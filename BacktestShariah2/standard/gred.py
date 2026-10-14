@@ -7,6 +7,7 @@
 #       --sektor papertrade/sektor.csv --acara <market_events.json> --pemangkin <pemangkin.json> --tarikh YYYY-MM-DD
 #   (ulang untuk papertrade/watchlist.csv; --pemangkin pilihan)
 import sys, os, re, csv, json, argparse
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from datetime import date, timedelta
 
 import numpy as np
@@ -15,7 +16,7 @@ import pandas as pd
 GRED = ['A', 'B', 'C', 'D', 'E']
 MATA = {'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0}
 TIADA = '–'
-LAJUR = ['gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
+LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
          'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'tarikh_earnings', 'hari_ke_earnings', 'sumber_earnings', 'gred_qr',
          'gred_keseluruhan', 'gred_pada']
 
@@ -50,6 +51,11 @@ def gred_kumpulan(skor):
     if skor is None or (isinstance(skor, float) and np.isnan(skor)):
         return TIADA
     return 'A' if skor >= 80 else 'B' if skor >= 60 else 'C' if skor >= 40 else 'D' if skor >= 20 else 'E'
+
+
+def peta_pasaran(path_csv):
+    """sektor_pasaran.csv (seluruh pasaran AS) -> ({sektor: skor}, {industri: skor}) snapshot terkini."""
+    return peta_sektor(path_csv)
 
 
 def peta_sektor(path_csv):
@@ -227,11 +233,20 @@ def tambah(a):
     vn = (v.iloc[-5:].mean() / v.iloc[-50:].mean()) if len(v) >= 50 else pd.Series(dtype=float)
     n5 = (c.iloc[-1] / c.iloc[-6] - 1) * 100 if len(c) >= 6 else pd.Series(dtype=float)
     sek, ind = peta_sektor(a.sektor)
+    # Utama: kekuatan seluruh pasaran AS (sektor_pasaran.py) dengan industri Moomoo setiap saham
+    pusek, puind, pind = {}, {}, {}
+    if a.pasaran and a.peta and os.path.exists(a.pasaran) and os.path.exists(a.peta):
+        from sektor_pasaran import SEKTOR_INDUSTRI
+        pusek, puind = peta_pasaran(a.pasaran)
+        pind = {r['ticker']: r['industri'] for r in csv.DictReader(open(a.peta, newline='', encoding='utf-8'))}
     ear = peta_earnings(a.acara, hari_ini) if a.acara else None
     pem = json.load(open(a.pemangkin, encoding='utf-8')) if a.pemangkin else {}
     for r in rows:
         t = ambil(r, 'saham', 'Saham')
-        s1 = sek.get(ambil(r, 'sektor', 'Sektor')); s2 = ind.get(ambil(r, 'industri', 'Industri'))
+        iu = pind.get(t); su = SEKTOR_INDUSTRI.get(iu) if iu else None
+        r['industri_us'] = iu or ''; r['sektor_us'] = su or ''
+        s1 = pusek.get(su) if su in pusek else sek.get(ambil(r, 'sektor', 'Sektor'))
+        s2 = puind.get(iu) if iu in puind else ind.get(ambil(r, 'industri', 'Industri'))
         r['skor_sektor'] = '' if s1 is None else round(s1, 1); r['gred_sektor'] = gred_kumpulan(s1)
         r['skor_industri'] = '' if s2 is None else round(s2, 1); r['gred_industri'] = gred_kumpulan(s2)
         x = int(rs[t]) if t in rs.index else None
@@ -275,7 +290,9 @@ def main(argv=None):
     t = sp.add_parser('tambah')
     t.add_argument('--csv', required=True)
     t.add_argument('--harga', required=True, help='folder harga_A.csv / harga_B.csv (stor harga dashboard)')
-    t.add_argument('--sektor', required=True, help='papertrade/sektor.csv')
+    t.add_argument('--sektor', required=True, help='papertrade/sektor.csv (sandaran: snapshot SST)')
+    t.add_argument('--pasaran', help='papertrade/sektor_pasaran.csv (utama: seluruh pasaran AS)')
+    t.add_argument('--peta', help='papertrade/peta_industri.csv (ticker -> industri Moomoo)')
     t.add_argument('--acara', help='JSON SST market_events (daysLookahead 30)')
     t.add_argument('--pemangkin', help='JSON {ticker: {berita, earnings_lalu_hari, earnings_gerak_pct, institusi}}')
     t.add_argument('--tarikh', required=True, help='tarikh imbasan YYYY-MM-DD')

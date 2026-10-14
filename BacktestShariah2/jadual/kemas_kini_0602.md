@@ -16,7 +16,12 @@ Alat (ToolSearch, satu panggilan setiap kumpulan):
    - 100% → kekal (dipindah oleh imbasan 8:02 malam);
    - terkeluar signal → BUANG.
    Tiada calon baharu pada 6:02. Data tidak dapat diambil → kekalkan baris dan catat; jangan reka.
-5. Sektor & industri: isi yang kosong (§5.6); snapshot hari ini (SST sector_rotation, industry_rotation, market_heatmap, sector_summary) → tambah ke `papertrade/sektor.csv`; pendedahan posisi aktif sah mengikut sektor/industri bagi M, C, Combine.
+5. Sektor & industri:
+   - (a) Isi sektor/industri posisi yang kosong (§5.6).
+   - (b) SELURUH PASARAN AS: jika `papertrade/peta_industri.csv` tiada atau lebih 30 hari → bina semula (quote_plate_list US INDUSTRY, kemudian quote_plate_stock setiap plate, limit 1000, ikut next_key; lajur ticker,industri,plate_code). Tarik skrin semua saham AS ≥ USD5 (arahan dalam kepala `standard/sektor_pasaran.py`, ~21 halaman × 300), kemudian `python3 BacktestShariah2/standard/sektor_pasaran.py --skrin <fail…> --peta BacktestShariah2/papertrade/peta_industri.csv --tarikh <tarikh tutup> --out BacktestShariah2/papertrade/sektor_pasaran.csv --json <sektor_pasaran.json>`.
+   - (c) SST (sector_rotation, industry_rotation, market_heatmap, institutional_flow, unusual_volume) → tambah ke `papertrade/sektor.csv` seperti biasa (aliran institusi dan volum luar biasa).
+   - (d) db `sektor/snapshot` = baris seluruh pasaran AS daripada (b) (jenis, nama, sektor, n, n_harga=n, prestasi_1w/1m/3m, breadth, rel_1m, rel_3m, fasa, skor_panas, mcap = mcap_bilion×1e9, teratas = [{saham, r1m}]) dengan medan SST (rs, volum_relatif, aliran_institusi, aliran_beli, aliran_jual) disalin jika nama sama, selainnya null; `alam` = "US penuh"; `pasaran` = ringkasan pasaran (n, breadth, median) digabung dengan medan pasaran SST sedia ada.
+   - (e) Pendedahan posisi aktif sah mengikut sektor/industri bagi M, C, Combine.
 6. Prestasi (tugasan_v3 §7).
 7. `python3 BacktestShariah2/standard/sahkan.py --betulkan` → mesti 0 (§5.5).
 8. Tulis CSV ke laluan sama; tolak ke db dashboard: `papertrade/moomoo`, `papertrade/claude` … `_6`, `papertrade/watchlist`, `sektor/snapshot`, `prestasi/mae`, `prestasi/ringkasan`, `harian/status` (kemaskini_pagi).

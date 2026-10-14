@@ -62,7 +62,7 @@ Papertrade M, Papertrade C (gabungan semua claude*.csv) dan Combine; baris sah s
 
 ## 8. Gred calon (sejak 14 Okt 2026; keputusan pengguna: rekod dan uji dahulu, bukan penapis)
 Lima gred A–E dikira pada hari isyarat oleh `standard/gred.py` dan direkod bersama setiap belian maya:
-1. **Sektor** dan 2. **Industri** — skor panas snapshot SST terkini (`sektor.csv`). Ujian 13 Okt 2026: TIDAK meramal pulangan 1–3 bulan; direkod untuk diuji semula.
+1. **Sektor** dan 2. **Industri** — kekuatan dalam SELURUH pasaran AS (kira-kira 6,100 saham harga ≥ USD5, bukan Shariah sahaja): `standard/sektor_pasaran.py` → `papertrade/sektor_pasaran.csv` (median 1W/1M/3M, breadth, fasa, skor panas 0–100). Industri saham = plate industri Moomoo (`papertrade/peta_industri.csv`, ~145 industri, dibina semula setiap 30 hari); sektor = 11 sektor Morningstar. Sandaran jika tiada: snapshot SST (`sektor.csv`). Ujian 13 Okt 2026 (snapshot SST): TIDAK meramal pulangan 1–3 bulan; direkod untuk diuji semula.
 3. **RS rating** (1–99, gaya IBD, dikira sendiri daripada stor harga). Ujian 2019–2026 (431 saham, pulangan 21 hari): RS ≥ 90 purata +4.2% lawan +1.6–2.2% bagi gred lain, dan mendahului setiap tahun 2020–2026.
 4. **Pemangkin** — berita 10 hari (Moomoo `quote_news_search`, SST `search_news`), penarafan analisis dalam tajuk berita, reaksi harga earnings terakhir (Moomoo `quote_financials_earnings_price_history`), volum ≥ 2× dengan harga naik, aliran institusi (SST). Belum diuji.
 5. **QR** — hari dagangan ke laporan suku seterusnya (SST `market_events` 30 hari; jika tiada, anggaran = earnings lalu + 91 hari). Makin jauh, makin kecil risiko jurang harga semasa pegang ~20 hari.

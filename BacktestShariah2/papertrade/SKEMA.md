@@ -49,13 +49,20 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 
 | Lajur | Nilai |
 |---|---|
-| gred_sektor, gred_industri | A–E atau "–" (skor panas SST: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20; "–" = industri tiada dalam snapshot) |
+| sektor_us, industri_us | sektor Morningstar dan industri Moomoo saham itu (seluruh pasaran AS) |
+| gred_sektor, gred_industri | A–E atau "–" (skor panas seluruh pasaran AS, sandaran SST: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20; "–" = tiada data) |
 | skor_sektor, skor_industri | 0–100 |
 | rs_rating, gred_rs | 1–99; A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40 |
 | gred_pemangkin, mata_pemangkin, pemangkin | A ≥ 4 mata, B 3, C 1–2, D 0, E < 0; ringkasan sebab; "–" = belum dikumpul |
 | tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; sumber SST / anggaran / tiada data |
 | gred_keseluruhan | purata mata gred yang ada (paparan sahaja; belum diuji) |
 | gred_pada | tarikh imbasan gred dikira |
+
+## `peta_industri.csv`
+ticker, industri, plate_code — keahlian plate industri Moomoo bagi semua saham AS. Dibina semula jika lebih 30 hari (quote_plate_list INDUSTRY + quote_plate_stock setiap plate).
+
+## `sektor_pasaran.csv`
+Snapshot harian kekuatan sektor/industri SELURUH pasaran AS (`standard/sektor_pasaran.py`): tarikh, jenis, nama, sektor, n, prestasi_1w, prestasi_1m, prestasi_3m (median %), breadth (% saham 1M > 0), rel_1m, rel_3m (lawan median pasaran), fasa, skor_panas, mcap_bilion, teratas, alam. Sejarah dikekalkan; snapshot tarikh sama diganti.
 
 ## `sektor.csv`
 Snapshot harian bertambah (sejarah dikekalkan). Satu baris setiap (tarikh, jenis, nama).
