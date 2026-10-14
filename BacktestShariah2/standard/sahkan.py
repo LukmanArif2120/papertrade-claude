@@ -12,7 +12,13 @@ POSISI = ['tarikh_beli', 'saham', 'kaedah', 'id_kaedah', 'sektor', 'industri', '
           'harga_terkini', 'untung_pct', 'hari', 'henti', 'sasaran', 'isyarat_keluar', 'keluar',
           'tarikh_keluar', 'harga_keluar', 'untung_akhir_pct', 'sumber', 'kaedah_kongsi', 'tarikh_isyarat',
           'nota', 'dikesan', 'tidak_sah', 'sebab_tidak_sah', 'tidak_dibeli', 'luar_peraturan',
-          'harga_buka_rujukan', 'tarikh_beli_dirancang']
+          'harga_buka_rujukan', 'tarikh_beli_dirancang',
+          # gred pada hari isyarat (standard/gred.py; tugasan_v3 §8)
+          'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
+          'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'tarikh_earnings', 'hari_ke_earnings',
+          'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada']
+LAJUR_GRED = ['gred_sektor', 'gred_industri', 'gred_rs', 'gred_pemangkin', 'gred_qr', 'gred_keseluruhan']
+NILAI_GRED = {'', 'A', 'B', 'C', 'D', 'E', '–'}
 WAJIB_POSISI = ['tarikh_beli', 'saham', 'kaedah', 'sektor', 'industri', 'harga_beli', 'unit',
                 'harga_terkini', 'untung_pct', 'hari', 'isyarat_keluar', 'keluar', 'tarikh_keluar',
                 'harga_keluar', 'untung_akhir_pct']
@@ -63,6 +69,16 @@ def fail_posisi():
     c = sorted(glob.glob(os.path.join(PT, 'claude*.csv')),
                key=lambda p: int(re.search(r'claude_?(\d*)', os.path.basename(p)).group(1) or 1))
     return [os.path.join(PT, 'moomoo.csv')] + c
+
+
+def semak_gred(nama, rows, ralat):
+    for i, r in enumerate(rows, start=2):
+        for c in LAJUR_GRED:
+            if c in r and (r[c] or '') not in NILAI_GRED:
+                ralat.append(f'{nama}:{i}: {c} tidak sah ({r[c]!r}); mesti A–E atau "–"')
+        v = nombor(r.get('rs_rating'))
+        if not kosong(r.get('rs_rating')) and (v is None or not 1 <= v <= 99):
+            ralat.append(f'{nama}:{i}: rs_rating {r.get("rs_rating")!r} di luar 1–99')
 
 
 def semak_posisi(nama, lajur, rows, ralat, amaran, kunci):
@@ -185,10 +201,12 @@ def main(argv=None):
                 print(f'Disusun semula: {os.path.basename(p)} ({len(lajur)} -> {len(baru)} lajur)')
                 lajur = baru
         semak_posisi(os.path.basename(p), lajur, rows, ralat, amaran, kunci)
+        semak_gred(os.path.basename(p), rows, ralat)
     for nm, fn in [('senarai_beli.csv', semak_senarai), ('watchlist.csv', semak_watch)]:
         p = os.path.join(PT, nm)
         if os.path.exists(p):
             fn(p, ralat, amaran)
+            semak_gred(nm, baca(p)[1], ralat)
     for x in amaran[:40]:
         print('AMARAN', x)
     if len(amaran) > 40:

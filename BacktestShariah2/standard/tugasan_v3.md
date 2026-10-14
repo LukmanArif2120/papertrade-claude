@@ -59,3 +59,13 @@ Papertrade M, Papertrade C (gabungan semua claude*.csv) dan Combine; baris sah s
 - Label (keputusan pengguna 14 Okt 2026): kaedah dengan **< 20 dagangan tertutup** = `BELUM CUKUP DATA`. Selepas ≥ 20: HENTIKAN jika untung purata ≤ −3% atau kadar gagal ≥ 75% atau skor < 25; TERUSKAN jika skor ≥ 55 dan untung purata > 0; selainnya PERHATI (gagal = % dagangan untung < 0; skor dibundar ke integer sebelum dibanding).
 - Metrik portfolio dalam dolar: setiap posisi dianggap **USD1,000 (sama berat)**, bukan 1 unit. Rekod CSV kekal 1 unit.
 - Ujian luar sampel backtest: tidak dibuat (keputusan pengguna 14 Okt 2026).
+
+## 8. Gred calon (sejak 14 Okt 2026; keputusan pengguna: rekod dan uji dahulu, bukan penapis)
+Lima gred A–E dikira pada hari isyarat oleh `standard/gred.py` dan direkod bersama setiap belian maya:
+1. **Sektor** dan 2. **Industri** — skor panas snapshot SST terkini (`sektor.csv`). Ujian 13 Okt 2026: TIDAK meramal pulangan 1–3 bulan; direkod untuk diuji semula.
+3. **RS rating** (1–99, gaya IBD, dikira sendiri daripada stor harga). Ujian 2019–2026 (431 saham, pulangan 21 hari): RS ≥ 90 purata +4.2% lawan +1.6–2.2% bagi gred lain, dan mendahului setiap tahun 2020–2026.
+4. **Pemangkin** — berita 10 hari (Moomoo `quote_news_search`, SST `search_news`), penarafan analisis dalam tajuk berita, reaksi harga earnings terakhir (Moomoo `quote_financials_earnings_price_history`), volum ≥ 2× dengan harga naik, aliran institusi (SST). Belum diuji.
+5. **QR** — hari dagangan ke laporan suku seterusnya (SST `market_events` 30 hari; jika tiada, anggaran = earnings lalu + 91 hari). Makin jauh, makin kecil risiko jurang harga semasa pegang ~20 hari.
+
+Dashboard Prestasi memaparkan prestasi setiap gred; sesuatu gred hanya dinilai selepas ≥ 20 dagangan tertutup. Gred tidak menapis belian sehingga pengguna memutuskan berdasarkan data papertrade.
+

@@ -33,6 +33,9 @@ header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;backgroun
 h1{font-size:1.2rem;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:balance}
 .live{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)}
 .live{flex-wrap:wrap;row-gap:2px}
+.gr{display:inline-block;min-width:1.45em;text-align:center;border-radius:4px;font-weight:700;font-size:.7rem;line-height:1.5;padding:0 3px;margin:0 2px 2px 0}
+.gr small{font-weight:500;opacity:.75;margin-right:1px}
+.g-A{background:var(--pos-soft);color:var(--pos)}.g-B{background:var(--accent-soft);color:var(--accent)}.g-C{background:var(--sunk);color:var(--fg-2);box-shadow:inset 0 0 0 1px var(--line)}.g-D{background:var(--warn-soft);color:var(--warn)}.g-E{background:var(--neg-soft);color:var(--neg)}.g-x{background:var(--sunk);color:var(--muted)}
 #dataTxt b{color:var(--fg-2)}
 #dataTxt b.neg{color:var(--neg)}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
@@ -668,7 +671,8 @@ function renderWatch(){
       {k:'pencetus',t:'Syarat belum cukup',tip:'syarat_belum',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}<span class="vv">${esc(r.sebab||'')}</span><span class="vv">${esc(r.syarat_belum||'')}</span>`,c:()=>'wrap'},
       {k:'paras',t:'Paras pencetus',tip:'paras',f:r=>`${fx(r.paras,2)}<span class="vv">jarak ${sg2(r.jarak_pct)}</span>`},
       {k:'ditambah',t:'Tarikh masuk watchlist',l:1,tip:'ditambah',f:r=>esc(r.ditambah||'–')},
-      {k:'hari',t:'Hari dalam watchlist',tip:'hari_watch',f:r=>fx(r.hari,0)}],
+      {k:'hari',t:'Hari dalam watchlist',tip:'hari_watch',f:r=>fx(r.hari,0)},
+      {k:'gred_keseluruhan',t:'Gred S I R P Q',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:grSel}],
       foot:(n,t)=>`<div class="tablefoot"><span>${n} daripada ${t}</span>${t>n?'<button type="button" class="more" id="wMore">Papar 60 lagi</button>':''}</div>`})}
   </div>`;
   $('#wK').onchange=e=>{wf.k=e.target.value;wf.shown=60;renderAll();};
@@ -684,6 +688,14 @@ function normPT(r){const keluar=!!(r.keluar||r.tarikh_keluar);return Object.assi
   untung_akhir_pct:keluar?(r.untung_akhir_pct??r.untung_pct):null,
   harga_terkini:keluar&&r.harga_keluar!=null?r.harga_keluar:r.harga_terkini,tidak_sah:!!r.tidak_sah});}
 const sahSahaja=rs=>rs.filter(r=>!r.tidak_sah);
+/* gred pada hari isyarat (standard/gred.py) */
+const GDIM=[['gred_sektor','S','Sektor','skor_sektor'],['gred_industri','I','Industri','skor_industri'],['gred_rs','R','RS rating','rs_rating'],['gred_pemangkin','P','Pemangkin','pemangkin'],['gred_qr','Q','QR (jarak earnings)','hari_ke_earnings']];
+const GORD={A:0,B:1,C:2,D:3,E:4};
+const grB=(g,lbl,tt)=>`<span class="gr g-${GORD[g]!=null?g:'x'}" title="${esc(tt||'')}">${lbl?`<small>${lbl}</small>`:''}${GORD[g]!=null?g:'–'}</span>`;
+const adaGred=r=>GDIM.some(([k])=>GORD[r[k]]!=null);
+function grSel(r){if(!adaGred(r))return '<span class="mut">–</span>';
+  const tt={gred_sektor:`Sektor ${r.sektor||''}: skor ${r.skor_sektor??'–'}`,gred_industri:`Industri ${r.industri||''}: skor ${r.skor_industri??'–'}`,gred_rs:`RS rating ${r.rs_rating??'–'}`,gred_pemangkin:`Pemangkin: ${r.pemangkin||'–'}`,gred_qr:`Earnings ${r.tarikh_earnings||'tiada dalam 30 hari'}${r.hari_ke_earnings!=null&&r.hari_ke_earnings!==''?' · '+r.hari_ke_earnings+' hari dagangan':''}${r.sumber_earnings?' · '+r.sumber_earnings:''}`};
+  return `<span style="white-space:nowrap">${GDIM.map(([k,l])=>grB(r[k],l,tt[k])).join('')}</span>${GORD[r.gred_keseluruhan]!=null?`<span class="vv">keseluruhan ${r.gred_keseluruhan}</span>`:''}`;}
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.keluar?'exit':'');
 function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>esc(r.tarikh_beli||'–')},
@@ -699,7 +711,8 @@ function ptCols(akaun){return [
   {k:'isyarat_keluar',t:'Isyarat keluar',tip:'isyarat_keluar',l:1,f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}<span class="pill ${r.keluar?'p-exit':'p-hold'}">${esc(r.isyarat_keluar)}</span>${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`},
   {k:'tarikh_keluar',t:'Tarikh keluar',tip:'tarikh_keluar',l:1,f:r=>esc(r.tarikh_keluar||'–')},
   {k:'harga_keluar',t:'Harga keluar',tip:'harga_keluar',f:r=>fx(r.harga_keluar,2)},
-  {k:'untung_akhir_pct',t:'Untung akhir %',tip:'untung_akhir',f:r=>r.untung_akhir_pct==null?'–':`<b class="${cls(r.untung_akhir_pct)}">${sg2(r.untung_akhir_pct)}</b>`}];}
+  {k:'untung_akhir_pct',t:'Untung akhir %',tip:'untung_akhir',f:r=>r.untung_akhir_pct==null?'–':`<b class="${cls(r.untung_akhir_pct)}">${sg2(r.untung_akhir_pct)}</b>`},
+  {k:'gred_keseluruhan',t:'Gred S I R P Q',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:grSel}];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
   const up=rows.filter(r=>r.untung_pct>0).length,ex=rows.filter(r=>r.keluar).length;const a=avgOf(rows.map(r=>r.keluar?r.untung_akhir_pct:r.untung_pct));
   const kd=new Set(rows.map(r=>r.kaedah)).size;
@@ -801,6 +814,20 @@ function prKpis(rows){const v=rows.map(r=>r.hasil).filter(x=>x!=null);const w=mi
     <div class="kpi"><div class="lbl" data-tip="hari_purata">Purata hari dipegang</div><div class="v">${fx(avgOf(rows.map(r=>r.hari)),1)}</div><div class="s">hari dagangan</div></div>
     <div class="kpi"><div class="lbl" data-tip="usd_sama">Jika USD1,000 setiap posisi</div><div class="v ${cls(usd)}">${usd==null?'–':(usd<0?'−':'+')+'USD'+Math.abs(usd).toLocaleString('en-US',{maximumFractionDigits:0})}</div><div class="s">modal USD${(v.length*USD_POSISI).toLocaleString('en-US')} · ${sg2(a)} setiap posisi</div></div>
   </div>`;}
+/* prestasi setiap gred: adakah gred A benar-benar lebih untung? */
+function prGred(rows){const ada=rows.filter(adaGred);
+  if(!ada.length)return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">Gred direkod mulai belian 14 Okt 2026</span></div><p class="empty">Belum ada posisi bergred. Imbasan 8:02 malam mengira gred Sektor, Industri, RS, Pemangkin dan QR; belian 9:35 menyalinnya ke setiap posisi.</p></div>`;
+  const out=[];GDIM.forEach(([k,,nama])=>{['A','B','C','D','E'].forEach(g=>{const a=ada.filter(r=>r[k]===g);if(!a.length)return;const v=a.map(r=>r.hasil).filter(x=>x!=null);const t=a.filter(r=>r.keluar);const vt=t.map(r=>r.untung_akhir_pct).filter(x=>x!=null);
+    out.push({dim:nama,g,n:a.length,tutup:t.length,win:v.length?v.filter(x=>x>0).length/v.length*100:null,avg:avgOf(v),avgT:avgOf(vt),cukup:t.length>=PR_MIN_TUTUP});});});
+  return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">${ada.length} posisi bergred · gred pada hari isyarat · dinilai selepas ≥ ${PR_MIN_TUTUP} dagangan tertutup setiap gred</span></div>
+    ${sortTable({id:'prg-'+S.tab+S.sub.prestasi,rows:out,cols:[
+      {k:'dim',t:'Dimensi',l:1,v:o=>GDIM.findIndex(d=>d[2]===o.dim)*10+GORD[o.g],f:o=>`<b>${esc(o.dim)}</b>`},
+      {k:'g',t:'Gred',l:1,v:o=>GORD[o.g],f:o=>grB(o.g)},
+      {k:'n',t:'Posisi',f:o=>o.n},{k:'tutup',t:'Tertutup',f:o=>`${o.tutup}${o.cukup?'':'<span class="vv">belum cukup</span>'}`},
+      {k:'win',t:'Kadar menang',tip:'win_p',f:o=>fx(o.win,0)+'%'},
+      {k:'avg',t:'Untung purata',tip:'untung_purata',f:o=>`<b class="${cls(o.avg)}">${sg2(o.avg)}</b>`},
+      {k:'avgT',t:'Untung akhir purata',tip:'untung_akhir',f:o=>o.avgT==null?'–':`<span class="${cls(o.avgT)}">${sg2(o.avgT)}</span>`}],def:{k:'dim',dir:1}})}
+    <p class="sub" style="margin-top:8px">Bandingkan baris A dengan E dalam dimensi yang sama. Jika A tidak lebih untung selepas cukup data, gred itu tidak berguna untuk memilih saham. Bukti backtest 2019–2026: RS ≥ 90 mendahului setiap tahun; kekuatan sektor/industri tidak meramal.</p></div>`;}
 /* carta bar mendatar: untung purata setiap kaedah, disusun */
 function drawPrBars(box,st){
   const rows=[...st].filter(o=>o.avg!=null).sort((a,b)=>b.avg-a.avg);if(!rows.length){box.innerHTML='<p class="empty">Tiada data.</p>';return;}
@@ -898,6 +925,7 @@ function renderPrestasi(which){
   el.innerHTML=`
   <p class="headline">${nama}: <b>${src.length}</b> dagangan dalam <b>${all.length}</b> kaedah. ${top?`Calon terbaik setakat ini: <b>${esc(top.kaedah)}</b> (skor ${top.skor}, untung purata ${sg2(top.avg)}, penurunan maks purata ${sg2(top.maeAvg)}). `:''}<b class="pos">${cnt.TERUSKAN}</b> TERUSKAN · <b style="color:var(--warn)">${cnt.PERHATI}</b> PERHATI · <b class="neg">${cnt.HENTIKAN}</b> HENTIKAN · <b class="mut">${cnt['BELUM CUKUP DATA']}</b> belum cukup data (label hanya diberi selepas ≥ ${PR_MIN_TUTUP} dagangan tertutup setiap kaedah).</p>
   ${prKpis(src)}
+  ${prGred(src)}
   <div class="filters"><span class="lbl" data-tip="min_n">Minimum dagangan setiap kaedah</span>
     <div class="seg" id="prMin${which}">${[1,3,5,10].map(n=>`<button type="button" data-v="${n}" aria-pressed="${pf.minN===n}">${n===1?'Semua':'≥ '+n}</button>`).join('')}</div>
     <span class="mut" style="font-size:.82rem">${st.length} daripada ${all.length} kaedah dipapar dalam carta & jadual kaedah</span></div>
@@ -1043,6 +1071,7 @@ const TIPS={
   penurunan_maks:{t:'Penurunan maksimum',d:'Bagi setiap dagangan: harga rendah terendah sejak hari beli (hingga hari ini atau hingga keluar) ÷ harga beli − 1. Purata = risiko biasa yang ditanggung; terburuk = satu kejatuhan paling dalam. Lebih hampir 0 = lebih selamat.',e:'Beli 100, pernah jatuh ke 94 = −6%, walaupun kini untung.'},
   skor_us:{t:'Skor Untung×Selamat (0–100)',d:'Skor = 100 × U × S. U (untung) = 0.6 × untung purata dipetakan −5%→0 hingga +10%→1, + 0.4 × kadar menang. S (selamat) = 0.6 × penurunan maks purata dipetakan −10%→0 hingga 0%→1, + 0.4 × kerugian terbesar dipetakan −20%→0 hingga 0%→1. Tinggi hanya jika KEDUA-DUANYA baik. Kaedah dengan kurang daripada 5 dagangan didarab n/5 (keyakinan rendah).',e:'U 0.8 × S 0.9 = 72; jika hanya 2 dagangan: 72 × 0.4 = 29.'},
   keputusan_pr:{t:'Keputusan (TERUSKAN / PERHATI / HENTIKAN)',d:'BELUM CUKUP DATA: kurang daripada 20 dagangan tertutup (sudah keluar). Selepas ≥ 20: HENTIKAN jika untung purata ≤ −3% ATAU kadar gagal ≥ 75% ATAU skor < 25; TERUSKAN jika skor ≥ 55 dan untung purata positif; selainnya PERHATI. Keputusan papertrade sahaja, bukan isyarat wang sebenar.',e:'▲ TERUSKAN · ● PERHATI · ✕ HENTIKAN · ○ BELUM CUKUP DATA (bentuk berbeza dalam carta).'},
+  gred:{t:'Gred S I R P Q',d:'Gred A (terbaik) hingga E pada hari isyarat. S = kekuatan sektor, I = kekuatan industri (skor panas SST), R = RS rating 1–99 (A ≥ 90), P = pemangkin (berita, penarafan analisis, reaksi earnings, volum, institusi), Q = jarak ke laporan suku seterusnya (A > 21 hari dagangan; makin dekat makin berisiko jurang harga). Direkod untuk diuji, bukan penapis belian.',e:'S B · I A · R A · P C · Q A = sektor agak kuat, industri dan RS sangat kuat, pemangkin sederhana, earnings masih jauh.'},
   usd_sama:{t:'Nilai sama USD1,000',d:'Untung bersih jika setiap posisi bernilai USD1,000 (sama berat), tanpa mengira harga saham. Rekod tetap 1 unit; ini cara kiraan sahaja supaya saham mahal tidak mendominasi.',e:'3 posisi +10%, −5%, +2% = +USD70 atas modal USD3,000.'},
   data_kini:{t:'Kesegaran data',d:'Tarikh tutup sesi AS yang dipakai dan masa kemas kini 6:02 pagi terakhir (harian/status). Merah jika larian 6:02 pagi terkini belum berjaya.',e:''},
   slot_c:{t:'Slot Claude',d:'Posisi maya Claude bagi kaedah itu: dipegang (belum keluar) dan jumlah semua (termasuk yang sudah keluar). Tiada had.',e:''}

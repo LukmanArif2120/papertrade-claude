@@ -14,6 +14,11 @@ Alat: `select:mcp__Moo_Moo__quote_market_state,mcp__Moo_Moo__quote_trading_days,
 3. Semak semula watchlist (tugasan_v3 §3): 90–99% kekal (kemas kini); 100% dan sah → senarai beli (keluarkan dari watchlist); terkeluar signal → BUANG.
 4. Imbas 87 kaedah: isyarat 100% dan sah (§3 a, b) → `papertrade/senarai_beli.csv` (lajur ikut SKEMA, destinasi = Claude, tarikh_imbasan = hari ini MYT). Calon baharu 90–99% → watchlist (maks 5 setiap kaedah).
 5. Sektor & industri wajib bagi setiap baris.
+5b. GRED (tugasan_v3 §8) — selepas senarai_beli.csv ditulis dan di-push (belian tidak boleh tertangguh kerana gred):
+   - Alat tambahan: `select:mcp__SST_Terminal__market_events,mcp__SST_Terminal__search_news,mcp__SST_Terminal__institutional_flow,mcp__Moo_Moo__quote_news_search,mcp__Moo_Moo__quote_financials_earnings_price_history`.
+   - `market_events` (market US, daysLookahead 30) → simpan fail JSON.
+   - Bagi saham unik senarai beli (maks 80, keutamaan RS tertinggi): `quote_news_search` (symbol = ticker, size 10, sort_type 2, lang en) dan `quote_financials_earnings_price_history` (US.ticker; ringkaskan dengan `python3 BacktestShariah2/standard/gred.py earnings <fail> --tarikh <hari ini>`). `institutional_flow` sekali. Bina `pemangkin.json` = {ticker: {berita: [{tajuk, hari_lalu}], earnings_lalu_hari, earnings_gerak_pct, earnings_anggaran, institusi: 'kumpul'|'agih'|null}} dengan Python. Baki > 80 → gred_pemangkin "–" (catat).
+   - `python3 BacktestShariah2/standard/gred.py tambah --csv BacktestShariah2/papertrade/senarai_beli.csv --harga <folder stor harga> --sektor BacktestShariah2/papertrade/sektor.csv --acara <market_events.json> --pemangkin <pemangkin.json> --tarikh <hari ini>`; ulang untuk `watchlist.csv` (tanpa --pemangkin). Commit + push semula.
 6. `python3 BacktestShariah2/standard/sahkan.py` → mesti 0.
-7. Tulis CSV; tolak `papertrade/senarai_beli` dan `papertrade/watchlist` ke db dashboard.
+7. Tulis CSV; tolak `papertrade/senarai_beli` dan `papertrade/watchlist` ke db dashboard (setiap baris db membawa lajur gred dengan nama yang sama seperti CSV; halaman memaparkan lajur Gred S I R P Q).
 8. Catatan dalam `standard/binaan_v2_log.md`: masa siap, bilangan senarai beli, watchlist dibuang/baharu, isyarat mingguan ditolak. Commit `Imbas 8:02 malam <tarikh>: <ringkas>` + push (push selepas setiap fail penting juga).

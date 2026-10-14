@@ -44,5 +44,18 @@ Lajur wajib: saham, kaedah, sektor, industri, pct_dipenuhi (= 100 sahaja), harga
 Tajuk lajur dikekalkan seperti sedia ada (dipakai oleh dashboard): Saham, Nama, Kaedah, Sektor, Industri, Harga, % hampir, Pencetus, Keadaan semasa, Syarat belum cukup, Syarat dipenuhi, Paras pencetus, Jarak %, Tarikh masuk watchlist, Hari dalam watchlist, Skor, Set, tarikh_data, dibina.
 `% hampir` mesti 90–100; baris yang terkeluar signal (< 90 atau isyarat batal) dibuang serta-merta. Kunci unik: (Saham, Kaedah).
 
+## Lajur gred (senarai_beli, watchlist, fail posisi) — sejak 14 Okt 2026
+Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris posisi oleh belian 9:35 NY dan TIDAK dikemas kini selepas itu (gred pada hari isyarat). Baris lama: kosong.
+
+| Lajur | Nilai |
+|---|---|
+| gred_sektor, gred_industri | A–E atau "–" (skor panas SST: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20; "–" = industri tiada dalam snapshot) |
+| skor_sektor, skor_industri | 0–100 |
+| rs_rating, gred_rs | 1–99; A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40 |
+| gred_pemangkin, mata_pemangkin, pemangkin | A ≥ 4 mata, B 3, C 1–2, D 0, E < 0; ringkasan sebab; "–" = belum dikumpul |
+| tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; sumber SST / anggaran / tiada data |
+| gred_keseluruhan | purata mata gred yang ada (paparan sahaja; belum diuji) |
+| gred_pada | tarikh imbasan gred dikira |
+
 ## `sektor.csv`
 Snapshot harian bertambah (sejarah dikekalkan). Satu baris setiap (tarikh, jenis, nama).
