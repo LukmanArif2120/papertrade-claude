@@ -1,0 +1,6 @@
+id,varian,tarikh,enjin,saham,bil_C0,bil_B1,bil_B2,bil_B3,bil_C1,berjaya_C0,berjaya_B1,berjaya_B2,berjaya_B3,berjaya_C1,K3_C0,K3_B1,K3_B3,berjaya_B1_selaras_atr,K3_B1_selaras_atr,K3_C1_selaras_atr,verdict
+P02,V1,2026-10-10,enjin_p02 v1.1,423,31368,6325,5200,3822,6225,0.28,0.34,0.32,0.32,0.32,0.025,0.031,0.026,0.30,0.025,0.013,GAGAL peringkat 1 (L1 L2 L3 gagal; L4 L5 lulus)
+P02,V2,2026-10-10,enjin_p02 v1.2,423,,3140,,,,0.28,0.38,,0.36,,0.026,0.039,,0.32,0.029,0.017,GAGAL (L2 L3)
+P02,V3,2026-10-10,enjin_p02 v1.2,423,,6836,,,,0.28,0.33,,0.31,,0.025,0.026,,0.29,0.021,0.010,GAGAL (L1 L2 L3)
+P02,V4,2026-10-10,enjin_p02 v1.2,423,,5046,,,,0.26,0.34,,0.32,,0.019,0.029,,0.30,0.023,0.013,GAGAL (L2 L3)
+P02,V5,2026-10-10,enjin_p02 v1.2,423,,6313,,,,0.28,0.34,,0.32,,0.023,0.029,,0.30,0.020,0.016,GAGAL (L1 L2 L3)
