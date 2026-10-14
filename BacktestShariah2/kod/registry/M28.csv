@@ -1,0 +1,2 @@
+set,id,kaedah,varian,enjin,tarikh,keputusan,skor,cagr,mdd,mar,h1,h2,thn_kalah_spy,n,dagangan_setahun,win,avg,avgwin,avgloss,pf,days,hit10,ret10,terburuk,ada_henti,gate_gagal,catatan,ew_cagr,menang_ew,bulan_untung,bulan10,pegang
+431,M28,VWAP Separator + Kiss Pivot,V2 Pemisahan ≥3 ATR,v1.2,2026-10-05,DITOLAK,,0.0241,-0.3911,0.0615,0.0199,0.0285,0.1667,3371,487.2409,0.4275,0.0022,0.0664,-0.0457,1.0845,5.0789,0.1276,0.0644,-0.4713,True,G3,V1 tetapi pemisahan >=3 ATR,0.2191,False,0.5422,0.0361,

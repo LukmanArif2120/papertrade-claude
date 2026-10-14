@@ -73,6 +73,8 @@ Laporan peringkat ada dalam `LAPORAN_UTAMA.md`. Data mentahnya ada dalam `data/P
 
 ## 5. Rutin harian papertrade (v2, mula 12 Okt 2026)
 
+> **TERBATAL (14 Okt 2026).** Rutin harian kini dalam `standard/tugasan_v3.md` dan `jadual/` (Papertrade C sahaja; imbasan 8:02 malam; model Sonnet 5.5).
+
 Peraturan penuh ada dalam `standard/tugasan_v2.md`. Ringkasannya:
 
 - **Skop imbasan:** semua saham AS berharga lebih daripada USD10 (Shariah atau tidak). Senarai 431 diimbas dahulu.

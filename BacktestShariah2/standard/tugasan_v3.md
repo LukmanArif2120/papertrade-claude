@@ -1,0 +1,58 @@
+# Tugasan v3 — Peraturan tunggal papertrade harian (berkuat kuasa 14 Okt 2026)
+
+Dokumen ini **satu-satunya** rujukan peraturan bagi tugasan harian. Ia menggantikan `tugasan_v2.md`, `papertrade_harian.md` dan bahagian 5 `00_NOTA_SERAHAN.md` (semuanya kini bertanda TERBATAL; dikekalkan untuk sejarah sahaja). Jika ada percanggahan, dokumen ini menang. Langkah setiap tugasan ada dalam `BacktestShariah2/jadual/`.
+
+## 1. Mod
+- Papertrade C (Claude, maya) SAHAJA untuk belian baharu sejak 13 Okt 2026, dilayan seperti papertrade sebenar di Moomoo: harga buka sebenar, tiada pandang belakang.
+- Tiada order Moomoo (tiada `sim_trade_input_order`, tiada `trading_order_*`). Tiada jualan. Tiada wang sebenar tanpa kelulusan pengguna.
+- Posisi Moomoo lama (akaun simulasi AS acc_id 4135388, market 100) kekal dikemas kini harganya sahaja.
+- Prinsip pengguna: "Kalau tak beli, cakap tak beli." Data mesti betul; jangan reka.
+- Hari operasi: hari dagangan NYSE sahaja (semak `quote_trading_days` / `quote_market_state`; cuti = catat dan berhenti).
+
+## 2. Jadual (semua tugasan guna model `claude-sonnet-5-5`)
+| Tugasan | Masa | Prosedur |
+|---|---|---|
+| Kemas kini | 6:02 pagi MYT, Selasa–Sabtu | `jadual/kemas_kini_0602.md` |
+| Imbas pasaran | 8:02 malam MYT, Isnin–Jumaat | `jadual/imbas_2002.md` |
+| Beli maya | 9:35 pagi New York, Isnin–Jumaat | `jadual/beli_0935.md` |
+
+Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade M, Papertrade C, Prestasi, `harian/status`.
+
+## 3. Kaedah dan isyarat
+- 87 kaedah M; varian dipilih dalam registry set 431: skor tertinggi bukan DITOLAK, jika tiada, CAGR tertinggi. Indikator I01–I32 tidak digunakan.
+- Kod isyarat: `BacktestShariah2/kod/` (sumber kebenaran; lihat `kod/README.md`). Enjin v1.2 beku.
+- Skop imbasan: saham AS Shariah (screener Moomoo) harga ≥ USD10; senarai 431 diutamakan.
+- **Senarai beli** = isyarat entry 100% dipenuhi pada tutup sesi DAN lulus kesahihan:
+  - (a) Isyarat MINGGUAN (M52 dan modul yang guna `akhir`) sah hanya jika sesi itu hari dagangan terakhir minggu.
+  - (b) Setiap baris wajib ada `henti`, `nota_henti` (formula jika henti bergantung pada buka masuk, cth. M52 = 0.60×buka), `buka_maks` (cth. M08 = 1.05×SMA20, M06 = 1.05×pangsi, M20/M19 = sasaran) dan `sasaran`, diambil daripada `sedia()` modul kaedah.
+- **Watchlist (Hampir Signal)** = 90–99% dipenuhi (semua syarat kecuali pencetus; pencetus dalam ≤ 2%; pencetus kalendar ≤ 3 hari dagangan). Maks 5 setiap kaedah (431 dahulu, kemudian skor).
+  - Dinilai semula pada 6:02 pagi DAN 8:02 malam. Terkeluar signal (< 90% atau isyarat batal/tidak sah) → BUANG serta-merta.
+  - Calon baharu hanya ditambah pada 8:02 malam. Calon yang menjadi 100% dipindah ke senarai beli pada 8:02 malam.
+  - Peraturan lama "buang selepas 10 hari" dimansuhkan.
+
+## 4. Belian maya (9:35 NY)
+- Calon = semua baris senarai_beli (tiada had slot). 1 unit setiap saham; kaedah kedua untuk saham sama = baris dengan `kaedah_kongsi`.
+- Langkau jika: buka ≤ henti; buka > buka_maks; buka ≥ sasaran (jika kaedah melangkau); isyarat batal; buka = 0 atau saham belum didagangkan (high/low = 0); kunci kaedah+saham+tarikh_isyarat sudah wujud dalam claude*.csv.
+- Harga beli = harga buka sebenar. Buka sementara disahkan dengan kline harian; larian 6:02 membetulkan baki.
+
+## 5. Kualiti data (wajib)
+1. `quote_stock_quote` dengan low/high = 0 bermaksud tiada dagangan; JANGAN tafsir sebagai kena henti. Guna kline harian.
+2. Harga beli = `open` kline harian rasmi hari beli.
+3. Keluar dinilai dengan enjin rasmi (`kod/`) dan `standard/harian_nilai_keluar.py` fungsi `keluar()`:
+   - henti dinilai dari hari masuk (buka jurang bawah henti dari hari kedua → harga buka);
+   - sasaran hanya dari hari selepas hari masuk, dengan tgt hari sebelumnya;
+   - isyarat keluar kaedah → jual pada BUKA hari berikutnya; had masa → tutup.
+   - Ujian: `python3 -m unittest discover -s BacktestShariah2/ujian`.
+4. Kesahihan belian: belian semalam disemak semula dengan `sedia()` atas bar hari beli. `sig` = False → baris TIDAK DIBELI (lihat `papertrade/SKEMA.md`). Baris `tidak_dibeli`/`tidak_sah` tidak dikira dalam prestasi atau pendedahan sektor.
+5. Sebelum push data: `python3 BacktestShariah2/standard/sahkan.py --betulkan` MESTI keluar 0. Jika 1: betulkan; jika tidak boleh, JANGAN push fail data yang rosak — catat ralat dalam log dan push log sahaja.
+6. Setiap saham wajib ada sektor & industri (SST `get_stock`, sandaran Moomoo `quote_owner_plate`; tiada → "Tiada data" + catat).
+
+## 6. Stor
+- Repo GitHub `pedagangsenja/papertrade-claude`, cawangan `main`. Mula: `git pull --rebase origin main`. Akhir: `git add -A`, commit, `git push origin main` (ditolak → pull --rebase, cuba semula maks 3 kali; tiada --force).
+- Skema CSV: `papertrade/SKEMA.md`.
+- Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (db melalui ArtifactData; muatkan skill artifact-capabilities). JANGAN cipta artifact baharu. Dokumen: `papertrade/moomoo`, `papertrade/claude`, `papertrade/claude_2` … `_6`, `papertrade/watchlist`, `papertrade/senarai_beli`, `sektor/snapshot`, `prestasi/mae`, `prestasi/ringkasan`, `harian/status`. JSON padat; setiap dokumen < 250 KB.
+- Log: imbasan → `standard/binaan_v2_log.md`; kemas kini dan belian → `standard/binaan_v2_log_tambahan.md` (baca dahulu, tambah di hujung).
+- Alat besar: keputusan disimpan ke fail oleh sistem — proses dengan Python; jangan salin data harga secara manual. Had kline Moomoo ~4 panggilan seminit; maks 24 ticker setiap larian.
+
+## 7. Prestasi
+Papertrade M, Papertrade C (gabungan semua claude*.csv) dan Combine; baris sah sahaja. KPI, untung purata setiap kaedah, kadar menang, penurunan maksimum, Paling Teruk, skor Untung×Selamat, TERUSKAN/PERHATI/HENTIKAN (gagal = % dagangan untung < 0; skor dibundar ke integer sebelum dibanding dengan 25/55). Skrip `standard/harian_*.py`, `bina_p4_mae.py`.

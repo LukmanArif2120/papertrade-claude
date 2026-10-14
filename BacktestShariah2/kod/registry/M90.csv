@@ -1,0 +1,2 @@
+set,id,kaedah,varian,enjin,tarikh,keputusan,skor,cagr,mdd,mar,h1,h2,thn_kalah_spy,n,dagangan_setahun,win,avg,avgwin,avgloss,pf,days,hit10,ret10,terburuk,ada_henti,gate_gagal,catatan,ew_cagr,menang_ew,bulan_untung,bulan10,pegang
+431,M90,Pring KST,"V3 V1 + tutup>SMA50, keluar tutup<SMA50",v1.2,2026-10-07,SIMPAN,59.9,0.3543,-0.4224,0.8387,0.0863,0.6395,0.6667,4812,695.5216,0.2955,0.0195,0.2051,-0.0583,1.4748,26.3882,0.3691,0.1453,-0.4453,True,,Isyarat V1 + tutup>SMA50; keluar tutup<SMA50,0.2191,True,0.6265,0.1446,5:0.3|10:0.4|15:0.8|20:1.2|30:1.9|40:2.9|60:4.3

@@ -1,5 +1,8 @@
 # Tugasan v2 — Dashboard & Papertrade (diluluskan 12 Okt 2026)
 
+> **TERBATAL (14 Okt 2026).** Diganti oleh `standard/tugasan_v3.md` dan `jadual/`. Dikekalkan untuk sejarah sahaja; jangan ikut peraturan di bawah.
+
+
 Dokumen rujukan untuk SEMUA tugasan berjadual v2. Baca ini dahulu, kemudian `standard/dashboard.md` dan `standard/papertrade_harian.md` (v1). Jika bercanggah, dokumen ini menang.
 
 ## Dashboard

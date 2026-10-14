@@ -1,0 +1,19 @@
+# Imbas pasaran 8:02 malam MYT (Isnin–Jumaat)
+
+Automatik; jangan tanya soalan. Peraturan: `standard/tugasan_v3.md`, skema: `papertrade/SKEMA.md`, kod: `kod/` (`scanner.py`, `kaedah/Mxx.py`).
+Tugasan belian bermula 9:35 pagi New York: siapkan `senarai_beli.csv` dahulu (sasaran < 30 minit) dan push sebelum watchlist.
+
+Alat: `select:mcp__Moo_Moo__quote_market_state,mcp__Moo_Moo__quote_trading_days,mcp__Moo_Moo__quote_stock_screen,mcp__Moo_Moo__quote_history_kline,mcp__Moo_Moo__quote_stock_quote` dan `select:ArtifactData`.
+
+0. `git pull --rebase origin main`. Pasaran AS hari ini (waktu New York) tidak dibuka → catat "cuti" dalam `standard/binaan_v2_log.md`, commit + push, berhenti.
+1. Baca `papertrade/moomoo.csv`, semua `papertrade/claude*.csv`, `papertrade/watchlist.csv`.
+2. Data pasaran: `quote_stock_screen`
+   - screen_queries = [{"simple_field_query":{"simple_field":1,"screen_value_list":[2]}},{"simple_field_query":{"simple_field":10,"screen_value_list":[1]}},{"simple_property_query":{"property":{"name":2201},"lower":{"value":10000,"includes":true}}}]
+   - retrieve_queries = [{"basic_property":{"name":1101}},{"simple_property":{"name":2202}},{"simple_property":{"name":2204}},{"simple_property":{"name":2205}},{"simple_property":{"name":2201}},{"cumulative_property":{"name":3104,"days":1}},{"financial_property":{"name":4903,"term":10}}]
+   - limit 250, ulang dengan next_key sehingga has_more=false. Kemudian kline US.SPY dan US.QQQ (num 370). Kline saham hanya untuk calon yang perlu (maks 24).
+3. Semak semula watchlist (tugasan_v3 §3): 90–99% kekal (kemas kini); 100% dan sah → senarai beli (keluarkan dari watchlist); terkeluar signal → BUANG.
+4. Imbas 87 kaedah: isyarat 100% dan sah (§3 a, b) → `papertrade/senarai_beli.csv` (lajur ikut SKEMA, destinasi = Claude, tarikh_imbasan = hari ini MYT). Calon baharu 90–99% → watchlist (maks 5 setiap kaedah).
+5. Sektor & industri wajib bagi setiap baris.
+6. `python3 BacktestShariah2/standard/sahkan.py` → mesti 0.
+7. Tulis CSV; tolak `papertrade/senarai_beli` dan `papertrade/watchlist` ke db dashboard.
+8. Catatan dalam `standard/binaan_v2_log.md`: masa siap, bilangan senarai beli, watchlist dibuang/baharu, isyarat mingguan ditolak. Commit `Imbas 8:02 malam <tarikh>: <ringkas>` + push (push selepas setiap fail penting juga).

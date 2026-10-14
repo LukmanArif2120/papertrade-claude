@@ -1,0 +1,2 @@
+set,id,kaedah,varian,enjin,tarikh,keputusan,skor,cagr,mdd,mar,h1,h2,thn_kalah_spy,n,dagangan_setahun,win,avg,avgwin,avgloss,pf,days,hit10,ret10,terburuk,ada_henti,gate_gagal,catatan,ew_cagr,menang_ew,bulan_untung,bulan10,pegang
+431,M91,Stochastic Pop (Bernstein/Steckler),V2 V1 + tutup>HH20 (pecah keluar),v1.2,2026-10-07,SIMPAN,58.5,0.2513,-0.2079,1.2086,0.1765,0.3248,0.6667,1578,228.0825,0.4183,0.0163,0.1176,-0.0566,1.4938,17.5336,0.3561,0.1515,-0.2745,True,,V1 + tutup > high tertinggi 20h sebelum,0.2191,True,0.5301,0.1325,5:0.3|10:1.1|15:1.5|20:2.1|30:3.0|40:4.6|60:6.8

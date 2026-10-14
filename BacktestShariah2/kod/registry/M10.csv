@@ -1,0 +1,2 @@
+set,id,kaedah,varian,enjin,tarikh,keputusan,skor,cagr,mdd,mar,h1,h2,thn_kalah_spy,n,dagangan_setahun,win,avg,avgwin,avgloss,pf,days,hit10,ret10,terburuk,ada_henti,gate_gagal,catatan,ew_cagr,menang_ew,bulan_untung,bulan10,pegang
+431,M10,EMA3 + CCI + MACD,V4 V1 pencetus CCI>+100,v1.2,2026-10-05,UJI KERTAS,65.0,0.285,-0.293,0.9725,0.1062,0.4696,0.8333,2612,377.5358,0.3254,0.047,0.2934,-0.0718,1.9712,53.6972,0.4552,0.2025,-0.5519,True,,x,0.2191,True,0.6386,0.1687,x

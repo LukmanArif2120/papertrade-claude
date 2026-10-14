@@ -1,0 +1,4 @@
+set,id,kaedah,varian,enjin,tarikh,keputusan,skor,cagr,mdd,mar,h1,h2,thn_kalah_spy,n,dagangan_setahun,win,avg,avgwin,avgloss,pf,days,hit10,ret10,terburuk,ada_henti,gate_gagal,catatan,ew_cagr,menang_ew,bulan_untung,bulan10,pegang
+431,M89,Chande 65sma-3cc,V5 V1+SMA65 naik (>SMA65 10h lalu),v1.2,2026-10-07,SIMPAN,56.3,0.2593,-0.3101,0.836,0.3366,0.2078,0.6667,4878,705.0611,0.3415,0.0183,0.172,-0.0614,1.4536,26.0203,0.3977,0.1667,-0.5214,True,,Penapis cerun SMA65,0.2191,True,0.6265,0.1566,x
+431,M89,Chande 65sma-3cc,V1 Spesifikasi dikunci,v1.2,2026-10-07,DITOLAK,,0.1382,-0.3579,0.3861,0.1028,0.1797,0.3333,10513,1519.5383,0.347,0.0242,0.1874,-0.0625,1.593,26.671,0.4093,0.175,-0.5214,True,G3,x,0.2191,False,0.5663,0.0964,x
+431,M89,Chande 65sma-3cc,V4 V1 keluar masa 20 hari,v1.2,2026-10-07,SIMPAN,36.6,0.1849,-0.3432,0.5387,0.1176,0.2512,0.5,10730,1550.9032,0.439,0.0134,0.115,-0.0662,1.3597,14.4601,0.333,0.1785,-0.5222,True,,x,0.2191,False,0.6265,0.1325,x

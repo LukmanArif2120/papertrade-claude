@@ -1,5 +1,8 @@
 # Papertrade harian automatik (mula 8 Okt 2026)
 
+> **TERBATAL (14 Okt 2026).** Diganti oleh `standard/tugasan_v3.md` dan `jadual/`. Dikekalkan untuk sejarah sahaja; jangan ikut peraturan di bawah.
+
+
 ## Tugasan berjadual (auto, tanpa kelulusan; paper trade sahaja)
 | Tugasan | Masa | Kerja |
 |---|---|---|
