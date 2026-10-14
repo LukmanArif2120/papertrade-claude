@@ -579,11 +579,11 @@ function renderSektor(){
   const tmRows=sf.tm==='Sektor'?sek:ind;const [pkK,pkL]=SKP[sf.pk];
   const seg=(id,cur,opts)=>`<div class="seg" id="${id}">${opts.map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${cur===v}">${t}</button>`).join('')}</div>`;
   el.innerHTML=`
-  <p class="headline">Pasaran AS: <b>${pas.naik??'–'}</b> naik / <b>${pas.turun??'–'}</b> turun hari ini, <b>${fx(pas.atas_sma50,0)}%</b> saham di atas SMA50 dan <b>${fx(pas.atas_sma200,0)}%</b> di atas SMA200. Prestasi 1M terkuat: sektor <b>${esc(topS[0]?topS[0].nama:'–')}</b>${topS[1]?`, kemudian <b>${esc(topS[1].nama)}</b>`:''}; industri <b>${esc(topI[0]?topI[0].nama:'–')}</b>. Tab ini maklumat sahaja, bukan penapis beli.</p>
+  <p class="headline">${sk.alam?`Seluruh pasaran AS: <b>${pas.n_saham??'–'}</b> saham harga ≥ USD5 dalam <b>${sek.length}</b> sektor dan <b>${ind.length}</b> industri. <b>${fx(pas.breadth_1m,0)}%</b> saham naik dalam sebulan (median 1M ${sg2(pas.median_1m)}, 3M ${sg2(pas.median_3m)}).`:`Pasaran AS: <b>${pas.naik??'–'}</b> naik / <b>${pas.turun??'–'}</b> turun hari ini, <b>${fx(pas.atas_sma50,0)}%</b> saham di atas SMA50 dan <b>${fx(pas.atas_sma200,0)}%</b> di atas SMA200.`} Prestasi 1M terkuat: sektor <b>${esc(topS[0]?topS[0].nama:'–')}</b>${topS[1]?`, kemudian <b>${esc(topS[1].nama)}</b>`:''}; industri <b>${esc(topI[0]?topI[0].nama:'–')}</b>. Tab ini maklumat sahaja, bukan penapis beli.</p>
   <div class="kpis">
     <div class="kpi"><div class="lbl" data-tip="prestasi_1m">Sektor 1M terkuat</div><div class="v" style="font-size:1.3rem">${esc(topS[0]?topS[0].nama:'–')}</div><div class="s">1M ${sg2(topS[0]&&topS[0].prestasi_1m)} · 3M ${sg2(topS[0]&&topS[0].prestasi_3m)} · ${topS[0]?topS[0].fasa||'':''}</div></div>
     <div class="kpi"><div class="lbl" data-tip="prestasi_1m">Industri 1M terkuat</div><div class="v" style="font-size:1.3rem">${esc(topI[0]?topI[0].nama:'–')}</div><div class="s">1M ${sg2(topI[0]&&topI[0].prestasi_1m)} · ${esc(topI[0]?topI[0].sektor:'')} · ${topI[0]?topI[0].n_harga:0} saham</div></div>
-    <div class="kpi"><div class="lbl" data-tip="breadth_pasaran">Breadth pasaran</div><div class="v ${pas.atas_sma50>=50?'pos':'neg'}">${fx(pas.atas_sma50,0)}%</div><div class="s">di atas SMA50 · nisbah naik/turun ${fx(pas.adr,2)} · RSI purata ${fx(pas.rsi,0)}</div></div>
+    ${sk.alam?`<div class="kpi"><div class="lbl" data-tip="breadth_pasaran">Breadth pasaran</div><div class="v ${pas.breadth_1m>=50?'pos':'neg'}">${fx(pas.breadth_1m,0)}%</div><div class="s">saham naik 1M · ${pas.n_saham} saham AS · median 1W ${sg2(pas.median_1w)}</div></div>`:`<div class="kpi"><div class="lbl" data-tip="breadth_pasaran">Breadth pasaran</div><div class="v ${pas.atas_sma50>=50?'pos':'neg'}">${fx(pas.atas_sma50,0)}%</div><div class="s">di atas SMA50 · nisbah naik/turun ${fx(pas.adr,2)} · RSI purata ${fx(pas.rsi,0)}</div></div>`}
     <div class="kpi"><div class="lbl" data-tip="fasa">Fasa sektor</div><div class="v" style="font-size:1.3rem">${['Leading','Improving','Weakening','Lagging'].map(f=>`<span style="color:var(${FASA[f].c})">${fc[f]||0}</span>`).join('<span class="mut"> · </span>')}</div><div class="s">Leading · Improving · Weakening · Lagging</div></div>
   </div>
   <div class="panel"><div class="panel-h"><h2>Peta haba</h2><span class="sub">Saiz = nilai pasaran · warna = prestasi ${pkL} · ketik petak untuk tapis jadual</span></div>
@@ -605,7 +605,7 @@ function renderSektor(){
       {k:'rs',t:'RS',tip:'rs_sek',f:r=>fx(r.rs,0)},
       {k:'breadth',t:'Breadth',tip:'breadth',f:r=>r.breadth==null?'–':`<span class="${r.breadth>=60?'pos':r.breadth<40?'neg':''}">${fx(r.breadth,0)}%</span>`},
       {k:'volum_relatif',t:'Volum relatif',tip:'volum_relatif',f:r=>r.volum_relatif==null?'–':`<span class="${r.volum_relatif>=1.2?'pos':''}">${fx(r.volum_relatif,2)}×</span>`},
-      {k:'aliran_institusi',t:'Aliran institusi',tip:'aliran_institusi',f:r=>`<span class="${cls(r.aliran_institusi)}">${r.aliran_institusi>0?'+':''}${r.aliran_institusi}</span><span class="vv">${r.aliran_beli} beli · ${r.aliran_jual} jual</span>`},
+      {k:'aliran_institusi',t:'Aliran institusi',tip:'aliran_institusi',f:r=>r.aliran_institusi==null?'<span class="mut">–</span>':`<span class="${cls(r.aliran_institusi)}">${r.aliran_institusi>0?'+':''}${r.aliran_institusi}</span><span class="vv">${r.aliran_beli??0} beli · ${r.aliran_jual??0} jual</span>`},
       {k:'n_harga',t:'Saham',tip:'n_saham',f:r=>`${r.n_harga}<span class="vv">daripada ${r.n}</span>`}]})}
   </div>
   <div class="grid2">
@@ -629,7 +629,7 @@ function renderSektor(){
       ${wc?`<div class="sub" style="margin:0;color:#c4b5fd">${wc} calon watchlist dalam industri ini: ${esc([...wByInd[r.nama]].slice(0,6).join(', '))}</div>`:''}</div>`;}).join('')}</div>
   </div>
   <div class="strip"><b class="t">Nota kalibrasi</b><span>Ujian 13 Okt 2026 (317 saham Shariah 2019–2026 dan 1,417 saham Moomoo 2020–2026): skor panas, fasa Leading dan kekuatan 1W/1M/3M sektor atau industri <b>tidak meramal</b> pulangan 1–3 bulan seterusnya. Gunakan tab ini sebagai maklumat pasaran sahaja; keputusan beli ikut isyarat kaedah yang sudah diuji.</span></div>
-  <div class="foot"><span>Snapshot ${esc(sk.dibina||'')} · harga sejarah hingga tutup ${esc(String(sk.tarikh_harga||'').replace(/(\d{4})(\d\d)(\d\d)/,'$1-$2-$3'))}; harga kini ${esc(sk.harga_kini||'')}</span><span>${esc(pas.n_harga||'')} saham dengan sejarah harga · ${esc(pas.n_saham||'')} dikelaskan</span></div>`;
+  <div class="foot"><span>${sk.alam?'Seluruh pasaran AS · ':''}Snapshot ${esc(sk.dibina||'')} · harga sejarah hingga tutup ${esc(String(sk.tarikh_harga||'').replace(/(\d{4})(\d\d)(\d\d)/,'$1-$2-$3'))}; harga kini ${esc(sk.harga_kini||'')}</span><span>${esc(pas.n_harga||'')} saham dengan sejarah harga · ${esc(pas.n_saham||'')} dikelaskan</span></div>`;
   drawTreemap($('#skTree'),tmRows,sf.pk);
   drawRotasi($('#skRotC'),sf.rot==='Sektor'?sek:indOk.filter(r=>r.n_harga>=3));
   const bindSeg=(id,f)=>{const s=$('#'+id);if(s)s.onclick=e=>{const b=e.target.closest('button');if(!b)return;f(b.dataset.v);renderAll();};};
@@ -1045,8 +1045,8 @@ const TIPS={
   prestasi_1m:{t:'1M',d:'Median pulangan 21 hari dagangan (≈ sebulan) bagi saham dalam kumpulan.',e:'+5% = saham biasa dalam kumpulan naik 5% sebulan.'},
   prestasi_3m:{t:'3M',d:'Median pulangan 63 hari dagangan (≈ 3 bulan) bagi saham dalam kumpulan.',e:''},
   rs_sek:{t:'RS (kekuatan relatif)',d:'Purata RS Rating SST Terminal (1–99) bagi saham dalam kumpulan: prestasi harga berbanding semua saham pasaran.',e:'RS 80 = saham biasa kumpulan ini mengatasi 80% pasaran.'},
-  breadth:{t:'Breadth',d:'Peratus saham dalam kumpulan yang harganya di atas SMA50. Tinggi = kenaikan meluas, bukan bergantung pada satu dua saham.',e:'70% = 7 daripada 10 saham dalam aliran naik jangka sederhana.'},
-  breadth_pasaran:{t:'Breadth pasaran',d:'Peratus semua saham AS (SST Terminal) di atas SMA50. Di bawah 40% = pasaran lemah; di atas 60% = sihat.',e:''},
+  breadth:{t:'Breadth',d:'Peratus saham dalam kumpulan yang naik dalam sebulan (data seluruh pasaran AS; snapshot lama: di atas SMA50). Tinggi = kenaikan meluas, bukan bergantung pada satu dua saham.',e:'70% = 7 daripada 10 saham dalam aliran naik jangka sederhana.'},
+  breadth_pasaran:{t:'Breadth pasaran',d:'Peratus semua saham AS harga ≥ USD5 yang naik dalam sebulan (screener Moomoo). Di bawah 40% = pasaran lemah; di atas 60% = sihat.',e:''},
   volum_relatif:{t:'Volum relatif',d:'Median nisbah volum purata 5 hari terakhir berbanding purata 50 hari. Melebihi 1× = lebih ramai pedagang memberi fokus.',e:'1.3× = volum 30% lebih tinggi daripada biasa.'},
   aliran_institusi:{t:'Aliran institusi',d:'Bilangan saham kumpulan dalam senarai 20 teratas pengumpulan institusi tolak bilangan dalam senarai 20 teratas pengagihan (SST institutional_flow, perubahan % pegangan institusi).',e:'+2 = dua saham lebih banyak sedang dikumpul berbanding diagihkan.'},
   volum_luar_biasa:{t:'Volum luar biasa',d:'Saham yang didagangkan ≥ 2× purata volum 20 hari hari ini (SST unusual_volume).',e:''},

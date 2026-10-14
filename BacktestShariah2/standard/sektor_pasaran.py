@@ -111,13 +111,16 @@ def kumpulan(df, kunci, jenis, pasaran):
         if len(g) < MIN_SAHAM:
             continue
         m1w, m1m, m3m = g.r1w.median(), g.r1m.median(), g.r3m.median()
-        top = g.sort_values('r1m', ascending=False).head(3)
+        besar = g[g.mcap >= 3e8]  # saham teratas: nilai pasaran >= USD300 juta sahaja
+        top = (besar if len(besar) else g).sort_values('r1m', ascending=False).head(3)
         out.append(dict(jenis=jenis, nama=nama, sektor=g.sektor.iloc[0] if jenis == 'Industri' else nama, n=len(g),
                         prestasi_1w=m1w, prestasi_1m=m1m, prestasi_3m=m3m,
                         breadth=round(100 * (g.r1m > 0).mean(), 1),
                         rel_1m=m1m - pasaran['r1m'], rel_3m=m3m - pasaran['r3m'],
                         mcap_bilion=round(g.mcap.sum() / 1e9, 1),
-                        teratas=' '.join(f'{r.ticker}({r.r1m:+.1f}%)' for r in top.itertuples() if pd.notna(r.r1m))))
+                        teratas=' '.join(f'{r.ticker}({r.r1m:+.1f}%)' for r in top.itertuples() if pd.notna(r.r1m)),
+                        teratas_senarai=[dict(saham=r.ticker, r1m=None if pd.isna(r.r1m) else round(r.r1m, 2),
+                                              r1w=None if pd.isna(r.r1w) else round(r.r1w, 2)) for r in top.itertuples()]))
     k = pd.DataFrame(out)
     if k.empty:
         return k
@@ -158,7 +161,8 @@ def main(argv=None):
     lama = lama[lama.tarikh != a.tarikh]
     pd.concat([lama, k[LAJUR]], ignore_index=True).to_csv(a.out, index=False)
     if a.json:
-        json.dump({'tarikh': a.tarikh, 'pasaran': pas, 'rows': json.loads(k[LAJUR].to_json(orient='records'))},
+        rows = json.loads(k[LAJUR + ['teratas_senarai']].to_json(orient='records'))
+        json.dump({'tarikh': a.tarikh, 'pasaran': pas, 'rows': rows},
                   open(a.json, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
     print(f"Pasaran: {pas['n']} saham, median 1M {pas['r1m']:.2f}%, breadth {pas['breadth']}%")
     for j in ['Sektor', 'Industri']:
