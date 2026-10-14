@@ -53,3 +53,8 @@
 - 22 isyarat Papertrade C yang melanggar peraturan kaedah kini direkod sebagai TIDAK DIBELI (tidak_dibeli: true): harga_beli/untung/keluar dikosongkan, harga buka disimpan dalam harga_buka_rujukan, tarikh dalam tarikh_beli_dirancang, sebab dalam sebab_tidak_sah; entri MAE dibuang. Dashboard v29: diasingkan ke panel "Isyarat tidak dibeli" di tab Papertrade C, tidak dalam jadual posisi atau Prestasi.
 - 8 posisi Moomoo (ZTO M13 + 7 M52) memang dibeli di akaun simulasi, jadi kekal dalam rekod dengan label "Luar peraturan" (luar_peraturan: true) dan tidak dikira dalam Prestasi.
 - Db: papertrade/claude v6, claude_2 v6, moomoo v6, prestasi/mae v7, prestasi/ringkasan v6, sektor/snapshot v7. Angka Prestasi tidak berubah (M 200 · C 918 · Combine 1,118).
+
+## 2026-10-14 (~12:40 MYT) — Pindah ke repo GitHub
+- Semua 34 doc Project + 13 fail data dipindahkan ke repo `pedagangsenja/papertrade-claude` (commit 20f7286). Project claude.ai dibekukan; tiada tulisan lagi ke sana.
+- Ketiga-tiga tugasan berjadual (9 malam, 9:35 NY, 6 pagi) kini clone repo, tulis fail di repo, dan commit + push ke `main`. Dashboard dan db artifact tidak berubah.
+- Ujian sesi berjadual (add_repo, clone, push) berjaya 04:28 UTC.
