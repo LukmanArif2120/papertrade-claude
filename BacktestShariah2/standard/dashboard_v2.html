@@ -672,7 +672,7 @@ function renderWatch(){
       {k:'paras',t:'Paras pencetus',tip:'paras',f:r=>`${fx(r.paras,2)}<span class="vv">jarak ${sg2(r.jarak_pct)}</span>`},
       {k:'ditambah',t:'Tarikh masuk watchlist',l:1,tip:'ditambah',f:r=>esc(r.ditambah||'–')},
       {k:'hari',t:'Hari dalam watchlist',tip:'hari_watch',f:r=>fx(r.hari,0)},
-      {k:'gred_keseluruhan',t:'Gred S I R P Q',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:grSel}],
+      ...grCols()],
       foot:(n,t)=>`<div class="tablefoot"><span>${n} daripada ${t}</span>${t>n?'<button type="button" class="more" id="wMore">Papar 60 lagi</button>':''}</div>`})}
   </div>`;
   $('#wK').onchange=e=>{wf.k=e.target.value;wf.shown=60;renderAll();};
@@ -693,9 +693,10 @@ const GDIM=[['gred_sektor','S','Sektor','skor_sektor'],['gred_industri','I','Ind
 const GORD={A:0,B:1,C:2,D:3,E:4};
 const grB=(g,lbl,tt)=>`<span class="gr g-${GORD[g]!=null?g:'x'}" title="${esc(tt||'')}">${lbl?`<small>${lbl}</small>`:''}${GORD[g]!=null?g:'–'}</span>`;
 const adaGred=r=>GDIM.some(([k])=>GORD[r[k]]!=null);
-function grSel(r){if(!adaGred(r))return '<span class="mut">–</span>';
-  const tt={gred_sektor:`Sektor ${r.sektor||''}: skor ${r.skor_sektor??'–'}`,gred_industri:`Industri ${r.industri||''}: skor ${r.skor_industri??'–'}`,gred_rs:`RS rating ${r.rs_rating??'–'}`,gred_pemangkin:`Pemangkin: ${r.pemangkin||'–'}`,gred_qr:`Earnings ${r.tarikh_earnings||'tiada dalam 30 hari'}${r.hari_ke_earnings!=null&&r.hari_ke_earnings!==''?' · '+r.hari_ke_earnings+' hari dagangan':''}${r.sumber_earnings?' · '+r.sumber_earnings:''}`};
-  return `<span style="white-space:nowrap">${GDIM.map(([k,l])=>grB(r[k],l,tt[k])).join('')}</span>${GORD[r.gred_keseluruhan]!=null?`<span class="vv">keseluruhan ${r.gred_keseluruhan}</span>`:''}`;}
+const grTT=(r,k)=>({gred_sektor:`Sektor ${r.sektor||''}: skor ${r.skor_sektor??'–'}`,gred_industri:`Industri ${r.industri||''}: skor ${r.skor_industri??'–'}`,gred_rs:`RS rating ${r.rs_rating??'–'}`,gred_pemangkin:`Pemangkin: ${r.pemangkin||'–'}`,gred_qr:`Earnings ${r.tarikh_earnings||'tiada dalam 30 hari'}${r.hari_ke_earnings!=null&&r.hari_ke_earnings!==''?' · '+r.hari_ke_earnings+' hari dagangan':''}${r.sumber_earnings?' · '+r.sumber_earnings:''}`})[k];
+/* satu lajur bagi setiap dimensi S I R P Q, kemudian gred keseluruhan */
+const grCols=()=>[...GDIM.map(([k,l])=>({k,t:l,tip:'gred',v:r=>GORD[r[k]]??9,f:r=>GORD[r[k]]!=null?grB(r[k],'',grTT(r,k)):'<span class="mut">–</span>'})),
+  {k:'gred_keseluruhan',t:'Gred',tip:'gred',v:r=>GORD[r.gred_keseluruhan]??9,f:r=>GORD[r.gred_keseluruhan]!=null?grB(r.gred_keseluruhan,'','Gred keseluruhan'):'<span class="mut">–</span>'}];
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.keluar?'exit':'');
 function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>esc(r.tarikh_beli||'–')},
@@ -712,7 +713,7 @@ function ptCols(akaun){return [
   {k:'tarikh_keluar',t:'Tarikh keluar',tip:'tarikh_keluar',l:1,f:r=>esc(r.tarikh_keluar||'–')},
   {k:'harga_keluar',t:'Harga keluar',tip:'harga_keluar',f:r=>fx(r.harga_keluar,2)},
   {k:'untung_akhir_pct',t:'Untung akhir %',tip:'untung_akhir',f:r=>r.untung_akhir_pct==null?'–':`<b class="${cls(r.untung_akhir_pct)}">${sg2(r.untung_akhir_pct)}</b>`},
-  {k:'gred_keseluruhan',t:'Gred S I R P Q',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:grSel}];}
+  ...grCols()];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
   const up=rows.filter(r=>r.untung_pct>0).length,ex=rows.filter(r=>r.keluar).length;const a=avgOf(rows.map(r=>r.keluar?r.untung_akhir_pct:r.untung_pct));
   const kd=new Set(rows.map(r=>r.kaedah)).size;
