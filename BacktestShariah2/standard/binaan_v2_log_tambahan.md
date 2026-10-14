@@ -58,3 +58,8 @@
 - Semua 34 doc Project + 13 fail data dipindahkan ke repo `pedagangsenja/papertrade-claude` (commit 20f7286). Project claude.ai dibekukan; tiada tulisan lagi ke sana.
 - Ketiga-tiga tugasan berjadual (9 malam, 9:35 NY, 6 pagi) kini clone repo, tulis fail di repo, dan commit + push ke `main`. Dashboard dan db artifact tidak berubah.
 - Ujian sesi berjadual (add_repo, clone, push) berjaya 04:28 UTC.
+
+## 2026-10-14 (9:36 NY) — Beli maya 9:35 NY
+- Calon: 375 baris senarai_beli (211 saham; tarikh_imbasan 14 Okt). Direkod 361 baris (1 unit setiap kaedah+saham, sumber harian_c) ke `papertrade/claude_3.csv` + db `papertrade/claude_3` (claude_2 sudah ~229 KB). Gred disalin tanpa diubah. Harga beli = buka sementara `quote_stock_quote` 9:36 NY; belum disahkan dengan kline.
+- Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
+- Dilangkau 14: buka ≤ henti — AEO M14, ASST M14 & M57, TSM M14, WAY M14, UMC M29, CLS M49, HVT M74; belum didagangkan (data_date 13 Okt/low-high 0) — FORR M02 & M10, CLMB M12, WKC M14, ARW M55, TBN M99. Tiada langkau buka_maks; M03 (EXE, INFY) tidak dilangkau (sasaran dinamik).
