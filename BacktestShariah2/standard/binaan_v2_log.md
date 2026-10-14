@@ -237,3 +237,17 @@
 - Nota: project_write menghasilkan doc teks baharu pada laluan sama (fail asal ialah muat naik blob) — fail blob lama mungkin masih kelihatan dalam senarai fail Project; versi terkini = doc teks.
 - db: `larian/20261013-2030-malam/{kumpulan k00–k14, meta}`, `harian/status` v10 (run_terkini, harga_aset, senarai_beli ringkas).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-14 20:40–20:56 MYT — Imbasan malam manual (data tutup 13 Okt; menggantikan rutin 8:02 yang gagal)
+- Rutin 8:02 gagal: `add_repo` tiada dalam sesi rutin → push ditolak (403). Imbasan dijalankan semula secara manual dalam sesi interaktif yang ada repo (model bukan Sonnet; pengecualian sekali).
+- Kalendar NYSE (Moomoo quote_trading_days): 14 Okt 2026 sesi penuh → teruskan.
+- Data: screener Moomoo Shariah AS harga ≥ USD10 — 919 saham (4 halaman); kline SPY & QQQ (370 bar hingga 13 Okt). Stor harga (aset dashboard A/B/idx/univ 13 Okt) + bar 13 Okt: 431/431 + 496/496. 8 saham baharu tanpa sejarah + 3 jurang — kline TIDAK ditarik (bukan calon). Aset harga dashboard TIDAK dimuat naik semula (stor tempatan sahaja).
+- Imbasan 87 kaedah (scanner.py mod malam, db larian 20261013-2030-malam), tiada ralat, 498 s.
+- **Senarai beli** 375 baris, 211 saham, 61 kaedah; destinasi Claude sahaja. Sumber: gilir pengimbas (189) + maks 5 isyarat lain setiap kaedah + calon watchlist semalam yang kini lengkap. Ditolak: 5 M52 (isyarat mingguan; 13 Okt bukan hari dagangan terakhir minggu, §3a); 42 kerana kaedah+saham masih dipegang.
+  - `buka_maks`/`nota_henti` diisi untuk M08 (1.05×SMA20), M06 (1.05×pangsi 15 hari), M19/M20 (= sasaran). Kaedah lain: kosong (belum ditakrif dalam kod `sedia()`; perlu kerja susulan). Semakan isyarat mingguan hanya untuk M52.
+- **Watchlist** 321 calon, 199 saham, 70 kaedah (100: 179, 99: 83, 98: 36, 90: 23). 197 baharu, 124 dibawa, 110 dipindah ke senarai beli, 82 dibuang (terkeluar signal).
+- Sektor & industri: semua baris lengkap (38 saham diisi daripada peta_industri + sektor_pasaran).
+- Gred (gred.py tambah, --acara SST market_events 30 hari): S, I, R, Q dikira; **pemangkin tidak dikumpul** (gred_pemangkin "–" bagi semua baris) kerana kekangan masa sebelum 9:35 NY.
+- db: `papertrade/senarai_beli` v4, `papertrade/watchlist` v4 (ruang padat: medan kosong dan beberapa lajur gred terperinci tidak disalin ke db watchlist; CSV lengkap), `harian/status` v12.
+- Rutin: tiga rutin baharu menembak ke sesi Sonnet yang sudah dilampirkan repo (tiada add_repo); rutin lama dinyahaktifkan.
+- Tiada order. Tiada wang sebenar.

@@ -22,3 +22,4 @@ Laluan lama dalam dokumen (`standard/x`, `papertrade/x`, `spec/`) = `BacktestSha
 - Setiap larian berjadual: `git pull --rebase` dahulu, tulis fail di repo ini, kemudian commit dan push ke `main`. Jangan tulis lagi ke Project claude.ai (salinan di sana dibekukan pada 14 Okt 2026).
 - Sebelum push data: `python3 BacktestShariah2/standard/sahkan.py --betulkan` mesti keluar 0.
 - Tugasan berjadual guna model Sonnet 5.5 sahaja.
+- Rutin berjadual (sejak 14 Okt 2026) menembak ke sesi Sonnet yang sudah dilampirkan repo ini; jangan guna `add_repo`. Dalam sesi itu alat Moomoo/SST mungkin berawalan lain (cth. `mcp__da8be8b4-…__quote_stock_quote`, bukan `mcp__Moo_Moo__…`): jika `select:mcp__Moo_Moo__…` gagal, cari dengan ToolSearch kata kunci nama alat (cth. "quote_stock_quote") dan guna alat yang ditemui. Larangan order terpakai tanpa mengira awalan.
