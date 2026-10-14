@@ -1,351 +1,376 @@
-saham,nama,kaedah,sektor,industri,pct_dipenuhi,harga_rujukan,henti,sasaran,destinasi,slot_moomoo,sumber,tarikh_isyarat,tarikh_imbasan,asal
-KBH,KB Home,M01,Real Estate,Residential Construction,100,41.63,,47.9763,Moomoo,5/10,431,2026-10-12,2026-10-13,isyarat
-MOS,The Mosaic,M01,Materials,Chemicals: Agricultural,100,18.85,,23.3783,Moomoo,6/10,431,2026-10-12,2026-10-13,isyarat
-ANGO,AngioDynamics,M01,Healthcare,Medical Instruments & Supplies,100,11.4,,14.9737,Moomoo,7/10,lain,2026-10-12,2026-10-13,isyarat
-ARGX,argenx SE,M01,Healthcare,Biotechnology,100,812.3,,964.1793,Moomoo,10/10,lain,2026-10-12,2026-10-13,isyarat
-PESI,Perma-Fix Environmental Services,M01,Industrial,Waste Management,100,13.3,,16.7217,Moomoo,8/10,lain,2026-10-12,2026-10-13,isyarat
-WGO,Winnebago Industries,M01,Consumer,Recreational Vehicles,100,23.21,,27.1688,Moomoo,9/10,lain,2026-10-12,2026-10-13,isyarat
-CTSH,Cognizant,M02,Technology,Information Technology Services,100,59.68,59.016,,Moomoo,7/10,431,2026-10-12,2026-10-13,isyarat
-LFST,LifeStance Health,M02,Healthcare,Medical/Nursing Services,100,12.48,8.8655,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-MDT,Medtronic,M02,Healthcare,Medical Specialties,100,91.93,86.0678,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-VET,Vermilion Energy,M02,Energy,Oil & Gas E&P,100,11.92,10.9956,,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-DOV,Dover,M03,Industrial,Industrial Machinery,100,190.88,184.7835,192.4341,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat
-PODD,Insulet,M03,Healthcare,Medical Specialties,100,139.81,129.9127,142.9813,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-GWW,W.W. Grainger,M05,Industrial,Wholesale Distributors,100,1306.73,1223.9271,,Moomoo,1/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-TALO,Talos Energy,M06,Energy,Oil & Gas E&P,100,17.34,15.8846,,Moomoo,2/10,431,2026-10-12,2026-10-13,isyarat
-AKA,a.k.a. Brands,M09,Consumer,Apparel Retail,100,10.85,9.8034,,Moomoo,5/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-CHT,Chunghwa Telecom,M09,Communication Services,Telecom Services,100,46.21,45.3742,,Moomoo,6/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-CNQ,Canadian Natural Resources,M10,Energy,Integrated Oil,100,50.5,45.3662,,Moomoo,4/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-OVV,Ovintiv,M10,Energy,Oil & Gas E&P,100,65.12,58.1073,,Moomoo,3/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-MMSI,Merit Medical Systems,M10,Healthcare,Medical Specialties,100,89.75,80.0709,,Moomoo,5/10,lain,2026-10-12,2026-10-13,isyarat
-PCYO,Pure Cycle,M10,Utilities,Utilities - Regulated Water,100,11.25,10.8629,,Moomoo,6/10,lain,2026-10-12,2026-10-13,isyarat
-PEN,Penumbra,M10,Healthcare,Medical Specialties,100,320.96,316.9359,,Moomoo,7/10,lain,2026-10-12,2026-10-13,isyarat
-FSLR,First Solar,M11,Technology,Semiconductors,100,179.72,166.914,,Moomoo,7/10,431,2026-10-12,2026-10-13,isyarat
-SENEB,Seneca Foods-B,M11,Consumer,Packaged Foods,100,182.14,172.4788,,Moomoo,8/10,lain,2026-10-12,2026-10-13,isyarat
-ASX,ASE Technology,M12,Technology,Semiconductors,100,47.53,44.3,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat
-ATRC,AtriCure,M12,Healthcare,Medical Specialties,100,57.28,51.63,,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ANF,Abercrombie & Fitch,M13,Consumer,Apparel/Footwear Retail,100,145.91,140.828,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat
-CVE,Cenovus Energy,M13,Energy,Oil & Gas Integrated,100,31.86,30.8318,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-CDNS,Cadence Design Systems,M14,Technology,Packaged Software,100,348.42,346.84,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-CLS,Celestica,M14,Technology,Electronic Components,100,347.5,346.8,,Moomoo,7/10,431,2026-10-12,2026-10-13,isyarat
-EXTR,Extreme Networks,M14,Technology,Computer Peripherals,100,23.55,23.51,,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat
-LSCC,Lattice Semiconductor,M14,Technology,Semiconductors,100,122.84,121.8,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat
-CAH,Cardinal Health,M15,Healthcare,Medical Distributors,100,238.08,225.4433,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat
-DASH,DoorDash,M15,Transportation,Air Freight/Couriers,100,194.24,182.1161,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-ADI,Analog Devices,M18,Technology,Semiconductors,100,406.245,398.965,444.556,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-FRPT,Freshpet,M18,Consumer,Food: Specialty/Candy,100,65.26,60.15,164.07,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat
-TANH,Tantech,M18,Consumer,Household & Personal Products,100,17.27,16.1,202.5,Moomoo,10/10,lain,2026-10-12,2026-10-13,isyarat
-BSX,Boston Scientific,M19,Healthcare,Medical Specialties,100,43.84,40.9711,45.74,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-ABT,Abbott Laboratories,M20,Healthcare,Medical Specialties,100,101.82,98.7822,107.8956,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-NWS,News Corp-B,M20,Communication Services,Entertainment,100,32.38,31.7394,33.6612,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-TREX,Trex Co.,M25,Industrial,Building Products & Equipment,100,44.48,43.7382,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-FAST,Fastenal,M26,Industrial,Wholesale Distributors,100,51.49,49.0446,,Moomoo,1/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-UFPT,UFP Technologies,M26,Industrial,Industrial Specialties,100,295.82,280.3878,,Moomoo,2/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-AEM,Agnico Eagle,M27,Materials,Precious Metals,100,188.18,178.7889,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-EGO,Eldorado Gold,M27,Materials,Gold,100,37.54,35.6353,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-STE,Steris PLC,M30,Healthcare,Medical Specialties,100,218.98,204.4647,,Moomoo,3/10,lain,2026-10-12,2026-10-13,isyarat
-WLY,John Wiley & Sons-A,M30,Communication Services,Publishing,100,51.32,46.2856,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat
-WLYB,John Wiley & Sons-B,M30,Communication Services,Publishing,100,51.59,46.6774,,Moomoo,5/10,lain,2026-10-12,2026-10-13,isyarat
-ATO,Atmos Energy,M33,Utilities,Utilities - Regulated Gas,100,162.38,155.981,,Moomoo,2/10,431,2026-10-12,2026-10-13,isyarat
-FC,Franklin Covey,M33,Industrial,Education & Training Services,100,18.67,16.4323,,Moomoo,3/10,lain,2026-10-12,2026-10-13,isyarat
-ALRM,Alarm.com,M34,Technology,Packaged Software,100,55.93,53.145,,Moomoo,6/10,lain,2026-10-12,2026-10-13,isyarat
-E,Eni SpA,M34,Energy,Oil & Gas Integrated,100,56.77,53.65,,Moomoo,5/10,lain,2026-10-12,2026-10-13,isyarat
-INTA,Intapp,M34,Technology,Packaged Software,100,39.64,34.41,,Moomoo,2/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-PCTY,Paylocity,M34,Technology,Software - Application,100,156.03,139.42,,Moomoo,3/10,lain,2026-10-12,2026-10-13,isyarat
-SIBN,Si-Bone,M34,Healthcare,Medical Devices,100,20.1,17.95,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat
-STNG,Scorpio Tankers,M35,Energy,Oil & Gas Midstream,100,87.49,86.49,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-MCK,McKesson,M39,Healthcare,Medical Distributors,100,955.76,812.396,,Moomoo,7/10,lain,2026-10-12,2026-10-13,isyarat
-GIC,Global Industrial,M48,Technology,Internet Retail,100,43.6,41.105,,Moomoo,1/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-CVX,Chevron,M49,Energy,Integrated Oil,100,215.0,209.28,,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat
-CAAP,Corporacion America Airports,M50,Industrial,Airports & Air Services,100,24.76,24.225,,Moomoo,10/10,lain,2026-10-12,2026-10-13,isyarat
-SGC,Superior,M50,Consumer,Apparel Manufacturing,100,13.26,12.95,,Moomoo,9/10,lain,2026-10-12,2026-10-13,isyarat
-PAYC,Paycom Software,M54,Technology,Packaged Software,100,235.01,220.9302,,Moomoo,8/10,lain,2026-10-12,2026-10-13,isyarat
-DXCM,DexCom,M55,Healthcare,Medical Specialties,100,85.92,82.935,,Moomoo,10/10,431,2026-10-12,2026-10-13,isyarat
-XNCR,Xencor,M55,Healthcare,Biotechnology,100,25.04,22.56,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-FLXS,Flexsteel Industries,M57,Consumer,"Furnishings, Fixtures & Appliances",100,87.19,84.5,,Moomoo,5/10,lain,2026-10-12,2026-10-13,isyarat
-MTW,Manitowoc,M57,Industrial,Farm & Heavy Construction Machinery,100,21.77,21.09,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-BDX,Becton Dickinson & Co,M66,Healthcare,Medical Specialties,100,188.89,177.915,,Moomoo,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-EQNR,Equinor,M66,Energy,Oil & Gas Integrated,100,43.94,41.51,,Moomoo,7/10,431,2026-10-12,2026-10-13,isyarat
-WRBY,Warby Parker,M66,Consumer,Specialty Stores,100,25.99,24.16,,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat
-ASST,Strive,M74,Financial Services,Investment Trusts/Mutual Funds,100,27.71,25.1751,,Moomoo,5/10,431,2026-10-12,2026-10-13,isyarat
-M,Macy's,M74,Consumer,Department Stores,100,22.99,22.8486,,Moomoo,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-OESX,Orion Energy Systems,M74,Industrial,Electrical Equipment & Parts,100,25.425,24.3431,,Moomoo,7/10,lain,2026-10-12,2026-10-13,isyarat
-BLZE,Backblaze,M76,Technology,Software - Infrastructure,100,12.65,12.105,,Moomoo,3/10,lain,2026-10-12,2026-10-13,isyarat
-PAR,PAR Technology,M79,Technology,Software - Application,100,15.83,13.4555,,Moomoo,5/10,lain,2026-10-12,2026-10-13,isyarat
-SVRN,SVRN Inc,M79,Financial Services,Asset Management,100,48.49,41.2165,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat
-CEG,Constellation Energy,M80,Utilities,Electric Utilities,100,293.89,251.8192,,Moomoo,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-DT,Dynatrace,M80,Technology,Packaged Software,100,65.25,59.9464,,Moomoo,5/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-DV,DoubleVerify,M80,Technology,Packaged Software,100,13.52,13.3258,,Moomoo,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-RRC,Range Resources,M80,Energy,Oil & Gas E&P,100,41.42,38.2514,,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat
-EXPO,Exponent,M80,Industrial,Engineering & Construction,100,70.67,65.0179,,Moomoo,9/10,lain,2026-10-12,2026-10-13,isyarat
-NEO,NeoGenomics,M82,Healthcare,Medical/Nursing Services,100,16.2,,,Moomoo,9/10,431,2026-10-12,2026-10-13,isyarat
-AMR,Alpha Metallurgical,M82,Energy,Coal,100,185.62,,,Moomoo,10/10,lain,2026-10-12,2026-10-13,watchlist→lengkap
-CEPU,Central Puerto,M88,Utilities,Utilities - Regulated Electric,100,12.82,11.7944,,Moomoo,2/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-GKOS,Glaukos,M88,Healthcare,Medical Specialties,100,168.02,154.5784,,Moomoo,1/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-FSM,Fortuna Silver Mines,M89,Materials,Precious Metals,100,10.76,9.845,,Moomoo,4/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-G,Genpact,M89,Industrial,Miscellaneous Commercial Services,100,34.35,32.224,,Moomoo,5/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-LYFT,Lyft Inc,M89,Transportation,Other Transportation,100,16.11,15.0761,,Moomoo,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-WPM,Wheaton Precious Metals,M89,Materials,Precious Metals,100,138.11,128.6455,,Moomoo,3/10,431,2026-10-12,2026-10-13,isyarat
-ERO,Ero Copper,M90,Materials,Other Metals/Minerals,100,37.53,33.8741,,Moomoo,2/10,431,2026-10-12,2026-10-13,isyarat
-SNX,TD Synnex,M90,Technology,Electronics & Computer Distribution,100,273.06,253.3044,,Moomoo,3/10,431,2026-10-12,2026-10-13,isyarat
-MTDR,Matador Resources,M92,Energy,Integrated Oil,100,55.11,51.5587,,Moomoo,8/10,431,2026-10-12,2026-10-13,isyarat
-NWSA,News Corp-A,M92,Communication Services,Entertainment,100,29.38,28.0091,,Moomoo,7/10,431,2026-10-12,2026-10-13,isyarat
-SBLK,Star Bulk Carriers,M92,Transportation,Marine Shipping,100,29.84,28.0609,,Moomoo,5/10,431,2026-10-12,2026-10-13,isyarat
-TTE,TotalEnergies,M92,Energy,Oil & Gas Integrated,100,88.37,84.6809,,Moomoo,6/10,431,2026-10-12,2026-10-13,isyarat
-WDAY,Workday,M92,Technology,Information Technology Services,100,188.25,174.0233,,Moomoo,4/10,431,2026-10-12,2026-10-13,isyarat
-JOYY,JOYY Inc,M95,Communication Services,Internet Content & Information,100,82.18,78.7342,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat
-BIIB,Biogen,M99,Healthcare,Pharmaceuticals: Major,100,229.41,218.43,,Moomoo,1/10,431,2026-10-12,2026-10-13,isyarat
-CF,CF Industries Holdings,M99,Materials,Chemicals: Agricultural,100,114.58,111.54,,Moomoo,3/10,431,2026-10-12,2026-10-13,isyarat
-YPF,YPF SA,M99,Energy,Oil & Gas Integrated,100,51.97,49.27,,Moomoo,2/10,431,2026-10-12,2026-10-13,isyarat
-ARTNA,Artesian Resources,M99,Utilities,Utilities - Regulated Water,100,33.83,32.89,,Moomoo,7/10,lain,2026-10-12,2026-10-13,isyarat
-KARO,Karooooo,M99,Technology,Packaged Software,100,61.66,60.0,,Moomoo,5/10,lain,2026-10-12,2026-10-13,isyarat
-MSEX,Middlesex Water,M99,Utilities,Water Utilities,100,53.74,52.43,,Moomoo,8/10,lain,2026-10-12,2026-10-13,isyarat
-RMR,The RMR Group,M99,Real Estate,Real Estate Services,100,18.23,17.44,,Moomoo,10/10,lain,2026-10-12,2026-10-13,isyarat
-SDRL,Seadrill,M99,Energy,Oil & Gas Drilling,100,46.99,43.85,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat
-SENEA,Seneca Foods-A,M99,Consumer,Packaged Foods,100,183.41,171.42,,Moomoo,6/10,lain,2026-10-12,2026-10-13,isyarat
-UNF,UniFirst,M99,Industrial,Specialty Business Services,100,262.46,250.52,,Moomoo,9/10,lain,2026-10-12,2026-10-13,isyarat
-INSW,International Seaways,M101,Energy,Oil & Gas Midstream,100,124.22,98.4555,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat
-AEP,American Electric Power,M105,Utilities,Utilities - Regulated Electric,100,124.23,117.7614,,Moomoo,7/10,431,2026-10-12,2026-10-13,isyarat
-EOG,EOG Resources,M105,Energy,Integrated Oil,100,150.51,140.2215,,Moomoo,4/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-EQT,EQT Corp,M105,Energy,Oil & Gas E&P,100,53.22,49.2782,,Moomoo,5/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-VNOM,Viper Energy,M105,Energy,Oil & Gas Midstream,100,43.37,40.1618,,Moomoo,6/10,431,2026-10-12,2026-10-13,isyarat
-RBA,Ritchie Bros Auctioneers,M106,Technology,Internet Software/Services,100,87.8,82.8751,,Moomoo,3/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ZUMZ,Zumiez,M106,Consumer,Apparel Retail,100,14.8,13.5242,,Moomoo,4/10,lain,2026-10-12,2026-10-13,isyarat
-CTAS,Cintas,M111,Industrial,Miscellaneous Commercial Services,100,205.23,194.6727,,Moomoo,3/10,431,2026-10-12,2026-10-13,isyarat
-MTX,Minerals Technologies,M01,Materials,Specialty Chemicals,100,62.95,,67.5367,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-CP,Canadian Pacific Railway,M02,Transportation,Railroads,100,85.53,83.4174,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-RIO,Rio Tinto,M02,Materials,Other Metals/Minerals,100,94.3,92.9448,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ZBH,Zimmer Biomet Holdings,M02,Healthcare,Medical Specialties,100,92.17,89.9626,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-INVX,Innovex International,M02,Energy,Oilfield Services/Equipment,100,28.54,26.4916,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-AR,Antero Resources,M03,Energy,Oil & Gas E&P,100,36.56,33.1848,37.6448,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-EW,Edwards Lifesciences,M03,Healthcare,Medical Specialties,100,86.39,81.6007,89.4338,Claude,10/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-VAL,Valaris,M03,Energy,Oil & Gas Drilling,100,84.94,78.2001,86.933,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-WEC,WEC Energ Group Inc,M03,Utilities,Utilities - Regulated Electric,100,104.91,99.8415,105.0754,Claude,10/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-DHT,DHT Holdings,M06,Energy,Oil & Gas Midstream,100,26.22,20.4336,,Claude,1/10,431,2026-10-12,2026-10-13,isyarat
-OLLI,Ollie's Bargain Outlet,M08,Consumer,Department Stores,100,86.44,82.7392,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-MKTW,MarketWise,M08,Financial Services,Financial Data & Stock Exchanges,100,19.2,18.9981,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-ROG,Rogers,M08,Materials,Chemicals: Specialty,100,145.84,142.5303,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-UFPT,UFP Technologies,M08,Industrial,Industrial Specialties,100,295.82,280.3878,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-WS,Worthington Steel,M08,Materials,Steel,100,37.99,33.2838,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-COP,ConocoPhillips,M10,Energy,Oil & Gas Production,100,137.56,120.6445,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-OXY,Occidental Petroleum,M10,Energy,Oil & Gas E&P,100,61.13,55.685,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-PR,Permian Resources,M10,Energy,Oil & Gas E&P,100,23.4,20.5348,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-VAL,Valaris,M10,Energy,Oil & Gas Drilling,100,84.94,81.9143,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-BKHA,Black Hawk Acquisition Corp,M10,Financial Services,Shell Companies,100,13.0,11.8042,,Claude,5/10,lain,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M11,Energy,Oil & Gas Midstream,100,26.22,21.3939,,Claude,6/10,431,2026-10-12,2026-10-13,isyarat
-AKA,a.k.a. Brands,M11,Consumer,Apparel Retail,100,10.85,9.9,,Claude,8/10,lain,2026-10-12,2026-10-13,isyarat
-SGU,Star Group LP,M11,Energy,Oil & Gas Refining & Marketing,100,13.11,12.5334,,Claude,8/10,lain,2026-10-12,2026-10-13,isyarat
-BIIB,Biogen,M12,Healthcare,Pharmaceuticals: Major,100,229.41,215.73,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-CRM,Salesforce,M12,Technology,Packaged Software,100,233.92,220.29,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-NOW,ServiceNow,M12,Technology,Packaged Software,100,140.32,126.75,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-TALO,Talos Energy,M12,Energy,Oil & Gas E&P,100,17.34,16.045,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-YPF,YPF SA,M12,Energy,Oil & Gas Integrated,100,51.97,48.36,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-BDX,Becton Dickinson & Co,M13,Healthcare,Medical Specialties,100,188.89,178.7451,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-CP,Canadian Pacific Railway,M13,Transportation,Railroads,100,85.53,84.1617,,Claude,10/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-DXCM,DexCom,M13,Healthcare,Medical Specialties,100,85.92,83.8851,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-PTEN,Patterson-UTI Energy,M13,Energy,Contract Drilling,100,11.33,10.7641,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-SN,SharkNinja,M13,Consumer,Electronics/Appliances,100,189.98,186.536,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-TALO,Talos Energy,M13,Energy,Oil & Gas E&P,100,17.34,16.6363,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-AAON,AAON Inc,M14,Industrial,Building Products & Equipment,100,84.77,84.24,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-ANET,Arista Networks,M14,Technology,Computer Peripherals,100,210.88,209.51,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-HPE,Hewlett Packard Enterprise,M14,Technology,Communication Equipment,100,70.33,69.51,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-SAIL,SailPoint,M14,Technology,Software - Infrastructure,100,19.57,19.29,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-VIV,Telefonica Brasil,M14,Communication Services,Telecom Services,100,12.16,12.085,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-GGG,Graco,M15,Industrial,Industrial Machinery,100,78.81,75.5399,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-M,Macy's,M15,Consumer,Department Stores,100,22.99,20.6359,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-TRI,Thomson Reuters,M15,Industrial,Specialty Business Services,100,104.25,96.8562,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-WEC,WEC Energ Group Inc,M15,Utilities,Utilities - Regulated Electric,100,104.91,100.8756,,Claude,10/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-GFS,GlobalFoundries,M18,Technology,Semiconductors,100,48.34,46.82,92.1855,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-GGG,Graco,M18,Industrial,Industrial Machinery,100,78.81,77.805,94.9906,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-OLLI,Ollie's Bargain Outlet,M18,Consumer,Department Stores,100,86.44,83.575,141.74,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-PHR,Phreesia,M18,Healthcare,Health Information Services,100,10.82,10.49,32.76,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-ATRC,AtriCure,M19,Healthcare,Medical Specialties,100,57.28,51.1137,61.7,Claude,9/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-EW,Edwards Lifesciences,M19,Healthcare,Medical Specialties,100,86.39,81.6007,89.7,Claude,10/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-GMED,Globus Medical,M19,Healthcare,Medical Specialties,100,76.24,71.8176,77.6566,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-LULU,Lululemon Athletica,M19,Consumer,Apparel/Footwear,100,94.66,89.4762,104.24,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-RDNT,RadNet,M19,Healthcare,Diagnostics & Research,100,71.49,65.5677,79.77,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-CVE,Cenovus Energy,M20,Energy,Oil & Gas Integrated,100,31.86,31.3781,32.8239,Claude,10/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-SHOO,Steven Madden,M20,Consumer,Apparel/Footwear,100,44.71,43.4808,47.1684,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-XNCR,Xencor,M20,Healthcare,Biotechnology,100,25.04,24.1906,26.7387,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M23,Energy,Oil & Gas Midstream,100,26.22,25.07,,Claude,0/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-FRPT,Freshpet,M25,Consumer,Food: Specialty/Candy,100,65.26,59.5485,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-DAC,Danaos,M25,Transportation,Marine Shipping,100,169.39,161.6224,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-FC,Franklin Covey,M25,Industrial,Education & Training Services,100,18.67,17.4834,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-AUGO,Aura Minerals,M27,Materials,Gold,100,91.8,86.3237,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-ERO,Ero Copper,M27,Materials,Other Metals/Minerals,100,37.53,35.6705,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-FRPT,Freshpet,M27,Consumer,Food: Specialty/Candy,100,65.26,60.4626,,Claude,10/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-ZS,Zscaler,M27,Technology,Packaged Software,100,225.78,211.8694,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-MOS,The Mosaic,M28,Materials,Chemicals: Agricultural,100,18.85,18.2289,22.219,Claude,1/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-CHD,Church & Dwight,M30,Consumer,Household/Personal Care,100,99.87,92.3967,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-PRVA,Privia Health,M30,Healthcare,Life/Health Insurance,100,21.45,19.0773,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-SU,Suncor Energy,M30,Energy,Oil & Gas Integrated,100,73.51,66.4389,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-COST,Costco,M31,Consumer,Discount Stores,100,959.44,,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-PRVA,Privia Health,M31,Healthcare,Life/Health Insurance,100,21.45,,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-TS,Tenaris,M31,Materials,Steel,100,58.05,,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-XOM,Exxon Mobil,M31,Energy,Integrated Oil,100,172.15,,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-INSW,International Seaways,M31,Energy,Oil & Gas Midstream,100,124.22,,,Claude,8/10,lain,2026-10-12,2026-10-13,isyarat
-PRVA,Privia Health,M33,Healthcare,Life/Health Insurance,100,21.45,19.4149,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-SGU,Star Group LP,M33,Energy,Oil & Gas Refining & Marketing,100,13.11,12.4904,,Claude,2/10,lain,2026-10-12,2026-10-13,isyarat
-TALO,Talos Energy,M35,Energy,Oil & Gas E&P,100,17.34,16.945,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-CHT,Chunghwa Telecom,M35,Communication Services,Telecom Services,100,46.21,45.65,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-MMSI,Merit Medical Systems,M35,Healthcare,Medical Specialties,100,89.75,87.65,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-ZBRA,Zebra Technologies,M35,Technology,Computer Processing Hardware,100,388.12,384.23,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M36,Energy,Oil & Gas Midstream,100,26.22,,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-MSFT,Microsoft,M36,Technology,Packaged Software,100,541.15,,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-XOM,Exxon Mobil,M36,Energy,Integrated Oil,100,172.15,,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-CNXN,PC Connection,M36,Technology,Information Technology Services,100,94.61,,,Claude,7/10,lain,2026-10-12,2026-10-13,isyarat
-INSW,International Seaways,M36,Energy,Oil & Gas Midstream,100,124.22,,,Claude,7/10,lain,2026-10-12,2026-10-13,isyarat
-JOYY,JOYY Inc,M36,Communication Services,Internet Content & Information,100,82.18,,,Claude,7/10,lain,2026-10-12,2026-10-13,isyarat
-SGU,Star Group LP,M36,Energy,Oil & Gas Refining & Marketing,100,13.11,,,Claude,7/10,lain,2026-10-12,2026-10-13,isyarat
-ACN,Accenture,M39,Technology,Information Technology Services,100,214.87,182.6395,,Claude,6/10,431,2026-10-12,2026-10-13,isyarat
-DINO,HF Sinclair,M39,Energy,Oil & Gas Refining & Marketing,100,122.91,104.4735,,Claude,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-SHEL,Shell,M39,Energy,Oil & Gas Integrated,100,101.59,86.3515,,Claude,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-SSL,Sasol,M39,Materials,Specialty Chemicals,100,15.3,13.005,,Claude,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ASC,Ardmore Shipping,M39,Transportation,Marine Shipping,100,19.82,16.847,,Claude,6/10,lain,2026-10-12,2026-10-13,isyarat
-CNXN,PC Connection,M39,Technology,Information Technology Services,100,94.61,80.4185,,Claude,6/10,lain,2026-10-12,2026-10-13,isyarat
-BKHA,Black Hawk Acquisition Corp,M47,Financial Services,Shell Companies,100,13.0,11.53,13.15,Claude,0/10,lain,2026-10-12,2026-10-13,isyarat
-BKHA,Black Hawk Acquisition Corp,M48,Financial Services,Shell Companies,100,13.0,10.4496,,Claude,1/10,lain,2026-10-12,2026-10-13,isyarat
-ACN,Accenture,M49,Technology,Information Technology Services,100,214.87,199.87,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-BDX,Becton Dickinson & Co,M49,Healthcare,Medical Specialties,100,188.89,182.06,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-DV,DoubleVerify,M49,Technology,Packaged Software,100,13.52,13.485,,Claude,8/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-DXC,DXC Technology,M49,Technology,Information Technology Services,100,12.54,11.4375,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-NOW,ServiceNow,M49,Technology,Packaged Software,100,140.32,137.443,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-RMD,ResMed,M49,Healthcare,Medical Specialties,100,234.6,225.89,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-SAP,SAP SE,M49,Technology,Packaged Software,100,217.85,212.1925,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-TEAM,Atlassian,M49,Technology,Packaged Software,100,207.75,190.445,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-M,Macy's,M50,Consumer,Department Stores,100,22.99,22.33,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-OLLI,Ollie's Bargain Outlet,M50,Consumer,Department Stores,100,86.44,83.575,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-AMN,AMN Healthcare Services,M50,Industrial,Personnel Services,100,36.28,35.7,,Claude,8/10,lain,2026-10-12,2026-10-13,isyarat
-FET,Forum Energy Technologies,M52,Energy,Oil & Gas Equipment & Services,100,85.72,51.432,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-INSW,International Seaways,M52,Energy,Oil & Gas Midstream,100,124.22,74.532,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-NSIT,Insight Enterprises,M52,Technology,Information Technology Services,100,166.1,99.66,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-SVRN,SVRN Inc,M52,Financial Services,Asset Management,100,48.49,29.094,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-ZBRA,Zebra Technologies,M52,Technology,Computer Processing Hardware,100,388.12,232.872,,Claude,10/10,lain,2026-10-12,2026-10-13,isyarat
-ANF,Abercrombie & Fitch,M54,Consumer,Apparel/Footwear Retail,100,145.91,134.9602,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M54,Energy,Oil & Gas Midstream,100,26.22,24.3246,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-MSFT,Microsoft,M54,Technology,Packaged Software,100,541.15,518.0708,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-SHOP,Shopify,M54,Industrial,Miscellaneous Commercial Services,100,179.22,165.7485,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-SN,SharkNinja,M54,Consumer,Electronics/Appliances,100,189.98,178.3482,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-TEAM,Atlassian,M54,Technology,Packaged Software,100,207.75,190.7808,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-XOM,Exxon Mobil,M54,Energy,Integrated Oil,100,172.15,165.1146,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-CRM,Salesforce,M55,Technology,Packaged Software,100,233.92,220.29,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-CVE,Cenovus Energy,M55,Energy,Oil & Gas Integrated,100,31.86,30.54,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-SHOO,Steven Madden,M55,Consumer,Apparel/Footwear,100,44.71,43.54,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-OLLI,Ollie's Bargain Outlet,M57,Consumer,Department Stores,100,86.44,83.575,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-AGPU,Axe Compute,M57,Technology,Software - Infrastructure,100,10.75,10.6,,Claude,4/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-GIC,Global Industrial,M57,Technology,Internet Retail,100,43.6,42.16,,Claude,4/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ANF,Abercrombie & Fitch,M64,Consumer,Apparel/Footwear Retail,100,145.91,133.446,,Claude,0/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-FAST,Fastenal,M66,Industrial,Wholesale Distributors,100,51.49,49.54,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-SN,SharkNinja,M66,Consumer,Electronics/Appliances,100,189.98,181.1,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-TALO,Talos Energy,M66,Energy,Oil & Gas E&P,100,17.34,16.385,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-TECH,Bio-Techne,M66,Technology,Biotechnology,100,72.56,72.43,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-TTE,TotalEnergies,M66,Energy,Oil & Gas Integrated,100,88.37,83.87,,Claude,7/10,431,2026-10-12,2026-10-13,isyarat
-MMSI,Merit Medical Systems,M66,Healthcare,Medical Specialties,100,89.75,83.94,,Claude,8/10,lain,2026-10-12,2026-10-13,isyarat
-CNXN,PC Connection,M68,Technology,Information Technology Services,100,94.61,88.175,,Claude,2/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-AUGO,Aura Minerals,M70,Materials,Gold,100,91.8,88.825,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-GRAL,Grail,M70,Healthcare,Diagnostics & Research,100,137.37,133.86,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-IOVA,Iovance Biotherapeutics,M70,Healthcare,Biotechnology,100,14.56,14.2,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-VLO,Valero Energy,M70,Energy,Oil & Gas Refining & Marketing,100,436.0,431.88,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-XNCR,Xencor,M70,Healthcare,Biotechnology,100,25.04,24.435,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-AEHR,Aehr Test Systems,M73,Technology,Electronic Production Equipment,100,78.18,,,Claude,10/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-AGCO,AGCO Corp,M73,Industrial,Trucks/Construction/Farm Machinery,100,104.47,,,Claude,10/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-APA,Apache,M73,Energy,Oil & Gas E&P,100,46.84,,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-COP,ConocoPhillips,M73,Energy,Oil & Gas Production,100,137.56,,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-IOVA,Iovance Biotherapeutics,M73,Healthcare,Biotechnology,100,14.56,,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-SSL,Sasol,M73,Materials,Specialty Chemicals,100,15.3,,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-XOM,Exxon Mobil,M73,Energy,Integrated Oil,100,172.15,,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-TEAM,Atlassian,M74,Technology,Packaged Software,100,207.75,195.0231,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-TECH,Bio-Techne,M74,Technology,Biotechnology,100,72.56,72.3188,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-GWW,W.W. Grainger,M74,Industrial,Wholesale Distributors,100,1306.73,1290.5578,,Claude,7/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-WLY,John Wiley & Sons-A,M74,Communication Services,Publishing,100,51.32,49.9136,,Claude,7/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-WLYB,John Wiley & Sons-B,M74,Communication Services,Publishing,100,51.59,50.4314,,Claude,7/10,lain,2026-10-12,2026-10-13,isyarat
-AEP,American Electric Power,M80,Utilities,Utilities - Regulated Electric,100,124.23,118.5036,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ASO,Academy,M80,Consumer,Specialty Retail,100,53.79,47.9741,,Claude,6/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-DXC,DXC Technology,M80,Technology,Information Technology Services,100,12.54,10.9986,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-INTU,Intuit,M80,Technology,Software - Application,100,305.99,271.0343,,Claude,8/10,431,2026-10-12,2026-10-13,isyarat
-PSX,Phillips 66,M80,Energy,Oil Refining/Marketing,100,281.47,255.722,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-APA,Apache,M81,Energy,Oil & Gas E&P,100,46.84,42.1962,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-EQNR,Equinor,M81,Energy,Oil & Gas Integrated,100,43.94,40.4603,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-PTEN,Patterson-UTI Energy,M81,Energy,Contract Drilling,100,11.33,9.9043,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-SM,SM Energy,M81,Energy,Oil & Gas E&P,100,37.69,33.4031,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-STM,STMicroelectronics,M81,Technology,Semiconductors,100,50.48,44.2456,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-ANF,Abercrombie & Fitch,M82,Consumer,Apparel/Footwear Retail,100,145.91,,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-AVPT,AvePoint,M82,Technology,Packaged Software,100,14.57,,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-CHD,Church & Dwight,M82,Consumer,Household/Personal Care,100,99.87,,,Claude,10/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-PTC,PTC Inc,M82,Technology,Packaged Software,100,194.39,,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-SHOP,Shopify,M82,Industrial,Miscellaneous Commercial Services,100,179.22,,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-TRMD,Torm,M82,Energy,Oil & Gas Midstream,100,40.92,,,Claude,9/10,431,2026-10-12,2026-10-13,isyarat
-SSL,Sasol,M87,Materials,Specialty Chemicals,100,15.3,14.076,,Claude,1/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-BKHA,Black Hawk Acquisition Corp,M88,Financial Services,Shell Companies,100,13.0,11.96,,Claude,1/10,lain,2026-10-12,2026-10-13,isyarat
-ADP,Automatic Data Processing,M89,Technology,Packaged Software,100,273.81,262.8697,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-CTAS,Cintas,M89,Industrial,Miscellaneous Commercial Services,100,205.23,197.8572,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-MTDR,Matador Resources,M89,Energy,Integrated Oil,100,55.11,51.5587,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-NWSA,News Corp-A,M89,Communication Services,Entertainment,100,29.38,28.0091,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-OVV,Ovintiv,M89,Energy,Oil & Gas E&P,100,65.12,61.4246,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-VAL,Valaris,M89,Energy,Oil & Gas Drilling,100,84.94,78.9424,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-VET,Vermilion Energy,M89,Energy,Oil & Gas E&P,100,11.92,11.1073,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M90,Energy,Oil & Gas Midstream,100,26.22,24.3246,,Claude,1/10,431,2026-10-12,2026-10-13,isyarat
-HAFN,Hafnia,M90,Transportation,Marine Shipping,100,10.92,10.1817,,Claude,1/10,431,2026-10-12,2026-10-13,isyarat
-SHEL,Shell,M90,Energy,Oil & Gas Integrated,100,101.59,98.0675,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-XOM,Exxon Mobil,M90,Energy,Integrated Oil,100,172.15,165.1146,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-E,Eni SpA,M90,Energy,Oil & Gas Integrated,100,56.77,54.6673,,Claude,3/10,lain,2026-10-12,2026-10-13,isyarat
-CHD,Church & Dwight,M92,Consumer,Household/Personal Care,100,99.87,96.6713,,Claude,8/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-CTSH,Cognizant,M92,Technology,Information Technology Services,100,59.68,55.0034,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-MDT,Medtronic,M92,Healthcare,Medical Specialties,100,91.93,87.1948,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-NYT,New York Times,M92,Communication Services,Publishing: Newspapers,100,66.08,61.6715,,Claude,8/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-PRVA,Privia Health,M92,Healthcare,Life/Health Insurance,100,21.45,20.1911,,Claude,8/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-ZM,Zoom Communications,M92,Technology,Packaged Software,100,97.94,92.1027,,Claude,6/10,431,2026-10-12,2026-10-13,isyarat
-ANF,Abercrombie & Fitch,M93,Consumer,Apparel/Footwear Retail,100,145.91,137.1187,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-COP,ConocoPhillips,M93,Energy,Oil & Gas Production,100,137.56,124.7675,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-DT,Dynatrace,M93,Technology,Packaged Software,100,65.25,59.87,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-DV,DoubleVerify,M93,Technology,Packaged Software,100,13.52,13.3693,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-MSFT,Microsoft,M93,Technology,Packaged Software,100,541.15,516.3025,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-OXY,Occidental Petroleum,M93,Energy,Oil & Gas E&P,100,61.13,55.5802,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-PR,Permian Resources,M93,Energy,Oil & Gas E&P,100,23.4,21.2871,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-RRC,Range Resources,M93,Energy,Oil & Gas E&P,100,41.42,38.1137,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-SSL,Sasol,M93,Materials,Specialty Chemicals,100,15.3,13.5186,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-TEAM,Atlassian,M93,Technology,Packaged Software,100,207.75,175.7469,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M95,Energy,Oil & Gas Midstream,100,26.22,24.3246,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-DT,Dynatrace,M95,Technology,Packaged Software,100,65.25,61.7143,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-HAFN,Hafnia,M95,Transportation,Marine Shipping,100,10.92,10.1817,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-SHEL,Shell,M95,Energy,Oil & Gas Integrated,100,101.59,98.0675,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-SU,Suncor Energy,M95,Energy,Oil & Gas Integrated,100,73.51,69.8712,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-TEAM,Atlassian,M95,Technology,Packaged Software,100,207.75,190.7808,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-CNXN,PC Connection,M95,Technology,Information Technology Services,100,94.61,90.2652,,Claude,4/10,lain,2026-10-12,2026-10-13,isyarat
-ANF,Abercrombie & Fitch,M99,Consumer,Apparel/Footwear Retail,100,145.91,132.25,,Claude,0/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ATRC,AtriCure,M99,Healthcare,Medical Specialties,100,57.28,52.84,,Claude,0/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-REGN,Regeneron Pharmaceuticals,M99,Healthcare,Pharmaceuticals: Major,100,762.81,726.47,,Claude,3/10,lain,2026-10-12,2026-10-13,isyarat
-XOM,Exxon Mobil,M100,Energy,Integrated Oil,100,172.15,159.27,185.26,Claude,0/10,431,2026-10-12,2026-10-13,isyarat
-PLUS,ePlus,M100,Technology,Packaged Software,100,94.9,87.8735,103.955,Claude,0/10,lain,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M101,Energy,Oil & Gas Midstream,100,26.22,20.4336,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-FAST,Fastenal,M101,Industrial,Wholesale Distributors,100,51.49,48.618,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-SHEL,Shell,M101,Energy,Oil & Gas Integrated,100,101.59,93.3966,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-XOM,Exxon Mobil,M101,Energy,Integrated Oil,100,172.15,154.2915,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-E,Eni SpA,M101,Energy,Oil & Gas Integrated,100,56.77,53.1135,,Claude,4/10,lain,2026-10-12,2026-10-13,isyarat
-JOYY,JOYY Inc,M101,Communication Services,Internet Content & Information,100,82.18,71.1424,,Claude,4/10,lain,2026-10-12,2026-10-13,isyarat + watchlist semalam
-ACN,Accenture,M102,Technology,Information Technology Services,100,214.87,208.329,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-ANF,Abercrombie & Fitch,M102,Consumer,Apparel/Footwear Retail,100,145.91,143.91,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-DHT,DHT Holdings,M102,Energy,Oil & Gas Midstream,100,26.22,25.5,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-IT,Gartner,M102,Technology,Internet Software/Services,100,194.1,192.0,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-SAP,SAP SE,M102,Technology,Packaged Software,100,217.85,215.7,,Claude,10/10,431,2026-10-12,2026-10-13,isyarat
-APA,Apache,M105,Energy,Oil & Gas E&P,100,46.84,42.1662,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-BDX,Becton Dickinson & Co,M105,Healthcare,Medical Specialties,100,188.89,174.4413,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-CHD,Church & Dwight,M105,Consumer,Household/Personal Care,100,99.87,94.2773,,Claude,5/10,431,2026-10-12,2026-10-13,isyarat
-COP,ConocoPhillips,M105,Energy,Oil & Gas Production,100,137.56,126.8876,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-COR,Cencora,M105,Healthcare,Medical Distributors,100,325.06,303.3858,,Claude,4/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-FAST,Fastenal,M105,Industrial,Wholesale Distributors,100,51.49,48.4112,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-SM,SM Energy,M105,Energy,Oil & Gas E&P,100,37.69,33.5343,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-ATO,Atmos Energy,M106,Utilities,Utilities - Regulated Gas,100,162.38,158.0551,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-CTSH,Cognizant,M107,Technology,Information Technology Services,100,59.68,52.6651,,Claude,1/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-AEP,American Electric Power,M111,Utilities,Utilities - Regulated Electric,100,124.23,118.7678,,Claude,3/10,431,2026-10-12,2026-10-13,watchlist→lengkap
-APA,Apache,M111,Energy,Oil & Gas E&P,100,46.84,42.074,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-ASO,Academy,M111,Consumer,Specialty Retail,100,53.79,48.0489,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-BDX,Becton Dickinson & Co,M111,Healthcare,Medical Specialties,100,188.89,176.6193,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-CHD,Church & Dwight,M111,Consumer,Household/Personal Care,100,99.87,95.2937,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-COP,ConocoPhillips,M111,Energy,Oil & Gas Production,100,137.56,127.7477,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-COR,Cencora,M111,Healthcare,Medical Distributors,100,325.06,303.1428,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
-MUR,Murphy Oil,M111,Energy,Oil & Gas E&P,100,39.38,35.5303,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-PR,Permian Resources,M111,Energy,Oil & Gas E&P,100,23.4,21.4092,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-RMD,ResMed,M111,Healthcare,Medical Specialties,100,234.6,218.7343,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat
-SM,SM Energy,M111,Energy,Oil & Gas E&P,100,37.69,33.5968,,Claude,2/10,431,2026-10-12,2026-10-13,isyarat + watchlist semalam
-VNOM,Viper Energy,M111,Energy,Oil & Gas Midstream,100,43.37,40.1133,,Claude,3/10,431,2026-10-12,2026-10-13,isyarat
+saham,nama,kaedah,sektor,industri,pct_dipenuhi,harga_rujukan,henti,nota_henti,buka_maks,sasaran,destinasi,sumber,tarikh_isyarat,tarikh_imbasan,asal
+ANIK,Anika Therapeutics,M02,Healthcare,Drug Manufacturers - Specialty & Generic,100,20.53,15.1839,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+FORR,Forrester Research,M02,Industrials,Consulting Services,100,11.87,8.2438,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+GPRE,Green Plains Inc,M02,Materials,Chemicals,100,15.58,14.8515,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+HSIC,Henry Schein,M02,Healthcare,Medical Distributors,100,85.03,79.7196,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+NE,Noble,M02,Energy,Oil & Gas Drilling,100,43.42,42.3924,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+RAMP,LiveRamp,M02,Technology,Packaged Software,100,37.66,32.2368,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+RDNT,RadNet,M02,Healthcare,Diagnostics & Research,100,71.51,64.729,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+TTE,TotalEnergies,M02,Energy,Oil & Gas Integrated,100,88.95,80.9928,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TXO,TXO Partners,M02,Energy,Oil & Gas E&P,100,14.57,12.2703,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+EXE,Expand Energy,M03,Energy,Oil & Gas E&P,100,92.37,85.14,,,91.0728,Claude,431,2026-10-13,2026-10-14,isyarat
+FRPT,Freshpet,M03,Consumer,Food: Specialty/Candy,100,66.16,59.5485,,,66.5615,Claude,431,2026-10-13,2026-10-14,isyarat
+HSIC,Henry Schein,M03,Healthcare,Medical Distributors,100,85.03,78.5763,,,86.9414,Claude,431,2026-10-13,2026-10-14,watchlist
+INFY,Infosys,M03,Technology,Information Technology Services,100,11.4,10.0188,,,11.3219,Claude,431,2026-10-13,2026-10-14,isyarat
+SITE,SiteOne Landscape Supply,M03,Industrial,Wholesale Distributors,100,90.35,81.18,,,94.016,Claude,431,2026-10-13,2026-10-14,watchlist
+SWK,Stanley Black & Decker,M03,Industrials,Tools & Accessories,100,90.71,84.8479,,,92.0015,Claude,431,2026-10-13,2026-10-14,isyarat
+EFXT,Enerflex,M04,Energy,Oil & Gas Equipment & Services,100,27.54,22.275,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+IFF,International Flavors & Fragrances,M04,Materials,Specialty Chemicals,100,88.2,80.7246,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+USNA,Usana Health Sciences,M04,Consumer Defensive,Packaged Foods,100,15.46,14.0877,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+EXPE,Expedia,M05,Consumer,Travel Services,100,273.44,250.6284,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CNXN,PC Connection,M06,Technology,Information Technology Services,100,95.22,85.4271,"max(0.99 x low 15 hari, 0.92 x buka masuk)",99.6135,,Claude,lain,2026-10-13,2026-10-14,isyarat
+EQNR,Equinor,M06,Energy,Oil & Gas Integrated,100,45.02,40.5454,"max(0.99 x low 15 hari, 0.92 x buka masuk)",46.5045,,Claude,431,2026-10-13,2026-10-14,isyarat
+IFF,International Flavors & Fragrances,M06,Materials,Specialty Chemicals,100,88.2,80.7246,"max(0.99 x low 15 hari, 0.92 x buka masuk)",91.0088,,Claude,431,2026-10-13,2026-10-14,isyarat
+SDRL,Seadrill,M06,Energy,Oil & Gas Drilling,100,49.0,43.2036,"max(0.99 x low 15 hari, 0.92 x buka masuk)",50.3895,,Claude,lain,2026-10-13,2026-10-14,isyarat
+DINO,HF Sinclair,M07,Energy,Oil & Gas Refining & Marketing,100,128.23,123.709,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ARQT,Arcutis Biotherapeutics,M08,Healthcare,Biotechnology,100,26.09,23.1363,0.99 x low terendah 6 hari,27.2407,,Claude,431,2026-10-13,2026-10-14,watchlist
+ASX,ASE Technology,M08,Technology,Semiconductors,100,47.6,43.857,0.99 x low terendah 6 hari,46.8757,,Claude,431,2026-10-13,2026-10-14,isyarat
+CIEN,Ciena,M08,Communication Services,Telecommunications Equipment,100,400.4,377.8236,0.99 x low terendah 6 hari,400.1356,,Claude,431,2026-10-13,2026-10-14,isyarat
+GNRC,Generac,M08,Industrial,Electrical Products,100,214.29,204.9557,0.99 x low terendah 6 hari,220.3829,,Claude,431,2026-10-13,2026-10-14,isyarat
+KEYS,Keysight Technologies,M08,Technology,Scientific & Technical Instruments,100,370.22,357.2613,0.99 x low terendah 6 hari,380.7715,,Claude,431,2026-10-13,2026-10-14,isyarat
+MGNI,Magnite,M08,Communication Services,Advertising Agencies,100,25.32,24.1708,0.99 x low terendah 6 hari,26.1219,,Claude,431,2026-10-13,2026-10-14,watchlist
+MRVL,Marvell Technology,M08,Technology,Semiconductors,100,268.725,245.9655,0.99 x low terendah 6 hari,276.3316,,Claude,431,2026-10-13,2026-10-14,watchlist
+ADP,Automatic Data Processing,M10,Technology,Packaged Software,100,275.9,250.3331,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APD,Air Products & Chemicals,M10,Basic Materials,Specialty Chemicals,100,288.96,284.4941,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CHRD,Chord Energy,M10,Energy,Integrated Oil,100,146.51,132.3126,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+CVE,Cenovus Energy,M10,Energy,Oil & Gas Integrated,100,32.83,28.5664,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DVN,Devon Energy,M10,Energy,Integrated Oil,100,50.21,45.1779,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+FANG,Diamondback Energy,M10,Energy,Oil & Gas Production,100,198.18,188.2632,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+FORR,Forrester Research,M10,Industrials,Consulting Services,100,11.87,9.8614,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+IFF,International Flavors & Fragrances,M10,Materials,Specialty Chemicals,100,88.2,79.1278,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MDT,Medtronic,M10,Healthcare,Medical Specialties,100,93.01,86.0315,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+OMC,Omnicom Group,M10,Communication Services,Advertising Agencies,100,78.49,77.2017,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SDRL,Seadrill,M10,Energy,Oil & Gas Drilling,100,49.0,44.3945,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+SM,SM Energy,M10,Energy,Oil & Gas E&P,100,38.54,31.9239,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TALO,Talos Energy,M10,Energy,Oil & Gas E&P,100,17.56,15.3135,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DFIN,Donnelley Financial Solutions,M11,Technology,Software - Application,100,50.13,45.5202,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+EXPD,Expeditors International,M11,Transportation,Integrated Freight & Logistics,100,195.13,182.4768,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GPRE,Green Plains Inc,M11,Materials,Chemicals,100,15.58,14.0877,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MGRT,Mega Fortune,M11,Technology,Information Technology Services,100,103.38,99.0099,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MSEX,Middlesex Water,M11,Utilities,Water Utilities,100,53.8,51.3018,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+VIV,Telefonica Brasil,M11,Communication Services,Telecom Services,100,12.27,11.0583,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CLMB,Climb Global Solutions,M12,Technology,Electronics & Computer Distribution,100,33.75,31.8201,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+CRSR,Corsair Gaming,M12,Technology,Computer Hardware,100,14.32,12.91,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+GIC,Global Industrial,M12,Technology,Internet Retail,100,44.09,42.16,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+GPRE,Green Plains Inc,M12,Materials,Chemicals,100,15.58,14.23,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+IFF,International Flavors & Fragrances,M12,Materials,Specialty Chemicals,100,88.2,81.54,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+OLLI,Ollie's Bargain Outlet,M12,Consumer,Department Stores,100,88.33,83.575,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PFE,Pfizer,M12,Healthcare,Pharmaceuticals: Major,100,28.37,27.12,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+USPH,US Physical Therapy,M12,Healthcare,Medical Care Facilities,100,85.44,82.51,,,,Claude,lain,2026-10-13,2026-10-14,watchlist
+WPP,WPP PLC,M12,Communication Services,Advertising Agencies,100,25.93,24.45,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+ACM,AECOM Technology,M13,Industrial,Engineering & Construction,100,59.39,56.39,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+EXLS,ExlService,M13,Technology,Information Technology Services,100,37.2,35.71,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GGG,Graco,M13,Industrial,Industrial Machinery,100,79.82,77.224,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+IFF,International Flavors & Fragrances,M13,Materials,Specialty Chemicals,100,88.2,83.1351,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MDT,Medtronic,M13,Healthcare,Medical Specialties,100,93.01,86.0323,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+OLLI,Ollie's Bargain Outlet,M13,Consumer,Department Stores,100,88.33,78.525,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SNX,TD Synnex,M13,Technology,Electronics & Computer Distribution,100,276.04,253.204,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TREX,Trex Co.,M13,Industrial,Building Products & Equipment,100,45.05,42.652,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AEO,American Eagle Outfitters,M14,Consumer,Apparel Retail,100,17.78,17.615,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ALAB,Astera Labs,M14,Technology,Semiconductors,100,325.41,300.44,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+AMD,Advanced Micro Devices,M14,Technology,Semiconductors,100,605.53,570.6,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+AMPL,Amplitude,M14,Technology,Software - Application,100,15.61,15.38,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ASST,Strive,M14,Financial Services,Investment Trusts/Mutual Funds,100,27.59,27.04,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ATEN,A10 Networks,M14,Technology,Information Technology Services,100,28.49,27.83,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AVT,Avnet,M14,Technology,Electronics & Computer Distribution,100,99.6,95.24,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+CIEN,Ciena,M14,Communication Services,Telecommunications Equipment,100,400.4,381.64,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+FSLY,Fastly,M14,Technology,Information Technology Services,100,27.09,25.45,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+NVDA,NVIDIA,M14,Technology,Semiconductors,100,228.52,223.06,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+TSM,Taiwan Semiconductor,M14,Technology,Semiconductors,100,445.12,437.4,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+WAY,Waystar Holding,M14,Healthcare,Health Information Services,100,26.3,25.975,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+WKC,World Kinect,M14,Energy,Oil & Gas Refining & Marketing,100,36.35,35.88,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ABT,Abbott Laboratories,M15,Healthcare,Medical Specialties,100,102.61,97.4091,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXE,Expand Energy,M15,Energy,Oil & Gas E&P,100,92.37,85.8863,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+GEHC,GE HealthCare Technologies,M15,Healthcare,Medical Specialties,100,68.79,64.0957,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+NWSA,News Corp-A,M15,Communication Services,Entertainment,100,29.63,28.4403,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ODFL,Old Dominion Freight Line,M15,Transportation,Trucking,100,183.17,170.6131,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+VIV,Telefonica Brasil,M15,Communication Services,Telecom Services,100,12.27,11.7622,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+AAON,AAON Inc,M18,Industrial,Building Products & Equipment,100,86.19,82.4,,,150.162,Claude,431,2026-10-13,2026-10-14,isyarat
+ARQT,Arcutis Biotherapeutics,M18,Healthcare,Biotechnology,100,26.09,25.6,,,31.77,Claude,431,2026-10-13,2026-10-14,isyarat
+CALX,Calix,M18,Communication Services,Telecommunications Equipment,100,36.31,35.58,,,71.22,Claude,431,2026-10-13,2026-10-14,isyarat
+CEG,Constellation Energy,M18,Utilities,Electric Utilities,100,295.79,286.128,,,410.408,Claude,431,2026-10-13,2026-10-14,isyarat
+CIEN,Ciena,M18,Communication Services,Telecommunications Equipment,100,400.4,381.64,,,637.51,Claude,431,2026-10-13,2026-10-14,watchlist
+CSCO,Cisco,M18,Communication Services,Telecommunications Equipment,100,115.07,112.76,,,129.378,Claude,431,2026-10-13,2026-10-14,watchlist
+TRMB,Trimble,M18,Technology,Packaged Software,100,60.015,59.138,,,87.5,Claude,431,2026-10-13,2026-10-14,isyarat
+YOU,Clear Secure,M18,Technology,Software - Application,100,43.52,42.13,,,68.83,Claude,431,2026-10-13,2026-10-14,isyarat
+AGCO,AGCO Corp,M19,Industrial,Trucks/Construction/Farm Machinery,100,107.52,101.7324,,126.045,126.045,Claude,431,2026-10-13,2026-10-14,watchlist
+BG,Bunge,M19,Consumer Defensive,Farm Products,100,107.56,101.5938,,125.82,125.82,Claude,431,2026-10-13,2026-10-14,isyarat
+CF,CF Industries Holdings,M19,Materials,Chemicals: Agricultural,100,117.25,109.499,,137.543,137.543,Claude,431,2026-10-13,2026-10-14,watchlist
+MOS,The Mosaic,M19,Materials,Chemicals: Agricultural,100,19.18,18.2289,,25.98,25.98,Claude,431,2026-10-13,2026-10-14,isyarat
+NTR,Nutrien,M19,Materials,Agricultural Inputs,100,69.68,66.2409,,79.0414,79.0414,Claude,431,2026-10-13,2026-10-14,isyarat
+OSK,Oshkosh,M19,Industrials,Farm & Heavy Construction Machinery,100,128.41,123.1709,,150.02,150.02,Claude,lain,2026-10-13,2026-10-14,isyarat
+SCL,Stepan,M19,Materials,Chemicals: Specialty,100,62.01,58.5981,,65.13,65.13,Claude,lain,2026-10-13,2026-10-14,isyarat
+THO,Thor Industries,M19,Consumer Cyclical,Recreational Vehicles,100,65.23,62.2017,,74.79,74.79,Claude,lain,2026-10-13,2026-10-14,isyarat
+EXPE,Expedia,M20,Consumer,Travel Services,100,273.44,266.4882,,287.3436,287.3436,Claude,431,2026-10-13,2026-10-14,isyarat
+GPRE,Green Plains Inc,M20,Materials,Chemicals,100,15.58,14.2956,,18.1488,18.1488,Claude,431,2026-10-13,2026-10-14,isyarat
+HSIC,Henry Schein,M20,Healthcare,Medical Distributors,100,85.03,83.0313,,89.0274,89.0274,Claude,431,2026-10-13,2026-10-14,isyarat
+INGM,Ingram Micro,M20,Technology,Information Technology Services,100,28.28,27.0666,,30.7068,30.7068,Claude,431,2026-10-13,2026-10-14,isyarat
+NCNO,nCino,M20,Technology,Packaged Software,100,19.71,19.3149,,20.5002,20.5002,Claude,431,2026-10-13,2026-10-14,watchlist
+PTEN,Patterson-UTI Energy,M20,Energy,Contract Drilling,100,11.52,11.0038,,12.5523,12.5523,Claude,431,2026-10-13,2026-10-14,watchlist
+SWK,Stanley Black & Decker,M20,Industrials,Tools & Accessories,100,90.71,87.3675,,97.395,97.395,Claude,431,2026-10-13,2026-10-14,isyarat
+ASX,ASE Technology,M25,Technology,Semiconductors,100,47.6,44.5797,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EMR,Emerson Electric,M25,Technology,Electronic Equipment/Instruments,100,163.5,158.895,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXPD,Expeditors International,M25,Transportation,Integrated Freight & Logistics,100,195.13,190.6146,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+FTV,Fortive,M25,Technology,Scientific & Technical Instruments,100,58.07,56.3755,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+UBER,Uber Technologies,M25,Technology,Software - Application,100,71.32,69.7356,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+WEC,WEC Energ Group Inc,M25,Utilities,Utilities - Regulated Electric,100,105.87,102.7026,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EFXT,Enerflex,M26,Energy,Oil & Gas Equipment & Services,100,27.54,23.1561,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+GGG,Graco,M26,Industrial,Industrial Machinery,100,79.82,76.1607,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ABT,Abbott Laboratories,M27,Healthcare,Medical Specialties,100,102.61,99.3844,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+BDX,Becton Dickinson & Co,M27,Healthcare,Medical Specialties,100,187.37,182.4987,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+CAI,Caris Life Sciences,M27,Healthcare,Biotechnology,100,29.53,27.4504,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CRM,Salesforce,M27,Technology,Packaged Software,100,238.01,224.6985,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+KBH,KB Home,M28,Real Estate,Residential Construction,100,42.2,40.8573,,,46.6346,Claude,431,2026-10-13,2026-10-14,isyarat
+PESI,Perma-Fix Environmental Services,M28,Industrial,Waste Management,100,13.23,12.5928,,,15.8386,Claude,lain,2026-10-13,2026-10-14,isyarat
+UMC,United Microelectronics,M29,Technology,Semiconductors,100,22.39,22.0845,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AEP,American Electric Power,M30,Utilities,Utilities - Regulated Electric,100,125.65,116.0874,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ANF,Abercrombie & Fitch,M30,Consumer,Apparel/Footwear Retail,100,150.88,129.883,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AS,Amer Sports,M30,Consumer Cyclical,Leisure,100,29.2,26.2548,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CNQ,Canadian Natural Resources,M30,Energy,Integrated Oil,100,52.14,46.1142,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+E,Eni SpA,M30,Energy,Oil & Gas Integrated,100,57.45,53.1135,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+GWW,W.W. Grainger,M30,Industrial,Wholesale Distributors,100,1325.1,1227.6,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+IFF,International Flavors & Fragrances,M30,Materials,Specialty Chemicals,100,88.2,80.7246,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+NSIT,Insight Enterprises,M30,Technology,Information Technology Services,100,175.87,152.0838,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+XOM,Exxon Mobil,M30,Energy,Integrated Oil,100,174.08,157.6773,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APA,Apache,M31,Energy,Oil & Gas E&P,100,48.01,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ASO,Academy,M31,Consumer,Specialty Retail,100,54.9,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DV,DoubleVerify,M31,Technology,Packaged Software,100,13.56,,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+PBF,PBF Energy,M31,Energy,Oil & Gas Refining & Marketing,100,91.17,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SIG,Signet Jewelers,M31,Consumer,Specialty Stores,100,108.16,,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+URBN,Urban Outfitters,M31,Consumer,Apparel/Footwear Retail,100,84.85,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CEPU,Central Puerto,M33,Utilities,Utilities - Regulated Electric,100,13.16,11.599,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+CNQ,Canadian Natural Resources,M33,Energy,Integrated Oil,100,52.14,47.5707,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EQNR,Equinor,M33,Energy,Oil & Gas Integrated,100,45.02,41.0209,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXE,Expand Energy,M33,Energy,Oil & Gas E&P,100,92.37,84.5003,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GIB,CGI Inc,M33,Technology,Information Technology Services,100,72.12,66.711,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+GWW,W.W. Grainger,M33,Industrial,Wholesale Distributors,100,1325.1,1244.0826,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+LYFT,Lyft Inc,M33,Transportation,Other Transportation,100,16.38,14.7921,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ZGN,Ermenegildo Zegna NV,M33,Consumer Cyclical,Apparel Manufacturing,100,12.94,11.5491,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+ANF,Abercrombie & Fitch,M34,Consumer,Apparel/Footwear Retail,100,150.88,133.02,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXLS,ExlService,M34,Technology,Information Technology Services,100,37.2,34.21,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+FRD,Friedman Industries,M34,Materials,Steel,100,42.91,36.88,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+NSIT,Insight Enterprises,M34,Technology,Information Technology Services,100,175.87,153.62,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+PNRG,PrimeEnergy Resources,M34,Energy,Oil & Gas E&P,100,219.15,197.5,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+RMD,ResMed,M34,Healthcare,Medical Specialties,100,235.04,218.03,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SSNC,SS&C Technologies,M34,Technology,Software - Application,100,81.52,76.795,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+STNG,Scorpio Tankers,M34,Energy,Oil & Gas Midstream,100,88.75,82.87,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TRI,Thomson Reuters,M34,Industrial,Specialty Business Services,100,105.14,95.1425,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AAPL,Apple,M35,Communication Services,Telecommunications Equipment,100,341.27,340.74,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+DHR,Danaher,M35,Healthcare,Medical Specialties,100,222.84,219.225,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+JCI,Johnson Controls,M35,Industrial,Industrial Machinery,100,156.47,151.933,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SONY,Sony,M35,Technology,Consumer Electronics,100,24.33,24.105,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SSNC,SS&C Technologies,M35,Technology,Software - Application,100,81.52,80.86,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VET,Vermilion Energy,M35,Energy,Oil & Gas E&P,100,12.25,11.9,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APA,Apache,M36,Energy,Oil & Gas E&P,100,48.01,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PBF,PBF Energy,M36,Energy,Oil & Gas Refining & Marketing,100,91.17,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SIG,Signet Jewelers,M36,Consumer,Specialty Stores,100,108.16,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SSL,Sasol,M36,Materials,Specialty Chemicals,100,15.58,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VLO,Valero Energy,M36,Energy,Oil & Gas Refining & Marketing,100,456.46,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APA,Apache,M39,Energy,Oil & Gas E&P,100,48.01,40.8085,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ASO,Academy,M39,Consumer,Specialty Retail,100,54.9,46.665,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PSX,Phillips 66,M39,Energy,Oil Refining/Marketing,100,292.73,248.8205,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SU,Suncor Energy,M39,Energy,Oil & Gas Integrated,100,75.2,63.92,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VLO,Valero Energy,M39,Energy,Oil & Gas Refining & Marketing,100,456.46,387.991,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+COR,Cencora,M44,Healthcare,Medical Distributors,100,330.11,303.7012,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+NSIT,Insight Enterprises,M44,Technology,Information Technology Services,100,175.87,161.8004,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+OLLI,Ollie's Bargain Outlet,M47,Consumer,Department Stores,100,88.33,83.575,,,89.39,Claude,431,2026-10-13,2026-10-14,isyarat
+WST,West Pharmaceutical Services,M47,Healthcare,Medical Specialties,100,371.82,363.098,,,382.71,Claude,lain,2026-10-13,2026-10-14,isyarat
+IOSP,Innospec,M48,Materials,Chemicals: Major Diversified,100,97.43,92.8573,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+OLLI,Ollie's Bargain Outlet,M48,Consumer,Department Stores,100,88.33,80.2792,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APA,Apache,M49,Energy,Oil & Gas E&P,100,48.01,44.655,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CEG,Constellation Energy,M49,Utilities,Electric Utilities,100,295.79,278.5,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CLS,Celestica,M49,Technology,Electronic Components,100,357.44,353.36,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CNQ,Canadian Natural Resources,M49,Energy,Integrated Oil,100,52.14,49.4075,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+COP,ConocoPhillips,M49,Energy,Oil & Gas Production,100,140.9,132.54,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXLS,ExlService,M49,Technology,Information Technology Services,100,37.2,35.915,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MTW,Manitowoc,M49,Industrial,Farm & Heavy Construction Machinery,100,22.55,21.815,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MUR,Murphy Oil,M49,Energy,Oil & Gas E&P,100,39.04,37.9772,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+SNX,TD Synnex,M49,Technology,Electronics & Computer Distribution,100,276.04,270.9,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ADI,Analog Devices,M50,Technology,Semiconductors,100,414.7,398.965,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+AMD,Advanced Micro Devices,M50,Technology,Semiconductors,100,605.53,570.6,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GEV,GE Vernova,M50,Industrial,Electrical Products,100,1004.04,963.294,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+PBF,PBF Energy,M50,Energy,Oil & Gas Refining & Marketing,100,91.17,84.27,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VIV,Telefonica Brasil,M50,Communication Services,Telecom Services,100,12.27,12.105,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+VLO,Valero Energy,M50,Energy,Oil & Gas Refining & Marketing,100,456.46,431.88,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APA,Apache,M54,Energy,Oil & Gas E&P,100,48.01,44.9239,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DV,DoubleVerify,M54,Technology,Packaged Software,100,13.56,13.4334,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+PBF,PBF Energy,M54,Energy,Oil & Gas Refining & Marketing,100,91.17,81.7403,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SSL,Sasol,M54,Materials,Specialty Chemicals,100,15.58,14.6178,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+VLO,Valero Energy,M54,Energy,Oil & Gas Refining & Marketing,100,456.46,423.5244,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ARW,Arrow Electronics Inc,M55,Technology,Electronics & Computer Distribution,100,231.75,220.83,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+IOSP,Innospec,M55,Materials,Chemicals: Major Diversified,100,97.43,95.0,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MTW,Manitowoc,M55,Industrial,Farm & Heavy Construction Machinery,100,22.55,21.09,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+RAMP,LiveRamp,M55,Technology,Packaged Software,100,37.66,37.465,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+TWIN,Twin Disc,M55,Industrial,Specialty Industrial Machinery,100,26.79,25.465,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+WPP,WPP PLC,M55,Communication Services,Advertising Agencies,100,25.93,24.83,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+ASST,Strive,M57,Financial Services,Investment Trusts/Mutual Funds,100,27.59,27.04,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AVT,Avnet,M57,Technology,Electronics & Computer Distribution,100,99.6,95.24,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+IOSP,Innospec,M57,Materials,Chemicals: Major Diversified,100,97.43,95.0,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+TWIN,Twin Disc,M57,Industrial,Specialty Industrial Machinery,100,26.79,25.465,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MSTR,Strategy,M59,Technology,Software - Application,100,152.18,126.815,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+URBN,Urban Outfitters,M59,Consumer,Apparel/Footwear Retail,100,84.85,77.1476,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXLS,ExlService,M64,Technology,Information Technology Services,100,37.2,33.9756,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SAP,SAP SE,M64,Technology,Packaged Software,100,219.75,201.2868,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AR,Antero Resources,M66,Energy,Oil & Gas E&P,100,37.54,35.7,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AVT,Avnet,M66,Technology,Electronics & Computer Distribution,100,99.6,95.24,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DV,DoubleVerify,M66,Technology,Packaged Software,100,13.56,13.48,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+EOG,EOG Resources,M66,Energy,Integrated Oil,100,153.17,146.505,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+EXPD,Expeditors International,M66,Transportation,Integrated Freight & Logistics,100,195.13,190.43,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+G,Genpact,M66,Industrial,Miscellaneous Commercial Services,100,35.22,33.17,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GEHC,GE HealthCare Technologies,M66,Healthcare,Medical Specialties,100,68.79,63.315,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+LYFT,Lyft Inc,M66,Transportation,Other Transportation,100,16.38,15.49,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MDT,Medtronic,M66,Healthcare,Medical Specialties,100,93.01,85.55,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MTDR,Matador Resources,M66,Energy,Integrated Oil,100,55.88,53.74,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+QCOM,Qualcomm,M66,Technology,Semiconductors,100,176.86,171.02,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+VET,Vermilion Energy,M66,Energy,Oil & Gas E&P,100,12.25,11.725,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ASC,Ardmore Shipping,M68,Transportation,Marine Shipping,100,20.13,18.0,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+SIG,Signet Jewelers,M68,Consumer,Specialty Stores,100,108.16,100.165,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AVTR,Avantor,M70,Healthcare,Medical Instruments & Supplies,100,15.55,15.435,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CAI,Caris Life Sciences,M70,Healthcare,Biotechnology,100,29.53,28.665,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PTC,PTC Inc,M70,Technology,Packaged Software,100,193.96,193.8,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SHOP,Shopify,M70,Industrial,Miscellaneous Commercial Services,100,176.52,173.81,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AMPL,Amplitude,M73,Technology,Software - Application,100,15.61,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+IMAX,IMAX Corp,M73,Communication Services,Entertainment,100,51.66,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SHEL,Shell,M73,Energy,Oil & Gas Integrated,100,102.99,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TRMD,Torm,M73,Energy,Oil & Gas Midstream,100,41.11,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ASH,Ashland,M74,Materials,Specialty Chemicals,100,72.65,71.6058,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+HVT,Haverty Furniture,M74,Consumer,Home Improvement Retail,100,27.97,27.7279,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MSFT,Microsoft,M74,Technology,Packaged Software,100,543.45,526.3056,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PNRG,PrimeEnergy Resources,M74,Energy,Oil & Gas E&P,100,219.15,208.2793,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+RIGL,Rigel Pharmaceuticals,M74,Healthcare,Biotechnology,100,47.14,45.9134,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+AEHR,Aehr Test Systems,M76,Technology,Electronic Production Equipment,100,77.51,73.37,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AMBQ,Ambiq Micro,M76,Technology,Semiconductors,100,55.86,53.0,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+AVNT,Avient,M76,Basic Materials,Specialty Chemicals,100,39.54,36.6,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+BKHA,Black Hawk Acquisition Corp,M76,Financial Services,Shell Companies,100,12.48,9.5,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+PLPC,Preformed Line Products,M76,Materials,Building Products,100,389.53,369.34,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+SNDK,SanDisk,M76,Technology,Computer Hardware,100,1482.33,1401.01,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+FRPT,Freshpet,M79,Consumer,Food: Specialty/Candy,100,66.16,56.236,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SM,SM Energy,M79,Energy,Oil & Gas E&P,100,38.54,32.759,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AR,Antero Resources,M80,Energy,Oil & Gas E&P,100,37.54,34.3207,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CNX,CNX Resources Corp,M80,Energy,Oil & Gas E&P,100,35.35,32.6837,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+COR,Cencora,M80,Healthcare,Medical Distributors,100,330.11,307.6393,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+COST,Costco,M80,Consumer,Discount Stores,100,954.63,911.0973,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+EQT,EQT Corp,M80,Energy,Oil & Gas E&P,100,54.43,50.5617,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+GPOR,Gulfport Energy,M80,Energy,Oil & Gas E&P,100,168.13,154.8242,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MNR,Mach Natural Resources,M80,Energy,Oil & Gas E&P,100,11.06,10.2907,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+OVV,Ovintiv,M80,Energy,Oil & Gas E&P,100,66.66,61.1614,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PRDO,Perdoceo Education,M80,Consumer Defensive,Education & Training Services,100,33.76,30.8881,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+SRE,Sempra Energy,M80,Utilities,Utilities - Diversified,100,82.37,78.0668,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TEAM,Atlassian,M80,Technology,Packaged Software,100,208.04,182.8915,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ZS,Zscaler,M80,Technology,Packaged Software,100,228.66,198.2059,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AXTI,AXT Inc,M81,Technology,Electronic Production Equipment,100,64.63,43.5388,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DELL,Dell Technologies,M81,Technology,Computer Hardware,100,572.47,487.135,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MXL,MaxLinear,M81,Technology,Semiconductors,100,88.64,66.3255,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SNDK,SanDisk,M81,Technology,Computer Hardware,100,1482.33,1171.6197,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AMPL,Amplitude,M82,Technology,Software - Application,100,15.61,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DINO,HF Sinclair,M82,Energy,Oil & Gas Refining & Marketing,100,128.23,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GRAL,Grail,M82,Healthcare,Diagnostics & Research,100,140.35,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+KEX,Kirby,M82,Transportation,Marine Shipping,100,136.77,,,,,Claude,lain,2026-10-13,2026-10-14,watchlist
+OKTA,Okta,M82,Technology,Packaged Software,100,226.53,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+RBRK,Rubrik,M82,Technology,Software - Infrastructure,100,118.47,,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+INFY,Infosys,M88,Technology,Information Technology Services,100,11.4,10.488,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VNOM,Viper Energy,M88,Energy,Oil & Gas Midstream,100,44.36,40.8112,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AMR,Alpha Metallurgical,M89,Energy,Coal,100,183.93,165.8612,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+ANIK,Anika Therapeutics,M89,Healthcare,Drug Manufacturers - Specialty & Generic,100,20.53,18.8994,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+DRD,DRDGOLD,M89,Basic Materials,Gold,100,24.5,22.9171,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+HCC,Warrior Met Coal,M89,Basic Materials,Coking Coal,100,93.92,86.6273,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MDT,Medtronic,M89,Healthcare,Medical Specialties,100,93.01,88.2116,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+RDNT,RadNet,M89,Healthcare,Diagnostics & Research,100,71.51,66.5367,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+RGEN,Repligen,M89,Healthcare,Pharmaceuticals: Major,100,175.42,158.0872,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+RGLD,Royal Gold,M89,Basic Materials,Gold,100,233.52,220.1792,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+TDW,Tidewater,M89,Transportation,Marine Shipping,100,86.97,81.3091,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+VNOM,Viper Energy,M89,Energy,Oil & Gas Midstream,100,44.36,42.1925,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ZM,Zoom Communications,M89,Technology,Packaged Software,100,98.16,92.2526,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APPN,Appian,M90,Technology,Packaged Software,100,38.71,34.7504,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+ASC,Ardmore Shipping,M90,Transportation,Marine Shipping,100,20.13,18.7568,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+DINO,HF Sinclair,M90,Energy,Oil & Gas Refining & Marketing,100,128.23,119.166,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXPD,Expeditors International,M90,Transportation,Integrated Freight & Logistics,100,195.13,187.4911,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+IFF,International Flavors & Fragrances,M90,Materials,Specialty Chemicals,100,88.2,84.6491,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+NSIT,Insight Enterprises,M90,Technology,Information Technology Services,100,175.87,165.0012,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+PAYC,Paycom Software,M90,Technology,Packaged Software,100,236.65,223.1602,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+PSIX,Power Solutions International,M90,Industrial,Specialty Industrial Machinery,100,53.14,47.6495,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+SU,Suncor Energy,M90,Energy,Oil & Gas Integrated,100,75.2,71.5304,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TX,Ternium,M90,Materials,Steel,100,58.99,55.7646,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+VLO,Valero Energy,M90,Energy,Oil & Gas Refining & Marketing,100,456.46,423.5244,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AR,Antero Resources,M92,Energy,Oil & Gas E&P,100,37.54,35.3938,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CNX,CNX Resources Corp,M92,Energy,Oil & Gas E&P,100,35.35,33.5725,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+FANG,Diamondback Energy,M92,Energy,Oil & Gas Production,100,198.18,188.0143,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+G,Genpact,M92,Industrial,Miscellaneous Commercial Services,100,35.22,33.0502,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GGG,Graco,M92,Industrial,Industrial Machinery,100,79.82,77.0098,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+INGM,Ingram Micro,M92,Technology,Information Technology Services,100,28.28,26.4425,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+LYFT,Lyft Inc,M92,Transportation,Other Transportation,100,16.38,15.3442,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+RGEN,Repligen,M92,Healthcare,Pharmaceuticals: Major,100,175.42,158.0872,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SHOO,Steven Madden,M92,Consumer,Apparel/Footwear,100,44.75,42.0868,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+VET,Vermilion Energy,M92,Energy,Oil & Gas E&P,100,12.25,11.4361,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+YPF,YPF SA,M92,Energy,Oil & Gas Integrated,100,51.79,48.2284,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APA,Apache,M93,Energy,Oil & Gas E&P,100,48.01,42.2534,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CNQ,Canadian Natural Resources,M93,Energy,Integrated Oil,100,52.14,47.0019,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CVX,Chevron,M93,Energy,Integrated Oil,100,217.73,204.2853,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DVN,Devon Energy,M93,Energy,Integrated Oil,100,50.21,46.0665,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EQNR,Equinor,M93,Energy,Oil & Gas Integrated,100,45.02,41.1446,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+OVV,Ovintiv,M93,Energy,Oil & Gas E&P,100,66.66,59.4109,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SHEL,Shell,M93,Energy,Oil & Gas Integrated,100,102.99,94.2215,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SM,SM Energy,M93,Energy,Oil & Gas E&P,100,38.54,33.9231,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SU,Suncor Energy,M93,Energy,Oil & Gas Integrated,100,75.2,66.7096,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VLO,Valero Energy,M93,Energy,Oil & Gas Refining & Marketing,100,456.46,404.3538,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APA,Apache,M95,Energy,Oil & Gas E&P,100,48.01,44.9239,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ASC,Ardmore Shipping,M95,Transportation,Marine Shipping,100,20.13,18.7568,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+DINO,HF Sinclair,M95,Energy,Oil & Gas Refining & Marketing,100,128.23,119.166,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DV,DoubleVerify,M95,Technology,Packaged Software,100,13.56,13.4334,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PBF,PBF Energy,M95,Energy,Oil & Gas Refining & Marketing,100,91.17,81.7403,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PSX,Phillips 66,M95,Energy,Oil Refining/Marketing,100,292.73,275.1608,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+SSL,Sasol,M95,Materials,Specialty Chemicals,100,15.58,14.6178,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VLO,Valero Energy,M95,Energy,Oil & Gas Refining & Marketing,100,456.46,423.5244,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ARLP,Alliance Resource,M99,Energy,Thermal Coal,100,25.18,24.29,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+CLW,Clearwater Paper,M99,Basic Materials,Paper & Paper Products,100,19.59,18.67,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+CWT,California Water Service Group,M99,Utilities,Utilities - Regulated Water,100,46.14,45.05,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+HNI,HNI Corp,M99,Industrial,Office Equipment/Supplies,100,47.72,45.32,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+J,Jacobs Engineering,M99,Industrials,Engineering & Construction,100,142.2,135.27,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+LYFT,Lyft Inc,M99,Transportation,Other Transportation,100,16.38,14.75,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PSO,Pearson,M99,Communication Services,Publishing: Books/Magazines,100,17.4,15.6,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+TBN,Tamboran Resources,M99,Energy,Oil & Gas E&P,100,36.07,32.96,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+E,Eni SpA,M100,Energy,Oil & Gas Integrated,100,57.45,53.78,,,62.3219,Claude,lain,2026-10-13,2026-10-14,isyarat
+DINO,HF Sinclair,M101,Energy,Oil & Gas Refining & Marketing,100,128.23,101.9651,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+NSIT,Insight Enterprises,M101,Technology,Information Technology Services,100,175.87,152.0838,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+PSX,Phillips 66,M101,Energy,Oil Refining/Marketing,100,292.73,246.0249,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ULTA,Ulta Beauty,M101,Consumer,Specialty Stores,100,579.0,528.7095,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+VLO,Valero Energy,M101,Energy,Oil & Gas Refining & Marketing,100,456.46,361.3104,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ADI,Analog Devices,M102,Technology,Semiconductors,100,414.7,400.509,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+AMD,Advanced Micro Devices,M102,Technology,Semiconductors,100,605.53,570.6,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+DINO,HF Sinclair,M102,Energy,Oil & Gas Refining & Marketing,100,128.23,123.709,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GRAL,Grail,M102,Healthcare,Diagnostics & Research,100,140.35,135.24,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+PBF,PBF Energy,M102,Energy,Oil & Gas Refining & Marketing,100,91.17,85.32,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+VLO,Valero Energy,M102,Energy,Oil & Gas Refining & Marketing,100,456.46,438.204,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+APD,Air Products & Chemicals,M105,Basic Materials,Specialty Chemicals,100,288.96,271.1147,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AR,Antero Resources,M105,Energy,Oil & Gas E&P,100,37.54,34.0301,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CNQ,Canadian Natural Resources,M105,Energy,Integrated Oil,100,52.14,47.5707,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CTAS,Cintas,M105,Industrial,Miscellaneous Commercial Services,100,206.38,195.6296,,,,Claude,431,2026-10-13,2026-10-14,watchlist
+EQNR,Equinor,M105,Energy,Oil & Gas Integrated,100,45.02,41.0209,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXE,Expand Energy,M105,Energy,Oil & Gas E&P,100,92.37,84.5003,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXLS,ExlService,M105,Technology,Information Technology Services,100,37.2,34.4017,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+FANG,Diamondback Energy,M105,Energy,Oil & Gas Production,100,198.18,182.2763,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+G,Genpact,M105,Industrial,Miscellaneous Commercial Services,100,35.22,32.0382,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GEHC,GE HealthCare Technologies,M105,Healthcare,Medical Specialties,100,68.79,63.367,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+LYFT,Lyft Inc,M105,Transportation,Other Transportation,100,16.38,14.7921,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MDT,Medtronic,M105,Healthcare,Medical Specialties,100,93.01,84.4007,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ABT,Abbott Laboratories,M106,Healthcare,Medical Specialties,100,102.61,97.8682,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+AS,Amer Sports,M106,Consumer Cyclical,Leisure,100,29.2,27.368,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EXE,Expand Energy,M106,Energy,Oil & Gas E&P,100,92.37,87.9227,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EYE,National Vision,M106,Consumer,Specialty Retail,100,17.04,15.6916,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+HQI,HireQuest,M106,Industrial,Staffing & Employment Services,100,17.31,15.2679,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+MNR,Mach Natural Resources,M106,Energy,Oil & Gas E&P,100,11.06,10.5472,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+OMC,Omnicom Group,M106,Communication Services,Advertising Agencies,100,78.49,74.7334,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+RGEN,Repligen,M106,Healthcare,Pharmaceuticals: Major,100,175.42,158.0872,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ZTO,ZTO Express,M106,Transportation,Integrated Freight & Logistics,100,20.67,19.9317,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ADP,Automatic Data Processing,M111,Technology,Packaged Software,100,275.9,260.9214,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+ANF,Abercrombie & Fitch,M111,Consumer,Apparel/Footwear Retail,100,150.88,134.7171,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CHRD,Chord Energy,M111,Energy,Integrated Oil,100,146.51,134.7669,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
+CNQ,Canadian Natural Resources,M111,Energy,Integrated Oil,100,52.14,48.2455,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+CVX,Chevron,M111,Energy,Integrated Oil,100,217.73,204.6765,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+DVN,Devon Energy,M111,Energy,Integrated Oil,100,50.21,46.0923,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+EQNR,Equinor,M111,Energy,Oil & Gas Integrated,100,45.02,41.4428,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+GEHC,GE HealthCare Technologies,M111,Healthcare,Medical Specialties,100,68.79,63.6303,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+MTDR,Matador Resources,M111,Energy,Integrated Oil,100,55.88,51.1475,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+TRI,Thomson Reuters,M111,Industrial,Specialty Business Services,100,105.14,95.6959,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+WEC,WEC Energ Group Inc,M111,Utilities,Utilities - Regulated Electric,100,105.87,100.9651,,,,Claude,431,2026-10-13,2026-10-14,isyarat
+WPP,WPP PLC,M111,Communication Services,Advertising Agencies,100,25.93,23.7593,,,,Claude,lain,2026-10-13,2026-10-14,isyarat
