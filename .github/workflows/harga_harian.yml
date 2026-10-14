@@ -1,0 +1,47 @@
+# Harga harian percuma (yfinance) -> BacktestShariah2/data/harga/
+# Sesi Claude tidak boleh capai Yahoo; runner GitHub boleh. Tugasan Claude hanya membaca fail ini.
+# Masa (UTC): 21:30 Isn–Jum = 5:30 pagi MYT (sebelum kemas kini 6:02); 00:15 Sel–Sab = sandaran (volum muktamad).
+name: Harga harian
+
+on:
+  schedule:
+    - cron: '30 21 * * 1-5'
+    - cron: '15 0 * * 2-6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: harga-harian
+  cancel-in-progress: false
+
+jobs:
+  harga:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy yfinance exchange_calendars
+      - name: Tarik 10 sesi terakhir
+        run: python3 BacktestShariah2/standard/harga_yf.py terkini
+      - name: Tarik sejarah (jika perlu_sejarah.txt wujud; fail dipadam selepas siap)
+        if: ${{ hashFiles('BacktestShariah2/data/harga/perlu_sejarah.txt') != '' }}
+        run: python3 BacktestShariah2/standard/harga_yf.py sejarah
+      - name: Commit dan push
+        run: |
+          git config user.name "harga-harian[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/harga
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          SESI=$(python3 -c "import json;print(json.load(open('BacktestShariah2/data/harga/status.json'))['terkini']['sesi'])")
+          git commit -q -m "Harga harian (yfinance): sesi $SESI"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1

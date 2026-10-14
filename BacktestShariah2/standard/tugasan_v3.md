@@ -52,6 +52,7 @@ Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade
 - Skema CSV: `papertrade/SKEMA.md`.
 - Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (db melalui ArtifactData; muatkan skill artifact-capabilities). JANGAN cipta artifact baharu. Dokumen: `papertrade/moomoo`, `papertrade/claude`, `papertrade/claude_2` … `_6`, `papertrade/watchlist`, `papertrade/senarai_beli`, `sektor/snapshot`, `prestasi/mae`, `prestasi/ringkasan`, `harian/status`. JSON padat; setiap dokumen < 250 KB.
 - Log: imbasan → `standard/binaan_v2_log.md`; kemas kini dan belian → `standard/binaan_v2_log_tambahan.md` (baca dahulu, tambah di hujung).
+- Harga yfinance (sejak 14 Okt 2026): GitHub Actions `.github/workflows/harga_harian.yml` (21:30 UTC Isn–Jum, sandaran 00:15 UTC) menulis `data/harga/terkini.csv` (10 sesi terakhir; universe = set 431 + semua saham papertrade + `data/harga/univ.txt` + SPY/QQQ), `status.json`, dan `sejarah.csv` (3 tahun, bagi ticker dalam `perlu_sejarah.txt`). Skrip: `standard/harga_yf.py`. Sumber tidak rasmi: wajib semak silang dengan kline Moomoo sebelum guna (`harga_yf.py semak`); beza > 0.5% → Moomoo menang. Harga beli/keluar rasmi kekal = kline Moomoo (§5.2).
 - Alat besar: keputusan disimpan ke fail oleh sistem — proses dengan Python; jangan salin data harga secara manual. Had kline Moomoo ~4 panggilan seminit; maks 24 ticker setiap larian.
 
 ## 7. Prestasi

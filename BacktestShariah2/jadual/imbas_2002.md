@@ -10,7 +10,7 @@ Alat: `select:mcp__Moo_Moo__quote_market_state,mcp__Moo_Moo__quote_trading_days,
 2. Data pasaran: `quote_stock_screen`
    - screen_queries = [{"simple_field_query":{"simple_field":1,"screen_value_list":[2]}},{"simple_field_query":{"simple_field":10,"screen_value_list":[1]}},{"simple_property_query":{"property":{"name":2201},"lower":{"value":10000,"includes":true}}}]
    - retrieve_queries = [{"basic_property":{"name":1101}},{"simple_property":{"name":2202}},{"simple_property":{"name":2204}},{"simple_property":{"name":2205}},{"simple_property":{"name":2201}},{"cumulative_property":{"name":3104,"days":1}},{"financial_property":{"name":4903,"term":10}}]
-   - limit 250, ulang dengan next_key sehingga has_more=false. Kemudian kline US.SPY dan US.QQQ (num 370). Kline saham hanya untuk calon yang perlu (maks 24).
+   - limit 250, ulang dengan next_key sehingga has_more=false. Tulis semua ticker skrin (tanpa `US.`, satu baris setiap satu) ke `data/harga/univ.txt` supaya Actions harga harian meliputi universe Shariah. Kemudian kline US.SPY dan US.QQQ (num 370). Kline saham hanya untuk calon yang perlu (maks 24).
 3. Semak semula watchlist (tugasan_v3 §3): 90–99% kekal (kemas kini); 100% dan sah → senarai beli (keluarkan dari watchlist); terkeluar signal → BUANG.
 4. Imbas 87 kaedah: isyarat 100% dan sah (§3 a, b) → `papertrade/senarai_beli.csv` (lajur ikut SKEMA, destinasi = Claude, tarikh_imbasan = hari ini MYT). Calon baharu 90–99% → watchlist (maks 5 setiap kaedah).
 5. Sektor & industri wajib bagi setiap baris.

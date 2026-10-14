@@ -11,7 +11,9 @@ Alat (ToolSearch, satu panggilan setiap kumpulan):
 1. Baca `papertrade/moomoo.csv`, semua `papertrade/claude*.csv`, `papertrade/sektor.csv`, `papertrade/watchlist.csv`. `sim_trade_position_list` acc_id "4135388", market 100: selaraskan dengan moomoo.csv (perbezaan dan qty > 1 dicatat dalam log, bukan dalam CSV). Jangan ubah posisi Moomoo.
 2. Posisi BELUM keluar yang dibeli (M dan semua claude*; langkau tidak_dibeli): harga tutup terkini, untung %, hari dipegang, nilai keluar (tugasan_v3 §5.3). Keluar → isi tarikh/harga keluar, untung akhir, keluar=True (dibekukan). Isi harga keluar baris "menunggu" semalam (= buka hari ini). Semakan kesahihan belian semalam (§5.4). Betulkan harga beli sementara (§5.2).
 3. Posisi sudah keluar: tidak dikemas kini (kecuali sektor/industri kosong). Lajur gred pada semua posisi TIDAK diubah (gred pada hari isyarat).
-4. Watchlist: muat stor harga (aset dashboard `harian/status` → `harga_aset` A/B/idx) dan tambah bar tutup semalam (`kod/scanner.py harga` dengan skrin Moomoo; kline untuk calon yang perlu, maks 24). Nilai semula setiap baris:
+4. Watchlist: muat stor harga (aset dashboard `harian/status` → `harga_aset` A/B/idx) dan tambah bar tutup semalam (`kod/scanner.py harga` dengan skrin Moomoo; kline untuk calon yang perlu, maks 24).
+   - Harga yfinance (tugasan_v3 §6): jika `data/harga/status.json` → `terkini.sesi` = sesi semalam, isi jurang dengan `python3 BacktestShariah2/standard/harga_yf.py gabung --stor <folder stor>` SELEPAS `scanner.py harga` (kline Moomoo tidak perlu bagi saham yang sudah diisi). Semak silang dahulu: kline Moomoo (ktype 2, num 10) 5 saham rawak, `harga_yf.py semak --kline T=fail …`; keluar 1 → JANGAN gabung, guna Moomoo seperti biasa dan catat. Saham baharu tanpa sejarah → tulis ticker ke `data/harga/perlu_sejarah.txt` (commit; Actions menarik 3 tahun pada larian seterusnya, gabung dengan `--fail BacktestShariah2/data/harga/sejarah.csv`).
+   Nilai semula setiap baris:
    - 90–99% → kekal, kemas kini % hampir, harga, paras pencetus;
    - 100% → kekal (dipindah oleh imbasan 8:02 malam);
    - terkeluar signal → BUANG.
