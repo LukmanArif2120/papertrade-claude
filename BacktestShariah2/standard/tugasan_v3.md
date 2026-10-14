@@ -55,4 +55,7 @@ Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade
 - Alat besar: keputusan disimpan ke fail oleh sistem — proses dengan Python; jangan salin data harga secara manual. Had kline Moomoo ~4 panggilan seminit; maks 24 ticker setiap larian.
 
 ## 7. Prestasi
-Papertrade M, Papertrade C (gabungan semua claude*.csv) dan Combine; baris sah sahaja. KPI, untung purata setiap kaedah, kadar menang, penurunan maksimum, Paling Teruk, skor Untung×Selamat, TERUSKAN/PERHATI/HENTIKAN (gagal = % dagangan untung < 0; skor dibundar ke integer sebelum dibanding dengan 25/55). Skrip `standard/harian_*.py`, `bina_p4_mae.py`.
+Papertrade M, Papertrade C (gabungan semua claude*.csv) dan Combine; baris sah sahaja. KPI, untung purata setiap kaedah, kadar menang, penurunan maksimum, Paling Teruk, skor Untung×Selamat. Skrip `standard/harian_prestasi.py <folder>` (DIBINA dan HARGA_PADA melalui env) dan `bina_p4_mae.py`; peraturan sama dengan halaman dashboard.
+- Label (keputusan pengguna 14 Okt 2026): kaedah dengan **< 20 dagangan tertutup** = `BELUM CUKUP DATA`. Selepas ≥ 20: HENTIKAN jika untung purata ≤ −3% atau kadar gagal ≥ 75% atau skor < 25; TERUSKAN jika skor ≥ 55 dan untung purata > 0; selainnya PERHATI (gagal = % dagangan untung < 0; skor dibundar ke integer sebelum dibanding).
+- Metrik portfolio dalam dolar: setiap posisi dianggap **USD1,000 (sama berat)**, bukan 1 unit. Rekod CSV kekal 1 unit.
+- Ujian luar sampel backtest: tidak dibuat (keputusan pengguna 14 Okt 2026).
