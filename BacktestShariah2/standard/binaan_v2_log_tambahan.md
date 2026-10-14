@@ -63,3 +63,4 @@
 - Calon: 375 baris senarai_beli (211 saham; tarikh_imbasan 14 Okt). Direkod 361 baris (1 unit setiap kaedah+saham, sumber harian_c) ke `papertrade/claude_3.csv` + db `papertrade/claude_3` (claude_2 sudah ~229 KB). Gred disalin tanpa diubah. Harga beli = buka sementara `quote_stock_quote` 9:36 NY; belum disahkan dengan kline.
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 14: buka ≤ henti — AEO M14, ASST M14 & M57, TSM M14, WAY M14, UMC M29, CLS M49, HVT M74; belum didagangkan (data_date 13 Okt/low-high 0) — FORR M02 & M10, CLMB M12, WKC M14, ARW M55, TBN M99. Tiada langkau buka_maks; M03 (EXE, INFY) tidak dilangkau (sasaran dinamik).
+- Sahkan buka (10:03 NY, `quote_history_kline` ktype 2, 14 Okt): sampel NE 44.25, DINO 128.11, EXE 92.21, KEYS 366.95, ANIK 20.34 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
