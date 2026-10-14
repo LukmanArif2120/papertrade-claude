@@ -1,0 +1,16 @@
+{
+ "terkini": {
+  "dijana": "2026-10-14 13:10 UTC",
+  "sesi": 20261013,
+  "bil_ticker": 660,
+  "bil_universe": 660,
+  "tiada_data": [],
+  "tiada_bar_sesi": [
+   "BLFS",
+   "DDS",
+   "ET",
+   "QRVO"
+  ],
+  "bil_tiada_bar_sesi": 4
+ }
+}
