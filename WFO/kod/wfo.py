@@ -4,7 +4,7 @@
 # Guna:
 #   python3 wfo.py senarai                 # kaedah layak dan status
 #   python3 wfo.py jalan M30 M96 ...       # WFO kaedah tertentu (selari, maks 5 proses)
-#   python3 wfo.py kelompok [5]            # jalankan semua kaedah BELUM, 5 serentak
+#   python3 wfo.py kelompok [5] [10]       # jalankan 10 kaedah BELUM seterusnya, 5 serentak
 #   python3 wfo.py w01                     # WFO gabungan (entry turut dipilih)
 import sys, os, json, time, importlib, traceback, warnings, subprocess
 from collections import OrderedDict
@@ -333,9 +333,10 @@ if __name__ == '__main__':
         kunci = open(os.path.join(KELUAR, '.kunci'), 'w')
         try: fcntl.flock(kunci, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError: print('SEDANG BERJALAN'); sys.exit(0)
-        n = int(a[1]) if len(a) > 1 else 5      # bilangan proses serentak; semua kaedah BELUM dijalankan
+        n = int(a[1]) if len(a) > 1 else 5      # bilangan proses serentak
+        had = int(a[2]) if len(a) > 2 else 10   # bilangan kaedah dalam larian ini (muat < 2 jam)
         belum = [m for m, v in status().items() if v in ('BELUM',)]
         if not belum: print('SEMUA SIAP')
-        else: jalan(belum, n)
+        else: jalan(belum[:had], n)
     elif a[0] == 'w01':
         jalan_w01()
