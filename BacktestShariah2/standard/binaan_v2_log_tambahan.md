@@ -82,3 +82,10 @@
 - Pepijat dibetulkan: tab Papertrade C gagal dipaparkan kerana `kaedah_kongsi` dalam `papertrade/claude_3` berbentuk teks; kini teks atau senarai diterima.
 - Lajur baharu `pemangkin_url` (gred.py, sahkan.py, SKEMA). Imbasan 8:02: gred dua peringkat (S/I/R/Q dahulu dan push; P maks 40 saham, berhenti 9:10 malam MYT, simpan URL berita); db wajib membawa semua medan gred yang berisi. Sebab: imbasan 14 Okt tidak sempat mengumpul pemangkin sebelum 9:35 NY.
 - Db: `papertrade/watchlist` v6, `papertrade/senarai_beli` v5 dilengkapkan dengan medan gred terperinci daripada CSV (skor, sektor_us/industri_us, tarikh/hari earnings); tiada nilai diubah.
+
+## 15 Okt 2026 — Pemangkin "Berita Panas" (P baharu)
+- `standard/gred.py`: skor P diganti tiga lapis — (1) tapis berita bukan tentang saham itu (carian Moomoo ialah kata kunci: "CF" memulangkan berita cystic fibrosis), tindakan analisis berstruktur (`quote_research_rating_summary`), belian orang dalam Form 4; (2) kelas kuasa Tier 1 +3 / Tier 2 +2 / Tier 3 +1, negatif −1…−3, susutan 4–10 hari separuh; (3) pengesahan pasaran pemangkin terkuat (reaksi naik, volum ≥ 2× purata 20 hari, harga kekal di atas tutup sebelum berita) → +2 dan "🔥 PANAS"; pasaran tolak −1. Gred P baharu: A ≥ 5, B 3–4.9, C 1–2.9, D 0–0.9, E < 0. Belum diuji.
+- Subperintah baharu `gred.py kumpul` (fail mentah alat → `papertrade/pemangkin.json`, digabung; entri ≤ 2 hari dagangan dipakai).
+- `jadual/imbas_2002.md` §5b: Peringkat 2 = semua senarai beli; Peringkat 3 = semua watchlist (had 11:30 malam MYT).
+- Dashboard diterbitkan semula (versi 41) atas versi langsung: lencana 🔥 Panas dalam lajur Pemangkin + tooltip baharu; `standard/dashboard_v2.html` diselaraskan dengan versi langsung.
+- FMP news/analyst ditolak pelan FMP semasa; tidak dipakai.

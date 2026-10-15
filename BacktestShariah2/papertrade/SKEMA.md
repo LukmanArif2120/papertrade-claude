@@ -53,11 +53,14 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 | gred_sektor, gred_industri | A–E atau "–" (skor panas seluruh pasaran AS, sandaran SST: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20; "–" = tiada data) |
 | skor_sektor, skor_industri | 0–100 |
 | rs_rating, gred_rs | 1–99; A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40 |
-| gred_pemangkin, mata_pemangkin, pemangkin | A ≥ 4 mata, B 3, C 1–2, D 0, E < 0; ringkasan sebab; "–" = belum dikumpul |
-| pemangkin_url | JSON [{"tajuk", "url"}] maks 2 berita (positif dahulu, kemudian terkini; URL https daripada quote_news_search); kosong jika tiada |
+| gred_pemangkin, mata_pemangkin, pemangkin | Berita Panas (sejak 15 Okt 2026): A ≥ 5 mata, B 3–4.9, C 1–2.9, D 0–0.9, E < 0 (mata boleh berpecahan .5); ringkasan sebab, bermula "🔥 PANAS · " jika pemangkin Tier 1/2 disahkan harga + volum; "–" = belum dikumpul. Baris sebelum 15 Okt guna skala lama (A ≥ 4) |
+| pemangkin_url | JSON [{"tajuk", "url"}] maks 2 (pemangkin terkuat dahulu, kemudian terkini; URL https daripada quote_news_search / rating_summary); kosong jika tiada |
 | tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; sumber SST / anggaran / tiada data |
 | gred_keseluruhan | purata mata gred yang ada (paparan sahaja; belum diuji) |
 | gred_pada | tarikh imbasan gred dikira |
+
+## `pemangkin.json`
+Ditulis oleh `standard/gred.py kumpul` (imbasan 8:02 malam) daripada hasil mentah alat Moomoo/SST: {ticker: {dikumpul, berita [{tajuk, tarikh (New York), selepas_tutup, hari_lalu, url, sumber}], analisis [{kategori, mata, firma, tarikh, hari_lalu, sasaran, url}], orang_dalam {bilangan, tarikh}, earnings_lalu_tarikh, earnings_lalu_hari, earnings_gerak_pct, earnings_anggaran, institusi}}. Berita yang bukan tentang saham itu sudah ditapis. Entri > 5 hari dagangan dibuang semasa gabung; `tambah` hanya memakai entri ≤ 2 hari dagangan.
 
 ## `peta_industri.csv`
 ticker, industri, plate_code — keahlian plate industri Moomoo bagi semua saham AS. Dibina semula jika lebih 30 hari (quote_plate_list INDUSTRY + quote_plate_stock setiap plate).
