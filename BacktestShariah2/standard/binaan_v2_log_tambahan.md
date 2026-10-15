@@ -89,3 +89,9 @@
 - `jadual/imbas_2002.md` §5b: Peringkat 2 = semua senarai beli; Peringkat 3 = semua watchlist (had 11:30 malam MYT).
 - Dashboard diterbitkan semula (versi 41) atas versi langsung: lencana 🔥 Panas dalam lajur Pemangkin + tooltip baharu; `standard/dashboard_v2.html` diselaraskan dengan versi langsung.
 - FMP news/analyst ditolak pelan FMP semasa; tidak dipakai.
+
+## 2026-10-15 ~20:40 MYT — Semakan sejarah jadual dan pembetulan
+- Sejarah kegagalan: 12 Okt beli 9:35 gagal (had penggunaan); 13 Okt beli Moomoo gagal (sim_trade ralat backend → mod Claude sahaja); 14 Okt imbas 8:02 ditembak lewat (20:18) dan gagal dalam 28 s (`add_repo` tiada → push 403; diganti larian manual); 15 Okt imbas 8:02 ditembak lewat 17 minit (20:19). Rutin 6:02 dan 9:35 NY ditembak tepat masa (lewat < 1 minit).
+- Punca semasa: penjadual menembak slot 20:02 MYT (12:02 UTC) lewat ~16–17 minit dua hari berturut. Larian 15 Okt dicetus manual pada 20:07 sebelum tembakan lewat; mesej kepada sesi imbas supaya prompt kedua dilangkau (pendua).
+- Moomoo meminta log masuk semula di tengah imbasan 15 Okt (pemangkin subagen gagal bagi sebahagian saham).
+- Pembetulan: rutin imbas dianjak ke **7:47 malam MYT** (`trig_012DQb9KbjfhpKuopsMByNDh`, cron `47 19 * * 1-5` Asia/Kuala_Lumpur) supaya senarai beli siap jauh sebelum 9:35 NY walaupun lewat. Nama fail prosedur `imbas_2002.md` kekal.

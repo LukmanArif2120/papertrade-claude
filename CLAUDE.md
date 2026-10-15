@@ -4,7 +4,7 @@ Repo ini menggantikan Project claude.ai "Backtest Shariah 2" sebagai stor utama 
 
 ## Struktur
 - `BacktestShariah2/standard/` — peraturan (tugasan_v3.md; dashboard.md), log (binaan_v2_log.md, binaan_v2_log_tambahan.md), skrip harian, `sahkan.py` (semakan data), `bungkus_kod.py`, enjin P01/P02, sumber halaman dashboard_v2.html.
-- `BacktestShariah2/jadual/` — prosedur tiga tugasan berjadual (6:02 pagi, 8:02 malam, 9:35 NY).
+- `BacktestShariah2/jadual/` — prosedur tiga tugasan berjadual (6:02 pagi, 7:47 malam, 9:35 NY).
 - `BacktestShariah2/kod/` — kod teras (scanner, enjin v1.2, kaedah/Mxx.py). Sumber kebenaran; aset kod dashboard hanya salinan.
 - `BacktestShariah2/ujian/` — ujian unit: `python3 -m unittest discover -s BacktestShariah2/ujian`.
 - `BacktestShariah2/papertrade/` — moomoo.csv, claude.csv, claude_2.csv (… claude_N.csv), senarai_beli.csv, watchlist.csv, sektor.csv. Skema: `papertrade/SKEMA.md`.

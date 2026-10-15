@@ -13,7 +13,7 @@ Dokumen ini **satu-satunya** rujukan peraturan bagi tugasan harian. Ia mengganti
 | Tugasan | Masa | Prosedur |
 |---|---|---|
 | Kemas kini | 6:02 pagi MYT, Selasa–Sabtu | `jadual/kemas_kini_0602.md` |
-| Imbas pasaran | 8:02 malam MYT, Isnin–Jumaat | `jadual/imbas_2002.md` |
+| Imbas pasaran | 7:47 malam MYT, Isnin–Jumaat (dahulu 8:02) | `jadual/imbas_2002.md` |
 | Beli maya | 9:35 pagi New York, Isnin–Jumaat | `jadual/beli_0935.md` |
 
 Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade M, Papertrade C, Prestasi, `harian/status`.
@@ -26,8 +26,8 @@ Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade
   - (a) Isyarat MINGGUAN (M52 dan modul yang guna `akhir`) sah hanya jika sesi itu hari dagangan terakhir minggu.
   - (b) Setiap baris wajib ada `henti`, `nota_henti` (formula jika henti bergantung pada buka masuk, cth. M52 = 0.60×buka), `buka_maks` (cth. M08 = 1.05×SMA20, M06 = 1.05×pangsi, M20/M19 = sasaran) dan `sasaran`, diambil daripada `sedia()` modul kaedah.
 - **Watchlist (Hampir Signal)** = 90–99% dipenuhi (semua syarat kecuali pencetus; pencetus dalam ≤ 2%; pencetus kalendar ≤ 3 hari dagangan). Maks 5 setiap kaedah (431 dahulu, kemudian skor).
-  - Dinilai semula pada 6:02 pagi DAN 8:02 malam. Terkeluar signal (< 90% atau isyarat batal/tidak sah) → BUANG serta-merta.
-  - Calon baharu hanya ditambah pada 8:02 malam. Calon yang menjadi 100% dipindah ke senarai beli pada 8:02 malam.
+  - Dinilai semula pada 6:02 pagi DAN imbasan malam (7:47). Terkeluar signal (< 90% atau isyarat batal/tidak sah) → BUANG serta-merta.
+  - Calon baharu hanya ditambah pada imbasan malam. Calon yang menjadi 100% dipindah ke senarai beli pada imbasan malam.
   - Peraturan lama "buang selepas 10 hari" dimansuhkan.
 
 ## 4. Belian maya (9:35 NY)
