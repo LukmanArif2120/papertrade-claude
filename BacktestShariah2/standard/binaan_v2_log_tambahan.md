@@ -101,3 +101,16 @@
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 12: buka ≤ henti — STLD M13, LNTH M13, NVST M13, IOVA M14, AMD M14, CSCO M14, AVT M14, JCI M14, OESX M29, KEX M35; belum didagangkan (data_date 14 Okt) — SENEB M02 & M11. Tiada langkau buka_maks/bertindih.
 - Sahkan buka (10:05 NY, `quote_history_kline` ktype 2, 15 Okt): sampel COP 142.92, CRM 238.51, KEYS 343.82, MU 873.39, XOM 178.4 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
+
+## 2026-10-16 (6:02 MYT) — Kemas kini pagi (sesi AS 15 Okt)
+- Semak pendua: tiada commit "Kemas kini 6:02 pagi 2026-10-16" pada origin/main; NYSE 15 Okt hari dagangan (SPY +0.28%, QQQ −0.13%).
+- Harga: `status.json` yfinance sesi 20261014 (belum 15 Okt) → bar 15 Okt dari skrin Shariah Moomoo (911 saham) + kline bagi BB, EFOR, LITE, LUXE, VIAV, SPY, QQQ. Skrin sepadan kline bagi COP, CRM, KEYS, MU, XOM (buka/tinggi/rendah/tutup sama). Stor kerja diteruskan daripada salinan 15 Okt (bar 13 Okt yfinance + 14 Okt Moomoo); aset stor dashboard tidak dimuat naik semula.
+- Keluar baharu 160 (C 147, M 13): kena henti 114 (C 101…), capai sasaran 17, isyarat keluar kaedah 29; "menunggu" buka 16 Okt: 29. Harga keluar baris menunggu semalam = buka 15 Okt.
+- Belian 15 Okt (claude_4, claude_5; 391 baris): harga_beli dibetulkan kepada `open` rasmi bagi 249 baris (46 baris beza > 0.5%, terbesar SNX M81 252.95→255.88, PAYC 238.37→240.94, BFAM 70.675→69.88). Sampel "sama" 10:05 NY semalam tidak tepat: kline sebenar COP 143.00, CRM 238.50, KEYS 344.08, MU 871.575, XOM 178.63 (log semalam 142.92/238.51/343.82/873.39/178.4). `henti` dikemas kini daripada enjin pada hari isyarat. Tiada belian baharu gagal kesahihan §5.4/langkau buka rasmi (0 tidak dibeli baharu).
+- PEMBETULAN log 15 Okt: keluar baharu sesi 14 Okt ialah 158 (C 149, M 9), bukan 167; `harian/status` 15 Okt mengira C=158 secara salah (laluan repo mengandungi "claude") — kini diperbetulkan (C 147 + M 13 hari ini).
+- Watchlist 267 → 204 (63 dibuang kerana terkeluar signal). Tiada calon baharu.
+- Moomoo acc 4135388: 208 posisi; semua 116 posisi aktif moomoo.csv ada di akaun (baris CSV "keluar" masih dipegang kerana tiada jualan). Qty > 1: MGA/DCI 33, ROG/CNXN/AMN/NEU/SNPS/SCSC/BB 19, VIAV/EFOR/ACN/EFXT/LITE 22, FORM 10.
+- Sektor: sektor_pasaran.csv 15 Okt (3,853 saham dipetakan daripada ~6,100); sektor.csv 15 Okt (149 baris); `sektor/snapshot` dibina semula; SST breadth (A/D 540/210), volum luar biasa (16) dikemas kini; aliran institusi SST tidak berubah. Medan SST per kumpulan tidak dikira semula (`screen_stocks` SST tidak ditarik); disalin daripada snapshot semasa.
+- Prestasi (baris sah): M 200 dagangan +0.08%; C 1,669 −0.07%; Combine 1,869 −0.05%. HENTIKAN: C — M08; Combine — M14, M08. Tiada TERUSKAN; selebihnya BELUM CUKUP DATA atau PERHATI.
+- sahkan.py --betulkan: 0 ralat, 0 amaran (1,877 posisi dibeli). Db: papertrade/moomoo v8, claude v8, claude_2 v8, claude_3 v3, claude_4 v2, claude_5 v2, watchlist v9, sektor/snapshot v10, prestasi/mae v9, prestasi/ringkasan v8, harian/status v15.
+- Nota: db `papertrade/claude_3` 259 KB, `claude` 241 KB (lebih had ~250 KB bagi claude_3).
