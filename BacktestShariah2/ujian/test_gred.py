@@ -52,6 +52,17 @@ class UjiGred(unittest.TestCase):
         m, _ = G.mata_pemangkin({'berita': [{'tajuk': 'old upgrade', 'hari_lalu': 20}]})
         self.assertEqual(m, 0)
 
+    def test_pautan_berita(self):
+        import json
+        u = json.loads(G.pautan_berita([
+            {'tajuk': 'Y news', 'hari_lalu': 1, 'url': 'https://a/1'},
+            {'tajuk': 'X upgrades Y', 'hari_lalu': 4, 'url': 'https://a/2'},
+            {'tajuk': 'Y beats', 'hari_lalu': 2, 'url': 'http://tidak-selamat'},
+            {'tajuk': 'lama upgrade', 'hari_lalu': 20, 'url': 'https://a/3'}]))
+        self.assertEqual([x['url'] for x in u], ['https://a/2', 'https://a/1'])
+        self.assertEqual(G.pautan_berita([{'tajuk': 'tiada url', 'hari_lalu': 1}]), '')
+        self.assertEqual(G.pautan_berita(None), '')
+
     def test_keseluruhan(self):
         self.assertEqual(G.gred_keseluruhan(['A', 'A', '–', 'B']), 'A')
         self.assertEqual(G.gred_keseluruhan(['–', '–']), '–')

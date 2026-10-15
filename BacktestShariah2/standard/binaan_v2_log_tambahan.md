@@ -76,3 +76,9 @@
 - Prestasi (baris sah): M 200 dagangan, −0.53%; C 1,278, −0.96%; Combine 1,478, −0.90%. HENTIKAN: C — M18, M14; Combine — M18, M14, M08. Tiada TERUSKAN; selebihnya BELUM CUKUP DATA (< 20 dagangan tertutup) atau PERHATI (Combine: 1).
 - sahkan.py --betulkan: 0 ralat, 0 amaran (1,486 posisi dibeli). Db: papertrade/moomoo v7, claude v7, claude_2 v7, claude_3 v2, watchlist v5, sektor/snapshot v9, prestasi/mae v8, prestasi/ringkasan v7, harian/status v13.
 - Nota: dokumen db `papertrade/claude_3` kini 253 KB (had ~250 KB); beli 9:35 NY seterusnya perlu mulakan `claude_4`.
+
+## 2026-10-15 — Lajur gred terperinci dan pautan berita (permintaan pengguna)
+- Dashboard v34: lajur Sektor, Industri, RS, Pemangkin, QR dan Gred, setiap satu dengan tooltip sendiri. Sel menunjukkan gred dengan angka sebenar: skor /100 dan nama (Sektor/Industri, dengan "1B kini" daripada tab Sector), RS 1–99 ("atasi N%"), ringkasan pemangkin dan sehingga 2 pautan berita, hari dagangan ke laporan suku dengan label Selamat (A/B) / Berhati-hati (C) / Elak (D/E) (maklumat sahaja, bukan penapis). Lajur teks Sektor/Industri berasingan digabung ke lajur gred. Jadual bergred skrol mendatar jika terlalu lebar (Papertrade C).
+- Pepijat dibetulkan: tab Papertrade C gagal dipaparkan kerana `kaedah_kongsi` dalam `papertrade/claude_3` berbentuk teks; kini teks atau senarai diterima.
+- Lajur baharu `pemangkin_url` (gred.py, sahkan.py, SKEMA). Imbasan 8:02: gred dua peringkat (S/I/R/Q dahulu dan push; P maks 40 saham, berhenti 9:10 malam MYT, simpan URL berita); db wajib membawa semua medan gred yang berisi. Sebab: imbasan 14 Okt tidak sempat mengumpul pemangkin sebelum 9:35 NY.
+- Db: `papertrade/watchlist` v6, `papertrade/senarai_beli` v5 dilengkapkan dengan medan gred terperinci daripada CSV (skor, sektor_us/industri_us, tarikh/hari earnings); tiada nilai diubah.

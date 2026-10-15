@@ -2,6 +2,7 @@
 # Guna:  python3 BacktestShariah2/standard/sahkan.py            -> semak sahaja
 #        python3 BacktestShariah2/standard/sahkan.py --betulkan -> susun lajur ikut skema, kemudian semak
 # Kod keluar: 0 = lulus, 1 = ada RALAT (jangan push data), 2 = fail tiada / tidak boleh dibaca.
+import json
 import sys, os, csv, glob, re, argparse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -15,7 +16,7 @@ POSISI = ['tarikh_beli', 'saham', 'kaedah', 'id_kaedah', 'sektor', 'industri', '
           'harga_buka_rujukan', 'tarikh_beli_dirancang',
           # gred pada hari isyarat (standard/gred.py; tugasan_v3 §8)
           'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
-          'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'tarikh_earnings', 'hari_ke_earnings',
+          'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
           'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada']
 LAJUR_GRED = ['gred_sektor', 'gred_industri', 'gred_rs', 'gred_pemangkin', 'gred_qr', 'gred_keseluruhan']
 NILAI_GRED = {'', 'A', 'B', 'C', 'D', 'E', '–'}
@@ -76,6 +77,14 @@ def semak_gred(nama, rows, ralat):
         for c in LAJUR_GRED:
             if c in r and (r[c] or '') not in NILAI_GRED:
                 ralat.append(f'{nama}:{i}: {c} tidak sah ({r[c]!r}); mesti A–E atau "–"')
+        u = r.get('pemangkin_url') or ''
+        if u:
+            try:
+                ok = all(str(x.get('url', '')).startswith('https://') and x.get('tajuk') for x in json.loads(u))
+            except (ValueError, AttributeError, TypeError):
+                ok = False
+            if not ok:
+                ralat.append(f'{nama}:{i}: pemangkin_url mesti JSON [{{"tajuk", "url" https}}]')
         v = nombor(r.get('rs_rating'))
         if not kosong(r.get('rs_rating')) and (v is None or not 1 <= v <= 99):
             ralat.append(f'{nama}:{i}: rs_rating {r.get("rs_rating")!r} di luar 1–99')

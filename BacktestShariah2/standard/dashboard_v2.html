@@ -35,6 +35,12 @@ h1{font-size:1.2rem;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:bal
 .live{flex-wrap:wrap;row-gap:2px}
 .gr{display:inline-block;min-width:1.45em;text-align:center;border-radius:4px;font-weight:700;font-size:.7rem;line-height:1.5;padding:0 3px;margin:0 2px 2px 0}
 .gr small{font-weight:500;opacity:.75;margin-right:1px}
+.nw{white-space:nowrap}
+/* jadual bergred: angka dan perkataan tidak dipecah; skrol mendatar dalam jadual jika terlalu lebar */
+.tablewrap:has(td.grd){overflow-x:auto}.tablewrap:has(td.grd) td,.tablewrap:has(td.grd) th{overflow-wrap:break-word;padding-inline:4px}
+td.grd{min-width:0}.tablewrap:has(td.grd) td.wrap{min-width:150px}td.grd .vv{font-size:.72rem}td.grp{min-width:150px}.tablewrap td .nw{white-space:nowrap}
+.grc{display:flex;gap:6px;align-items:flex-start}.grc>.gr{flex:none;margin-top:1px}.grt{min-width:0}.grt b{color:var(--fg)}
+a.berita{color:var(--accent);text-decoration:none;margin-top:2px}a.berita:hover{text-decoration:underline}
 .g-A{background:var(--pos-soft);color:var(--pos)}.g-B{background:var(--accent-soft);color:var(--accent)}.g-C{background:var(--sunk);color:var(--fg-2);box-shadow:inset 0 0 0 1px var(--line)}.g-D{background:var(--warn-soft);color:var(--warn)}.g-E{background:var(--neg-soft);color:var(--neg)}.g-x{background:var(--sunk);color:var(--muted)}
 #dataTxt b{color:var(--fg-2)}
 #dataTxt b.neg{color:var(--neg)}
@@ -665,7 +671,6 @@ function renderWatch(){
     ${sortTable({id:'watch',rows,def:{k:'pct_dipenuhi',dir:-1},limit:wf.shown,cols:[
       {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`<b>${esc(r.saham)}</b><span class="vv">${esc(r.nama||'')}</span>`,c:()=>'tk'},
       {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`},
-      {k:'sektor',t:'Sektor',tip:'sektor',l:1},{k:'industri',t:'Industri',tip:'industri',l:1},
       {k:'harga_terkini',t:'Harga',tip:'harga_w',f:r=>fx(r.harga_terkini,2)},
       {k:'pct_dipenuhi',t:'% hampir',tip:'pct_dipenuhi',f:r=>`<span class="pill p-near">${fx(r.pct_dipenuhi,1)}%</span>`},
       {k:'pencetus',t:'Syarat belum cukup',tip:'syarat_belum',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}<span class="vv">${esc(r.sebab||'')}</span><span class="vv">${esc(r.syarat_belum||'')}</span>`,c:()=>'wrap'},
@@ -682,7 +687,8 @@ function renderWatch(){
 
 /* ================= lajur papertrade diselaraskan (M, C, Prestasi) ================= */
 function hariDari(t){if(!t)return null;const d=Date.parse(t+'T00:00:00Z');if(isNaN(d))return null;let n=0;const now=new Date();for(let x=new Date(d);x<now;x.setUTCDate(x.getUTCDate()+1)){const w=x.getUTCDay();if(w&&w<6)n++;}return Math.max(0,n-1);}
-function normPT(r){const keluar=!!(r.keluar||r.tarikh_keluar);return Object.assign({},r,{
+function normPT(r){const keluar=!!(r.keluar||r.tarikh_keluar);const kk=r.kaedah_kongsi;return Object.assign({},r,{
+  kaedah_kongsi:Array.isArray(kk)?kk:typeof kk==='string'&&kk.trim()?kk.split(/[,;]\s*/).filter(Boolean):null,
   kaedah:r.kaedah||r.id_kaedah||'–',hari:r.tidak_dibeli?null:(r.hari??hariDari(r.tarikh_beli)),keluar,
   isyarat_keluar:r.isyarat_keluar||(keluar?'Keluar':'Pegang'),
   untung_akhir_pct:keluar?(r.untung_akhir_pct??r.untung_pct):null,
@@ -693,17 +699,41 @@ const GDIM=[['gred_sektor','S','Sektor','skor_sektor'],['gred_industri','I','Ind
 const GORD={A:0,B:1,C:2,D:3,E:4};
 const grB=(g,lbl,tt)=>`<span class="gr g-${GORD[g]!=null?g:'x'}" title="${esc(tt||'')}">${lbl?`<small>${lbl}</small>`:''}${GORD[g]!=null?g:'–'}</span>`;
 const adaGred=r=>GDIM.some(([k])=>GORD[r[k]]!=null);
-const grTT=(r,k)=>({gred_sektor:`Sektor ${r.sektor||''}: skor ${r.skor_sektor??'–'}`,gred_industri:`Industri ${r.industri||''}: skor ${r.skor_industri??'–'}`,gred_rs:`RS rating ${r.rs_rating??'–'}`,gred_pemangkin:`Pemangkin: ${r.pemangkin||'–'}`,gred_qr:`Earnings ${r.tarikh_earnings||'tiada dalam 30 hari'}${r.hari_ke_earnings!=null&&r.hari_ke_earnings!==''?' · '+r.hari_ke_earnings+' hari dagangan':''}${r.sumber_earnings?' · '+r.sumber_earnings:''}`})[k];
-/* satu lajur bagi setiap dimensi S I R P Q, kemudian gred keseluruhan */
-const grCols=()=>[...GDIM.map(([k,l])=>({k,t:l,tip:'gred',v:r=>GORD[r[k]]??9,f:r=>GORD[r[k]]!=null?grB(r[k],'',grTT(r,k)):'<span class="mut">–</span>'})),
-  {k:'gred_keseluruhan',t:'Gred',tip:'gred',v:r=>GORD[r.gred_keseluruhan]??9,f:r=>GORD[r.gred_keseluruhan]!=null?grB(r.gred_keseluruhan,'','Gred keseluruhan'):'<span class="mut">–</span>'}];
+/* satu lajur bagi setiap dimensi S I R P Q (nilai pada hari isyarat), kemudian gred keseluruhan */
+const grNil=v=>v==null||v===''?null:Number(v);
+const grSel1=(g,body)=>GORD[g]!=null?`<div class="grc">${grB(g)}<div class="grt">${body}</div></div>`:'<span class="mut">–</span>';
+/* prestasi 1 bulan sektor/industri semasa daripada tab Sector (padanan nama) */
+function skPerf(jenis,nama){const sk=S.sektor;if(!nama||!sk||!Array.isArray(sk.rows))return null;
+  if(!sk._peta||sk._peta.src!==sk.rows){const m={};sk.rows.forEach(x=>{m[x.jenis+'|'+x.nama]=x;});sk._peta={src:sk.rows,m};}
+  return sk._peta.m[jenis+'|'+nama]||null;}
+function grKump(r,jenis){const g=r[jenis==='Sektor'?'gred_sektor':'gred_industri'],sk=grNil(r[jenis==='Sektor'?'skor_sektor':'skor_industri']);
+  const asal=jenis==='Sektor'?r.sektor:r.industri,us=jenis==='Sektor'?r.sektor_us:r.industri_us;const x=skPerf(jenis,us||asal);
+  if(GORD[g]==null)return asal?`<span class="grt">${esc(asal)}</span>`:'<span class="mut">belum</span>';
+  return grSel1(g,`<span class="nw"><b>${sk==null?'–':fx(sk,0)}</b><span class="mut">/100</span></span><span class="vv">${esc(asal||us||'').replace(/([\/-])/g,'$1<wbr>')}</span>${x&&x.prestasi_1m!=null?`<span class="vv">1B kini <span class="${cls(x.prestasi_1m)}">${sg2(x.prestasi_1m)}</span></span>`:''}`);}
+function grRS(r){const v=grNil(r.rs_rating);
+  return grSel1(r.gred_rs,v==null?'<span class="mut">tiada data</span>':`<b class="nw">RS ${fx(v,0)}</b><span class="vv nw">atasi ${fx(v,0)}%</span>`);}
+function grPem(r){if(GORD[r.gred_pemangkin]==null)return `<span class="mut">${r.pemangkin&&r.pemangkin!=='belum dikumpul'?esc(r.pemangkin):'Belum dikumpul'}</span>`;
+  let u=[];try{u=r.pemangkin_url?(typeof r.pemangkin_url==='string'?JSON.parse(r.pemangkin_url):r.pemangkin_url):[];}catch(e){u=[];}
+  const ln=(Array.isArray(u)?u:[]).filter(x=>x&&/^https:\/\//.test(x.url||'')).slice(0,2).map(x=>`<a class="vv berita" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer">↗ ${esc(x.tajuk||'Berita')}</a>`).join('');
+  const t=r.pemangkin&&r.pemangkin!=='tiada pemangkin dikesan'?esc(r.pemangkin):'Tiada berita/pemangkin';
+  return grSel1(r.gred_pemangkin,`<span>${t}</span>${ln}`);}
+const QLBL={A:['Selamat','p-buy'],B:['Selamat','p-buy'],C:['Berhati-hati','p-warn'],D:['Elak','p-exit'],E:['Elak','p-exit']};
+function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
+  const tk=r.tarikh_earnings?new Date(r.tarikh_earnings+'T00:00:00Z').toLocaleDateString('ms-MY',{day:'numeric',month:'short',timeZone:'UTC'}):'';
+  const txt=h!=null?`<b class="nw">${fx(h,0)} hari lagi</b><span class="vv">${esc(tk)}${r.sumber_earnings==='anggaran'?' · anggaran':''}</span>`:`<b>${r.sumber_earnings==='tiada data'?'Tiada data':'Tiada laporan'}</b><span class="vv">${r.sumber_earnings==='tiada data'?'':'dalam 30 hari'}</span>`;
+  return grSel1(r.gred_qr,`${txt}${q?`<span class="pill ${q[1]}" style="margin-top:3px">${q[0]}</span>`:''}`);}
+const grCols=()=>[
+  {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??9,f:r=>grKump(r,'Sektor')},
+  {k:'gred_industri',t:'Industri',tip:'g_i',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??9,f:r=>grKump(r,'Industri')},
+  {k:'rs_rating',t:'RS',tip:'g_r',l:1,c:()=>'grd',v:r=>grNil(r.rs_rating),f:grRS},
+  {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??9,f:grPem,c:()=>'grd grp'},
+  {k:'hari_ke_earnings',t:'QR',tip:'g_q',l:1,c:()=>'grd',v:r=>GORD[r.gred_qr]??9,f:grQR},
+  {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:r=>grSel1(r.gred_keseluruhan,'')}];
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.keluar?'exit':'');
 function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>esc(r.tarikh_beli||'–')},
   {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`<b>${esc(r.saham)}</b>${akaun&&r.akaun?` <span class="pill p-mute" title="${r.akaun==='M'?'Moomoo':'Claude'}">${r.akaun}</span>`:''}`,c:()=>'tk'},
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`${esc(r.kaedah)}${r.kaedah_kongsi&&r.kaedah_kongsi.length?`<span class="vv">kongsi: ${esc(r.kaedah_kongsi.join(', '))}</span>`:''}`},
-  {k:'sektor',t:'Sektor',tip:'sektor',l:1,f:r=>r.sektor?esc(r.sektor):'<span class="mut">belum</span>'},
-  {k:'industri',t:'Industri',tip:'industri',l:1,f:r=>r.industri?esc(r.industri):'<span class="mut">belum</span>'},
   {k:'harga_beli',t:'Harga beli',tip:'harga_beli',f:r=>fx(r.harga_beli,2)},
   {k:'unit',t:'Unit',tip:'unit',f:r=>fx(r.unit,0)},
   {k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)},
@@ -1072,7 +1102,12 @@ const TIPS={
   penurunan_maks:{t:'Penurunan maksimum',d:'Bagi setiap dagangan: harga rendah terendah sejak hari beli (hingga hari ini atau hingga keluar) ÷ harga beli − 1. Purata = risiko biasa yang ditanggung; terburuk = satu kejatuhan paling dalam. Lebih hampir 0 = lebih selamat.',e:'Beli 100, pernah jatuh ke 94 = −6%, walaupun kini untung.'},
   skor_us:{t:'Skor Untung×Selamat (0–100)',d:'Skor = 100 × U × S. U (untung) = 0.6 × untung purata dipetakan −5%→0 hingga +10%→1, + 0.4 × kadar menang. S (selamat) = 0.6 × penurunan maks purata dipetakan −10%→0 hingga 0%→1, + 0.4 × kerugian terbesar dipetakan −20%→0 hingga 0%→1. Tinggi hanya jika KEDUA-DUANYA baik. Kaedah dengan kurang daripada 5 dagangan didarab n/5 (keyakinan rendah).',e:'U 0.8 × S 0.9 = 72; jika hanya 2 dagangan: 72 × 0.4 = 29.'},
   keputusan_pr:{t:'Keputusan (TERUSKAN / PERHATI / HENTIKAN)',d:'BELUM CUKUP DATA: kurang daripada 20 dagangan tertutup (sudah keluar). Selepas ≥ 20: HENTIKAN jika untung purata ≤ −3% ATAU kadar gagal ≥ 75% ATAU skor < 25; TERUSKAN jika skor ≥ 55 dan untung purata positif; selainnya PERHATI. Keputusan papertrade sahaja, bukan isyarat wang sebenar.',e:'▲ TERUSKAN · ● PERHATI · ✕ HENTIKAN · ○ BELUM CUKUP DATA (bentuk berbeza dalam carta).'},
-  gred:{t:'Gred S I R P Q',d:'Gred A (terbaik) hingga E pada hari isyarat. S = kekuatan sektor, I = kekuatan industri (skor panas SST), R = RS rating 1–99 (A ≥ 90), P = pemangkin (berita, penarafan analisis, reaksi earnings, volum, institusi), Q = jarak ke laporan suku seterusnya (A > 21 hari dagangan; makin dekat makin berisiko jurang harga). Direkod untuk diuji, bukan penapis belian.',e:'S B · I A · R A · P C · Q A = sektor agak kuat, industri dan RS sangat kuat, pemangkin sederhana, earnings masih jauh.'},
+  g_s:{t:'S · Sektor',d:'Kekuatan sektor saham itu berbanding seluruh pasaran AS pada hari isyarat: skor 0–100 daripada prestasi 1 minggu, 1 bulan dan 3 bulan, breadth dan kekuatan relatif. A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20. Skor ialah kedudukan kekuatan, bukan peratus untung. Baris "1B kini" ialah prestasi median sektor sebulan menurut tab Sector hari ini.',e:'A 88/100 · Technology · 1B kini +4.1% = sektor antara terkuat semasa isyarat.'},
+  g_i:{t:'I · Industri',d:'Kekuatan industri saham itu (lebih sempit daripada sektor) berbanding seluruh pasaran AS pada hari isyarat, skor 0–100 dengan sempadan sama seperti Sektor: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20.',e:'B 73/100 · Semiconductors = industri kuat, tetapi bukan teratas.'},
+  g_r:{t:'R · RS rating',d:'Kekuatan relatif harga saham (gaya IBD, 1–99) berbanding semua saham dalam stor harga: 40% pulangan 3 bulan terkini + 20% setiap satu daripada tiga suku sebelumnya. RS 92 ("atasi 92%") bermaksud saham ini lebih kuat daripada 92% saham lain. A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40. Ujian 2019–2026: RS ≥ 90 purata +4.2% dalam 21 hari, lawan +1.6–2.2% bagi gred lain.',e:'RS 92 = lebih kuat daripada 92% saham.'},
+  g_p:{t:'P · Pemangkin',d:'Ada atau tidak sebab baharu saham bergerak, dalam 10 hari terakhir: berita (naik taraf/turun taraf analisis, sasaran harga, kontrak, kelulusan), reaksi harga selepas earnings terakhir, volum luar biasa dan aliran institusi. Mata: A ≥ 4, B 3, C 1–2, D 0, E negatif. Ketik tajuk berita untuk membuka artikel.',e:'"2 berita positif; earnings 5 hari lalu +6.0%" dengan pautan berita = pemangkin kuat (A).'},
+  g_q:{t:'Q · Laporan suku (QR)',d:'Bilangan hari dagangan sebelum laporan suku (earnings) seterusnya. Harga boleh melonjak atau jatuh mendadak pada hari laporan, dan pegangan biasa ±20 hari. Selamat: lebih 15 hari atau tiada laporan dalam 30 hari (A, B). Berhati-hati: 11–15 hari (C). Elak: 10 hari atau kurang (D, E). Label ini maklumat sahaja, bukan penapis belian.',e:'E · 4 hari lagi · 20 Okt · Elak = laporan jatuh dalam tempoh pegangan.'},
+  gred:{t:'Gred keseluruhan',d:'Purata mata lima dimensi pada hari isyarat (A=4, B=3, C=2, D=1, E=0): Sektor, Industri, RS, Pemangkin dan QR. Dimensi tanpa data tidak dikira. Direkod untuk diuji, belum terbukti meramal dan bukan penapis belian. Panel Prestasi ikut gred menilai setiap gred selepas ≥ 20 dagangan tertutup.',e:'Sektor B, Industri A, RS A, Pemangkin C, QR A = purata 3.4 → gred B.'},
   usd_sama:{t:'Nilai sama USD1,000',d:'Untung bersih jika setiap posisi bernilai USD1,000 (sama berat), tanpa mengira harga saham. Rekod tetap 1 unit; ini cara kiraan sahaja supaya saham mahal tidak mendominasi.',e:'3 posisi +10%, −5%, +2% = +USD70 atas modal USD3,000.'},
   data_kini:{t:'Kesegaran data',d:'Tarikh tutup sesi AS yang dipakai dan masa kemas kini 6:02 pagi terakhir (harian/status). Merah jika larian 6:02 pagi terkini belum berjaya.',e:''},
   slot_c:{t:'Slot Claude',d:'Posisi maya Claude bagi kaedah itu: dipegang (belum keluar) dan jumlah semua (termasuk yang sudah keluar). Tiada had.',e:''}

@@ -17,7 +17,7 @@ GRED = ['A', 'B', 'C', 'D', 'E']
 MATA = {'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0}
 TIADA = '–'
 LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
-         'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'tarikh_earnings', 'hari_ke_earnings', 'sumber_earnings', 'gred_qr',
+         'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings', 'sumber_earnings', 'gred_qr',
          'gred_keseluruhan', 'gred_pada']
 
 
@@ -158,7 +158,7 @@ def nilai_tajuk(tajuk):
 
 def mata_pemangkin(p):
     """p: dict untuk satu saham (dikumpul oleh tugasan imbasan):
-         berita: [{'tajuk': str, 'hari_lalu': int}]  (Moomoo quote_news_search + SST search_news, 10 hari)
+         berita: [{'tajuk': str, 'hari_lalu': int, 'url': str}]  (Moomoo quote_news_search + SST search_news, 10 hari)
          earnings_lalu_hari: int|None  (hari dagangan sejak earnings terakhir)
          earnings_gerak_pct: float|None (perubahan harga hari earnings, Moomoo earnings_price_history)
          volum_nisbah: float|None (volum 5 hari / purata 50 hari)  ; naik_5h: float|None (% 5 hari)
@@ -184,6 +184,16 @@ def mata_pemangkin(p):
     if ins == 'kumpul': m += 1; ring.append('institusi kumpul')
     elif ins == 'agih': m -= 1; ring.append('institusi agih')
     return m, '; '.join(ring) or 'tiada pemangkin dikesan'
+
+
+def pautan_berita(berita, maks=2):
+    """Pautan berita untuk dashboard: berita positif dahulu, kemudian terkini; hanya yang ada URL https.
+    Pulangkan JSON [{"tajuk", "url"}] (maks 2) atau '' jika tiada."""
+    b = [x for x in (berita or []) if str(x.get('url') or '').startswith('https://')
+         and (x.get('hari_lalu') is None or x['hari_lalu'] <= 10)]
+    b.sort(key=lambda x: (-nilai_tajuk(x.get('tajuk')), x.get('hari_lalu') if x.get('hari_lalu') is not None else 99))
+    out = [{'tajuk': str(x.get('tajuk') or '')[:140], 'url': x['url']} for x in b[:maks]]
+    return json.dumps(out, ensure_ascii=False) if out else ''
 
 
 def gred_pemangkin(mata):
@@ -270,8 +280,10 @@ def tambah(a):
             p.setdefault('naik_5h', None if t not in n5.index or pd.isna(n5[t]) else float(n5[t]))
             m, ring = mata_pemangkin(p)
             r['mata_pemangkin'] = m; r['pemangkin'] = ring; r['gred_pemangkin'] = gred_pemangkin(m)
+            r['pemangkin_url'] = pautan_berita(p.get('berita'))
         else:
             r['mata_pemangkin'] = ''; r['pemangkin'] = 'belum dikumpul'; r['gred_pemangkin'] = TIADA
+            r['pemangkin_url'] = ''
         r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_rs'],
                                                   r['gred_pemangkin'], r['gred_qr']])
         r['gred_pada'] = a.tarikh
@@ -294,7 +306,7 @@ def main(argv=None):
     t.add_argument('--pasaran', help='papertrade/sektor_pasaran.csv (utama: seluruh pasaran AS)')
     t.add_argument('--peta', help='papertrade/peta_industri.csv (ticker -> industri Moomoo)')
     t.add_argument('--acara', help='JSON SST market_events (daysLookahead 30)')
-    t.add_argument('--pemangkin', help='JSON {ticker: {berita, earnings_lalu_hari, earnings_gerak_pct, institusi}}')
+    t.add_argument('--pemangkin', help='JSON {ticker: {berita [{tajuk, hari_lalu, url}], earnings_lalu_hari, earnings_gerak_pct, institusi}}')
     t.add_argument('--tarikh', required=True, help='tarikh imbasan YYYY-MM-DD')
     e = sp.add_parser('earnings', help='ringkas fail Moomoo earnings_price_history -> JSON')
     e.add_argument('fail'); e.add_argument('--tarikh', required=True)

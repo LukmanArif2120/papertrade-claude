@@ -54,6 +54,7 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 | skor_sektor, skor_industri | 0–100 |
 | rs_rating, gred_rs | 1–99; A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40 |
 | gred_pemangkin, mata_pemangkin, pemangkin | A ≥ 4 mata, B 3, C 1–2, D 0, E < 0; ringkasan sebab; "–" = belum dikumpul |
+| pemangkin_url | JSON [{"tajuk", "url"}] maks 2 berita (positif dahulu, kemudian terkini; URL https daripada quote_news_search); kosong jika tiada |
 | tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; sumber SST / anggaran / tiada data |
 | gred_keseluruhan | purata mata gred yang ada (paparan sahaja; belum diuji) |
 | gred_pada | tarikh imbasan gred dikira |

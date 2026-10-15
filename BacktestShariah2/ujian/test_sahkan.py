@@ -47,6 +47,14 @@ class UjiSahkan(unittest.TestCase):
         self.assertEqual(kod, 1)
         self.assertIn('untung_pct', out)
 
+    def test_pemangkin_url(self):
+        tulis(self.d, 'claude.csv', [dict(ASAS, pemangkin_url='[{"tajuk": "X", "url": "https://a/1"}]')])
+        self.assertEqual(self.jalan()[0], 0)
+        tulis(self.d, 'claude.csv', [dict(ASAS, pemangkin_url='http://a/1')])
+        kod, out = self.jalan()
+        self.assertNotEqual(kod, 0)
+        self.assertIn('pemangkin_url', out)
+
     def test_sektor_kosong(self):
         tulis(self.d, 'claude.csv', [dict(ASAS, sektor='-')])
         self.assertIn('sektor/industri kosong', self.jalan()[1])
