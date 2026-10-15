@@ -105,7 +105,7 @@
 ## 2026-10-16 (6:02 MYT) — Kemas kini pagi (sesi AS 15 Okt)
 - Semak pendua: tiada commit "Kemas kini 6:02 pagi 2026-10-16" pada origin/main; NYSE 15 Okt hari dagangan (SPY +0.28%, QQQ −0.13%).
 - Harga: `status.json` yfinance sesi 20261014 (belum 15 Okt) → bar 15 Okt dari skrin Shariah Moomoo (911 saham) + kline bagi BB, EFOR, LITE, LUXE, VIAV, SPY, QQQ. Skrin sepadan kline bagi COP, CRM, KEYS, MU, XOM (buka/tinggi/rendah/tutup sama). Stor kerja diteruskan daripada salinan 15 Okt (bar 13 Okt yfinance + 14 Okt Moomoo); aset stor dashboard tidak dimuat naik semula.
-- Keluar baharu 160 (C 147, M 13): kena henti 114 (C 101…), capai sasaran 17, isyarat keluar kaedah 29; "menunggu" buka 16 Okt: 29. Harga keluar baris menunggu semalam = buka 15 Okt.
+- Keluar baharu 160 (C 147, M 13): kena henti 104 (C 101, M 3), capai sasaran 23 (C 17, M 6), isyarat keluar kaedah 33 (C 29, M 4); "menunggu" buka 16 Okt: 29. Harga keluar baris menunggu semalam = buka 15 Okt.
 - Belian 15 Okt (claude_4, claude_5; 391 baris): harga_beli dibetulkan kepada `open` rasmi bagi 249 baris (46 baris beza > 0.5%, terbesar SNX M81 252.95→255.88, PAYC 238.37→240.94, BFAM 70.675→69.88). Sampel "sama" 10:05 NY semalam tidak tepat: kline sebenar COP 143.00, CRM 238.50, KEYS 344.08, MU 871.575, XOM 178.63 (log semalam 142.92/238.51/343.82/873.39/178.4). `henti` dikemas kini daripada enjin pada hari isyarat. Tiada belian baharu gagal kesahihan §5.4/langkau buka rasmi (0 tidak dibeli baharu).
 - PEMBETULAN log 15 Okt: keluar baharu sesi 14 Okt ialah 158 (C 149, M 9), bukan 167; `harian/status` 15 Okt mengira C=158 secara salah (laluan repo mengandungi "claude") — kini diperbetulkan (C 147 + M 13 hari ini).
 - Watchlist 267 → 204 (63 dibuang kerana terkeluar signal). Tiada calon baharu.
