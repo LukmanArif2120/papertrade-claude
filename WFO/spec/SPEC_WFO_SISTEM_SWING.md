@@ -138,3 +138,4 @@ Jika gagal → DITOLAK. Varian beku kekal digunakan dan WFO dihentikan.
 - Larian: 5 kaedah serentak (`WFO/kod/wfo.py kelompok 5`); keputusan di `WFO/data/hasil/`. Kerja berhenti di Fasa C (laporan).
 - Laporan menyertakan pembetulan ujian berganda (deflated Sharpe ratio) merentas semua kaedah.
 - Pindaan masa (15 Okt 2026, 20:10 MYT): kelompok 4 tersangkut kerana kehabisan memori (2 jam hilang). Untuk siap sebelum 8 pagi 16 Okt, kaedah selepas M12 dijalankan dengan **100 percubaan** setiap suku (M01–M12: 150). Bilangan percubaan dicatat dalam setiap `<id>.json`.
+- Pindaan masa kedua (15 Okt 2026, 22:00 MYT): satu larian 10 kaedah mengambil ~90 minit pada 100 percubaan; untuk siap sebelum 8 pagi, kaedah yang bermula selepas 23:30 MYT memakai **60 percubaan** setiap suku. W01 gabungan: 60 percubaan. Bilangan sebenar dicatat dalam `<id>.json` (`percubaan`).
