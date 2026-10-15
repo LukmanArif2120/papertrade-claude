@@ -30,6 +30,9 @@ MDD_HAD = -0.35
 N_MIN_LATIH = 30
 HAD_HENTI = 0.85          # stop >= 0.85 x tutup (had global 15%)
 SEMAK_POTONG = '2024-06-28'
+# Disemak manual: beza hanya pada bar terakhir data dipotong, kerana sig menolak entry jika buka esok <= henti
+# (peraturan langkau pelaksanaan, sama seperti tugasan_v3 §5; bukan ramalan). Bar terakhir dikecualikan dalam semakan.
+BUKA_ESOK_OK = {'M13', 'M14'}
 
 STOPS = ([f'PCT{p}' for p in (6, 8, 10, 12, 15)] + [f'ATR{k}' for k in (1.5, 2, 2.5, 3, 3.5, 4)]
          + [f'LOW{n}' for n in (1, 5, 10)] + ['ASAL'])
@@ -114,6 +117,7 @@ def semak_kaedah(mid, fr, idx):
     m.sedia(b, {k: v[v.index <= pot] for k, v in idx.items()})
     beza = 0
     for t, g in b.items():
+        if mid in BUKA_ESOK_OK: g = g.iloc[:-1]
         x = a[t].loc[g.index]
         s1 = g['sig'].fillna(False).astype(bool) if 'sig' in g else pd.Series(False, g.index)
         s2 = x['sig'].fillna(False).astype(bool) if 'sig' in x else pd.Series(False, g.index)
