@@ -4,10 +4,10 @@
 # Guna:
 #   python3 wfo.py senarai                 # kaedah layak dan status
 #   python3 wfo.py jalan M30 M96 ...       # WFO kaedah tertentu (selari, maks 5 proses)
-#   python3 wfo.py kelompok [5]            # jalankan 5 kaedah seterusnya yang belum siap
+#   python3 wfo.py kelompok [5]            # jalankan semua kaedah BELUM, 5 serentak
 #   python3 wfo.py w01                     # WFO gabungan (entry turut dipilih)
-import sys, os, json, time, importlib, traceback, warnings
-from multiprocessing import Pool
+import sys, os, json, time, importlib, traceback, warnings, subprocess
+from collections import OrderedDict
 import numpy as np, pandas as pd
 
 ROOT = os.path.dirname(os.path.abspath(__file__))                     # WFO/kod
@@ -30,6 +30,8 @@ MDD_HAD = -0.35
 N_MIN_LATIH = 30
 HAD_HENTI = 0.85          # stop >= 0.85 x tutup (had global 15%)
 SEMAK_POTONG = '2024-06-28'
+CACHE_MAKS = 200          # had cache dagangan setiap kaedah (memori)
+MASA_MAKS = 7200          # saat; proses satu kaedah dihentikan selepas ini
 # Disemak manual: beza hanya pada bar terakhir data dipotong, kerana sig menolak entry jika buka esok <= henti
 # (peraturan langkau pelaksanaan, sama seperti tugasan_v3 §5; bukan ramalan). Bar terakhir dikecualikan dalam semakan.
 BUKA_ESOK_OK = {'M13', 'M14'}
@@ -87,7 +89,7 @@ class Kaedah:
         self.mid = mid; self.m = importlib.import_module(mid)
         f = salin(fr); self.m.sedia(f, idx); f = {t: enjin.siap(g) for t, g in f.items()}
         self.f = f; self.warm = self.m.WARM; self.tmax_asal = self.m.TMAX
-        self.cache = {}; self.pcache = {}
+        self.cache = OrderedDict(); self.pcache = {}
         # lajur stop/exit dikira sekali bagi setiap kod
         self.st = {s: {t: lajur_stop(g, s, g.stop) for t, g in f.items()} for s in STOPS}
         self.ex = {e: {t: lajur_exit(g, e, g.exitc, g.tgt) for t, g in f.items()} for e in EXITS}
@@ -100,7 +102,13 @@ class Kaedah:
             for t, g in self.asas.items():
                 ex, tg = self.ex[exit_][t]
                 fr[t] = g.assign(stop=self.st[stop][t], exitc=ex, tgt=tg)
-            self.cache[k] = enjin.trades(fr, tmax or None, self.warm)
+            T = enjin.trades(fr, tmax or None, self.warm)
+            if len(T):
+                T['ticker'] = T.ticker.astype('category'); T['why'] = T.why.astype('category')
+            self.cache[k] = T
+            if len(self.cache) > CACHE_MAKS: self.cache.popitem(last=False)
+        else:
+            self.cache.move_to_end(k)
         return self.cache[k]
 
     def dagangan_asal(self):
@@ -283,9 +291,23 @@ def status():
     return out
 
 def jalan(mids, proses=5):
-    with Pool(min(proses, len(mids))) as pool:
-        for mid, st, s in pool.imap_unordered(jalan_satu, mids):
-            print(f'{mid}\t{st}\t{s}s', flush=True)
+    """Satu subproses bagi setiap kaedah (proses yang mati tidak menggantung yang lain)."""
+    giliran = list(mids); aktif = {}
+    while giliran or aktif:
+        while giliran and len(aktif) < proses:
+            m = giliran.pop(0)
+            aktif[m] = (subprocess.Popen([sys.executable, os.path.abspath(__file__), 'satu', m],
+                                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL), time.time())
+        time.sleep(5)
+        for m, (pr, t0) in list(aktif.items()):
+            if pr.poll() is None and time.time() - t0 > MASA_MAKS: pr.kill(); pr.wait()
+            if pr.poll() is None: continue
+            del aktif[m]
+            f = os.path.join(KELUAR, 'hasil', m + '.json')
+            if pr.returncode != 0 or not os.path.exists(f):
+                os.makedirs(os.path.dirname(f), exist_ok=True)
+                json.dump(dict(id=m, status='RALAT', sebab=f'proses mati (kod {pr.returncode}; mungkin memori/masa)'), open(f, 'w'))
+            print(f"{m}\t{json.load(open(f)).get('status')}\t{round(time.time() - t0)}s", flush=True)
 
 def jalan_w01():
     warnings.filterwarnings('ignore'); t0 = time.time()
@@ -303,15 +325,17 @@ if __name__ == '__main__':
         s = status(); print(json.dumps(s)); print({v: list(s.values()).count(v) for v in set(s.values())})
     elif a[0] == 'jalan':
         jalan(a[1:])
+    elif a[0] == 'satu':
+        print(jalan_satu(a[1]))
     elif a[0] == 'kelompok':
         import fcntl
         os.makedirs(KELUAR, exist_ok=True)
         kunci = open(os.path.join(KELUAR, '.kunci'), 'w')
         try: fcntl.flock(kunci, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError: print('SEDANG BERJALAN'); sys.exit(0)
-        n = int(a[1]) if len(a) > 1 else 5
+        n = int(a[1]) if len(a) > 1 else 5      # bilangan proses serentak; semua kaedah BELUM dijalankan
         belum = [m for m, v in status().items() if v in ('BELUM',)]
         if not belum: print('SEMUA SIAP')
-        else: jalan(belum[:n], n)
+        else: jalan(belum, n)
     elif a[0] == 'w01':
         jalan_w01()
