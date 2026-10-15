@@ -19,7 +19,7 @@
 [hidden]{display:none!important}
 html{font-size:16px}
 body{margin:0;background:radial-gradient(1200px 500px at 80% -10%,rgba(45,212,191,.06),transparent 60%),var(--bg);background-color:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:'cv11','ss01'}
-.wrap{max-width:1680px;margin:0 auto;padding-inline:16px;padding-block:0 56px}
+.wrap{max-width:none;margin:0 auto;padding-inline:16px;padding-block:0 56px}
 .num{font-variant-numeric:tabular-nums lining-nums}
 a{color:var(--accent)}
 button{font-family:inherit}
@@ -39,7 +39,12 @@ h1{font-size:1.2rem;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:bal
 /* jadual bergred: angka dan perkataan tidak dipecah; skrol mendatar dalam jadual jika terlalu lebar */
 .tablewrap:has(td.grd){overflow-x:auto}.tablewrap:has(td.grd) td,.tablewrap:has(td.grd) th{overflow-wrap:break-word;padding-inline:4px}
 td.grd{min-width:0}.tablewrap:has(td.grd) td.wrap{min-width:150px}td.grd .vv{font-size:.72rem}td.grp{min-width:150px}.tablewrap td .nw{white-space:nowrap}
-.grc{display:flex;gap:6px;align-items:flex-start}.grc>.gr{flex:none;margin-top:1px}.grt{min-width:0}.grt b{color:var(--fg)}
+.grc{display:inline-flex;gap:8px;align-items:stretch;text-align:left;vertical-align:middle}
+.grc>.gr{flex:none;display:flex;align-items:center;justify-content:center;min-width:2em;min-height:2.1em;margin:0;padding:0 6px;font-size:1.05rem;border-radius:6px}
+.grt{min-width:0;display:flex;flex-direction:column;justify-content:center}.grt b{color:var(--fg)}.grt .pill{align-self:flex-start}
+td.grd{text-align:center;vertical-align:middle}
+.tablewrap:has(td.grd) td{vertical-align:middle}
+.tablewrap:has(td.grd) th[data-tip^="g_"],.tablewrap:has(td.grd) th[data-tip="gred"]{text-align:center}
 a.berita{color:var(--accent);text-decoration:none;margin-top:2px}a.berita:hover{text-decoration:underline}
 .g-A{background:var(--pos-soft);color:var(--pos)}.g-B{background:var(--accent-soft);color:var(--accent)}.g-C{background:var(--sunk);color:var(--fg-2);box-shadow:inset 0 0 0 1px var(--line)}.g-D{background:var(--warn-soft);color:var(--warn)}.g-E{background:var(--neg-soft);color:var(--neg)}.g-x{background:var(--sunk);color:var(--muted)}
 #dataTxt b{color:var(--fg-2)}
