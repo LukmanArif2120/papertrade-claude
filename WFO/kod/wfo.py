@@ -32,6 +32,7 @@ HAD_HENTI = 0.85          # stop >= 0.85 x tutup (had global 15%)
 SEMAK_POTONG = '2024-06-28'
 CACHE_MAKS = 200          # had cache dagangan setiap kaedah (memori)
 MASA_MAKS = 7200          # saat; proses satu kaedah dihentikan selepas ini
+HAD_LANCAR = 4200         # saat; tiada kaedah baharu dilancarkan selepas ini (larian muat < 2 jam)
 # Bar terakhir data dipotong dikecualikan: ~60 modul menolak entry jika buka esok <= henti (peraturan langkau
 # pelaksanaan, tugasan_v3 §5) dan beberapa modul mengesan hujung minggu/bulan dengan bar berikutnya. Kedua-duanya
 # hanya menyentuh bar terakhir; pandang ke hadapan sebenar (data > 1 bar ke hadapan) tetap dikesan pada bar lain.
@@ -288,15 +289,20 @@ def status():
     out = {}
     for mid in semua_kaedah():
         p = os.path.join(KELUAR, 'hasil', mid + '.json')
-        out[mid] = json.load(open(p)).get('status', '?') if os.path.exists(p) else 'BELUM'
+        out[mid] = (json.load(open(p)).get('status', '?') if os.path.exists(p)
+                    else 'SEDANG' if os.path.exists(os.path.join(KELUAR, 'hasil', mid + '.sedang')) else 'BELUM')
     return out
 
 def jalan(mids, proses=5):
     """Satu subproses bagi setiap kaedah (proses yang mati tidak menggantung yang lain)."""
-    giliran = list(mids); aktif = {}
+    giliran = list(mids); aktif = {}; mula = time.time()
+    os.makedirs(os.path.join(KELUAR, 'hasil'), exist_ok=True)
     while giliran or aktif:
+        if time.time() - mula > HAD_LANCAR: giliran = []
         while giliran and len(aktif) < proses:
             m = giliran.pop(0)
+            if status().get(m) != 'BELUM': continue
+            open(os.path.join(KELUAR, 'hasil', m + '.sedang'), 'w').close()
             aktif[m] = (subprocess.Popen([sys.executable, os.path.abspath(__file__), 'satu', m],
                                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL), time.time())
         time.sleep(5)
@@ -304,6 +310,8 @@ def jalan(mids, proses=5):
             if pr.poll() is None and time.time() - t0 > MASA_MAKS: pr.kill(); pr.wait()
             if pr.poll() is None: continue
             del aktif[m]
+            try: os.remove(os.path.join(KELUAR, 'hasil', m + '.sedang'))
+            except OSError: pass
             f = os.path.join(KELUAR, 'hasil', m + '.json')
             if pr.returncode != 0 or not os.path.exists(f):
                 os.makedirs(os.path.dirname(f), exist_ok=True)
@@ -335,7 +343,7 @@ if __name__ == '__main__':
         try: fcntl.flock(kunci, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError: print('SEDANG BERJALAN'); sys.exit(0)
         n = int(a[1]) if len(a) > 1 else 5      # bilangan proses serentak
-        had = int(a[2]) if len(a) > 2 else 10   # bilangan kaedah dalam larian ini (muat < 2 jam)
+        had = int(a[2]) if len(a) > 2 else 99   # had bilangan kaedah; masa dihadkan oleh HAD_LANCAR
         belum = [m for m, v in status().items() if v in ('BELUM',)]
         if not belum: print('SEMUA SIAP')
         else: jalan(belum[:had], n)
