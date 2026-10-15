@@ -138,6 +138,7 @@ def potong(T, mula, akhir, fr):
     """Dagangan masuk dalam [mula, akhir]; posisi yang masih terbuka pada `akhir` ditutup pada tutup `akhir`
     (setara enjin apabila data berakhir pada `akhir`)."""
     T = T[(T.ent >= mula) & (T.ent <= akhir)].copy()
+    if 'why' in T: T['why'] = T.why.astype(object)
     lps = T.ex > akhir
     if lps.any():
         e = np.array([fr[t].open.at[d] for t, d in zip(T.ticker[lps], T.ent[lps])])
