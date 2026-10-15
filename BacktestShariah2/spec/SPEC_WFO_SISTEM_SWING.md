@@ -127,3 +127,13 @@ Jika gagal → DITOLAK. Varian beku kekal digunakan dan WFO dihentikan.
 3. 150 percubaan Optuna bagi setiap suku.
 4. Sasaran harga hanya melalui E-ASAL; tiada sasaran peratus tetap (batasan enjin, §3).
 5. Kriteria lulus §7.
+
+## 11. Pindaan 15 Okt 2026 (arahan pengguna)
+
+- Skop diluaskan: WFO stop/exit/tmax dijalankan **berasingan bagi setiap kaedah M** (87 modul; M40 dan M45 tidak layak, dan mana-mana modul yang gagal semakan pandang ke hadapan). Syarat entry setiap kaedah kekal ikut varian registry. W01 gabungan (entry turut dipilih, §4.1) dijalankan selepas semua kaedah siap.
+- Bandingan setiap kaedah: versi WFO lawan varian beku sendiri dalam tempoh luar sampel yang sama.
+- Suku ujian: 2023 S1 hingga 2026 S4 (2026 S4 hanya 1–2 Okt 2026) = 16 suku.
+- Semakan pandang ke hadapan: `sig` dikira atas data penuh dan atas data dipotong pada 28 Jun 2024; sebarang beza = tidak layak.
+- Subset S1–S4: gabungan terpilih yang sama (tidak ditala semula) dinilai atas alam subset.
+- Larian: 5 kaedah serentak (`kod/wfo.py kelompok 5`); keputusan di `data/wfo/hasil/`. Kerja berhenti di Fasa C (laporan).
+- Laporan menyertakan pembetulan ujian berganda (deflated Sharpe ratio) merentas semua kaedah.
