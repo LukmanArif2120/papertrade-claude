@@ -60,6 +60,9 @@ def main():
     ewc, spy, qqq = any_['ew']['cagr'], any_['spy']['cagr'], any_['qqq']['cagr']
     m96 = siap['M96']['beku']['cagr'] if 'M96' in siap else float('nan')
 
+    from collections import Counter
+    c = Counter(int(v.get('percubaan', 0)) for v in siap.values())
+    pc = ', '.join(f'{n} ({c[n]} kaedah)' for n in sorted(c, reverse=True))
     S = {k: sharpe(k) for k in siap}
     srs = [s[0] for s in S.values() if not math.isnan(s[0])]
     nk = len(srs); v = np.var(srs) if nk > 1 else 0
@@ -72,17 +75,18 @@ def main():
         rows.append(dict(id=k, nama=h['nama'], cagr=o.get('cagr'), mdd=o.get('mdd'), win=o.get('win'), hit10=o.get('hit10'),
                          n=o.get('n', 0), hari=o.get('hari'), bcagr=b.get('cagr'), bmdd=b.get('mdd'),
                          subw=h['menang_ew_subset'], dsr=dsr(sr, sk, ku, n, sr0) if not math.isnan(sr) else np.nan,
-                         lulus=ok, gagal=why))
+                         lulus=ok, gagal=why, lulus_tanpa_subset=lulus(dict(h, menang_ew_subset=4), m96, ewc)[0]))
     R = pd.DataFrame(rows).sort_values('cagr', ascending=False).reset_index(drop=True)
 
     L = [f'# Laporan W01 — WFO stop/exit/tempoh pegangan bagi setiap kaedah (Fasa C)', '',
          f'Spec: `spec/SPEC_WFO_SISTEM_SWING.md`. Enjin v1.2 (beku). Alam 423 saham. Luar sampel: 1 Jan 2023 – 2 Okt 2026 (16 suku). '
-         f'Optuna {any_.get("percubaan")} percubaan setiap suku, latih 3 tahun. Objektif: CAGR maks, MDD ≥ −35%.', '',
+         f'Optuna {pc} percubaan setiap suku (ikut kaedah), latih 3 tahun. Objektif: CAGR maks, MDD ≥ −35%.', '',
          '## 1. Ringkasan', '',
          f'- Kaedah diuji: {len(siap)} siap; {len(tl)} tidak layak; {len(ra)} ralat.',
          f'- Penanda aras luar sampel: EW 423 {p(ewc)}, SPY {p(spy)}, QQQ {p(qqq)}, M96 V1 beku {p(m96)}.',
          f'- Versi WFO mengalahkan varian beku sendiri: {int((R.cagr > R.bcagr).sum())}/{len(R)} kaedah.',
          f'- LULUS semua kriteria §7: {int(R.lulus.sum())} kaedah' + (f" ({', '.join(R.id[R.lulus])})." if R.lulus.any() else '.'),
+         f'- LULUS jika kriteria subset diketepikan (lihat §6): {int(R.lulus_tanpa_subset.sum())} kaedah' + (f" ({', '.join(R.id[R.lulus_tanpa_subset])})." if R.lulus_tanpa_subset.any() else '.'),
          f'- Deflated Sharpe: SR* (jangkaan maksimum nasib, {nk} kaedah) = {sr0 * math.sqrt(252):.2f} tahunan. DSR ≥ 0.95 = kebarangkalian tinggi bukan nasib.', '']
     if 'W01' in H and H['W01'].get('status') == 'SIAP':
         w = H['W01']; o = w['oos']; ok, why = lulus(w, m96, ewc)
@@ -107,7 +111,10 @@ def main():
     L += ['', '## 6. Nota tafsiran', '',
           '- CAGR beku = varian registry dengan stop/exit asal, dagangan masuk ≥ 1 Jan 2023, portfolio sama. Ia BUKAN luar sampel tulen (varian dipilih dengan melihat data 2019–2026).',
           '- CAGR WFO ialah luar sampel tulen: setiap suku memakai gabungan yang dipilih atas 3 tahun sebelumnya sahaja.',
-          '- Subset: gabungan terpilih yang sama dinilai atas S1–S4 (tidak ditala semula); bilangan subset yang mengalahkan EW subset.',
+          '- Subset: gabungan terpilih yang sama dinilai atas S1–S4 (tidak ditala semula); bilangan subset yang mengalahkan EW subset. '
+          '**Kelemahan reka bentuk:** dagangan ditapis kepada ~105 saham tetapi portfolio kekal 8 slot, jadi slot banyak kosong (tunai) berbanding EW subset yang sentiasa melabur penuh; bagi kaedah merentas saham (cth. M96) hanya ~2 daripada 8 pilihan jatuh dalam setiap subset. Ujian ini berat sebelah menentang semua kaedah dan tidak setara dengan gate subset projek (yang menjalankan semula kaedah atas alam subset). Oleh itu senarai "LULUS tanpa subset" turut dilaporkan.',
+          '- n = semua dagangan calon yang dijana (konvensyen `enjin.metrik`), bukan hanya yang diambil oleh 8 slot.',
+          '- M22: tiada gabungan sah dalam mana-mana tetingkap latihan (< 30 dagangan), jadi tiada dagangan luar sampel.',
           '- Kriteria LULUS (§7): CAGR > M96 V1 beku dan > EW; MDD ≥ −35%; n ≥ 60; subset ≥ 3/4; tiada saham > 25% keuntungan.', '']
     open(LAPORAN, 'w').write('\n'.join(L))
     print('ditulis', LAPORAN, len(R), 'kaedah')
