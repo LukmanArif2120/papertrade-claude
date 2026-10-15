@@ -100,3 +100,4 @@
 - Calon: 403 baris senarai_beli (207 saham; tarikh_imbasan 15 Okt). Direkod 391 baris (1 unit setiap kaedah+saham, sumber harian_c) ke `papertrade/claude_4.csv` (195) dan `claude_5.csv` (196) + db `papertrade/claude_4`, `claude_5` (claude_3 sudah ~228 KB; gabungan > had satu dokumen). Gred (termasuk pemangkin_url) disalin tanpa diubah. Harga beli = buka sementara `quote_stock_quote` 9:36 NY; belum disahkan dengan kline.
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 12: buka ≤ henti — STLD M13, LNTH M13, NVST M13, IOVA M14, AMD M14, CSCO M14, AVT M14, JCI M14, OESX M29, KEX M35; belum didagangkan (data_date 14 Okt) — SENEB M02 & M11. Tiada langkau buka_maks/bertindih.
+- Sahkan buka (10:05 NY, `quote_history_kline` ktype 2, 15 Okt): sampel COP 142.92, CRM 238.51, KEYS 343.82, MU 873.39, XOM 178.4 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
