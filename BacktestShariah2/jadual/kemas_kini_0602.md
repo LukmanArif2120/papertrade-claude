@@ -7,6 +7,8 @@ Alat (ToolSearch, satu panggilan setiap kumpulan):
 - `select:mcp__SST_Terminal__sector_rotation,mcp__SST_Terminal__industry_rotation,mcp__SST_Terminal__market_heatmap,mcp__SST_Terminal__sector_summary,mcp__SST_Terminal__get_stock`
 - `select:ArtifactData`
 
+- **Semak pendua (wajib, sebelum langkah 0):** selepas `git pull`, jika origin/main sudah ada commit "Kemas kini 6:02 pagi <tarikh hari ini>", larian ini pendua (rutin boleh ditembak semula oleh pengawas atau secara manual) → jawab "pendua, dilangkau" dan berhenti tanpa menulis apa-apa.
+- Jika alat Moomoo meminta log masuk semula: catat dalam log, commit catatan itu, dan teruskan langkah yang boleh.
 0. `git pull --rebase origin main`. Semak kalendar NYSE: sesi AS semalam cuti → catat dalam `standard/binaan_v2_log.md`, commit + push, berhenti.
 1. Baca `papertrade/moomoo.csv`, semua `papertrade/claude*.csv`, `papertrade/sektor.csv`, `papertrade/watchlist.csv`. `sim_trade_position_list` acc_id "4135388", market 100: selaraskan dengan moomoo.csv (perbezaan dan qty > 1 dicatat dalam log, bukan dalam CSV). Jangan ubah posisi Moomoo.
 2. Posisi BELUM keluar yang dibeli (M dan semua claude*; langkau tidak_dibeli): harga tutup terkini, untung %, hari dipegang, nilai keluar (tugasan_v3 §5.3). Keluar → isi tarikh/harga keluar, untung akhir, keluar=True (dibekukan). Isi harga keluar baris "menunggu" semalam (= buka hari ini). Semakan kesahihan belian semalam (§5.4). Betulkan harga beli sementara (§5.2).

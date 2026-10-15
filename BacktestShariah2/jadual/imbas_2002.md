@@ -5,6 +5,8 @@ Tugasan belian bermula 9:35 pagi New York: siapkan `senarai_beli.csv` dahulu (sa
 
 Alat: `select:mcp__Moo_Moo__quote_market_state,mcp__Moo_Moo__quote_trading_days,mcp__Moo_Moo__quote_stock_screen,mcp__Moo_Moo__quote_history_kline,mcp__Moo_Moo__quote_stock_quote` dan `select:ArtifactData`.
 
+- **Semak pendua (wajib, sebelum langkah 0):** selepas `git pull`, jika origin/main sudah ada commit "Imbas <tarikh hari ini>" dan `papertrade/senarai_beli.csv` sudah bertarikh_imbasan hari ini, larian ini pendua (rutin boleh ditembak semula oleh pengawas atau secara manual) → jawab "pendua, dilangkau" dan berhenti tanpa menulis apa-apa.
+- Jika alat Moomoo meminta log masuk semula: catat dalam log, commit catatan itu, dan teruskan langkah yang boleh.
 0. `git pull --rebase origin main`. Pasaran AS hari ini (waktu New York) tidak dibuka → catat "cuti" dalam `standard/binaan_v2_log.md`, commit + push, berhenti.
 1. Baca `papertrade/moomoo.csv`, semua `papertrade/claude*.csv`, `papertrade/watchlist.csv`.
 2. Data pasaran: `quote_stock_screen`
