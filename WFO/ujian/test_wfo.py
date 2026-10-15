@@ -1,8 +1,9 @@
-# Ujian kod/wfo.py (W01). Data sebenar data_mentah dipakai (subset kecil) supaya enjin v1.2 diuji tanpa olok-olok.
+# Ujian WFO/kod/wfo.py (W01). Data sebenar data_mentah dipakai (subset kecil) supaya enjin v1.2 diuji tanpa olok-olok.
 import os, sys, unittest, warnings
 import numpy as np, pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'kod'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'BacktestShariah2', 'kod'))
 import wfo, enjin
 
 TK = ['ADSK', 'AAPL', 'MSFT', 'NVDA', 'AMD', 'ANET', 'CRWD', 'LLY', 'COST', 'ORCL', 'AVGO', 'KLAC']

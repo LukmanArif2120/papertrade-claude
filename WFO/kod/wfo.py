@@ -1,5 +1,5 @@
 # W01 — Walk-forward optimization stop/exit/tempoh pegangan bagi setiap kaedah M.
-# Spec: BacktestShariah2/spec/SPEC_WFO_SISTEM_SWING.md. Enjin v1.2 diimport tanpa ubah.
+# Spec: WFO/spec/SPEC_WFO_SISTEM_SWING.md. Enjin v1.2 diimport tanpa ubah.
 #
 # Guna:
 #   python3 wfo.py senarai                 # kaedah layak dan status
@@ -10,13 +10,15 @@ import sys, os, json, time, importlib, traceback, warnings
 from multiprocessing import Pool
 import numpy as np, pandas as pd
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, ROOT); sys.path.insert(0, os.path.join(ROOT, 'kaedah'))
+ROOT = os.path.dirname(os.path.abspath(__file__))                     # WFO/kod
+REPO = os.path.join(ROOT, '..', '..')
+KOD = os.path.join(REPO, 'BacktestShariah2', 'kod')                   # enjin v1.2 + kaedah (baca sahaja)
+sys.path.insert(0, KOD); sys.path.insert(0, os.path.join(KOD, 'kaedah'))
 import enjin
 from enjin import atr
 
-DATA = os.path.join(ROOT, '..', '..', 'data_mentah')
-KELUAR = os.path.join(ROOT, '..', 'data', 'wfo')
+DATA = os.path.join(REPO, 'data_mentah')
+KELUAR = os.path.join(ROOT, '..', 'data')
 BUANG8 = ['ASST', 'FCEL', 'MTDR', 'OVV', 'PR', 'SM', 'VAL', 'XENE']
 DIKECUALI = {'M40': 'isyarat bergantung pada pra-simulasi 8 slot kaedah sendiri',
              'M45': 'isyarat bergantung pada pra-simulasi 8 slot kaedah sendiri'}
@@ -266,7 +268,7 @@ def jalan_satu(mid):
         return mid, 'RALAT', round(time.time() - t0)
 
 def semua_kaedah():
-    return sorted([f[:-3] for f in os.listdir(os.path.join(ROOT, 'kaedah')) if f.startswith('M') and f.endswith('.py')],
+    return sorted([f[:-3] for f in os.listdir(os.path.join(KOD, 'kaedah')) if f.startswith('M') and f.endswith('.py')],
                   key=lambda x: int(x[1:]))
 
 def status():

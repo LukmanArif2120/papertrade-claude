@@ -12,14 +12,14 @@ W01 tidak menggantikan kaedah M. Varian beku dalam registry kekal. W01 ialah sat
 
 ## 2. Data
 
-- Alam utama: set 431 (`data_mentah/dataset_S1–S4.csv`) **tolak 8 saham bermasalah** (ASST, FCEL, MTDR, OVV, PR, SM, VAL, XENE) = **423 saham**. Sebab: `LAPORAN_UTAMA.md` Bahagian 10 (dagangan FCEL +780% mengherotkan keputusan).
+- Alam utama: set 431 (`data_mentah/dataset_S1–S4.csv`) **tolak 8 saham bermasalah** (ASST, FCEL, MTDR, OVV, PR, SM, VAL, XENE) = **423 saham**. Sebab: `BacktestShariah2/laporan/LAPORAN_UTAMA.md` Bahagian 10 (dagangan FCEL +780% mengherotkan keputusan).
 - Indeks: `index_benchmark.csv` (SPY, QQQ).
 - Tempoh data: 2 Jan 2019 – 2 Okt 2026, bar harian.
 - Ujian kekukuhan: set 431 penuh dan setiap subset S1–S4 (tolak 8 saham itu).
 
 ## 3. Batasan enjin v1.2 (menentukan apa yang boleh diuji)
 
-Daripada `kod/enjin.py`:
+Daripada `BacktestShariah2/kod/enjin.py`:
 - Masuk pada **buka hari selepas isyarat**. Kos 0.1% setiap belah.
 - `stop` dibaca **sekali sahaja pada hari isyarat** dan kekal tetap. Henti mengekor tidak boleh dibuat melalui `stop`; ia dibuat melalui `exitc`.
 - `exitc` benar → keluar pada **buka hari berikutnya**.
@@ -43,7 +43,7 @@ Daripada `kod/enjin.py`:
 | M37 | Weinstein Peringkat 2 | V2 |
 | M04 | BB Squeeze Breakout | U2 |
 
-- **Dikecualikan:** M114 (tiada modul `kod/kaedah/M114.py`), M40 dan M45 (isyarat bergantung pada pra-simulasi 8 slot kaedah itu sendiri, jadi tidak boleh dipisahkan daripada exit asalnya).
+- **Dikecualikan:** M114 (tiada modul `BacktestShariah2/kod/kaedah/M114.py`), M40 dan M45 (isyarat bergantung pada pra-simulasi 8 slot kaedah itu sendiri, jadi tidak boleh dipisahkan daripada exit asalnya).
 - Syarat kelayakan modul: `sig` hari *i* hanya bergantung pada data ≤ *i* dan tidak bergantung pada posisi kaedah itu sendiri. Modul yang gagal semakan ini dibuang sebelum backtest dan dicatat dalam laporan.
 
 ### 4.2 Stop loss (lajur `stop`, ditetapkan pada hari isyarat)
@@ -84,7 +84,7 @@ Daripada `kod/enjin.py`:
 4. **Pilihan kukuh:** daripada 10 percubaan teratas, pilih yang mempunyai **pulangan tahunan terendah paling tinggi** dalam 3 tahun latihan (elak gabungan yang bergantung pada satu tahun bertuah).
 5. **Luar sampel:** gabungan terpilih menjana dagangan yang **masuk** dalam suku ujian. Dagangan dibiarkan berjalan hingga exit sendiri walaupun melepasi hujung suku.
 6. Dagangan luar sampel 15 suku digabungkan, kemudian dijalankan melalui `portfolio()` enjin v1.2 sekali → satu lengkung ekuiti luar sampel 2023-01-01 – 2026-10-02.
-7. **Tetapan semasa:** gabungan yang dipilih untuk tetingkap terkini disimpan ke `data/wfo/W01_parameter_semasa.json` (untuk uji kertas, jika lulus).
+7. **Tetapan semasa:** gabungan yang dipilih untuk tetingkap terkini disimpan ke `WFO/data/W01_parameter_semasa.json` (untuk uji kertas, jika lulus).
 
 ## 6. Penanda aras (tempoh luar sampel yang sama)
 
@@ -107,11 +107,11 @@ Jika gagal → DITOLAK. Varian beku kekal digunakan dan WFO dihentikan.
 
 ## 8. Output
 
-- `kod/wfo.py` — skrip WFO (mengimport `enjin.py` tanpa ubah).
-- `ujian/test_wfo.py` — ujian unit: tiada pandang ke hadapan (isyarat hari *i* tidak berubah apabila data selepas *i* dibuang), had stop 15%, pemisahan tetingkap.
-- `data/wfo/W01_pilihan.csv` — gabungan terpilih setiap suku, dengan metrik latihan.
-- `data/wfo/W01_dagangan_oos.csv` — semua dagangan luar sampel.
-- `laporan/W01_LAPORAN.md` — keputusan, perbandingan penanda aras, kestabilan pilihan antara suku, verdict.
+- `WFO/kod/wfo.py` — skrip WFO (mengimport `BacktestShariah2/kod/enjin.py` tanpa ubah).
+- `WFO/ujian/test_wfo.py` — ujian unit: tiada pandang ke hadapan (isyarat hari *i* tidak berubah apabila data selepas *i* dibuang), had stop 15%, pemisahan tetingkap.
+- `WFO/data/hasil/<id>_pilihan.csv` — gabungan terpilih setiap suku, dengan metrik latihan.
+- `WFO/data/hasil/<id>_dagangan_oos.csv` — semua dagangan luar sampel.
+- `WFO/laporan/W01_LAPORAN.md` — keputusan, perbandingan penanda aras, kestabilan pilihan antara suku, verdict.
 
 ## 9. Pelaksanaan dan peraturan projek
 
@@ -135,5 +135,5 @@ Jika gagal → DITOLAK. Varian beku kekal digunakan dan WFO dihentikan.
 - Suku ujian: 2023 S1 hingga 2026 S4 (2026 S4 hanya 1–2 Okt 2026) = 16 suku.
 - Semakan pandang ke hadapan: `sig` dikira atas data penuh dan atas data dipotong pada 28 Jun 2024; sebarang beza = tidak layak.
 - Subset S1–S4: gabungan terpilih yang sama (tidak ditala semula) dinilai atas alam subset.
-- Larian: 5 kaedah serentak (`kod/wfo.py kelompok 5`); keputusan di `data/wfo/hasil/`. Kerja berhenti di Fasa C (laporan).
+- Larian: 5 kaedah serentak (`WFO/kod/wfo.py kelompok 5`); keputusan di `WFO/data/hasil/`. Kerja berhenti di Fasa C (laporan).
 - Laporan menyertakan pembetulan ujian berganda (deflated Sharpe ratio) merentas semua kaedah.

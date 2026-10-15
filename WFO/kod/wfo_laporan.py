@@ -1,10 +1,10 @@
-# Jana laporan Fasa C W01 daripada data/wfo/hasil/*.json → laporan/W01_LAPORAN.md
+# Jana laporan Fasa C W01 daripada WFO/data/hasil/*.json → WFO/laporan/W01_LAPORAN.md
 import os, json, math
 from statistics import NormalDist
 import numpy as np, pandas as pd
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-HASIL = os.path.join(ROOT, '..', 'data', 'wfo', 'hasil')
+HASIL = os.path.join(ROOT, '..', 'data', 'hasil')
 LAPORAN = os.path.join(ROOT, '..', 'laporan', 'W01_LAPORAN.md')
 N = NormalDist()
 p = lambda x: '' if x is None or (isinstance(x, float) and math.isnan(x)) else f'{x * 100:.1f}%'
