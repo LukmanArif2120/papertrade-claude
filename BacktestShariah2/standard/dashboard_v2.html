@@ -39,8 +39,8 @@ h1{font-size:1.2rem;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:bal
 /* jadual bergred: angka dan perkataan tidak dipecah; skrol mendatar dalam jadual jika terlalu lebar */
 .tablewrap:has(td.grd){overflow-x:auto}.tablewrap:has(td.grd) td,.tablewrap:has(td.grd) th{overflow-wrap:break-word;padding-inline:4px}
 td.grd{min-width:0}.tablewrap:has(td.grd) td.wrap{min-width:150px}td.grd .vv{font-size:.72rem}td.grp{min-width:150px}.tablewrap td .nw{white-space:nowrap}
-.grc{display:inline-flex;gap:8px;align-items:stretch;text-align:left;vertical-align:middle}
-.grc>.gr{flex:none;display:flex;align-items:center;justify-content:center;min-width:2em;min-height:2.1em;margin:0;padding:0 6px;font-size:1.05rem;border-radius:6px}
+.grc{display:inline-flex;gap:8px;align-items:center;text-align:left;vertical-align:middle}
+.grc>.gr{flex:none;display:flex;align-items:center;justify-content:center;min-width:2em;height:2.1em;margin:0;padding:0 6px;font-size:1.05rem;border-radius:6px}
 .grt{min-width:0;display:flex;flex-direction:column;justify-content:center}.grt b{color:var(--fg)}.grt .pill{align-self:flex-start}
 td.grd{text-align:center;vertical-align:middle}
 td.ctr,th[data-tip="hari_watch"]{text-align:center}
@@ -726,8 +726,9 @@ function grPem(r){if(GORD[r.gred_pemangkin]==null)return `<span class="mut">${r.
 const QLBL={A:['Selamat','p-buy'],B:['Selamat','p-buy'],C:['Berhati-hati','p-warn'],D:['Elak','p-exit'],E:['Elak','p-exit']};
 function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
   const tk=r.tarikh_earnings?new Date(r.tarikh_earnings+'T00:00:00Z').toLocaleDateString('ms-MY',{day:'numeric',month:'short',timeZone:'UTC'}):'';
-  const txt=h!=null?`<b class="nw">${fx(h,0)} hari lagi</b><span class="vv">${esc(tk)}${r.sumber_earnings==='anggaran'?' · anggaran':''}</span>`:`<b>${r.sumber_earnings==='tiada data'?'Tiada data':'Tiada laporan'}</b><span class="vv">${r.sumber_earnings==='tiada data'?'':'dalam 30 hari'}</span>`;
-  return grSel1(r.gred_qr,`${txt}${q?`<span class="pill ${q[1]}" style="margin-top:3px">${q[0]}</span>`:''}`);}
+  const pl=q?` <span class="pill ${q[1]}" style="padding:0 6px;margin-left:4px">${q[0]}</span>`:'';
+  const txt=h!=null?`<b class="nw">${fx(h,0)} hari lagi</b><span class="vv nw">${esc(tk)}${r.sumber_earnings==='anggaran'?' (anggaran)':''}${pl}</span>`:`<b class="nw">${r.sumber_earnings==='tiada data'?'Tiada data':'Tiada laporan'}</b><span class="vv nw">${r.sumber_earnings==='tiada data'?'':'30 hari'}${pl}</span>`;
+  return grSel1(r.gred_qr,txt);}
 const grCols=()=>[
   {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??9,f:r=>grKump(r,'Sektor')},
   {k:'gred_industri',t:'Industri',tip:'g_i',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??9,f:r=>grKump(r,'Industri')},
