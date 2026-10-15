@@ -43,6 +43,7 @@ td.grd{min-width:0}.tablewrap:has(td.grd) td.wrap{min-width:150px}td.grd .vv{fon
 .grc>.gr{flex:none;display:flex;align-items:center;justify-content:center;min-width:2em;min-height:2.1em;margin:0;padding:0 6px;font-size:1.05rem;border-radius:6px}
 .grt{min-width:0;display:flex;flex-direction:column;justify-content:center}.grt b{color:var(--fg)}.grt .pill{align-self:flex-start}
 td.grd{text-align:center;vertical-align:middle}
+td.ctr,th[data-tip="hari_watch"]{text-align:center}
 .tablewrap:has(td.grd) td{vertical-align:middle}
 .tablewrap:has(td.grd) th[data-tip^="g_"],.tablewrap:has(td.grd) th[data-tip="gred"]{text-align:center}
 a.berita{color:var(--accent);text-decoration:none;margin-top:2px}a.berita:hover{text-decoration:underline}
@@ -681,7 +682,7 @@ function renderWatch(){
       {k:'pencetus',t:'Syarat belum cukup',tip:'syarat_belum',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}<span class="vv">${esc(r.sebab||'')}</span><span class="vv">${esc(r.syarat_belum||'')}</span>`,c:()=>'wrap'},
       {k:'paras',t:'Paras pencetus',tip:'paras',f:r=>`${fx(r.paras,2)}<span class="vv">jarak ${sg2(r.jarak_pct)}</span>`},
       {k:'ditambah',t:'Tarikh masuk watchlist',l:1,tip:'ditambah',f:r=>esc(r.ditambah||'–')},
-      {k:'hari',t:'Hari dalam watchlist',tip:'hari_watch',f:r=>fx(r.hari,0)},
+      {k:'hari',t:'Hari dalam watchlist',tip:'hari_watch',f:r=>fx(r.hari,0),c:()=>'ctr'},
       ...grCols()],
       foot:(n,t)=>`<div class="tablefoot"><span>${n} daripada ${t}</span>${t>n?'<button type="button" class="more" id="wMore">Papar 60 lagi</button>':''}</div>`})}
   </div>`;
