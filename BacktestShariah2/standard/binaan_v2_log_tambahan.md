@@ -114,3 +114,9 @@
 - Prestasi (baris sah): M 200 dagangan +0.08%; C 1,669 −0.07%; Combine 1,869 −0.05%. HENTIKAN: C — M08; Combine — M14, M08. Tiada TERUSKAN; selebihnya BELUM CUKUP DATA atau PERHATI.
 - sahkan.py --betulkan: 0 ralat, 0 amaran (1,877 posisi dibeli). Db: papertrade/moomoo v8, claude v8, claude_2 v8, claude_3 v3, claude_4 v2, claude_5 v2, watchlist v9, sektor/snapshot v10, prestasi/mae v9, prestasi/ringkasan v8, harian/status v15.
 - Nota: db `papertrade/claude_3` 259 KB, `claude` 241 KB (lebih had ~250 KB bagi claude_3).
+
+## 2026-10-16 (9:36 NY) — Beli maya 9:35 NY
+- Calon: 847 baris senarai_beli (327 saham; tarikh_imbasan 16 Okt; 23 belian semula `belian_ke` 2 dengan nota "belian ke-2"). Direkod 820 baris (1 unit setiap kaedah+saham, sumber harian_c). Harga beli = buka sementara `quote_stock_quote` 9:36 NY; belum disahkan dengan kline. Gred (termasuk pemangkin_url) disalin tanpa diubah.
+- Fail: baris ditambah ke `claude_7.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_8` … `claude_12` (unjuran tertinggi 238,882 B < 240,000). Dokumen db `papertrade/claude_7` … `claude_12` ditolak dalam dua batch (satu batch > 1 MiB).
+- Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
+- Dilangkau 27: buka > buka_maks — AMN M06, ZS M08, TENB M08, AVPT M08, ZETA M08; buka ≤ henti — ALB M13, AMD M29, AVT M29, AUGO M49, MSTR M49, TEL M49; belum didagangkan (data_date 15 Okt) — KELYB M02 & M122, SAIH M55 & M133, CLW M76, PARK M76, DFIN M88, MGRT M89, FEDU M90, BNED M119 & M150, GHC M119 & M150, DLB M148, AFYA M149, ETD M160. Tiada bertindih.
