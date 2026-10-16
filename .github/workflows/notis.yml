@@ -10,7 +10,7 @@ on:
       - 'BacktestShariah2/papertrade/**'
       - 'BacktestShariah2/standard/binaan_v2_log*.md'
   workflow_run:
-    workflows: ['Semak data', 'Harga harian', 'Saringan TradingView']
+    workflows: ['Semak data', 'Harga harian', 'Saringan TradingView', 'Data pemangkin']
     types: [completed]
   schedule:
     - cron: '13 23 * * 1-5'   # pengawas kemas kini 6:02 pagi MYT (sauh 22:00 UTC)

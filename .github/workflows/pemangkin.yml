@@ -1,0 +1,72 @@
+# Data pemangkin percuma (Yahoo berita/analisis/orang dalam + kalendar earnings Nasdaq) -> BacktestShariah2/data/pemangkin/
+# Dicetus apabila imbasan malam push watchlist.csv / senarai_beli.csv; ticker yang sudah dikumpul tanpa ralat pada
+# tarikh MYT sama tidak dikumpul semula (hanya ticker baharu/gagal). Dibaca oleh gred.py (imbas_2002 langkah 5b).
+# Repo awam: minit Actions percuma.
+name: Data pemangkin
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'BacktestShariah2/papertrade/watchlist.csv'
+      - 'BacktestShariah2/papertrade/senarai_beli.csv'
+  workflow_dispatch:
+    inputs:
+      paksa:
+        description: 'Kumpul semula walaupun sudah lengkap hari ini (ya/tidak)'
+        required: false
+        default: 'tidak'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pemangkin
+  cancel-in-progress: false
+
+jobs:
+  pemangkin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      # push hanya dalam tetingkap imbasan malam (10:00–16:00 UTC = 6 petang–12 malam MYT); push rutin 6:02 pagi dilangkau
+      - name: Tetingkap masa
+        id: masa
+        run: |
+          JAM=$((10#$(date -u +%H)))
+          if [ "$GITHUB_EVENT_NAME" = "push" ] && { [ $JAM -lt 10 ] || [ $JAM -ge 16 ]; }; then
+            echo "jalan=tidak" >> "$GITHUB_OUTPUT"; echo "push di luar tetingkap imbasan malam; dilangkau"
+          else
+            echo "jalan=ya" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v4
+        if: steps.masa.outputs.jalan == 'ya'
+      - uses: actions/setup-python@v5
+        if: steps.masa.outputs.jalan == 'ya'
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        if: steps.masa.outputs.jalan == 'ya'
+        run: pip install -q pandas numpy requests yfinance
+      - name: Kumpul data pemangkin
+        if: steps.masa.outputs.jalan == 'ya'
+        env:
+          PAKSA: ${{ github.event.inputs.paksa }}
+        run: |
+          F=""; [ "$PAKSA" = "ya" ] && F="--paksa"
+          python3 BacktestShariah2/standard/pemangkin_actions.py $F --keluar BacktestShariah2/data/pemangkin \
+            --univ BacktestShariah2/data/harga/univ.txt \
+            --csv BacktestShariah2/papertrade/senarai_beli.csv BacktestShariah2/papertrade/watchlist.csv
+      - name: Commit dan push
+        if: steps.masa.outputs.jalan == 'ya'
+        run: |
+          git config user.name "pemangkin[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/pemangkin
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Data pemangkin (Yahoo + Nasdaq): $(date -u +%Y-%m-%d)"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1
