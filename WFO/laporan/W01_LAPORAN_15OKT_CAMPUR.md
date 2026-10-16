@@ -1,4 +1,4 @@
-# Laporan W01 — WFO stop/exit/tempoh pegangan bagi setiap kaedah (Fasa C)
+# Laporan W01 — 15 Okt 2026 (ARKIB: percubaan bercampur 150/100/60, enjin v1.2 asal; diganti oleh W01_LAPORAN.md)
 
 Spec: `spec/SPEC_WFO_SISTEM_SWING.md`. Enjin v1.2 (beku). Alam 423 saham. Luar sampel: 1 Jan 2023 – 2 Okt 2026 (16 suku). Optuna 150 (13 kaedah), 100 (17 kaedah), 60 (55 kaedah) percubaan setiap suku (ikut kaedah), latih 3 tahun. Objektif: CAGR maks, MDD ≥ −35%.
 

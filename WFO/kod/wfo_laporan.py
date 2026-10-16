@@ -79,7 +79,7 @@ def main():
     R = pd.DataFrame(rows).sort_values('cagr', ascending=False).reset_index(drop=True)
 
     L = [f'# Laporan W01 — WFO stop/exit/tempoh pegangan bagi setiap kaedah (Fasa C)', '',
-         f'Spec: `spec/SPEC_WFO_SISTEM_SWING.md`. Enjin v1.2 (beku). Alam 423 saham. Luar sampel: 1 Jan 2023 – 2 Okt 2026 (16 suku). '
+         f'Spec: `spec/SPEC_WFO_SISTEM_SWING.md`. Enjin v1.2 (beku) melalui salinan laju yang disahkan setara (`laporan/ENJIN_LAJU_SAHKAN.md`). Alam 423 saham. Luar sampel: 1 Jan 2023 – 2 Okt 2026 (16 suku). '
          f'Optuna {pc} percubaan setiap suku (ikut kaedah), latih 3 tahun. Objektif: CAGR maks, MDD ≥ −35%.', '',
          '## 1. Ringkasan', '',
          f'- Kaedah diuji: {len(siap)} siap; {len(tl)} tidak layak; {len(ra)} ralat.',
