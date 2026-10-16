@@ -65,19 +65,19 @@ def salin(fr):
 
 
 # ---------- komponen stop / exit ----------
-def lajur_stop(g, kod, asal):
+def lajur_stop(g, kod, asal, a14=None):
     c = g.close
     if kod.startswith('PCT'): s = c * (1 - int(kod[3:]) / 100)
-    elif kod.startswith('ATR'): s = c - float(kod[3:]) * atr(g)
+    elif kod.startswith('ATR'): s = c - float(kod[3:]) * (atr(g) if a14 is None else a14)
     elif kod.startswith('LOW'): s = g.low.rolling(int(kod[3:])).min()
     else: s = asal
     return np.maximum(s.astype(float).fillna(-np.inf), HAD_HENTI * c)
 
-def lajur_exit(g, kod, asal_ex, asal_tg):
+def lajur_exit(g, kod, asal_ex, asal_tg, a22=None):
     c = g.close; tg = pd.Series(np.nan, g.index)
     if kod.startswith('EMA'): ex = c < c.ewm(span=int(kod[3:]), adjust=False).mean()
     elif kod.startswith('SMA'): ex = c < c.rolling(int(kod[3:])).mean()
-    elif kod.startswith('CHAN'): ex = c < g.high.rolling(22).max() - int(kod[4:]) * atr(g, 22)
+    elif kod.startswith('CHAN'): ex = c < g.high.rolling(22).max() - int(kod[4:]) * (atr(g, 22) if a22 is None else a22)
     elif kod == 'ASAL': ex, tg = asal_ex, asal_tg
     else: ex = pd.Series(False, g.index)
     return ex.fillna(False).astype(bool), tg
@@ -89,14 +89,16 @@ def sah(stop, exit_, tmax):
 # ---------- kaedah ----------
 class Kaedah:
     """Isyarat entry sekali; dagangan bagi setiap gabungan dicache."""
-    def __init__(self, mid, fr, idx):
+    def __init__(self, mid, fr, idx, f=None):
         self.mid = mid; self.m = importlib.import_module(mid)
-        f = salin(fr); self.m.sedia(f, idx); f = {t: enjin.siap(g) for t, g in f.items()}
+        if f is None: f = salin(fr); self.m.sedia(f, idx)
+        f = {t: enjin.siap(g) for t, g in f.items()}
         self.f = f; self.warm = self.m.WARM; self.tmax_asal = self.m.TMAX
         self.cache = OrderedDict(); self.pcache = {}
         # lajur stop/exit dikira sekali bagi setiap kod
-        self.st = {s: {t: lajur_stop(g, s, g.stop) for t, g in f.items()} for s in STOPS}
-        self.ex = {e: {t: lajur_exit(g, e, g.exitc, g.tgt) for t, g in f.items()} for e in EXITS}
+        a14 = {t: atr(g) for t, g in f.items()}; a22 = {t: atr(g, 22) for t, g in f.items()}   # dikira sekali
+        self.st = {s: {t: lajur_stop(g, s, g.stop, a14[t]) for t, g in f.items()} for s in STOPS}
+        self.ex = {e: {t: lajur_exit(g, e, g.exitc, g.tgt, a22[t]) for t, g in f.items()} for e in EXITS}
         self.asas = {t: g[['open', 'high', 'low', 'close', 'sig', 'rank']] for t, g in f.items()}
         if ENJIN == 'laju':   # tatasusunan bersambung, penukaran sama seperti enjin.trades
             self.susun = enjin_laju.Susun(f)
@@ -129,12 +131,14 @@ class Kaedah:
         return enjin.trades(self.f, self.tmax_asal, self.warm)
 
 
-def semak_kaedah(mid, fr, idx):
-    """Pulang None jika layak, atau sebab tidak layak (pandang ke hadapan / ralat)."""
+def semak_kaedah(mid, fr, idx, penuh=None):
+    """Pulang None jika layak, atau sebab tidak layak (pandang ke hadapan / ralat).
+    penuh: hasil sedia() atas data penuh jika sudah ada (elak kira semula)."""
     if mid in DIKECUALI: return DIKECUALI[mid]
     m = importlib.import_module(mid)
     pot = pd.Timestamp(SEMAK_POTONG)
-    a = salin(fr); m.sedia(a, idx)
+    if penuh is None: penuh = salin(fr); m.sedia(penuh, idx)
+    a = penuh
     b = salin({t: g[g.index <= pot] for t, g in fr.items() if (g.index <= pot).sum() > 0})
     m.sedia(b, {k: v[v.index <= pot] for k, v in idx.items()})
     beza = 0
@@ -151,16 +155,26 @@ def semak_kaedah(mid, fr, idx):
 def potong(T, mula, akhir, fr):
     """Dagangan masuk dalam [mula, akhir]; posisi yang masih terbuka pada `akhir` ditutup pada tutup `akhir`
     (setara enjin apabila data berakhir pada `akhir`)."""
-    T = T[(T.ent >= mula) & (T.ent <= akhir)].copy()
-    if 'why' in T: T['why'] = T.why.astype(object)
+    T = T[(T.ent >= mula) & (T.ent <= akhir)]
     lps = T.ex > akhir
     if lps.any():
+        T = T.copy(); T['why'] = T.why.astype(object)
         e = np.array([fr[t].open.at[d] for t, d in zip(T.ticker[lps], T.ent[lps])])
-        c = np.array([fr[t].close[:akhir].iloc[-1] for t in T.ticker[lps]])
+        z = [_tutup_akhir(fr, t, akhir) for t in T.ticker[lps]]
+        c = np.array([x[0] for x in z])
         T.loc[lps, 'ret'] = c / e * (1 - enjin.COST) / (1 + enjin.COST) - 1
-        T.loc[lps, 'ex'] = [fr[t].close[:akhir].index[-1] for t in T.ticker[lps]]
+        T.loc[lps, 'ex'] = [x[1] for x in z]
         T.loc[lps, 'why'] = 'hujung'
     return T
+
+_AKHIR = {}
+def _tutup_akhir(fr, t, akhir):
+    """(tutup, tarikh) bar terakhir saham t pada atau sebelum akhir (= fr[t].close[:akhir].iloc[-1])."""
+    k = (t, akhir)
+    if k not in _AKHIR:
+        if len(_AKHIR) > 50000: _AKHIR.clear()
+        s = fr[t].close[:akhir]; _AKHIR[k] = (s.iloc[-1], s.index[-1])
+    return _AKHIR[k]
 
 _PASARAN = {}
 def pasaran(frw):
@@ -256,7 +270,7 @@ def wfo(kaedah_list, fr, idx, subset, label):
     # subset S1-S4: gabungan terpilih yang sama, alam subset
     sub = {}
     for sname in sorted(set(subset.values())):
-        tk = {t for t, s in subset.items() if s == sname}; fs = {t: fr[t] for t in tk}
+        tk = sorted(t for t, s in subset.items() if s == sname); fs = {t: fr[t] for t in tk}
         Ts = T[T.ticker.isin(tk)] if len(T) else T
         cs = lengkung(Ts, fs, mula_oos) if len(Ts) else None
         sub[sname] = dict(cagr=ukur(cs)['cagr'], ew=ew(fs, mula_oos)['cagr'], n=len(Ts))
@@ -285,13 +299,15 @@ def jalan_satu(mid):
     warnings.filterwarnings('ignore'); t0 = time.time()
     try:
         fr, idx, subset = muat_data()
-        sebab = semak_kaedah(mid, fr, idx)
         m = importlib.import_module(mid) if mid not in DIKECUALI else None
+        penuh = None
+        if m is not None: penuh = salin(fr); m.sedia(penuh, idx)
+        sebab = semak_kaedah(mid, fr, idx, penuh)
         asas = dict(id=mid, nama=getattr(m, 'NAMA', ''), varian=getattr(m, 'VARIAN', ''))
         if sebab:
             _simpan(mid, dict(**asas, status='TIDAK LAYAK', sebab=sebab), pd.DataFrame(), pd.DataFrame(), None)
             return mid, 'TIDAK LAYAK', round(time.time() - t0)
-        k = Kaedah(mid, fr, idx)
+        k = Kaedah(mid, fr, idx, penuh)
         hasil, pil, T, cv = wfo({mid: k}, fr, idx, subset, mid)
         hasil.update(asas, status='SIAP', beku=asal_oos(k, fr, pd.Timestamp(OOS_MULA)),
                      percubaan=PERCUBAAN, saat=round(time.time() - t0))

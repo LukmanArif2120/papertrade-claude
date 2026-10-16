@@ -5,6 +5,8 @@ Kerja kajian berasingan daripada rutin harian Papertrade C. Tiada fail dalam `Ba
 - `spec/SPEC_WFO_SISTEM_SWING.md` — spec W01.
 - `kod/wfo.py` — larian WFO (`python3 WFO/kod/wfo.py senarai | kelompok 5 | jalan Mxx | w01`).
 - `kod/wfo_laporan.py` — laporan Fasa C → `laporan/W01_LAPORAN.md`.
+- `kod/enjin_laju.py` — salinan numba `trades()`/`portfolio()` enjin v1.2, setara bait demi bait (termasuk penjumlahan `sum()` Python). Lalai dalam `wfo.py`; `WFO_ENJIN=asal` memakai enjin v1.2 asal. Perlu pakej `numba`.
+- `kod/sahkan_enjin.py` — sahkan enjin laju lawan v1.2 bagi semua kaedah → `laporan/ENJIN_LAJU_SAHKAN.md`. Jalankan semula setiap kali `enjin_laju.py` atau modul kaedah berubah.
 - `ujian/` — `python3 -m unittest discover -s WFO/ujian`.
 - `data/hasil/` — keputusan setiap kaedah (`<id>.json`, `_pilihan.csv`, `_dagangan_oos.csv`, `_ekuiti.csv`).
 - Data input: `data_mentah/dataset_S1–S4.csv`, `index_benchmark.csv`.

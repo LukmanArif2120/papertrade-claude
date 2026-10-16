@@ -180,8 +180,9 @@ class Pasaran:
     """Tarikh (>= START) dan matriks harga tutup 'asof' (abaikan NaN, seperti Series.asof) bagi satu fr."""
     def __init__(self, fr):
         mula = pd.Timestamp(enjin.START)
-        semua = sorted(set().union(*[g.index for g in fr.values()])) if fr else []
-        self.tarikh = pd.DatetimeIndex([x for x in semua if x >= mula])
+        # = sorted(set().union(*indeks)) ditapis >= START, tetapi dalam numpy
+        semua = pd.DatetimeIndex(np.unique(np.concatenate([g.index.values for g in fr.values()]))) if fr else pd.DatetimeIndex([])
+        self.tarikh = semua[semua >= mula]
         self.kod = {t: k for k, t in enumerate(fr)}
         self.A = np.full((len(fr), len(self.tarikh)), np.nan)
         for t, k in self.kod.items():
@@ -192,7 +193,8 @@ class Pasaran:
     def lengkung(self, T, slots=8, w=0.125):
         if len(T): T = T[T.ent >= pd.Timestamp(enjin.START)].sort_values(['ent', 'rank'], ascending=[True, False])
         D = len(self.tarikh)
-        tk = np.array([self.kod.get(t, -1) for t in T.ticker], np.int64) if len(T) else np.empty(0, np.int64)
+        tk = (T.ticker.astype(object).map(self.kod).fillna(-1).values.astype(np.int64) if len(T)
+              else np.empty(0, np.int64))
         en = self.pos.reindex(T.ent).fillna(-1).values.astype(np.int64) if len(T) else np.empty(0, np.int64)
         ek = self.pos.reindex(T.ex).fillna(-1).values.astype(np.int64) if len(T) else np.empty(0, np.int64)
         ret = T.ret.values.astype(float) if len(T) else np.empty(0)
