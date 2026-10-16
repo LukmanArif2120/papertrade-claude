@@ -309,6 +309,18 @@ def pengesahan(close, vol, tarikh, selepas_tutup=False):
             'volum_x': round(float(v.iloc[i]) / purata, 2), 'kekal': bool(float(c.iloc[-1]) > sebelum)}
 
 
+def reaksi_earnings(close, vol, tarikh, selepas_tutup=None):
+    """Gerak % hari reaksi earnings (tutup hari reaksi lawan tutup sebelumnya). selepas_tutup None (masa
+    pengumuman tidak diketahui, cth. kalendar Nasdaq 'time-not-supplied'): hari reaksi = hari volum lebih tinggi
+    antara hari pengumuman dan hari dagangan berikutnya; None jika hari berikutnya belum ada dalam stor harga."""
+    if selepas_tutup is not None:
+        s = pengesahan(close, vol, tarikh, selepas_tutup)
+    else:
+        a, b = pengesahan(close, vol, tarikh, False), pengesahan(close, vol, tarikh, True)
+        s = None if not a or not b else a if a['volum_x'] >= b['volum_x'] else b
+    return s['gerak_pct'] if s else None
+
+
 def mata_pemangkin(p, hari_ini=None):
     """p: dict satu saham (papertrade/pemangkin.json; dibina oleh `gred.py kumpul`):
          berita: [{tajuk, tarikh (New York), selepas_tutup, hari_lalu, url}]   (sudah ditapis relevan)
@@ -596,7 +608,7 @@ def baca_nasdaq(path, hari_ini, hari_maks=4):
 
 def earnings_nasdaq(e, hari_ini):
     """Entri Nasdaq satu saham -> (medan earnings lalu untuk pemangkin, tarikh earnings >= hari_ini atau None).
-    Masa 'time-not-supplied' -> earnings_selepas_tutup None (reaksi tidak dikira kerana hari reaksi tidak pasti)."""
+    Masa 'time-not-supplied' -> earnings_selepas_tutup None (hari reaksi ditentukan oleh volum; reaksi_earnings)."""
     lalu, seter = _tarikh((e or {}).get('lalu')), _tarikh((e or {}).get('seterusnya'))
     out = {}
     if lalu and lalu < hari_ini:
@@ -776,11 +788,10 @@ def tambah(a):
             p = dict(pem[t])
             if nas is not None and 'earnings_lalu_tarikh' not in p:
                 p.update(earnings_nasdaq(nas.get(t), hari_ini)[0])
-            # reaksi earnings lalu (sumber Nasdaq): tutup hari reaksi lawan tutup sebelumnya, daripada stor harga
+            # reaksi earnings lalu (sumber Nasdaq; entri Moomoo sudah mengira sendiri): daripada stor harga
             if p.get('earnings_lalu_tarikh') and p.get('earnings_gerak_pct') is None \
-                    and p.get('earnings_selepas_tutup') is not None and t in c.columns:
-                s = pengesahan(c[t], v[t], p['earnings_lalu_tarikh'], p['earnings_selepas_tutup'])
-                p['earnings_gerak_pct'] = s['gerak_pct'] if s else None
+                    and 'earnings_selepas_tutup' in p and t in c.columns:
+                p['earnings_gerak_pct'] = reaksi_earnings(c[t], v[t], p['earnings_lalu_tarikh'], p['earnings_selepas_tutup'])
             p.setdefault('volum_nisbah', None if t not in vn.index or pd.isna(vn[t]) else float(vn[t]))
             p.setdefault('naik_5h', None if t not in n5.index or pd.isna(n5[t]) else float(n5[t]))
             top = terkuat(peristiwa(p, hari_ini))

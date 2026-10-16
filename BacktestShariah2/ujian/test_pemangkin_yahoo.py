@@ -129,6 +129,17 @@ class UjiGredYahooNasdaq(unittest.TestCase):
         self.assertIsNone(d)
         self.assertEqual(G.earnings_nasdaq(None, HARI), ({}, None))
 
+    def test_reaksi_earnings_masa_tidak_diketahui(self):
+        idx = pd.bdate_range('2026-09-01', '2026-10-14')
+        c = pd.Series(10.0, index=idx); v = pd.Series(1e6, index=idx)
+        c.loc['2026-10-09':] = 11.0; v.loc['2026-10-09'] = 4e6            # pengumuman 8 Okt selepas tutup
+        self.assertEqual(G.reaksi_earnings(c, v, '2026-10-08'), 10.0)
+        self.assertEqual(G.reaksi_earnings(c, v, '2026-10-08', False), 0.0)   # masa diketahui: hari pengumuman
+        c2 = c.copy(); v2 = pd.Series(1e6, index=idx)
+        c2.loc['2026-10-08':] = 9.0; v2.loc['2026-10-08'] = 5e6           # pengumuman 8 Okt sebelum dibuka
+        self.assertEqual(G.reaksi_earnings(c2, v2, '2026-10-08'), -10.0)
+        self.assertIsNone(G.reaksi_earnings(c, v, '2026-10-14'))           # hari berikutnya belum ada
+
     def test_kumpul_dan_tambah(self):
         with tempfile.TemporaryDirectory() as d:
             p = lambda n: os.path.join(d, n)
