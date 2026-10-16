@@ -30,6 +30,7 @@ Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade
   - Dinilai semula pada 6:02 pagi DAN imbasan malam (7:47). Terkeluar signal (< 90% atau isyarat batal/tidak sah) → BUANG serta-merta.
   - Calon baharu hanya ditambah pada imbasan malam. Calon yang menjadi 100% dipindah ke senarai beli pada imbasan malam.
   - Peraturan lama "buang selepas 10 hari" dimansuhkan.
+- **Belian semula (keputusan pengguna 16 Okt 2026):** saham yang sudah keluar (kena henti, sasaran, isyarat keluar, had masa) TIDAK diabaikan. Ia terus diimbas oleh semua kaedah; isyarat 100% baharu = belian ke-2, ke-3 … (lajur `belian_ke`). Yang dikecualikan hanya posisi Claude yang MASIH TERBUKA bagi kaedah yang sama (kaedah lain tetap boleh, dengan `kaedah_kongsi`). Prestasi belian semula dinilai berasingan selepas ≥ 20 dagangan tertutup.
 
 ## 4. Belian maya (9:35 NY)
 - Calon = semua baris senarai_beli (tiada had slot). 1 unit setiap saham; kaedah kedua untuk saham sama = baris dengan `kaedah_kongsi`.
