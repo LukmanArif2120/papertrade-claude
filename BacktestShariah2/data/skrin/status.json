@@ -1,0 +1,25 @@
+{
+ "dijana": "2026-10-16 02:48 UTC",
+ "sumber": "https://scanner.tradingview.com/america/scan",
+ "tv": {
+  "baris": 4167,
+  "jumlah_padan": 4167,
+  "harga_min": 5.0,
+  "medan_tiada_data": [
+   "is_shariah_compliant"
+  ],
+  "is_shariah_compliant": {
+   "benar": 0,
+   "salah": 0,
+   "tiada": 4167
+  }
+ },
+ "etf": {
+  "SPUS": {
+   "pegangan": 219
+  },
+  "SPTE": {
+   "pegangan": 109
+  }
+ }
+}
