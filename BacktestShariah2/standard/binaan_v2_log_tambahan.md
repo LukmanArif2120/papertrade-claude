@@ -120,3 +120,4 @@
 - Fail: baris ditambah ke `claude_7.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_8` … `claude_12` (unjuran tertinggi 238,882 B < 240,000). Dokumen db `papertrade/claude_7` … `claude_12` ditolak dalam dua batch (satu batch > 1 MiB).
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 27: buka > buka_maks — AMN M06, ZS M08, TENB M08, AVPT M08, ZETA M08; buka ≤ henti — ALB M13, AMD M29, AVT M29, AUGO M49, MSTR M49, TEL M49; belum didagangkan (data_date 15 Okt) — KELYB M02 & M122, SAIH M55 & M133, CLW M76, PARK M76, DFIN M88, MGRT M89, FEDU M90, BNED M119 & M150, GHC M119 & M150, DLB M148, AFYA M149, ETD M160. Tiada bertindih.
+- Sahkan buka (10:08 NY, `quote_history_kline` ktype 2, 16 Okt): sampel OLLI 95.6, SPSC 87.86, STRA 82.66, KNX 65.53, RMD 241.79 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
