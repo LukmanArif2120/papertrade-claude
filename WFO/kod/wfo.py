@@ -16,6 +16,9 @@ KOD = os.path.join(REPO, 'BacktestShariah2', 'kod')                   # enjin v1
 sys.path.insert(0, KOD); sys.path.insert(0, os.path.join(KOD, 'kaedah'))
 import enjin
 from enjin import atr
+import enjin_laju
+
+ENJIN = os.environ.get('WFO_ENJIN', 'laju')   # 'laju' (numba, disahkan setara v1.2) atau 'asal' (enjin v1.2)
 
 DATA = os.path.join(REPO, 'data_mentah')
 KELUAR = os.path.join(ROOT, '..', 'data')
@@ -95,15 +98,24 @@ class Kaedah:
         self.st = {s: {t: lajur_stop(g, s, g.stop) for t, g in f.items()} for s in STOPS}
         self.ex = {e: {t: lajur_exit(g, e, g.exitc, g.tgt) for t, g in f.items()} for e in EXITS}
         self.asas = {t: g[['open', 'high', 'low', 'close', 'sig', 'rank']] for t, g in f.items()}
+        if ENJIN == 'laju':   # tatasusunan bersambung, penukaran sama seperti enjin.trades
+            self.susun = enjin_laju.Susun(f)
+            self.st_a = {s: np.concatenate([v.astype(float).values for v in d.values()]) for s, d in self.st.items()}
+            self.ex_a = {e: (np.concatenate([x.fillna(False).astype(bool).values for x, _ in d.values()]),
+                             np.concatenate([tg.astype(float).values for _, tg in d.values()])) for e, d in self.ex.items()}
 
     def dagangan(self, stop, exit_, tmax):
         k = (stop, exit_, tmax)
         if k not in self.cache:
-            fr = {}
-            for t, g in self.asas.items():
-                ex, tg = self.ex[exit_][t]
-                fr[t] = g.assign(stop=self.st[stop][t], exitc=ex, tgt=tg)
-            T = enjin.trades(fr, tmax or None, self.warm)
+            if ENJIN == 'laju':
+                ex, tg = self.ex_a[exit_]
+                T = self.susun.dagangan(self.st_a[stop], tg, ex, tmax or None, self.warm)
+            else:
+                fr = {}
+                for t, g in self.asas.items():
+                    ex, tg = self.ex[exit_][t]
+                    fr[t] = g.assign(stop=self.st[stop][t], exitc=ex, tgt=tg)
+                T = enjin.trades(fr, tmax or None, self.warm)
             if len(T):
                 T['ticker'] = T.ticker.astype('category'); T['why'] = T.why.astype('category')
             self.cache[k] = T
@@ -113,6 +125,7 @@ class Kaedah:
         return self.cache[k]
 
     def dagangan_asal(self):
+        if ENJIN == 'laju': return enjin_laju.trades_laju(self.f, self.tmax_asal, self.warm)
         return enjin.trades(self.f, self.tmax_asal, self.warm)
 
 
@@ -149,9 +162,18 @@ def potong(T, mula, akhir, fr):
         T.loc[lps, 'why'] = 'hujung'
     return T
 
+_PASARAN = {}
+def pasaran(frw):
+    """Pasaran (tarikh + matriks asof) dicache bagi setiap dict fr; rujukan disimpan supaya id tidak diguna semula."""
+    k = id(frw)
+    if k not in _PASARAN:
+        if len(_PASARAN) > 8: _PASARAN.clear()
+        _PASARAN[k] = (frw, enjin_laju.Pasaran(frw))
+    return _PASARAN[k][1]
+
 def lengkung(T, frw, mula):
     if len(T) == 0: return None
-    cv = enjin.portfolio(T, frw)
+    cv = pasaran(frw).lengkung(T) if ENJIN == 'laju' else enjin.portfolio(T, frw)
     return cv[cv.index >= mula]
 
 def ukur(cv):
