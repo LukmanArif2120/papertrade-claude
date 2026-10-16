@@ -27,7 +27,9 @@ jobs:
       - name: Pasang pakej
         run: pip install -q requests
       - name: Saringan TradingView dan ETF Shariah
-        run: python3 BacktestShariah2/standard/skrin_tv.py --keluar BacktestShariah2/data/skrin
+        run: >-
+          python3 BacktestShariah2/standard/skrin_tv.py --keluar BacktestShariah2/data/skrin
+          --univ BacktestShariah2/data/harga/univ.txt --papertrade BacktestShariah2/papertrade
       - name: Commit dan push
         run: |
           git config user.name "skrin-tv[bot]"
