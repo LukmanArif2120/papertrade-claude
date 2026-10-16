@@ -16,7 +16,6 @@ Alat: `select:mcp__Moo_Moo__quote_market_state,mcp__Moo_Moo__quote_trading_days,
 3. Semak semula watchlist (tugasan_v3 §3): 90–99% kekal (kemas kini); 100% dan sah → senarai beli (keluarkan dari watchlist); terkeluar signal → BUANG.
 4. Imbas 87 kaedah: isyarat 100% dan sah (§3 a, b) → `papertrade/senarai_beli.csv` (lajur ikut SKEMA, destinasi = Claude, tarikh_imbasan = hari ini MYT). Calon baharu 90–99% → watchlist (maks 5 setiap kaedah).
 5. Sektor & industri wajib bagi setiap baris.
-5a. Semakan Shariah kedua (maklumat; TIDAK menghalang belian kecuali pengguna memutuskan): baca `data/skrin/semak_shariah.csv` (Actions 5:47 pagi MYT; status setiap ticker universe Moomoo). Saham senarai beli berstatus `sp500_tiada_spus` (ahli S&P 500 yang tidak dipegang ETF Shariah SPUS) → senaraikan dalam log imbasan. Fail tiada atau `data/skrin/status.json` lebih 3 hari → catat "semakan Shariah kedua tiada" dan teruskan.
 5b. GRED (tugasan_v3 §8) — selepas senarai_beli.csv ditulis dan di-push (belian tidak boleh tertangguh kerana gred):
    - Alat tambahan: `select:mcp__SST_Terminal__market_events,mcp__SST_Terminal__search_news,mcp__SST_Terminal__institutional_flow,mcp__Moo_Moo__quote_news_search,mcp__Moo_Moo__quote_financials_earnings_price_history`.
    - `market_events` (market US, daysLookahead 30) → simpan fail JSON.
