@@ -290,3 +290,13 @@
 - Ulang tayang 12–15 Okt (tempatan, tidak disimpan): 0 ralat, ~4 minit setiap sesi (4 proses); isyarat 12 Okt 98.2% sama dengan scanner. Lawan Papertrade C (isyarat 12–14 Okt): 994/1,086 posisi C ada dalam lejar; harga beli berbeza > 0.5%: 0; status keluar sama: 994/994. Baki 92: 80 sudah dipegang lejar daripada isyarat lebih awal (kesan had 10 dalam C), 9 universe/data, 3 saham tanpa dagangan (SENEB, WLYB). Lejar 5,072 posisi lawan C 1,086 (4.7×).
 - Lejar rasmi bermula: isyarat sesi 15 Okt (3,598, 111 kaedah) direkod sebelum buka 16 Okt; belian pertama pada buka 16 Okt (diproses larian 02:17 UTC 17 Okt). Papertrade C dan tiga rutin tidak berubah selain sumber stor harga.
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-16 19:48–20:35 MYT — Imbas malam (rutin sesi repo, Sonnet; data tutup 15 Okt)
+- Kalendar NYSE: 16 Okt 2026 sesi penuh → teruskan. Bukan pendua (tiada commit "Imbas" 16 Okt sebelum larian).
+- Data: skrin Moomoo Shariah AS harga ≥ USD10 — 924 saham (4 halaman; tutup 15 Okt sepadan yfinance pada 909 saham, beza 0). Stor harga = stor repo `data/harga/stor/` (bar hingga 15 Okt) + skrin untuk saham baharu; `univ.txt` ditulis. 8 saham jurang data dan 6 saham baharu tanpa sejarah tidak diimbas (kline tidak ditarik).
+- Imbasan 134 kaedah (scanner.py scan --papertrade; db asal larian 20261013-2030-malam), tiada ralat, 1,011 s; 3,601 isyarat mentah, direkod dalam `data/isyarat/2026-10-15_malam.csv.gz`.
+- **Senarai beli** 847 baris, 327 saham, 108 kaedah. Ditolak: 97 isyarat mingguan (M37/M38/M41/M50/M52/M64/M78; 15 Okt Khamis bukan hari dagangan terakhir minggu, §3a); 184 kerana posisi Claude kaedah+saham yang sama masih terbuka; 2,473 melebihi had 10 setiap kaedah (431 dahulu, kemudian skor) kecuali 107 calon watchlist yang kini lengkap (ditambah di luar had). Belian semula (belian_ke ≥ 2) dikira dalam CSV. `nota_henti`/`buka_maks` hanya M06, M08, M19, M20 (+ nota M52); kaedah lain kosong (belum ditakrif dalam `sedia()`).
+- **Watchlist** 306 calon, 184 saham, 68 kaedah (kaedah M115–M161 tiada `hampir()`). 232 baharu, 74 dibawa, 107 dipindah ke senarai beli, 23 dibuang. % hampir dihadkan 99.9 jika bukan isyarat sah.
+- Gred (SST market_events 30 hari, Nasdaq): S, I, R, Q dikira. Pemangkin: Moomoo tidak dipakai (tiada pengumpulan Moomoo); semua 394 saham daripada Yahoo + Nasdaq (`pemangkin.json`, 0 Moomoo, 394 Yahoo, 0 tiada).
+- db: `papertrade/senarai_beli` (+_2.._5), `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `harian/status` v19.
+- Tiada order. Tiada wang sebenar.
