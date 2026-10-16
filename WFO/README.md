@@ -14,3 +14,9 @@ Kerja kajian berasingan daripada rutin harian Papertrade C. Tiada fail dalam `Ba
 ## Otak penalaan (sejak 16 Okt 2026)
 - `kod/analisis_sebenar.py` — prestasi sebenar Papertrade C lawan jangkaan (posisi matang sahaja) → `laporan/ANALISIS_SEBENAR.md`. Jadual: `jadual/analisis_mingguan.md`.
 - `kod/tala_semula.py` — data terkini → WFO 3 benih → `cadangan/<label>.md`. Jadual: `jadual/tala_suku.md`. Tiada perubahan tanpa kelulusan pengguna.
+
+## Tempoh pengumpulan data (keputusan pengguna 16 Okt 2026: "maintain dahulu, kumpul data terbaik")
+Ditetapkan SEBELUM data dikumpul supaya kriteria tidak berubah mengikut keputusan.
+- Tempoh: 16 Okt 2026 – 15 Jan 2027. Kaedah dan tetapan Papertrade C (134 kaedah) TIDAK diubah, kecuali pembetulan ralat kod atau keputusan pengguna. Cadangan tala semula 1 Jan 2027 hanya dicatat, belum diguna.
+- Data: posisi `papertrade/claude*.csv`; SEMUA isyarat 100% setiap malam dengan rank (`BacktestShariah2/data/isyarat/`); stor harga harian; analisis mingguan (`laporan/ANALISIS_SEBENAR.md`).
+- Penilaian 15 Jan 2027: (1) setiap kaedah dengan >= 30 posisi matang: menang/purata sebenar lawan jangkaan (z, t < −2 = gagal); (2) portfolio 8 slot × 12.5% dibina semula daripada rekod isyarat (8 rank tertinggi kaedah teras setiap hari, enjin v1.2) lawan EW tempoh sama; (3) DSR merentas semua kaedah yang dinilai. Hanya kaedah yang lulus (1) dan menyumbang kepada (2) dikekalkan.

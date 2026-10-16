@@ -140,6 +140,16 @@ def baca_db(dirdb):
     return out
 
 
+def simpan_isyarat(rows, folder, tdata, mod):
+    """Rekod kekal SEMUA isyarat 100% satu imbasan (bukan hanya yang dibeli) untuk analisis kemudian
+    (cth. portfolio 8 slot ikut rank). Fail: <folder>/<tdata>_<mod>.csv.gz. Tidak mengubah logik isyarat/belian."""
+    os.makedirs(folder, exist_ok=True)
+    p = os.path.join(folder, f'{tdata}_{mod}.csv.gz')
+    lajur = ['tarikh_data', 'kaedah', 'saham', 'rank', 'henti', 'sasaran', 'tutup', 'sumber', 'dirancang']
+    pd.DataFrame(rows, columns=lajur).to_csv(p, index=False, compression={'method': 'gzip', 'mtime': 0})
+    return p
+
+
 def tulis(dirout, rel, data):
     p = os.path.join(dirout, rel + '.json'); os.makedirs(os.path.dirname(p), exist_ok=True)
     json.dump(data, open(p, 'w'), ensure_ascii=False, default=lambda x: None if (isinstance(x, float) and np.isnan(x)) else (x.item() if hasattr(x, 'item') else str(x)))
@@ -249,7 +259,7 @@ def cmd_scan(a):
         if k.startswith('kaedah/'):
             dipegang |= {p['saham'] for p in d.get('posisi', [])}
     buka_c, bil_c = pegangan_c(a.papertrade) if getattr(a, 'papertrade', None) else (set(), {})
-    queue = []; ringkas = []; ralat = []
+    queue = []; ringkas = []; ralat = []; semua_isyarat = []
     kaedah = senarai_kaedah() if not a.hanya else a.hanya.split(',')
     fr_ok = {t: g for t, g in fr0.items() if len(g) >= 60}
     for mid in kaedah:
@@ -279,6 +289,8 @@ def cmd_scan(a):
                 pass
         sig.sort(key=lambda x: (x['sumber'] != '431', -(x['rank'] if x['rank'] is not None else -1e9)))
         tulis(a.out, f'semua_sig/{mid}', bersih(sig))
+        semua_isyarat += [dict(tarikh_data=tdata, kaedah=mid, **{k: x[k] for k in ('saham', 'rank', 'henti', 'sasaran', 'tutup', 'sumber')})
+                          for x in sig]
         # hanya posisi TERBUKA kaedah ini dikecualikan; saham yang sudah keluar layak dibeli semula (belian ke-2, ke-3 ...)
         ada = {p['saham'] for p in doc['posisi'] + doc['penuh'] if terbuka(p) and not getattr(a, 'papertrade', None)} \
             | {t for (k, t) in buka_c if k == mid}
@@ -344,6 +356,13 @@ def cmd_scan(a):
         print(mid, round(time.time() - tm, 1), file=sys.stderr, flush=True)
     for k, d in db.items():
         if k.startswith('meta/') and k != 'meta/beli': tulis(a.out, k, d)
+    if getattr(a, 'papertrade', None):
+        try:
+            dir_ = {(q['kaedah'], q['saham']) for q in queue}
+            for r in semua_isyarat: r['dirancang'] = (r['kaedah'], r['saham']) in dir_
+            simpan_isyarat(semua_isyarat, os.path.join(a.papertrade, '..', 'data', 'isyarat'), tdata, a.mod)
+        except Exception as e:
+            ralat.append(f'simpan_isyarat gagal {type(e).__name__}: {e}')
     # baris gilir beli (unik saham untuk pesanan sebenar)
     tulis(a.out, 'meta/beli', bersih(dict(tarikh_data=tdata, dibina=pd.Timestamp.now(tz='Asia/Kuala_Lumpur').strftime('%Y-%m-%d %H:%M'),
                                   mod=a.mod, rows=queue)))
