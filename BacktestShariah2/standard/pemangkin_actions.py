@@ -2,7 +2,7 @@
 # supaya imbasan malam tidak perlu ~3 panggilan Moomoo bagi setiap saham watchlist (gred P Peringkat 3).
 # Sesi Claude tidak boleh capai Yahoo/Nasdaq; runner GitHub boleh. Hasil (folder --keluar):
 #   yahoo.json           : {dijana, tarikh (MYT), liputan, saham: {T: {diambil (saat UTC), berita, analisis, orang_dalam, ralat?}}}
-#                          berita [{tajuk, masa (saat UTC), url}] (≤ 11 hari, ditapis gred.relevan), analisis [{tarikh,
+#                          berita [{tajuk, masa (saat UTC), url}] (RSS Yahoo, ≤ 11 hari, ditapis gred.relevan), analisis [{tarikh,
 #                          firma, dari, ke, tindakan, sasaran, sasaran_lalu}] (≤ 11 hari), orang_dalam [{tarikh, nama,
 #                          teks, saham}] (belian, ≤ 31 hari)
 #   earnings_nasdaq.json : {dijana, tarikh, dari, hingga, hari_ralat, saham: {T: {lalu, lalu_masa, seterusnya, seterusnya_masa}}}
@@ -216,7 +216,8 @@ def tarik_yahoo(nama, hari_ini, had_saat=1500, rehat=0.35):
         if time.time() - mula > had_saat:
             break
         e, ralat, tk = {}, [], yf.Ticker(t.replace('.', '-'))
-        for medan, fn in (('berita', lambda: berita_yf(tk.news, sejak_berita, t, nm)),
+        # berita: RSS Yahoo (yfinance get_news memulangkan 0 item dari runner GitHub, diagnostik 16 Okt 2026)
+        for medan, fn in (('berita', lambda: berita_yf(rss_yahoo(t.replace('.', '-')), sejak_berita, t, nm)),
                           ('analisis', lambda: analisis_yf(tk.upgrades_downgrades, s10)),
                           ('orang_dalam', lambda: orang_dalam_yf(tk.insider_transactions, s30))):
             for cuba in range(2):
