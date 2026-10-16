@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "mcp__.*__(trading_order_.*|sim_trade_(input|modify|cancel)_order|crypto_account_(create|modify|cancel)_order)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'DISEKAT oleh hook projek: alat order dilarang (tugasan_v3 §1: tiada order Moomoo, sim atau sebenar; papertrade C maya sahaja). Jangan cuba alat order lain.' >&2; exit 2"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/pasang_pakej.sh\"",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
+  }
+}

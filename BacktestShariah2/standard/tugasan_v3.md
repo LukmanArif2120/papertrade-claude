@@ -5,6 +5,7 @@ Dokumen ini **satu-satunya** rujukan peraturan bagi tugasan harian. Ia mengganti
 ## 1. Mod
 - Papertrade C (Claude, maya) SAHAJA untuk belian baharu sejak 13 Okt 2026, dilayan seperti papertrade sebenar di Moomoo: harga buka sebenar, tiada pandang belakang.
 - Tiada order Moomoo (tiada `sim_trade_input_order`, tiada `trading_order_*`). Tiada jualan. Tiada wang sebenar tanpa kelulusan pengguna.
+- Hook projek `.claude/settings.json` (sejak 16 Okt 2026): PreToolUse menyekat semua alat order (`trading_order_*`, `sim_trade_input/modify/cancel_order`, `crypto_account_create/modify/cancel_order`) tanpa mengira awalan pelayan; SessionStart memasang `requirements.txt` dalam sesi awan. Jangan buang atau longgarkan hook ini.
 - Posisi Moomoo lama (akaun simulasi AS acc_id 4135388, market 100) kekal dikemas kini harganya sahaja.
 - Prinsip pengguna: "Kalau tak beli, cakap tak beli." Data mesti betul; jangan reka.
 - Hari operasi: hari dagangan NYSE sahaja (semak `quote_trading_days` / `quote_market_state`; cuti = catat dan berhenti).
@@ -52,7 +53,7 @@ Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade
 - Skema CSV: `papertrade/SKEMA.md`.
 - Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (db melalui ArtifactData; muatkan skill artifact-capabilities). JANGAN cipta artifact baharu. Dokumen: `papertrade/moomoo`, `papertrade/claude`, `papertrade/claude_2` … `_6`, `papertrade/watchlist`, `papertrade/senarai_beli`, `sektor/snapshot`, `prestasi/mae`, `prestasi/ringkasan`, `harian/status`. JSON padat; setiap dokumen < 250 KB.
 - Log: imbasan → `standard/binaan_v2_log.md`; kemas kini dan belian → `standard/binaan_v2_log_tambahan.md` (baca dahulu, tambah di hujung).
-- Harga yfinance (sejak 14 Okt 2026): GitHub Actions `.github/workflows/harga_harian.yml` (21:30 UTC Isn–Jum, sandaran 00:15 UTC) menulis `data/harga/terkini.csv` (10 sesi terakhir; universe = set 431 + semua saham papertrade + `data/harga/univ.txt` + SPY/QQQ), `status.json`, dan `sejarah.csv` (3 tahun, bagi ticker dalam `perlu_sejarah.txt`). Skrip: `standard/harga_yf.py`. Sumber tidak rasmi: wajib semak silang dengan kline Moomoo sebelum guna (`harga_yf.py semak`); beza > 0.5% → Moomoo menang. Harga beli/keluar rasmi kekal = kline Moomoo (§5.2).
+- Harga yfinance (sejak 14 Okt 2026): GitHub Actions `.github/workflows/harga_harian.yml` (21:37 UTC Isn–Jum, sandaran 00:23 UTC; jadual GitHub boleh lewat 2–4 jam, jadi rutin 6:02 menembak workflow ini sendiri jika data belum siap, `jadual/kemas_kini_0602.md` langkah 0a) menulis `data/harga/terkini.csv` (10 sesi terakhir; universe = set 431 + semua saham papertrade + `data/harga/univ.txt` + SPY/QQQ), `status.json`, dan `sejarah.csv` (3 tahun, bagi ticker dalam `perlu_sejarah.txt`). Skrip: `standard/harga_yf.py`. Sumber tidak rasmi: wajib semak silang dengan kline Moomoo sebelum guna (`harga_yf.py semak`); beza > 0.5% → Moomoo menang. Harga beli/keluar rasmi kekal = kline Moomoo (§5.2).
 - Alat besar: keputusan disimpan ke fail oleh sistem — proses dengan Python; jangan salin data harga secara manual. Had kline Moomoo ~4 panggilan seminit; maks 24 ticker setiap larian.
 
 ## 7. Prestasi

@@ -1,12 +1,14 @@
 # Harga harian percuma (yfinance) -> BacktestShariah2/data/harga/
 # Sesi Claude tidak boleh capai Yahoo; runner GitHub boleh. Tugasan Claude hanya membaca fail ini.
-# Masa (UTC): 21:30 Isn–Jum = 5:30 pagi MYT (sebelum kemas kini 6:02); 00:15 Sel–Sab = sandaran (volum muktamad).
+# Masa (UTC): 21:37 Isn–Jum = 5:37 pagi MYT; 00:23 Sel–Sab = sandaran (volum muktamad).
+# Jadual GitHub kerap lewat 2–4 jam (14–15 Okt 2026), jadi rutin 6:02 menembak workflow_dispatch
+# sendiri jika data belum siap (jadual/kemas_kini_0602.md langkah 0a). Jadual di bawah hanya sandaran.
 name: Harga harian
 
 on:
   schedule:
-    - cron: '30 21 * * 1-5'
-    - cron: '15 0 * * 2-6'
+    - cron: '37 21 * * 1-5'
+    - cron: '23 0 * * 2-6'
   workflow_dispatch:
 
 permissions:
