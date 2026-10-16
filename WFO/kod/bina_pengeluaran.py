@@ -17,9 +17,10 @@ def pilihan(mid):
     return r.stop, r.exit, int(r.tmax), f'pilihan WFO suku {r.suku} (latih {r.latih})'
 
 
-def bina(mid):
+def bina(mid, tetapan=None):
+    """tetapan: (henti, keluar, tmax, keterangan) yang diluluskan pengguna; None = pilihan WFO suku terkini."""
     src = open(os.path.join(BARU, mid + '.py')).read()
-    s, e, x, asal = pilihan(mid)
+    s, e, x, asal = tetapan or pilihan(mid)
     src = re.sub(r'^from _alat import .*$', 'try:\n    from kaedah._k145 import *\nexcept ImportError:\n    from _k145 import *', src, count=1, flags=re.M)
     src = re.sub(r"^VARIAN = .*$", f"VARIAN = 'V1 WFO beku: henti {s}, keluar {e}, tmax {x or 'tiada'}'", src, count=1, flags=re.M)
     src = re.sub(r'^TMAX = .*$', f'TMAX = {x or None}', src, count=1, flags=re.M)

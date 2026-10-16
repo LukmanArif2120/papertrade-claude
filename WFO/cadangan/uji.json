@@ -1,0 +1,68 @@
+[
+ {
+  "id": "M30",
+  "nama": "BB Free Bar + Himpitan 50/2.5",
+  "semasa": [
+   "ASAL",
+   "ASAL",
+   0
+  ],
+  "cadangan": [
+   "ATR3",
+   "ASAL",
+   0
+  ],
+  "stabil": "1/3",
+  "oos_cagr": 0.2901277846045349,
+  "oos_mdd": -0.30916093382266363,
+  "oos_n": 2405,
+  "beku_cagr": 0.7612054979296243,
+  "beku_mdd": -0.3564692882367728,
+  "lulus": false,
+  "boleh_guna": false
+ },
+ {
+  "id": "M119",
+  "nama": "180 Bullish (Cooper)",
+  "semasa": [
+   "ASAL",
+   "CHAN4",
+   42
+  ],
+  "cadangan": [
+   "PCT15",
+   "SMA20",
+   10
+  ],
+  "stabil": "1/3",
+  "oos_cagr": 0.3367186842825911,
+  "oos_mdd": -0.41037796154332973,
+  "oos_n": 3589,
+  "beku_cagr": 0.3683128367568127,
+  "beku_mdd": -0.4890941383324844,
+  "lulus": false,
+  "boleh_guna": false
+ },
+ {
+  "id": "M137",
+  "nama": "Livermore System",
+  "semasa": [
+   "ATR2.5",
+   "CHAN4",
+   0
+  ],
+  "cadangan": [
+   "ATR1.5",
+   "EMA10",
+   21
+  ],
+  "stabil": "1/3",
+  "oos_cagr": 0.16625569583735378,
+  "oos_mdd": -0.3191317135914281,
+  "oos_n": 3341,
+  "beku_cagr": 0.25308815546382535,
+  "beku_mdd": -0.3308079852929373,
+  "lulus": false,
+  "boleh_guna": false
+ }
+]

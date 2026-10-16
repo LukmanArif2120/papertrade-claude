@@ -21,8 +21,9 @@ import enjin_laju
 
 ENJIN = os.environ.get('WFO_ENJIN', 'laju')   # 'laju' (numba, disahkan setara v1.2) atau 'asal' (enjin v1.2)
 
-DATA = os.path.join(REPO, 'data_mentah')
-KELUAR = os.path.join(ROOT, '..', 'data')
+DATA = os.environ.get('WFO_DATA', os.path.join(REPO, 'data_mentah'))   # tala_semula.py: data_mentah + stor harga terkini
+KELUAR = os.environ.get('WFO_KELUAR', os.path.join(ROOT, '..', 'data'))
+BENIH = int(os.environ.get('WFO_BENIH', 42))           # benih asas Optuna (benih suku = BENIH + n)
 BUANG8 = ['ASST', 'FCEL', 'MTDR', 'OVV', 'PR', 'SM', 'VAL', 'XENE']
 DIKECUALI = {'M40': 'isyarat bergantung pada pra-simulasi 8 slot kaedah sendiri',
              'M45': 'isyarat bergantung pada pra-simulasi 8 slot kaedah sendiri'}
@@ -256,7 +257,7 @@ def wfo(kaedah_list, fr, idx, subset, label):
     pil = []; oos = []
     for n, (qa, qz) in enumerate(suku_ujian(akhir)):
         za = qa - pd.Timedelta(days=1); ma = pd.Timestamp(year=qa.year - LATIH_THN, month=qa.month, day=1)
-        p = pilih(kaedah_list, fr, ma, za, 42 + n)
+        p = pilih(kaedah_list, fr, ma, za, BENIH + n)
         if p is None:
             pil.append(dict(suku=str(qa.to_period('Q')), catatan='tiada gabungan sah')); continue
         T = kaedah_list[p['entry']].dagangan(p['stop'], p['exit'], int(p['tmax']))
@@ -296,6 +297,17 @@ def _simpan(label, hasil, pil, T, cv):
     if cv is not None:
         cv.round(5).rename('ekuiti').to_csv(b + '_ekuiti.csv')
 
+def tetapan_semasa(mid):
+    """(henti, keluar, tmax) modul pengeluaran K145+ dalam BacktestShariah2/kod/kaedah, atau None."""
+    p = os.path.join(KOD, 'kaedah', mid + '.py')
+    if not os.path.exists(p): return None
+    src = open(p).read()
+    if "HENTI_KOD = '" not in src: return None
+    g = lambda k: src.split(f"{k} = '")[1].split("'")[0]
+    tm = src.split('\nTMAX = ')[1].split('\n')[0].strip()
+    return g('HENTI_KOD'), g('KELUAR_KOD'), 0 if tm == 'None' else int(tm.split()[0])
+
+
 def jalan_satu(mid):
     warnings.filterwarnings('ignore'); t0 = time.time()
     try:
@@ -310,6 +322,10 @@ def jalan_satu(mid):
             return mid, 'TIDAK LAYAK', round(time.time() - t0)
         k = Kaedah(mid, fr, idx, penuh)
         hasil, pil, T, cv = wfo({mid: k}, fr, idx, subset, mid)
+        sm = tetapan_semasa(mid)
+        if sm:   # kaedah K145+ dalam Papertrade C: prestasi luar sampel tetapan beku yang sedang dipakai
+            Ts = k.dagangan(*sm); Ts = Ts[Ts.ent >= pd.Timestamp(OOS_MULA)]
+            hasil['semasa'] = dict(tetapan=list(sm), **metrik_oos(Ts, lengkung(Ts, fr, pd.Timestamp(OOS_MULA)) if len(Ts) else None))
         hasil.update(asas, status='SIAP', beku=asal_oos(k, fr, pd.Timestamp(OOS_MULA)),
                      percubaan=PERCUBAAN, saat=round(time.time() - t0))
         _simpan(mid, hasil, pil, T, cv)
