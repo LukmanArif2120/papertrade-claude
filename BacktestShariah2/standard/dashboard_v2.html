@@ -284,7 +284,7 @@ const MAIN=['backtest','sektor','watch','ptm','ptc','prestasi'];
 const SUBS={backtest:[['ringkasan','Ringkasan'],['papan','Papan Kedudukan'],['banding','Banding']],prestasi:[['m','Papertrade M'],['c','Papertrade C'],['gab','Combine']]};
 const S={set:'431',tab:'backtest',sub:{backtest:'ringkasan',prestasi:'m'},docs:{},meta:null,live:false,
   f:{jenis:'semua',kep:new Set(),q:'',best:true,gaya:false,shown:40},cmp:[],cmpTouched:false,
-  ptm:null,ptmPeta:null,ptc:null,ptc2:null,ptc3:null,ptc4:null,ptc5:null,ptc6:null,mae:null,prf:null,watch:null,beli:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:60}};
+  ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,beli:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:60}};
 try{const t=localStorage.getItem('pbs2_tab');if(MAIN.includes(t))S.tab=t;const s=localStorage.getItem('pbs_set');if(SETS.includes(s))S.set=s;
   const sb=JSON.parse(localStorage.getItem('pbs2_sub')||'null');if(sb){if(SUBS.backtest.some(x=>x[0]===sb.backtest))S.sub.backtest=sb.backtest;if(SUBS.prestasi.some(x=>x[0]===sb.prestasi))S.sub.prestasi=sb.prestasi;}}catch(e){}
 {const h=(location.hash||'').slice(1);const map={ringkasan:['backtest','ringkasan'],papan:['backtest','papan'],banding:['backtest','banding'],sektor:['sektor'],watchlist:['watch'],ptm:['ptm'],ptc:['ptc'],prestasi:['prestasi']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];}}
@@ -780,7 +780,7 @@ function ptFilterBar(id,rows){const st=S['pf_'+id]||(S['pf_'+id]={k:'',sk:'',ind
    apply:rs=>rs.filter(r=>(!st.k||r.kaedah===st.k)&&(!st.sk||r.sektor===st.sk)&&(!st.ind||r.industri===st.ind)&&(!st.q||[r.saham,r.sektor,r.industri].join(' ').toLowerCase().includes(st.q.toLowerCase()))),
    bind:()=>{const s=$('#'+id+'K'),q=$('#'+id+'Q');if(!s)return;s.onchange=e=>{st.k=e.target.value;if(st.k){if(!rows.some(r=>r.kaedah===st.k&&okS(r,st)))st.sk='';if(!rows.some(r=>r.kaedah===st.k&&okS(r,st)&&okI(r,st)))st.ind='';}renderAll();};bindSI(id,st,null,rows);let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{st.q=q.value.trim();renderAll();const n=$('#'+id+'Q');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};}};}
 function ptmRows(){const d=S.ptm&&S.ptm.rows&&S.ptm.rows.length?S.ptm:S.ptmPeta;return d&&d.rows?{d,rows:d.rows.map(normPT),pratonton:d===S.ptmPeta}:null;}
-function ptcRows(){const ds=[S.ptc,S.ptc2,S.ptc3,S.ptc4,S.ptc5,S.ptc6].filter(d=>d&&d.rows&&d.rows.length);return ds.length?{d:S.ptc||ds[0],rows:ds.flatMap(d=>d.rows).map(normPT)}:null;}
+function ptcRows(){const ds=[S.ptc,...Object.keys(S.ptcN).map(Number).sort((a,b)=>a-b).map(n=>S.ptcN[n])].filter(d=>d&&d.rows&&d.rows.length);return ds.length?{d:S.ptc||ds[0],rows:ds.flatMap(d=>d.rows).map(normPT)}:null;}
 
 /* ================= Paper Trade M ================= */
 function renderPtm(){
@@ -1184,11 +1184,10 @@ renderNav();renderAll();
   sub('papertrade/moomoo','ptm',['ptm','prestasi']);
   sub('papertrade/moomoo_peta','ptmPeta',['ptm','prestasi']);
   sub('papertrade/claude','ptc',['ptc','prestasi']);
-  sub('papertrade/claude_2','ptc2',['ptc','prestasi']);
-  sub('papertrade/claude_3','ptc3',['ptc','prestasi']);
-  sub('papertrade/claude_4','ptc4',['ptc','prestasi']);
-  sub('papertrade/claude_5','ptc5',['ptc','prestasi']);
-  sub('papertrade/claude_6','ptc6',['ptc','prestasi']);
+  /* papertrade/claude_2, _3, … tanpa had: dokumen yang wujud membuka langganan dua nombor seterusnya */
+  const ptcDah=new Set();
+  const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
+  subPtc(2);subPtc(3);
   sub('papertrade/watchlist','watch',['watch','sektor']);
   sub('papertrade/senarai_beli','beli',['ptc']);
   sub('sektor/snapshot','sektor',['sektor']);

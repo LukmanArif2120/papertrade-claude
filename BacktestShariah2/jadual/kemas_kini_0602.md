@@ -31,5 +31,5 @@ Alat (ToolSearch, satu panggilan setiap kumpulan):
    - (e) Pendedahan posisi aktif sah mengikut sektor/industri bagi M, C, Combine.
 6. Prestasi (tugasan_v3 §7).
 7. `python3 BacktestShariah2/standard/sahkan.py --betulkan` → mesti 0 (§5.5).
-8. Tulis CSV ke laluan sama; tolak ke db dashboard: `papertrade/moomoo`, `papertrade/claude` … `_6`, `papertrade/watchlist`, `sektor/snapshot`, `prestasi/mae`, `prestasi/ringkasan`, `harian/status` (kemaskini_pagi).
+8. Tulis CSV ke laluan sama; jalankan `python3 BacktestShariah2/standard/pecah_claude.py --pecah` (posisi yang keluar membesarkan dokumen; fail yang unjurannya > 240 KB dipecah ke nombor seterusnya). Tolak ke db dashboard: `papertrade/moomoo`, setiap `papertrade/claude_N` (satu dokumen bagi setiap fail `claude*.csv`, termasuk fail baharu hasil pecahan; tanpa had nombor), `papertrade/watchlist`, `sektor/snapshot`, `prestasi/mae`, `prestasi/ringkasan`, `harian/status` (kemaskini_pagi).
 9. Catatan dalam `standard/binaan_v2_log_tambahan.md`: keluar baharu, tidak dibeli baharu, watchlist dibuang, keputusan sahkan.py. Commit `Kemas kini 6:02 pagi <tarikh>: <ringkas>` + push.
