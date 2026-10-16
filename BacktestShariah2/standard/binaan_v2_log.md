@@ -262,3 +262,10 @@
 - db: `papertrade/senarai_beli` v6, `papertrade/watchlist` v8, `harian/status` v14. Ruang padat: pemboleh ubah malar per baris (tarikh_isyarat/imbasan/gred_pada) dipindah ke aras dokumen senarai_beli; watchlist: teks `sebab`/`syarat_belum` dipotong ke 90 aksara, URL tanpa parameter penjejakan, sektor_us/industri_us dibuang jika sama dengan sektor/industri. CSV penuh.
 - AMARAN untuk beli 9:35 NY: Moomoo perlu log masuk semula (sambungan `da8be8b4…` minta pengesahan) — tanpa itu harga buka tidak boleh diambil.
 - Tiada order. Tiada wang sebenar.
+
+## 16 Okt 2026 — Calon K145+ (M115–M161) dimasukkan ke Papertrade C
+- 47 kaedah baharu dalam `kod/kaedah/` (pembantu `kaedah/_k145.py`): entry daripada `spec/KATALOG_K145.md` (modul WFO `WFO/kaedah_baru/`), henti/keluar/tmax = pilihan WFO suku 2026S4 dibekukan sebagai varian V1. Jumlah kaedah diimbas kini 134. `hampir()` belum ditakrif → tiada watchlist bagi kaedah ini.
+- Disahkan: dagangan setiap modul pengeluaran sama bait demi bait dengan WFO bagi gabungan sama; cuba-imbas 134 kaedah melalui `kaedah.Mxx` tanpa ralat (bar 2 Okt: +618 isyarat). Ujian unit lulus; `sahkan.py --betulkan` = 0.
+- Registry v1.2 (431 + S1–S4) dalam `kod/registry/M115–M161.csv` dan `data/registry_M_gabung.csv` (1,457 baris). Nota: angka registry DALAM SAMPEL (gabungan dipilih atas 2023–2026); luar sampel: `WFO/laporan/W01_LAPORAN.md`.
+- Dashboard: aset kod baharu `b698200e20ac43886af0f50773fc7779` (ganti `f95dcf4644c829a0035aa6fa77cab277`; beza = 95 fail baharu, tiada fail lama berubah); `harian/status` v17 (`harga_aset.kod`, `bil_kaedah` 134); db `registry/M115`–`M161` (47 dokumen).
+- Tiada order. Tiada wang sebenar.
