@@ -269,3 +269,9 @@
 - Registry v1.2 (431 + S1–S4) dalam `kod/registry/M115–M161.csv` dan `data/registry_M_gabung.csv` (1,457 baris). Nota: angka registry DALAM SAMPEL (gabungan dipilih atas 2023–2026); luar sampel: `WFO/laporan/W01_LAPORAN.md`.
 - Dashboard: aset kod baharu `b698200e20ac43886af0f50773fc7779` (ganti `f95dcf4644c829a0035aa6fa77cab277`; beza = 95 fail baharu, tiada fail lama berubah); `harian/status` v17 (`harga_aset.kod`, `bil_kaedah` 134); db `registry/M115`–`M161` (47 dokumen).
 - Tiada order. Tiada wang sebenar.
+
+## 16 Okt 2026 — Otak penalaan (analisis + tala semula)
+- `WFO/kod/analisis_sebenar.py`: prestasi sebenar Papertrade C lawan jangkaan registry, posisi MATANG sahaja (elak bias kena-henti awal). Larian pertama: 71 kaedah, semua "data belum cukup" (data sejak 8 Okt).
+- `WFO/kod/tala_semula.py`: data_mentah + stor harga dashboard → WFO 3 benih → `WFO/cadangan/<label>.md`. CADANGAN SAHAJA; diguna hanya selepas pengguna lulus (`guna`, M115–M161).
+- Jadual baharu (sesi Sonnet `session_01SyCuCvjugccaVEg84B5Nyo`): `trig_01CkyFZsHK42BXBwY6bkmEqT` analisis mingguan Sabtu 9:52 pagi MYT; `trig_01LmjLfYCAhTPyqnaqozLWBq` tala semula 1 Jan/Apr/Jul/Okt 9:49 pagi MYT. Prosedur: `WFO/jadual/`.
+- Tiada order. Tiada wang sebenar.
