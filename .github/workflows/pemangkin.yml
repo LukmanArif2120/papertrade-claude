@@ -16,6 +16,10 @@ on:
         description: 'Kumpul semula walaupun sudah lengkap hari ini (ya/tidak)'
         required: false
         default: 'tidak'
+      diagnostik:
+        description: 'Diagnostik sahaja: senarai "TICKER:Nama" dipisah ruang (cetak data mentah Yahoo, tiada commit)'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -48,8 +52,14 @@ jobs:
       - name: Pasang pakej
         if: steps.masa.outputs.jalan == 'ya'
         run: pip install -q pandas numpy requests yfinance
+      - name: Diagnostik Yahoo
+        if: steps.masa.outputs.jalan == 'ya' && github.event.inputs.diagnostik != ''
+        env:
+          DIAG: ${{ github.event.inputs.diagnostik }}
+        run: |
+          set -f; python3 BacktestShariah2/standard/pemangkin_actions.py --csv x --keluar /tmp/diag --diagnostik $DIAG
       - name: Kumpul data pemangkin
-        if: steps.masa.outputs.jalan == 'ya'
+        if: steps.masa.outputs.jalan == 'ya' && github.event.inputs.diagnostik == ''
         env:
           PAKSA: ${{ github.event.inputs.paksa }}
         run: |
@@ -58,7 +68,7 @@ jobs:
             --univ BacktestShariah2/data/harga/univ.txt \
             --csv BacktestShariah2/papertrade/senarai_beli.csv BacktestShariah2/papertrade/watchlist.csv
       - name: Commit dan push
-        if: steps.masa.outputs.jalan == 'ya'
+        if: steps.masa.outputs.jalan == 'ya' && github.event.inputs.diagnostik == ''
         run: |
           git config user.name "pemangkin[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

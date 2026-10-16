@@ -124,9 +124,36 @@ def orang_dalam_yf(df, sejak_tarikh):
 
 
 def tiada_data(x):
-    """Ralat yfinance yang bermaksud 'tiada data' (saham tanpa liputan analisis / modul tiada), bukan kegagalan."""
+    """Ralat yfinance yang bermaksud 'tiada data' (saham tanpa liputan analisis / modul tiada / 404 Yahoo bagi
+    saham kelas atau senaraian baharu), bukan kegagalan."""
     return isinstance(x, (KeyError, IndexError)) or (
-        type(x).__name__ == 'YFDataException' and 'history found' in str(x))
+        type(x).__name__ == 'YFDataException' and 'history found' in str(x)) or 'HTTP Error 404' in str(x)
+
+
+def diagnostik(pasangan):
+    """Cetak struktur mentah berita Yahoo bagi 'TICKER:Nama_Syarikat' (_ = ruang; log Actions; tiada fail ditulis)."""
+    import yfinance as yf
+    try:
+        yf.config.debug.hide_exceptions = False
+    except AttributeError:
+        pass
+    print('yfinance', getattr(yf, '__version__', '?'))
+    sejak = int((datetime.now(timezone.utc) - timedelta(days=11)).timestamp())
+    for p in pasangan:
+        t, _, nm = p.partition(':')
+        nm, tk = nm.replace('_', ' '), yf.Ticker(t)
+        for tab in ('news', 'all', 'press releases'):
+            try:
+                n = tk.get_news(count=10, tab=tab)
+                tk._news = []   # cache yfinance setiap tab
+                print(f'{t} tab={tab}: {len(n)} item; relevan<=11h: {len(berita_yf(n, sejak, t, nm))}')
+                for it in n[:3]:
+                    c = it.get('content') if isinstance(it.get('content'), dict) else it
+                    print('   kunci', sorted(it)[:6], '| content', sorted(c)[:14] if isinstance(c, dict) else type(c).__name__)
+                    print('   ', str(c.get('title'))[:90], '|', c.get('pubDate') or c.get('providerPublishTime'), '|',
+                          (c.get('canonicalUrl') or {}).get('url') or c.get('link'))
+            except Exception as x:
+                print(f'{t} tab={tab}: RALAT {type(x).__name__}: {str(x)[:200]}')
 
 
 def tarik_yahoo(nama, hari_ini, had_saat=1500, rehat=0.35):
@@ -218,7 +245,11 @@ def main(argv=None, tarik_y=None, tarik_n=None, hari_ini=None):
     ap.add_argument('--paksa', action='store_true', help='kumpul semula semua walaupun sudah dikumpul hari ini')
     ap.add_argument('--had-saat', type=int, default=1500)
     ap.add_argument('--segar-jam', type=float, default=2.0, help='entri hari ini yang lebih muda daripada ini dipakai semula')
+    ap.add_argument('--diagnostik', nargs='*', help='TICKER:Nama … : cetak data mentah Yahoo sahaja (tiada fail ditulis)')
     a = ap.parse_args(argv)
+    if a.diagnostik:
+        diagnostik(a.diagnostik)
+        return 0
     tarik_y, tarik_n = tarik_y or tarik_yahoo, tarik_n or tarik_nasdaq
     os.makedirs(a.keluar, exist_ok=True)
     hari_ini = hari_ini or hari_ini_myt()
