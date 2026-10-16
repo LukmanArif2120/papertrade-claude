@@ -1,5 +1,5 @@
 # Jana laporan Fasa C W01 daripada WFO/data/hasil/*.json → WFO/laporan/W01_LAPORAN.md
-import os, json, math
+import os, json, math, subprocess
 from statistics import NormalDist
 import numpy as np, pandas as pd
 
@@ -7,6 +7,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 HASIL = os.path.join(ROOT, '..', 'data', 'hasil')
 LAPORAN = os.path.join(ROOT, '..', 'laporan', 'W01_LAPORAN.md')
 N = NormalDist()
+BANDING = os.environ.get('WFO_BANDING', '18e0db0')   # commit larian 15 Okt (percubaan bercampur)
 p = lambda x: '' if x is None or (isinstance(x, float) and math.isnan(x)) else f'{x * 100:.1f}%'
 
 
@@ -50,6 +51,14 @@ def mod(mid, col):
     v = s.value_counts(); return f'{v.index[0]} ({v.iloc[0]}/{len(s)})'
 
 
+def lama(mid):
+    try:
+        return json.loads(subprocess.check_output(['git', '-C', ROOT, 'show', f'{BANDING}:WFO/data/hasil/{mid}.json'],
+                                                  stderr=subprocess.DEVNULL))
+    except Exception:
+        return None
+
+
 def main():
     H = muat(); K = {k: v for k, v in H.items() if k.startswith('M')}
     siap = {k: v for k, v in K.items() if v.get('status') == 'SIAP'}
@@ -86,7 +95,7 @@ def main():
          f'- Penanda aras luar sampel: EW 423 {p(ewc)}, SPY {p(spy)}, QQQ {p(qqq)}, M96 V1 beku {p(m96)}.',
          f'- Versi WFO mengalahkan varian beku sendiri: {int((R.cagr > R.bcagr).sum())}/{len(R)} kaedah.',
          f'- LULUS semua kriteria §7: {int(R.lulus.sum())} kaedah' + (f" ({', '.join(R.id[R.lulus])})." if R.lulus.any() else '.'),
-         f'- LULUS jika kriteria subset diketepikan (lihat §6): {int(R.lulus_tanpa_subset.sum())} kaedah' + (f" ({', '.join(R.id[R.lulus_tanpa_subset])})." if R.lulus_tanpa_subset.any() else '.'),
+         f'- LULUS jika kriteria subset diketepikan (lihat §7): {int(R.lulus_tanpa_subset.sum())} kaedah' + (f" ({', '.join(R.id[R.lulus_tanpa_subset])})." if R.lulus_tanpa_subset.any() else '.'),
          f'- Deflated Sharpe: SR* (jangkaan maksimum nasib, {nk} kaedah) = {sr0 * math.sqrt(252):.2f} tahunan. DSR ≥ 0.95 = kebarangkalian tinggi bukan nasib.', '']
     if 'W01' in H and H['W01'].get('status') == 'SIAP':
         w = H['W01']; o = w['oos']; ok, why = lulus(w, m96, ewc)
@@ -104,11 +113,29 @@ def main():
     L += ['', '## 4. Gabungan paling kerap dipilih (10 teratas)', '', '| ID | Stop | Exit | Tmax |', '|---|---|---|---|']
     for k in R.id[:10]:
         L.append(f"| {k} | {mod(k, 'stop')} | {mod(k, 'exit')} | {mod(k, 'tmax')} |")
+    # kestabilan: banding larian 15 Okt (percubaan lebih sedikit bagi kebanyakan kaedah)
+    B = []
+    for k, h in siap.items():
+        o = lama(k)
+        if not o or o.get('status') != 'SIAP' or 'cagr' not in o.get('oos', {}) or 'cagr' not in h['oos']: continue
+        B.append(dict(id=k, pc_lama=int(o.get('percubaan', 0)), lama=o['oos']['cagr'], baru=h['oos']['cagr']))
+    if B:
+        B = pd.DataFrame(B); sm = B[B.pc_lama == int(any_.get('percubaan', 0))]; bz = B[B.pc_lama != int(any_.get('percubaan', 0))]
+        rho = bz[['lama', 'baru']].rank().corr().iloc[0, 1] if len(bz) > 2 else float('nan')
+        L += ['', f'## 5. Kestabilan: banding larian 15 Okt (commit {BANDING})', '',
+              f'- {len(sm)} kaedah yang dahulu sudah {any_.get("percubaan")} percubaan (enjin v1.2 asal): metrik luar sampel '
+              f'{"sama tepat" if (sm.lama == sm.baru).all() else "BERBEZA"} — bukti hujung ke hujung enjin laju setara.',
+              f'- {len(bz)} kaedah yang dahulu 60/100 percubaan: korelasi kedudukan (Spearman) CAGR WFO lama lawan baru = {rho:.2f}; '
+              f'beza mutlak median {p(float((bz.baru - bz.lama).abs().median()))}. Beza besar = pilihan Optuna sensitif kepada bajet carian '
+              f'(tanda keputusan WFO kaedah itu kurang stabil).', '',
+              '| ID | Percubaan lama | CAGR lama | CAGR baru | Beza |', '|---|---|---|---|---|']
+        for _, r in bz.assign(b=(bz.baru - bz.lama).abs()).sort_values('b', ascending=False).head(15).iterrows():
+            L.append(f'| {r.id} | {r.pc_lama} | {p(r.lama)} | {p(r.baru)} | {p(r.baru - r.lama)} |')
     if tl or ra:
-        L += ['', '## 5. Tidak layak / ralat', '']
+        L += ['', '## 6. Tidak layak / ralat', '']
         L += [f"- {k}: {v.get('sebab', '')}" for k, v in tl.items()]
         L += [f"- {k}: RALAT — {v.get('sebab', '').strip().splitlines()[-1] if v.get('sebab') else ''}" for k, v in ra.items()]
-    L += ['', '## 6. Nota tafsiran', '',
+    L += ['', '## 7. Nota tafsiran', '',
           '- CAGR beku = varian registry dengan stop/exit asal, dagangan masuk ≥ 1 Jan 2023, portfolio sama. Ia BUKAN luar sampel tulen (varian dipilih dengan melihat data 2019–2026).',
           '- CAGR WFO ialah luar sampel tulen: setiap suku memakai gabungan yang dipilih atas 3 tahun sebelumnya sahaja.',
           '- Subset: gabungan terpilih yang sama dinilai atas S1–S4 (tidak ditala semula); bilangan subset yang mengalahkan EW subset. '
