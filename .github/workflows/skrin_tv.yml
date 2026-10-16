@@ -1,0 +1,44 @@
+# Saringan malam TradingView (seluruh pasaran AS) + pegangan ETF Shariah -> BacktestShariah2/data/skrin/
+# Sesi Claude tidak boleh capai scanner.tradingview.com; runner GitHub boleh. Tugasan Claude hanya membaca fail ini.
+# Masa (UTC): 21:47 Isn–Jum = 5:47 pagi MYT, selepas tutup New York. Repo awam: minit Actions percuma.
+name: Saringan TradingView
+
+on:
+  schedule:
+    - cron: '47 21 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: skrin-tv
+  cancel-in-progress: false
+
+jobs:
+  skrin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q requests
+      - name: Saringan TradingView dan ETF Shariah
+        run: >-
+          python3 BacktestShariah2/standard/skrin_tv.py --keluar BacktestShariah2/data/skrin
+          --univ BacktestShariah2/data/harga/univ.txt --papertrade BacktestShariah2/papertrade
+      - name: Commit dan push
+        run: |
+          git config user.name "skrin-tv[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/skrin
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Saringan TradingView: $(date -u +%Y-%m-%d)"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1

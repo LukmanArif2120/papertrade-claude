@@ -251,3 +251,14 @@
 - db: `papertrade/senarai_beli` v4, `papertrade/watchlist` v4 (ruang padat: medan kosong dan beberapa lajur gred terperinci tidak disalin ke db watchlist; CSV lengkap), `harian/status` v12.
 - Rutin: tiga rutin baharu menembak ke sesi Sonnet yang sudah dilampirkan repo (tiada add_repo); rutin lama dinyahaktifkan.
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-15 20:08–20:45 MYT — Imbas 8:02 malam (rutin sesi repo, Sonnet; data tutup 14 Okt)
+- Kalendar NYSE: 15 Okt 2026 sesi penuh → teruskan.
+- Data: skrin Moomoo Shariah AS harga ≥ USD10 — 911 saham (4 halaman; tutup 14 Okt sepadan yfinance pada 639 saham, beza 0). Stor harga = aset dashboard (bar hingga 12 Okt) + bar 13 Okt (yfinance `terkini.csv`, 12 Okt disemak silang: 0 beza) + bar 14 Okt (skrin). 267 saham (kebanyakan harga_B di luar universe Actions) tiada bar 13 Okt → tidak diimbas hari ini (kline tidak ditarik; had 4/min). `data/harga/univ.txt` ditulis supaya Actions meliputinya bermula malam ini. Aset harga dashboard TIDAK dimuat naik semula.
+- Imbasan 87 kaedah (scanner.py mod malam, db asal larian 20261013-2030-malam), tiada ralat, 614 s; 1,188 isyarat mentah.
+- **Senarai beli** 403 baris, 207 saham, 60 kaedah (isyarat 69 daripada watchlist). Ditolak: 31 isyarat mingguan (M37/M38/M41/M50/M52/M64/M78; 14 Okt Rabu bukan hari dagangan terakhir minggu, §3a); 109 kerana kaedah+saham masih dipegang; 645 melebihi had 15 setiap kaedah (431 dahulu, kemudian skor; terutama M82, M27, M81, M14). `nota_henti`/`buka_maks` diisi untuk M06, M08, M19, M20 (+ nota M52); kaedah lain kosong (belum ditakrif dalam `sedia()`).
+- **Watchlist** 267 calon, 162 saham, 67 kaedah (maks 5/kaedah; % hampir dihadkan 99.9 jika bukan isyarat sah). 184 baharu, 83 dibawa (hari tidak ditambah: tarikh data sama dengan kemas kini 6:02), 69 dipindah ke senarai beli, 31 dibuang.
+- Gred (gred.py tambah, SST market_events 30 hari): S, I, R, Q dikira untuk kedua-dua fail. **Pemangkin senarai_beli TIDAK dikumpul** (semua "–"): pelayan Moomoo minta log masuk semula semasa pengumpulan (subagen gagal selepas panggilan pertama); 147 baris watchlist membawa gred pemangkin daripada kemas kini 6:02 (db), selebihnya "–".
+- db: `papertrade/senarai_beli` v6, `papertrade/watchlist` v8, `harian/status` v14. Ruang padat: pemboleh ubah malar per baris (tarikh_isyarat/imbasan/gred_pada) dipindah ke aras dokumen senarai_beli; watchlist: teks `sebab`/`syarat_belum` dipotong ke 90 aksara, URL tanpa parameter penjejakan, sektor_us/industri_us dibuang jika sama dengan sektor/industri. CSV penuh.
+- AMARAN untuk beli 9:35 NY: Moomoo perlu log masuk semula (sambungan `da8be8b4…` minta pengesahan) — tanpa itu harga buka tidak boleh diambil.
+- Tiada order. Tiada wang sebenar.

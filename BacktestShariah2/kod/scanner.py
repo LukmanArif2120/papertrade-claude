@@ -97,6 +97,30 @@ def cmd_harga(a):
     print(json.dumps({'tarikh': tarikh, 'nota': nota}, ensure_ascii=False, indent=1))
 
 
+# ---------------------------------------------------------------- belian semula
+def terbuka(r):
+    """Baris posisi/penuh db masih terbuka (belum keluar, atau keluar menunggu harga)."""
+    k = r.get('keluar')
+    return not k or bool(k.get('menunggu')) or k.get('harga') is None
+
+
+def pegangan_c(folder):
+    """papertrade/claude*.csv -> (set (kaedah, saham) masih terbuka, Counter (kaedah, saham) bilangan belian).
+    Saham yang sudah keluar (henti/sasaran/isyarat keluar/had masa) TIDAK dikecualikan: isyarat baharu = belian ke-2, ke-3 ..."""
+    import csv
+    from collections import Counter
+    buka, bil = set(), Counter()
+    for f in sorted(glob.glob(os.path.join(folder, 'claude*.csv'))):
+        for r in csv.DictReader(open(f, newline='', encoding='utf-8')):
+            if r.get('tidak_dibeli') == 'True' or not r.get('tarikh_beli'):
+                continue
+            k = (r.get('kaedah'), r.get('saham'))
+            bil[k] += 1
+            if r.get('keluar') != 'True' and r.get('tidak_sah') != 'True':
+                buka.add(k)
+    return buka, bil
+
+
 # ---------------------------------------------------------------- db helpers
 def baca_db(dirdb):
     """Baca dokumen yang disimpan oleh ArtifactData (out_dir). Pulang dict path->data."""
@@ -224,6 +248,7 @@ def cmd_scan(a):
     for k, d in db.items():
         if k.startswith('kaedah/'):
             dipegang |= {p['saham'] for p in d.get('posisi', [])}
+    buka_c, bil_c = pegangan_c(a.papertrade) if getattr(a, 'papertrade', None) else (set(), {})
     queue = []; ringkas = []; ralat = []
     kaedah = senarai_kaedah() if not a.hanya else a.hanya.split(',')
     fr_ok = {t: g for t, g in fr0.items() if len(g) >= 60}
@@ -254,18 +279,21 @@ def cmd_scan(a):
                 pass
         sig.sort(key=lambda x: (x['sumber'] != '431', -(x['rank'] if x['rank'] is not None else -1e9)))
         tulis(a.out, f'semua_sig/{mid}', bersih(sig))
-        ada = {p['saham'] for p in doc['posisi']} | {p['saham'] for p in doc['penuh']}
+        # hanya posisi TERBUKA kaedah ini dikecualikan; saham yang sudah keluar layak dibeli semula (belian ke-2, ke-3 ...)
+        ada = {p['saham'] for p in doc['posisi'] + doc['penuh'] if terbuka(p) and not getattr(a, 'papertrade', None)} \
+            | {t for (k, t) in buka_c if k == mid}
         baru_penuh = 0
-        baki = MAKS_SLOT - len(doc['posisi'])
+        baki = MAKS_SLOT - sum(1 for p in doc['posisi'] if terbuka(p))
         for s in sig:
             if s['saham'] in ada: continue
+            s['belian_ke'] = bil_c.get((mid, s['saham']), 0) + 1
             if baki > 0 and a.mod in ('malam', 'tutup'):
                 s.update(kaedah=mid, dikongsi=s['saham'] in dipegang, tarikh_isyarat=tdata)
                 queue.append(s); baki -= 1; ada.add(s['saham']); dipegang.add(s['saham'])
             elif baru_penuh < PENUH_SEHARI:
                 baru_penuh += 1
                 doc['penuh'].append(dict(saham=s['saham'], sumber=s['sumber'], tarikh_isyarat=tdata, harga_isyarat=s['tutup'],
-                                         henti=s['henti'], harga_masuk_andaian=None,
+                                         henti=s['henti'], harga_masuk_andaian=None, belian_ke=s['belian_ke'],
                                          catatan='Isyarat beli sah tetapi slot kaedah penuh (10/10); dipantau seolah-olah dibeli pada buka esok'))
                 ada.add(s['saham'])
         doc['penuh'] = doc['penuh'][-PENUH_MAKS:]
@@ -389,6 +417,7 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(); sp = p.add_subparsers(dest='cmd')
     h = sp.add_parser('harga'); h.add_argument('--skrin', nargs='*'); h.add_argument('--kline', nargs='*'); h.add_argument('--idx', nargs='*'); h.add_argument('--tarikh', type=int)
     s = sp.add_parser('scan'); s.add_argument('--mod', default='tutup'); s.add_argument('--db'); s.add_argument('--out', default='out'); s.add_argument('--hanya'); s.add_argument('--status')
+    s.add_argument('--papertrade', help='folder papertrade/ (claude*.csv): kecualikan posisi Claude TERBUKA sahaja; isi belian_ke')
     r = sp.add_parser('rekod'); r.add_argument('--db'); r.add_argument('--isian'); r.add_argument('--out', default='out'); r.add_argument('--status')
     b = sp.add_parser('batch'); b.add_argument('--out'); b.add_argument('--run')
     a = p.parse_args()

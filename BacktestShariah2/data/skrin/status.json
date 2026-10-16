@@ -1,0 +1,80 @@
+{
+ "dijana": "2026-10-16 02:50 UTC",
+ "sumber": "https://scanner.tradingview.com/america/scan",
+ "tv": {
+  "baris": 4167,
+  "jumlah_padan": 4167,
+  "harga_min": 5.0,
+  "medan_tiada_data": [
+   "is_shariah_compliant"
+  ],
+  "is_shariah_compliant": {
+   "benar": 0,
+   "salah": 0,
+   "tiada": 4167
+  }
+ },
+ "etf": {
+  "SPUS": {
+   "pegangan": 219
+  },
+  "SPTE": {
+   "pegangan": 109
+  }
+ },
+ "sp500": {
+  "ahli": 503
+ },
+ "uji_is_shariah_compliant": {
+  "america": {
+   "berisi": 0,
+   "daripada": 50
+  },
+  "malaysia": {
+   "berisi": 39,
+   "daripada": 50
+  }
+ },
+ "semak_shariah": {
+  "disahkan_etf": 142,
+  "tiada_maklumat": 724,
+  "sp500_tiada_spus": 51,
+  "univ_moomoo": 911,
+  "papertrade": 455,
+  "papertrade_sp500_tiada_spus": [
+   "ADP",
+   "AEP",
+   "APA",
+   "ATO",
+   "BG",
+   "COST",
+   "CVS",
+   "CVX",
+   "DVN",
+   "EQT",
+   "EXE",
+   "FTV",
+   "HPE",
+   "HPQ",
+   "HSIC",
+   "IFF",
+   "INTU",
+   "J",
+   "JKHY",
+   "KEYS",
+   "MOS",
+   "NWS",
+   "NWSA",
+   "OMC",
+   "PAYX",
+   "PFE",
+   "PSX",
+   "SMCI",
+   "SRE",
+   "SWK",
+   "VLO",
+   "WEC",
+   "ZBH"
+  ]
+ }
+}

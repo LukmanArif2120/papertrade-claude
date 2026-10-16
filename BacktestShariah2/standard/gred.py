@@ -8,9 +8,12 @@
 #   (ulang untuk papertrade/watchlist.csv; --pemangkin pilihan)
 #   python3 gred.py kumpul --folder <fail mentah alat> --csv papertrade/senarai_beli.csv papertrade/watchlist.csv \
 #       --keluar papertrade/pemangkin.json --tarikh YYYY-MM-DD      (Berita Panas; lihat jadual/imbas_2002.md)
+#   Sumber percuma (Actions, pemangkin_actions.py): `kumpul --yahoo data/pemangkin/yahoo.json --nasdaq
+#   data/pemangkin/earnings_nasdaq.json` (--folder pilihan; data Moomoo hari ini diutamakan) dan `tambah --nasdaq …`
+#   (tarikh earnings kedua selepas SST; reaksi earnings lalu dikira daripada stor harga).
 import sys, os, re, csv, json, argparse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 import numpy as np
 import pandas as pd
@@ -306,6 +309,18 @@ def pengesahan(close, vol, tarikh, selepas_tutup=False):
             'volum_x': round(float(v.iloc[i]) / purata, 2), 'kekal': bool(float(c.iloc[-1]) > sebelum)}
 
 
+def reaksi_earnings(close, vol, tarikh, selepas_tutup=None):
+    """Gerak % hari reaksi earnings (tutup hari reaksi lawan tutup sebelumnya). selepas_tutup None (masa
+    pengumuman tidak diketahui, cth. kalendar Nasdaq 'time-not-supplied'): hari reaksi = hari volum lebih tinggi
+    antara hari pengumuman dan hari dagangan berikutnya; None jika hari berikutnya belum ada dalam stor harga."""
+    if selepas_tutup is not None:
+        s = pengesahan(close, vol, tarikh, selepas_tutup)
+    else:
+        a, b = pengesahan(close, vol, tarikh, False), pengesahan(close, vol, tarikh, True)
+        s = None if not a or not b else a if a['volum_x'] >= b['volum_x'] else b
+    return s['gerak_pct'] if s else None
+
+
 def mata_pemangkin(p, hari_ini=None):
     """p: dict satu saham (papertrade/pemangkin.json; dibina oleh `gred.py kumpul`):
          berita: [{tajuk, tarikh (New York), selepas_tutup, hari_lalu, url}]   (sudah ditapis relevan)
@@ -451,16 +466,20 @@ def analisis_moomoo(d, hari_ini, hari_maks=10):
         elif P is None and rl is not None:
             kat = 'mula_beli' if rl >= 3 else 'mula_jual' if rl <= 1 else None
         elif sl and sp:
-            u = sl / sp - 1
+            u = round(sl / sp - 1, 6)
             kat = ('naik_sasaran_besar' if u >= 0.10 else 'naik_sasaran' if u > 0 else
                    'potong_sasaran' if u < 0 else None)
         if not kat:
             continue
-        m = {'naik_taraf': 2, 'mula_beli': 2, 'naik_sasaran_besar': 2, 'naik_sasaran': 1, 'turun_taraf': -2,
-             'mula_jual': -2, 'potong_sasaran': -2 if sl and sp and sl / sp - 1 <= -0.10 else -1}[kat]
-        out.append({'kategori': kat, 'mata': m, 'firma': firma, 'tarikh': tk, 'hari_lalu': h,
+        out.append({'kategori': kat, 'mata': mata_analisis(kat, sl, sp), 'firma': firma, 'tarikh': tk, 'hari_lalu': h,
                     'sasaran': sl, 'url': L.get('rating_url') or ''})
     return out
+
+
+def mata_analisis(kat, sl=None, sp=None):
+    if kat == 'potong_sasaran':
+        return -2 if sl and sp and round(sl / sp - 1, 6) <= -0.10 else -1
+    return {'naik_taraf': 2, 'mula_beli': 2, 'naik_sasaran_besar': 2, 'naik_sasaran': 1, 'turun_taraf': -2, 'mula_jual': -2}[kat]
 
 
 def orang_dalam_moomoo(d, hari_ini, hari_maks=30):
@@ -487,7 +506,7 @@ def kumpul_pemangkin(folder, nama, hari_ini, institusi=None):
                       if re.match(r'^(berita|analisis|orangdalam|earnings|sst)_.+\.json$', f)})
     for t in tickers:
         f = lambda jenis: os.path.join(folder, f'{jenis}_{t}.json')
-        e = {'dikumpul': hari_ini.isoformat(), 'berita': [], 'analisis': [], 'orang_dalam': {}}
+        e = {'dikumpul': hari_ini.isoformat(), 'sumber_pemangkin': 'moomoo', 'berita': [], 'analisis': [], 'orang_dalam': {}}
         if os.path.exists(f('berita')):
             e['berita'] += berita_moomoo(baca_json(f('berita')), t, nama.get(t, ''), hari_ini)
         if os.path.exists(f('sst')):
@@ -502,6 +521,126 @@ def kumpul_pemangkin(folder, nama, hari_ini, institusi=None):
         e['institusi'] = (institusi or {}).get(t)
         out[t] = e
     return out
+
+
+# ---------- Sumber percuma: GitHub Actions (pemangkin_actions.py -> data/pemangkin/) ----------
+GRED_BELI = re.compile(r'\b(strong buy|buy|outperform|overweight|positive|accumulate|add)\b', re.I)
+GRED_JUAL = re.compile(r'\b(sell|underperform|underweight|negative|reduce)\b', re.I)
+
+
+def berita_yahoo(lst, ticker, nama, hari_ini):
+    """yahoo.json saham[T].berita [{tajuk, masa (saat UTC), url}] -> format berita_moomoo (ditapis relevan)."""
+    out = []
+    for r in lst or []:
+        if not isinstance(r, dict) or not r.get('masa') or not relevan(r.get('tajuk'), ticker, nama):
+            continue
+        tk, st = masa_ny(float(r['masa']))
+        out.append({'tajuk': bersih(r.get('tajuk'))[:200], 'tarikh': tk, 'selepas_tutup': st,
+                    'hari_lalu': max((hari_ini - date.fromisoformat(tk)).days, 0), 'url': r.get('url') or '',
+                    'sumber': 'yahoo'})
+    return out
+
+
+def analisis_yahoo(lst, hari_ini, hari_maks=10):
+    """yahoo.json saham[T].analisis (yfinance upgrades_downgrades) -> format analisis_moomoo. Tindakan terkini
+    setiap firma (<= 10 hari): up/down = naik/turun taraf; init = mula liputan Beli/Jual (Tahan diabaikan);
+    selainnya (main/reit) ubah sasaran berbanding sasaran sebelumnya."""
+    out, dilihat = [], set()
+    sah = [x for x in lst or [] if isinstance(x, dict) and TARIKH_ISO.match(str(x.get('tarikh') or ''))]
+    for x in sorted(sah, key=lambda x: x['tarikh'], reverse=True):
+        firma = x.get('firma') or ''
+        if firma in dilihat:
+            continue
+        dilihat.add(firma)
+        h = (hari_ini - date.fromisoformat(x['tarikh'])).days
+        if h > hari_maks or h < 0:
+            continue
+        tin, ke, sl, sp = str(x.get('tindakan') or '').lower(), str(x.get('ke') or ''), x.get('sasaran'), x.get('sasaran_lalu')
+        kat = None
+        if tin == 'up':
+            kat = 'naik_taraf'
+        elif tin == 'down':
+            kat = 'turun_taraf'
+        elif tin == 'init':
+            kat = 'mula_jual' if GRED_JUAL.search(ke) else 'mula_beli' if GRED_BELI.search(ke) else None
+        elif sl and sp:
+            u = round(sl / sp - 1, 6)
+            kat = 'naik_sasaran_besar' if u >= 0.10 else 'naik_sasaran' if u > 0 else 'potong_sasaran' if u < 0 else None
+        if kat:
+            out.append({'kategori': kat, 'mata': mata_analisis(kat, sl, sp), 'firma': firma, 'tarikh': x['tarikh'],
+                        'hari_lalu': h, 'sasaran': sl, 'url': ''})
+    return out
+
+
+def orang_dalam_yahoo(lst, hari_ini, hari_maks=30):
+    """yahoo.json saham[T].orang_dalam (belian sahaja) -> {bilangan orang dalam berbeza, tarikh terkini}."""
+    nama, akhir = set(), None
+    for r in lst or []:
+        t = str(r.get('tarikh') or '')[:10]
+        if (r.get('saham') or 0) <= 0 or not TARIKH_ISO.match(t) or not 0 <= (hari_ini - date.fromisoformat(t)).days <= hari_maks:
+            continue
+        nama.add(r.get('nama') or '?'); akhir = max(akhir or t, t)
+    return {'bilangan': len(nama), 'tarikh': akhir} if nama else {}
+
+
+def _tarikh(x):
+    try:
+        return date.fromisoformat(str(x or '')[:10])
+    except ValueError:
+        return None
+
+
+def baca_nasdaq(path, hari_ini, hari_maks=4):
+    """earnings_nasdaq.json -> (saham {T: {lalu, lalu_masa, seterusnya, seterusnya_masa}}, lengkap tanpa ralat hari)
+    atau (None, False) jika fail tiada atau bukan bertarikh 0–4 hari sebelum hari_ini."""
+    if not path or not os.path.exists(path):
+        return None, False
+    try:
+        d = baca_json(path)
+    except ValueError:
+        d = None
+    t = _tarikh(d.get('tarikh') or d.get('dijana')) if isinstance(d, dict) else None
+    if t is None or not 0 <= (hari_ini - t).days <= hari_maks:
+        print(f'AMARAN {path} bertarikh {t}; diabaikan (mesti 0–{hari_maks} hari sebelum {hari_ini})')
+        return None, False
+    return d.get('saham') or {}, d.get('hari_ralat') == 0
+
+
+def earnings_nasdaq(e, hari_ini):
+    """Entri Nasdaq satu saham -> (medan earnings lalu untuk pemangkin, tarikh earnings >= hari_ini atau None).
+    Masa 'time-not-supplied' -> earnings_selepas_tutup None (hari reaksi ditentukan oleh volum; reaksi_earnings)."""
+    lalu, seter = _tarikh((e or {}).get('lalu')), _tarikh((e or {}).get('seterusnya'))
+    out = {}
+    if lalu and lalu < hari_ini:
+        masa = e.get('lalu_masa') or ''
+        out = {'earnings_lalu_tarikh': lalu.isoformat(), 'earnings_lalu_hari': hari_dagangan(lalu, hari_ini),
+               'earnings_selepas_tutup': True if masa == 'time-after-hours' else False if masa == 'time-pre-market' else None,
+               'earnings_anggaran': (lalu + timedelta(days=91)).isoformat(), 'earnings_gerak_pct': None}
+    return out, next((x for x in (lalu, seter) if x and x >= hari_ini), None)
+
+
+def pemangkin_yahoo(d, hari_ini, nama=None, tickers=None, institusi=None, nas=None):
+    """yahoo.json -> ({ticker: entri format kumpul_pemangkin, sumber_pemangkin 'yahoo'}, {'ralat': [...], 'lama': [...]}).
+    Hanya fail bertarikh hari_ini (MYT) dan entri yang diambil selepas 6:00 petang MYT hari itu (berita pra-pasaran
+    New York sesi imbasan); ticker beralat atau lama tidak dimasukkan (kumpul melalui Moomoo atau '–')."""
+    out, buang = {}, {'ralat': [], 'lama': []}
+    if not isinstance(d, dict) or str(d.get('tarikh')) != hari_ini.isoformat():
+        return out, buang
+    sempadan = datetime(hari_ini.year, hari_ini.month, hari_ini.day, 10, tzinfo=timezone.utc).timestamp()
+    for t, y in (d.get('saham') or {}).items():
+        if tickers is not None and t not in tickers:
+            continue
+        if y.get('ralat') or (y.get('diambil') or 0) < sempadan:
+            buang['ralat' if y.get('ralat') else 'lama'].append(t)
+            continue
+        e = {'dikumpul': hari_ini.isoformat(), 'sumber_pemangkin': 'yahoo',
+             'berita': berita_yahoo(y.get('berita'), t, (nama or {}).get(t, ''), hari_ini),
+             'analisis': analisis_yahoo(y.get('analisis'), hari_ini),
+             'orang_dalam': orang_dalam_yahoo(y.get('orang_dalam'), hari_ini), 'institusi': (institusi or {}).get(t)}
+        if nas is not None:
+            e.update(earnings_nasdaq(nas.get(t), hari_ini)[0])
+        out[t] = e
+    return out, buang
 
 
 def gred_keseluruhan(gred):
@@ -546,23 +685,54 @@ def segar(e, hari_ini, hari_maks=2):
 
 def kumpul(a):
     hari_ini = date.fromisoformat(a.tarikh)
-    nama = {}
+    nama, semua = {}, set()
     for f in a.csv or []:
         for r in csv.DictReader(open(f, newline='', encoding='utf-8')):
             t, n = ambil(r, 'saham', 'Saham'), ambil(r, 'nama', 'Nama')
+            if t:
+                semua.add(t)
             if t and n:
                 nama[t] = n
     ins = json.load(open(a.institusi, encoding='utf-8')) if a.institusi else {}
-    baru = kumpul_pemangkin(a.folder, nama, hari_ini, ins)
+    nas = baca_nasdaq(a.nasdaq, hari_ini)[0] if getattr(a, 'nasdaq', None) else None
+    if a.folder and not os.path.isdir(a.folder):
+        print(f'AMARAN folder {a.folder} tiada; fail mentah Moomoo dilangkau')
+    baru = kumpul_pemangkin(a.folder, nama, hari_ini, ins) if a.folder and os.path.isdir(a.folder) else {}
+    if nas is not None:
+        for t, e in baru.items():
+            if 'earnings_lalu_tarikh' not in e:
+                e.update(earnings_nasdaq(nas.get(t), hari_ini)[0])
     lama = json.load(open(a.keluar, encoding='utf-8')) if os.path.exists(a.keluar) else {}
+    n_mm, n_yh, yh_buang = len(baru), 0, {}
+    if getattr(a, 'yahoo', None):
+        try:
+            d = baca_json(a.yahoo) if os.path.exists(a.yahoo) else {}
+        except ValueError:
+            d = {}
+        if not isinstance(d, dict) or str(d.get('tarikh')) != a.tarikh:
+            print(f'AMARAN {a.yahoo} tiada / bukan bertarikh {a.tarikh}: data Yahoo tidak dipakai')
+            d = {}
+        yh, yh_buang = pemangkin_yahoo(d, hari_ini, nama, semua if a.csv else None, ins, nas)
+        for t, e in yh.items():
+            l = lama.get(t) or {}
+            # data Moomoo (dikumpul khusus bagi saham itu) hari ini diutamakan; Yahoo hanya mengisi yang belum ada
+            if t in baru or (l.get('dikumpul') == a.tarikh and l.get('sumber_pemangkin', 'moomoo') != 'yahoo'):
+                continue
+            baru[t] = e; n_yh += 1
     # gabung: entri baharu menggantikan; entri lama > 5 hari dagangan dibuang
     gab = {t: e for t, e in lama.items() if segar(e, hari_ini, 5)}
     gab.update(baru)
     with open(a.keluar, 'w', encoding='utf-8') as f:
         json.dump(dict(sorted(gab.items())), f, ensure_ascii=False, indent=1)
     tanpa_nama = sorted(t for t in baru if t not in nama)
-    print(f'{len(baru)} saham dikumpul; {sum(1 for e in baru.values() if e["berita"])} ada berita relevan; '
+    print(f'{len(baru)} saham dikumpul ({n_mm} Moomoo, {n_yh} Yahoo); {sum(1 for e in baru.values() if e["berita"])} ada berita relevan; '
           f'{sum(1 for e in baru.values() if e["analisis"])} ada tindakan analisis; jumlah dalam fail {len(gab)}')
+    if a.csv:
+        hari = sorted(t for t in semua if (gab.get(t) or {}).get('dikumpul') != a.tarikh)
+        print(f'{len(hari)} saham CSV belum ada entri hari ini' + (': ' + ' '.join(hari) if hari else ''))
+    for k, v in yh_buang.items():
+        if v:
+            print(f'{len(v)} saham Yahoo tidak dipakai ({k}):', ' '.join(sorted(v)))
     if tanpa_nama:
         print('AMARAN tiada nama syarikat (tapisan relevan guna ticker sahaja):', ' '.join(tanpa_nama))
 
@@ -583,6 +753,7 @@ def tambah(a):
         pusek, puind = peta_pasaran(a.pasaran)
         pind = {r['ticker']: r['industri'] for r in csv.DictReader(open(a.peta, newline='', encoding='utf-8'))}
     ear = peta_earnings(a.acara, hari_ini) if a.acara else None
+    nas, nas_lengkap = baca_nasdaq(a.nasdaq, hari_ini) if getattr(a, 'nasdaq', None) else (None, False)
     pem = json.load(open(a.pemangkin, encoding='utf-8')) if a.pemangkin else {}
     for r in rows:
         t = ambil(r, 'saham', 'Saham')
@@ -595,20 +766,32 @@ def tambah(a):
         x = int(rs[t]) if t in rs.index else None
         r['rs_rating'] = '' if x is None else x; r['gred_rs'] = gred_rs(x)
         te, sumber = (ear or {}).get(t), 'SST'
+        if te is None and nas is not None:
+            d = earnings_nasdaq(nas.get(t), hari_ini)[1]
+            if d:
+                te, sumber = d, 'Nasdaq'
         if te is None and (pem.get(t) or {}).get('earnings_anggaran'):
             te, sumber = date.fromisoformat(pem[t]['earnings_anggaran']), 'anggaran'
             if te < hari_ini:
                 te = None
-        if te is None and ear is None:
+        # Nasdaq tanpa ralat dan saham itu ada earnings lalu dalam kalendar -> ketiadaan tarikh hadapan boleh dipercayai
+        liput_nas = nas is not None and nas_lengkap and bool((nas.get(t) or {}).get('lalu'))
+        if te is None and ear is None and not liput_nas:
             r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = TIADA
         else:
             h = hari_dagangan(hari_ini, te) if te else None
             r['tarikh_earnings'] = te.isoformat() if te else ''
             r['hari_ke_earnings'] = '' if h is None else h
-            r['sumber_earnings'] = sumber if te else 'tiada dalam 30 hari (SST)'
+            r['sumber_earnings'] = sumber if te else 'tiada dalam 30 hari (SST)' if ear is not None else 'tiada dalam 35 hari (Nasdaq)'
             r['gred_qr'] = gred_qr(h)
         if t in pem and segar(pem[t], hari_ini):
             p = dict(pem[t])
+            if nas is not None and 'earnings_lalu_tarikh' not in p:
+                p.update(earnings_nasdaq(nas.get(t), hari_ini)[0])
+            # reaksi earnings lalu (sumber Nasdaq; entri Moomoo sudah mengira sendiri): daripada stor harga
+            if p.get('earnings_lalu_tarikh') and p.get('earnings_gerak_pct') is None \
+                    and 'earnings_selepas_tutup' in p and t in c.columns:
+                p['earnings_gerak_pct'] = reaksi_earnings(c[t], v[t], p['earnings_lalu_tarikh'], p['earnings_selepas_tutup'])
             p.setdefault('volum_nisbah', None if t not in vn.index or pd.isna(vn[t]) else float(vn[t]))
             p.setdefault('naik_5h', None if t not in n5.index or pd.isna(n5[t]) else float(n5[t]))
             top = terkuat(peristiwa(p, hari_ini))
@@ -643,9 +826,12 @@ def main(argv=None):
     t.add_argument('--peta', help='papertrade/peta_industri.csv (ticker -> industri Moomoo)')
     t.add_argument('--acara', help='JSON SST market_events (daysLookahead 30)')
     t.add_argument('--pemangkin', help='papertrade/pemangkin.json (hasil `gred.py kumpul`)')
+    t.add_argument('--nasdaq', help='data/pemangkin/earnings_nasdaq.json (Actions): tarikh earnings kedua selepas SST')
     t.add_argument('--tarikh', required=True, help='tarikh imbasan YYYY-MM-DD')
     k = sp.add_parser('kumpul', help='fail mentah alat (berita/analisis/orangdalam/earnings/sst_<T>.json) -> pemangkin.json')
-    k.add_argument('--folder', required=True)
+    k.add_argument('--folder', help='folder fail mentah alat Moomoo/SST (pilihan jika --yahoo diberi)')
+    k.add_argument('--yahoo', help='data/pemangkin/yahoo.json (Actions; dipakai jika bertarikh --tarikh)')
+    k.add_argument('--nasdaq', help='data/pemangkin/earnings_nasdaq.json (Actions; earnings lalu bagi saham tanpa fail earnings_)')
     k.add_argument('--csv', nargs='*', help='senarai_beli.csv / watchlist.csv (nama syarikat untuk tapisan relevan)')
     k.add_argument('--institusi', help='JSON {ticker: "kumpul"|"agih"} daripada SST institutional_flow')
     k.add_argument('--keluar', required=True, help='papertrade/pemangkin.json (digabung dengan entri sedia ada)')
@@ -656,6 +842,8 @@ def main(argv=None):
     if a.cmd == 'tambah':
         tambah(a)
     elif a.cmd == 'kumpul':
+        if not a.folder and not a.yahoo:
+            ap.error('kumpul memerlukan --folder atau --yahoo')
         kumpul(a)
     elif a.cmd == 'earnings':
         print(json.dumps(ringkas_earnings(a.fail, date.fromisoformat(a.tarikh))))
