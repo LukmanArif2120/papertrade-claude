@@ -442,7 +442,7 @@ def cmd_banding(a):
         print('lejar belum bermula'); return
     C = pd.concat([pd.read_csv(f, dtype=str, keep_default_na=False) for f in sorted(glob.glob(os.path.join(BS2, 'papertrade', 'claude*.csv')))])
     C = C[(C.tidak_dibeli != 'True') & (C.tidak_sah != 'True') & (C.harga_beli != '') & (C.tarikh_isyarat >= mula)]
-    T, O = semua_posisi(); P = pd.concat([T, O], ignore_index=True)
+    T, O = semua_posisi(); P = pd.concat([T, O], ignore_index=True).fillna('')
     lk = pd.concat([baca(f, L_LANGKAU) for f in sorted(glob.glob(os.path.join(LEJAR, 'langkau', '*.csv')))] or [pd.DataFrame(columns=L_LANGKAU)])
     isy = pd.concat([pd.read_csv(f, dtype=str, keep_default_na=False) for f in sorted(glob.glob(os.path.join(LEJAR, 'isyarat', '*.csv.gz')))]
                     or [pd.DataFrame(columns=L_ISYARAT)])

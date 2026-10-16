@@ -282,3 +282,11 @@
 - Dashboard: aset kod baharu `2ada390fe41ce42ea28ad4402cf5764b` (ganti `b698200e…`; beza = scanner.py sahaja); `harian/status` v18 (`harga_aset.kod`).
 - Pelan pengumpulan data 16 Okt 2026 – 15 Jan 2027 (`WFO/README.md`): semua 134 kaedah diuji ke hadapan, tiada pemangkasan.
 - Tiada order. Tiada wang sebenar.
+
+## 16 Okt 2026 — Lejar Penuh fasa 1 (keputusan pengguna: data adil untuk semua kaedah)
+- Audit: imbasan Papertrade C mengehadkan 10 belian sekaedah semalam (saham 431 diutamakan); cuba-imbas 134 kaedah (data 12 Okt): 2,695 isyarat, 525 (19%) masuk senarai beli; 46 kaedah dihadkan (17% isyarat dibeli). Stor harga dashboard tersangkut pada 12 Okt (ditampal 10–12 sesi yfinance setiap larian).
+- `standard/lejar.py` + `.github/workflows/lejar.yml` (02:17 UTC Sel–Sab, sandaran 06:17; tanpa LLM/Moomoo): SEMUA isyarat semua kaedah dibeli pada buka esok dan dikeluarkan dengan gelung enjin v1.2; tiada had sekaedah, tiada keutamaan 431; larian terlepas ditampung. Ujian `ujian/test_lejar.py`: dagangan lejar sesi demi sesi sama tepat dengan `enjin.trades` (henti, sasaran, isyarat keluar, masa, terbuka).
+- Stor harga repo `data/harga/stor/` (aset dashboard hingga 12 Okt + yfinance hingga 15 Okt; laras INTU ×1.0047, WLYB ×1.0037; volum integer). Prosedur 6:02, 7:47 dan tala suku kini menyalin stor repo.
+- Ulang tayang 12–15 Okt (tempatan, tidak disimpan): 0 ralat, ~4 minit setiap sesi (4 proses); isyarat 12 Okt 98.2% sama dengan scanner. Lawan Papertrade C (isyarat 12–14 Okt): 994/1,086 posisi C ada dalam lejar; harga beli berbeza > 0.5%: 0; status keluar sama: 994/994. Baki 92: 80 sudah dipegang lejar daripada isyarat lebih awal (kesan had 10 dalam C), 9 universe/data, 3 saham tanpa dagangan (SENEB, WLYB). Lejar 5,072 posisi lawan C 1,086 (4.7×).
+- Lejar rasmi bermula: isyarat sesi 15 Okt (3,598, 111 kaedah) direkod sebelum buka 16 Okt; belian pertama pada buka 16 Okt (diproses larian 02:17 UTC 17 Okt). Papertrade C dan tiga rutin tidak berubah selain sumber stor harga.
+- Tiada order. Tiada wang sebenar.

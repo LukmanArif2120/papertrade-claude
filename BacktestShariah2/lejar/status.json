@@ -1,0 +1,21 @@
+{
+ "mula": "2026-10-15",
+ "sesi_terakhir": "2026-10-15",
+ "kemaskini": "2026-10-16 17:24 MYT",
+ "bil_kaedah": 134,
+ "larian": [
+  {
+   "sesi": "2026-10-15",
+   "beli": 0,
+   "tutup": 0,
+   "langkau": 0,
+   "isyarat": 3598,
+   "terbuka": 0,
+   "tunggu": 3598,
+   "kaedah_isyarat": 111,
+   "ralat": [],
+   "nota": [],
+   "masa_s": 233
+  }
+ ]
+}
