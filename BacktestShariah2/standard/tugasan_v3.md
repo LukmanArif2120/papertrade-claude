@@ -19,7 +19,7 @@ Dokumen ini **satu-satunya** rujukan peraturan bagi tugasan harian. Ia mengganti
 Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade M, Papertrade C, Prestasi, `harian/status`.
 
 ## 3. Kaedah dan isyarat
-- 87 kaedah M; varian dipilih dalam registry set 431: skor tertinggi bukan DITOLAK, jika tiada, CAGR tertinggi. Indikator I01–I32 tidak digunakan.
+- 134 kaedah M (87 asal + 47 calon K145+ M115–M161 sejak 16 Okt 2026: entry daripada `spec/KATALOG_K145.md`, henti/keluar/tempoh = pilihan WFO suku terkini dibekukan sebagai varian V1; tiada `hampir()` → tiada watchlist bagi kaedah ini; prestasi luar sampel: `WFO/laporan/W01_LAPORAN.md`); varian dipilih dalam registry set 431: skor tertinggi bukan DITOLAK, jika tiada, CAGR tertinggi. Indikator I01–I32 tidak digunakan.
 - Kod isyarat: `BacktestShariah2/kod/` (sumber kebenaran; lihat `kod/README.md`). Enjin v1.2 beku.
 - Skop imbasan: saham AS Shariah (screener Moomoo) harga ≥ USD10; senarai 431 diutamakan.
 - **Senarai beli** = isyarat entry 100% dipenuhi pada tutup sesi DAN lulus kesahihan:
