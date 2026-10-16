@@ -1,0 +1,63 @@
+# Notifikasi Telegram (percuma): ringkasan commit rutin, amaran workflow gagal, dan pengawas rutin.
+# Rahsia repo (Settings > Secrets and variables > Actions): TELEGRAM_TOKEN dan TELEGRAM_TO.
+# Tanpa rahsia, workflow hanya mencetak mesej dan lulus. Skrip: BacktestShariah2/standard/notis_telegram.py
+name: Notis Telegram
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'BacktestShariah2/papertrade/**'
+      - 'BacktestShariah2/standard/binaan_v2_log*.md'
+  workflow_run:
+    workflows: ['Semak data', 'Harga harian', 'Saringan TradingView']
+    types: [completed]
+  schedule:
+    - cron: '13 23 * * 1-5'   # pengawas kemas kini 6:02 pagi MYT (sauh 22:00 UTC)
+    - cron: '23 13 * * 1-5'   # pengawas imbas 7:47 malam MYT (sauh 11:40 UTC)
+    - cron: '7 16 * * 1-5'    # pengawas beli 9:35 NY (sauh 13:30 UTC)
+  workflow_dispatch:
+    inputs:
+      teks:
+        description: 'Mesej ujian'
+        required: false
+        default: 'Ujian notifikasi Papertrade C'
+
+permissions:
+  contents: read
+
+jobs:
+  notis:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      TELEGRAM_TO: ${{ secrets.TELEGRAM_TO }}
+      PERISTIWA: ${{ github.event_name }}
+      JADUAL: ${{ github.event.schedule }}
+      TEKS: ${{ github.event.inputs.teks }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 100
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang kalendar NYSE (pengawas sahaja)
+        if: github.event_name == 'schedule'
+        run: pip install -q exchange_calendars
+      - name: Hantar notifikasi
+        run: |
+          S=BacktestShariah2/standard/notis_telegram.py
+          case "$PERISTIWA" in
+            push) python3 "$S" komit ;;
+            workflow_run) python3 "$S" gagal ;;
+            workflow_dispatch) python3 "$S" hantar --teks "$TEKS" ;;
+            schedule)
+              case "$JADUAL" in
+                '13 23 * * 1-5') python3 "$S" pengawas --jenis pagi --mula 22:00 ;;
+                '23 13 * * 1-5') python3 "$S" pengawas --jenis imbas --mula 11:40 ;;
+                '7 16 * * 1-5') python3 "$S" pengawas --jenis beli --mula 13:30 ;;
+                *) echo "jadual tidak dikenali: $JADUAL" ;;
+              esac ;;
+          esac
