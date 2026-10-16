@@ -1188,8 +1188,17 @@ renderNav();renderAll();
   const ptcDah=new Set();
   const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
   subPtc(2);subPtc(3);
-  sub('papertrade/watchlist','watch',['watch','sektor']);
-  sub('papertrade/senarai_beli','beli',['ptc']);
+  /* dokumen besar dibahagi (standard/bahagi_db.py): asas {bahagian:{id,n}} + <nama>_2… {induk,bahagian,rows}; bahagian lama (induk lain) diabaikan */
+  const subBhg=(path,keyName,tabs)=>{let asas=null;const ch={},dah=new Set();
+    const gabung=()=>{let d=null;if(asas){const b=asas.bahagian;let rows=asas.rows||[];
+        if(b&&b.n>1)for(let i=2;i<=b.n;i++){const c=ch[i];if(c&&c.induk===b.id)rows=rows.concat(c.rows||[]);}
+        d=Object.assign({},asas,{rows});}
+      S[keyName]=d;S.live=true;re(...tabs);};
+    db.doc(path).onSnapshot(s=>{asas=s.exists?s.data():null;const n=asas&&asas.bahagian?asas.bahagian.n:1;
+      for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);db.doc(path+'_'+i).onSnapshot(t=>{ch[i]=t.exists?t.data():null;gabung();},()=>{});}
+      gabung();},()=>{});};
+  subBhg('papertrade/watchlist','watch',['watch','sektor']);
+  subBhg('papertrade/senarai_beli','beli',['ptc']);
   sub('sektor/snapshot','sektor',['sektor']);
   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
   sub('prestasi/mae','mae',['prestasi']);
