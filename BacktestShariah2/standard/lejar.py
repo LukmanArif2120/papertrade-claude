@@ -100,12 +100,16 @@ def univ_layak():
 
 # ---------------------------------------------------------------- stor harga repo
 def tulis_stor(d, p):
-    """Format tetap: harga 6 angka bererti (seperti kod/stor.py), volum integer."""
+    """Format tetap: harga 6 angka bererti (seperti kod/stor.py), volum integer. Pulang True jika fail berubah."""
     d = d[LAJ].copy()
     for c in ('open', 'high', 'low', 'close'): d[c] = pd.to_numeric(d[c], errors='coerce').astype(float)
     d['volume'] = pd.to_numeric(d.volume, errors='coerce').fillna(0).round().astype('int64')
     d['date'] = d.date.astype('int64')
-    d.sort_values(['ticker', 'date']).to_csv(p, index=False, float_format='%.6g')
+    teks = d.sort_values(['ticker', 'date']).to_csv(index=False, float_format='%.6g')
+    if os.path.exists(p) and open(p).read() == teks:
+        return False
+    open(p, 'w').write(teks)
+    return True
 
 
 def cmd_stor(a):
@@ -130,8 +134,7 @@ def cmd_stor(a):
         r = (m.close_k / m.close_l).groupby(m.ticker).median()
         laras = {t: round(float(v), 6) for t, v in r.items() if abs(v - 1) > TOLERANSI_LARAS}
     stor, nota = harga_yf.gabung(stor, baru)
-    for nm, d in stor.items():
-        tulis_stor(d, os.path.join(STOR, nm))
+    ubah = [nm for nm, d in stor.items() if tulis_stor(d, os.path.join(STOR, nm))]
     # saham universe tanpa sejarah mencukupi -> minta sejarah 3 tahun (harga_harian.yml)
     u = univ_layak() or set()
     n = {t: c for d in stor.values() for t, c in d.groupby('ticker').size().items()}
@@ -142,8 +145,9 @@ def cmd_stor(a):
         open(p, 'w').write('\n'.join(sorted(lama | set(perlu))) + '\n')
     st = dict(dikemaskini=pd.Timestamp.now(tz='UTC').strftime('%Y-%m-%d %H:%M UTC'),
               bar_terakhir=int(max(d.date.max() for d in stor.values())), laras=laras, perlu_sejarah=perlu[:100], **nota)
-    json.dump(st, open(os.path.join(STOR, 'status.json'), 'w'), ensure_ascii=False, indent=1)
-    print(json.dumps(dict(bar_terakhir=st['bar_terakhir'], laras=len(laras), perlu_sejarah=len(perlu))))
+    if ubah or not os.path.exists(os.path.join(STOR, 'status.json')):   # status hanya ditulis jika stor berubah (elak commit kosong)
+        json.dump(st, open(os.path.join(STOR, 'status.json'), 'w'), ensure_ascii=False, indent=1)
+    print(json.dumps(dict(bar_terakhir=st['bar_terakhir'], fail_berubah=ubah, laras=len(laras), perlu_sejarah=len(perlu))))
 
 
 # ---------------------------------------------------------------- logik dagangan (enjin v1.2, satu posisi)
