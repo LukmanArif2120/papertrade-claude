@@ -36,3 +36,5 @@ jobs:
         run: python3 BacktestShariah2/standard/sahkan.py
       - name: Saiz dokumen claude_N di bawah had db (pecah_claude.py)
         run: python3 BacktestShariah2/standard/pecah_claude.py
+      - name: Integriti Lejar Penuh (lejar.py semak)
+        run: python3 BacktestShariah2/standard/lejar.py semak

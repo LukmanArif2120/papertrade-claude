@@ -9,7 +9,7 @@ Alat: `select:mcp__Moo_Moo__quote_market_state,mcp__Moo_Moo__quote_trading_days,
 - Jika alat Moomoo meminta log masuk semula: catat dalam log, commit catatan itu, dan teruskan langkah yang boleh.
 0. `git pull --rebase origin main`. Pasaran AS hari ini (waktu New York) tidak dibuka → catat "cuti" dalam `standard/binaan_v2_log.md`, commit + push, berhenti.
 1. Baca `papertrade/moomoo.csv`, semua `papertrade/claude*.csv`, `papertrade/watchlist.csv`.
-2. Data pasaran: `quote_stock_screen`
+2. Stor harga: salin `BacktestShariah2/data/harga/stor/harga_A.csv`, `harga_B.csv`, `harga_idx.csv` (stor repo, dikemas kini oleh workflow Lejar penuh setiap malam; sejak 16 Okt 2026 menggantikan aset dashboard `harga_aset` A/B/idx yang tersangkut pada 12 Okt) ke folder kerja; JANGAN ubah atau commit `data/harga/stor/`. Data pasaran: `quote_stock_screen`
    - screen_queries = [{"simple_field_query":{"simple_field":1,"screen_value_list":[2]}},{"simple_field_query":{"simple_field":10,"screen_value_list":[1]}},{"simple_property_query":{"property":{"name":2201},"lower":{"value":10000,"includes":true}}}]
    - retrieve_queries = [{"basic_property":{"name":1101}},{"simple_property":{"name":2202}},{"simple_property":{"name":2204}},{"simple_property":{"name":2205}},{"simple_property":{"name":2201}},{"cumulative_property":{"name":3104,"days":1}},{"financial_property":{"name":4903,"term":10}}]
    - limit 250, ulang dengan next_key sehingga has_more=false. Tulis semua ticker skrin (tanpa `US.`, satu baris setiap satu) ke `data/harga/univ.txt` supaya Actions harga harian meliputi universe Shariah. Kemudian kline US.SPY dan US.QQQ (num 370). Kline saham hanya untuk calon yang perlu (maks 24).

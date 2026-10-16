@@ -1,0 +1,57 @@
+# Lejar Penuh (BacktestShariah2/standard/lejar.py): stor harga repo + beli/keluar SEMUA isyarat semua kaedah,
+# satu peraturan untuk semua (tiada had sekaedah, tiada keutamaan 431). Tanpa LLM, tanpa Moomoo.
+# Masa (UTC): 02:17 Sel–Sab (~6 jam selepas tutup; volum muktamad daripada Harga harian 00:23), sandaran 06:17.
+# Setiap larian memproses semua sesi yang belum diproses mengikut urutan (larian terlepas ditampung) sebelum buka AS seterusnya.
+# Papertrade C (claude*.csv) dan rutin Claude tidak disentuh.
+name: Lejar penuh
+
+on:
+  schedule:
+    - cron: '17 2 * * 2-6'
+    - cron: '17 6 * * 2-6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lejar
+  cancel-in-progress: false
+
+jobs:
+  lejar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy
+      - name: Kemas kini stor harga repo (terkini.csv + sejarah saham baharu)
+        run: python3 BacktestShariah2/standard/lejar.py stor
+      - name: Proses sesi belum diproses (beli, keluar, isyarat)
+        run: python3 BacktestShariah2/standard/lejar.py jalan --proses 4
+      - name: Semak integriti lejar
+        run: python3 BacktestShariah2/standard/lejar.py semak
+      - name: Ringkasan setiap kaedah dan banding Papertrade C
+        run: |
+          python3 BacktestShariah2/standard/lejar.py ringkas
+          python3 BacktestShariah2/standard/lejar.py banding
+      - name: Commit dan push
+        run: |
+          git config user.name "lejar[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/lejar BacktestShariah2/data/harga/stor
+          [ -f BacktestShariah2/data/harga/perlu_sejarah.txt ] && git add BacktestShariah2/data/harga/perlu_sejarah.txt
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          SESI=$(python3 -c "import json;print(json.load(open('BacktestShariah2/lejar/status.json')).get('sesi_terakhir'))")
+          git commit -q -m "Lejar penuh: sesi $SESI"
+          for n in 1 2 3; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 15))
+          done
+          echo "Push gagal; larian seterusnya memproses semula sesi yang sama daripada keadaan repo." >&2
+          exit 1

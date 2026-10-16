@@ -4,7 +4,7 @@ Automatik; jangan tanya soalan. Tiada order. MENGHASILKAN CADANGAN SAHAJA — te
 sehingga pengguna meluluskan (`tala_semula.py guna`). Label = tahun + suku yang baru tamat, cth. `2026S4`.
 
 1. `git pull --rebase origin main`. Pastikan `pip install -q -r requirements.txt` (numba, optuna).
-2. Stor harga: baca `harian/status` (ArtifactData) → `harga_aset` A, B, idx. Muat turun setiap aset (`Artifact` action read, `path` = id aset) ke satu folder sebagai `harga_A.csv`, `harga_B.csv`, `harga_idx.csv`.
+2. Stor harga: folder `BacktestShariah2/data/harga/stor/` (stor repo `harga_A.csv`, `harga_B.csv`, `harga_idx.csv`, dikemas kini Lejar penuh setiap malam).
 3. `python3 WFO/kod/tala_semula.py data <folder>`; catat bar baharu dan ticker yang tidak disambung.
 4. Bagi setiap benih 42, 1042, 2042: `python3 WFO/kod/tala_semula.py jalan <label> <benih>` dengan Bash run_in_background (timeout 7200000). Satu larian berhenti melancar selepas ~70 minit; ulang arahan yang sama sehingga tiada BELUM (hasil disambung). Jalankan satu benih pada satu masa.
 5. `python3 WFO/kod/tala_semula.py cadang <label>` → `WFO/cadangan/<label>.md` + `.json`.

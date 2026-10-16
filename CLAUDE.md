@@ -9,6 +9,7 @@ Repo ini menggantikan Project claude.ai "Backtest Shariah 2" sebagai stor utama 
 - `BacktestShariah2/ujian/` — ujian unit: `python3 -m unittest discover -s BacktestShariah2/ujian`.
 - `BacktestShariah2/papertrade/` — moomoo.csv, claude.csv, claude_2.csv (… claude_N.csv), senarai_beli.csv, watchlist.csv, sektor.csv. Skema: `papertrade/SKEMA.md`.
 - `BacktestShariah2/spec/SPEC_SEMUA_KAEDAH.md` — semua spec (cari tanda `FAIL ASAL`).
+- `BacktestShariah2/lejar/` — Lejar Penuh (sejak 16 Okt 2026): semua isyarat semua kaedah dibeli/dikeluarkan setiap malam oleh GitHub Actions `lejar.yml` (`standard/lejar.py`). Jangan ubah secara manual. Stor harga repo: `BacktestShariah2/data/harga/stor/` (rutin menyalinnya; jangan commit perubahan).
 - `BacktestShariah2/laporan/`, `BacktestShariah2/data/` (registry gabungan, P01/P02), `BacktestShariah2/uji_kertas/log.csv`.
 - `data_mentah/` — dataset_S1–S4.csv, index_benchmark.csv (data backtest).
 

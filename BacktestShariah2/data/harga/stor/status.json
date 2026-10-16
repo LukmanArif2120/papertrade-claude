@@ -1,0 +1,27 @@
+{
+ "dikemaskini": "2026-10-16 09:03 UTC",
+ "bar_terakhir": 20261015,
+ "laras": {},
+ "perlu_sejarah": [
+  "EROK",
+  "HMH",
+  "ICCC",
+  "LIME",
+  "NOVTU",
+  "NVRI",
+  "REF",
+  "VSECU"
+ ],
+ "harga_A.csv": {
+  "ticker_dikemaskini": 431,
+  "bar_terakhir": 20261015
+ },
+ "harga_B.csv": {
+  "ticker_dikemaskini": 492,
+  "bar_terakhir": 20261015
+ },
+ "harga_idx.csv": {
+  "ticker_dikemaskini": 2,
+  "bar_terakhir": 20261015
+ }
+}
