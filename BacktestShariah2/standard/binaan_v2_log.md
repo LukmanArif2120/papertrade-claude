@@ -275,3 +275,10 @@
 - `WFO/kod/tala_semula.py`: data_mentah + stor harga dashboard → WFO 3 benih → `WFO/cadangan/<label>.md`. CADANGAN SAHAJA; diguna hanya selepas pengguna lulus (`guna`, M115–M161).
 - Jadual baharu (sesi Sonnet `session_01SyCuCvjugccaVEg84B5Nyo`): `trig_01CkyFZsHK42BXBwY6bkmEqT` analisis mingguan Sabtu 9:52 pagi MYT; `trig_01LmjLfYCAhTPyqnaqozLWBq` tala semula 1 Jan/Apr/Jul/Okt 9:49 pagi MYT. Prosedur: `WFO/jadual/`.
 - Tiada order. Tiada wang sebenar.
+
+## 16 Okt 2026 — Rekod semua isyarat malam
+- `kod/scanner.py scan --papertrade …`: tulis `BacktestShariah2/data/isyarat/<tarikh_data>_<mod>.csv.gz` (SEMUA isyarat 100% setiap kaedah: rank, henti, sasaran, tutup, sumber, `dirancang` = masuk senarai beli). Logik isyarat dan senarai beli tidak berubah. Ujian `ujian/test_simpan_isyarat.py`.
+- Cuba-imbas penuh atas salinan (stor dashboard hingga 12 Okt, 134 kaedah): 0 ralat; 2,695 isyarat (97 kaedah), 525 dirancang.
+- Dashboard: aset kod baharu `2ada390fe41ce42ea28ad4402cf5764b` (ganti `b698200e…`; beza = scanner.py sahaja); `harian/status` v18 (`harga_aset.kod`).
+- Pelan pengumpulan data 16 Okt 2026 – 15 Jan 2027 (`WFO/README.md`): semua 134 kaedah diuji ke hadapan, tiada pemangkasan.
+- Tiada order. Tiada wang sebenar.
