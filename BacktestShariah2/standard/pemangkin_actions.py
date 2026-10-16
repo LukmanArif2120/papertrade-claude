@@ -130,8 +130,56 @@ def tiada_data(x):
         type(x).__name__ == 'YFDataException' and 'history found' in str(x)) or 'HTTP Error 404' in str(x)
 
 
+RSS_YAHOO = 'https://feeds.finance.yahoo.com/rss/2.0/headline'
+BERITA_NASDAQ = 'https://api.nasdaq.com/api/news/topic/articlebysymbol'
+RSS_GOOGLE = 'https://news.google.com/rss/search'
+
+
+def _rss(url, params):
+    """RSS -> [{title, pubDate (saat UTC), link}] (format lama yfinance; dibaca terus oleh berita_yf)."""
+    import requests, xml.etree.ElementTree as ET
+    from email.utils import parsedate_to_datetime
+    r = requests.get(url, params=params, headers={'user-agent': UA}, timeout=20)
+    r.raise_for_status()
+    out = []
+    for it in ET.fromstring(r.content).iter('item'):
+        try:
+            masa = int(parsedate_to_datetime(it.findtext('pubDate')).timestamp())
+        except (TypeError, ValueError):
+            continue
+        out.append({'title': (it.findtext('title') or '').strip(), 'pubDate': masa, 'link': (it.findtext('link') or '').strip()})
+    return out
+
+
+def rss_yahoo(ticker):
+    return _rss(RSS_YAHOO, {'s': ticker, 'region': 'US', 'lang': 'en-US'})
+
+
+def rss_google(ticker, nama=''):
+    q = (f'"{nama}" OR ' if nama else '') + f'{ticker} stock when:11d'
+    return _rss(RSS_GOOGLE, {'q': q, 'hl': 'en-US', 'gl': 'US', 'ceid': 'US:en'})
+
+
+def berita_nasdaq(ticker):
+    import requests
+    h = {'user-agent': UA, 'accept': 'application/json, text/plain, */*', 'origin': 'https://www.nasdaq.com',
+         'referer': 'https://www.nasdaq.com/'}
+    r = requests.get(BERITA_NASDAQ, params={'q': f'{ticker}|stocks', 'offset': 0, 'limit': 10, 'fallback': 'false'},
+                     headers=h, timeout=20)
+    r.raise_for_status()
+    out = []
+    for x in ((r.json().get('data') or {}).get('rows') or []):
+        try:
+            masa = int(datetime.strptime(str(x.get('created')), '%b %d, %Y').replace(tzinfo=timezone.utc).timestamp())
+        except ValueError:
+            continue
+        u = str(x.get('url') or '')
+        out.append({'title': x.get('title') or '', 'pubDate': masa, 'link': u if u.startswith('http') else 'https://www.nasdaq.com' + u})
+    return out
+
+
 def diagnostik(pasangan):
-    """Cetak struktur mentah berita Yahoo bagi 'TICKER:Nama_Syarikat' (_ = ruang; log Actions; tiada fail ditulis)."""
+    """Bandingkan sumber berita percuma bagi 'TICKER:Nama_Syarikat' (_ = ruang); cetak ke log Actions sahaja."""
     import yfinance as yf
     try:
         yf.config.debug.hide_exceptions = False
@@ -141,19 +189,17 @@ def diagnostik(pasangan):
     sejak = int((datetime.now(timezone.utc) - timedelta(days=11)).timestamp())
     for p in pasangan:
         t, _, nm = p.partition(':')
-        nm, tk = nm.replace('_', ' '), yf.Ticker(t)
-        for tab in ('news', 'all', 'press releases'):
+        nm = nm.replace('_', ' ')
+        for sumber, fn in (('yfinance', lambda: yf.Ticker(t).get_news(count=10)), ('rss_yahoo', lambda: rss_yahoo(t)),
+                           ('nasdaq', lambda: berita_nasdaq(t)), ('rss_google', lambda: rss_google(t, nm))):
             try:
-                n = tk.get_news(count=10, tab=tab)
-                tk._news = []   # cache yfinance setiap tab
-                print(f'{t} tab={tab}: {len(n)} item; relevan<=11h: {len(berita_yf(n, sejak, t, nm))}')
-                for it in n[:3]:
-                    c = it.get('content') if isinstance(it.get('content'), dict) else it
-                    print('   kunci', sorted(it)[:6], '| content', sorted(c)[:14] if isinstance(c, dict) else type(c).__name__)
-                    print('   ', str(c.get('title'))[:90], '|', c.get('pubDate') or c.get('providerPublishTime'), '|',
-                          (c.get('canonicalUrl') or {}).get('url') or c.get('link'))
+                n = fn()
+                rel = berita_yf(n, sejak, t, nm)
+                print(f'{t} {sumber}: {len(n)} item; relevan <= 11 hari: {len(rel)}')
+                for x in rel[:2]:
+                    print('    ', datetime.fromtimestamp(x['masa'], timezone.utc).strftime('%Y-%m-%d %H:%M'), '|', x['tajuk'][:90], '|', x['url'][:80])
             except Exception as x:
-                print(f'{t} tab={tab}: RALAT {type(x).__name__}: {str(x)[:200]}')
+                print(f'{t} {sumber}: RALAT {type(x).__name__}: {str(x)[:200]}')
 
 
 def tarik_yahoo(nama, hari_ini, had_saat=1500, rehat=0.35):

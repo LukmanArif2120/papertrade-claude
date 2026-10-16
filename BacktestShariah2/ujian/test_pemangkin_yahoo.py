@@ -39,6 +39,24 @@ class UjiPemangkinActions(unittest.TestCase):
         self.assertEqual(o, [{'tarikh': '2026-10-08', 'nama': 'A', 'teks': 'Purchase at price 10.00 per share.', 'saham': 1000}])
         self.assertEqual(PA.analisis_yf(pd.DataFrame(), date(2026, 10, 5)), [])
 
+    def test_rss_dan_berita_nasdaq(self):
+        from unittest import mock
+        rss = (b'<?xml version="1.0"?><rss><channel><item><title>Acme Robotics beats estimates</title>'
+               b'<link>https://finance.yahoo.com/n/1</link><pubDate>Thu, 15 Oct 2026 21:30:00 +0000</pubDate></item>'
+               b'<item><title>Tanpa tarikh</title><link>https://x/2</link></item></channel></rss>')
+        jwb = mock.Mock(content=rss); jwb.raise_for_status = lambda: None
+        with mock.patch('requests.get', return_value=jwb):
+            n = PA.rss_yahoo('ACME')
+        self.assertEqual(n, [{'title': 'Acme Robotics beats estimates', 'link': 'https://finance.yahoo.com/n/1',
+                              'pubDate': int(datetime(2026, 10, 15, 21, 30, tzinfo=timezone.utc).timestamp())}])
+        self.assertEqual(len(PA.berita_yf(n, utc('2026-10-05 00:00'), 'ACME', 'Acme Robotics')), 1)
+        jwb = mock.Mock(); jwb.raise_for_status = lambda: None
+        jwb.json = lambda: {'data': {'rows': [{'title': 'Acme Robotics wins contract', 'url': '/articles/acme-1',
+                                               'created': 'Oct 14, 2026'}, {'title': 'x', 'created': 'semalam'}]}}
+        with mock.patch('requests.get', return_value=jwb):
+            n = PA.berita_nasdaq('ACME')
+        self.assertEqual([x['link'] for x in n], ['https://www.nasdaq.com/articles/acme-1'])
+
     def test_tiada_data_bukan_ralat(self):
         class YFDataException(Exception):
             pass
@@ -46,6 +64,7 @@ class UjiPemangkinActions(unittest.TestCase):
         self.assertTrue(PA.tiada_data(YFDataException('No upgrade/downgrade history found for X')))
         self.assertFalse(PA.tiada_data(YFDataException('*** YAHOO! FINANCE IS CURRENTLY DOWN! ***')))
         self.assertFalse(PA.tiada_data(ConnectionError('reset')))
+        self.assertTrue(PA.tiada_data(Exception('HTTP Error 404: ')))
 
     def test_main_cache_setiap_ticker(self):
         with tempfile.TemporaryDirectory() as d:
