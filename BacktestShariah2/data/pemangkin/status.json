@@ -1,22 +1,17 @@
 {
- "dijana": "2026-10-16 03:19 UTC",
+ "dijana": "2026-10-16 03:54 UTC",
  "tarikh": "2026-10-16",
- "lengkap": false,
+ "lengkap": true,
  "ticker": 262,
- "yahoo_dikumpul": 258,
+ "yahoo_dikumpul": 262,
  "yahoo_baru": 262,
- "yahoo_ralat": 4,
+ "yahoo_ralat": 0,
  "yahoo_belum": 0,
- "yahoo_berita": 0,
+ "yahoo_berita": 230,
  "yahoo_analisis": 145,
  "yahoo_orang_dalam": 2,
  "nasdaq_tarikh": "2026-10-16",
  "nasdaq_saham": 881,
  "nasdaq_hari_ralat": 0,
- "contoh_ralat": [
-  "analisis: HTTPError: HTTP Error 404: ",
-  "analisis: HTTPError: HTTP Error 404: ",
-  "analisis: HTTPError: HTTP Error 404: ",
-  "analisis: HTTPError: HTTP Error 404: "
- ]
+ "contoh_ralat": []
 }
