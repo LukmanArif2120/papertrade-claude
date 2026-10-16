@@ -13,7 +13,8 @@ import numpy as np, pandas as pd
 ROOT = os.path.dirname(os.path.abspath(__file__))                     # WFO/kod
 REPO = os.path.join(ROOT, '..', '..')
 KOD = os.path.join(REPO, 'BacktestShariah2', 'kod')                   # enjin v1.2 + kaedah (baca sahaja)
-sys.path.insert(0, KOD); sys.path.insert(0, os.path.join(KOD, 'kaedah'))
+BARU = os.path.join(ROOT, '..', 'kaedah_baru')                      # calon K145+ (M115–M161), di luar imbasan harian
+sys.path.insert(0, KOD); sys.path.insert(0, os.path.join(KOD, 'kaedah')); sys.path.insert(0, BARU)
 import enjin
 from enjin import atr
 import enjin_laju
@@ -320,8 +321,8 @@ def jalan_satu(mid):
         return mid, 'RALAT', round(time.time() - t0)
 
 def semua_kaedah():
-    return sorted([f[:-3] for f in os.listdir(os.path.join(KOD, 'kaedah')) if f.startswith('M') and f.endswith('.py')],
-                  key=lambda x: int(x[1:]))
+    f = os.listdir(os.path.join(KOD, 'kaedah')) + os.listdir(BARU)
+    return sorted({x[:-3] for x in f if x.startswith('M') and x.endswith('.py')}, key=lambda x: int(x[1:]))
 
 def status():
     out = {}
