@@ -1,0 +1,13847 @@
+{
+"M01": {
+"r13_ambang_25": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 25,
+"peranan_kod": "r13_ambang",
+"urut": 3
+},
+"rolling_30": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 30,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rsi_13": {
+"flag": [
+"arg",
+"fn:rsi",
+"gelung"
+],
+"kali": 1,
+"nilai": 13,
+"peranan_kod": "rsi",
+"urut": 0
+},
+"sd_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 1
+}
+},
+"M02": {
+"ewm_span_12": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "ewm_span",
+"urut": 5
+},
+"ewm_span_26": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 26,
+"peranan_kod": "ewm_span",
+"urut": 6
+},
+"ewm_span_9": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "ewm_span",
+"urut": 4
+},
+"r": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "r",
+"urut": 0
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"s200_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "s200_kali",
+"urut": 1
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 3
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M03": {
+"i_tolak_30": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "i_tolak",
+"urut": 6
+},
+"i_tolak_5": {
+"flag": [
+"dalam_arg",
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 3,
+"nilai": 5,
+"peranan_kod": "i_tolak",
+"urut": 4
+},
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 5
+},
+"range_31": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 31,
+"peranan_kod": "range",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rsi_14": {
+"flag": [
+"arg",
+"fn:rsi"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rsi",
+"urut": 2
+},
+"sd_kali_2": {
+"flag": [
+"op:kali"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 1
+}
+},
+"M04": {
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 0
+},
+"quantile_0_2": {
+"flag": [
+"arg",
+"fn:quantile",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "quantile",
+"urut": 3
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 9
+},
+"rolling_11": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"rolling_126": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 3,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"sd_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 1
+},
+"sd_kali_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "sd_kali",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 7
+},
+"vs20_kali_1_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "vs20_kali",
+"urut": 6
+}
+},
+"M05": {
+"ewm_span_12": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "ewm_span",
+"urut": 12
+},
+"ewm_span_26": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 26,
+"peranan_kod": "ewm_span",
+"urut": 13
+},
+"i_ambang_15": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 15,
+"peranan_kod": "i_ambang",
+"urut": 11
+},
+"i_tolak_3": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "i_tolak",
+"urut": 8
+},
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 14
+},
+"len_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "len_ambang",
+"urut": 1
+},
+"n_tolak_3": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "n_tolak",
+"urut": 9
+},
+"nilai_2": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 10
+},
+"p2_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "p2_ambang",
+"urut": 2
+},
+"p_p2_ambang_5_ambang_40": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "p_p2_ambang_5_ambang",
+"urut": 3
+},
+"p_q2_ambang_5_ambang_40": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "p_q2_ambang_5_ambang",
+"urut": 5
+},
+"q2_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "q2_ambang",
+"urut": 4
+},
+"range_10": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "range",
+"urut": 0
+},
+"range_3": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "range",
+"urut": 7
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"t_tambah_4": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tambah"
+],
+"kali": 2,
+"nilai": 4,
+"peranan_kod": "t_tambah",
+"urut": 16
+},
+"t_tolak_3": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "t_tolak",
+"urut": 15
+}
+},
+"M06": {
+"bm_kali_0_92": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "bm_kali",
+"urut": 17
+},
+"cl_kali_0_2": {
+"flag": [
+"op:kali"
+],
+"kali": 3,
+"nilai": 0.2,
+"peranan_kod": "cl_kali",
+"urut": 1
+},
+"cl_kali_0_4": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.4,
+"peranan_kod": "cl_kali",
+"urut": 2
+},
+"h_kali_0_75": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "h_kali",
+"urut": 13
+},
+"l_kali_1_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.3,
+"peranan_kod": "l_kali",
+"urut": 15
+},
+"lb3_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "lb3_kali",
+"urut": 16
+},
+"piv_kali_1_05": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.05,
+"peranan_kod": "piv_kali",
+"urut": 14
+},
+"rank_kali_100": {
+"flag": [
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "rank_kali",
+"urut": 0
+},
+"rolling_15": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 15,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rolling_150": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 150,
+"peranan_kod": "rolling",
+"urut": 11
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"rolling_252": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 252,
+"peranan_kod": "rolling",
+"urut": 19
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"rsp_ambang_70": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 70,
+"peranan_kod": "rsp_ambang",
+"urut": 7
+},
+"shift_126": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "shift",
+"urut": 6
+},
+"shift_189": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 189,
+"peranan_kod": "shift",
+"urut": 4
+},
+"shift_21": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "shift",
+"urut": 18
+},
+"shift_252": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "shift",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+},
+"vola_kali_1_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.4,
+"peranan_kod": "vola_kali",
+"urut": 9
+}
+},
+"M07": {
+"adr_ambang_0_04": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 0.04,
+"peranan_kod": "adr_ambang",
+"urut": 5
+},
+"adr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "adr_kali",
+"urut": 9
+},
+"atrw_14": {
+"flag": [
+"arg",
+"fn:_atrw",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atrw",
+"urut": 1
+},
+"i_tolak_10": {
+"flag": [
+"dalam_arg",
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "i_tolak",
+"urut": 13
+},
+"i_tolak_126": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 126,
+"peranan_kod": "i_tolak",
+"urut": 2
+},
+"i_tolak_4": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 4,
+"nilai": 4,
+"peranan_kod": "i_tolak",
+"urut": 14
+},
+"i_tolak_5": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 4,
+"nilai": 5,
+"peranan_kod": "i_tolak",
+"urut": 10
+},
+"i_tolak_6": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "i_tolak",
+"urut": 11
+},
+"i_tolak_9": {
+"flag": [
+"dalam_arg",
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 9,
+"peranan_kod": "i_tolak",
+"urut": 15
+},
+"k_tolak_63": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 63,
+"peranan_kod": "k_tolak",
+"urut": 3
+},
+"range_132": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 132,
+"peranan_kod": "range",
+"urut": 0
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 4,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"run_ambang_0_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 0.3,
+"peranan_kod": "run_ambang",
+"urut": 4
+},
+"s10_kali_1_01": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 1.01,
+"peranan_kod": "s10_kali",
+"urut": 12
+},
+"shift_126": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "shift",
+"urut": 16
+}
+},
+"M08": {
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 3
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_6": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"s20_kali_1_01": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.01,
+"peranan_kod": "s20_kali",
+"urut": 7
+},
+"s20_kali_1_05": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 1.05,
+"peranan_kod": "s20_kali",
+"urut": 4
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 1
+},
+"sl20_ambang_0_01": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.01,
+"peranan_kod": "sl20_ambang",
+"urut": 6
+}
+},
+"M09": {
+"a14_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 0.5,
+"peranan_kod": "a14_kali",
+"urut": 14
+},
+"a200_kali_2": {
+"flag": [
+"op:kali"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "a200_kali",
+"urut": 4
+},
+"a_bahagi_100": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi"
+],
+"kali": 2,
+"nilai": 100,
+"peranan_kod": "a_bahagi",
+"urut": 11
+},
+"age_ambang_50": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "age_ambang",
+"urut": 10
+},
+"atrw_14": {
+"flag": [
+"arg",
+"fn:_atrw"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atrw",
+"urut": 6
+},
+"atrw_200": {
+"flag": [
+"arg",
+"fn:_atrw"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "atrw",
+"urut": 3
+},
+"bahagi_2": {
+"flag": [
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "bahagi",
+"urut": 0
+},
+"bahagi_2_bahagi_11": {
+"flag": [
+"kanan",
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "bahagi_2_bahagi",
+"urut": 1
+},
+"buy_bahagi_2": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "buy_bahagi",
+"urut": 5
+},
+"buy_kali_100": {
+"flag": [
+"gelung",
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "buy_kali",
+"urut": 9
+},
+"cc_tambah_4": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tambah"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "cc_tambah",
+"urut": 17
+},
+"cc_tolak_3": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "cc_tolak",
+"urut": 16
+},
+"dl_ambang_30": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 30,
+"peranan_kod": "dl_ambang",
+"urut": 13
+},
+"i_tolak_3": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "i_tolak",
+"urut": 7
+},
+"range_7": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 7,
+"peranan_kod": "range",
+"urut": 2
+},
+"rolling_15": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"up_kali_100": {
+"flag": [
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "up_kali",
+"urut": 15
+}
+},
+"M10": {
+"cci_20": {
+"flag": [
+"arg",
+"fn:_cci",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "cci",
+"urut": 3
+},
+"cci_ambang_100": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 3,
+"nilai": 100,
+"peranan_kod": "cci_ambang",
+"urut": 4
+},
+"e125_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "e125_kali",
+"urut": 2
+},
+"ewm_span_125": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 125,
+"peranan_kod": "ewm_span",
+"urut": 6
+},
+"ewm_span_250": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 250,
+"peranan_kod": "ewm_span",
+"urut": 7
+},
+"ewm_span_60": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "ewm_span",
+"urut": 5
+},
+"high_bahagi_3": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "high_bahagi",
+"urut": 0
+},
+"md_kali_0_015": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.015,
+"peranan_kod": "md_kali",
+"urut": 1
+},
+"rolling_11": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 11,
+"peranan_kod": "rolling",
+"urut": 8
+}
+},
+"M100": {
+"b_kali_1_03": {
+"flag": [
+"gelung",
+"kanan",
+"op:kali"
+],
+"kali": 2,
+"nilai": 1.03,
+"peranan_kod": "b_kali",
+"urut": 7
+},
+"i_tolak_4": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "i_tolak",
+"urut": 2
+},
+"i_tolak_63": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "i_tolak",
+"urut": 6
+},
+"nl3_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "nl3_ambang",
+"urut": 3
+},
+"nl4_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "nl4_ambang",
+"urut": 10
+},
+"nl4_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "nl4_ambang",
+"urut": 11
+},
+"np_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "np_ambang",
+"urut": 4
+},
+"np_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "np_ambang",
+"urut": 9
+},
+"np_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "np_ambang",
+"urut": 5
+},
+"p_w_tambah_63": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tambah"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "p_w_tambah",
+"urut": 1
+},
+"rolling_7": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 7,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 13
+},
+"t_kali_0_98": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.98,
+"peranan_kod": "t_kali",
+"urut": 12
+},
+"w": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 7,
+"nilai": 40,
+"peranan_kod": "w",
+"urut": 0
+}
+},
+"M101": {
+"a_tolak_63": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 63,
+"peranan_kod": "a_tolak",
+"urut": 9
+},
+"b_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "b_ambang",
+"urut": 2
+},
+"cc_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "cc_ambang",
+"urut": 4
+},
+"i_ambang_126": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "i_ambang",
+"urut": 6
+},
+"lc_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "lc_kali",
+"urut": 11
+},
+"p": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 3,
+"nilai": 5,
+"peranan_kod": "p",
+"urut": 0
+},
+"p_b_ambang_5_ambang_60": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "p_b_ambang_5_ambang",
+"urut": 3
+},
+"p_cc_ambang_5_ambang_60": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "p_cc_ambang_5_ambang",
+"urut": 5
+},
+"p_kali_2": {
+"flag": [
+"dalam_arg",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "p_kali",
+"urut": 10
+},
+"ptr_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "ptr_ambang",
+"urut": 1
+},
+"ptr_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "ptr_tolak",
+"urut": 8
+},
+"ptr_tolak_3": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "ptr_tolak",
+"urut": 7
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 13
+}
+},
+"M102": {
+"c_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "c_ambang",
+"urut": 9
+},
+"fillna_1000000000_0": {
+"flag": [
+"arg",
+"fn:fillna",
+"gelung"
+],
+"kali": 1,
+"nilai": 1000000000.0,
+"peranan_kod": "fillna",
+"urut": 5
+},
+"minv_ambang_100000": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 100000,
+"peranan_kod": "minv_ambang",
+"urut": 8
+},
+"r_ambang_0_02": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.02,
+"peranan_kod": "r_ambang",
+"urut": 4
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"rolling_65": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 65,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_7": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 7,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+},
+"ti65_ambang_1_05": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 1.05,
+"peranan_kod": "ti65_ambang",
+"urut": 7
+}
+},
+"M104": {
+"close_kali_0_88": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.88,
+"peranan_kod": "close_kali",
+"urut": 8
+},
+"dalam_ambang_0_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "dalam_ambang",
+"urut": 6
+},
+"fillna_1000000000_0": {
+"flag": [
+"arg",
+"fn:fillna",
+"gelung"
+],
+"kali": 1,
+"nilai": 1000000000.0,
+"peranan_kod": "fillna",
+"urut": 9
+},
+"i_tolak_30": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "i_tolak",
+"urut": 1
+},
+"l_max": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "l_max",
+"urut": 3
+},
+"l_min": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "l_min",
+"urut": 5
+},
+"p_tolak_40": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 40,
+"peranan_kod": "p_tolak",
+"urut": 2
+},
+"range_41": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 41,
+"peranan_kod": "range",
+"urut": 0
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"rr_kali_0_99": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "rr_kali",
+"urut": 7
+},
+"tiang_min": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "tiang_min",
+"urut": 4
+},
+"vol50_kali_1_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "vol50_kali",
+"urut": 11
+}
+},
+"M105": {
+"close_kali_0_88": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.88,
+"peranan_kod": "close_kali",
+"urut": 3
+},
+"high_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "high_bahagi",
+"urut": 0
+},
+"m": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "m",
+"urut": 2
+},
+"n": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "n",
+"urut": 1
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 4
+}
+},
+"M106": {
+"a14_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "a14_kali",
+"urut": 6
+},
+"adx_ambang_25": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 25,
+"peranan_kod": "adx_ambang",
+"urut": 7
+},
+"adx_bahagi_14": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "adx_bahagi",
+"urut": 3
+},
+"adx_kali_13": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 13,
+"peranan_kod": "adx_kali",
+"urut": 4
+},
+"dmi_14": {
+"flag": [
+"arg",
+"fn:_dmi",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "dmi",
+"urut": 5
+},
+"np_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "np_kali",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 8
+},
+"wn_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "wn_kali",
+"urut": 1
+},
+"wp_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "wp_kali",
+"urut": 0
+}
+},
+"M107": {
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 4
+},
+"rma_atr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rma_atr_kali",
+"urut": 1
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 3
+}
+},
+"M11": {
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 1
+},
+"rolling_11": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_7": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 7,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 3
+}
+},
+"M111": {
+"close_kali_0_88": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.88,
+"peranan_kod": "close_kali",
+"urut": 3
+},
+"m": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 2,
+"nilai": 3.0,
+"peranan_kod": "m",
+"urut": 1
+},
+"n": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 7,
+"peranan_kod": "n",
+"urut": 0
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+},
+"sistem_mula_199": {
+"flag": [
+"arg",
+"fn:_sistem",
+"gelung",
+"kw:mula"
+],
+"kali": 1,
+"nilai": 199,
+"peranan_kod": "sistem_mula",
+"urut": 2
+}
+},
+"M115": {
+"between_3": {
+"flag": [
+"arg",
+"fn:between",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "between",
+"urut": 0
+},
+"between_a1_5": {
+"flag": [
+"arg",
+"fn:between",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "between_a1",
+"urut": 1
+},
+"ema_20": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "ema",
+"urut": 3
+},
+"ema_30": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "ema",
+"urut": 4
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 7
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 6
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 5
+},
+"sma_10": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "sma",
+"urut": 2
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M116": {
+"ema_20": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ema",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 4
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "henti_pct",
+"urut": 3
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 2
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 1
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M117": {
+"c_ambang_0_04": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.04,
+"peranan_kod": "c_ambang",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "henti_atr",
+"urut": 5
+},
+"lp_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "lp_ambang",
+"urut": 1
+},
+"p_lp_ambang_2_ambang_7": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 7,
+"peranan_kod": "p_lp_ambang_2_ambang",
+"urut": 2
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"rolling_42": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "rolling",
+"urut": 3
+}
+},
+"M118": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 4
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "henti_low",
+"urut": 3
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 5
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 2
+},
+"rolling_9": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 0
+}
+},
+"M119": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 6
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 8
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 7
+},
+"pos_ambang_0_25": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.25,
+"peranan_kod": "pos_ambang",
+"urut": 1
+},
+"pos_ambang_0_75": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "pos_ambang",
+"urut": 2
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"sma_10": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "sma",
+"urut": 3
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 0
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M12": {
+"psar_a0_0_02": {
+"flag": [
+"arg",
+"fn:_psar",
+"gelung",
+"kw:a0"
+],
+"kali": 1,
+"nilai": 0.02,
+"peranan_kod": "psar_a0",
+"urut": 1
+},
+"psar_amax_0_2": {
+"flag": [
+"arg",
+"fn:_psar",
+"gelung",
+"kw:amax"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "psar_amax",
+"urut": 3
+},
+"psar_da_0_02": {
+"flag": [
+"arg",
+"fn:_psar",
+"gelung",
+"kw:da"
+],
+"kali": 1,
+"nilai": 0.02,
+"peranan_kod": "psar_da",
+"urut": 2
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+},
+"t_tolak_2": {
+"flag": [
+"dalam_arg",
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "t_tolak",
+"urut": 0
+}
+},
+"M120": {
+"c_ambang_30": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "c_ambang",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 4
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 5
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"rolling_5": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_60": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "rolling",
+"urut": 1
+}
+},
+"M121": {
+"ema_20": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ema",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 7
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "henti_pct",
+"urut": 6
+},
+"i_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "i_tolak",
+"urut": 4
+},
+"kira_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "kira_ambang",
+"urut": 2
+},
+"pos_ambang_0_75": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "pos_ambang",
+"urut": 3
+},
+"range_2": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "range",
+"urut": 1
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 5
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M122": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 11
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "henti_low",
+"urut": 10
+},
+"k_ambang_20": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "k_ambang",
+"urut": 8
+},
+"macd_hist_a_12": {
+"flag": [
+"arg",
+"fn:macd_hist",
+"gelung",
+"kw:a"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "macd_hist_a",
+"urut": 2
+},
+"macd_hist_b_26": {
+"flag": [
+"arg",
+"fn:macd_hist",
+"gelung",
+"kw:b"
+],
+"kali": 1,
+"nilai": 26,
+"peranan_kod": "macd_hist_b",
+"urut": 3
+},
+"macd_hist_s_9": {
+"flag": [
+"arg",
+"fn:macd_hist",
+"gelung",
+"kw:s"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "macd_hist_s",
+"urut": 4
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 9
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"sma_150": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 150,
+"peranan_kod": "sma",
+"urut": 6
+},
+"sma_20": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "sma",
+"urut": 5
+},
+"stoch_k_14": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "stoch_k",
+"urut": 0
+},
+"stoch_k_d_3": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "stoch_k_d",
+"urut": 1
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M123": {
+"cci_20": {
+"flag": [
+"arg",
+"fn:cci",
+"gelung"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "cci",
+"urut": 0
+},
+"cd_ambang_100": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "cd_ambang",
+"urut": 2
+},
+"cds_ambang_100": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 100,
+"peranan_kod": "cds_ambang",
+"urut": 3
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 1,
+"peranan_kod": "henti_low",
+"urut": 5
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 7
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"v_ambang_100": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 100,
+"peranan_kod": "v_ambang",
+"urut": 1
+}
+},
+"M124": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.0,
+"peranan_kod": "henti_atr",
+"urut": 4
+},
+"k_ambang_50": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 3,
+"nilai": 50,
+"peranan_kod": "k_ambang",
+"urut": 2
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "keluar_chan",
+"urut": 6
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 8
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 7
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"stoch_k_39": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 39,
+"peranan_kod": "stoch_k",
+"urut": 0
+},
+"stoch_k_d_3": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "stoch_k_d",
+"urut": 1
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M125": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 4
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.5,
+"peranan_kod": "henti_atr",
+"urut": 3
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 2
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 0
+},
+"shift_3": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "shift",
+"urut": 1
+}
+},
+"M126": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "henti_atr",
+"urut": 5
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 7
+},
+"pos_ambang_0_25": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.25,
+"peranan_kod": "pos_ambang",
+"urut": 1
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 2
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 0
+}
+},
+"M127": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 4
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 1,
+"peranan_kod": "henti_low",
+"urut": 3
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 5
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 7
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 6
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 2
+},
+"rolling_42": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 3,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 0
+}
+},
+"M128": {
+"h_ambang_0_45": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 0.45,
+"peranan_kod": "h_ambang",
+"urut": 1
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "henti_pct",
+"urut": 4
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "keluar_sma",
+"urut": 6
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 2
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 0
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M129": {
+"h_ambang_0_4": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.4,
+"peranan_kod": "h_ambang",
+"urut": 1
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "henti_low",
+"urut": 4
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 2
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 0
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M13": {
+"k": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 3,
+"nilai": 3,
+"peranan_kod": "k",
+"urut": 1
+},
+"len_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "len_ambang",
+"urut": 2
+},
+"nilai_2": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 4
+},
+"win": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "win",
+"urut": 0
+}
+},
+"M130": {
+"b_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "b_kali",
+"urut": 7
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 10
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.5,
+"peranan_kod": "henti_atr",
+"urut": 9
+},
+"pb_kali_1_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "pb_kali",
+"urut": 1
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 8
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 6
+},
+"sma_10": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "sma",
+"urut": 3
+},
+"sma_20": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "sma",
+"urut": 4
+},
+"sma_5": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "sma",
+"urut": 2
+}
+},
+"M131": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 12
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.0,
+"peranan_kod": "henti_atr",
+"urut": 11
+},
+"i_tolak_2": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "i_tolak",
+"urut": 1
+},
+"k_tambah_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tambah"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "k_tambah",
+"urut": 8
+},
+"k_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "k_tolak",
+"urut": 7
+},
+"len_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "len_ambang",
+"urut": 4
+},
+"nilai_2": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 9
+},
+"range_4": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "range",
+"urut": 0
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 10
+},
+"tahap_2": {
+"flag": [
+"gelung",
+"tugasan"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "tahap",
+"urut": 5
+},
+"tahap_3": {
+"flag": [
+"gelung",
+"tugasan"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "tahap",
+"urut": 6
+},
+"tahap_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "tahap_ambang",
+"urut": 2
+},
+"tahap_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "tahap_ambang",
+"urut": 3
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M132": {
+"dalam_ambang_0_08": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.08,
+"peranan_kod": "dalam_ambang",
+"urut": 7
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 13
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4.0,
+"peranan_kod": "henti_atr",
+"urut": 12
+},
+"i_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "i_ambang",
+"urut": 2
+},
+"i_tolak_40": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 40,
+"peranan_kod": "i_tolak",
+"urut": 5
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 14
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 16
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 15
+},
+"p_dalam_ambang_0_08_ambang_0_35": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.35,
+"peranan_kod": "p_dalam_ambang_0_08_ambang",
+"urut": 8
+},
+"pv_kali_1_02": {
+"flag": [
+"gelung",
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.02,
+"peranan_kod": "pv_kali",
+"urut": 10
+},
+"range_100": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "range",
+"urut": 1
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 11
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 9
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 0
+},
+"t_ambang_40": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "t_ambang",
+"urut": 4
+},
+"t_tolak_5": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "t_tolak",
+"urut": 3
+},
+"t_tolak_60": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "t_tolak",
+"urut": 6
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M133": {
+"atr_20": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "atr",
+"urut": 3
+},
+"atr_kali_6": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "atr_kali",
+"urut": 2
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.0,
+"peranan_kod": "henti_atr",
+"urut": 5
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 7
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"sma_10": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "sma",
+"urut": 1
+},
+"sma_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "sma_kali",
+"urut": 0
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M134": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.0,
+"peranan_kod": "henti_atr",
+"urut": 4
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 6
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 8
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 7
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"rolling_60": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 60,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"run_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "run_ambang",
+"urut": 1
+},
+"sma_10": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "sma",
+"urut": 0
+}
+},
+"M135": {
+"dekat_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "dekat_ambang",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 12
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "henti_low",
+"urut": 11
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 13
+},
+"paras_kali_0_97": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.97,
+"peranan_kod": "paras_kali",
+"urut": 5
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 10
+},
+"rolling_106": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 106,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_126": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 3,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 1
+},
+"shift_21": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "shift",
+"urut": 7
+},
+"shift_3": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "shift",
+"urut": 9
+},
+"shift_4": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "shift",
+"urut": 8
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+},
+"v_kali_1_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "v_kali",
+"urut": 3
+}
+},
+"M136": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 7
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "henti_pct",
+"urut": 6
+},
+"i_ambang_10": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "i_ambang",
+"urut": 1
+},
+"len_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "len_ambang",
+"urut": 2
+},
+"nilai_2": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 3
+},
+"nilai_3": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "nilai",
+"urut": 4
+},
+"range_2": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "range",
+"urut": 0
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 5
+}
+},
+"M137": {
+"a_kali_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 4,
+"peranan_kod": "a_kali",
+"urut": 4
+},
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 1
+},
+"atr_20": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "atr",
+"urut": 3
+},
+"atr_kali_6": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "atr_kali",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 8
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.5,
+"peranan_kod": "henti_atr",
+"urut": 7
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 9
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 11
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 10
+},
+"len_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "len_ambang",
+"urut": 2
+},
+"nilai_2": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 5
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 6
+}
+},
+"M138": {
+"brun_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "brun_kali",
+"urut": 4
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 9
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4.0,
+"peranan_kod": "henti_atr",
+"urut": 8
+},
+"r_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "r_ambang",
+"urut": 3
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 7
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"rolling_5": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"shift_6": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "shift",
+"urut": 6
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+},
+"v_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "v_kali",
+"urut": 5
+},
+"vrun_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "vrun_kali",
+"urut": 2
+}
+},
+"M139": {
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 4
+},
+"atr_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "atr_kali",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 9
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "henti_pct",
+"urut": 8
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 7
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 6
+},
+"sma_10": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "sma",
+"urut": 2
+},
+"sma_20": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "sma",
+"urut": 3
+},
+"sma_5": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "sma",
+"urut": 1
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M14": {
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 3,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 0
+}
+},
+"M140": {
+"c_ambang_0_045": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.045,
+"peranan_kod": "c_ambang",
+"urut": 2
+},
+"float_ambang_40": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "float_ambang",
+"urut": 1
+},
+"h_kali_0_85": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "h_kali",
+"urut": 3
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 9
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "henti_atr",
+"urut": 8
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 10
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 7
+},
+"rolling_120": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 120,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_60": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 60,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"sma_60": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "sma",
+"urut": 0
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M141": {
+"a_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "a_kali",
+"urut": 4
+},
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 1
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 7
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.5,
+"peranan_kod": "henti_atr",
+"urut": 6
+},
+"i_ambang_15": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "i_ambang",
+"urut": 2
+},
+"range_61": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 61,
+"peranan_kod": "range",
+"urut": 0
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 5
+},
+"rolling_60": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M142": {
+"h20_kali_1_03": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.03,
+"peranan_kod": "h20_kali",
+"urut": 4
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 8
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.5,
+"peranan_kod": "henti_atr",
+"urut": 7
+},
+"i_ambang_10": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "i_ambang",
+"urut": 2
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 9
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 11
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 10
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 6
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 1
+},
+"sma_250": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 250,
+"peranan_kod": "sma",
+"urut": 0
+},
+"v20_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "v20_kali",
+"urut": 3
+}
+},
+"M143": {
+"c_kali_1_07": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.07,
+"peranan_kod": "c_kali",
+"urut": 3
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 8
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.5,
+"peranan_kod": "henti_atr",
+"urut": 7
+},
+"hh_ambang_0_15": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.15,
+"peranan_kod": "hh_ambang",
+"urut": 1
+},
+"i_ambang_10": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "i_ambang",
+"urut": 2
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 9
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 11
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 10
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 6
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 3,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"sma_5": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 2,
+"nilai": 5,
+"peranan_kod": "sma",
+"urut": 0
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "tmax",
+"urut": -1
+},
+"v20_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "v20_kali",
+"urut": 4
+}
+},
+"M144": {
+"adr_ambang_0_04": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.04,
+"peranan_kod": "adr_ambang",
+"urut": 0
+},
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 6
+},
+"atr_kali_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "atr_kali",
+"urut": 2
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 9
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4.0,
+"peranan_kod": "henti_atr",
+"urut": 8
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 10
+},
+"pos_ambang_0_1": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "pos_ambang",
+"urut": 4
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 7
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"sma_20": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "sma",
+"urut": 3
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 5
+}
+},
+"M145": {
+"ema_20": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ema",
+"urut": 0
+},
+"ffill_limit_3": {
+"flag": [
+"arg",
+"fn:ffill",
+"gelung",
+"kw:limit"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "ffill_limit",
+"urut": 2
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 8
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "henti_low",
+"urut": 7
+},
+"pos_ambang_0_75": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "pos_ambang",
+"urut": 1
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 6
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 4
+}
+},
+"M146": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "henti_pct",
+"urut": 4
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "keluar_sma",
+"urut": 6
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 6,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 0
+},
+"shift_3": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "shift",
+"urut": 2
+}
+},
+"M147": {
+"ema_3": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "ema",
+"urut": 1
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "henti_pct",
+"urut": 5
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 2
+},
+"shift_3": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "shift",
+"urut": 3
+},
+"trix_9": {
+"flag": [
+"arg",
+"fn:trix",
+"gelung"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "trix",
+"urut": 0
+}
+},
+"M148": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 10
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "henti_pct",
+"urut": 9
+},
+"i_ambang_20": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "i_ambang",
+"urut": 1
+},
+"keluar_ema": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "keluar_ema",
+"urut": 11
+},
+"p_ambang_100": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "p_ambang",
+"urut": 4
+},
+"p_ambang_20": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "p_ambang",
+"urut": 2
+},
+"p_ambang_500": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 500,
+"peranan_kod": "p_ambang",
+"urut": 7
+},
+"pulang_10_0": {
+"flag": [],
+"kali": 1,
+"nilai": 10.0,
+"peranan_kod": "pulang",
+"urut": 5
+},
+"pulang_50_0": {
+"flag": [],
+"kali": 1,
+"nilai": 50.0,
+"peranan_kod": "pulang",
+"urut": 6
+},
+"pulang_5_0": {
+"flag": [],
+"kali": 1,
+"nilai": 5.0,
+"peranan_kod": "pulang",
+"urut": 3
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 8
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+},
+"wma_180": {
+"flag": [
+"arg",
+"fn:wma",
+"gelung"
+],
+"kali": 1,
+"nilai": 180,
+"peranan_kod": "wma",
+"urut": 0
+}
+},
+"M149": {
+"a_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "a_kali",
+"urut": 8
+},
+"a_kali_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "a_kali",
+"urut": 3
+},
+"atr_15": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung"
+],
+"kali": 2,
+"nilai": 15,
+"peranan_kod": "atr",
+"urut": 1
+},
+"atr_kali_2_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2.5,
+"peranan_kod": "atr_kali",
+"urut": 4
+},
+"ema_15": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "ema",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 10
+},
+"k_ambang_15": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "k_ambang",
+"urut": 2
+},
+"k_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "k_ambang",
+"urut": 5
+},
+"p_susut_ambang_0_2_ambang_0_8": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.8,
+"peranan_kod": "p_susut_ambang_0_2_ambang",
+"urut": 7
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 9
+},
+"susut_ambang_0_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "susut_ambang",
+"urut": 6
+}
+},
+"M15": {
+"a14_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 0.5,
+"peranan_kod": "a14_kali",
+"urut": 6
+},
+"atrw_14": {
+"flag": [
+"arg",
+"fn:_atrw",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atrw",
+"urut": 1
+},
+"bb_tolak_4": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "bb_tolak",
+"urut": 4
+},
+"h_kali_0_382": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.382,
+"peranan_kod": "h_kali",
+"urut": 7
+},
+"i_tolak_16": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 16,
+"peranan_kod": "i_tolak",
+"urut": 2
+},
+"i_tolak_60": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "i_tolak",
+"urut": 8
+},
+"range_70": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 70,
+"peranan_kod": "range",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_7": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 7,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 9
+}
+},
+"M150": {
+"ema_20": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ema",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "henti_pct",
+"urut": 4
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "keluar_sma",
+"urut": 6
+},
+"r_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "r_kali",
+"urut": 2
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 1
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M151": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 5
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "henti_atr",
+"urut": 4
+},
+"i_ambang_10": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "i_ambang",
+"urut": 2
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "keluar_chan",
+"urut": 6
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 8
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 7
+},
+"range_21": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "range",
+"urut": 0
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 3
+},
+"sma_20": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "sma",
+"urut": 1
+}
+},
+"M152": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 9
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "henti_pct",
+"urut": 8
+},
+"naik_aliran_shift_20": {
+"flag": [
+"fn:naik_aliran",
+"k145"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "naik_aliran_shift_20",
+"urut": 6
+},
+"naik_aliran_sma_50": {
+"flag": [
+"fn:naik_aliran",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "naik_aliran_sma_50",
+"urut": 5
+},
+"pos_ambang_0_75": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "pos_ambang",
+"urut": 1
+},
+"range_12": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "range",
+"urut": 0
+},
+"range_5": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "range",
+"urut": 2
+},
+"range_a1_12": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "range_a1",
+"urut": 3
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 7
+},
+"rolling_5": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M153": {
+"h_bahagi_2": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "h_bahagi",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 3
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "henti_pct",
+"urut": 2
+},
+"keluar_chan": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "keluar_chan",
+"urut": 4
+},
+"keluar_chan_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_atr",
+"urut": 6
+},
+"keluar_chan_tinggi": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 22,
+"peranan_kod": "keluar_chan_tinggi",
+"urut": 5
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 1
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M154": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 2.5,
+"peranan_kod": "henti_atr",
+"urut": 5
+},
+"i_tolak_20": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "i_tolak",
+"urut": 1
+},
+"naik_aliran_shift_20": {
+"flag": [
+"fn:naik_aliran",
+"k145"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "naik_aliran_shift_20",
+"urut": 3
+},
+"naik_aliran_sma_50": {
+"flag": [
+"fn:naik_aliran",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "naik_aliran_sma_50",
+"urut": 2
+},
+"range_21": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "range",
+"urut": 0
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M155": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 11
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "henti_atr",
+"urut": 10
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 9
+},
+"rolling_21": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"s1_ambang_0_1": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "s1_ambang",
+"urut": 6
+},
+"stoch_k_13": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 13,
+"peranan_kod": "stoch_k",
+"urut": 0
+},
+"stoch_k_21": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "stoch_k",
+"urut": 2
+},
+"stoch_k_34": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 34,
+"peranan_kod": "stoch_k",
+"urut": 4
+},
+"stoch_k_d_13": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 13,
+"peranan_kod": "stoch_k_d",
+"urut": 3
+},
+"stoch_k_d_21": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "stoch_k_d",
+"urut": 5
+},
+"stoch_k_d_8": {
+"flag": [
+"arg",
+"fn:stoch_k",
+"gelung"
+],
+"kali": 1,
+"nilai": 8,
+"peranan_kod": "stoch_k_d",
+"urut": 1
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "tmax",
+"urut": -1
+},
+"v_ambang_1_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 1.2,
+"peranan_kod": "v_ambang",
+"urut": 7
+}
+},
+"M156": {
+"h_kali_0_382": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.382,
+"peranan_kod": "h_kali",
+"urut": 2
+},
+"h_kali_0_618": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.618,
+"peranan_kod": "h_kali",
+"urut": 3
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 9
+},
+"henti_atr": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "henti_atr",
+"urut": 8
+},
+"i_tolak_10": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "i_tolak",
+"urut": 1
+},
+"k_tolak_20": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "k_tolak",
+"urut": 4
+},
+"naik_aliran_shift_20": {
+"flag": [
+"fn:naik_aliran",
+"k145"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "naik_aliran_shift_20",
+"urut": 6
+},
+"naik_aliran_sma_50": {
+"flag": [
+"fn:naik_aliran",
+"k145"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "naik_aliran_sma_50",
+"urut": 5
+},
+"range_41": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 41,
+"peranan_kod": "range",
+"urut": 0
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 7
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M157": {
+"adr5_ambang_0_03": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.03,
+"peranan_kod": "adr5_ambang",
+"urut": 5
+},
+"c_ambang_0_15": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.15,
+"peranan_kod": "c_ambang",
+"urut": 8
+},
+"c_ambang_0_25": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.25,
+"peranan_kod": "c_ambang",
+"urut": 9
+},
+"ema_10": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "ema",
+"urut": 0
+},
+"ema_21": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "ema",
+"urut": 1
+},
+"h_ambang_0_02": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.02,
+"peranan_kod": "h_ambang",
+"urut": 3
+},
+"h_kali_0_85": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "h_kali",
+"urut": 10
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 15
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "henti_pct",
+"urut": 14
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 13
+},
+"rolling_5": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 11
+},
+"shift_40": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "shift",
+"urut": 12
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 6
+},
+"v_kali_0_8": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.8,
+"peranan_kod": "v_kali",
+"urut": 4
+}
+},
+"M158": {
+"adx_14": {
+"flag": [
+"arg",
+"fn:adx",
+"gelung"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "adx",
+"urut": 1
+},
+"atr_20": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "atr",
+"urut": 3
+},
+"atr_kali_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "atr_kali",
+"urut": 2
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "henti_pct",
+"urut": 5
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"sma_50": {
+"flag": [
+"arg",
+"fn:sma",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "sma",
+"urut": 0
+}
+},
+"M159": {
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 7
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "henti_pct",
+"urut": 6
+},
+"hh_kali_0_1": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "hh_kali",
+"urut": 3
+},
+"ho_bahagi_2": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "ho_bahagi",
+"urut": 2
+},
+"keluar_sma": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "keluar_sma",
+"urut": 8
+},
+"o_bahagi_2": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "o_bahagi",
+"urut": 1
+},
+"o_bahagi_4": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "o_bahagi",
+"urut": 0
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 5
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 4
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M160": {
+"a_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "a_kali",
+"urut": 1
+},
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 0
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 6
+},
+"henti_low": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "henti_low",
+"urut": 5
+},
+"keluar_ema": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "keluar_ema",
+"urut": 7
+},
+"p_rt_ambang_0_3_ambang_0_7": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.7,
+"peranan_kod": "p_rt_ambang_0_3_ambang",
+"urut": 3
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 4
+},
+"rt_ambang_0_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.3,
+"peranan_kod": "rt_ambang",
+"urut": 2
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 42,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M161": {
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 7
+},
+"atr_kali_1_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "atr_kali",
+"urut": 4
+},
+"ema_10": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "ema",
+"urut": 2
+},
+"ema_21": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "ema",
+"urut": 3
+},
+"had_henti": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "had_henti",
+"urut": 10
+},
+"henti_pct": {
+"flag": [
+"fn:pasang",
+"k145"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "henti_pct",
+"urut": 9
+},
+"rank_shift_63": {
+"flag": [
+"fn:siap_lajur",
+"k145"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rank_shift_63",
+"urut": 8
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_5": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 3,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"supertrend_hijau_10": {
+"flag": [
+"arg",
+"fn:supertrend_hijau",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "supertrend_hijau",
+"urut": 0
+},
+"supertrend_hijau_k_3_0": {
+"flag": [
+"arg",
+"fn:supertrend_hijau",
+"gelung"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "supertrend_hijau_k",
+"urut": 1
+}
+},
+"M18": {
+"ema_a1_21": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "ema_a1",
+"urut": 1
+},
+"ema_a1_9": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "ema_a1",
+"urut": 0
+},
+"rr_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rr_ambang",
+"urut": 2
+}
+},
+"M19": {
+"fillna_9_0": {
+"flag": [
+"arg",
+"fn:fillna",
+"gelung"
+],
+"kali": 1,
+"nilai": 9.0,
+"peranan_kod": "fillna",
+"urut": 1
+},
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 3
+},
+"shift_3": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "shift",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M20": {
+"atrw_14": {
+"flag": [
+"arg",
+"fn:_atrw",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atrw",
+"urut": 7
+},
+"c_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "c_kali",
+"urut": 3
+},
+"ema_a1_10": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "ema_a1",
+"urut": 1
+},
+"ema_a1_15": {
+"flag": [
+"arg",
+"fn:ema",
+"gelung"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "ema_a1",
+"urut": 2
+},
+"fillna_99_0": {
+"flag": [
+"arg",
+"fn:fillna",
+"gelung"
+],
+"kali": 1,
+"nilai": 99.0,
+"peranan_kod": "fillna",
+"urut": 4
+},
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 0
+},
+"range_a1_6": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "range_a1",
+"urut": 8
+},
+"rolling_100": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 6
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M21": {
+"adr_ambang_0_05": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.05,
+"peranan_kod": "adr_ambang",
+"urut": 7
+},
+"adr_kali_2_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2.5,
+"peranan_kod": "adr_kali",
+"urut": 11
+},
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 1
+},
+"c_ambang_0_75": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "c_ambang",
+"urut": 6
+},
+"c_ambang_1000000_0": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 1000000.0,
+"peranan_kod": "c_ambang",
+"urut": 2
+},
+"hk_kali_0_75": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "hk_kali",
+"urut": 12
+},
+"i_tolak_10": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "i_tolak",
+"urut": 16
+},
+"i_tolak_11": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "i_tolak",
+"urut": 18
+},
+"i_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "i_tolak",
+"urut": 17
+},
+"i_tolak_20": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "i_tolak",
+"urut": 19
+},
+"i_tolak_63": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 3,
+"nilai": 63,
+"peranan_kod": "i_tolak",
+"urut": 3
+},
+"k_tolak_63": {
+"flag": [
+"dalam_arg",
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "k_tolak",
+"urut": 20
+},
+"max_0_04": {
+"flag": [
+"arg",
+"fn:max",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.04,
+"peranan_kod": "max",
+"urut": 14
+},
+"o_ambang_0_05": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.05,
+"peranan_kod": "o_ambang",
+"urut": 5
+},
+"range_70": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 70,
+"peranan_kod": "range",
+"urut": 0
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 4,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 9
+},
+"rolling_252": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "rolling",
+"urut": 22
+},
+"rolling_40": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "rolling",
+"urut": 21
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"run_ambang_0_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.3,
+"peranan_kod": "run_ambang",
+"urut": 4
+},
+"vol50_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "vol50_kali",
+"urut": 15
+},
+"vol50_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "vol50_kali",
+"urut": 13
+}
+},
+"M22": {
+"ema_a1_10": {
+"flag": [
+"arg",
+"fn:ema"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "ema_a1",
+"urut": 0
+},
+"ema_a1_20": {
+"flag": [
+"arg",
+"fn:ema"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ema_a1",
+"urut": 1
+},
+"g_ambang_0_1": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "g_ambang",
+"urut": 2
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"vr_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "vr_ambang",
+"urut": 3
+}
+},
+"M23": {
+"rolling_126": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"vs50_kali_1_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "vs50_kali",
+"urut": 2
+}
+},
+"M24": {
+"k": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "k",
+"urut": 0
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_252": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "shift",
+"urut": 1
+}
+},
+"M25": {
+"a_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "a_tolak",
+"urut": 1
+},
+"high_bahagi_3": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "high_bahagi",
+"urut": 2
+},
+"i_tolak_10": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "i_tolak",
+"urut": 10
+},
+"i_tolak_11": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "i_tolak",
+"urut": 8
+},
+"low_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "low_kali",
+"urut": 6
+},
+"max_a1_11": {
+"flag": [
+"arg",
+"fn:max",
+"gelung"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "max_a1",
+"urut": 7
+},
+"n": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "n",
+"urut": 4
+},
+"n_tolak_2": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "n_tolak",
+"urut": 9
+},
+"range_12": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "range",
+"urut": 5
+},
+"range_2": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "range",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 11
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "tmax",
+"urut": -1
+},
+"tp_kuasa_2": {
+"flag": [
+"gelung",
+"kanan",
+"op:kuasa"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "tp_kuasa",
+"urut": 3
+},
+"vs20_kali_0_7": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.7,
+"peranan_kod": "vs20_kali",
+"urut": 13
+}
+},
+"M26": {
+"a_kali_0_25": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 0.25,
+"peranan_kod": "a_kali",
+"urut": 7
+},
+"atrw_14": {
+"flag": [
+"arg",
+"fn:_atrw",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atrw",
+"urut": 4
+},
+"j_tambah_11": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tambah"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "j_tambah",
+"urut": 0
+},
+"j_tolak_3": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "j_tolak",
+"urut": 6
+},
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 1
+},
+"l_tolak_1em12": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 1e-12,
+"peranan_kod": "l_tolak",
+"urut": 8
+},
+"len_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "len_ambang",
+"urut": 5
+},
+"nilai_2": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 9
+},
+"pivot_k_3": {
+"flag": [
+"arg",
+"fn:_pivot"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "pivot_k",
+"urut": 2
+},
+"range_10": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "range",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 10
+}
+},
+"M27": {
+"a14_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 0.5,
+"peranan_kod": "a14_kali",
+"urut": 5
+},
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 1
+},
+"b_tolak_250": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 250,
+"peranan_kod": "b_tolak",
+"urut": 2
+},
+"b_tolak_4": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "b_tolak",
+"urut": 3
+},
+"eq_4": {
+"flag": [
+"arg",
+"fn:eq",
+"gelung"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "eq",
+"urut": 7
+},
+"i_tolak_14": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "i_tolak",
+"urut": 8
+},
+"i_tolak_15": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "i_tolak",
+"urut": 10
+},
+"i_tolak_4": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "i_tolak",
+"urut": 13
+},
+"np_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "np_ambang",
+"urut": 4
+},
+"pivot_k_3": {
+"flag": [
+"arg",
+"fn:_pivot"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "pivot_k",
+"urut": 0
+},
+"range_5": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "range",
+"urut": 6
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 11
+},
+"rolling_4": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "rolling",
+"urut": 14
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 9
+}
+},
+"M28": {
+"ambang": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "ambang",
+"urut": 0
+},
+"atrw_14": {
+"flag": [
+"arg",
+"fn:_atrw",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atrw",
+"urut": 3
+},
+"c_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "c_kali",
+"urut": 5
+},
+"h_bahagi_3": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "h_bahagi",
+"urut": 1
+},
+"h_kali_0_6": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.6,
+"peranan_kod": "h_kali",
+"urut": 6
+},
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 2
+},
+"l_kali_1_01": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.01,
+"peranan_kod": "l_kali",
+"urut": 4
+},
+"o_bahagi_2": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "o_bahagi",
+"urut": 7
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 3,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M29": {
+"c_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "c_kali",
+"urut": 4
+},
+"k_ambang_20": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "k_ambang",
+"urut": 9
+},
+"p1": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "p1",
+"urut": 0
+},
+"p2": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 110,
+"peranan_kod": "p2",
+"urut": 1
+},
+"p3": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 250,
+"peranan_kod": "p3",
+"urut": 2
+},
+"r75_ambang_50": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 3,
+"nilai": 50,
+"peranan_kod": "r75_ambang",
+"urut": 11
+},
+"rolling_14": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 3,
+"nilai": 14,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_6": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 6,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rsi_75": {
+"flag": [
+"arg",
+"fn:rsi"
+],
+"kali": 1,
+"nilai": 75,
+"peranan_kod": "rsi",
+"urut": 3
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 3,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 6
+},
+"z_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "z_kali",
+"urut": 10
+}
+},
+"M30": {
+"atrw_14": {
+"flag": [
+"arg",
+"fn:_atrw",
+"gelung",
+"kw:n"
+],
+"kali": 2,
+"nilai": 14,
+"peranan_kod": "atrw",
+"urut": 4
+},
+"atrw_kali_0_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "atrw_kali",
+"urut": 6
+},
+"l_kali_0_99": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.99,
+"peranan_kod": "l_kali",
+"urut": 0
+},
+"quantile_0_2": {
+"flag": [
+"arg",
+"fn:quantile",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "quantile",
+"urut": 3
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 9
+},
+"rolling_11": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 11,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"rolling_126": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 3,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 11
+},
+"sd_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 1
+},
+"sd_kali_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "sd_kali",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 7
+}
+},
+"M31": {
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"sd_kali_2": {
+"flag": [
+"op:kali"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 1
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 2,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 3
+}
+},
+"M32": {
+"clv_ambang_0_75": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "clv_ambang",
+"urut": 10
+},
+"h_kali_0_8": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.8,
+"peranan_kod": "h_kali",
+"urut": 3
+},
+"r_ambang_0_02": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.02,
+"peranan_kod": "r_ambang",
+"urut": 0
+},
+"r_ambang_0_04": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.04,
+"peranan_kod": "r_ambang",
+"urut": 1
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 5
+},
+"shift_3": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "shift",
+"urut": 9
+},
+"shift_6": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "shift",
+"urut": 6
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 11
+},
+"shift_64": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 64,
+"peranan_kod": "shift",
+"urut": 8
+}
+},
+"M33": {
+"h_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "h_bahagi",
+"urut": 0
+},
+"high_ambang_0_25": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.25,
+"peranan_kod": "high_ambang",
+"urut": 1
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 3,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+},
+"supertrend_10": {
+"flag": [
+"arg",
+"fn:_supertrend",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "supertrend",
+"urut": 2
+},
+"supertrend_k_3_0": {
+"flag": [
+"arg",
+"fn:_supertrend",
+"gelung",
+"kw:k"
+],
+"kali": 1,
+"nilai": 3.0,
+"peranan_kod": "supertrend_k",
+"urut": 3
+}
+},
+"M34": {
+"a20_kali_1_5": {
+"flag": [
+"op:kali"
+],
+"kali": 2,
+"nilai": 1.5,
+"peranan_kod": "a20_kali",
+"urut": 5
+},
+"bahagi_20": {
+"flag": [
+"dalam_arg",
+"kanan",
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "bahagi",
+"urut": 8
+},
+"dm_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "dm_bahagi",
+"urut": 1
+},
+"h_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "h_bahagi",
+"urut": 0
+},
+"linreg_end_20": {
+"flag": [
+"arg",
+"fn:_linreg_end",
+"kw:n"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "linreg_end",
+"urut": 2
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 9
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 4,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"sd_kali_2": {
+"flag": [
+"op:kali"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 4
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 7
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 10
+}
+},
+"M35": {
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"s10_kali_1_02": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.02,
+"peranan_kod": "s10_kali",
+"urut": 1
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 2
+}
+},
+"M36": {
+"n_20": {
+"flag": [
+"arg",
+"fn:_N",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "n",
+"urut": 2
+},
+"n_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "n_kali",
+"urut": 3
+},
+"out_bahagi_20": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "out_bahagi",
+"urut": 0
+},
+"out_kali_19": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 19,
+"peranan_kod": "out_kali",
+"urut": 1
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_55": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 55,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+}
+},
+"M37": {
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_26": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 26,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_30": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"rolling_4": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 4,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_52": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 52,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"shift_4": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "shift",
+"urut": 5
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 8
+},
+"vol4_kali_2": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "vol4_kali",
+"urut": 0
+}
+},
+"M38": {
+"n_sah": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "n_sah",
+"urut": 1
+},
+"rolling_52": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 52,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 3
+},
+"weekday_ambang_4": {
+"flag": [
+"banding",
+"kalendar"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "weekday_ambang",
+"urut": 0
+}
+},
+"M39": {
+"c_kali_0_85": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "c_kali",
+"urut": 2
+},
+"rolling_100": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 100,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"sd_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 1
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 3
+}
+},
+"M40": {
+"b_kali_252": {
+"flag": [
+"dalam_arg",
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "b_kali",
+"urut": 7
+},
+"b_kuasa_2": {
+"flag": [
+"kanan",
+"op:kuasa"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "b_kuasa",
+"urut": 4
+},
+"c_ambang_0_15": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.15,
+"peranan_kod": "c_ambang",
+"urut": 16
+},
+"d_kuasa_2": {
+"flag": [
+"kanan",
+"op:kuasa"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "d_kuasa",
+"urut": 6
+},
+"loc_kali_0_2": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "loc_kali",
+"urut": 15
+},
+"n_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "n_bahagi",
+"urut": 3
+},
+"nb_kali_0_2": {
+"flag": [
+"dalam_arg",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "nb_kali",
+"urut": 11
+},
+"rma_atr_20": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rma_atr",
+"urut": 13
+},
+"rma_atr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rma_atr_kali",
+"urut": 10
+},
+"rolling_100": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"rolling_90": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 90,
+"peranan_kod": "rolling",
+"urut": 14
+},
+"skor_90": {
+"flag": [
+"arg",
+"fn:_skor",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 90,
+"peranan_kod": "skor",
+"urut": 9
+},
+"slot": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 3,
+"nilai": 8,
+"peranan_kod": "slot",
+"urut": 8
+},
+"weekday_ambang_2": {
+"flag": [
+"banding",
+"kalendar"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "weekday_ambang",
+"urut": 0
+},
+"weekday_mod_7": {
+"flag": [
+"dalam_arg",
+"kalendar",
+"kanan",
+"op:mod"
+],
+"kali": 1,
+"nilai": 7,
+"peranan_kod": "weekday_mod",
+"urut": 1
+},
+"weekday_tolak_2": {
+"flag": [
+"dalam_arg",
+"kalendar",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "weekday_tolak",
+"urut": 2
+},
+"x_kuasa_2": {
+"flag": [
+"kanan",
+"op:kuasa"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "x_kuasa",
+"urut": 5
+}
+},
+"M41": {
+"c_ambang_0_2": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "c_ambang",
+"urut": 3
+},
+"ema_sma_12": {
+"flag": [
+"arg",
+"fn:_ema_sma"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "ema_sma",
+"urut": 4
+},
+"ema_sma_26": {
+"flag": [
+"arg",
+"fn:_ema_sma"
+],
+"kali": 1,
+"nilai": 26,
+"peranan_kod": "ema_sma",
+"urut": 5
+},
+"ema_sma_9": {
+"flag": [
+"arg",
+"fn:_ema_sma"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "ema_sma",
+"urut": 1
+},
+"n_bahagi_2": {
+"flag": [
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "n_bahagi",
+"urut": 0
+},
+"nilai_10": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "nilai",
+"urut": 16
+},
+"nilai_6": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 2,
+"nilai": 6,
+"peranan_kod": "nilai",
+"urut": 15
+},
+"rint_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rint_bahagi",
+"urut": 2
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_6": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 6,
+"peranan_kod": "rolling",
+"urut": 9
+},
+"saiz_ambang_0_05": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.05,
+"peranan_kod": "saiz_ambang",
+"urut": 12
+},
+"saiz_ambang_0_2": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "saiz_ambang",
+"urut": 11
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 14
+},
+"sumbu_ambang_0_5": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "sumbu_ambang",
+"urut": 8
+},
+"volume_kali_1_3": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.3,
+"peranan_kod": "volume_kali",
+"urut": 6
+},
+"weekday_ambang_4": {
+"flag": [
+"banding",
+"gelung",
+"kalendar"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "weekday_ambang",
+"urut": 13
+}
+},
+"M44": {
+"c_ambang_0_2": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "c_ambang",
+"urut": 2
+},
+"iloc_kali_0_92": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "iloc_kali",
+"urut": 9
+},
+"open_kali_0_92": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "open_kali",
+"urut": 8
+},
+"rolling_25": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 25,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_9": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"shift_26": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 26,
+"peranan_kod": "shift",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 11
+},
+"shift_89": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 89,
+"peranan_kod": "shift",
+"urut": 5
+},
+"t_ambang_0_15": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.15,
+"peranan_kod": "t_ambang",
+"urut": 0
+},
+"t_tambah_0_1": {
+"flag": [
+"kanan",
+"op:tambah"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "t_tambah",
+"urut": 1
+},
+"tb_kali_1_05": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.05,
+"peranan_kod": "tb_kali",
+"urut": 10
+}
+},
+"M45": {
+"clip_50": {
+"flag": [
+"arg",
+"fn:clip",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "clip",
+"urut": 10
+},
+"clip_a1_50": {
+"flag": [
+"arg",
+"fn:clip",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "clip_a1",
+"urut": 8
+},
+"hari_sejak_max_252": {
+"flag": [
+"arg",
+"fn:_hari_sejak_max",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "hari_sejak_max",
+"urut": 7
+},
+"hari_sejak_max_ambang_21": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "hari_sejak_max_ambang",
+"urut": 1
+},
+"len_kali_0_3": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 0.3,
+"peranan_kod": "len_kali",
+"urut": 4
+},
+"r_kali_1em06": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1e-06,
+"peranan_kod": "r_kali",
+"urut": 3
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 9
+},
+"rma_atr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rma_atr_kali",
+"urut": 2
+},
+"rolling_252": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"shift_126": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "shift",
+"urut": 6
+},
+"slot": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 2,
+"nilai": 8,
+"peranan_kod": "slot",
+"urut": 0
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M46": {
+"a40_kali_0_75": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "a40_kali",
+"urut": 5
+},
+"atr_40": {
+"flag": [
+"arg",
+"fn:atr"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "atr",
+"urut": 0
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_31": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 31,
+"peranan_kod": "shift",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+},
+"vol50_kali_1_5": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "vol50_kali",
+"urut": 4
+}
+},
+"M47": {
+"adx_14": {
+"flag": [
+"arg",
+"fn:_adx",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "adx",
+"urut": 4
+},
+"adx_ambang_30": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "adx_ambang",
+"urut": 3
+},
+"ewm_span_20": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ewm_span",
+"urut": 6
+},
+"mdm_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "mdm_kali",
+"urut": 1
+},
+"pdi_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pdi_kali",
+"urut": 2
+},
+"pdm_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pdm_kali",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+}
+},
+"M48": {
+"adx_ambang_30": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "adx_ambang",
+"urut": 6
+},
+"high_tambah_0_125": {
+"flag": [
+"gelung",
+"kanan",
+"op:tambah"
+],
+"kali": 1,
+"nilai": 0.125,
+"peranan_kod": "high_tambah",
+"urut": 7
+},
+"mdm_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "mdm_kali",
+"urut": 3
+},
+"pdi_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pdi_kali",
+"urut": 4
+},
+"pdm_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pdm_kali",
+"urut": 2
+},
+"rendah_ambang_2": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rendah_ambang",
+"urut": 1
+},
+"rolling_3": {
+"flag": [
+"arg",
+"banding",
+"fn:rolling"
+],
+"kali": 3,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 9
+},
+"wilder_14": {
+"flag": [
+"arg",
+"fn:_wilder",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "wilder",
+"urut": 5
+}
+},
+"M49": {
+"h_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 3,
+"nilai": 2,
+"peranan_kod": "h_bahagi",
+"urut": 0
+},
+"rolling_26": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 26,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_52": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 52,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_9": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 9,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_26": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 4,
+"nilai": 26,
+"peranan_kod": "shift",
+"urut": 5
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+},
+"ten_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "ten_bahagi",
+"urut": 1
+}
+},
+"M50": {
+"dayofweek_ambang_4": {
+"flag": [
+"banding",
+"kalendar"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "dayofweek_ambang",
+"urut": 0
+},
+"ewm_span_12": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 12,
+"peranan_kod": "ewm_span",
+"urut": 1
+},
+"ewm_span_2": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "ewm_span",
+"urut": 6
+},
+"ewm_span_26": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 26,
+"peranan_kod": "ewm_span",
+"urut": 2
+},
+"ewm_span_9": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "ewm_span",
+"urut": 3
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+}
+},
+"M51": {
+"bo_kali_0_92": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "bo_kali",
+"urut": 18
+},
+"c_kali_0_92": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "c_kali",
+"urut": 16
+},
+"dalam_max": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "dalam_max",
+"urut": 0
+},
+"dc_ambang_0_12": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.12,
+"peranan_kod": "dc_ambang",
+"urut": 7
+},
+"i_ambang_475": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 475,
+"peranan_kod": "i_ambang",
+"urut": 1
+},
+"i_tolak_25": {
+"flag": [
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 25,
+"peranan_kod": "i_tolak",
+"urut": 2
+},
+"i_tolak_4": {
+"flag": [
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "i_tolak",
+"urut": 10
+},
+"kiri_bahagi_2": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "kiri_bahagi",
+"urut": 14
+},
+"kiri_kali_0_9": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.9,
+"peranan_kod": "kiri_kali",
+"urut": 12
+},
+"kiri_kali_1_05": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.05,
+"peranan_kod": "kiri_kali",
+"urut": 13
+},
+"lft_tolak_130": {
+"flag": [
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 130,
+"peranan_kod": "lft_tolak",
+"urut": 4
+},
+"naik_ambang_0_3": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.3,
+"peranan_kod": "naik_ambang",
+"urut": 8
+},
+"p_kali_1_05": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.05,
+"peranan_kod": "p_kali",
+"urut": 20
+},
+"panjang_ambang_35": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 35,
+"peranan_kod": "panjang_ambang",
+"urut": 5
+},
+"panjang_ambang_35_ambang_325": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 325,
+"peranan_kod": "panjang_ambang_35_ambang",
+"urut": 6
+},
+"r_tolak_29": {
+"flag": [
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 29,
+"peranan_kod": "r_tolak",
+"urut": 11
+},
+"r_tolak_320": {
+"flag": [
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 320,
+"peranan_kod": "r_tolak",
+"urut": 3
+},
+"range_475": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 475,
+"peranan_kod": "range",
+"urut": 15
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 17
+},
+"rp_ambang_0_12": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.12,
+"peranan_kod": "rp_ambang",
+"urut": 9
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 19
+},
+"v50_kali_1_4": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.4,
+"peranan_kod": "v50_kali",
+"urut": 21
+}
+},
+"M52": {
+"bo_kali_0_6": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.6,
+"peranan_kod": "bo_kali",
+"urut": 5
+},
+"c_kali_0_6": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.6,
+"peranan_kod": "c_kali",
+"urut": 1
+},
+"roc_ambang_0_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.3,
+"peranan_kod": "roc_ambang",
+"urut": 3
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 2
+}
+},
+"M54": {
+"ewm_span_21": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "ewm_span",
+"urut": 4
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 7
+},
+"rma_atr_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rma_atr_kali",
+"urut": 5
+},
+"rolling_10": {
+"flag": [
+"arg",
+"banding",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rolling_5": {
+"flag": [
+"arg",
+"banding",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+}
+},
+"M55": {
+"nilai_15": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "nilai",
+"urut": 0
+},
+"nilai_30": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "nilai",
+"urut": 1
+},
+"nilai_60": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 60,
+"peranan_kod": "nilai",
+"urut": 2
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_4": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"shift_10": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "shift",
+"urut": 6
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 4
+}
+},
+"M56": {
+"len_ambang_252": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "len_ambang",
+"urut": 5
+},
+"len_kali_0_1": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "len_kali",
+"urut": 7
+},
+"max_16": {
+"flag": [
+"arg",
+"fn:max",
+"gelung"
+],
+"kali": 1,
+"nilai": 16,
+"peranan_kod": "max",
+"urut": 2
+},
+"nilai_8": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 8,
+"peranan_kod": "nilai",
+"urut": 8
+},
+"open_kali_0_8": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.8,
+"peranan_kod": "open_kali",
+"urut": 3
+},
+"p_ambang_252": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "p_ambang",
+"urut": 6
+},
+"range_4": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "range",
+"urut": 4
+},
+"shift_21": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "shift",
+"urut": 0
+},
+"shift_252": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "shift",
+"urut": 1
+}
+},
+"M57": {
+"aliran_lag_2": {
+"flag": [
+"arg",
+"fn:_aliran",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "aliran_lag",
+"urut": 5
+},
+"c_ambang_0_15": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.15,
+"peranan_kod": "c_ambang",
+"urut": 0
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_63": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"shift_10": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "shift",
+"urut": 1
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 7
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 2,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 4
+}
+},
+"M59": {
+"atas": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 69,
+"peranan_kod": "atas",
+"urut": 1
+},
+"bawah": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 39,
+"peranan_kod": "bawah",
+"urut": 0
+},
+"lb": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 2,
+"nilai": 65,
+"peranan_kod": "lb",
+"urut": 2
+},
+"r_ambang_40": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "r_ambang",
+"urut": 4
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 7
+},
+"rma_atr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rma_atr_kali",
+"urut": 5
+},
+"rsi_14": {
+"flag": [
+"arg",
+"fn:rsi",
+"gelung"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rsi",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+}
+},
+"M64": {
+"c_ambang_0_2": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "c_ambang",
+"urut": 1
+},
+"concat_tambah_0_1": {
+"flag": [
+"kanan",
+"op:tambah"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "concat_tambah",
+"urut": 2
+},
+"ketat": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 2,
+"nilai": 0.015,
+"peranan_kod": "ketat",
+"urut": 0
+},
+"piv_kali_0_92": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "piv_kali",
+"urut": 6
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"sah": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "sah",
+"urut": 5
+},
+"shift_10": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "shift",
+"urut": 4
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 4,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 8
+}
+},
+"M66": {
+"akhir_999": {
+"flag": [
+"gelung",
+"tugasan"
+],
+"kali": 1,
+"nilai": 999,
+"peranan_kod": "akhir",
+"urut": 0
+},
+"i_ambang_10": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "i_ambang",
+"urut": 4
+},
+"rolling_4": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 4,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"s50_kali_1_02": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.02,
+"peranan_kod": "s50_kali",
+"urut": 1
+},
+"shift_10": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "shift",
+"urut": 2
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+}
+},
+"M67": {
+"a_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "a_kali",
+"urut": 9
+},
+"b_ambang_3": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "b_ambang",
+"urut": 0
+},
+"ewm_span_20": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ewm_span",
+"urut": 3
+},
+"ewm_span_50": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "ewm_span",
+"urut": 4
+},
+"i_tolak_6": {
+"flag": [
+"dalam_arg",
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 6,
+"peranan_kod": "i_tolak",
+"urut": 5
+},
+"nilai_2": {
+"flag": [
+"indeks"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 7
+},
+"nilai_3": {
+"flag": [
+"indeks"
+],
+"kali": 3,
+"nilai": 3,
+"peranan_kod": "nilai",
+"urut": 1
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 8
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_10": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "shift",
+"urut": 6
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 10
+}
+},
+"M68": {
+"ewm_span_10": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "ewm_span",
+"urut": 4
+},
+"ewm_span_20": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "ewm_span",
+"urut": 5
+},
+"n": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 5,
+"nilai": 10,
+"peranan_kod": "n",
+"urut": 0
+},
+"pangsi_ambang_0_12": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.12,
+"peranan_kod": "pangsi_ambang",
+"urut": 1
+},
+"pangsi_ambang_0_2": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "pangsi_ambang",
+"urut": 2
+},
+"rolling_30": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_63": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 8
+}
+},
+"M70": {
+"ewm_span_10": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "ewm_span",
+"urut": 3
+},
+"ewm_span_21": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "ewm_span",
+"urut": 4
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 2
+}
+},
+"M73": {
+"adx_5": {
+"flag": [
+"arg",
+"fn:_adx",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "adx",
+"urut": 2
+},
+"adx_ambang_40": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "adx_ambang",
+"urut": 3
+},
+"pdi_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pdi_kali",
+"urut": 1
+},
+"rma_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 2,
+"nilai": 100,
+"peranan_kod": "rma_kali",
+"urut": 0
+},
+"rolling_5": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 4
+}
+},
+"M74": {
+"h252_kali_0_75": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "h252_kali",
+"urut": 6
+},
+"l252_kali_1_3": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.3,
+"peranan_kod": "l252_kali",
+"urut": 5
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 9
+},
+"rma_atr_kali_1_5": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.5,
+"peranan_kod": "rma_atr_kali",
+"urut": 7
+},
+"rolling_150": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 150,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_252": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 252,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"shift_21": {
+"flag": [
+"arg",
+"fn:shift"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "shift",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 8
+}
+},
+"M76": {
+"clv_ambang_0_6": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.6,
+"peranan_kod": "clv_ambang",
+"urut": 9
+},
+"i_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "i_tolak",
+"urut": 4
+},
+"i_tolak_8": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 8,
+"peranan_kod": "i_tolak",
+"urut": 3
+},
+"n": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 5,
+"nilai": 40,
+"peranan_kod": "n",
+"urut": 0
+},
+"n_tolak_2": {
+"flag": [
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "n_tolak",
+"urut": 1
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rp_kali_1_05": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.05,
+"peranan_kod": "rp_kali",
+"urut": 5
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 8
+}
+},
+"M77": {
+"clv_ambang_0_6": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.6,
+"peranan_kod": "clv_ambang",
+"urut": 6
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"rolling_5": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 1
+},
+"shift_10": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "shift",
+"urut": 0
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 7
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 4
+}
+},
+"M78": {
+"dv21_ambang_15000000_0": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 15000000.0,
+"peranan_kod": "dv21_ambang",
+"urut": 7
+},
+"k_atr": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "k_atr",
+"urut": 0
+},
+"open_kali_0_92": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "open_kali",
+"urut": 3
+},
+"r20_ambang_0_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.3,
+"peranan_kod": "r20_ambang",
+"urut": 9
+},
+"rma_atr_100": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "rma_atr",
+"urut": 2
+},
+"rolling_100": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"rolling_19": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 19,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rolling_21": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"shift_20": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "shift",
+"urut": 5
+},
+"weekday_ambang_4": {
+"flag": [
+"banding",
+"kalendar"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "weekday_ambang",
+"urut": 1
+}
+},
+"M79": {
+"a": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 3,
+"nilai": 0.15,
+"peranan_kod": "a",
+"urut": 0
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 1
+}
+},
+"M80": {
+"n_atas_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "n_atas_ambang",
+"urut": 1
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 6
+},
+"rma_atr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rma_atr_kali",
+"urut": 2
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"rolling_5": {
+"flag": [
+"arg",
+"banding",
+"fn:rolling",
+"gelung"
+],
+"kali": 3,
+"nilai": 5,
+"peranan_kod": "rolling",
+"urut": 0
+},
+"rolling_8": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 8,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_5": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "shift",
+"urut": 7
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+}
+},
+"M81": {
+"a20_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "a20_kali",
+"urut": 0
+},
+"close_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "close_ambang",
+"urut": 3
+},
+"nilai20_ambang_50000000": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 50000000,
+"peranan_kod": "nilai20_ambang",
+"urut": 4
+},
+"rma_atr_20": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rma_atr",
+"urut": 2
+},
+"rolling_100": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"rolling_25": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 25,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"shift_200": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "shift",
+"urut": 9
+},
+"tt_kali_0_75": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "tt_kali",
+"urut": 1
+}
+},
+"M82": {
+"e_kali_1_1": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.1,
+"peranan_kod": "e_kali",
+"urut": 0
+},
+"ewm_span_125": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 125,
+"peranan_kod": "ewm_span",
+"urut": 12
+},
+"ewm_span_200": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "ewm_span",
+"urut": 10
+},
+"ewm_span_25": {
+"flag": [
+"arg",
+"fn:ewm",
+"gelung",
+"kw:span"
+],
+"kali": 1,
+"nilai": 25,
+"peranan_kod": "ewm_span",
+"urut": 11
+},
+"ewm_span_50": {
+"flag": [
+"arg",
+"fn:ewm",
+"kw:span"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "ewm_span",
+"urut": 9
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_250": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 250,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"sd250_ambang_20": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "sd250_ambang",
+"urut": 7
+},
+"sd250_kali_100": {
+"flag": [
+"gelung",
+"kanan",
+"op:kali"
+],
+"kali": 2,
+"nilai": 100,
+"peranan_kod": "sd250_kali",
+"urut": 1
+},
+"shift_125": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 125,
+"peranan_kod": "shift",
+"urut": 8
+},
+"shift_65": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 65,
+"peranan_kod": "shift",
+"urut": 4
+},
+"sma20_ambang_10": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 10,
+"peranan_kod": "sma20_ambang",
+"urut": 3
+},
+"sma20_ambang_5000000": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 5000000,
+"peranan_kod": "sma20_ambang",
+"urut": 2
+}
+},
+"M84": {
+"close_ambang_5": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "close_ambang",
+"urut": 1
+},
+"p_ambang_90": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 90,
+"peranan_kod": "p_ambang",
+"urut": 4
+},
+"pmad_ambang_90": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 90,
+"peranan_kod": "pmad_ambang",
+"urut": 8
+},
+"rank_kali_100": {
+"flag": [
+"kanan",
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "rank_kali",
+"urut": 0
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 7
+},
+"rma_atr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rma_atr_kali",
+"urut": 2
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_21": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 2,
+"nilai": 21,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 3
+}
+},
+"M87": {
+"beli_kali_1_05": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.05,
+"peranan_kod": "beli_kali",
+"urut": 12
+},
+"d_ambang_0_1": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "d_ambang",
+"urut": 6
+},
+"hr_kali_0_9": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.9,
+"peranan_kod": "hr_kali",
+"urut": 8
+},
+"i_ambang_45": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 45,
+"peranan_kod": "i_ambang",
+"urut": 2
+},
+"lr_kali_1_1": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1.1,
+"peranan_kod": "lr_kali",
+"urut": 9
+},
+"open_kali_0_92": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.92,
+"peranan_kod": "open_kali",
+"urut": 10
+},
+"p3_tambah_0_1": {
+"flag": [
+"gelung",
+"kanan",
+"op:tambah"
+],
+"kali": 1,
+"nilai": 0.1,
+"peranan_kod": "p3_tambah",
+"urut": 1
+},
+"p_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "p_ambang",
+"urut": 0
+},
+"p_d_ambang_0_1_ambang_0_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "p_d_ambang_0_1_ambang",
+"urut": 7
+},
+"p_i_ambang_45_ambang_80": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 80,
+"peranan_kod": "p_i_ambang_45_ambang",
+"urut": 3
+},
+"p_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "p_tolak",
+"urut": 5
+},
+"p_tolak_3": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "p_tolak",
+"urut": 4
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 11
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 13
+}
+},
+"M88": {
+"bm_kali_0_92": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 0.92,
+"peranan_kod": "bm_kali",
+"urut": 5
+},
+"d2_tolak_40": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 40,
+"peranan_kod": "d2_tolak",
+"urut": 2
+},
+"d2_tolak_5": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 5,
+"peranan_kod": "d2_tolak",
+"urut": 3
+},
+"i_tolak_15": {
+"flag": [
+"gelung",
+"kanan",
+"op:tolak"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "i_tolak",
+"urut": 1
+},
+"l1_kali_0_9": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.9,
+"peranan_kod": "l1_kali",
+"urut": 7
+},
+"l1_kali_1_1": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 2,
+"nilai": 1.1,
+"peranan_kod": "l1_kali",
+"urut": 4
+},
+"range_16": {
+"flag": [
+"arg",
+"fn:range",
+"gelung"
+],
+"kali": 1,
+"nilai": 16,
+"peranan_kod": "range",
+"urut": 0
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 9
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 8
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 6
+}
+},
+"M89": {
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 6
+},
+"rma_atr_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rma_atr_kali",
+"urut": 1
+},
+"rolling_14": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rolling",
+"urut": 7
+},
+"rolling_65": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 65,
+"peranan_kod": "rolling",
+"urut": 2
+},
+"shift_10": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "shift",
+"urut": 0
+},
+"shift_2": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "shift",
+"urut": 3
+},
+"shift_3": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 2,
+"nilai": 3,
+"peranan_kod": "shift",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+}
+},
+"M90": {
+"c_kali_100": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "c_kali",
+"urut": 0
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 14
+},
+"rma_atr_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rma_atr_kali",
+"urut": 11
+},
+"roc_10": {
+"flag": [
+"arg",
+"fn:roc"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "roc",
+"urut": 8
+},
+"roc_15": {
+"flag": [
+"arg",
+"fn:roc"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "roc",
+"urut": 10
+},
+"roc_20": {
+"flag": [
+"arg",
+"fn:roc"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "roc",
+"urut": 9
+},
+"roc_30": {
+"flag": [
+"arg",
+"fn:roc"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "roc",
+"urut": 7
+},
+"roc_kali_2": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "roc_kali",
+"urut": 3
+},
+"roc_kali_3": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "roc_kali",
+"urut": 2
+},
+"roc_kali_4": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 4,
+"peranan_kod": "roc_kali",
+"urut": 1
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 3,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"rolling_15": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 15,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"rolling_9": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 9,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 13
+}
+},
+"M91": {
+"adx_14": {
+"flag": [
+"arg",
+"fn:_adx",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "adx",
+"urut": 9
+},
+"adx_ambang_20": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "adx_ambang",
+"urut": 13
+},
+"close_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "close_kali",
+"urut": 5
+},
+"mdm_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "mdm_kali",
+"urut": 1
+},
+"pdi_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pdi_kali",
+"urut": 2
+},
+"pdm_kali_100": {
+"flag": [
+"op:kali"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pdm_kali",
+"urut": 0
+},
+"rolling_10": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "rolling",
+"urut": 11
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 15
+},
+"rolling_250": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 250,
+"peranan_kod": "rolling",
+"urut": 14
+},
+"rolling_3": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"s14_ambang_50": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "s14_ambang",
+"urut": 8
+},
+"s14_ambang_80": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 80,
+"peranan_kod": "s14_ambang",
+"urut": 10
+},
+"s70_ambang_50": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "s70_ambang",
+"urut": 16
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 12
+},
+"sto_14": {
+"flag": [
+"arg",
+"fn:_sto",
+"gelung"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "sto",
+"urut": 6
+},
+"sto_70": {
+"flag": [
+"arg",
+"fn:_sto",
+"gelung"
+],
+"kali": 1,
+"nilai": 70,
+"peranan_kod": "sto",
+"urut": 7
+},
+"where_a1_50_0": {
+"flag": [
+"arg",
+"fn:where"
+],
+"kali": 1,
+"nilai": 50.0,
+"peranan_kod": "where_a1",
+"urut": 3
+}
+},
+"M92": {
+"cci_50": {
+"flag": [
+"arg",
+"fn:_cci",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "cci",
+"urut": 2
+},
+"cci_ambang_100": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 100,
+"peranan_kod": "cci_ambang",
+"urut": 4
+},
+"high_bahagi_3": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "high_bahagi",
+"urut": 0
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 6
+},
+"rma_atr_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rma_atr_kali",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 5
+},
+"sp_kali_0_015": {
+"flag": [
+"dalam_arg",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.015,
+"peranan_kod": "sp_kali",
+"urut": 1
+}
+},
+"M93": {
+"high_bahagi_3": {
+"flag": [
+"kanan",
+"op:bahagi",
+"purata"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "high_bahagi",
+"urut": 0
+},
+"i_ambang_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "i_ambang",
+"urut": 8
+},
+"i_tolak_2": {
+"flag": [
+"gelung",
+"indeks",
+"kanan",
+"op:tolak"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "i_tolak",
+"urut": 9
+},
+"mfi_10": {
+"flag": [
+"arg",
+"fn:_mfi",
+"gelung"
+],
+"kali": 1,
+"nilai": 10,
+"peranan_kod": "mfi",
+"urut": 10
+},
+"mfi_ambang_20": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "mfi_ambang",
+"urut": 16
+},
+"mfi_ambang_80": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 80,
+"peranan_kod": "mfi_ambang",
+"urut": 14
+},
+"n_ambang_2": {
+"flag": [
+"banding"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "n_ambang",
+"urut": 7
+},
+"pb_ambang_0_2": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "pb_ambang",
+"urut": 15
+},
+"pb_ambang_0_8": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.8,
+"peranan_kod": "pb_ambang",
+"urut": 13
+},
+"pos_bahagi_100": {
+"flag": [
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pos_bahagi",
+"urut": 2
+},
+"pos_tolak_100": {
+"flag": [
+"op:tolak"
+],
+"kali": 1,
+"nilai": 100,
+"peranan_kod": "pos_tolak",
+"urut": 1
+},
+"psar_mx_0_2": {
+"flag": [
+"arg",
+"fn:_psar",
+"gelung",
+"kw:mx"
+],
+"kali": 1,
+"nilai": 0.2,
+"peranan_kod": "psar_mx",
+"urut": 12
+},
+"psar_step_0_02": {
+"flag": [
+"arg",
+"fn:_psar",
+"gelung",
+"kw:step"
+],
+"kali": 1,
+"nilai": 0.02,
+"peranan_kod": "psar_step",
+"urut": 11
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 19
+},
+"rma_atr_kali_2": {
+"flag": [
+"dalam_arg",
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rma_atr_kali",
+"urut": 17
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling"
+],
+"kali": 2,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 4
+},
+"sd_kali_2": {
+"flag": [
+"op:kali"
+],
+"kali": 2,
+"nilai": 2,
+"peranan_kod": "sd_kali",
+"urut": 5
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 18
+},
+"where_a1_0_5": {
+"flag": [
+"arg",
+"fn:where"
+],
+"kali": 1,
+"nilai": 0.5,
+"peranan_kod": "where_a1",
+"urut": 6
+},
+"where_a1_100_0": {
+"flag": [
+"arg",
+"fn:where"
+],
+"kali": 1,
+"nilai": 100.0,
+"peranan_kod": "where_a1",
+"urut": 3
+}
+},
+"M94": {
+"n": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 4,
+"nilai": 252,
+"peranan_kod": "n",
+"urut": 0
+},
+"nilai_2": {
+"flag": [
+"indeks"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "nilai",
+"urut": 1
+},
+"rank_ambang_0_8": {
+"flag": [
+"banding"
+],
+"kali": 2,
+"nilai": 0.8,
+"peranan_kod": "rank_ambang",
+"urut": 2
+},
+"shift_21": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 3,
+"nilai": 21,
+"peranan_kod": "shift",
+"urut": 3
+},
+"shift_252": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "shift",
+"urut": 4
+},
+"tmax": {
+"flag": [
+"tmax"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "tmax",
+"urut": -1
+}
+},
+"M95": {
+"clip_a1_30": {
+"flag": [
+"arg",
+"fn:clip",
+"gelung"
+],
+"kali": 1,
+"nilai": 30,
+"peranan_kod": "clip_a1",
+"urut": 0
+},
+"hsh_252": {
+"flag": [
+"arg",
+"fn:_hsh",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "hsh",
+"urut": 1
+},
+"hshp_ambang_21": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 21,
+"peranan_kod": "hshp_ambang",
+"urut": 7
+},
+"hshp_bahagi_252": {
+"flag": [
+"gelung",
+"kanan",
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "hshp_bahagi",
+"urut": 2
+},
+"pth_ambang_0_85": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.85,
+"peranan_kod": "pth_ambang",
+"urut": 8
+},
+"rma_atr_14": {
+"flag": [
+"arg",
+"fn:_rma_atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "rma_atr",
+"urut": 9
+},
+"rma_atr_kali_2": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 2,
+"peranan_kod": "rma_atr_kali",
+"urut": 3
+},
+"roc_kali_1em05": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 1e-05,
+"peranan_kod": "roc_kali",
+"urut": 4
+},
+"rolling_20": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "rolling",
+"urut": 10
+},
+"rolling_252": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "rolling",
+"urut": 5
+},
+"rolling_50": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 50,
+"peranan_kod": "rolling",
+"urut": 6
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 11
+}
+},
+"M96": {
+"atr_14": {
+"flag": [
+"arg",
+"fn:atr",
+"gelung",
+"kw:n"
+],
+"kali": 1,
+"nilai": 14,
+"peranan_kod": "atr",
+"urut": 10
+},
+"atr_kali_3": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "atr_kali",
+"urut": 7
+},
+"c_ambang_0_05": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 0.05,
+"peranan_kod": "c_ambang",
+"urut": 5
+},
+"c_kali_0_75": {
+"flag": [
+"gelung",
+"op:kali"
+],
+"kali": 1,
+"nilai": 0.75,
+"peranan_kod": "c_kali",
+"urut": 9
+},
+"k_ambang_20": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 20,
+"peranan_kod": "k_ambang",
+"urut": 8
+},
+"k_ambang_8": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 8,
+"peranan_kod": "k_ambang",
+"urut": 6
+},
+"nilai_126": {
+"flag": [
+"gelung"
+],
+"kali": 1,
+"nilai": 126,
+"peranan_kod": "nilai",
+"urut": 1
+},
+"nilai_252": {
+"flag": [
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "nilai",
+"urut": 0
+},
+"nilai_63": {
+"flag": [
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "nilai",
+"urut": 2
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 12
+},
+"s_bahagi_3": {
+"flag": [
+"kanan",
+"op:bahagi"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "s_bahagi",
+"urut": 3
+},
+"shift_252": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "shift",
+"urut": 11
+},
+"sqrt_252": {
+"flag": [
+"arg",
+"fn:sqrt",
+"gelung"
+],
+"kali": 1,
+"nilai": 252,
+"peranan_kod": "sqrt",
+"urut": 4
+}
+},
+"M99": {
+"h_ambang_3": {
+"flag": [
+"banding",
+"gelung"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "h_ambang",
+"urut": 0
+},
+"n_balik": {
+"flag": [
+"pemalar_modul"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "n_balik",
+"urut": 2
+},
+"nilai_3": {
+"flag": [
+"gelung",
+"indeks"
+],
+"kali": 1,
+"nilai": 3,
+"peranan_kod": "nilai",
+"urut": 1
+},
+"rolling_200": {
+"flag": [
+"arg",
+"fn:rolling",
+"gelung"
+],
+"kali": 1,
+"nilai": 200,
+"peranan_kod": "rolling",
+"urut": 3
+},
+"shift_63": {
+"flag": [
+"arg",
+"fn:shift",
+"gelung"
+],
+"kali": 1,
+"nilai": 63,
+"peranan_kod": "shift",
+"urut": 4
+}
+}
+}
