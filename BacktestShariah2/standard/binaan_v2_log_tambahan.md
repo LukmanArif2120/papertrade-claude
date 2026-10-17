@@ -140,3 +140,4 @@
 - Pembetulan NCNO M20 (claude_3): capai sasaran 15 Okt @ 20.5002 (+4.91%); rekod lama 16 Okt @ 21.5784 (+10.43%) tidak sepadan dengan harga 16 Okt (buka 21.46, tinggi 21.75).
 - pecah_claude: claude.csv–claude_12.csv dipecah ke claude_13–claude_23 (lajur baharu menambah saiz).
 - Pindaan lorong 2 (keputusan pengguna 17 Okt 2026): "pegang selagi naik" — keluar pada buka esok selepas 2 tutup berturut < tutup semalam, atau kena henti kaedah. Dikira semula (`keluar_tiga.py --semula henti`): keluar lorong 2 = 902, tutup semua = 498.
+- Lorong 10% dibuang (keputusan pengguna 17 Okt 2026): dua lorong sahaja — kaedah dan pegang selagi naik. `keluar_tiga.py` dinamakan semula `keluar_lorong.py`; lajur `*_10` dibuang daripada fail posisi; tutup semua = 557.
