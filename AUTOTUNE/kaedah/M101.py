@@ -103,7 +103,6 @@ BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
 JULAT = {
-    'p': ('int', 2, 10),
     'ptr_ambang_3': ('int', 2, 4),
     'b_ambang_5': ('int', 2, 8),
     'p_b_ambang_5_ambang_60': ('int', 30, 90),
@@ -113,4 +112,4 @@ JULAT = {
     'rolling_50': ('int', 25, 100),
     'shift_63': ('int', 32, 126),
 }
-TALA = ['p', 'lc_kali_0_99', 'rolling_50']
+TALA = ['lc_kali_0_99', 'rolling_50']

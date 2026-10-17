@@ -206,16 +206,30 @@ def info_struktur(tree):
             for x in [n.left] + n.comparators:
                 p = Aliran.param_dalam(x) if isinstance(x, (ast.Subscript, ast.Name)) else set()
                 sama |= p
+        elif isinstance(n, ast.Call):
+            # tetingkap berpusat (center=True) atau anjakan negatif: menala boleh mencipta pandang ke hadapan
+            pusat = any(k.arg == 'center' and not (isinstance(k.value, ast.Constant) and k.value.value is False)
+                        for k in n.keywords)
+            if pusat:
+                for x in n.args + [k.value for k in n.keywords]: BEKU_AST.setdefault(id(tree), set()).update(Aliran.param_dalam(x))
+            if isinstance(n.func, ast.Attribute) and n.func.attr == 'shift':
+                for x in n.args + [k.value for k in n.keywords if k.arg == 'periods']:
+                    if isinstance(x, ast.UnaryOp) and isinstance(x.op, ast.USub):
+                        BEKU_AST.setdefault(id(tree), set()).update(Aliran.param_dalam(x))
     return gel, sama
 
 
-def julat(nama, v, m, per, mid='', st=(set(), set(), set())):
+BEKU_AST = {}
+
+
+def julat(nama, v, m, per, mid='', st=(set(), set(), (set(), set()), set())):
     """Pulangkan (jenis, bawah, atas, sebab_beku)."""
     F = set(m.get('flag', [])); r = m.get('peranan_kod', nama)
-    gel, sama, nilai_sama = st
+    gel, sama, nilai_sama = st[:3]
     hint = r
     for o in OP_AKHIR:
         if r.endswith(o): hint = r[: -len(o)]; break
+    if nama in st[3]: return 'beku', None, None, 'elak pandang ke hadapan'
     if hint != r and hint in gel: return 'beku', None, None, 'indeks gelung'
     if 'fn:range' in F: return 'beku', None, None, 'julat gelung'
     tug, hint_sama = nilai_sama
@@ -312,7 +326,7 @@ def proses(mid, meta):
             if r.endswith(o): return r[: -len(o)]
         return r
     tug = {md[n]['peranan_kod'] for n in md if 'tugasan' in md[n].get('flag', []) and isinstance(PARAM.get(n), int)}
-    st = (gel, sama, (tug, {_hint(md[n]['peranan_kod']) for n in sama if n in md}))
+    st = (gel, sama, (tug, {_hint(md[n]['peranan_kod']) for n in sama if n in md}), BEKU_AST.pop(id(tree), set()))
     J, baris, cal = {}, [], []
     for n, v in PARAM.items():
         m = md.get(n, {'flag': [], 'peranan_kod': n, 'kali': 1, 'urut': 999})

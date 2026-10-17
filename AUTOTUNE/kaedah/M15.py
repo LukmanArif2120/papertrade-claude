@@ -105,9 +105,8 @@ BELUM_DITALA = False
 JULAT = {
     'atrw_14': ('int', 7, 28),
     'rolling_20': ('int', 10, 40),
-    'rolling_7': ('int', 4, 14),
     'a14_kali_0_5': ('float', 0.25, 0.75),
     'h_kali_0_382': ('float', 0.191, 0.573),
     'shift_63': ('int', 32, 126),
 }
-TALA = ['rolling_20', 'atrw_14', 'rolling_7', 'h_kali_0_382']
+TALA = ['rolling_20', 'atrw_14', 'h_kali_0_382']

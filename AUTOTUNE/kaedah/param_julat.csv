@@ -145,7 +145,7 @@ M15,i_tolak_16,16,beku,,,N,sig|stop,indeks gelung
 M15,i_tolak_60,60,beku,,,N,sig,indeks gelung
 M15,range_70,70,beku,,,N,sig|stop,julat gelung
 M15,rolling_20,20,int,10,40,Y,exitc|sig,
-M15,rolling_7,7,int,4,14,Y,sig|stop,
+M15,rolling_7,7,beku,,,N,sig|stop,elak pandang ke hadapan
 M15,shift_63,63,int,32,126,N,rank,
 M18,ema_a1_21,21,int,10,42,Y,exitc|sig,
 M18,ema_a1_9,9,int,4,18,Y,sig,
@@ -771,10 +771,10 @@ M100,nl3_ambang_2,2,beku,,,N,sig|tgt,indeks gelung
 M100,nl4_ambang_2,2,int,1,3,N,sig|tgt,
 M100,nl4_ambang_3,3,int,2,4,N,sig|tgt,
 M100,np_ambang_2,2,int,1,3,Y,sig|tgt,
-M100,np_ambang_3,3,int,2,4,N,sig|tgt,
+M100,np_ambang_3,3,int,2,4,Y,sig|tgt,
 M100,np_ambang_5,5,int,2,8,Y,sig|tgt,
 M100,p_w_tambah_63,63,int,32,126,Y,sig|stop|tgt,
-M100,rolling_7,7,int,4,14,Y,sig|stop|tgt,
+M100,rolling_7,7,beku,,,N,sig|stop|tgt,elak pandang ke hadapan
 M100,shift_63,63,int,32,126,N,rank,
 M100,t_kali_0_98,0.98,float,0.49,0.99,N,sig|tgt,
 M100,w,40,int,20,80,Y,sig|stop|tgt,
@@ -783,10 +783,10 @@ M101,b_ambang_5,5,int,2,8,N,,
 M101,cc_ambang_5,5,int,2,8,N,,
 M101,i_ambang_126,126,beku,,,N,,indeks gelung
 M101,lc_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
-M101,p,5,int,2,10,Y,sig|stop,
+M101,p,5,beku,,,N,sig|stop,elak pandang ke hadapan
 M101,p_b_ambang_5_ambang_60,60,int,30,90,N,,
 M101,p_cc_ambang_5_ambang_60,60,int,30,90,N,,
-M101,p_kali_2,2,beku,,,N,sig|stop,indeks gelung
+M101,p_kali_2,2,beku,,,N,sig|stop,elak pandang ke hadapan
 M101,ptr_ambang_3,3,int,2,4,N,,
 M101,ptr_tolak_2,2,beku,,,N,,indeks
 M101,ptr_tolak_3,3,beku,,,N,sig,indeks
