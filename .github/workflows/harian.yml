@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       paksa:
-        description: 'Proses semula sesi terakhir walaupun sudah diproses (ya/tidak)'
+        description: 'Kecemasan sahaja: proses semula sesi terakhir walaupun sudah diproses (ya/tidak); watchlist sesi itu sendiri dipakai'
         required: false
         default: 'tidak'
 

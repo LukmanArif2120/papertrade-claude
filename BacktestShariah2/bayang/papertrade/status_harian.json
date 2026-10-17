@@ -1,10 +1,10 @@
 {
  "malam": {
   "sesi": "2026-10-16",
-  "masa": "2026-10-17 16:18 MYT",
+  "masa": "2026-10-17 16:44 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 329,
+  "masa_kaedah_s": 192,
   "keluar_baru": {
    "M": {},
    "C": {}
@@ -20,32 +20,32 @@
   "nota": [
    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor"
   ],
-  "senarai_beli": 595,
-  "saham_unik": 247,
+  "senarai_beli": 603,
+  "saham_unik": 251,
   "kaedah": 98,
   "belian_semula": 22,
-  "dari_watchlist": 0,
+  "dari_watchlist": 61,
   "isyarat": 2195,
   "ditolak": {
    "dipegang": 202,
-   "had": 1398
+   "had": 1390
   },
   "watchlist": 270,
-  "watchlist_baharu": 0,
+  "watchlist_baharu": 173,
   "watchlist_dibuang": 0,
-  "watchlist_ke_senarai": 0,
+  "watchlist_ke_senarai": 61,
   "minggu_akhir": true,
   "fail_isyarat": "bayang/isyarat/2026-10-16_malam.csv.gz"
  },
  "gred": {
   "tarikh": "2026-10-17",
-  "masa": "2026-10-17 16:23 MYT",
+  "masa": "2026-10-17 16:48 MYT",
   "pemangkin": {
-   "D": 181,
+   "D": 183,
    "B": 86,
    "C": 237,
-   "E": 55,
-   "A": 36
+   "E": 60,
+   "A": 37
   }
  }
 }

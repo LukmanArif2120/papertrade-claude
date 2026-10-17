@@ -921,7 +921,8 @@ def main(argv=None):
 
     def umum(x):
         x.add_argument('--folder', default=PT); x.add_argument('--stor', default=STOR); x.add_argument('--univ', default=UNIV)
-        x.add_argument('--masa', help='masa larian MYT "YYYY-MM-DD HH:MM" (ulang tayang)'); x.add_argument('--paksa', action='store_true')
+        x.add_argument('--masa', help='masa larian MYT "YYYY-MM-DD HH:MM" (ulang tayang)')
+        x.add_argument('--paksa', action='store_true', help='kecemasan: proses semula walaupun sudah diproses. AMARAN malam: watchlist yang dipakai ialah watchlist sesi itu sendiri, jadi calon watchlist yang lengkap tidak lagi ditanda asal=watchlist')
     x = sp.add_parser('malam'); umum(x)
     x.add_argument('--sesi', help='sesi YYYY-MM-DD (lalai: bar terakhir stor)'); x.add_argument('--proses', type=int, default=4)
     x.add_argument('--isyarat', default=ISYARAT, help='folder rekod isyarat (kosong = tidak ditulis)')
