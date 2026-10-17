@@ -18,6 +18,10 @@ on:
         description: 'Percubaan sahaja (tiada fail ditulis): tarikh beli YYYY-MM-DD yang mahu diuji'
         required: false
         default: ''
+      cuba_folder:
+        description: 'Folder senarai_beli untuk percubaan (baca sahaja)'
+        required: false
+        default: 'BacktestShariah2/bayang/papertrade'
 
 permissions:
   contents: write
@@ -52,7 +56,7 @@ jobs:
         run: pip install -q pandas numpy yfinance exchange_calendars
       - name: Percubaan (tiada fail ditulis)
         if: steps.masa.outputs.jalan == 'cuba'
-        run: python3 BacktestShariah2/standard/harian_c.py beli --folder BacktestShariah2/bayang/papertrade --tarikh "${{ github.event.inputs.cuba_tarikh }}" --cuba
+        run: python3 BacktestShariah2/standard/harian_c.py beli --folder "${{ github.event.inputs.cuba_folder }}" --tarikh "${{ github.event.inputs.cuba_tarikh }}" --cuba
       - name: Beli maya
         id: beli
         if: steps.masa.outputs.jalan == 'ya'
