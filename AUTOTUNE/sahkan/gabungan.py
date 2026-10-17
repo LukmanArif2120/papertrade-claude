@@ -153,8 +153,8 @@ class Penjana:
 
 class Penilai:
     """Pulangan harian gabungan bagi set kaedah atas satu bahagian ('A' = k0–11 A, 'B' = k0–11 B, 'K' = k12 AB)."""
-    def __init__(self, semua_kaj, penjana):
-        self.kaj = semua_kaj; self.pj = penjana; self._T = {}
+    def __init__(self, semua_kaj, penjana, proses=1):
+        self.kaj = semua_kaj; self.pj = penjana; self._T = {}; self.proses = proses; self.gagal = {}
 
     def _bahagian(self, b):
         return [(k, b) for k in U.K_WFO] if b in ('A', 'B') else [(U.K_AKHIR, 'AB')]
@@ -178,11 +178,42 @@ class Penilai:
         return U.sambung(out)
 
     def sediakan(self, ids, b):
-        """Jana (dan cache) semua dagangan bagi ids — dilakukan kajian demi kajian supaya data dimuat sekali."""
+        """Jana (dan cache) semua dagangan bagi ids, kajian demi kajian (data dimuat sekali setiap kajian).
+        proses > 1: kaedah dijana selari dalam proses fork (data dikongsi). Kaedah yang gagal direkod dalam
+        self.gagal dan dikeluarkan daripada calon. Pulang senarai ids yang berjaya."""
         for k, g in self._bahagian(b):
-            for i in ids: self.dagangan(i, k, g)
-            lm, um, ua = tetingkap_kajian(self.kaj[ids[0]][k], k)
+            ok = [i for i in ids if i not in self.gagal]
+            if not ok: break
+            lm, um, ua = tetingkap_kajian(self.kaj[ok[0]][k], k)
+            tugas = []
+            for i in ok:
+                d = self.kaj[i][k]; l2, u2, a2 = tetingkap_kajian(d, k)
+                if not os.path.exists(self.pj._laluan(i, k, g, P.param(d))): tugas.append((i, k, g, P.param(d), l2, u2, a2))
+            if tugas and self.proses > 1 and len(tugas) > 1:
+                self.pj._muat(k, lm, um, ua)
+                global _PJ
+                _PJ = self.pj
+                from multiprocessing import get_context
+                with get_context('fork').Pool(min(self.proses, len(tugas)), maxtasksperchild=4) as pool:
+                    for i, e in pool.imap_unordered(_kerja, tugas):
+                        if e: self.gagal[i] = e
+            for i in ok:
+                if i in self.gagal: continue
+                try: self.dagangan(i, k, g)
+                except Exception as e: self.gagal[i] = f'k{k:02d}: {type(e).__name__}: {e}'[:300]
             self.pj.pasaran(k, g, um, ua, lm)
+        return [i for i in ids if i not in self.gagal]
+
+
+_PJ = None
+
+
+def _kerja(t):
+    i, k, g, Pm, lm, um, ua = t
+    try:
+        _PJ.dagangan(i, k, g, Pm, lm, um, ua); return i, None
+    except Exception as e:
+        return i, f'k{k:02d}: {type(e).__name__}: {e}'[:300]
 
 
 def _metrik(r, spy):
@@ -191,7 +222,7 @@ def _metrik(r, spy):
                          akhir=r.index[-1].strftime('%Y-%m-%d') if len(r) else None, hari=len(r)), 4)
 
 
-def jalan(csv=None, tala=None, keluar=None, data_dir=None, maks=MAKS, penjana=None, spy=None):
+def jalan(csv=None, tala=None, keluar=None, data_dir=None, maks=MAKS, penjana=None, spy=None, proses=1):
     keluar = keluar or U.HASIL; tala = tala or U.TALA
     df = pd.read_csv(csv or os.path.join(keluar, 'parameter_sedia.csv'))
     calon_df = df[df.label.isin(['TINGGI', 'SEDERHANA'])].sort_values('cagr_a', ascending=False)
@@ -209,10 +240,15 @@ def jalan(csv=None, tala=None, keluar=None, data_dir=None, maks=MAKS, penjana=No
     rA = {k: P.oos(kaj[k], 'A') for k in calon}
     if spy is None: spy = P.muat_spy(data_dir)
     pj = penjana or Penjana(data_dir)
-    pn = Penilai(kaj, pj)
+    pn = Penilai(kaj, pj, proses)
     t0 = time.time()
-    pn.sediakan(calon, 'A')
-    print(f'gabungan: dagangan OOS-A {len(calon)} calon siap ({time.time() - t0:.0f} s)')
+    calon = pn.sediakan(calon, 'A')
+    hasil['gagal_jana'] = dict(pn.gagal)
+    print(f'gabungan: dagangan OOS-A {len(calon)} calon siap, {len(pn.gagal)} gagal ({time.time() - t0:.0f} s)')
+    if not calon:
+        hasil.update(terpilih=[], log=[], penjelasan='Jana semula dagangan gagal bagi semua calon; lihat gagal_jana.')
+        U.tulis_json(os.path.join(keluar, 'gabungan.json'), U.bersih(hasil))
+        return hasil
     # semakan: gabungan satu kaedah mesti sama dengan OOS-A JSON kaedah itu
     semak = {}
     for k in calon[:3]:
@@ -231,8 +267,9 @@ def jalan(csv=None, tala=None, keluar=None, data_dir=None, maks=MAKS, penjana=No
     pilih, log, _ = pilih_tamak(calon, rA, nilai_fn, maks=maks)
     print(f'gabungan: terpilih {pilih} ({time.time() - t0:.0f} s)')
     gA = pn.pulangan(pilih, 'A')
-    pn.sediakan(pilih, 'B'); gB = pn.pulangan(pilih, 'B')
-    pn.sediakan(pilih, 'K'); gK = pn.pulangan(pilih, 'K')
+    pB = pn.sediakan(pilih, 'B'); gB = pn.pulangan(pB, 'B') if pB == pilih else pd.Series(dtype=float)
+    pK = pn.sediakan(pilih, 'K'); gK = pn.pulangan(pK, 'K') if pK == pilih else pd.Series(dtype=float)
+    hasil['gagal_jana'] = dict(pn.gagal)
     sA = U.spy_pulangan(spy, gA.index); sK = U.spy_pulangan(spy, gK.index)
     hasil.update(
         terpilih=pilih, log=U.bersih(log, 4), semakan_satu_kaedah=U.bersih(semak, 8),
@@ -251,8 +288,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--maks', type=int, default=MAKS); ap.add_argument('--data', default=None)
     ap.add_argument('--keluar', default=None); ap.add_argument('--tala', default=None)
+    ap.add_argument('--proses', type=int, default=max(1, (os.cpu_count() or 2) - 1))
     a = ap.parse_args()
-    h = jalan(tala=a.tala, keluar=a.keluar, data_dir=a.data, maks=a.maks)
+    h = jalan(tala=a.tala, keluar=a.keluar, data_dir=a.data, maks=a.maks, proses=a.proses)
     if not h['terpilih']:
         print('gabungan: ' + h['penjelasan']); return
     m = h['metrik']

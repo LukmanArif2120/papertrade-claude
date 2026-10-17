@@ -271,5 +271,50 @@ class TestGabungan(unittest.TestCase):
         self.assertEqual(G.tetingkap_kajian(d, 12), ('2021-10-01', '2024-10-01', '2026-10-16'))
 
 
+class TestPenilai(unittest.TestCase):
+    """Penilai dengan penjana palsu dan enjin_at.Pasaran sebenar (tanpa data harga)."""
+    def setUp(self):
+        sys.path.insert(0, os.path.join(AKAR, 'teras'))
+        import enjin_at as E
+        self.E = E
+        t = hari('2012-12-01', '2026-10-16'); rng = np.random.default_rng(3)
+        self.fr = {x: pd.DataFrame({'close': 100 * np.cumprod(1 + rng.normal(0.0005, 0.01, len(t)))}, index=t)
+                   for x in ('a', 'b', 'c')}
+        uji = self
+
+        class PJ:
+            E = uji.E
+            def _laluan(self, *a): return '/tiada'
+            def pasaran(self, k, g, um, ua, lm): return uji.E.Pasaran(uji.fr, um, ua)
+            def dagangan(self, kid, k, g, Pm, lm, um, ua):
+                tk = {'X': 'a', 'Y': 'b', 'Z': 'a', 'BAD': 'c'}[kid]
+                if kid == 'BAD' and k == 3: raise RuntimeError('rosak')
+                tt = uji.fr['a'].index; i = tt.searchsorted(pd.Timestamp(um)) + 5
+                c = uji.fr[tk].close
+                return pd.DataFrame(dict(ticker=[tk], sig=[tt[i - 1]], ent=[tt[i]], ex=[tt[i + 20]],
+                                         ret=[c.iloc[i + 20] / c.iloc[i] - 1], days=[20], why=['masa'], rank=[1.0]))
+        self.kaj = {kid: {k: dict(params={}, latih=['2010-01-01', '2012-12-31'],
+                                  ujian=list(UJI[k]) if k < 12 else ['2024-10-01', '2026-10-16']) for k in range(13)}
+                    for kid in ('X', 'Y', 'Z')}
+        self.pn = G.Penilai(self.kaj, PJ())
+
+    def test_satu_dan_kongsi(self):
+        self.assertEqual(self.pn.sediakan(['X', 'Y'], 'A'), ['X', 'Y'])
+        rX = self.pn.pulangan(['X'], 'A')
+        self.assertEqual(len(rX), sum(len(hari(*u)) for u in UJI))
+        self.assertTrue(np.isfinite(rX.values).all())
+        rXZ = self.pn.pulangan(['X', 'Z'], 'A')                      # ticker sama → satu posisi sahaja
+        self.assertTrue(np.allclose(rX.values, rXZ.values))
+        rXY = self.pn.pulangan(['X', 'Y'], 'A')
+        self.assertFalse(np.allclose(rX.values, rXY.values))
+        rK = self.pn.pulangan(['X'], 'K')
+        self.assertEqual(rK.index[0], pd.Timestamp('2024-10-01'))
+
+    def test_gagal_dikeluarkan(self):
+        self.kaj['BAD'] = self.kaj['X']
+        self.assertEqual(self.pn.sediakan(['X', 'BAD'], 'A'), ['X'])
+        self.assertIn('rosak', self.pn.gagal['BAD'])
+
+
 if __name__ == '__main__':
     unittest.main()
