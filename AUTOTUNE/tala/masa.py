@@ -3,11 +3,10 @@
 import os, sys, json, glob
 import pandas as pd
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import tala
+KELUAR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'hasil', 'tala')   # = tala.KELUAR (tanpa numba)
 
 
-def main(d=tala.KELUAR):
+def main(d=KELUAR):
     R = []
     for f in sorted(glob.glob(os.path.join(d, 'M*', 'k*.json'))):
         try: H = json.load(open(f))
