@@ -13714,3 +13714,662 @@ Jadual utama: baris = turutan (termasuk "tidak lengkap" dan "hari rawak"); lajur
 | L5 | C1 (20% terbawah) lebih lemah daripada B1 (semakan arah) |
 
 **Hipotesis:** H1 B1 > C0 (pilihan saham penting) · H2 B3 > B1 (paras tertinggi RS baharu menambah nilai) · H3 B2 ≈ B1 (MACD tidak menambah nilai, selaras P01).
+
+
+---
+
+<!-- FAIL ASAL: spec/RANGKA_R_M162-M167.md -->
+# Rangka R — rangka ranking piawai bagi M162–M167 (17 Okt 2026)
+
+**Latar:** Kajian 17 Okt 2026 (chat "teknik baharu") mendapati kelebihan Project datang daripada ranking keratan rentas, iaitu membandingkan saham antara satu sama lain pada hari yang sama, dan daripada pegangan lama dengan henti lebar. Pencetus masa masuk pula ≈ rawak (P01: 27% berjaya lawan 28% hari rawak; kumpulan M115–M161: 0 GUNA, 6 UJI KERTAS). Oleh itu M162–M167 menguji **kunci ranking baharu (F)** dalam rangka yang sama dengan M114 V4 (GUNA 77.4). Beza CAGR berbanding M114 V4 boleh terus dikaitkan dengan kunci F.
+
+**Pengguna memilih (17 Okt 2026):** semua calon dibawa ke STEP-1; semua spec ditulis dahulu, kemudian backtest satu kaedah bagi setiap chat.
+
+| Perkara | Takrif (dikunci) |
+|---|---|
+| Alam | 431 saham (dataset_S1–S4). Persentil dikira atas 431 saham, termasuk bagi subset (ikut M114) |
+| PCT_i(F) | Persentil F merentas semua saham yang ada F sah pada tutup hari i (`rank(pct=True)`) |
+| Kolam | PCT_i(F) ≥ 0.90 (10% teratas, seperti M114 V4) |
+| Kecairan | Purata volum 20 hari ≥ 100K |
+| Penapis pasaran | Tutup SPY_i > SMA200 SPY_i, kecuali dinyatakan lain dalam spec kaedah |
+| `sig` | Benar pada setiap hari semua syarat dipenuhi; enjin mengabaikan isyarat semasa posisi dipegang |
+| Masuk | Buka hari i+1; slot penuh → pilih `rank` tertinggi |
+| `stop` | buka_masuk × 0.88 (tetap), cara M114. Jika semakan pandang ke hadapan `wfo.semak_kaedah` menolak `open.shift(-1)`, guna tutup_i × 0.88 dan catat dalam laporan |
+| `exitc` | tutup_k < maks(tutup sejak masuk) − 3 × ATR22_k, atau tutup_k < stop; keluar buka k+1. Laluan enjin direplika (cara M114) |
+| `tgt` / `tmax` | Tiada / tiada |
+| `rank` | F_i |
+
+**Langkah wajib pertama STEP-2 (sekali sahaja, dalam chat M162):** modul M114 tiada dalam repo (`kod/kaedah/` dan `WFO/` tidak memuatkannya). Tulis `WFO/kaedah_baru/_rangka_r.py`, kemudian sahkan ia menghasilkan semula M114 V4 dalam registry (CAGR 49.6%, MDD −38.8%, n 2619, menang 38.1%). Jika tidak sepadan dalam ±0.5 mata peratus CAGR dan ±2% n, berhenti dan laporkan; jangan uji F baharu atas rangka yang belum sah.
+
+**Rujukan wajib dalam setiap laporan STEP-2:** M114 V4 (kawalan langsung), M96 V1, SPY, QQQ, sama rata 431; CAGR hingga Dis 2025; dengan dan tanpa 8 saham bermasalah (ASST, FCEL, MTDR, OVV, PR, SM, VAL, XENE), dengan persentil dikira semula atas 423; subset S1–S4; H1/H2 (`semak_h1_h2.py`).
+
+**Status papertrade:** modul diletakkan dalam `WFO/kaedah_baru/` (bukan `kod/kaedah/`), supaya tidak masuk imbasan harian. Ini selaras dengan peraturan tempoh ujian hadapan 16 Okt 2026 – 15 Jan 2027. Kemasukan ke Papertrade C hanya dengan keputusan pengguna.
+
+**Registry:** baris M162–M167 ditambah ke `data/registry_M_gabung.csv` seperti biasa. Lapisan L01/L02 TIDAK masuk registry M (lihat spec masing-masing).
+
+---
+
+<!-- FAIL ASAL: spec/M162_momentum_residual.md -->
+# M162 — Momentum Residual (ranking momentum terlaras beta)
+
+**Sumber:** Blitz, Huij & Martens (2011), "Residual momentum", *Journal of Empirical Finance* 18. Katalog K270 (dibuang dengan kod D kerana memerlukan faktor FF3). Kertas penuh tidak dibaca; peraturan diambil daripada katalog K270, ringkasan CXO Advisory (cxoadvisory.com/momentum-investing/stripping-risks-from-a-stock-momentum-strategy/) dan Blitz, Hanauer & Vidojevic (2017) melalui ringkasan sekunder.
+**Jenis:** Rotasi momentum keratan rentas (ikut aliran). Long sahaja. **Selari** dengan gaya momentum pengguna.
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Idea teras | Pilih saham yang naik kerana kekuatan sendiri, bukan kerana beta pasaran yang tinggi |
+| Indikator | Beta 252 hari lawan SPY; residual harian; RESID = jumlah residual ÷ (SD residual × √N) |
+| Persediaan | RESID dalam 10% teratas daripada 431 saham + Rangka R |
+| Arah | Long sahaja |
+| Sasaran | Tiada (pegang selagi aliran tidak patah) |
+| Henti rugi | 12% di bawah harga masuk |
+| Rangka masa | Harian (sumber: bulanan) |
+| Elakkan | Saham beta tinggi yang naik hanya kerana pasaran naik |
+
+## 2. Tetapan indikator
+| Indikator | Tetapan | Nota |
+|---|---|---|
+| r_t, m_t | Pulangan harian saham; pulangan harian SPY (ffill ke tarikh saham) | |
+| β_i | Cov(r, m) ÷ Var(m) atas t = i−251..i (OLS dengan pintasan); min 200 cerapan sah | Sumber: regresi bulanan 36 bulan atas FF3 (berbeza) |
+| e_t | r_t − β_i · m_t bagi t = i−251..i−21 (231 hari; 21 hari terkini dilangkau) | Alfa TIDAK ditolak, supaya jumlah residual tidak menjadi sifar secara mekanikal (anggaran dan pembentukan berkongsi tetingkap) |
+| RESID_i | Σ e_t ÷ (SD(e_t) × √N), N = bilangan e_t sah | Sumber: jumlah residual 12-1 ÷ SD residual |
+| ATR22, SMA200 SPY | Seperti M114 | |
+
+## 3. Persediaan utama
+| Langkah | Syarat (pada tutup hari i) |
+|---|---|
+| 1 | Saham ada ≥ 252 hari data dan β_i sah |
+| 2 | PCT_i(RESID) ≥ 0.90 |
+| 3 | Tutup SPY > SMA200 SPY |
+| 4 | Purata volum 20 hari ≥ 100K |
+| 5 | Masuk buka i+1; henti 0.88 × buka masuk; keluar ikut Rangka R |
+
+## 4. Penapis "jangan dagang"
+| Tanda amaran | Maksud | Tindakan |
+|---|---|---|
+| SPY ≤ SMA200 | Pasaran lemah | Tiada masuk baharu |
+| β_i tidak sah (< 200 cerapan) | Saham baharu tersenarai | Tiada isyarat |
+| Buka masuk ≤ henti | Jurang turun | Langkau (cara enjin) |
+
+## 5. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | Faktor FF3 | ❌ Data tiada dalam repo | Proksi: model pasaran SPY sahaja (V1); SPY + industri (V4). Faktor FF3 harian boleh dimuat turun daripada pustaka data Kenneth French (belum disahkan dari sesi ini) |
+| 2 | Tetingkap 36 bulan | ⚠️ Data | Data bermula 2 Jan 2019, jadi tetingkap 36 bulan hanya sah dari 2022. Diganti regresi harian 252 hari (C) |
+| 3 | 12-1 lawan 12-0 | ⚠️ Kabur | K270: "12-1". Satu ringkasan sekunder menulis t−12 hingga t−1. Dipilih: langkau 21 hari terkini (C) |
+| 4 | Henti rugi | ❌ Tiada dalam sumber | 12% (C, Rangka R) |
+| 5 | Imbang semula | ⚠️ | Sumber bulanan; V1 harian (Rangka R), V0 bulanan |
+| 6 | Dakwaan prestasi | ⚠️ | Sharpe 0.90 lawan 0.45 bagi momentum biasa (AS 1926–2009), menurut ringkasan sekunder; belum disahkan dengan kertas asal |
+| 7 | Kesan mungkin pudar | ⚠️ | Ehsani & Linnainmaa (2022): momentum khusus syarikat kuat hingga 2002, kemudian hampir hilang; sebahagian keuntungan residual ialah taruhan melawan beta |
+| 8 | Bias kemandirian | ⚠️ Tinggi | Senarai Shariah hari ini |
+| 9 | Syariah | ✅ | Long sahaja (sumber long-short; bahagian short dibuang) |
+| 10 | Keperluan data | ✅ | OHLCV + SPY (+ `peta_industri.csv` bagi V4) |
+
+## 6. Verdict awal
+**Layak diuji dengan STEP-2. Ia menguji terus sama ada membuang beta daripada RS menaikkan kualiti pilihan M114 V4.**
+| Gate | Keputusan | Sebab |
+|---|---|---|
+| Sepadan gaya momentum | ✅ | Varian momentum keratan rentas |
+| Mampu +10% dalam 1–4 minggu | ⚠️ Anggaran, belum diuji | Residual memilih saham beta lebih rendah, jadi pemenang besar mungkin berkurang |
+| Boleh diuji dengan data harian | ✅ | Dengan proksi model pasaran |
+| Patuh Syariah | ✅ | |
+| Nilai tambah | ✅ | Kunci ranking baharu; K270 dihidupkan semula dengan proksi |
+
+## 7. Kad Spesifikasi Mesin
+| Medan enjin | Takrif tepat (formula) | S/C |
+|---|---|---|
+| `sig` | PCT_i(RESID) ≥ 0.90 DAN tutup SPY > SMA200 SPY DAN vol20 ≥ 100K DAN β_i sah | C (Rangka R); RESID S (proksi) |
+| `stop` | buka_masuk × 0.88 | C |
+| `tgt` | Tiada | C |
+| `exitc` | Rangka R (chandelier 3 × ATR22 atau tutup < henti) | C |
+| `rank` | RESID_i | S |
+| `tmax` | Tiada | C |
+| Penapis pasaran | SPY > SMA200 | C |
+| Varian V0 | Sumber (proksi pasaran): hari dagangan terakhir bulan (kalendar M96), sig = PCT(RESID) ≥ 0.90 DAN vol20 ≥ 100K; exitc = hari terakhir bulan DAN PCT(RESID) < 0.90; tiada henti; tiada penapis SPY | S/C |
+| Varian V1 | Spesifikasi dikunci (di atas) | C |
+| Varian V2 | V1 tanpa penapis SPY > SMA200 | C |
+| Varian V3 | V1, `exitc` = tutup < SMA50 atau tutup < henti | C |
+| Varian V4 | V1, residual dua faktor: e_t = r_t − β1·m_t − β2·ind_t, dengan ind_t = pulangan sama berat ahli lain industri yang sama (`peta_industri.csv`, industri ≥ 3 saham; jika tidak, model pasaran sahaja) | C |
+| Varian V5 | V1, kolam PCT ≥ 0.80 (20%) | C |
+
+## Penutup
+Untuk backtest: buka chat baharu dan taip `/step2 M162`. Chat ini juga membina dan mengesahkan Rangka R (lihat `RANGKA_R_M162-M167`).
+
+---
+
+<!-- FAIL ASAL: spec/M163_kekuatan_mutlak.md -->
+# M163 — Kekuatan Mutlak (momentum berbanding taburan sejarah)
+
+**Sumber:** Gulen & Petkova, "Absolute Strength: Exploring Momentum in Stock Returns" (SSRN 2638004). Kertas penuh tidak dibaca. Peraturan diambil daripada ringkasan Alpha Architect (alphaarchitect.com/2015/10/absolute-strength-momentum-investing-strategy/) dan IASG: pemenang/pecundang ditakrif berbanding taburan SEJARAH pulangan lepas (titik putus rekursif merentas masa dan saham, persentil ke-90/ke-10), bukan berbanding saham lain hari ini.
+**Jenis:** Momentum mutlak keratan rentas, dengan penapis rejim terbina. Long sahaja. **Selari** dengan gaya momentum.
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Idea teras | Beli hanya saham yang pulangan 12-1 bulannya luar biasa tinggi berbanding sejarah semua saham. Dalam pasaran lemah, mungkin tiada saham layak, jadi tiada belian |
+| Indikator | AS = pulangan 12-1; BP90 = persentil ke-90 taburan sejarah AS (semua saham, semua tarikh lalu) |
+| Persediaan | AS_i ≥ BP90 |
+| Arah | Long sahaja |
+| Sasaran | Tiada |
+| Henti rugi | 12% (Rangka R) |
+| Rangka masa | Harian; titik putus dikemas kini bulanan |
+| Elakkan | Membeli "10% teratas" ketika semua saham sedang jatuh |
+
+## 2. Tetapan indikator
+| Indikator | Tetapan | Nota |
+|---|---|---|
+| AS_i | C_{i−21} ÷ C_{i−252} − 1 | 12-1 (C; formasi tepat sumber tidak disahkan) |
+| BP90_m | Persentil ke-90 semua nilai AS_{s,t} (semua saham s, semua hari t ≤ hari dagangan terakhir bulan m−1), terkumpul sejak AS pertama sah | Dikemas kini pada hari pertama setiap bulan m (C). Minimum 126 hari pengumpulan; sebelum itu tiada isyarat |
+| ATR22, vol20 | Seperti Rangka R | |
+
+## 3. Persediaan utama
+| Langkah | Syarat (pada tutup hari i dalam bulan m) |
+|---|---|
+| 1 | AS_i sah (≥ 252 hari data) dan BP90_m sah |
+| 2 | AS_i ≥ BP90_m |
+| 3 | Purata volum 20 hari ≥ 100K |
+| 4 | Tiada penapis SPY dalam V1 (sumber mendakwa penapis mutlak sudah mengelak krisis) |
+| 5 | Masuk buka i+1; henti 0.88; keluar Rangka R; rank AS_i |
+
+## 4. Penapis "jangan dagang"
+| Tanda amaran | Maksud | Tindakan |
+|---|---|---|
+| Tiada saham dengan AS ≥ BP90 | Pasaran tidak menghasilkan pemenang luar biasa | Tiada belian ("kalau tak beli, cakap tak beli") |
+| < 126 hari pengumpulan AS | Taburan sejarah terlalu nipis | Tiada isyarat (anggaran awal 2020: tiada dagangan sehingga ~Jul 2020) |
+
+## 5. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | Formasi (12-1?) dan tempoh pegang | ⚠️ Kabur | Tidak disahkan daripada kertas; 12-1 dan Rangka R (C) |
+| 2 | Sejarah pendek | ⚠️ Data | Sumber guna sejarah sejak 1965. Data kita bermula 2019, jadi taburan awal dikuasai ledakan 2020–21. Titik putus mungkin terlalu tinggi bagi 2022–23. V5 menguji tetingkap bergolek 504 hari |
+| 3 | Angka titik putus purata (+64%) | ❌ Tidak dipakai | Hanya daripada ringkasan sekunder; tidak disahkan |
+| 4 | Henti rugi | ❌ Tiada dalam sumber | 12% (C) |
+| 5 | Dakwaan "tiada crash" | ⚠️ Tidak disokong (belum disahkan) | Daripada ringkasan sekunder; diuji dalam STEP-2 |
+| 6 | Kekerapan isyarat | ⚠️ | Berubah-ubah mengikut rejim; mungkin < 20 dagangan setahun dalam 2022 (penalti S6) |
+| 7 | Syariah | ✅ | Long sahaja |
+| 8 | Keperluan data | ✅ | OHLCV sahaja |
+
+## 6. Verdict awal
+**Layak diuji dengan STEP-2. Ia satu-satunya calon yang menggabungkan pilihan saham dengan penapis rejim tanpa menggunakan SPY.**
+| Gate | Keputusan | Sebab |
+|---|---|---|
+| Sepadan gaya momentum | ✅ | |
+| Mampu +10% dalam 1–4 minggu | ⚠️ Anggaran, belum diuji | Memilih saham yang sudah naik banyak; risiko pembalikan |
+| Boleh diuji dengan data harian | ✅ | |
+| Patuh Syariah | ✅ | |
+| Nilai tambah | ✅ | Titik putus mutlak belum pernah diuji dalam Project |
+
+## 7. Kad Spesifikasi Mesin
+| Medan enjin | Takrif tepat (formula) | S/C |
+|---|---|---|
+| `sig` | AS_i ≥ BP90_m DAN vol20 ≥ 100K | S (titik putus sejarah) / C (12-1, harian) |
+| `stop` | buka_masuk × 0.88 | C |
+| `tgt` | Tiada | C |
+| `exitc` | Rangka R | C |
+| `rank` | AS_i | C |
+| `tmax` | Tiada | C |
+| Penapis pasaran | Tiada | S |
+| Varian V0 | Sumber: hari dagangan terakhir bulan, sig = AS ≥ BP90; exitc = hari terakhir bulan DAN AS < BP90; tiada henti | S/C |
+| Varian V1 | Spesifikasi dikunci (di atas) | C |
+| Varian V2 | V1 + tutup SPY > SMA200 | C |
+| Varian V3 | V1 dengan BP80 (persentil ke-80) | C |
+| Varian V4 | V1, `rank` = RESID (M162). Inilah gabungan "residual + mutlak" yang dipilih pengguna | C |
+| Varian V5 | V1, titik putus daripada tetingkap bergolek 504 hari (bukan terkumpul) | C |
+
+## Penutup
+Untuk backtest: buka chat baharu dan taip `/step2 M163` (selepas M162, kerana V4 memerlukan RESID dan Rangka R).
+
+---
+
+<!-- FAIL ASAL: spec/M164_pulangan_pengumuman_pendapatan.md -->
+# M164 — Pulangan Hari Pengumuman Pendapatan (EAR, momentum pendapatan)
+
+**Sumber:** (a) Brandt, Kishore, Santa-Clara & Venkatachalam (2008), "Earnings Announcements Are Full of Surprises" (kertas kerja; kertas penuh tidak dibaca): strategi EAR/SUE dilaporkan memberi ~12.5% setahun (ringkasan sekunder). (b) Novy-Marx (2015), "Fundamentally, Momentum is Fundamental Momentum" (NBER w20984, abstrak dibaca): ukuran kejutan pendapatan menyerap momentum harga, dan kawalan pulangan lepas menghapuskan crash. (c) Bantahan: Martineau (2022), "Rest in Peace Post-Earnings Announcement Drift": hanyutan tiada bagi saham besar sejak 2006; dua kertas 2025 membantah.
+**Jenis:** Momentum pendapatan (reaksi harga terhadap berita pendapatan). Long sahaja. **Selari** dengan gaya momentum (setara Episodic Pivot, tetapi berasaskan tarikh pendapatan sebenar).
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Idea teras | Pasaran kurang bertindak balas terhadap berita pendapatan yang baik. Saham dengan reaksi 3 hari paling kuat terus menghanyut naik |
+| Indikator | EAR = pulangan 3 hari sekitar pengumuman tolak pulangan SPY tempoh sama |
+| Persediaan | EAR dalam 10% teratas semua pengumuman 63 hari dagangan terakhir |
+| Arah | Long sahaja |
+| Sasaran | Tiada |
+| Henti rugi | 12% (Rangka R) |
+| Rangka masa | Harian; isyarat hanya pada hari d0+1 |
+| Elakkan | Reaksi lemah atau negatif; saham tanpa tarikh pendapatan sah |
+
+## 2. Tetapan indikator dan data
+| Indikator / data | Tetapan | Nota |
+|---|---|---|
+| Fail tarikh | `BacktestShariah2/data/pemangkin/tarikh_pendapatan.csv` (ticker, d0, suku, sumber) | BELUM ADA; dibina sebagai langkah pertama STEP-2 |
+| Sumber 1 | Moomoo `quote_financials_earnings_price_history`: 20 suku terkini setiap saham | Diuji 17 Okt 2026: VRT 2021/Q4–2026/Q3 (d0 pertama 23 Feb 2022), ADSK d0 pertama 25 Ogos 2021. `schedule_close_price` sepadan dengan tutup dataset (VRT 20–24 Okt 2025) |
+| Sumber 2 | Kalendar Nasdaq ikut tarikh (`api.nasdaq.com/api/calendar/earnings?date=`) melalui GitHub Actions (`pemangkin_actions.py` sudah menariknya untuk 95 hari ke belakang) | Bagi 2019 – Jul 2021. Belum disahkan sama ada data sejauh itu tersedia; disekat proksi dalam sesi awan |
+| d0 | `pub_trading_day` (Moomoo) / tarikh kalendar (Nasdaq) | Masa (sebelum buka / selepas tutup) tidak boleh dipercayai: `pub_time_str` seragam (09:30 / 00:00 / 11:00). Oleh itu tetingkap 3 hari dipakai |
+| EAR | C_{d0+1} ÷ C_{d0−2} − SPY_{d0+1} ÷ SPY_{d0−2} | Meliputi hari d0−1, d0, d0+1 (C; tetingkap tepat sumber tidak disahkan) |
+| BP90_EAR_i | Persentil ke-90 EAR bagi semua pengumuman (semua saham) dengan hari isyarat dalam [i−63, i−1]; minimum 100 pengumuman | C (persentil keratan rentas sehari mustahil kerana pengumuman sedikit setiap hari) |
+
+## 3. Persediaan utama
+| Langkah | Syarat |
+|---|---|
+| 1 | Hari i = d0 + 1 hari dagangan bagi suatu pengumuman saham itu |
+| 2 | EAR ≥ BP90_EAR_i |
+| 3 | Purata volum 20 hari ≥ 100K |
+| 4 | Masuk buka i+1; henti 0.88; keluar Rangka R; had 63 hari dagangan (≈ hingga pengumuman seterusnya) |
+
+## 4. Penapis "jangan dagang"
+| Tanda amaran | Maksud | Tindakan |
+|---|---|---|
+| d0 tidak sepadan dengan hari dagangan dataset | Tarikh salah atau cuti | Buang pengumuman; catat bilangan |
+| Dua sumber beri d0 berbeza > 1 hari | Data bercanggah | Buang pengumuman; catat bilangan |
+| Jurang pengumuman > 5 bulan bagi saham sama | Suku hilang | Laporkan liputan setiap saham |
+
+## 5. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | Tarikh pendapatan 2019 – Jul 2021 | ❌ Data tiada (belum disahkan) | Jika Nasdaq tidak membekalkannya, dagangan bermula ~Ogos 2021. Enjin mengira CAGR dari 1 Nov 2019, jadi wang terbiar 2019–21 merendahkan CAGR dan H1 (H1 menjadi Ogos 2021 – Dis 2022, kebanyakannya pasaran bear). Dalam kes itu keputusan dilabel MAKLUMAT SAHAJA dan dibandingkan dengan SPY/EW/M114 V4 bagi tempoh yang sama, bukan gate rasmi |
+| 2 | Masa pengumuman | ⚠️ | Diatasi dengan tetingkap 3 hari |
+| 3 | Anggaran EPS (SUE) | ❌ Tidak dipakai | EAR tidak memerlukannya |
+| 4 | Tempoh pegang sumber | ❌ Tidak dinyatakan (sumber penuh tidak dibaca) | 63 hari (C) |
+| 5 | Henti rugi | ❌ Tiada dalam sumber | 12% (C) |
+| 6 | Hanyutan pudar | ⚠️ | Martineau 2022: tiada bagi saham besar sejak 2006 (dipertikai 2025). Alam 431 kebanyakannya saham sederhana–besar |
+| 7 | Dakwaan prestasi | ⚠️ Tidak disokong (belum disahkan) | ~12.5% setahun hanya daripada ringkasan sekunder |
+| 8 | Syariah | ✅ | Long sahaja |
+| 9 | Keperluan data | ⚠️ | OHLCV + fail tarikh baharu |
+
+## 6. Verdict awal
+**Layak diuji dengan STEP-2 selepas fail tarikh dibina. Ini satu-satunya calon yang menambah maklumat bukan harga.**
+| Gate | Keputusan | Sebab |
+|---|---|---|
+| Sepadan gaya momentum | ✅ | Momentum pendapatan |
+| Mampu +10% dalam 1–4 minggu | ⚠️ Anggaran, belum diuji | Reaksi pendapatan besar biasanya pantas; hanyutan selepasnya perlahan |
+| Boleh diuji dengan data harian | ⚠️ | Ya, jika fail tarikh lengkap; jika tidak, hanya dari ~2021 |
+| Patuh Syariah | ✅ | |
+| Nilai tambah | ✅ | Pertama dalam Project; M22 Episodic Pivot hanya proksi jurang tanpa tarikh pendapatan |
+
+## 7. Kad Spesifikasi Mesin
+| Medan enjin | Takrif tepat (formula) | S/C |
+|---|---|---|
+| `sig` | i = d0+1 DAN EAR ≥ BP90_EAR_i DAN vol20 ≥ 100K | S (EAR) / C (ambang, tetingkap) |
+| `stop` | buka_masuk × 0.88 | C |
+| `tgt` | Tiada | C |
+| `exitc` | Rangka R | C |
+| `rank` | EAR | S |
+| `tmax` | 63 | C |
+| Penapis pasaran | Tiada | C |
+| Varian V0 | Sumber: sig sama; pegang tepat 63 hari (`tmax`); tiada henti; tiada exitc | S/C |
+| Varian V1 | Spesifikasi dikunci (di atas) | C |
+| Varian V2 | V1 dengan BP80 | C |
+| Varian V3 | V1 + tutup SPY > SMA200 | C |
+| Varian V4 | V1 + PCT_i(RS12) ≥ 0.80 (gabungan momentum harga dan pendapatan, Novy-Marx 2015 / Chan, Jegadeesh & Lakonishok 1996) | C |
+| Varian V5 | V1, `tmax` tiada | C |
+
+## Penutup
+Untuk backtest: buka chat baharu dan taip `/step2 M164`. Langkah pertama ialah membina `tarikh_pendapatan.csv`: Moomoo untuk 431 saham (alat baca sahaja), dan backfill Nasdaq melalui GitHub Actions (perlu kelulusan pengguna untuk aliran kerja baharu). Laporkan liputan sebelum backtest.
+
+---
+
+<!-- FAIL ASAL: spec/M165_momentum_industri.md -->
+# M165 — Momentum Industri (peneraju dalam industri peneraju)
+
+**Sumber:** Moskowitz & Grinblatt (1999), "Do Industries Explain Momentum?", *Journal of Finance* 54(4). Kertas penuh tidak dibaca. Abstrak (IDEAS/RePEc) dan ringkasan menyatakan: momentum industri sangat menguntungkan walaupun selepas kawalan saiz, nilai buku, momentum saham individu dan kesan mikrostruktur; kesan terkuat pada ufuk 1 bulan dan bertahan hingga 12 bulan; momentum saham individu jauh berkurang selepas kawalan industri. Ada bantahan: Giannikos & Ji (2007) mendapati kedua-duanya bebas antara satu sama lain.
+**Jenis:** Momentum industri + kekuatan relatif saham (gaya O'Neil "L" dan "I"). Long sahaja. **Selari** dengan gaya momentum.
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Idea teras | Saham peneraju lebih mungkin terus naik jika industrinya juga peneraju |
+| Indikator | IR6 = purata sama berat pulangan 126 hari ahli industri; RS12 saham |
+| Persediaan | Industri dalam 20% teratas IR6 DAN saham dalam 20% teratas RS12 |
+| Arah | Long sahaja |
+| Sasaran | Tiada |
+| Henti rugi | 12% |
+| Rangka masa | Harian |
+| Elakkan | Saham kuat dalam industri lemah (kekuatan terpencil) |
+
+## 2. Tetapan indikator
+| Indikator | Tetapan | Nota |
+|---|---|---|
+| Industri | `papertrade/peta_industri.csv` (Moomoo, snapshot Okt 2026). Semua 431 saham dipetakan; 92 industri; 51 industri ≥ 3 saham meliputi 374 saham | Klasifikasi hari ini dipakai untuk semua tarikh (C) |
+| IR6_{k,i} | Purata sama berat (C_i ÷ C_{i−126} − 1) ahli industri k yang ada data; minimum 3 ahli sah | Sumber: portfolio industri (pemberat dan tempoh formasi tidak disahkan) |
+| PCT_ind | Persentil IR6 merentas industri layak pada hari i | |
+| RS12 | Seperti M114: (C/SPY)_i ÷ (C/SPY)_{i−251} − 1 | |
+
+## 3. Persediaan utama
+| Langkah | Syarat (pada tutup hari i) |
+|---|---|
+| 1 | Industri saham layak (≥ 3 ahli sah) |
+| 2 | PCT_ind ≥ 0.80 |
+| 3 | PCT_i(RS12) ≥ 0.80 (atas 431) |
+| 4 | Tutup SPY > SMA200; vol20 ≥ 100K |
+| 5 | Masuk buka i+1; henti 0.88; keluar Rangka R; rank RS12 |
+
+Kawalan langsung bagi M165 ialah **M114 V1** (kolam RS12 20%, CAGR 23.3%), kerana V1 = M114 V1 + syarat industri. Beza CAGR = nilai penapis industri.
+
+## 4. Penapis "jangan dagang"
+| Tanda amaran | Maksud | Tindakan |
+|---|---|---|
+| Industri < 3 ahli sah | Purata industri tidak bermakna | Tiada isyarat (57 saham terkecuali) |
+| SPY ≤ SMA200 | Pasaran lemah | Tiada masuk baharu |
+
+## 5. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | Bilangan industri sumber, pemberat, tempoh formasi/pegang | ⚠️ Kabur | Tidak disahkan; IR6 sama berat (C), IR1 di V2 (sumber: kesan terkuat 1 bulan) |
+| 2 | Klasifikasi tetap Okt 2026 | ⚠️ | Pertukaran industri sejarah tidak diambil kira |
+| 3 | Industri kecil | ⚠️ | Median 3 saham setiap industri; purata industri kecil bising. V4 hanya industri ≥ 5 (310 saham) |
+| 4 | Henti rugi | ❌ Tiada dalam sumber | 12% (C) |
+| 5 | Dakwaan prestasi | ✅ | Tiada angka dipakai |
+| 6 | Syariah | ✅ | Long sahaja (sumber long-short) |
+| 7 | Keperluan data | ✅ | OHLCV + `peta_industri.csv` |
+
+## 6. Verdict awal
+**Layak diuji dengan STEP-2. Ia menguji sama ada konteks industri menambah nilai kepada RS saham.**
+| Gate | Keputusan | Sebab |
+|---|---|---|
+| Sepadan gaya momentum | ✅ | |
+| Mampu +10% dalam 1–4 minggu | ⚠️ Anggaran, belum diuji | |
+| Boleh diuji dengan data harian | ✅ | |
+| Patuh Syariah | ✅ | |
+| Nilai tambah | ✅ | Peta industri belum pernah dipakai dalam backtest |
+
+## 7. Kad Spesifikasi Mesin
+| Medan enjin | Takrif tepat (formula) | S/C |
+|---|---|---|
+| `sig` | PCT_ind(IR6) ≥ 0.80 DAN PCT_i(RS12) ≥ 0.80 DAN SPY > SMA200 DAN vol20 ≥ 100K DAN industri ≥ 3 ahli sah | S (momentum industri) / C (ambang) |
+| `stop` | buka_masuk × 0.88 | C |
+| `tgt` | Tiada | C |
+| `exitc` | Rangka R | C |
+| `rank` | RS12_i | C |
+| `tmax` | Tiada | C |
+| Penapis pasaran | SPY > SMA200 | C |
+| Varian V0 | Sumber: hari dagangan terakhir bulan, sig = PCT_ind(IR6) ≥ 0.80 (tanpa syarat RS saham); rank IR6; `tmax` 126; tiada henti; tiada exitc | S/C |
+| Varian V1 | Spesifikasi dikunci (di atas) | C |
+| Varian V2 | V1, IR1 (21 hari) menggantikan IR6 | C |
+| Varian V3 | V1 tanpa syarat RS saham (industri sahaja; rank RS12) | C |
+| Varian V4 | V1, hanya industri ≥ 5 ahli sah | C |
+| Varian V5 | V1 tanpa penapis SPY | C |
+
+## Penutup
+Untuk backtest: buka chat baharu dan taip `/step2 M165`.
+
+---
+
+<!-- FAIL ASAL: spec/M166_titik_pusing_momentum.md -->
+# M166 — Titik Pusing Momentum (kelajuan momentum ikut keadaan pasaran)
+
+**Sumber:** Goulding, Harvey & Mazzoleni (2023), "Momentum Turning Points", *Journal of Financial Economics*. Kertas penuh tidak dibaca. Abstrak dan ringkasan (CXO Advisory, Alpha Architect, IBKR): isyarat perlahan (pulangan 12 bulan) dan pantas (1 bulan) membahagikan pasaran kepada empat keadaan, iaitu Bull, Correction, Bear dan Rebound. Momentum perlahan lambat bertindak balas di titik pusing, manakala momentum pantas kerap memberi amaran palsu. Analisis kelajuan ikut keadaan memilih momentum lebih perlahan selepas Correction dan lebih pantas selepas Rebound.
+**Penting:** sumber menguji momentum siri masa ke atas indeks/aset. **Penggunaan pada ranking saham ialah adaptasi saya (C)**, bukan dakwaan sumber.
+**Jenis:** Rotasi momentum dengan kelajuan dinamik. Long sahaja. **Selari** dengan gaya momentum.
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Idea teras | Momentum 12 bulan gagal ketika pasaran berpusing naik (crash momentum Daniel & Moskowitz berlaku semasa rebound). Selepas rebound, tukar kepada ranking pantas 1 bulan; ketika bear, jangan beli |
+| Indikator | Keadaan SPY (S = pulangan 252 hari, F = pulangan 21 hari); RS12; RS1 |
+| Persediaan | Keadaan ≠ Bear DAN saham dalam 10% teratas kunci ikut keadaan |
+| Arah | Long sahaja |
+| Sasaran | Tiada |
+| Henti rugi | 12% |
+| Rangka masa | Harian |
+| Elakkan | Membeli pemimpin lama 12 bulan sejurus selepas pasaran berpusing naik |
+
+## 2. Tetapan indikator
+| Indikator | Tetapan | Nota |
+|---|---|---|
+| S_i, F_i | SPY: C_i ÷ C_{i−252} − 1; C_i ÷ C_{i−21} − 1 | S (12 bulan / 1 bulan) |
+| Keadaan | Bull: S>0, F>0 · Correction: S>0, F≤0 · Bear: S≤0, F≤0 · Rebound: S≤0, F>0 | S. Bilangan hari dalam sampel 1 Nov 2019 – 2 Okt 2026: Bull 1034, Correction 377, Bear 146, Rebound 136, tiada nilai 41 |
+| RS12 | Seperti M114 | Kunci perlahan |
+| RS1 | (C/SPY)_i ÷ (C/SPY)_{i−21} − 1 | Kunci pantas |
+
+## 3. Persediaan utama
+| Langkah | Syarat (pada tutup hari i) |
+|---|---|
+| 1 | Keadaan_i ≠ Bear |
+| 2 | Kunci K_i = RS12 jika Bull atau Correction; K_i = RS1 jika Rebound |
+| 3 | PCT_i(K) ≥ 0.90; vol20 ≥ 100K |
+| 4 | Tiada penapis SMA200 (keadaan menggantikannya) |
+| 5 | Masuk buka i+1; henti 0.88; keluar Rangka R; rank K_i |
+
+## 4. Penapis "jangan dagang"
+| Tanda amaran | Maksud | Tindakan |
+|---|---|---|
+| Keadaan Bear | Pulangan 12 bulan dan 1 bulan SPY kedua-duanya negatif | Tiada masuk baharu |
+
+## 5. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | Adaptasi ke saham | ⚠️ Cadangan | Sumber ialah momentum siri masa ke atas pasaran, bukan pilihan saham |
+| 2 | Pemberat dinamik | ⚠️ Kabur | Sumber menganggar pemberat campuran ikut keadaan; di sini pertukaran binari (C) |
+| 3 | Pembalikan jangka pendek | ⚠️ | RS1 terdedah kepada pembalikan 1 bulan (Jegadeesh 1990). Hanya 136 hari Rebound, jadi kesannya kecil |
+| 4 | Henti rugi | ❌ Tiada dalam sumber | 12% (C) |
+| 5 | Dakwaan prestasi | ✅ | Tiada angka dipakai |
+| 6 | Syariah | ✅ | Long sahaja |
+| 7 | Keperluan data | ✅ | OHLCV + SPY |
+
+## 6. Verdict awal
+**Layak diuji dengan STEP-2. Ia menyasarkan kelemahan sebenar M114/M96 (kejatuhan semasa pasaran berpusing).**
+| Gate | Keputusan | Sebab |
+|---|---|---|
+| Sepadan gaya momentum | ✅ | |
+| Mampu +10% dalam 1–4 minggu | ⚠️ Anggaran, belum diuji | |
+| Boleh diuji dengan data harian | ✅ | |
+| Patuh Syariah | ✅ | |
+| Nilai tambah | ✅ | Kunci ranking ikut rejim belum pernah diuji |
+
+## 7. Kad Spesifikasi Mesin
+| Medan enjin | Takrif tepat (formula) | S/C |
+|---|---|---|
+| `sig` | Keadaan_i ≠ Bear DAN PCT_i(K) ≥ 0.90 DAN vol20 ≥ 100K | S (keadaan) / C (adaptasi) |
+| `stop` | buka_masuk × 0.88 | C |
+| `tgt` | Tiada | C |
+| `exitc` | Rangka R | C |
+| `rank` | K_i | C |
+| `tmax` | Tiada | C |
+| Penapis pasaran | Keadaan ≠ Bear | S |
+| Varian V0 | Laju pertengahan statik: K = 0.5 × PCT(RS12) + 0.5 × PCT(RS1); kolam PCT(K) ≥ 0.90; tiada penapis keadaan | S (campuran 50/50) / C |
+| Varian V1 | Spesifikasi dikunci (di atas) | C |
+| Varian V2 | V1, tanpa sekatan Bear (hanya pertukaran kunci) | C |
+| Varian V3 | V1, keadaan dikira daripada indeks sama rata 431, bukan SPY | C |
+| Varian V4 | V1, isyarat pantas 63 hari (F dan RS3) | C |
+| Varian V5 | V1, keadaan Correction juga tiada isyarat (Bull dan Rebound sahaja) | C |
+
+## Penutup
+Untuk backtest: buka chat baharu dan taip `/step2 M166`.
+
+---
+
+<!-- FAIL ASAL: spec/M167_momentum_semalaman.md -->
+# M167 — Momentum Semalaman (pulangan tutup → buka)
+
+**Sumber:** Lou, Polk & Skouras (2019), "A Tug of War: Overnight Versus Intraday Expected Returns", *Journal of Financial Economics* 134, 192–213 (personal.lse.ac.uk/polk/research/TugOfWar.pdf). Kertas penuh tidak dibaca dalam chat ini. Menurut abstrak, pulangan abnormal momentum berlaku hampir sepenuhnya semalaman, manakala strategi lain kebanyakannya intrahari; corak ini lebih kuat bagi saham besar dan berharga tinggi. Peraturan strategi diambil daripada katalog K234 (dibuang dengan kod D): ranking ikut pulangan semalaman bulan lepas, beli desil teratas, pegang 1 bulan. Kertas menggunakan VWAP 9:30–10:00; harga buka harian dipakai sebagai proksi.
+**Jenis:** Momentum keratan rentas (komponen semalaman). Long sahaja. **Selari** dengan gaya momentum.
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Idea teras | Belian berterusan di luar waktu dagangan (selalunya pelabur runcit) menandakan permintaan momentum |
+| Indikator | ON_t = ln(buka_t ÷ tutup_{t−1}); OVN21 = Σ ON 21 hari |
+| Persediaan | OVN21 dalam 10% teratas + Rangka R |
+| Arah | Long sahaja |
+| Sasaran | Tiada |
+| Henti rugi | 12% |
+| Rangka masa | Harian (sumber: bulanan) |
+| Elakkan | Saham yang naik hanya semasa sesi dagangan biasa |
+
+## 2. Tetapan indikator
+| Indikator | Tetapan | Nota |
+|---|---|---|
+| ON_t | ln(O_t ÷ C_{t−1}) | Harga terlaras: buka dan tutup dilaras dengan faktor yang sama, jadi dividen/pecahan saham dikira dengan betul |
+| OVN21_i | Σ ON_t, t = i−20..i | S (bulan lepas, K234) |
+| OVN252_i | Σ ON_t, t = i−251..i | C (V2) |
+
+## 3. Persediaan utama
+| Langkah | Syarat (pada tutup hari i) |
+|---|---|
+| 1 | ≥ 21 hari ON sah |
+| 2 | PCT_i(OVN21) ≥ 0.90 |
+| 3 | SPY > SMA200; vol20 ≥ 100K |
+| 4 | Masuk buka i+1; henti 0.88; keluar Rangka R; rank OVN21 |
+
+## 4. Penapis "jangan dagang"
+| Tanda amaran | Maksud | Tindakan |
+|---|---|---|
+| Buka = tutup semalam | Mungkin harga buka basi | 2.95% hari dalam dataset; dikekalkan (ON = 0) tetapi dilaporkan |
+| SPY ≤ SMA200 | Pasaran lemah | Tiada masuk baharu |
+
+## 5. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | VWAP 9:30–10:00 | ❌ Data tiada | Proksi harga buka harian |
+| 2 | Kesan pada pulangan penuh | ⚠️ | Kertas menunjukkan komponen semalaman dan intrahari bertentangan ("tarik tali"). Strategi swing memegang kedua-dua komponen, jadi kelebihan mungkin terbatal. Cooper, Cliff & Gulen: hampir semua pulangan saham berlaku semalaman |
+| 3 | Peraturan strategi | ⚠️ Kabur | Daripada katalog K234, belum disahkan dengan kertas penuh |
+| 4 | Henti rugi | ❌ Tiada dalam sumber | 12% (C) |
+| 5 | Dakwaan prestasi | ✅ | Tiada angka dipakai |
+| 6 | Syariah | ✅ | Long sahaja |
+| 7 | Keperluan data | ✅ | OHLCV sahaja (K234 sepatutnya tidak dibuang dengan kod D) |
+
+## 6. Verdict awal
+**Layak diuji dengan STEP-2, dengan risiko tinggi bahawa kelebihan terbatal dalam pulangan tutup-ke-tutup.**
+| Gate | Keputusan | Sebab |
+|---|---|---|
+| Sepadan gaya momentum | ✅ | |
+| Mampu +10% dalam 1–4 minggu | ⚠️ Anggaran, belum diuji | |
+| Boleh diuji dengan data harian | ✅ | Proksi buka |
+| Patuh Syariah | ✅ | |
+| Nilai tambah | ⚠️ | Kunci baharu, tetapi bukti untuk pegangan swing lemah |
+
+## 7. Kad Spesifikasi Mesin
+| Medan enjin | Takrif tepat (formula) | S/C |
+|---|---|---|
+| `sig` | PCT_i(OVN21) ≥ 0.90 DAN SPY > SMA200 DAN vol20 ≥ 100K | S (OVN21) / C (Rangka R) |
+| `stop` | buka_masuk × 0.88 | C |
+| `tgt` | Tiada | C |
+| `exitc` | Rangka R | C |
+| `rank` | OVN21_i | S |
+| `tmax` | Tiada | C |
+| Penapis pasaran | SPY > SMA200 | C |
+| Varian V0 | Sumber: hari dagangan terakhir bulan, sig = PCT(OVN21) ≥ 0.90; exitc = hari terakhir bulan DAN PCT < 0.90; tiada henti; tiada penapis SPY | S |
+| Varian V1 | Spesifikasi dikunci (di atas) | C |
+| Varian V2 | V1, kunci OVN252 | C |
+| Varian V3 | V1, kolam PCT(RS12) ≥ 0.90 (kolam M114 V4), rank OVN21. Menguji sama ada OVN memilih lebih baik dalam kalangan peneraju | C |
+| Varian V4 | V1 tanpa penapis SPY | C |
+| Varian V5 | V1, kunci OVN63 | C |
+
+## Penutup
+Untuk backtest: buka chat baharu dan taip `/step2 M167`.
+
+---
+
+<!-- FAIL ASAL: spec/L01_penapis_rejim_crash.md -->
+# L01 — Penapis Rejim Crash (lapisan, bukan kaedah masuk)
+
+**Sumber:** Katalog K273 (disimpan sebagai lapisan, belum diuji). Daniel & Moskowitz (2016), "Momentum Crashes", *JFE* (NBER w20439): crash momentum boleh diramal sebahagiannya; ia berlaku dalam keadaan "panik", iaitu selepas pasaran jatuh dan ketika turun naik pasaran tinggi, serentak dengan lantunan pasaran. Cooper, Gutierrez & Hameed (2004): premium momentum hampir sifar apabila pulangan pasaran 3 tahun lepas negatif. Bendera bear K273 = pulangan pasaran 24 bulan < 0. Barroso & Santa-Clara (2015): skala pendedahan ikut turun naik.
+**Jenis:** Penapis rejim pasaran, dipasang atas `sig` kaedah sedia ada. Long sahaja.
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Idea teras | Jangan buka posisi momentum baharu dalam rejim yang secara sejarah menghasilkan crash momentum |
+| Dipasang pada | M96 V1, M30 V3, M79 V3, M111 V5 (modul `kod/kaedah/`) dan M114 V4 (Rangka R). M162–M167 V1 ditambah jika lulus STEP-2 |
+| Tindakan | sig_L = sig DAN BUKAN bendera_i. Posisi sedia ada mengikut peraturan keluar asal |
+
+## 2. Bendera (dikira pada tutup hari i)
+| Bendera | Takrif | Nota data (1 Nov 2019 – 2 Okt 2026) |
+|---|---|---|
+| A | SPY C_i ÷ C_{i−252} − 1 < 0 | 282 hari, antara 12 Mac 2020 dan 8 Apr 2025 |
+| B (K273 tulen) | SPY C_i ÷ C_{i−504} − 1 < 0 | Hanya 29 hari, antara 26 Apr dan 28 Nov 2023. Hampir tiada kesan; diuji untuk lengkap |
+| C (panik) | A DAN turun naik SPY 63 hari (SD harian × √252) > persentil ke-80 sejarah terkumpul turun naik itu (min 252 hari) | C, proksi "pasaran jatuh + turun naik tinggi" Daniel & Moskowitz |
+
+## 3. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | Skala turun naik (Barroso & Santa-Clara) | ❌ Tidak boleh diuji | Perlu mengubah saiz posisi; `portfolio()` enjin v1.2 beku (8 slot × 12.5%) |
+| 2 | Skala dinamik Daniel & Moskowitz | ❌ Tidak boleh diuji | Sebab yang sama; hanya bendera binari diuji |
+| 3 | Tetingkap 36 bulan (Cooper) | ⚠️ Data | Data bermula 2019; tetingkap 504 hari (B) sudah hampir tidak aktif |
+| 4 | Sampel kecil | ⚠️ | Hanya satu-dua episod bear (2020, 2022, awal 2025); risiko lebih padan tinggi |
+| 5 | Pertindihan dengan SPY > SMA200 | ⚠️ | M114 dan Rangka R sudah ada penapis SPY. Kesan tambahan mungkin kecil |
+| 6 | Syariah | ✅ | Penapis sahaja |
+
+## 4. Kriteria penerimaan (ditetapkan SEBELUM ujian)
+Lapisan diterima jika, bagi ≥ 3 daripada 5 kaedah: MDD bertambah baik ≥ 3 mata peratus DAN CAGR tidak turun lebih daripada 2 mata peratus, DAN arah yang sama dalam ≥ 3/4 subset S1–S4. Jika tidak, lapisan DITOLAK. Satu bendera dipilih sahaja (A, B atau C) berdasarkan bilangan kaedah yang lulus; jika seri, pilih yang paling ringkas (A).
+
+## 5. Output
+`laporan/L01_penapis_rejim.md` dan `data/lapisan/L01.csv` (lajur sama seperti registry, dengan `varian` = "Vx + L01-A/B/C"). **Jangan tambah ke `registry_M_gabung.csv`**: pemilihan varian modul dan semakan `uji_kaedah.py` membaca registry, jadi baris lapisan boleh mengubah varian Papertrade C atau menggagalkan CI. Tiada perubahan pada rutin harian atau ujian hadapan sebelum 15 Jan 2027 tanpa keputusan pengguna.
+
+## 6. Verdict awal
+**Layak diuji. Kos rendah (penapis atas modul sedia ada); faedah dijangka hanya pada MDD.**
+
+## Penutup
+Untuk ujian: buka chat baharu dan taip `/step2 L01` (selepas M162, kerana M114 V4 memerlukan Rangka R).
+
+---
+
+<!-- FAIL ASAL: spec/L02_meta_label.md -->
+# L02 — Meta-label (model kedua menapis isyarat kaedah)
+
+**Sumber:** López de Prado, *Advances in Financial Machine Learning* (2018), konsep meta-labelling. Model utama menentukan arah dan bila; model kedua binari memutuskan sama ada isyarat itu diambil (1) atau dilangkau (0), dengan matlamat menaikkan ketepatan (precision). Kebarangkalian model kedua boleh dipakai untuk saiz posisi, tetapi ini tidak diuji kerana enjin beku. Amaran: label yang bertindih menyebabkan kebocoran, jadi purge dan embargo wajib; kajian Hudson & Thames menunjukkan meta-label tidak selalu menambah nilai.
+**Jenis:** Penapis pembelajaran mesin atas `sig` kaedah sedia ada. Long sahaja. Selaras dengan matlamat "peluang menang paling tinggi".
+
+## 1. Ringkasan satu pandangan
+| Perkara | Isi |
+|---|---|
+| Model utama | M96 V1, M30 V3, M79 V3, M111 V5, M114 V4, M81 V4 (dagangan paling banyak). Semua isyarat daripada `trades()` enjin v1.2, sebelum had slot |
+| Label y | 1 jika high mencecah buka_masuk × 1.10 dalam ≤ 20 hari dagangan selepas masuk SEBELUM low menyentuh henti kaedah; jika tidak, 0. Jika kedua-duanya disentuh pada hari yang sama, y = 0 (konservatif). Ini halangan tiga: atas +10%, bawah = henti, menegak 20 hari |
+| Tindakan | sig_L = sig DAN p_i ≥ ambang |
+
+## 2. Ciri (pada tutup hari isyarat i; tiada pandang ke hadapan)
+| # | Ciri |
+|---|---|
+| 1 | PCT_i(RS12) atas 431 |
+| 2 | PCT_i(RS1) atas 431 |
+| 3 | ATR14_i ÷ C_i |
+| 4 | C_i ÷ SMA50_i − 1 |
+| 5 | C_i ÷ SMA200_i − 1 |
+| 6 | C_i ÷ maks(C_{i−251..i}) − 1 |
+| 7 | vol20 ÷ vol252 |
+| 8 | SPY C_i ÷ C_{i−252} − 1 |
+| 9 | SPY C_i ÷ SMA200 − 1 |
+| 10 | Turun naik SPY 21 hari (SD harian × √252) |
+| 11 | PCT_ind(IR6) (M165; 0.5 jika industri < 3 ahli) |
+| 12 | ID kaedah (satu-panas; one-hot) |
+
+## 3. Latihan berjalan ke hadapan
+| Perkara | Takrif |
+|---|---|
+| Luar sampel | 1 Jan 2023 – 2 Okt 2026, 16 suku (sama seperti W01) |
+| Latih semula | Awal setiap suku, guna semua isyarat dengan tarikh masuk < (awal suku − 25 hari dagangan): purge 20 hari (panjang label) + embargo 5 hari |
+| Piawaian ciri | Min/SD set latihan sahaja |
+| Model V1 | Regresi logistik L2 (λ = 1), ditulis dengan numpy (tiada kebergantungan baharu) |
+| Ambang | Median p dalam set latihan suku itu (≈ 50% isyarat lulus) |
+
+## 4. Varian
+| Varian | Beza |
+|---|---|
+| V1 | Di atas (dikunci) |
+| V2 | Tanpa penapis; `rank` = p (menggantikan rank asal) |
+| V3 | Model HistGradientBoosting (perlu `scikit-learn` dalam `requirements.txt`; tiada dalam persekitaran sekarang) |
+| V4 | Label = pulangan akhir dagangan ≥ +10% (bukan halangan tiga) |
+
+## 5. Jurang dan kekaburan
+| # | Perkara | Status | Masalah |
+|---|---|---|---|
+| 1 | Saiz posisi ikut p | ❌ Tidak boleh diuji | `portfolio()` beku |
+| 2 | Kebocoran | ⚠️ | Purge/embargo; ciri hari i sahaja; piawaian atas set latihan |
+| 3 | Lebih padan | ⚠️ Tinggi | 6 kaedah × 4 varian; DSR wajib dilaporkan (cara W01) |
+| 4 | G5 / subset | ⚠️ | Luar sampel bermula 2023, jadi H1 tiada; dinilai ikut kriteria W01, bukan gate registry |
+| 5 | Bias kemandirian | ⚠️ | Sama seperti semua backtest |
+| 6 | Syariah | ✅ | Penapis sahaja |
+
+## 6. Kriteria penerimaan (ditetapkan SEBELUM ujian)
+Dalam luar sampel, bagi ≥ 4 daripada 6 kaedah: kadar Hit10 isyarat lulus − kadar Hit10 semua isyarat ≥ +5 mata peratus DAN CAGR portfolio (8 slot, enjin v1.2) ≥ versi tanpa penapis dalam tempoh sama. DSR ≥ 0.95 bagi sekurang-kurangnya satu kaedah. Jika tidak, DITOLAK.
+
+## 7. Output
+`WFO/laporan/L02_meta_label.md`, `WFO/data/hasil/L02_*.csv`. Tidak masuk `registry_M_gabung.csv`. Tiada perubahan pada rutin harian sebelum 15 Jan 2027 tanpa keputusan pengguna.
+
+## 8. Verdict awal
+**Layak diuji, paling akhir: ia bergantung pada RS1, IR6 (M165) dan Rangka R (M162), dan risiko lebih padan paling tinggi.**
+
+## Penutup
+Untuk ujian: buka chat baharu dan taip `/step2 L02` selepas M162, M165 dan L01 siap.

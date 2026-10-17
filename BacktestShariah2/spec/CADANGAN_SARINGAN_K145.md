@@ -321,3 +321,18 @@ Perubahan utama semakan ketiga:
 - Penapis berguna untuk disimpan sebagai lapisan, bukan kaedah: K273 (rejim pasaran Daniel & Moskowitz), K240 (elak saham MAX tinggi), K233 Trend Factor (kunci `rank`).
 - Peraturan keluar X01–X09 dikekalkan untuk dipasang pada mana-mana kaedah.
 - Keputusan 'sesuai' ialah saringan awal berdasarkan ringkasan katalog; verdict penuh dibuat dalam STEP-1 setiap kaedah.
+## Tambahan 17 Okt 2026 — calon akademik M162–M167 dan lapisan L01–L02
+Kajian 17 Okt 2026: pencetus corak bar ≈ rawak (P01; kumpulan M115–M161: 0 GUNA). Calon baharu menguji kunci ranking keratan rentas dalam Rangka R (M114 V4) dan lapisan atas kaedah sedia ada. Pengguna memilih semua calon untuk STEP-1. Spec dalam `SPEC_SEMUA_KAEDAH.md` (cari `FAIL ASAL: spec/RANGKA_R`, `spec/M162`–`spec/M167`, `spec/L01`, `spec/L02`).
+
+| Baharu | Asal | Kaedah | Data |
+|---|---|---|---|
+| M162 | K270 (dihidupkan semula; proksi SPY bagi FF3) | Momentum Residual (Blitz, Huij & Martens 2011) | OHLCV |
+| M163 | Baharu | Kekuatan Mutlak (Gulen & Petkova) | OHLCV |
+| M164 | Baharu | Pulangan Hari Pengumuman Pendapatan, EAR | OHLCV + tarikh pendapatan (perlu dibina) |
+| M165 | Baharu (K111 rotasi sektor ETF berbeza) | Momentum Industri (Moskowitz & Grinblatt 1999) | OHLCV + `peta_industri.csv` |
+| M166 | Baharu | Titik Pusing Momentum (Goulding, Harvey & Mazzoleni 2023), adaptasi saham | OHLCV + SPY |
+| M167 | K234 (dihidupkan semula; harga buka dikira daripada OHLCV) | Momentum Semalaman (Lou, Polk & Skouras 2019) | OHLCV |
+| L01 | K273 | Penapis rejim crash (lapisan) | SPY |
+| L02 | Baharu | Meta-label (López de Prado) (lapisan) | Isyarat kaedah sedia ada |
+
+Susunan STEP-2 dicadangkan: M162 (membina dan mengesahkan Rangka R) → M163 → M166 → M167 → M165 → L01 → M164 (selepas fail tarikh) → L02.
