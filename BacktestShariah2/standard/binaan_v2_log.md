@@ -303,3 +303,11 @@
 
 ## Analisis mingguan 2026-10-17 (Sabtu)
 - `WFO/kod/analisis_sebenar.py`: 111 kaedah; AMARAN 0, SELARI 0, data belum cukup 111 (tiada kaedah matang). Kaedah AMARAN: tiada. db `analisis/sebenar` ditulis. Tiada order. Tiada wang sebenar.
+
+## 17 Okt 2026 — STEP-2 M166, M167, M165, L01; jejak kertas M166; kemas kini papan
+- STEP-2 (enjin v1.2, Rangka R; skrip `WFO/kaedah_baru/step2_<ID>.py`, laporan `laporan/<ID>.md`): **M166** Titik Pusing Momentum V1 GUNA 83.0 (CAGR 58.2%, MDD −40.4%, gate 4/4 subset) — LAYAK; **M167** Momentum Semalaman V1 DITOLAK (8.7%), V2 OVN252 GUNA 83.1 (proksi RS12, korelasi 0.60); **M165** Momentum Industri TIDAK LAYAK (V1 15.6% < SPY); **L01** Penapis Rejim Crash DITOLAK 0/5 (`laporan/L01_penapis_rejim.md`, `data/lapisan/L01.csv`, tidak masuk registry M). M164 dan L02 belum diuji.
+- Registry: `kod/registry/M165–M167.csv` + baris dalam `data/registry_M_gabung.csv` (1,563 baris, 140 kaedah). `kod/registry/M114.csv` dicipta daripada baris gabungan (sebelum ini tiada; scanner/lejar melangkau registry tanpa modul).
+- Dashboard db: `registry/M114`, `M162`, `M163`, `M165`, `M166`, `M167` ditulis (sebelum ini tiada).
+- `standard/jana_papan.py` (baharu) menjana semula `laporan/PAPAN_KEDUDUKAN_M.md` (140 kaedah; varian kaedah yang semua DITOLAK kini CAGR tertinggi ikut tugasan_v3 §3, dahulu V0). `laporan/SEMAKAN_H1_H2.md` dijana semula (`semak_h1_h2.py`).
+- Jejak kertas M166 V1 (keputusan pengguna: jejak sahaja, tiada belian C): `WFO/kaedah_baru/jejak_M166.py` membaca stor harga repo → `uji_kertas/jejak_M166.csv`; langkah 4b dalam `jadual/imbas_2002.md`; tempoh hingga 15 Jan 2027.
+- Tiada order. Tiada wang sebenar.

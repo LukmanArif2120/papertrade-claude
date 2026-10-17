@@ -10,7 +10,8 @@ Repo ini menggantikan Project claude.ai "Backtest Shariah 2" sebagai stor utama 
 - `BacktestShariah2/papertrade/` — moomoo.csv, claude.csv, claude_2.csv (… claude_N.csv), senarai_beli.csv, watchlist.csv, sektor.csv. Skema: `papertrade/SKEMA.md`.
 - `BacktestShariah2/spec/SPEC_SEMUA_KAEDAH.md` — semua spec (cari tanda `FAIL ASAL`).
 - `BacktestShariah2/lejar/` — Lejar Penuh (sejak 16 Okt 2026): semua isyarat semua kaedah dibeli/dikeluarkan setiap malam oleh GitHub Actions `lejar.yml` (`standard/lejar.py`). Jangan ubah secara manual. Stor harga repo: `BacktestShariah2/data/harga/stor/` (rutin menyalinnya; jangan commit perubahan).
-- `BacktestShariah2/laporan/`, `BacktestShariah2/data/` (registry gabungan, P01/P02), `BacktestShariah2/uji_kertas/log.csv`.
+- `BacktestShariah2/laporan/` (papan: `standard/jana_papan.py`), `BacktestShariah2/data/` (registry gabungan, P01/P02, `lapisan/`), `BacktestShariah2/uji_kertas/log.csv`, `uji_kertas/jejak_M166.csv` (jejak kertas M166 V1 sahaja, tiada belian; hingga 15 Jan 2027).
+- `WFO/kaedah_baru/step2_<ID>.py` — skrip STEP-2 Rangka R (M162–M167, L01). Kaedah baharu: tambah `kod/registry/<ID>.csv`, baris ke `data/registry_M_gabung.csv`, db dashboard `registry/<ID>` (`standard/dashboard_kemaskini.py`), dan jana semula papan.
 - `data_mentah/` — dataset_S1–S4.csv, index_benchmark.csv (data backtest).
 
 Laluan lama dalam dokumen (`standard/x`, `papertrade/x`, `spec/`) = `BacktestShariah2/standard/x`, `BacktestShariah2/papertrade/x`, `BacktestShariah2/spec/SPEC_SEMUA_KAEDAH.md`.
