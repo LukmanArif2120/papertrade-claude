@@ -22,3 +22,7 @@ Sasaran siap: Ahad 18 Okt 2026, 23:59 MYT. Peraturan teknikal: `SPEC.md`. Penggu
 
 ## Status
 - 17 Okt 21:47 MYT: spec ditetapkan; F1–F3 dimulakan selari.
+- 17 Okt ~22:15 MYT: F1 siap (Release autotune-data 215.8 MB; 5376 siri, 0 gagal; universe 2000/bulan sejak 2021; 605 ticker ditanda dan dikeluarkan).
+- 17 Okt ~22:40 MYT: F2 siap (134/134 salinan SAMA bait demi bait; BELUM DITALA = 0; median TALA 6). Catatan: M15, M100, M101 guna `rolling(center=True)` (dibekukan; kod asal perlu disemak berasingan); TMAX ≥ 60 dibekukan (had enjin 60).
+- 17 Okt ~22:40 MYT: F3 siap (enjin_at setara v1.2 bila perubahan dimatikan; perintis 5 kaedah lulus; ~12 s/percubaan; unjuran penuh ~10 jam → dua larian).
+- 17 Okt 22:45 MYT: F5 larian 1 dimulakan (run 39042108317; 120 percubaan, 20 shard). Larian 2 menyambung tugas yang belum SIAP.
