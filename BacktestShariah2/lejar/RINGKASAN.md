@@ -1,142 +1,144 @@
 # Lejar Penuh — ringkasan setiap kaedah
 
-Dijana oleh `standard/lejar.py ringkas`. Lejar bermula 2026-10-15; sesi terakhir 2026-10-15. 0 posisi (0 tutup, 0 terbuka). Semua isyarat setiap kaedah dibeli pada buka rasmi esok dengan peraturan sama (tiada had sekaedah). Jangkaan = registry set 431 varian modul (dalam sampel).
+Dijana oleh `standard/lejar.py ringkas`. Lejar bermula 2026-10-15; sesi terakhir 2026-10-16. 3404 posisi (149 tutup lorong 1, 3255 terbuka). Semua isyarat setiap kaedah dibeli pada buka rasmi esok dengan peraturan sama (tiada had sekaedah). Jangkaan = registry set 431 varian modul (dalam sampel).
 
 Nota: data awal didominasi posisi yang tutup cepat (kebanyakan kena henti); nilai hanya selepas posisi matang (lihat `WFO/README.md`, penilaian 15 Jan 2027).
 
-| Kaedah | Posisi | Tutup | Terbuka | Menang % | Purata tutup % | Hari | Purata terbuka % | Menang jangka % | Purata jangka % | Hari jangka |
-|---|---|---|---|---|---|---|---|---|---|---|
-| M01 Bollinger Band + RSI | 0 | 0 | 0 |  |  |  |  | 67 | 2.22 | 22 |
-| M02 MACD + SMA200 | 0 | 0 | 0 |  |  |  |  | 44 | 0.66 | 14 |
-| M03 BB Break + Divergence RSI | 0 | 0 | 0 |  |  |  |  | 56 | 0.58 | 8 |
-| M04 BB Squeeze Breakout | 0 | 0 | 0 |  |  |  |  | 36 | 4.96 | 32 |
-| M05 MACD Divergence + Pengesahan | 0 | 0 | 0 |  |  |  |  | 35 | 10.85 | 108 |
-| M06 Minervini VCP Breakout | 0 | 0 | 0 |  |  |  |  | 33 | 2.49 | 29 |
-| M07 Qullamaggie Breakout | 0 | 0 | 0 |  |  |  |  | 20 | 1.05 | 8 |
-| M08 SMA20 + SMA200 | 0 | 0 | 0 |  |  |  |  | 32 | 1.07 | 12 |
-| M09 Volumatic VIDYA Pivot Retest | 0 | 0 | 0 |  |  |  |  | 23 | 1.85 | 30 |
-| M10 EMA3 + CCI + MACD | 0 | 0 | 0 |  |  |  |  | 33 | 4.70 | 54 |
-| M11 NR7 Breakout + Volume | 0 | 0 | 0 |  |  |  |  | 36 | 2.86 | 20 |
-| M12 Parabolic SAR | 0 | 0 | 0 |  |  |  |  | 29 | 2.04 | 23 |
-| M13 Garis Trend Action/Safety Line | 0 | 0 | 0 |  |  |  |  | 34 | 0.97 | 11 |
-| M14 Walking with the Whales | 0 | 0 | 0 |  |  |  |  | 21 | 1.52 | 15 |
-| M15 Break & Retest + Henti ATR | 0 | 0 | 0 |  |  |  |  | 33 | 1.08 | 12 |
-| M18 EMA9/21 Pullback | 0 | 0 | 0 |  |  |  |  | 26 | 0.40 | 7 |
-| M19 Sneaky Pivot (proksi harian) | 0 | 0 | 0 |  |  |  |  | 44 | 0.27 | 11 |
-| M20 EMA10/15 Crossover + Sudut | 0 | 0 | 0 |  |  |  |  | 39 | 0.22 | 7 |
-| M21 Marius 3 Persediaan (Pecahan+Jurang+Kesinambungan) | 0 | 0 | 0 |  |  |  |  | 26 | 2.57 | 8 |
-| M22 Qullamaggie Episodic Pivot | 0 | 0 | 0 |  |  |  |  | 40 | 3.35 | 8 |
-| M23 Breitstein Kapitulasi + Kesinambungan | 0 | 0 | 0 |  |  |  |  | 22 | 0.55 | 10 |
-| M24 Rotasi Momentum ROC12 + SMA200 | 0 | 0 | 0 |  |  |  |  | 54 | 28.88 | 65 |
-| M25 VWAP Wave (proksi harian) | 0 | 0 | 0 |  |  |  |  | 30 | 0.42 | 10 |
-| M26 Garis Trend Undur 3 Sentuhan + Pecahan | 0 | 0 | 0 |  |  |  |  | 50 | 5.17 | 39 |
-| M27 Price Action 4 Tiang | 0 | 0 | 0 |  |  |  |  | 35 | 0.36 | 7 |
-| M28 VWAP Separator + Kiss Pivot | 0 | 0 | 0 |  |  |  |  | 43 | 0.22 | 5 |
-| M29 EMA3 + RSI75 + Stokastik | 0 | 0 | 0 |  |  |  |  | 18 | 3.22 | 35 |
-| M30 BB Free Bar + Himpitan 50/2.5 | 0 | 0 | 0 |  |  |  |  | 37 | 3.80 | 34 |
-| M31 Band Walk (BB 20/2) | 0 | 0 | 0 |  |  |  |  | 43 | 3.30 | 32 |
-| M32 Momentum Burst | 0 | 0 | 0 |  |  |  |  | 25 | 3.57 | 22 |
-| M33 Supertrend + SMA10 | 0 | 0 | 0 |  |  |  |  | 40 | 1.65 | 33 |
-| M34 Carter TTM Squeeze | 0 | 0 | 0 |  |  |  |  | 34 | 2.38 | 30 |
-| M35 Pocket Pivot Morales & Kacher | 0 | 0 | 0 |  |  |  |  | 28 | 0.29 | 9 |
-| M36 Turtle 55/20 | 0 | 0 | 0 |  |  |  |  | 32 | 2.65 | 30 |
-| M37 Weinstein Peringkat 2 | 0 | 0 | 0 |  |  |  |  | 41 | 5.49 | 42 |
-| M38 Darvas Kotak | 0 | 0 | 0 |  |  |  |  | 49 | 18.79 | 210 |
-| M39 Radge Pecahan Bollinger 100 hari | 0 | 0 | 0 |  |  |  |  | 37 | 9.11 | 96 |
-| M40 Clenow Stocks on the Move | 0 | 0 | 0 |  |  |  |  | 38 | 4.80 | 35 |
-| M41 FW Penyatuan Mingguan | 0 | 0 | 0 |  |  |  |  | 36 | 15.03 | 117 |
-| M44 Tapak Rata IBD | 0 | 0 | 0 |  |  |  |  | 30 | 0.39 | 28 |
-| M45 High 52 Minggu (George & Hwang) | 0 | 0 | 0 |  |  |  |  | 32 | 12.81 | 61 |
-| M46 Jurang Naik Boleh Beli (Buyable Gap Up) | 0 | 0 | 0 |  |  |  |  | 23 | 2.81 | 22 |
-| M47 Holy Grail Raschke | 0 | 0 | 0 |  |  |  |  | 51 | 0.25 | 5 |
-| M48 Cooper 1-2-3-4 | 0 | 0 | 0 |  |  |  |  | 34 | 2.79 | 30 |
-| M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) | 0 | 0 | 0 |  |  |  |  | 23 | 3.99 | 34 |
-| M50 Elder Triple Screen | 0 | 0 | 0 |  |  |  |  | 23 | 1.80 | 18 |
-| M51 O'Neil Cawan & Pemegang | 0 | 0 | 0 |  |  |  |  | 39 | 3.12 | 35 |
-| M52 Radge Weekend Trend Trader | 0 | 0 | 0 |  |  |  |  | 37 | 5.19 | 37 |
-| M54 IBD Power Trend | 0 | 0 | 0 |  |  |  |  | 30 | 3.37 | 37 |
-| M55 Guppy GMMA | 0 | 0 | 0 |  |  |  |  | 26 | 2.71 | 28 |
-| M56 Gray & Vogel Momentum Lancar (FIP) | 0 | 0 | 0 |  |  |  |  | 43 | 19.93 | 72 |
-| M57 Landry Trend Knockout (TKO) | 0 | 0 | 0 |  |  |  |  | 21 | 1.55 | 18 |
-| M59 Anjakan Julat RSI | 0 | 0 | 0 |  |  |  |  | 34 | 3.10 | 37 |
-| M64 O'Neil Tiga Minggu Ketat | 0 | 0 | 0 |  |  |  |  | 34 | 1.68 | 31 |
-| M66 IBD Undur Pertama ke Purata 50 Hari | 0 | 0 | 0 |  |  |  |  | 28 | 1.71 | 19 |
-| M67 Rayner Teo: Ujian Ketiga pada Purata 50 | 0 | 0 | 0 |  |  |  |  | 30 | 1.90 | 24 |
-| M68 Kell Base n' Break | 0 | 0 | 0 |  |  |  |  | 36 | 1.35 | 35 |
-| M70 Pecahan Hari Dalam | 0 | 0 | 0 |  |  |  |  | 11 | 0.84 | 10 |
-| M73 ADX(5) > 40 + Julat Terkecil 6 Hari | 0 | 0 | 0 |  |  |  |  | 63 | 0.18 | 5 |
-| M74 Lulus Baharu Trend Template Minervini | 0 | 0 | 0 |  |  |  |  | 24 | 2.72 | 20 |
-| M76 Undercut & Rally pada Low Penting | 0 | 0 | 0 |  |  |  |  | 37 | 0.67 | 9 |
-| M77 Undercut & Rally pada Purata Bergerak (MAU&R) | 0 | 0 | 0 |  |  |  |  | 25 | 2.69 | 15 |
-| M78 Alvarez Pecahan Mingguan DTAYS | 0 | 0 | 0 |  |  |  |  | 32 | 3.17 | 40 |
-| M79 Radge: 20% Flipper | 0 | 0 | 0 |  |  |  |  | 40 | 6.25 | 60 |
-| M80 Radge Saluran Purata Bergerak (MAC) | 0 | 0 | 0 |  |  |  |  | 36 | 8.91 | 66 |
-| M81 Bensdorp Long Trend High Momentum | 0 | 0 | 0 |  |  |  |  | 32 | 8.56 | 105 |
-| M82 Arthur Hill Rotasi Sasaran 10% | 0 | 0 | 0 |  |  |  |  | 61 | 1.84 | 38 |
-| M84 Jarak purata bergerak MAD 21/200 | 0 | 0 | 0 |  |  |  |  | 37 | 3.71 | 26 |
-| M87 IBD Tapak Menaik | 0 | 0 | 0 |  |  |  |  | 32 | 3.49 | 30 |
-| M88 O'Neil Shakeout +3 | 0 | 0 | 0 |  |  |  |  | 32 | 5.56 | 32 |
-| M89 Chande 65sma-3cc | 0 | 0 | 0 |  |  |  |  | 34 | 1.83 | 26 |
-| M90 Pring KST | 0 | 0 | 0 |  |  |  |  | 30 | 1.95 | 26 |
-| M91 Stochastic Pop (Bernstein/Steckler) | 0 | 0 | 0 |  |  |  |  | 42 | 1.63 | 18 |
-| M92 CCI-50 | 0 | 0 | 0 |  |  |  |  | 49 | 1.17 | 13 |
-| M93 Bollinger Kaedah II: %b + MFI | 0 | 0 | 0 |  |  |  |  | 36 | 8.20 | 62 |
-| M94 Pecutan Momentum (Chen, Yu & Wang) | 0 | 0 | 0 |  |  |  |  | 63 | 24.04 | 121 |
-| M95 Nisbah Kebaharuan High 52 Minggu (Bhootra & Hur) | 0 | 0 | 0 |  |  |  |  | 32 | 2.68 | 29 |
-| M96 Momo India: Ranking Sharpe 3/6/12 bulan | 0 | 0 | 0 |  |  |  |  | 43 | 12.18 | 54 |
-| M99 Three Line Break | 0 | 0 | 0 |  |  |  |  | 40 | 1.17 | 16 |
-| M100 Bulkowski Segi Empat & Segi Tiga Menaik | 0 | 0 | 0 |  |  |  |  | 46 | 1.32 | 29 |
-| M101 Bulkowski: Tiga lembah menaik | 0 | 0 | 0 |  |  |  |  | 35 | 3.46 | 33 |
-| M102 Stockbee SLTB | 0 | 0 | 0 |  |  |  |  | 18 | 1.34 | 16 |
-| M104 High Tight Flag / Power Play | 0 | 0 | 0 |  |  |  |  | 35 | 5.62 | 33 |
-| M105 Supertrend tulen | 0 | 0 | 0 |  |  |  |  | 39 | 2.44 | 32 |
-| M106 DMI Wilder | 0 | 0 | 0 |  |  |  |  | 32 | 1.01 | 12 |
-| M107 Golden Cross SMA50/200 | 0 | 0 | 0 |  |  |  |  | 32 | 15.43 | 110 |
-| M111 Sistem Volatiliti Wilder | 0 | 0 | 0 |  |  |  |  | 39 | 2.39 | 30 |
-| M115 Bow Tie (Landry) | 0 | 0 | 0 |  |  |  |  | 27 | 1.06 | 18 |
-| M116 2/20 EMA Breakout (Landry) | 0 | 0 | 0 |  |  |  |  | 50 | 0.40 | 9 |
-| M117 Landry Pullback (high 2 bulan) | 0 | 0 | 0 |  |  |  |  | 21 | 45.52 | 287 |
-| M118 Expansion Pivot (Cooper) | 0 | 0 | 0 |  |  |  |  | 33 | 1.56 | 27 |
-| M119 180 Bullish (Cooper) | 0 | 0 | 0 |  |  |  |  | 27 | 1.17 | 18 |
-| M120 Reversal New Highs | 0 | 0 | 0 |  |  |  |  | 27 | 1.15 | 28 |
-| M121 High 2 bull flag (Brooks) | 0 | 0 | 0 |  |  |  |  | 47 | 2.47 | 49 |
-| M122 Moving Momentum (ChartSchool) | 0 | 0 | 0 |  |  |  |  | 35 | 1.79 | 24 |
-| M123 CCI Correction (Lambert, ChartSchool) | 0 | 0 | 0 |  |  |  |  | 28 | 0.92 | 10 |
-| M124 'Last' Stochastic Technique (ChartSchool) | 0 | 0 | 0 |  |  |  |  | 36 | 1.74 | 20 |
-| M125 2-Bar Breakout | 0 | 0 | 0 |  |  |  |  | 30 | 166.86 | 443 |
-| M126 Hidden Smash Day (beli, Larry Williams) | 0 | 0 | 0 |  |  |  |  | 35 | 5.15 | 33 |
-| M127 Slingshot Bullish | 0 | 0 | 0 |  |  |  |  | 19 | 2.60 | 16 |
-| M128 Inventory Retracement Bar (IRB, Rob Hoffman) | 0 | 0 | 0 |  |  |  |  | 34 | 0.55 | 12 |
-| M129 Wick Play | 0 | 0 | 0 |  |  |  |  | 38 | 2.60 | 38 |
-| M130 多方炮 (dua lilin hijau mengapit satu merah) | 0 | 0 | 0 |  |  |  |  | 25 | 92.22 | 261 |
-| M131 Ross Hook (Joe Ross) | 0 | 0 | 0 |  |  |  |  | 30 | 2.35 | 30 |
-| M132 Ascending Scallop (Bulkowski) | 0 | 0 | 0 |  |  |  |  | 42 | 0.98 | 29 |
-| M133 Bull Hook (Crabel) | 0 | 0 | 0 |  |  |  |  | 41 | 0.68 | 10 |
-| M134 First Kiss After Daylight (Landry) | 0 | 0 | 0 |  |  |  |  | 34 | 5.41 | 35 |
-| M135 3rd Watch | 0 | 0 | 0 |  |  |  |  | 39 | 2.05 | 35 |
-| M136 Short/Intermediate-term Low (Larry Williams) | 0 | 0 | 0 |  |  |  |  | 24 | 112.90 | 343 |
-| M137 Livermore System | 0 | 0 | 0 |  |  |  |  | 35 | 4.22 | 37 |
-| M138 直升机空中加油 (Helikopter isi minyak di udara) | 0 | 0 | 0 |  |  |  |  | 45 | 4.60 | 46 |
-| M139 均线首次粘合向上发散 (MA berhimpun kali pertama, berkipas naik) | 0 | 0 | 0 |  |  |  |  | 51 | 1.31 | 19 |
-| M140 猎豹出击 (Serangan Cheetah) | 0 | 0 | 0 |  |  |  |  | 36 | 5.31 | 25 |
-| M141 First Thrust (Landry) | 0 | 0 | 0 |  |  |  |  | 39 | 4.05 | 37 |
-| M142 Pecahan volum dari dasar (底部放量) | 0 | 0 | 0 |  |  |  |  | 41 | 6.85 | 44 |
-| M143 장대양봉 이후 눌림목 / 5일선 매매 (Undur ke MA5 selepas lilin naik panjang) | 0 | 0 | 0 |  |  |  |  | 52 | 0.83 | 18 |
-| M144 Screw Bar | 0 | 0 | 0 |  |  |  |  | 41 | 7.68 | 23 |
-| M145 Yum-Yum Continuation | 0 | 0 | 0 |  |  |  |  | 25 | 80.48 | 356 |
-| M146 3-Bar Momentum Pattern | 0 | 0 | 0 |  |  |  |  | 27 | 2.66 | 26 |
-| M147 Improved Three-Bar Pullback | 0 | 0 | 0 |  |  |  |  | 31 | 91.01 | 442 |
-| M148 Natural Number Method | 0 | 0 | 0 |  |  |  |  | 35 | 0.50 | 10 |
-| M149 3-Step Pullback | 0 | 0 | 0 |  |  |  |  | 19 | 59.37 | 273 |
-| M150 Trend Bar Failure (Brooks) | 0 | 0 | 0 |  |  |  |  | 37 | 0.54 | 13 |
-| M151 Outside Bar Failure | 0 | 0 | 0 |  |  |  |  | 27 | 1.93 | 26 |
-| M152 Spike & Ledge | 0 | 0 | 0 |  |  |  |  | 52 | 3.20 | 36 |
-| M153 Range Leader | 0 | 0 | 0 |  |  |  |  | 43 | 0.18 | 6 |
-| M154 HOLP (High of Low Period) | 0 | 0 | 0 |  |  |  |  | 39 | 1.93 | 27 |
-| M155 Market Cycle Strategy | 0 | 0 | 0 |  |  |  |  | 49 | 1.56 | 17 |
-| M156 Single Penetration (DiNapoli) | 0 | 0 | 0 |  |  |  |  | 52 | 0.69 | 9 |
-| M157 Consolidation Pivot Breakout (versi angka) | 0 | 0 | 0 |  |  |  |  | 14 | 32.05 | 179 |
-| M158 Doubly Adaptive Profit Targets | 0 | 0 | 0 |  |  |  |  | 34 | 2.94 | 30 |
-| M159 Heikin-Ashi Trend | 0 | 0 | 0 |  |  |  |  | 40 | 0.17 | 6 |
-| M160 Measured Move Up | 0 | 0 | 0 |  |  |  |  | 32 | 0.44 | 8 |
-| M161 EMA 10/21 + Supertrend (10,3) | 0 | 0 | 0 |  |  |  |  | 35 | 1.43 | 18 |
+Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (peraturan kaedah); Selagi naik = lorong 2 (pegang selagi naik: 2 tutup turun berturut atau henti). n = bilangan keluar.
+
+| Kaedah | Posisi | Tutup | Terbuka | Menang % | Purata tutup % | Hari | Purata terbuka % | Selagi naik n | Purata selagi naik % | Menang jangka % | Purata jangka % | Hari jangka |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| M82 Arthur Hill Rotasi Sasaran 10% | 329 | 0 | 329 |  |  |  | -1.34 | 0 |  | 61 | 1.84 | 38 |
+| M159 Heikin-Ashi Trend | 290 | 0 | 290 |  |  |  | -1.05 | 0 |  | 40 | 0.17 | 6 |
+| M153 Range Leader | 226 | 0 | 226 |  |  |  | -1.40 | 0 |  | 43 | 0.18 | 6 |
+| M27 Price Action 4 Tiang | 201 | 5 | 196 | 0 | -5.41 | 1 | -0.94 | 5 | -5.42 | 35 | 0.36 | 7 |
+| M81 Bensdorp Long Trend High Momentum | 163 | 0 | 163 |  |  |  | -2.37 | 0 |  | 32 | 8.56 | 105 |
+| M14 Walking with the Whales | 129 | 37 | 92 | 0 | -3.55 | 1 | -1.14 | 37 | -3.55 | 21 | 1.52 | 15 |
+| M125 2-Bar Breakout | 128 | 0 | 128 |  |  |  | -0.98 | 0 |  | 30 | 166.86 | 443 |
+| M136 Short/Intermediate-term Low (Larry Williams) | 104 | 0 | 104 |  |  |  | -1.24 | 0 |  | 24 | 112.90 | 343 |
+| M116 2/20 EMA Breakout (Landry) | 100 | 0 | 100 |  |  |  | -1.34 | 0 |  | 50 | 0.40 | 9 |
+| M13 Garis Trend Action/Safety Line | 87 | 11 | 76 | 0 | -2.54 | 1 | -1.09 | 11 | -2.54 | 34 | 0.97 | 11 |
+| M03 BB Break + Divergence RSI | 80 | 0 | 80 |  |  |  | -1.02 | 0 |  | 56 | 0.58 | 8 |
+| M155 Market Cycle Strategy | 80 | 0 | 80 |  |  |  | -1.32 | 0 |  | 49 | 1.56 | 17 |
+| M31 Band Walk (BB 20/2) | 66 | 0 | 66 |  |  |  | -1.40 | 0 |  | 43 | 3.30 | 32 |
+| M161 EMA 10/21 + Supertrend (10,3) | 66 | 0 | 66 |  |  |  | -2.82 | 0 |  | 35 | 1.43 | 18 |
+| M92 CCI-50 | 63 | 0 | 63 |  |  |  | -1.40 | 0 |  | 49 | 1.17 | 13 |
+| M50 Elder Triple Screen | 52 | 7 | 45 | 0 | -3.16 | 1 | -1.92 | 7 | -3.16 | 23 | 1.80 | 18 |
+| M102 Stockbee SLTB | 47 | 14 | 33 | 0 | -4.92 | 1 | -2.08 | 14 | -4.92 | 18 | 1.34 | 16 |
+| M105 Supertrend tulen | 44 | 0 | 44 |  |  |  | -1.04 | 0 |  | 39 | 2.44 | 32 |
+| M20 EMA10/15 Crossover + Sudut | 42 | 6 | 36 | 0 | -3.04 | 1 | -2.47 | 6 | -3.04 | 39 | 0.22 | 7 |
+| M30 BB Free Bar + Himpitan 50/2.5 | 41 | 0 | 41 |  |  |  | -1.50 | 0 |  | 37 | 3.80 | 34 |
+| M35 Pocket Pivot Morales & Kacher | 39 | 8 | 31 | 0 | -2.41 | 1 | -2.39 | 8 | -2.41 | 28 | 0.29 | 9 |
+| M15 Break & Retest + Henti ATR | 37 | 0 | 37 |  |  |  | -1.45 | 0 |  | 33 | 1.08 | 12 |
+| M158 Doubly Adaptive Profit Targets | 34 | 0 | 34 |  |  |  | 0.36 | 0 |  | 34 | 2.94 | 30 |
+| M93 Bollinger Kaedah II: %b + MFI | 32 | 2 | 30 | 0 | -2.42 | 1 | -1.22 | 2 | -2.42 | 36 | 8.20 | 62 |
+| M36 Turtle 55/20 | 30 | 0 | 30 |  |  |  | -1.39 | 0 |  | 32 | 2.65 | 30 |
+| M28 VWAP Separator + Kiss Pivot | 29 | 7 | 22 | 0 | -5.36 | 1 | -3.03 | 7 | -5.36 | 43 | 0.22 | 5 |
+| M33 Supertrend + SMA10 | 29 | 0 | 29 |  |  |  | -1.44 | 0 |  | 40 | 1.65 | 33 |
+| M54 IBD Power Trend | 27 | 0 | 27 |  |  |  | -2.13 | 0 |  | 30 | 3.37 | 37 |
+| M80 Radge Saluran Purata Bergerak (MAC) | 27 | 0 | 27 |  |  |  | -0.37 | 0 |  | 36 | 8.91 | 66 |
+| M111 Sistem Volatiliti Wilder | 27 | 0 | 27 |  |  |  | -1.48 | 0 |  | 39 | 2.39 | 30 |
+| M12 Parabolic SAR | 26 | 0 | 26 |  |  |  | -1.78 | 0 |  | 29 | 2.04 | 23 |
+| M18 EMA9/21 Pullback | 26 | 5 | 21 | 0 | -5.38 | 1 | -2.46 | 5 | -5.38 | 26 | 0.40 | 7 |
+| M73 ADX(5) > 40 + Julat Terkecil 6 Hari | 25 | 0 | 25 |  |  |  | -2.56 | 0 |  | 63 | 0.18 | 5 |
+| M124 'Last' Stochastic Technique (ChartSchool) | 25 | 0 | 25 |  |  |  | -1.05 | 0 |  | 36 | 1.74 | 20 |
+| M131 Ross Hook (Joe Ross) | 24 | 1 | 23 | 0 | -6.36 | 1 | -0.65 | 1 | -6.36 | 30 | 2.35 | 30 |
+| M147 Improved Three-Bar Pullback | 24 | 0 | 24 |  |  |  | -1.01 | 0 |  | 31 | 91.01 | 442 |
+| M19 Sneaky Pivot (proksi harian) | 23 | 0 | 23 |  |  |  | -1.63 | 0 |  | 44 | 0.27 | 11 |
+| M66 IBD Undur Pertama ke Purata 50 Hari | 23 | 0 | 23 |  |  |  | -2.12 | 0 |  | 28 | 1.71 | 19 |
+| M123 CCI Correction (Lambert, ChartSchool) | 23 | 9 | 14 | 0 | -1.90 | 1 | -1.72 | 9 | -1.90 | 28 | 0.92 | 10 |
+| M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) | 21 | 7 | 14 | 0 | -1.71 | 1 | -1.87 | 7 | -1.71 | 23 | 3.99 | 34 |
+| M55 Guppy GMMA | 21 | 1 | 20 | 0 | -3.73 | 1 | -1.49 | 1 | -3.73 | 26 | 2.71 | 28 |
+| M08 SMA20 + SMA200 | 19 | 1 | 18 | 0 | -5.48 | 1 | -3.18 | 1 | -5.48 | 32 | 1.07 | 12 |
+| M99 Three Line Break | 19 | 3 | 16 | 0 | -3.27 | 1 | -1.45 | 3 | -3.27 | 40 | 1.17 | 16 |
+| M128 Inventory Retracement Bar (IRB, Rob Hoffman) | 17 | 0 | 17 |  |  |  | -2.87 | 0 |  | 34 | 0.55 | 12 |
+| M137 Livermore System | 17 | 0 | 17 |  |  |  | -1.15 | 0 |  | 35 | 4.22 | 37 |
+| M79 Radge: 20% Flipper | 16 | 0 | 16 |  |  |  | -1.97 | 0 |  | 40 | 6.25 | 60 |
+| M145 Yum-Yum Continuation | 16 | 0 | 16 |  |  |  | -1.52 | 0 |  | 25 | 80.48 | 356 |
+| M156 Single Penetration (DiNapoli) | 16 | 0 | 16 |  |  |  | -3.57 | 0 |  | 52 | 0.69 | 9 |
+| M02 MACD + SMA200 | 14 | 0 | 14 |  |  |  | -1.43 | 0 |  | 44 | 0.66 | 14 |
+| M10 EMA3 + CCI + MACD | 14 | 0 | 14 |  |  |  | -1.00 | 0 |  | 33 | 4.70 | 54 |
+| M106 DMI Wilder | 14 | 0 | 14 |  |  |  | -1.20 | 0 |  | 32 | 1.01 | 12 |
+| M95 Nisbah Kebaharuan High 52 Minggu (Bhootra & Hur) | 13 | 0 | 13 |  |  |  | -1.18 | 0 |  | 32 | 2.68 | 29 |
+| M148 Natural Number Method | 13 | 1 | 12 | 0 | -6.83 | 1 | -2.01 | 1 | -6.83 | 35 | 0.50 | 10 |
+| M32 Momentum Burst | 12 | 2 | 10 | 0 | -5.41 | 1 | -3.55 | 2 | -5.41 | 25 | 3.57 | 22 |
+| M39 Radge Pecahan Bollinger 100 hari | 12 | 0 | 12 |  |  |  | -0.75 | 0 |  | 37 | 9.11 | 96 |
+| M100 Bulkowski Segi Empat & Segi Tiga Menaik | 12 | 0 | 12 |  |  |  | -0.98 | 0 |  | 46 | 1.32 | 29 |
+| M132 Ascending Scallop (Bulkowski) | 12 | 0 | 12 |  |  |  | -0.77 | 0 |  | 42 | 0.98 | 29 |
+| M04 BB Squeeze Breakout | 11 | 0 | 11 |  |  |  | -2.62 | 0 |  | 36 | 4.96 | 32 |
+| M76 Undercut & Rally pada Low Penting | 11 | 3 | 8 | 0 | -3.69 | 1 | -0.60 | 3 | -3.69 | 37 | 0.67 | 9 |
+| M152 Spike & Ledge | 11 | 0 | 11 |  |  |  | -1.15 | 0 |  | 52 | 3.20 | 36 |
+| M119 180 Bullish (Cooper) | 10 | 1 | 9 | 0 | -2.33 | 1 | -2.55 | 1 | -2.33 | 27 | 1.17 | 18 |
+| M34 Carter TTM Squeeze | 9 | 0 | 9 |  |  |  | -2.59 | 0 |  | 34 | 2.38 | 30 |
+| M74 Lulus Baharu Trend Template Minervini | 9 | 5 | 4 | 0 | -1.84 | 1 | -1.26 | 5 | -1.84 | 24 | 2.72 | 20 |
+| M89 Chande 65sma-3cc | 9 | 0 | 9 |  |  |  | -0.02 | 0 |  | 34 | 1.83 | 26 |
+| M90 Pring KST | 9 | 0 | 9 |  |  |  | -1.41 | 0 |  | 30 | 1.95 | 26 |
+| M122 Moving Momentum (ChartSchool) | 9 | 0 | 9 |  |  |  | -2.57 | 0 |  | 35 | 1.79 | 24 |
+| M127 Slingshot Bullish | 9 | 1 | 8 | 0 | -2.50 | 1 | -1.56 | 1 | -2.50 | 19 | 2.60 | 16 |
+| M11 NR7 Breakout + Volume | 8 | 0 | 8 |  |  |  | 0.12 | 0 |  | 36 | 2.86 | 20 |
+| M57 Landry Trend Knockout (TKO) | 8 | 1 | 7 | 0 | -4.68 | 1 | -4.47 | 1 | -4.68 | 21 | 1.55 | 18 |
+| M09 Volumatic VIDYA Pivot Retest | 7 | 1 | 6 | 0 | -7.84 | 1 | -3.63 | 1 | -7.84 | 23 | 1.85 | 30 |
+| M77 Undercut & Rally pada Purata Bergerak (MAU&R) | 7 | 1 | 6 | 0 | -7.39 | 1 | -2.05 | 1 | -7.39 | 25 | 2.69 | 15 |
+| M150 Trend Bar Failure (Brooks) | 7 | 0 | 7 |  |  |  | -1.51 | 0 |  | 37 | 0.54 | 13 |
+| M151 Outside Bar Failure | 7 | 0 | 7 |  |  |  | -1.87 | 0 |  | 27 | 1.93 | 26 |
+| M05 MACD Divergence + Pengesahan | 6 | 0 | 6 |  |  |  | -1.56 | 0 |  | 35 | 10.85 | 108 |
+| M06 Minervini VCP Breakout | 6 | 0 | 6 |  |  |  | -1.94 | 0 |  | 33 | 2.49 | 29 |
+| M23 Breitstein Kapitulasi + Kesinambungan | 6 | 4 | 2 | 0 | -2.88 | 1 | -0.04 | 4 | -2.88 | 22 | 0.55 | 10 |
+| M26 Garis Trend Undur 3 Sentuhan + Pecahan | 6 | 0 | 6 |  |  |  | -1.36 | 0 |  | 50 | 5.17 | 39 |
+| M117 Landry Pullback (high 2 bulan) | 6 | 0 | 6 |  |  |  | -2.17 | 0 |  | 21 | 45.52 | 287 |
+| M134 First Kiss After Daylight (Landry) | 6 | 0 | 6 |  |  |  | -0.62 | 0 |  | 34 | 5.41 | 35 |
+| M146 3-Bar Momentum Pattern | 6 | 0 | 6 |  |  |  | -1.24 | 0 |  | 27 | 2.66 | 26 |
+| M154 HOLP (High of Low Period) | 6 | 0 | 6 |  |  |  | -2.70 | 0 |  | 39 | 1.93 | 27 |
+| M25 VWAP Wave (proksi harian) | 5 | 0 | 5 |  |  |  | -1.60 | 0 |  | 30 | 0.42 | 10 |
+| M88 O'Neil Shakeout +3 | 5 | 0 | 5 |  |  |  | -2.10 | 0 |  | 32 | 5.56 | 32 |
+| M115 Bow Tie (Landry) | 5 | 0 | 5 |  |  |  | -0.92 | 0 |  | 27 | 1.06 | 18 |
+| M01 Bollinger Band + RSI | 4 | 0 | 4 |  |  |  | -4.26 | 0 |  | 67 | 2.22 | 22 |
+| M139 均线首次粘合向上发散 (MA berhimpun kali pertama, berkipas naik) | 4 | 0 | 4 |  |  |  | -0.79 | 0 |  | 51 | 1.31 | 19 |
+| M149 3-Step Pullback | 4 | 0 | 4 |  |  |  | -2.44 | 0 |  | 19 | 59.37 | 273 |
+| M160 Measured Move Up | 4 | 2 | 2 | 0 | -5.28 | 1 | -2.01 | 2 | -5.28 | 32 | 0.44 | 8 |
+| M68 Kell Base n' Break | 3 | 0 | 3 |  |  |  | -0.68 | 0 |  | 36 | 1.35 | 35 |
+| M70 Pecahan Hari Dalam | 3 | 2 | 1 | 0 | -0.50 | 1 | 0.17 | 2 | -0.50 | 11 | 0.84 | 10 |
+| M87 IBD Tapak Menaik | 3 | 0 | 3 |  |  |  | -4.09 | 0 |  | 32 | 3.49 | 30 |
+| M101 Bulkowski: Tiga lembah menaik | 3 | 0 | 3 |  |  |  | -0.86 | 0 |  | 35 | 3.46 | 33 |
+| M129 Wick Play | 3 | 0 | 3 |  |  |  | 0.52 | 0 |  | 38 | 2.60 | 38 |
+| M29 EMA3 + RSI75 + Stokastik | 2 | 1 | 1 | 0 | -5.28 | 1 | -3.62 | 1 | -5.28 | 18 | 3.22 | 35 |
+| M47 Holy Grail Raschke | 2 | 0 | 2 |  |  |  | -8.33 | 0 |  | 51 | 0.25 | 5 |
+| M48 Cooper 1-2-3-4 | 2 | 0 | 2 |  |  |  | -1.99 | 0 |  | 34 | 2.79 | 30 |
+| M91 Stochastic Pop (Bernstein/Steckler) | 2 | 0 | 2 |  |  |  | -1.01 | 0 |  | 42 | 1.63 | 18 |
+| M107 Golden Cross SMA50/200 | 2 | 0 | 2 |  |  |  | -2.84 | 0 |  | 32 | 15.43 | 110 |
+| M141 First Thrust (Landry) | 2 | 0 | 2 |  |  |  | -2.15 | 0 |  | 39 | 4.05 | 37 |
+| M07 Qullamaggie Breakout | 1 | 0 | 1 |  |  |  | -0.47 | 0 |  | 20 | 1.05 | 8 |
+| M44 Tapak Rata IBD | 1 | 0 | 1 |  |  |  | -1.62 | 0 |  | 30 | 0.39 | 28 |
+| M46 Jurang Naik Boleh Beli (Buyable Gap Up) | 1 | 0 | 1 |  |  |  | -0.16 | 0 |  | 23 | 2.81 | 22 |
+| M59 Anjakan Julat RSI | 1 | 0 | 1 |  |  |  | 0.11 | 0 |  | 34 | 3.10 | 37 |
+| M64 O'Neil Tiga Minggu Ketat | 1 | 0 | 1 |  |  |  | -6.55 | 0 |  | 34 | 1.68 | 31 |
+| M67 Rayner Teo: Ujian Ketiga pada Purata 50 | 1 | 0 | 1 |  |  |  | -2.97 | 0 |  | 30 | 1.90 | 24 |
+| M118 Expansion Pivot (Cooper) | 1 | 0 | 1 |  |  |  | -0.69 | 0 |  | 33 | 1.56 | 27 |
+| M120 Reversal New Highs | 1 | 0 | 1 |  |  |  | -1.65 | 0 |  | 27 | 1.15 | 28 |
+| M133 Bull Hook (Crabel) | 1 | 0 | 1 |  |  |  | 1.50 | 0 |  | 41 | 0.68 | 10 |
+| M135 3rd Watch | 1 | 0 | 1 |  |  |  | -1.28 | 0 |  | 39 | 2.05 | 35 |
+| M140 猎豹出击 (Serangan Cheetah) | 1 | 0 | 1 |  |  |  | -6.23 | 0 |  | 36 | 5.31 | 25 |
+| M21 Marius 3 Persediaan (Pecahan+Jurang+Kesinambungan) | 0 | 0 | 0 |  |  |  |  | 0 |  | 26 | 2.57 | 8 |
+| M22 Qullamaggie Episodic Pivot | 0 | 0 | 0 |  |  |  |  | 0 |  | 40 | 3.35 | 8 |
+| M24 Rotasi Momentum ROC12 + SMA200 | 0 | 0 | 0 |  |  |  |  | 0 |  | 54 | 28.88 | 65 |
+| M37 Weinstein Peringkat 2 | 0 | 0 | 0 |  |  |  |  | 0 |  | 41 | 5.49 | 42 |
+| M38 Darvas Kotak | 0 | 0 | 0 |  |  |  |  | 0 |  | 49 | 18.79 | 210 |
+| M40 Clenow Stocks on the Move | 0 | 0 | 0 |  |  |  |  | 0 |  | 38 | 4.80 | 35 |
+| M41 FW Penyatuan Mingguan | 0 | 0 | 0 |  |  |  |  | 0 |  | 36 | 15.03 | 117 |
+| M45 High 52 Minggu (George & Hwang) | 0 | 0 | 0 |  |  |  |  | 0 |  | 32 | 12.81 | 61 |
+| M51 O'Neil Cawan & Pemegang | 0 | 0 | 0 |  |  |  |  | 0 |  | 39 | 3.12 | 35 |
+| M52 Radge Weekend Trend Trader | 0 | 0 | 0 |  |  |  |  | 0 |  | 37 | 5.19 | 37 |
+| M56 Gray & Vogel Momentum Lancar (FIP) | 0 | 0 | 0 |  |  |  |  | 0 |  | 43 | 19.93 | 72 |
+| M78 Alvarez Pecahan Mingguan DTAYS | 0 | 0 | 0 |  |  |  |  | 0 |  | 32 | 3.17 | 40 |
+| M84 Jarak purata bergerak MAD 21/200 | 0 | 0 | 0 |  |  |  |  | 0 |  | 37 | 3.71 | 26 |
+| M94 Pecutan Momentum (Chen, Yu & Wang) | 0 | 0 | 0 |  |  |  |  | 0 |  | 63 | 24.04 | 121 |
+| M96 Momo India: Ranking Sharpe 3/6/12 bulan | 0 | 0 | 0 |  |  |  |  | 0 |  | 43 | 12.18 | 54 |
+| M104 High Tight Flag / Power Play | 0 | 0 | 0 |  |  |  |  | 0 |  | 35 | 5.62 | 33 |
+| M121 High 2 bull flag (Brooks) | 0 | 0 | 0 |  |  |  |  | 0 |  | 47 | 2.47 | 49 |
+| M126 Hidden Smash Day (beli, Larry Williams) | 0 | 0 | 0 |  |  |  |  | 0 |  | 35 | 5.15 | 33 |
+| M130 多方炮 (dua lilin hijau mengapit satu merah) | 0 | 0 | 0 |  |  |  |  | 0 |  | 25 | 92.22 | 261 |
+| M138 直升机空中加油 (Helikopter isi minyak di udara) | 0 | 0 | 0 |  |  |  |  | 0 |  | 45 | 4.60 | 46 |
+| M142 Pecahan volum dari dasar (底部放量) | 0 | 0 | 0 |  |  |  |  | 0 |  | 41 | 6.85 | 44 |
+| M143 장대양봉 이후 눌림목 / 5일선 매매 (Undur ke MA5 selepas lilin naik panjang) | 0 | 0 | 0 |  |  |  |  | 0 |  | 52 | 0.83 | 18 |
+| M144 Screw Bar | 0 | 0 | 0 |  |  |  |  | 0 |  | 41 | 7.68 | 23 |
+| M157 Consolidation Pivot Breakout (versi angka) | 0 | 0 | 0 |  |  |  |  | 0 |  | 14 | 32.05 | 179 |

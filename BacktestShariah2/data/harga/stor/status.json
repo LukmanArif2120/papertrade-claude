@@ -1,27 +1,26 @@
 {
- "dikemaskini": "2026-10-16 09:26 UTC",
- "bar_terakhir": 20261015,
+ "dikemaskini": "2026-10-17 04:33 UTC",
+ "bar_terakhir": 20261016,
  "laras": {},
  "perlu_sejarah": [
-  "EROK",
-  "HMH",
-  "ICCC",
-  "LIME",
-  "NOVTU",
-  "NVRI",
-  "REF",
-  "VSECU"
+  "ADSE",
+  "ARHS",
+  "CX",
+  "ERIC",
+  "FTW",
+  "NRDS",
+  "REF"
  ],
  "harga_A.csv": {
   "ticker_dikemaskini": 431,
-  "bar_terakhir": 20261015
+  "bar_terakhir": 20261016
  },
  "harga_B.csv": {
-  "ticker_dikemaskini": 492,
-  "bar_terakhir": 20261015
+  "ticker_dikemaskini": 505,
+  "bar_terakhir": 20261016
  },
  "harga_idx.csv": {
   "ticker_dikemaskini": 2,
-  "bar_terakhir": 20261015
+  "bar_terakhir": 20261016
  }
 }
