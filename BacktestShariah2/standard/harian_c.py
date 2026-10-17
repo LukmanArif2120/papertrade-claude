@@ -787,7 +787,7 @@ def cmd_beli(a):
     ny = masa.tz_convert('America/New_York')
     D = a.tarikh or str(ny.date())
     st = status_baca(folder)
-    if not a.paksa and st.get('beli', {}).get('tarikh') == D:
+    if not a.paksa and not a.cuba and st.get('beli', {}).get('tarikh') == D:
         print(json.dumps(dict(tarikh=D, langkau='sudah direkod', masa=st['beli'].get('masa')), ensure_ascii=False)); return 0
     c = kal()
     if not c.is_session(pd.Timestamp(D)):
@@ -843,6 +843,16 @@ def cmd_beli(a):
         if sig2 is False:
             lk('isyarat batal pada buka (peraturan kaedah)'); continue
         rekod.append((r, o, henti))
+    if a.cuba:   # percubaan: tiada fail ditulis; banding harga buka dengan bar harian stor (jika ada)
+        fr0, _ = frames_dict(muat(a.stor)); Dt = pd.Timestamp(D); beza = []
+        for t, (o, v) in opens.items():
+            g = fr0.get(t)
+            if g is not None and Dt in g.index and abs(o / float(g.open.loc[Dt]) - 1) > 0.005:
+                beza.append(f'{t}: yf {o:.4f} / stor {float(g.open.loc[Dt]):.4f}')
+        print(json.dumps(dict(cuba=True, tarikh=D, calon=len(calon), harga_buka=len(opens), direkod=len(rekod), dilangkau=len(langkau),
+                              langkau=langkau[:30], beza_stor_lebih_0_5pct=len(beza), contoh_beza=beza[:15],
+                              contoh=dict(list(opens.items())[:5])), ensure_ascii=False, indent=1))
+        return 0
     # kaedah_kongsi: kaedah lain yang membeli saham sama hari ini
     ikut_saham = {}
     for r, o, h in rekod:
@@ -924,6 +934,7 @@ def main(argv=None):
     x = sp.add_parser('beli'); umum(x)
     x.add_argument('--tarikh', help='tarikh beli New York YYYY-MM-DD'); x.add_argument('--buka', help='CSV ticker,open[,volume]')
     x.add_argument('--sumber-buka'); x.add_argument('--akhir', action='store_true', help='larian sandaran terakhir hari itu')
+    x.add_argument('--cuba', action='store_true', help='percubaan: tarik harga dan nilai peraturan tanpa menulis fail')
     x.set_defaults(f=cmd_beli)
     x = sp.add_parser('log'); x.add_argument('--folder', default=PT); x.add_argument('--peringkat', choices=['malam', 'beli'], required=True)
     x.add_argument('--log', default=LOG_HARIAN); x.set_defaults(f=cmd_log)

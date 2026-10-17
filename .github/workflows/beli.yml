@@ -13,6 +13,11 @@ on:
     - cron: '25 16 * * 1-5'
     - cron: '25 19 * * 1-5'
   workflow_dispatch:
+    inputs:
+      cuba_tarikh:
+        description: 'Percubaan sahaja (tiada fail ditulis): tarikh beli YYYY-MM-DD yang mahu diuji'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -28,20 +33,26 @@ jobs:
     steps:
       - name: Masa New York
         id: masa
+        env:
+          CUBA: ${{ github.event.inputs.cuba_tarikh }}
         run: |
+          if [ -n "$CUBA" ]; then echo "jalan=cuba" >> "$GITHUB_OUTPUT"; echo "akhir=" >> "$GITHUB_OUTPUT"; exit 0; fi
           JAM=$(TZ=America/New_York date +%H%M)
           echo "NY $JAM"
           if [ "$((10#$JAM))" -lt 931 ] || [ "$((10#$JAM))" -ge 1700 ]; then echo "jalan=tidak" >> "$GITHUB_OUTPUT"; else echo "jalan=ya" >> "$GITHUB_OUTPUT"; fi
           if [ "$((10#$JAM))" -ge 1500 ]; then echo "akhir=--akhir" >> "$GITHUB_OUTPUT"; else echo "akhir=" >> "$GITHUB_OUTPUT"; fi
       - uses: actions/checkout@v4
-        if: steps.masa.outputs.jalan == 'ya'
+        if: steps.masa.outputs.jalan != 'tidak'
       - uses: actions/setup-python@v5
-        if: steps.masa.outputs.jalan == 'ya'
+        if: steps.masa.outputs.jalan != 'tidak'
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        if: steps.masa.outputs.jalan == 'ya'
+        if: steps.masa.outputs.jalan != 'tidak'
         run: pip install -q pandas numpy yfinance exchange_calendars
+      - name: Percubaan (tiada fail ditulis)
+        if: steps.masa.outputs.jalan == 'cuba'
+        run: python3 BacktestShariah2/standard/harian_c.py beli --folder BacktestShariah2/bayang/papertrade --tarikh "${{ github.event.inputs.cuba_tarikh }}" --cuba
       - name: Beli maya
         id: beli
         if: steps.masa.outputs.jalan == 'ya'
