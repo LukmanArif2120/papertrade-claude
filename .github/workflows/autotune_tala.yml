@@ -16,6 +16,9 @@ on:
       shard:
         description: "bilangan shard (job serentak)"
         default: '20'
+      simpan:
+        description: "commit hasil ke main (ya/tidak)"
+        default: 'ya'
 
 permissions:
   contents: read
@@ -111,6 +114,7 @@ jobs:
           merge-multiple: true
       - run: python3 AUTOTUNE/tala/masa.py
       - name: Commit hasil
+        if: inputs.simpan == 'ya'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
