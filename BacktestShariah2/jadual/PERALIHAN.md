@@ -15,6 +15,7 @@ Moomoo/SST boleh beri dikumpul seminggu sekali; (4) dashboard dikemas kini oleh 
 | Lejar Penuh | `lejar.yml` | `lejar.yml` 06:17 UTC (tidak berubah; pengawal data muktamad) |
 | Pengawas (6 semakan sehari) | sesi Sonnet | dibuang; sandaran jadual + `jana_db.py` pengawas + e-mel kegagalan GitHub |
 | Tolak db dashboard | dalam setiap rutin | `jadual/tolak_db.md` (sesi Claude baharu, Isn–Sab 10:20 NY) |
+| Jejak kertas M166 V1 (`uji_kertas/jejak_M166.csv`) | imbas 7:47 langkah 4b | `harian.yml` (mod rasmi sahaja) |
 | Universe Shariah, sektor seluruh pasaran, SST, akaun Moomoo | setiap hari | `jadual/mingguan.md` (Ahad) |
 
 Mod ditentukan oleh `BacktestShariah2/MOD_ACTIONS`: `bayang` = Actions menulis ke `BacktestShariah2/bayang/` sahaja dan

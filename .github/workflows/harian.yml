@@ -79,6 +79,10 @@ jobs:
           SELEPAS=$(python3 -c "import json;print(json.load(open('$F/status_harian.json'))['malam']['sesi'])")
           if [ "$SEBELUM" != "$SELEPAS" ] || [ -n "$X" ]; then echo "baru=ya" >> "$GITHUB_OUTPUT"; else echo "baru=tidak" >> "$GITHUB_OUTPUT"; fi
           echo "sesi=$SELEPAS" >> "$GITHUB_OUTPUT"
+      - name: Jejak kertas M166 V1 (rekod sahaja, tiada belian; mod rasmi; hingga 15 Jan 2027)
+        if: steps.mod.outputs.mod == 'rasmi' && steps.malam.outputs.baru == 'ya'
+        continue-on-error: true
+        run: python3 WFO/kaedah_baru/jejak_M166.py || echo "::warning::jejak M166 gagal"
       - name: Gred senarai beli + watchlist (S, I, R, Q, P)
         continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
         if: steps.malam.outputs.baru == 'ya'
@@ -110,6 +114,7 @@ jobs:
           git config user.name "harian[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add BacktestShariah2/data/harga BacktestShariah2/bayang 2>/dev/null || true
+          git add BacktestShariah2/uji_kertas/jejak_M166.csv 2>/dev/null || true
           git add "${{ steps.mod.outputs.folder }}" "${{ steps.mod.outputs.isyarat }}" "${{ steps.mod.outputs.pemangkin }}" "${{ steps.mod.outputs.log }}" 2>/dev/null || true
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "Harian Actions (${{ steps.mod.outputs.mod }}): sesi ${{ steps.malam.outputs.sesi }}"
