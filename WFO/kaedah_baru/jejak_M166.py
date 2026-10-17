@@ -42,5 +42,5 @@ D=pd.DataFrame(rows,columns=['tarikh','keadaan','saham','kunci','nilai_kunci','t
 D['kedudukan']=range(1,len(D)+1)
 old=pd.read_csv(a.keluar) if os.path.exists(a.keluar) else pd.DataFrame(columns=D.columns)
 old=old[old.tarikh.astype(str)!=str(tarikh.date())]
-pd.concat([old,D]).to_csv(a.keluar,index=False)
+pd.concat([old,D]).sort_values(['tarikh','kedudukan'],key=lambda x:x.astype(str) if x.name=='tarikh' else x).to_csv(a.keluar,index=False)
 print('tarikh',tarikh.date(),'keadaan',k,'isyarat',len(D),'saham',len(fr)); print(D.head(8).to_string(index=False))
