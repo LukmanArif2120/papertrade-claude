@@ -728,11 +728,13 @@ const LORONG={kaedah:['keluar','tarikh_keluar','harga_keluar','untung_akhir_pct'
 /* untung lorong: akhir jika lorong itu sudah keluar, semasa jika masih dipegang */
 const hasilL=(r,l)=>r[LORONG[l][0]]?r[LORONG[l][3]]:r.untung_pct;
 const BLN=['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+/* hari dagangan (Isn–Jum) dari tarikh beli hingga tarikh keluar */
+function hariAntara(a,b){const x=Date.parse((a||'')+'T00:00:00Z'),y=Date.parse((b||'')+'T00:00:00Z');if(isNaN(x)||isNaN(y)||y<x)return null;let n=0;for(let d=new Date(x+864e5);d<=y;d.setUTCDate(d.getUTCDate()+1)){const w=d.getUTCDay();if(w&&w<6)n++;}return n;}
 const tkO=t=>/^\d{4}-\d\d-\d\d/.test(t||'')?(+t.slice(8,10))+' '+BLN[+t.slice(5,7)-1]:'';
 /* satu sel bagi setiap lorong, format seragam: status · tarikh @ harga · untung · sebab */
 function selLorong(r,l){const [k,t,h,u,st]=LORONG[l];if(r.tidak_dibeli)return '<span class="mut">–</span>';
   const kini=r.untung_pct==null?'':`<span class="vv">kini <span class="${cls(r.untung_pct)}">${sg2(r.untung_pct)}</span></span>`;
-  if(r[k])return `<span class="pill p-exit">Keluar ${esc(tkO(r[t]))}</span><span class="vv nw">@ ${fx(r[h],2)} · <b class="${cls(r[u])}">${sg2(r[u])}</b></span><span class="vv">${esc((r[st]||'').replace(/^Keluar:? ?/,'').replace(/ \([^)]*\)\s*$/,''))}</span>`;
+  if(r[k])return `<span class="pill p-exit">Keluar ${esc(tkO(r[t]))}</span><span class="vv nw">@ ${fx(r[h],2)} · <b class="${cls(r[u])}">${sg2(r[u])}</b>${hariAntara(r.tarikh_beli,r[t])!=null?' · '+hariAntara(r.tarikh_beli,r[t])+' hari':''}</span><span class="vv">${esc((r[st]||'').replace(/^Keluar:? ?/,'').replace(/ \([^)]*\)\s*$/,''))}</span>`;
   if(!r[st])return `<span class="mut">belum dinilai</span>${kini}`;
   const cp=l==='10'&&r.capai_10?`<span class="pill p-buy" title="Tutup capai +10% pada ${esc(tkO(r.tarikh_capai_10))}">+10% ✓</span> `:'';
   const tunggu=/menunggu/.test(r[st]),m=/\(([^)]*)\)\s*$/.exec(r[st]);
@@ -790,7 +792,7 @@ function ptCols(akaun){return [
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`<b class="${cls(r.untung_pct)}">${sg2(r.untung_pct)}</b>`},
   {k:'hari',t:'Hari dipegang',tip:'hari_pt',f:r=>fx(r.hari,0)},
   {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}${selLorong(r,'kaedah')}${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`,c:()=>'wrap lrg'},
-  {k:'untung_henti_pct',t:'Keluar henti',tip:'keluar_henti',l:1,v:r=>hasilL(r,'henti'),f:r=>selLorong(r,'henti'),c:()=>'wrap lrg'},
+  {k:'untung_henti_pct',t:'Pegang selagi naik',tip:'keluar_henti',l:1,v:r=>hasilL(r,'henti'),f:r=>selLorong(r,'henti'),c:()=>'wrap lrg'},
   {k:'untung_10_pct',t:'Keluar 10%',tip:'keluar_10',l:1,v:r=>hasilL(r,'10'),f:r=>selLorong(r,'10'),c:()=>'wrap lrg'},
   ...grCols()];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
@@ -799,7 +801,7 @@ function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.le
   return `<div class="kpis">
     <div class="kpi"><div class="lbl">Posisi ${label}</div><div class="v">${rows.length}</div><div class="s">${kd} kaedah · ${ex} kena isyarat keluar${nv?` · ${nv} ${all.some(r=>r.tidak_dibeli)?'isyarat tidak dibeli':'dibeli luar peraturan (tidak dikira)'}`:''}</div></div>
     <div class="kpi"><div class="lbl">Purata untung</div><div class="v ${cls(a)}">${sg2(a)}</div><div class="s">Untung akhir bagi yang keluar, semasa bagi yang dipegang</div></div>
-    <div class="kpi"><div class="lbl" data-tip="tiga_lorong">Purata ikut lorong keluar</div><div class="v" style="font-size:1.05rem;white-space:normal">${['kaedah','henti','10'].map(l=>`<span class="${cls(avgOf(rows.map(r=>hasilL(r,l))))}">${sg2(avgOf(rows.map(r=>hasilL(r,l))))}</span>`).join('<span class="mut"> · </span>')}</div><div class="s">Kaedah · Henti · 10% — keluar ${ex} · ${rows.filter(r=>r.keluar_henti).length} · ${rows.filter(r=>r.keluar_10).length} · capai +10%: ${rows.filter(r=>r.capai_10).length} · tutup semua: ${rows.filter(r=>r.tutup_semua).length}</div></div>
+    <div class="kpi"><div class="lbl" data-tip="tiga_lorong">Purata ikut lorong keluar</div><div class="v" style="font-size:1.05rem;white-space:normal">${['kaedah','henti','10'].map(l=>`<span class="${cls(avgOf(rows.map(r=>hasilL(r,l))))}">${sg2(avgOf(rows.map(r=>hasilL(r,l))))}</span>`).join('<span class="mut"> · </span>')}</div><div class="s">Kaedah · Selagi naik · 10% — keluar ${ex} · ${rows.filter(r=>r.keluar_henti).length} · ${rows.filter(r=>r.keluar_10).length} · capai +10%: ${rows.filter(r=>r.capai_10).length} · tutup semua: ${rows.filter(r=>r.tutup_semua).length}</div></div>
     <div class="kpi"><div class="lbl">Sedang untung</div><div class="v">${up}<span class="mut" style="font-size:1rem"> / ${rows.length}</span></div><div class="s">${rows.length?(up/rows.length*100).toFixed(0):0}% posisi positif</div></div>
     <div class="kpi"><div class="lbl">Tanpa sektor</div><div class="v ${rows.some(r=>!r.sektor)?'neg':'pos'}">${rows.filter(r=>!r.sektor).length}</div><div class="s">Setiap saham wajib ada sektor & industri</div></div>
   </div>`;}
@@ -921,15 +923,15 @@ function prGred(rows){const ada=rows.filter(adaGred);
 function prLorong(rows){const by={};rows.forEach(r=>{(by[r.kaedah]=by[r.kaedah]||[]).push(r);});
   const st=a=>({n:a.length,k:avgOf(a.map(r=>hasilL(r,'kaedah'))),h:avgOf(a.map(r=>hasilL(r,'henti'))),t:avgOf(a.map(r=>hasilL(r,'10'))),
     xk:a.filter(r=>r.keluar).length,xh:a.filter(r=>r.keluar_henti).length,xt:a.filter(r=>r.keluar_10).length,cp:a.filter(r=>r.capai_10).length,ts:a.filter(r=>r.tutup_semua).length});
-  const out=Object.entries(by).map(([k,a])=>Object.assign({kaedah:k},st(a)));out.forEach(o=>{const m=[['Kaedah',o.k],['Henti',o.h],['10%',o.t]].filter(x=>x[1]!=null).sort((x,y)=>y[1]-x[1]);o.terbaik=!m.length?'–':m.length>1&&m[0][1]-m[1][1]<0.005?'Seri':m[0][0];});
+  const out=Object.entries(by).map(([k,a])=>Object.assign({kaedah:k},st(a)));out.forEach(o=>{const m=[['Kaedah',o.k],['Selagi naik',o.h],['10%',o.t]].filter(x=>x[1]!=null).sort((x,y)=>y[1]-x[1]);o.terbaik=!m.length?'–':m.length>1&&m[0][1]-m[1][1]<0.005?'Seri':m[0][0];});
   const T=st(rows);const menang={};out.forEach(o=>{menang[o.terbaik]=(menang[o.terbaik]||0)+1;});
   const sel=(v,x)=>`<b class="${cls(v)}">${sg2(v)}</b><span class="vv">${x} keluar</span>`;
-  return `<div class="panel"><div class="panel-h"><h2 data-tip="tiga_lorong">Banding tiga lorong keluar</h2><span class="sub">Semua ${T.n} dagangan: kaedah ${sg2(T.k)} · henti ${sg2(T.h)} · 10% ${sg2(T.t)} · lorong terbaik: kaedah ${menang['Kaedah']||0}, henti ${menang['Henti']||0}, 10% ${menang['10%']||0}, seri ${menang['Seri']||0} kaedah</span></div>
+  return `<div class="panel"><div class="panel-h"><h2 data-tip="tiga_lorong">Banding tiga lorong keluar</h2><span class="sub">Semua ${T.n} dagangan: kaedah ${sg2(T.k)} · selagi naik ${sg2(T.h)} · 10% ${sg2(T.t)} · lorong terbaik: kaedah ${menang['Kaedah']||0}, selagi naik ${menang['Selagi naik']||0}, 10% ${menang['10%']||0}, seri ${menang['Seri']||0} kaedah</span></div>
     ${sortTable({id:'prl-'+S.tab+S.sub.prestasi,rows:out,def:{k:'n',dir:-1},limit:60,cols:[
       {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,frz:1,f:o=>`<b>${esc(o.kaedah)}</b>`,c:()=>'tk'},
       {k:'n',t:'Dagangan',tip:'jumlah_dag',f:o=>`${o.n}<span class="vv">${o.ts} tutup semua</span>`},
       {k:'k',t:'Lorong kaedah',tip:'isyarat_keluar',f:o=>sel(o.k,o.xk)},
-      {k:'h',t:'Lorong henti',tip:'keluar_henti',f:o=>sel(o.h,o.xh)},
+      {k:'h',t:'Pegang selagi naik',tip:'keluar_henti',f:o=>sel(o.h,o.xh)},
       {k:'t',t:'Lorong 10%',tip:'keluar_10',f:o=>`${sel(o.t,o.xt)}<span class="vv">${o.cp} capai +10%</span>`},
       {k:'terbaik',t:'Terbaik setakat ini',l:1,f:o=>`<span class="pill p-near">${esc(o.terbaik)}</span>`}]})}
     <p class="sub" style="margin-top:8px">Untung setiap lorong = untung akhir jika lorong itu sudah keluar, untung semasa jika masih dipegang. Lorong kaedah kekal keputusan rasmi; henti dan 10% ialah rekod perbandingan. Nilai selepas ≥ ${PR_MIN_TUTUP} dagangan tertutup setiap kaedah.</p></div>`;}
@@ -1146,9 +1148,9 @@ const TIPS={
   untung_pct:{t:'Untung %',d:'Harga terkini ÷ harga beli − 1. Bagi posisi yang sudah keluar, ini untung pada harga keluar.',e:'+5.0% = RM100 kini bernilai RM105.'},
   hari_pt:{t:'Hari dipegang',d:'Bilangan hari dagangan sejak tarikh beli (hingga tarikh keluar jika sudah keluar).',e:''},
   isyarat_keluar:{t:'Keluar kaedah (lorong 1)',d:'Status mengikut peraturan keluar penuh kaedah itu: Pegang, atau Keluar (henti rugi, sasaran, isyarat jual, had masa). Keputusan rasmi papertrade. Baris ditanda merah hanya apabila ketiga-tiga lorong sudah keluar. Susun ikut untung lorong ini (akhir jika keluar, semasa jika dipegang).',e:'Keluar 15 Okt · @ 20.50 · +4.91% · capai sasaran.'},
-  keluar_henti:{t:'Keluar henti (lorong 2)',d:'Henti kaedah sahaja: pegang sehingga harga rendah sentuh henti (jual pada paras henti, atau harga buka jika buka di bawah henti). Kaedah tanpa henti (M01, M24, M31, M73, M82, M94): pegang selagi untung, jual pada buka esok selepas tutup pertama di bawah harga beli. Susun ikut untung lorong ini.',e:'Keluar 10-16 @ 19.31 · −1.15% = kena henti 16 Okt.'},
+  keluar_henti:{t:'Pegang selagi naik (lorong 2)',d:'Pegang selagi harga terus naik. Keluar hanya selepas 2 tutup berturut lebih rendah daripada tutup semalam (jual pada buka esok); satu hari turun sahaja tidak keluar. Henti kaedah kekal sebagai perlindungan. Untuk melihat berapa lama untung terus naik dan berapa hari dipegang. Susun ikut untung lorong ini.',e:'Pegang · turun berturut 1/2 · 6 hari = semalam turun sekali; turun lagi esok → jual buka lusa.'},
   keluar_10:{t:'Keluar 10% (lorong 3)',d:'Sebelum tutup capai harga beli × 1.10: keluar ikut henti kaedah (atau tutup di bawah harga beli bagi kaedah tanpa henti). Selepas capai +10%: pegang selagi tutup tidak jatuh di bawah low semalam; tutup pertama di bawah low semalam → jual pada buka esok.',e:'+10% ✓ Pegang (keluar jika tutup < 21.30) = sudah capai, masih naik.'},
-  tiga_lorong:{t:'Tiga lorong keluar',d:'Setiap posisi dinilai serentak dengan tiga peraturan keluar dari harga beli yang sama: Kaedah (peraturan penuh kaedah), Henti (henti sahaja) dan 10% (sasaran 10% kemudian ikut low semalam). Kaedah+saham sama hanya dibeli semula selepas ketiga-tiga lorong keluar. Purata = untung akhir bagi lorong yang keluar, semasa bagi yang dipegang.',e:'Kaedah +1.2% · Henti +2.5% · 10% +3.1%: memegang lebih lama lebih untung setakat ini.'},
+  tiga_lorong:{t:'Tiga lorong keluar',d:'Setiap posisi dinilai serentak dengan tiga peraturan keluar dari harga beli yang sama: Kaedah (peraturan penuh kaedah), Pegang selagi naik (2 tutup turun berturut atau henti) dan 10% (sasaran 10% kemudian ikut low semalam). Kaedah+saham sama hanya dibeli semula selepas ketiga-tiga lorong keluar. Purata = untung akhir bagi lorong yang keluar, semasa bagi yang dipegang.',e:'Kaedah +1.2% · Selagi naik +2.5% · 10% +3.1%: memegang lebih lama lebih untung setakat ini.'},
   tarikh_keluar:{t:'Tarikh keluar',d:'Hari peraturan keluar dicetuskan.',e:''},
   harga_keluar:{t:'Harga keluar',d:'Harga yang dipakai peraturan keluar (contohnya paras henti atau harga buka esok).',e:''},
   untung_akhir:{t:'Untung akhir %',d:'Untung dibekukan pada harga keluar. Kosong bagi posisi yang masih dipegang.',e:''},

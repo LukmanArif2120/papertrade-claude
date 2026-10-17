@@ -34,16 +34,16 @@ Susunan lajur rasmi (lajur tambahan dibenarkan di hujung):
 | tidak_dibeli | True/kosong | belian tidak berlaku (langkau kaedah kena pada buka rasmi). harga_beli kosong, isyarat_keluar = "TIDAK DIBELI", keluar = False, tidak dikemas kini lagi |
 | luar_peraturan | True/kosong | Moomoo sahaja: dibeli sebenar tetapi luar peraturan (kekal dikemas kini harga, tidak dikira) |
 | harga_buka_rujukan, tarikh_beli_dirancang | nombor, tarikh | untuk baris tidak_dibeli |
-| keluar_henti, tarikh_keluar_henti, harga_keluar_henti, untung_henti_pct, status_henti | True/False, tarikh, nombor, nombor 2 tp, teks | Lorong 2 (henti sahaja). Lihat bahagian Tiga lorong keluar |
+| keluar_henti, tarikh_keluar_henti, harga_keluar_henti, untung_henti_pct, status_henti | True/False, tarikh, nombor, nombor 2 tp, teks | Lorong 2 (pegang selagi naik). Lihat bahagian Tiga lorong keluar |
 | capai_10, tarikh_capai_10, keluar_10, tarikh_keluar_10, harga_keluar_10, untung_10_pct, status_10 | True/False, tarikh, True/False, tarikh, nombor, nombor 2 tp, teks | Lorong 3 (sasaran 10%) |
 | tutup_semua | True/False | = keluar AND keluar_henti AND keluar_10. Belian semula kaedah+saham sama hanya selepas True |
 
 ## Tiga lorong keluar (keputusan pengguna 17 Okt 2026)
 Setiap posisi yang dibeli dinilai serentak dengan tiga peraturan keluar dari harga beli yang sama. Setiap lorong direkod dalam lajurnya sendiri dan dibekukan sebaik keluar:
 1. **Kaedah** (`keluar`, `tarikh_keluar`, `harga_keluar`, `untung_akhir_pct`, `isyarat_keluar`): peraturan penuh kaedah (henti, sasaran, isyarat keluar, had masa), seperti sebelum ini.
-2. **Henti** (`*_henti`): henti kaedah sahaja; pegang sehingga kena (rendah <= henti → paras henti; buka <= henti dari hari kedua → harga buka). Kaedah tanpa henti (M01, M24, M31, M73, M82, M94): "pegang selagi untung" = tutup pertama < harga beli → jual pada buka esok.
-3. **10%** (`*_10`): sebelum tutup >= harga beli × 1.10, peraturan lorong 2 (perlindungan rugi). Selepas capai (`capai_10`, `tarikh_capai_10`): pegang selagi tutup >= low semalam; tutup pertama < low semalam → jual pada buka esok. Henti kaedah kekal aktif.
-Lorong 2 dan 3 diisi oleh `python3 BacktestShariah2/standard/keluar_tiga.py --stor <folder stor>` (harga = stor harga; baris yang buka stor hari beli berbeza > 15% daripada harga_beli tidak dinilai). Lajur kosong = belum dinilai (amaran `sahkan.py`). `status_henti`/`status_10` = teks paparan (Pegang …, menunggu, Keluar: …). Lejar Penuh memakai lajur sama (tanpa status).
+2. **Pegang selagi naik** (`*_henti`; dipinda 17 Okt 2026): pegang selagi harga terus naik; 2 tutup berturut lebih rendah daripada tutup semalam → jual pada buka esok (satu hari turun sahaja tidak keluar; tutup >= tutup semalam mengosongkan kiraan). Henti kaedah kekal sebagai perlindungan (rendah <= henti → paras henti; buka <= henti dari hari kedua → harga buka). Tujuan: ukur berapa lama untung terus naik dan berapa hari dipegang.
+3. **10%** (`*_10`): sebelum tutup >= harga beli × 1.10, henti kaedah (kaedah tanpa henti M01, M24, M31, M73, M82, M94: tutup < harga beli → jual pada buka esok). Selepas capai (`capai_10`, `tarikh_capai_10`): pegang selagi tutup >= low semalam; tutup pertama < low semalam → jual pada buka esok. Henti kaedah kekal aktif.
+Lorong 2 dan 3 diisi oleh `python3 BacktestShariah2/standard/keluar_tiga.py --stor <folder stor>` (`--semula henti` / `--semula 10` mengira semula lorong itu selepas peraturan dipinda) (harga = stor harga; baris yang buka stor hari beli berbeza > 15% daripada harga_beli tidak dinilai). Lajur kosong = belum dinilai (amaran `sahkan.py`). `status_henti`/`status_10` = teks paparan (Pegang …, menunggu, Keluar: …). Lejar Penuh memakai lajur sama (tanpa status).
 
 Kunci unik: (akaun, kaedah, saham, tarikh_beli) bagi baris yang dibeli. Akaun = moomoo atau claude (semua claude*.csv dikira satu akaun).
 

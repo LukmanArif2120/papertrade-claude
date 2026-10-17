@@ -20,7 +20,7 @@ Peraturan setiap sesi S (data dipotong <= S; modul kaedah = kod/kaedah/Mxx.py, l
 3. Isyarat baharu bar S: saham layak (data/harga/univ.txt, tutup >= USD10), bar >= PERLU_BAR (atau SILANG), indeks
    bar >= WARM. Isyarat semasa kaedah sama memegang saham itu (termasuk hari keluar) diabaikan, seperti enjin.
    Semua isyarat direkod dalam `isyarat/<S>.csv.gz`; yang layak masuk menunggu sesi seterusnya (`tunggu.csv`).
-4. Tiga lorong keluar (sejak 17 Okt 2026, TIGA_LORONG): lorong 1 = peraturan 1; lorong 2 (henti sahaja) dan lorong 3
+4. Tiga lorong keluar (sejak 17 Okt 2026, TIGA_LORONG): lorong 1 = peraturan 1; lorong 2 (pegang selagi naik) dan lorong 3
    (sasaran 10% + tutup < low semalam) dikira oleh standard/keluar_tiga.py. Posisi kekal terbuka (dan menyekat isyarat
    baharu kaedah+saham sama) sehingga ketiga-tiga lorong keluar.
 Harga: stor repo `data/harga/stor/` (format kod/stor.py; yfinance, semakan silang Moomoo oleh rutin 6:02).
@@ -44,7 +44,7 @@ HARGA_MIN = 10.0
 TAMAT_TUNGGU = 5      # sesi maksimum isyarat menunggu bar masuk (saham digantung / data lewat)
 TOLERANSI_LARAS = 0.003
 # Tiga lorong keluar (keputusan pengguna 17 Okt 2026; standard/keluar_tiga.py): lorong 1 = peraturan kaedah (enjin, lajur
-# tarikh_keluar …), lorong 2 = henti sahaja, lorong 3 = sasaran 10% + tutup < low semalam. Posisi kekal dalam terbuka.csv
+# tarikh_keluar …), lorong 2 = pegang selagi naik (2 tutup turun berturut atau henti), lorong 3 = sasaran 10% + tutup < low semalam. Posisi kekal dalam terbuka.csv
 # (dan menyekat isyarat baharu kaedah+saham sama) sehingga ketiga-tiga lorong keluar; kemudian dipindah ke tutup/.
 # False = tingkah laku enjin asal (posisi tutup apabila lorong 1 keluar); dipakai oleh ujian kesetaraan enjin.
 TIGA_LORONG = True
@@ -491,8 +491,8 @@ def cmd_ringkas(a):
          'dengan peraturan sama (tiada had sekaedah). Jangkaan = registry set 431 varian modul (dalam sampel).', '',
          'Nota: data awal didominasi posisi yang tutup cepat (kebanyakan kena henti); nilai hanya selepas posisi matang '
          '(lihat `WFO/README.md`, penilaian 15 Jan 2027).', '',
-         'Tiga lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (peraturan kaedah); Henti = lorong 2 (henti '
-         'sahaja; tanpa henti: tutup < harga beli); 10% = lorong 3 (capai +10% kemudian tutup < low semalam). n = bilangan keluar.', '',
+         'Tiga lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (peraturan kaedah); Henti = lorong 2 (pegang '
+         'selagi naik: 2 tutup turun berturut atau henti); 10% = lorong 3 (capai +10% kemudian tutup < low semalam). n = bilangan keluar.', '',
          '| Kaedah | Posisi | Tutup | Terbuka | Menang % | Purata tutup % | Hari | Purata terbuka % | Henti n | Purata henti % '
          '| Capai 10% | 10% n | Purata 10% % | Menang jangka % | Purata jangka % | Hari jangka |',
          '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|']

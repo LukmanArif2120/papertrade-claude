@@ -18,7 +18,7 @@ POSISI = ['tarikh_beli', 'saham', 'kaedah', 'id_kaedah', 'sektor', 'industri', '
           'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
           'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
           'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada',
-          # tiga lorong keluar (standard/keluar_tiga.py; sejak 17 Okt 2026): lorong 2 henti, lorong 3 sasaran 10%
+          # tiga lorong keluar (standard/keluar_tiga.py; sejak 17 Okt 2026): lorong 2 pegang selagi naik, lorong 3 sasaran 10%
           'keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct', 'status_henti',
           'capai_10', 'tarikh_capai_10', 'keluar_10', 'tarikh_keluar_10', 'harga_keluar_10', 'untung_10_pct', 'status_10',
           'tutup_semua']
@@ -148,7 +148,7 @@ def semak_posisi(nama, lajur, rows, ralat, amaran, kunci):
 
 
 def semak_tiga(t, r, hb, ralat, amaran):
-    """Lorong 2 (henti) dan 3 (10%): keluar=True => tarikh/harga/untung lengkap dan konsisten; tutup_semua = semua lorong keluar.
+    """Lorong 2 (pegang selagi naik) dan 3 (10%): keluar=True => tarikh/harga/untung lengkap dan konsisten; tutup_semua = semua lorong keluar.
     Lajur kosong = belum dinilai (amaran sahaja; diisi oleh keluar_tiga.py)."""
     if 'tutup_semua' not in r:
         return

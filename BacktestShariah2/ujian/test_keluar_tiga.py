@@ -1,4 +1,5 @@
-# Ujian standard/keluar_tiga.py: lorong 2 (henti / pegang selagi untung) dan lorong 3 (+10% kemudian tutup < low semalam).
+# Ujian standard/keluar_tiga.py: lorong 2 (pegang selagi naik: 2 tutup turun berturut atau henti) dan lorong 3
+# (+10% kemudian tutup < low semalam).
 import csv, os, sys, tempfile, unittest
 import numpy as np
 
@@ -27,17 +28,28 @@ class UjiLorong(unittest.TestCase):
         L2, _ = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 95.0)
         self.assertEqual((L2['harga_keluar_henti'], L2['untung_henti_pct']), ('93', '-7.00'))
 
-    def test_tanpa_henti_pegang_selagi_untung(self):
-        ix, o, h, l, c = bar([101, 103, 99.5, 98], o=[100, 102, 103, 97])
-        L2, L3 = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, None)
-        # tutup 99.5 < harga beli pada hari ke-3 -> jual buka hari ke-4
-        self.assertEqual((L2['tarikh_keluar_henti'], L2['harga_keluar_henti']), (ix[3], '97'))
-        self.assertEqual(L3['tarikh_keluar_10'], ix[3])
+    def test_lorong2_dua_tutup_turun(self):
+        # turun (1), naik (kosong), turun (1), turun (2) -> jual buka bar berikutnya
+        ix, o, h, l, c = bar([100, 102, 101, 103, 102, 100, 99], o=[100, 101, 102, 101, 103, 101, 98.5])
+        L2, _ = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, None)
+        self.assertEqual((L2['tarikh_keluar_henti'], L2['harga_keluar_henti'], L2['untung_henti_pct']), (ix[6], '98.5', '-1.50'))
+        self.assertIn('2 tutup turun berturut', L2['status_henti'])
 
-    def test_tanpa_henti_menunggu(self):
-        ix, o, h, l, c = bar([101, 99])
+    def test_lorong2_satu_turun_pegang(self):
+        ix, o, h, l, c = bar([100, 103, 102, 105])
+        L2, _ = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 95.0)
+        self.assertEqual(L2['keluar_henti'], 'False')
+        self.assertIn('turun berturut 0/2', L2['status_henti']); self.assertIn('henti 95.00', L2['status_henti'])
+
+    def test_lorong2_menunggu(self):
+        ix, o, h, l, c = bar([100, 99, 98])
         L2, _ = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, None)
         self.assertEqual(L2['keluar_henti'], 'False'); self.assertIn('menunggu', L2['status_henti'])
+
+    def test_lorong3_tanpa_henti_tutup_bawah_harga_beli(self):
+        ix, o, h, l, c = bar([101, 103, 99.5, 98], o=[100, 102, 103, 97])
+        _, L3 = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, None)
+        self.assertEqual((L3['tarikh_keluar_10'], L3['harga_keluar_10']), (ix[3], '97'))
 
     def test_capai_10_kemudian_low_semalam(self):
         # tutup 110 (capai) -> 114 (low 111) -> 112 (>= low semalam 111? ya, pegang; low 110) -> 109 < 110 -> jual buka esok 108
@@ -48,7 +60,8 @@ class UjiLorong(unittest.TestCase):
         L2, L3 = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 95.0)
         self.assertEqual((L3['capai_10'], L3['tarikh_capai_10']), ('True', ix[1]))
         self.assertEqual((L3['tarikh_keluar_10'], L3['harga_keluar_10'], L3['untung_10_pct']), (ix[5], '108', '8.00'))
-        self.assertEqual(L2['keluar_henti'], 'False')
+        # lorong 2: 112 < 114 (1), 109 < 112 (2) -> jual buka bar ke-6 = 108
+        self.assertEqual((L2['tarikh_keluar_henti'], L2['harga_keluar_henti']), (ix[5], '108'))
 
     def test_capai_tanpa_keluar(self):
         ix, o, h, l, c = bar([105, 111, 113], l=[100, 104, 110])
@@ -71,6 +84,15 @@ class UjiBaris(unittest.TestCase):
         r['harga_keluar_henti'] = '94.5'          # lorong yang sudah keluar dibekukan
         K.kemas_baris(r, H, [])
         self.assertEqual(r['harga_keluar_henti'], '94.5')
+
+    def test_semula_kira_lorong_yang_sudah_keluar(self):
+        H = {'X': bar([100, 103, 105], l=[99, 101, 104])}
+        r = dict(saham='X', kaedah='M01', tarikh_beli=IX[0], harga_beli='100', henti='95', keluar='False',
+                 keluar_henti='True', tarikh_keluar_henti=IX[1], harga_keluar_henti='95', untung_henti_pct='-5.00')
+        K.kemas_baris(r, H, [])
+        self.assertEqual(r['harga_keluar_henti'], '95')            # beku
+        K.kemas_baris(r, H, [], semula=('henti',))
+        self.assertEqual((r['keluar_henti'], r['harga_keluar_henti']), ('False', ''))
 
     def test_tidak_dibeli_kosong(self):
         r = dict(saham='X', kaedah='M01', tarikh_beli='', tidak_dibeli='True')

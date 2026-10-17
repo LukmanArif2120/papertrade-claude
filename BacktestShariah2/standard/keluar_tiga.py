@@ -1,16 +1,18 @@
 # Tiga lorong keluar (keputusan pengguna 17 Okt 2026). Setiap posisi dinilai serentak dengan tiga peraturan keluar,
 # masing-masing dari harga beli yang sama, dan direkod dalam lajur berasingan:
 #   1. Kaedah  — peraturan penuh kaedah (henti, sasaran, isyarat keluar, had masa): lajur sedia ada `keluar`, `tarikh_keluar` …
-#   2. Henti   — henti kaedah sahaja, pegang hingga kena. Kaedah tanpa henti: "pegang selagi untung" = keluar pada buka esok
-#                selepas tutup pertama < harga beli.
-#   3. 10%     — sebelum tutup >= harga beli × 1.10: peraturan lorong 2 (perlindungan rugi). Selepas capai: pegang selagi
-#                tutup >= low semalam; tutup pertama < low semalam -> jual pada buka esok. Henti kaedah kekal aktif.
+#   2. Pegang selagi naik (lajur *_henti; dipinda 17 Okt 2026) — pegang selagi harga terus naik; keluar pada buka esok selepas
+#                TURUN_BERTURUT (2) tutup berturut lebih rendah daripada tutup semalam. Henti kaedah kekal sebagai perlindungan.
+#   3. 10%     — sebelum tutup >= harga beli × 1.10: henti kaedah (kaedah tanpa henti: tutup < harga beli -> buka esok).
+#                Selepas capai: pegang selagi tutup >= low semalam; tutup pertama < low semalam -> jual pada buka esok.
+#                Henti kaedah kekal aktif.
 # Belian semula kaedah+saham yang sama hanya selepas ketiga-tiga lorong keluar (`tutup_semua` = True).
 # Lorong 2 dan 3 hanya perlukan harga (OHLC), harga beli dan henti, jadi dikira di sini tanpa modul kaedah.
 #
 # Guna (rutin 6:02 pagi, selepas lorong 1 dinilai; juga untuk isi semula):
 #   python3 BacktestShariah2/standard/keluar_tiga.py [--stor <folder harga_A/B/idx.csv>] [--folder <papertrade>]
 #       -> kemas kini lajur lorong 2 dan 3 serta tutup_semua dalam moomoo.csv dan claude*.csv (lorong yang sudah keluar dibekukan)
+#   --semula henti|10   -> kira semula lorong itu walaupun sudah keluar (selepas peraturan lorong dipinda)
 import argparse, csv, glob, json, os, re, sys
 
 import numpy as np
@@ -21,6 +23,7 @@ PT = os.path.join(BS2, 'papertrade')
 STOR = os.path.join(BS2, 'data', 'harga', 'stor')
 
 AMBANG_10 = 0.10
+TURUN_BERTURUT = 2       # lorong 2: bilangan tutup berturut < tutup semalam sebelum keluar
 BEZA_HARGA_MAKS = 0.15   # buka stor pada hari beli lawan harga_beli; lebih -> data tidak sepadan (split/ticker lain), langkau
 
 LAJUR_HENTI = ['keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct', 'status_henti']
@@ -41,21 +44,24 @@ def ada_henti(sp):
 
 
 # ---------------------------------------------------------------- logik (tatasusunan bar; k = indeks bar hari beli)
-def lorong_henti(o, h, l, c, k, e, sp):
-    """Lorong 2. Pulang dict: keluar (j, harga, sebab) | menunggu (j isyarat) | terbuka.
-    Henti dinilai dari hari beli (rendah <= henti), buka jurang bawah henti dari hari kedua -> harga buka (seperti enjin)."""
-    n = len(o)
+def lorong_henti(o, h, l, c, k, e, sp, n_turun=TURUN_BERTURUT):
+    """Lorong 2 (pegang selagi naik). Pulang dict: keluar (j, harga, sebab) | menunggu (j isyarat) | terbuka (turun = kiraan semasa).
+    Tutup < tutup semalam menambah kiraan; tutup >= tutup semalam mengosongkannya. Kiraan = n_turun -> jual pada buka esok.
+    Henti kaedah: rendah <= henti dari hari beli, buka jurang bawah henti dari hari kedua -> harga buka (seperti enjin)."""
+    n = len(o); turun = 0
     for j in range(k, n):
         if ada_henti(sp):
             if j > k and o[j] <= sp:
                 return dict(jenis='keluar', j=j, harga=float(o[j]), sebab='kena henti (buka bawah henti)')
             if l[j] <= sp:
                 return dict(jenis='keluar', j=j, harga=float(sp), sebab='kena henti')
-        elif c[j] < e:
+        if j >= 1:
+            turun = turun + 1 if c[j] < c[j - 1] else 0
+        if turun >= n_turun:
             if j + 1 < n:
-                return dict(jenis='keluar', j=j + 1, harga=float(o[j + 1]), sebab=f'tutup bawah harga beli {{t{j}}}')
-            return dict(jenis='menunggu', j=j, sebab='tutup bawah harga beli')
-    return dict(jenis='terbuka')
+                return dict(jenis='keluar', j=j + 1, harga=float(o[j + 1]), sebab=f'{n_turun} tutup turun berturut {{t{j}}}')
+            return dict(jenis='menunggu', j=j, sebab=f'{n_turun} tutup turun berturut')
+    return dict(jenis='terbuka', turun=turun)
 
 
 def lorong_10(o, h, l, c, k, e, sp, ambang=AMBANG_10):
@@ -113,10 +119,9 @@ def nilai_baris(ix, o, h, l, c, tarikh_beli, e, sp):
         L2['keluar_henti'] = 'False'
         if a['jenis'] == 'menunggu':
             L2['status_henti'] = f"{a['sebab'].capitalize()} {hb(ix[a['j']])} — jual pada buka esok (menunggu)"
-        elif ada_henti(sp):
-            L2['status_henti'] = f'Pegang (henti {sp:.2f})'
         else:
-            L2['status_henti'] = f'Pegang selagi untung (keluar jika tutup < {e:.2f})'
+            hti = f'; henti {sp:.2f}' if ada_henti(sp) else ''
+            L2['status_henti'] = f"Pegang (turun berturut {a['turun']}/{TURUN_BERTURUT}; {akhir - k} hari{hti})"
     b = lorong_10(o, h, l, c, k, e, sp)
     L3 = dict.fromkeys(LAJUR_10, '')
     cp = b.get('capai')
@@ -167,7 +172,7 @@ def muat_harga(stor):
     return out
 
 
-def kemas_baris(r, H, nota):
+def kemas_baris(r, H, nota, semula=()):
     """Ubah baris r di tempat. Lorong yang sudah keluar dibekukan. Pulang True jika ada perubahan."""
     lama = {c: r.get(c, '') for c in LAJUR_TIGA}
     if benar(r.get('tidak_dibeli')) or not r.get('tarikh_beli'):
@@ -176,7 +181,8 @@ def kemas_baris(r, H, nota):
     e = nombor(r.get('harga_beli'))
     if e is None or e <= 0:
         return False
-    beku2, beku3 = benar(r.get('keluar_henti')), benar(r.get('keluar_10'))
+    beku2 = benar(r.get('keluar_henti')) and 'henti' not in semula
+    beku3 = benar(r.get('keluar_10')) and '10' not in semula
     if not (beku2 and beku3):
         d = H.get(r.get('saham'))
         if d is None:
@@ -204,6 +210,8 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description='Kemas kini lorong keluar 2 (henti) dan 3 (10%) dalam fail posisi papertrade')
     ap.add_argument('--stor', default=STOR, help='folder harga_A/B/idx.csv (lalai: stor repo)')
     ap.add_argument('--folder', default=PT, help='folder papertrade')
+    ap.add_argument('--semula', action='append', default=[], choices=['henti', '10'],
+                    help='kira semula lorong ini walaupun sudah keluar (selepas peraturan dipinda)')
     a = ap.parse_args(argv)
     H = muat_harga(a.stor)
     nota, ringkas = [], {}
@@ -211,7 +219,7 @@ def main(argv=None):
         with open(p, newline='', encoding='utf-8') as f:
             rd = csv.DictReader(f); lajur = list(rd.fieldnames or []); rows = list(rd)
         lajur += [c for c in LAJUR_TIGA if c not in lajur]
-        ubah = sum(kemas_baris(r, H, nota) for r in rows)
+        ubah = sum(kemas_baris(r, H, nota, a.semula) for r in rows)
         if ubah:
             with open(p, 'w', newline='', encoding='utf-8') as f:
                 w = csv.DictWriter(f, fieldnames=lajur); w.writeheader()
