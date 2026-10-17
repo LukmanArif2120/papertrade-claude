@@ -27,8 +27,8 @@ class UjiBelianSemula(unittest.TestCase):
         self.assertEqual(buka, {('M20', 'FSLY'), ('M81', 'FSLY')})
         self.assertEqual((bil[('M13', 'FSLY')], bil[('M20', 'FSLY')], bil[('M13', 'AAA')]), (1, 2, 0))
 
-    def test_tiga_lorong(self):
-        # sejak 17 Okt 2026: belian semula hanya selepas ketiga-tiga lorong keluar (tutup_semua = True)
+    def test_dua_lorong(self):
+        # sejak 17 Okt 2026: belian semula hanya selepas kedua-dua lorong keluar (tutup_semua = True)
         with tempfile.TemporaryDirectory() as d:
             lajur = ['tarikh_beli', 'saham', 'kaedah', 'keluar', 'tidak_dibeli', 'tidak_sah', 'tutup_semua']
             with open(os.path.join(d, 'claude.csv'), 'w', newline='', encoding='utf-8') as f:

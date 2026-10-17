@@ -20,9 +20,9 @@ Peraturan setiap sesi S (data dipotong <= S; modul kaedah = kod/kaedah/Mxx.py, l
 3. Isyarat baharu bar S: saham layak (data/harga/univ.txt, tutup >= USD10), bar >= PERLU_BAR (atau SILANG), indeks
    bar >= WARM. Isyarat semasa kaedah sama memegang saham itu (termasuk hari keluar) diabaikan, seperti enjin.
    Semua isyarat direkod dalam `isyarat/<S>.csv.gz`; yang layak masuk menunggu sesi seterusnya (`tunggu.csv`).
-4. Tiga lorong keluar (sejak 17 Okt 2026, TIGA_LORONG): lorong 1 = peraturan 1; lorong 2 (pegang selagi naik) dan lorong 3
-   (sasaran 10% + tutup < low semalam) dikira oleh standard/keluar_tiga.py. Posisi kekal terbuka (dan menyekat isyarat
-   baharu kaedah+saham sama) sehingga ketiga-tiga lorong keluar.
+4. Dua lorong keluar (sejak 17 Okt 2026, DUA_LORONG): lorong 1 = peraturan 1; lorong 2 (pegang selagi naik: 2 tutup turun
+   berturut atau henti) dikira oleh standard/keluar_lorong.py. Posisi kekal terbuka (dan menyekat isyarat baharu kaedah+saham
+   sama) sehingga kedua-dua lorong keluar.
 Harga: stor repo `data/harga/stor/` (format kod/stor.py; yfinance, semakan silang Moomoo oleh rutin 6:02).
 Jika harga lama dilaras (split), posisi terbuka dilaras dengan nisbah sama (lajur `laras`).
 """
@@ -35,7 +35,7 @@ BS2 = os.path.dirname(HERE)
 KOD = os.path.join(BS2, 'kod'); sys.path.insert(0, KOD); sys.path.insert(0, HERE)
 import enjin  # noqa: E402
 from stor import muat, frames_dict, LAJ  # noqa: E402
-import keluar_tiga  # noqa: E402
+import keluar_lorong  # noqa: E402
 
 HARGA = os.path.join(BS2, 'data', 'harga')
 STOR = os.environ.get('LEJAR_STOR', os.path.join(HARGA, 'stor'))
@@ -43,18 +43,17 @@ LEJAR = os.environ.get('LEJAR_DIR', os.path.join(BS2, 'lejar'))
 HARGA_MIN = 10.0
 TAMAT_TUNGGU = 5      # sesi maksimum isyarat menunggu bar masuk (saham digantung / data lewat)
 TOLERANSI_LARAS = 0.003
-# Tiga lorong keluar (keputusan pengguna 17 Okt 2026; standard/keluar_tiga.py): lorong 1 = peraturan kaedah (enjin, lajur
-# tarikh_keluar …), lorong 2 = pegang selagi naik (2 tutup turun berturut atau henti), lorong 3 = sasaran 10% + tutup < low semalam. Posisi kekal dalam terbuka.csv
-# (dan menyekat isyarat baharu kaedah+saham sama) sehingga ketiga-tiga lorong keluar; kemudian dipindah ke tutup/.
+# Dua lorong keluar (keputusan pengguna 17 Okt 2026; standard/keluar_lorong.py): lorong 1 = peraturan kaedah (enjin, lajur
+# tarikh_keluar …), lorong 2 = pegang selagi naik (2 tutup turun berturut atau henti). Posisi kekal dalam terbuka.csv
+# (dan menyekat isyarat baharu kaedah+saham sama) sehingga kedua-dua lorong keluar; kemudian dipindah ke tutup/.
 # False = tingkah laku enjin asal (posisi tutup apabila lorong 1 keluar); dipakai oleh ujian kesetaraan enjin.
-TIGA_LORONG = True
+DUA_LORONG = True
 
 L_ASAS = ['id_kaedah', 'saham', 'sumber', 'tarikh_isyarat', 'rank', 'tarikh_beli', 'harga_beli', 'henti', 'sasaran',
           'tmax', 'belian_ke', 'dinilai_hingga', 'keluar_esok', 'laras']
 L_K1 = ['tarikh_keluar', 'harga_keluar', 'sebab_keluar', 'hari', 'untung_pct', 'pulangan', 'mfe_pct', 'mae_pct']
-L_K23 = ['keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct',
-         'capai_10', 'tarikh_capai_10', 'keluar_10', 'tarikh_keluar_10', 'harga_keluar_10', 'untung_10_pct', 'tutup_semua']
-L_POS = L_ASAS + L_K1 + L_K23     # terbuka.csv: lorong 1 boleh sudah keluar sementara lorong 2/3 masih terbuka
+L_K2 = ['keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct', 'tutup_semua']
+L_POS = L_ASAS + L_K1 + L_K2      # terbuka.csv: lorong 1 boleh sudah keluar sementara lorong 2 masih terbuka
 L_TUTUP = L_POS
 L_TUNGGU = ['id_kaedah', 'saham', 'sumber', 'tarikh_isyarat', 'rank', 'henti', 'sasaran', 'tutup']
 L_LANGKAU = ['id_kaedah', 'saham', 'tarikh_isyarat', 'sesi', 'sebab', 'buka', 'henti']
@@ -220,11 +219,11 @@ def benar(v):
 
 def tarikh_tutup(r):
     """Tarikh posisi tutup sepenuhnya (lorong terakhir keluar); '' jika masih ada lorong terbuka."""
-    if not TIGA_LORONG:
+    if not DUA_LORONG:
         return r.get('tarikh_keluar') or ''
-    if not (r.get('tarikh_keluar') and benar(r.get('keluar_henti')) and benar(r.get('keluar_10'))):
+    if not (r.get('tarikh_keluar') and benar(r.get('keluar_henti'))):
         return ''
-    return max(r['tarikh_keluar'], r['tarikh_keluar_henti'], r['tarikh_keluar_10'])
+    return max(r['tarikh_keluar'], r['tarikh_keluar_henti'])
 
 
 def nilai_posisi(g, p, tmax):
@@ -232,16 +231,14 @@ def nilai_posisi(g, p, tmax):
     if not p.get('tarikh_keluar'):
         k = langkah_keluar(g, p, tmax)
         if k: p = tutup_posisi(g, p, k)
-    if not TIGA_LORONG:
+    if not DUA_LORONG:
         return p, bool(p.get('tarikh_keluar'))
-    if not (benar(p.get('keluar_henti')) and benar(p.get('keluar_10'))):
+    if not benar(p.get('keluar_henti')):
         ix = [tkh(x) for x in g.index]
-        L2, L3 = keluar_tiga.nilai_baris(ix, g.open.values.astype(float), g.high.values.astype(float), g.low.values.astype(float),
-                                         g.close.values.astype(float), p['tarikh_beli'], float(p['harga_beli']), nombor(p['henti']))
+        L2, _ = keluar_lorong.nilai_baris(ix, g.open.values.astype(float), g.high.values.astype(float), g.low.values.astype(float),
+                                          g.close.values.astype(float), p['tarikh_beli'], float(p['harga_beli']), nombor(p['henti']))
         if L2 is not None:
-            p = dict(p)
-            for L, beku in ((L2, benar(p.get('keluar_henti'))), (L3, benar(p.get('keluar_10')))):
-                if not beku: p.update({c: v for c, v in L.items() if c in L_K23})
+            p = dict(p); p.update({c: v for c, v in L2.items() if c in L_K2})
     p['tutup_semua'] = bool(tarikh_tutup(p))
     return p, p['tutup_semua']
 
@@ -344,7 +341,7 @@ def keadaan():
     W = baca(os.path.join(LEJAR, 'tunggu.csv'), L_TUNGGU).to_dict('records')
     for p in T:
         p['keluar_esok'] = str(p['keluar_esok']).lower() == 'true'
-        for c in L_K1 + L_K23:   # medan kosong -> tiada (posisi lama sebelum tiga lorong, atau lorong 1 belum keluar)
+        for c in L_K1 + L_K2:    # medan kosong -> tiada (posisi lama sebelum dua lorong, atau lorong 1 belum keluar)
             if p.get(c) == '': p.pop(c)
     bil = {}
     for f in [os.path.join(LEJAR, 'terbuka.csv')] + sorted(glob.glob(os.path.join(LEJAR, 'tutup', '*.csv'))):
@@ -431,10 +428,10 @@ def cmd_semak(a):
         hk = pd.to_numeric(T.harga_keluar, errors='coerce')
         if (~(hk > 0)).any(): salah.append('tutup: harga_keluar tidak sah')
         if ~T.sebab_keluar.isin(['henti', 'sasaran', 'isyarat keluar', 'masa']).all(): salah.append('tutup: sebab_keluar tidak dikenali')
-        baru = T[T.tutup_semua != '']   # baris sejak tiga lorong: mesti tutup sepenuhnya
+        baru = T[T.tutup_semua != '']   # baris sejak dua lorong: mesti tutup sepenuhnya
         if len(baru) and not (baru.tutup_semua.str.lower() == 'true').all(): salah.append('tutup: ada lorong keluar belum keluar (tutup_semua bukan True)')
     for nm, d in [('tutup', T), ('terbuka', O)]:
-        for c, t in (('keluar_henti', 'tarikh_keluar_henti'), ('keluar_10', 'tarikh_keluar_10')):
+        for c, t in (('keluar_henti', 'tarikh_keluar_henti'),):
             x = d[d[c].str.lower() == 'true']
             if len(x) and ((x[t] == '') | (x[t] < x.tarikh_beli)).any(): salah.append(f'{nm}: {c}=True tetapi {t} kosong/sebelum beli')
     # setiap posisi mesti bermula daripada isyarat yang direkod
@@ -468,19 +465,17 @@ def cmd_ringkas(a):
     fr, _ = frames_dict(muat(STOR))
     akhir = {t: float(g.close.iloc[-1]) for t, g in fr.items()}
     P = pd.concat([T, O], ignore_index=True)   # lorong 1 dikira daripada semua posisi (terbuka.csv boleh ada lorong 1 sudah keluar)
-    for c in ('untung_pct', 'hari', 'untung_henti_pct', 'untung_10_pct'): P[c] = pd.to_numeric(P[c], errors='coerce')
+    for c in ('untung_pct', 'hari', 'untung_henti_pct'): P[c] = pd.to_numeric(P[c], errors='coerce')
     P['untung_kini'] = [(akhir.get(t, np.nan) / float(h) - 1) * 100 if h else np.nan for t, h in zip(P.saham, P.harga_beli)]
     T, O = P[P.tarikh_keluar != ''], P[P.tarikh_keluar == '']   # T/O di bawah = lorong 1 keluar / masih dipegang
     rows = []
     for mid in senarai_kaedah():
         t = T[T.id_kaedah == mid]; o = O[O.id_kaedah == mid]; j = J.get(mid, {}); a = P[P.id_kaedah == mid]
-        t2 = a[a.keluar_henti.str.lower() == 'true']; t3 = a[a.keluar_10.str.lower() == 'true']
+        t2 = a[a.keluar_henti.str.lower() == 'true']
         rows.append(dict(id=mid, nama=j.get('nama', ''), posisi=len(t) + len(o), tutup=len(t), terbuka=len(o),
                          menang=r4((t.untung_pct > 0).mean() * 100) if len(t) else None, purata=r4(t.untung_pct.mean()) if len(t) else None,
                          hari=r4(t.hari.mean()) if len(t) else None, terbuka_purata=r4(o.untung_kini.mean()) if len(o) else None,
                          tutup_henti=len(t2), purata_henti=r4(t2.untung_henti_pct.mean()) if len(t2) else None,
-                         capai_10=int((a.capai_10.str.lower() == 'true').sum()), tutup_10=len(t3),
-                         purata_10=r4(t3.untung_10_pct.mean()) if len(t3) else None,
                          j_menang=r4(j['win'] * 100) if j else None, j_purata=r4(j['avg']) if j else None, j_hari=r4(j['days']) if j else None))
     json.dump(dict(sesi_terakhir=st.get('sesi_terakhir'), mula=st.get('mula'), kaedah=rows), open(os.path.join(LEJAR, 'ringkasan.json'), 'w'),
               ensure_ascii=False, indent=1)
@@ -491,15 +486,15 @@ def cmd_ringkas(a):
          'dengan peraturan sama (tiada had sekaedah). Jangkaan = registry set 431 varian modul (dalam sampel).', '',
          'Nota: data awal didominasi posisi yang tutup cepat (kebanyakan kena henti); nilai hanya selepas posisi matang '
          '(lihat `WFO/README.md`, penilaian 15 Jan 2027).', '',
-         'Tiga lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (peraturan kaedah); Henti = lorong 2 (pegang '
-         'selagi naik: 2 tutup turun berturut atau henti); 10% = lorong 3 (capai +10% kemudian tutup < low semalam). n = bilangan keluar.', '',
-         '| Kaedah | Posisi | Tutup | Terbuka | Menang % | Purata tutup % | Hari | Purata terbuka % | Henti n | Purata henti % '
-         '| Capai 10% | 10% n | Purata 10% % | Menang jangka % | Purata jangka % | Hari jangka |',
-         '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|']
+         'Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (peraturan kaedah); Selagi naik = lorong 2 '
+         '(pegang selagi naik: 2 tutup turun berturut atau henti). n = bilangan keluar.', '',
+         '| Kaedah | Posisi | Tutup | Terbuka | Menang % | Purata tutup % | Hari | Purata terbuka % | Selagi naik n | Purata selagi naik % '
+         '| Menang jangka % | Purata jangka % | Hari jangka |',
+         '|---|---|---|---|---|---|---|---|---|---|---|---|---|']
     for r in sorted(rows, key=lambda r: -r['posisi']):
         L.append(f"| {r['id']} {r['nama']} | {r['posisi']} | {r['tutup']} | {r['terbuka']} | {f(r['menang'], 0)} | {f(r['purata'], 2)} | "
-                 f"{f(r['hari'], 0)} | {f(r['terbuka_purata'], 2)} | {r['tutup_henti']} | {f(r['purata_henti'], 2)} | {r['capai_10']} | "
-                 f"{r['tutup_10']} | {f(r['purata_10'], 2)} | {f(r['j_menang'], 0)} | {f(r['j_purata'], 2)} | {f(r['j_hari'], 0)} |")
+                 f"{f(r['hari'], 0)} | {f(r['terbuka_purata'], 2)} | {r['tutup_henti']} | {f(r['purata_henti'], 2)} | "
+                 f"{f(r['j_menang'], 0)} | {f(r['j_purata'], 2)} | {f(r['j_hari'], 0)} |")
     open(os.path.join(LEJAR, 'RINGKASAN.md'), 'w').write('\n'.join(L) + '\n')
     print(f"ringkasan: {len(rows)} kaedah, {len(T)} tutup, {len(O)} terbuka")
 

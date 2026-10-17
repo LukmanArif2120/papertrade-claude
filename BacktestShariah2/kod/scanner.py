@@ -107,7 +107,7 @@ def terbuka(r):
 def pegangan_c(folder):
     """papertrade/claude*.csv -> (set (kaedah, saham) masih terbuka, Counter (kaedah, saham) bilangan belian).
     Saham yang sudah keluar TIDAK dikecualikan: isyarat baharu = belian ke-2, ke-3 ...
-    Sejak 17 Okt 2026 (tiga lorong keluar, standard/keluar_tiga.py) posisi kekal terbuka sehingga ketiga-tiga lorong keluar
+    Sejak 17 Okt 2026 (dua lorong keluar, standard/keluar_lorong.py) posisi kekal terbuka sehingga kedua-dua lorong keluar
     (`tutup_semua` = True). Fail tanpa lajur tutup_semua: ikut `keluar` (lorong 1) seperti dahulu."""
     import csv
     from collections import Counter

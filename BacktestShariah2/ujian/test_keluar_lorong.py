@@ -1,10 +1,9 @@
-# Ujian standard/keluar_tiga.py: lorong 2 (pegang selagi naik: 2 tutup turun berturut atau henti) dan lorong 3
-# (+10% kemudian tutup < low semalam).
+# Ujian standard/keluar_lorong.py: lorong 2 (pegang selagi naik: 2 tutup turun berturut atau henti).
 import csv, os, sys, tempfile, unittest
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'standard'))
-import keluar_tiga as K  # noqa: E402
+import keluar_lorong as K  # noqa: E402
 
 IX = [f'2026-10-{d:02d}' for d in range(1, 21)]
 
@@ -18,10 +17,8 @@ def bar(c, o=None, h=None, l=None):
 class UjiLorong(unittest.TestCase):
     def test_henti_rendah(self):
         ix, o, h, l, c = bar([100, 101, 99, 97], l=[99, 100, 95, 96])
-        L2, L3 = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 96.0)
+        L2, _ = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 96.0)
         self.assertEqual((L2['keluar_henti'], L2['tarikh_keluar_henti'], L2['harga_keluar_henti']), ('True', ix[2], '96'))
-        self.assertEqual((L3['keluar_10'], L3['capai_10']), ('True', 'False'))
-        self.assertIn('sebelum +10%', L3['status_10'])
 
     def test_henti_buka_jurang_hari_kedua(self):
         ix, o, h, l, c = bar([100, 94], o=[100, 93])
@@ -46,28 +43,13 @@ class UjiLorong(unittest.TestCase):
         L2, _ = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, None)
         self.assertEqual(L2['keluar_henti'], 'False'); self.assertIn('menunggu', L2['status_henti'])
 
-    def test_lorong3_tanpa_henti_tutup_bawah_harga_beli(self):
-        ix, o, h, l, c = bar([101, 103, 99.5, 98], o=[100, 102, 103, 97])
-        _, L3 = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, None)
-        self.assertEqual((L3['tarikh_keluar_10'], L3['harga_keluar_10']), (ix[3], '97'))
-
-    def test_capai_10_kemudian_low_semalam(self):
-        # tutup 110 (capai) -> 114 (low 111) -> 112 (>= low semalam 111? ya, pegang; low 110) -> 109 < 110 -> jual buka esok 108
+    def test_lorong2_lima_hari_naik_kemudian_jatuh(self):
         c = [104, 110, 114, 112, 109, 107]
-        l = [102, 106, 111, 110, 108, 105]
         o = [100, 105, 111, 113, 111, 108]
-        ix, o, h, l, c = bar(c, o=o, l=l)
-        L2, L3 = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 95.0)
-        self.assertEqual((L3['capai_10'], L3['tarikh_capai_10']), ('True', ix[1]))
-        self.assertEqual((L3['tarikh_keluar_10'], L3['harga_keluar_10'], L3['untung_10_pct']), (ix[5], '108', '8.00'))
-        # lorong 2: 112 < 114 (1), 109 < 112 (2) -> jual buka bar ke-6 = 108
-        self.assertEqual((L2['tarikh_keluar_henti'], L2['harga_keluar_henti']), (ix[5], '108'))
-
-    def test_capai_tanpa_keluar(self):
-        ix, o, h, l, c = bar([105, 111, 113], l=[100, 104, 110])
-        _, L3 = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 95.0)
-        self.assertEqual((L3['capai_10'], L3['keluar_10']), ('True', 'False'))
-        self.assertIn('tutup < 110.00', L3['status_10'])
+        ix, o, h, l, c = bar(c, o=o)
+        L2, _ = K.nilai_baris(ix, o, h, l, c, ix[0], 100.0, 95.0)
+        # 112 < 114 (1), 109 < 112 (2) -> jual buka bar ke-6 = 108
+        self.assertEqual((L2['tarikh_keluar_henti'], L2['harga_keluar_henti'], L2['untung_henti_pct']), (ix[5], '108', '8.00'))
 
     def test_harga_tidak_sepadan(self):
         ix, o, h, l, c = bar([50, 51])
@@ -80,7 +62,7 @@ class UjiBaris(unittest.TestCase):
         H = {'X': bar([100, 90], l=[99, 89])}
         r = dict(saham='X', kaedah='M01', tarikh_beli=IX[0], harga_beli='100', henti='95', keluar='True')
         K.kemas_baris(r, H, [])
-        self.assertEqual((r['keluar_henti'], r['keluar_10'], r['tutup_semua']), ('True', 'True', 'True'))
+        self.assertEqual((r['keluar_henti'], r['tutup_semua']), ('True', 'True'))
         r['harga_keluar_henti'] = '94.5'          # lorong yang sudah keluar dibekukan
         K.kemas_baris(r, H, [])
         self.assertEqual(r['harga_keluar_henti'], '94.5')
@@ -102,13 +84,14 @@ class UjiBaris(unittest.TestCase):
     def test_fail(self):
         with tempfile.TemporaryDirectory() as d:
             with open(os.path.join(d, 'claude.csv'), 'w', newline='') as f:
-                w = csv.writer(f); w.writerow(['tarikh_beli', 'saham', 'kaedah', 'harga_beli', 'henti', 'keluar'])
-                w.writerow([IX[0], 'X', 'M01', '100', '95', 'False'])
+                w = csv.writer(f); w.writerow(['tarikh_beli', 'saham', 'kaedah', 'harga_beli', 'henti', 'keluar', 'capai_10', 'keluar_10'])
+                w.writerow([IX[0], 'X', 'M01', '100', '95', 'False', 'True', 'False'])
             H = {'X': bar([100, 112, 113], l=[99, 105, 111])}
             K.muat_harga = lambda stor: H
             K.main(['--folder', d, '--stor', d])
             r = list(csv.DictReader(open(os.path.join(d, 'claude.csv'))))[0]
-        self.assertEqual((r['capai_10'], r['keluar_10'], r['tutup_semua']), ('True', 'False', 'False'))
+        self.assertEqual((r['keluar_henti'], r['tutup_semua']), ('False', 'False'))
+        self.assertNotIn('capai_10', r); self.assertNotIn('keluar_10', r)   # lajur lorong 10% dibuang
 
 
 if __name__ == '__main__':

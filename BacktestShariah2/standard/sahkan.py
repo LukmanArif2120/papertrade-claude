@@ -18,9 +18,8 @@ POSISI = ['tarikh_beli', 'saham', 'kaedah', 'id_kaedah', 'sektor', 'industri', '
           'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
           'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
           'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada',
-          # tiga lorong keluar (standard/keluar_tiga.py; sejak 17 Okt 2026): lorong 2 pegang selagi naik, lorong 3 sasaran 10%
+          # dua lorong keluar (standard/keluar_lorong.py; sejak 17 Okt 2026): lorong 2 pegang selagi naik
           'keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct', 'status_henti',
-          'capai_10', 'tarikh_capai_10', 'keluar_10', 'tarikh_keluar_10', 'harga_keluar_10', 'untung_10_pct', 'status_10',
           'tutup_semua']
 LAJUR_GRED = ['gred_sektor', 'gred_industri', 'gred_rs', 'gred_pemangkin', 'gred_qr', 'gred_keseluruhan']
 NILAI_GRED = {'', 'A', 'B', 'C', 'D', 'E', '–'}
@@ -139,7 +138,7 @@ def semak_posisi(nama, lajur, rows, ralat, amaran, kunci):
                     ralat.append(f'{t}: untung_akhir_pct {ua} != (harga_keluar/harga_beli-1)*100 = {(hk / hb - 1) * 100:.2f}')
         elif not kosong(r['tarikh_keluar']) or not kosong(r['harga_keluar']):
             ralat.append(f'{t}: keluar=False tetapi tarikh_keluar/harga_keluar berisi')
-        semak_tiga(t, r, hb, ralat, amaran)
+        semak_lorong(t, r, hb, ralat, amaran)
         k = (akaun, r['kaedah'], r['saham'], r['tarikh_beli'])
         if k in kunci:
             ralat.append(f'{t}: bertindih dengan {kunci[k]} (kaedah+saham+tarikh_beli)')
@@ -147,31 +146,27 @@ def semak_posisi(nama, lajur, rows, ralat, amaran, kunci):
             kunci[k] = f'{nama}:{i}'
 
 
-def semak_tiga(t, r, hb, ralat, amaran):
-    """Lorong 2 (pegang selagi naik) dan 3 (10%): keluar=True => tarikh/harga/untung lengkap dan konsisten; tutup_semua = semua lorong keluar.
-    Lajur kosong = belum dinilai (amaran sahaja; diisi oleh keluar_tiga.py)."""
+def semak_lorong(t, r, hb, ralat, amaran):
+    """Lorong 2 (pegang selagi naik): keluar_henti=True => tarikh/harga/untung lengkap dan konsisten;
+    tutup_semua = keluar & keluar_henti. Lajur kosong = belum dinilai (amaran sahaja; diisi oleh keluar_lorong.py)."""
     if 'tutup_semua' not in r:
         return
     if kosong(r.get('tutup_semua')):
-        amaran.append(f'{t}: lorong 2/3 belum dinilai (jalankan standard/keluar_tiga.py)')
+        amaran.append(f'{t}: lorong 2 belum dinilai (jalankan standard/keluar_lorong.py)')
         return
-    for ky, tk, hk, uk in (('keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct'),
-                           ('keluar_10', 'tarikh_keluar_10', 'harga_keluar_10', 'untung_10_pct')):
-        if benar(r.get(ky)):
-            h, u = nombor(r.get(hk)), nombor(r.get(uk))
-            if not TARIKH.match(r.get(tk) or '') or h is None:
-                ralat.append(f'{t}: {ky}=True tetapi {tk}/{hk} kosong')
-            elif r[tk] < r['tarikh_beli']:
-                ralat.append(f'{t}: {tk} {r[tk]} sebelum tarikh_beli')
-            elif u is None or abs((h / hb - 1) * 100 - u) > TOL:
-                ralat.append(f'{t}: {uk} {u} != ({hk}/harga_beli-1)*100 = {(h / hb - 1) * 100:.2f}')
-        elif not kosong(r.get(tk)) or not kosong(r.get(hk)):
-            ralat.append(f'{t}: {ky}=False tetapi {tk}/{hk} berisi')
-    if benar(r.get('capai_10')) and not TARIKH.match(r.get('tarikh_capai_10') or ''):
-        ralat.append(f'{t}: capai_10=True tetapi tarikh_capai_10 kosong')
-    jangka = benar(r.get('keluar')) and benar(r.get('keluar_henti')) and benar(r.get('keluar_10'))
+    if benar(r.get('keluar_henti')):
+        h, u = nombor(r.get('harga_keluar_henti')), nombor(r.get('untung_henti_pct'))
+        if not TARIKH.match(r.get('tarikh_keluar_henti') or '') or h is None:
+            ralat.append(f'{t}: keluar_henti=True tetapi tarikh_keluar_henti/harga_keluar_henti kosong')
+        elif r['tarikh_keluar_henti'] < r['tarikh_beli']:
+            ralat.append(f'{t}: tarikh_keluar_henti {r["tarikh_keluar_henti"]} sebelum tarikh_beli')
+        elif u is None or abs((h / hb - 1) * 100 - u) > TOL:
+            ralat.append(f'{t}: untung_henti_pct {u} != (harga_keluar_henti/harga_beli-1)*100 = {(h / hb - 1) * 100:.2f}')
+    elif not kosong(r.get('tarikh_keluar_henti')) or not kosong(r.get('harga_keluar_henti')):
+        ralat.append(f'{t}: keluar_henti=False tetapi tarikh_keluar_henti/harga_keluar_henti berisi')
+    jangka = benar(r.get('keluar')) and benar(r.get('keluar_henti'))
     if benar(r.get('tutup_semua')) != jangka:
-        ralat.append(f'{t}: tutup_semua {r.get("tutup_semua")} != keluar & keluar_henti & keluar_10 ({jangka})')
+        ralat.append(f'{t}: tutup_semua {r.get("tutup_semua")} != keluar & keluar_henti ({jangka})')
 
 
 def semak_senarai(p, ralat, amaran):

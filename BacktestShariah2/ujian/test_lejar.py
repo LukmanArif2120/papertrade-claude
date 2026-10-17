@@ -62,13 +62,13 @@ def enjin_trades(m, fr, idx):
 
 
 class UjiLejar(unittest.TestCase):
-    # Kesetaraan enjin diuji dengan TIGA_LORONG=False (posisi tutup apabila lorong 1 keluar, seperti enjin.trades).
-    # Dengan tiga lorong, lorong 1 setiap posisi tetap = enjin, tetapi belian semula disekat sehingga semua lorong keluar.
+    # Kesetaraan enjin diuji dengan DUA_LORONG=False (posisi tutup apabila lorong 1 keluar, seperti enjin.trades).
+    # Dengan dua lorong, lorong 1 setiap posisi tetap = enjin, tetapi belian semula disekat sehingga semua lorong keluar.
     def setUp(self):
-        self._tiga = lejar.TIGA_LORONG; lejar.TIGA_LORONG = False
+        self._dua = lejar.DUA_LORONG; lejar.DUA_LORONG = False
 
     def tearDown(self):
-        lejar.TIGA_LORONG = self._tiga
+        lejar.DUA_LORONG = self._dua
 
     def test_sama_dengan_enjin(self):
         m = modul('M9001'); fr, idx = data()
@@ -144,22 +144,22 @@ class UjiLejar(unittest.TestCase):
                 lejar.STOR, lejar.LEJAR = lama; os.environ.pop('LEJAR_UNIV', None)
 
 
-class UjiTigaLorong(unittest.TestCase):
+class UjiDuaLorong(unittest.TestCase):
     def setUp(self):
-        self._tiga = lejar.TIGA_LORONG; lejar.TIGA_LORONG = True
+        self._dua = lejar.DUA_LORONG; lejar.DUA_LORONG = True
 
     def tearDown(self):
-        lejar.TIGA_LORONG = self._tiga
+        lejar.DUA_LORONG = self._dua
 
     def test_lorong1_sama_enjin_dan_belian_semula_disekat(self):
         m = modul('M9004'); fr, idx = data(benih=5)
         T, W, tutup, langkau = jalan_lejar('M9004', fr, idx)
         semua = tutup + T
         self.assertGreater(len(semua), 5); self.assertGreater(len(tutup), 1)
-        # setiap posisi tutup: ketiga-tiga lorong keluar, tarikh lorong >= tarikh beli
+        # setiap posisi tutup: kedua-dua lorong keluar, tarikh lorong >= tarikh beli
         for r in tutup:
             self.assertTrue(r['tutup_semua'])
-            for c in ('tarikh_keluar', 'tarikh_keluar_henti', 'tarikh_keluar_10'):
+            for c in ('tarikh_keluar', 'tarikh_keluar_henti'):
                 self.assertGreaterEqual(r[c], r['tarikh_beli'])
         # tiada dua posisi kaedah+saham bertindih: belian baharu hanya selepas tarikh tutup sepenuhnya posisi sebelumnya
         by = {}

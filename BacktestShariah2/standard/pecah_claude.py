@@ -14,7 +14,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PT = os.path.join(os.path.dirname(HERE), 'papertrade')
 HAD_DB = 262144          # had keras dokumen db
 TUMBUH = 140             # bait tambahan bagi setiap posisi terbuka apabila keluar (diukur 113–128; dibundar ke atas)
-TUMBUH_LORONG = 150      # bait tambahan apabila lorong 2 (henti) atau 3 (10%) keluar (keluar_tiga.py; anggaran 125–146)
+TUMBUH_LORONG = 150      # bait tambahan apabila lorong 2 (pegang selagi naik) keluar (keluar_lorong.py; anggaran 125–146)
 META = {'claude': 12000}  # meta dokumen (slot, batal, nota_slot) dalam papertrade/claude
 META_LAIN = 1000
 
@@ -56,7 +56,7 @@ def tumbuh(hdr, r):
         return 0
     n = TUMBUH if terbuka(hdr, r) else 0
     if 'tutup_semua' in d:
-        n += sum(TUMBUH_LORONG for c in ('keluar_henti', 'keluar_10') if str(d.get(c, '')).strip().lower() != 'true')
+        n += TUMBUH_LORONG if str(d.get('keluar_henti', '')).strip().lower() != 'true' else 0
     return n
 
 
