@@ -78,3 +78,15 @@ Dashboard Prestasi memaparkan prestasi setiap gred; sesuatu gred hanya dinilai s
 - SEMUA isyarat setiap kaedah dibeli pada buka rasmi esok dan dikeluarkan mengikut peraturan kaedah itu (enjin v1.2), tanpa had 10 sekaedah dan tanpa keutamaan 431. Harga: stor repo (yfinance), semakan silang sampel Moomoo oleh rutin 6:02.
 - Dijalankan oleh GitHub Actions `.github/workflows/lejar.yml` (06:17 UTC Sel–Sab, sandaran 10:17; sesi ditangguh jika data yfinance belum muktamad), tanpa LLM dan tanpa Moomoo; larian terlepas ditampung. Butiran: `lejar/README.md`, kod `standard/lejar.py`.
 - Fasa 1 (2 minggu): berjalan selari; Papertrade C dan tiga rutin tidak berubah (kecuali sumber stor harga, §6). Rutin tidak menulis ke `lejar/`. Peralihan (rutin 9:35 NY dibersarakan, dsb.) hanya selepas pengguna meluluskan berdasarkan perbandingan.
+
+## 10. Peralihan ke GitHub Actions (keputusan pengguna 17 Okt 2026; mod selari 3 hari dagangan)
+- Kerja harian tanpa LLM: `standard/harian_c.py` (kemas kini posisi, imbas 134 kaedah, gred, beli 9:35 NY) dijalankan oleh
+  `.github/workflows/harian.yml` (05:07 UTC Sel–Sab + sandaran), `beli.yml` (9:40 NY + sandaran) dan `petang.yml` (gred P).
+  Peraturan sama dengan §3–§8 (ulang tayang 16–17 Okt: sama tepat dengan rutin Claude kecuali beza data; `jadual/PERALIHAN.md`).
+- Harga: yfinance ditarik oleh `harian.yml` sendiri (05:07 UTC); sesi ditangguh jika data belum muktamad (pengawal sama dengan `lejar.py`: tarikan < 00:20 UTC selepas sesi atau liputan bar < 99%).
+  Harga beli 9:35 NY = buka sementara yfinance, dibetulkan kepada buka bar harian muktamad oleh larian harian seterusnya (§5.2).
+- Calon watchlist tanpa jarak pencetus boleh diukur (`jarak_pct` kosong) tidak dimasukkan (% hampir = 100 − jarak), sama seperti
+  watchlist rutin Claude.
+- `BacktestShariah2/MOD_ACTIONS` = `bayang`: Actions menulis ke `BacktestShariah2/bayang/` sahaja dan rutin Claude kekal rasmi (§2);
+  `rasmi`: Actions menulis ke `papertrade/`, rutin Claude dimatikan, dashboard ditolak oleh `jadual/tolak_db.md` dan data
+  Moomoo/SST dikumpul mingguan (`jadual/mingguan.md`).

@@ -619,14 +619,15 @@ def earnings_nasdaq(e, hari_ini):
     return out, next((x for x in (lalu, seter) if x and x >= hari_ini), None)
 
 
-def pemangkin_yahoo(d, hari_ini, nama=None, tickers=None, institusi=None, nas=None):
+def pemangkin_yahoo(d, hari_ini, nama=None, tickers=None, institusi=None, nas=None, sejak=None):
     """yahoo.json -> ({ticker: entri format kumpul_pemangkin, sumber_pemangkin 'yahoo'}, {'ralat': [...], 'lama': [...]}).
     Hanya fail bertarikh hari_ini (MYT) dan entri yang diambil selepas 6:00 petang MYT hari itu (berita pra-pasaran
-    New York sesi imbasan); ticker beralat atau lama tidak dimasukkan (kumpul melalui Moomoo atau '–')."""
+    New York sesi imbasan); ticker beralat atau lama tidak dimasukkan (kumpul melalui Moomoo atau '–').
+    sejak (saat UTC): sempadan lain bagi saluran Actions (standard/harian_c.py: selepas sesi isyarat tutup)."""
     out, buang = {}, {'ralat': [], 'lama': []}
     if not isinstance(d, dict) or str(d.get('tarikh')) != hari_ini.isoformat():
         return out, buang
-    sempadan = datetime(hari_ini.year, hari_ini.month, hari_ini.day, 10, tzinfo=timezone.utc).timestamp()
+    sempadan = sejak if sejak is not None else datetime(hari_ini.year, hari_ini.month, hari_ini.day, 10, tzinfo=timezone.utc).timestamp()
     for t, y in (d.get('saham') or {}).items():
         if tickers is not None and t not in tickers:
             continue
@@ -712,7 +713,8 @@ def kumpul(a):
         if not isinstance(d, dict) or str(d.get('tarikh')) != a.tarikh:
             print(f'AMARAN {a.yahoo} tiada / bukan bertarikh {a.tarikh}: data Yahoo tidak dipakai')
             d = {}
-        yh, yh_buang = pemangkin_yahoo(d, hari_ini, nama, semua if a.csv else None, ins, nas)
+        sejak = datetime.fromisoformat(a.sejak.replace('Z', '+00:00')).timestamp() if getattr(a, 'sejak', None) else None
+        yh, yh_buang = pemangkin_yahoo(d, hari_ini, nama, semua if a.csv else None, ins, nas, sejak)
         for t, e in yh.items():
             l = lama.get(t) or {}
             # data Moomoo (dikumpul khusus bagi saham itu) hari ini diutamakan; Yahoo hanya mengisi yang belum ada
@@ -836,6 +838,7 @@ def main(argv=None):
     k.add_argument('--institusi', help='JSON {ticker: "kumpul"|"agih"} daripada SST institutional_flow')
     k.add_argument('--keluar', required=True, help='papertrade/pemangkin.json (digabung dengan entri sedia ada)')
     k.add_argument('--tarikh', required=True)
+    k.add_argument('--sejak', help='ISO UTC: entri Yahoo yang diambil selepas masa ini dipakai (lalai 10:00 UTC --tarikh)')
     e = sp.add_parser('earnings', help='ringkas fail Moomoo earnings_price_history -> JSON')
     e.add_argument('fail'); e.add_argument('--tarikh', required=True)
     a = ap.parse_args(argv)

@@ -20,3 +20,11 @@ Sesi Sonnet `session_01686xK3etzJNAReGbsM8sAw` ("Pengawas jadual papertrade") me
 | `trig_018eaPB3VHoodMscT1s8BiLs` | 6:25 dan 7:25 pagi MYT, Sel–Sab | Kemas kini 6:02 pagi |
 
 Kerana rutin boleh ditembak dua kali, setiap prosedur bermula dengan "Semak pendua".
+
+## Peralihan ke GitHub Actions (sejak 17 Okt 2026; mod selari 3 hari dagangan)
+Keputusan pengguna 17 Okt 2026 (jimat token): kerja harian dipindah ke GitHub Actions tanpa LLM — `.github/workflows/harian.yml`
+(kemas kini + imbas + gred, 05:07 UTC Sel–Sab), `beli.yml` (9:40 NY), `petang.yml` (gred P sebelum buka); skrip `standard/harian_c.py`.
+Mod dalam `BacktestShariah2/MOD_ACTIONS`: `bayang` (sekarang) = Actions menulis ke `BacktestShariah2/bayang/` dan membanding setiap
+hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`); tiga rutin di atas KEKAL RASMI sehingga peralihan.
+Selepas peralihan (`PERALIHAN.md`): rutin di atas dan pengawas dimatikan; sesi Claude hanya `tolak_db.md` (Isn–Sab 10:20 NY) dan
+`mingguan.md` (Ahad).

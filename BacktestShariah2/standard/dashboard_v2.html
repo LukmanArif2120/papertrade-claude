@@ -51,8 +51,17 @@ td.ctr,th[data-tip="hari_watch"],th[data-tip="hari_pt"]{text-align:center}
 td.grd .vv.nm1{white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:110px;overflow-wrap:normal}
 a.berita{color:var(--accent);text-decoration:none;margin-top:2px}a.berita:hover{text-decoration:underline}
 .g-A{background:var(--pos-soft);color:var(--pos)}.g-B{background:var(--accent-soft);color:var(--accent)}.g-C{background:var(--sunk);color:var(--fg-2);box-shadow:inset 0 0 0 1px var(--line)}.g-D{background:var(--warn-soft);color:var(--warn)}.g-E{background:var(--neg-soft);color:var(--neg)}.g-x{background:var(--sunk);color:var(--muted)}
-#dataTxt b{color:var(--fg-2)}
-#dataTxt b.neg{color:var(--neg)}
+/* kemas kini terakhir (atas kanan) */
+.titlerow{flex-wrap:nowrap;align-items:flex-start}
+.brand{flex:1 1 auto;padding-top:2px}
+.kanan{display:flex;flex-direction:column;align-items:flex-end;gap:3px;text-align:right;flex:none;max-width:62%}
+.kini{display:flex;flex-direction:column;align-items:flex-end;line-height:1.25;cursor:help}
+.kini .kl{font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.kini b{font-size:.92rem;font-weight:700;color:var(--fg);font-variant-numeric:tabular-nums;white-space:nowrap}
+.kini b.neg{color:var(--neg)}
+.kini .kd{font-size:.74rem;color:var(--muted)}
+.kanan .live{justify-content:flex-end}
+@media (max-width:520px){h1{font-size:1.02rem}#liveTxt{display:none}.kini b{font-size:.84rem}}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
 .dot.on{background:var(--pos);box-shadow:0 0 0 3px var(--pos-soft)}
 nav.tabs{display:flex;gap:2px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
@@ -240,7 +249,10 @@ td .vv{white-space:normal}
   <header class="top">
     <div class="titlerow">
       <div class="brand"><span class="mk" aria-hidden="true"></span><h1>Papan Backtest Shariah</h1></div>
-      <span class="live"><span class="dot" id="dot"></span><span id="liveTxt">Menyambung…</span><span id="dataTxt" data-tip="data_kini"></span></span>
+      <div class="kanan">
+        <div class="kini" data-tip="data_kini"><span class="kl">Kemas kini terakhir</span><b id="kiniMasa">–</b><span class="kd" id="kiniData"></span></div>
+        <span class="live"><span class="dot" id="dot"></span><span id="liveTxt">Menyambung…</span></span>
+      </div>
     </div>
     <nav class="tabs" role="tablist" id="mainTabs">
       <button role="tab" data-tab="backtest" aria-selected="true">Backtest</button>
@@ -354,12 +366,17 @@ $('#mainTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.tab
 $('#subSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.sub[S.tab]=b.dataset.sub;save();renderNav();renderAll();};
 $('#setSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.set=b.dataset.set;S.f.shown=40;save();renderNav();renderAll();};
 function setLive(on,txt){S.live=on;$('#dot').classList.toggle('on',on);$('#liveTxt').textContent=txt;}
-/* larian 6:02 MYT (Sel–Sab) terkini yang sepatutnya sudah siap (tenggang 45 minit) */
-function jangkaPagi(){const t=new Date(Date.now()+8*3600e3);for(let i=0;i<8;i++){const d=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate()-i,6,47));const w=d.getUTCDay();if(w>=2&&w<=6&&d<=t)return d;}return null;}
-function renderData(){const el=$('#dataTxt');if(!el)return;const h=S.hst;if(!h){el.textContent='';return;}
-  const m=/^(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d)/.exec(h.kemaskini_pagi||'');const kp=m?new Date(Date.UTC(+m[1],m[2]-1,+m[3],+m[4],+m[5])):null;const jk=jangkaPagi();
-  const basi=!kp||(jk&&kp<new Date(jk.getTime()-45*60e3));
-  el.innerHTML=` · data tutup <b>${esc(h.harga_tutup_pada||h.tarikh_data_pagi||'–')}</b> · kemas kini <b class="${basi?'neg':''}">${esc(h.kemaskini_pagi||'–')}</b>${basi?' <span class="pill p-exit">belum dikemas kini</span>':''}`;}
+/* Kemas kini terakhir (harian/status): masa data dashboard terakhir ditolak (dikemaskini; sebelum peralihan:
+   kemaskini_pagi rutin 6:02) dan tarikh tutup sesi AS yang dipakai. Tolakan harian Isn–Sab selepas belian 9:35 NY;
+   merah jika lebih 30 jam (Ahad–Selasa MYT: 74 jam, merentas hujung minggu). */
+function renderData(){const mEl=$('#kiniMasa'),dEl=$('#kiniData');if(!mEl)return;const h=S.hst;
+  if(!h){mEl.textContent='–';mEl.className='';dEl.textContent='';return;}
+  const t=h.dikemaskini||h.kemaskini_pagi||'';const m=/^(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d)/.exec(t);
+  const kp=m?Date.UTC(+m[1],m[2]-1,+m[3],+m[4]-8,+m[5]):null;
+  const hari=new Date(Date.now()+8*3600e3).getUTCDay();const had=(hari<=2?74:30)*3600e3;
+  const basi=!kp||(Date.now()-kp>had);
+  mEl.textContent=t||'–';mEl.className=basi?'neg':'';
+  dEl.innerHTML=`data tutup <b style="font-size:inherit;font-weight:600;color:var(--fg-2)">${esc(h.harga_tutup_pada||h.tarikh_data_pagi||'–')}</b>${basi?' <span class="pill p-exit">belum dikemas kini</span>':''}`;}
 
 /* ================= Backtest · Ringkasan ================= */
 function renderRingkasan(){
@@ -674,7 +691,7 @@ function bindSI(id,st,reset,rows,rr){const a=$('#'+id+'Sk'),b=$('#'+id+'In');if(
 function renderWatch(){
   const el=$('#v-watch');const w=S.watch;
   const all=w&&w.rows?w.rows.filter(r=>(r.pct_dipenuhi??0)>=90&&(r.pct_dipenuhi??0)<=100):[];
-  if(!all.length){el.innerHTML=`<div class="panel empty">${S.live?'Belum ada calon Hampir Signal. Imbasan malam (8:02 malam MYT, Isnin–Jumaat) mengisi senarai ini.':'Memuatkan watchlist…'}</div>`;return;}
+  if(!all.length){el.innerHTML=`<div class="panel empty">${S.live?'Belum ada calon Hampir Signal. Imbasan harian selepas pasaran AS tutup (Isnin–Jumaat) mengisi senarai ini.':'Memuatkan watchlist…'}</div>`;return;}
   const wf=S.wf;let rows=all;
   const kd=[...new Set(all.map(r=>r.kaedah))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
   const kdP=[...new Set(all.filter(r=>okS(r,wf)&&okI(r,wf)).map(r=>r.kaedah))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
@@ -686,7 +703,7 @@ function renderWatch(){
   const topSek=Object.entries(sekCount).sort((a,b)=>b[1]-a[1]).slice(0,3);
   const n99=all.filter(r=>(r.pct_dipenuhi??0)>=99).length;
   el.innerHTML=`
-  <p class="headline">Calon <b>Hampir Signal</b> (90–100%): semua syarat entry selain pencetus sudah dipenuhi pada tutup <b>${esc(w.tarikh_data||'–')}</b>, dan pencetus dalam ≤ 2%. Disemak semula 6:02 pagi dan 8:02 malam; calon yang terkeluar signal dibuang. Jika isyarat lengkap, saham dibeli maya dalam Papertrade C pada buka esok.</p>
+  <p class="headline">Calon <b>Hampir Signal</b> (90–100%): semua syarat entry selain pencetus sudah dipenuhi pada tutup <b>${esc(w.tarikh_data||'–')}</b>, dan pencetus dalam ≤ 2%. Disemak semula setiap hari selepas pasaran AS tutup; calon yang terkeluar signal dibuang. Jika isyarat lengkap, saham dibeli maya dalam Papertrade C pada buka esok.</p>
   <div class="kpis">
     <div class="kpi"><div class="lbl">Calon</div><div class="v">${all.length}</div><div class="s">${new Set(all.map(r=>r.saham)).size} saham unik · ${kd.length} kaedah</div></div>
     <div class="kpi"><div class="lbl" data-tip="pct_dipenuhi">≥ 99% hampir</div><div class="v" style="color:#c4b5fd">${n99}</div><div class="s">Pencetus tinggal ≤ 1% lagi</div></div>
@@ -831,7 +848,7 @@ function renderPtm(){
   el.innerHTML=`
   <p class="headline">Akaun simulasi Moomoo <b>${esc(p.d.akaun||'4135388')}</b> · harga pada <b>${esc(p.d.harga_pada||'–')}</b>. 1 unit setiap saham, maksimum 10 saham setiap kaedah. Saham yang kena isyarat keluar ditanda <b class="neg">merah</b> dan harganya dibekukan; posisi tidak dijual dan slotnya kekal dikira.</p>
   ${p.pratonton?`<div class="strip"><b class="t">Pratonton</b><span>Pemetaan posisi → kaedah daripada sistem harian, log papertrade v1 dan teks order Moomoo. Sektor, hari dipegang dan isyarat keluar dilengkapkan oleh peringkat 2 (01:15 MYT).</span></div>`:
-   `<div class="strip"><b class="t">Sumber</b><span>${p.rows.filter(r=>r.sumber==='harian').length} posisi sistem harian · ${p.rows.filter(r=>r.sumber==='log_v1').length} pegangan warisan v1 · ${p.rows.filter(r=>r.sumber==='luar').length} strategi luar 87 M (tidak dikira dalam slot). Isyarat keluar dinilai ikut peraturan kaedah sehingga tutup terakhir yang lengkap; harga terkini daripada Moomoo.</span></div>`}
+   `<div class="strip"><b class="t">Sumber</b><span>${p.rows.filter(r=>r.sumber==='harian').length} posisi sistem harian · ${p.rows.filter(r=>r.sumber==='log_v1').length} pegangan warisan v1 · ${p.rows.filter(r=>r.sumber==='luar').length} strategi luar 87 M (tidak dikira dalam slot). Isyarat keluar dinilai ikut peraturan kaedah sehingga tutup terakhir yang lengkap; harga terkini = tutup sesi AS terakhir.</span></div>`}
   ${ptKpis(p.rows,'Moomoo')}
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik tajuk lajur untuk susun</span></div>
     ${fb.html}${sortTable({id:'ptm',rows,cols:ptCols(),def:{k:'untung_pct',dir:-1},rcls:rclsPT,limit:fb.st.shown,foot:kakiLagi('ptmMore')})}</div>`;
@@ -912,7 +929,7 @@ function prKpis(rows){const v=rows.map(r=>r.hasil).filter(x=>x!=null);const w=mi
   </div>`;}
 /* prestasi setiap gred: adakah gred A benar-benar lebih untung? */
 function prGred(rows){const ada=rows.filter(adaGred);
-  if(!ada.length)return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">Gred direkod mulai belian 14 Okt 2026</span></div><p class="empty">Belum ada posisi bergred. Imbasan 8:02 malam mengira gred Sektor, Industri, RS, Pemangkin dan QR; belian 9:35 menyalinnya ke setiap posisi.</p></div>`;
+  if(!ada.length)return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">Gred direkod mulai belian 14 Okt 2026</span></div><p class="empty">Belum ada posisi bergred. Imbasan harian mengira gred Sektor, Industri, RS, Pemangkin dan QR; belian 9:35 NY menyalinnya ke setiap posisi.</p></div>`;
   const out=[];GDIM.forEach(([k,,nama])=>{['A','B','C','D','E'].forEach(g=>{const a=ada.filter(r=>r[k]===g);if(!a.length)return;const v=a.map(r=>r.hasil).filter(x=>x!=null);const t=a.filter(r=>r.keluar);const vt=t.map(r=>r.untung_akhir_pct).filter(x=>x!=null);
     out.push({dim:nama,g,n:a.length,tutup:t.length,win:v.length?v.filter(x=>x>0).length/v.length*100:null,avg:avgOf(v),avgT:avgOf(vt),cukup:t.length>=PR_MIN_TUTUP});});});
   return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">${ada.length} posisi bergred · gred pada hari isyarat · dinilai selepas ≥ ${PR_MIN_TUTUP} dagangan tertutup setiap gred</span></div>
@@ -1194,7 +1211,7 @@ const TIPS={
   industri:{t:'Industri',d:'Industri saham dalam sektornya.',e:''},
   harga_beli:{t:'Harga beli',d:'Harga isian purata order beli.',e:''},
   unit:{t:'Unit',d:'Bilangan saham dipegang. Sistem v2 membeli 1 unit; unit lebih besar ialah pegangan lama sebelum 8 Okt.',e:''},
-  harga_terkini_pt:{t:'Harga terkini',d:'Harga terkini daripada Moomoo (tutup terakhir, atau intraday jika dikemas kini semasa pasaran dibuka). Selepas isyarat keluar, harga dibekukan pada harga keluar dan tidak dikemas kini lagi.',e:''},
+  harga_terkini_pt:{t:'Harga terkini',d:'Harga tutup sesi AS terakhir (bar harian muktamad; harga beli hari ini = harga buka sementara sehingga disahkan selepas tutup). Selepas isyarat keluar, harga dibekukan pada harga keluar dan tidak dikemas kini lagi.',e:''},
   harga_terkini:{t:'Harga terkini',d:'Harga tutup terkini dalam data imbasan.',e:''},
   untung_pct:{t:'Untung %',d:'Harga terkini ÷ harga beli − 1. Bagi posisi yang sudah keluar, ini untung pada harga keluar.',e:'+5.0% = RM100 kini bernilai RM105.'},
   hari_pt:{t:'Hari dipegang',d:'Bilangan hari dagangan sejak tarikh beli (hingga tarikh keluar jika sudah keluar).',e:''},
@@ -1247,7 +1264,7 @@ const TIPS={
   g_q:{t:'Q · Laporan suku (QR)',d:'Bilangan hari dagangan sebelum laporan suku (earnings) seterusnya. Harga boleh melonjak atau jatuh mendadak pada hari laporan, dan pegangan biasa ±20 hari. Selamat: lebih 15 hari atau tiada laporan dalam 30 hari (A, B). Berhati-hati: 11–15 hari (C). Elak: 10 hari atau kurang (D, E). Label ini maklumat sahaja, bukan penapis belian.',e:'E · 4 hari lagi · 20 Okt · Elak = laporan jatuh dalam tempoh pegangan.'},
   gred:{t:'Gred keseluruhan',d:'Purata mata lima dimensi pada hari isyarat (A=4, B=3, C=2, D=1, E=0): Sektor, Industri, RS, Pemangkin dan QR. Dimensi tanpa data tidak dikira. Direkod untuk diuji, belum terbukti meramal dan bukan penapis belian. Panel Prestasi ikut gred menilai setiap gred selepas ≥ 20 dagangan tertutup.',e:'Sektor B, Industri A, RS A, Pemangkin C, QR A = purata 3.4 → gred B.'},
   usd_sama:{t:'Nilai sama USD1,000',d:'Untung bersih jika setiap posisi bernilai USD1,000 (sama berat), tanpa mengira harga saham. Rekod tetap 1 unit; ini cara kiraan sahaja supaya saham mahal tidak mendominasi.',e:'3 posisi +10%, −5%, +2% = +USD70 atas modal USD3,000.'},
-  data_kini:{t:'Kesegaran data',d:'Tarikh tutup sesi AS yang dipakai dan masa kemas kini 6:02 pagi terakhir (harian/status). Merah jika larian 6:02 pagi terkini belum berjaya.',e:''},
+  data_kini:{t:'Kemas kini terakhir',d:'Masa data dashboard terakhir dikemas kini (harian/status) dan tarikh tutup sesi AS yang dipakai. Data dikira oleh GitHub Actions selepas pasaran AS tutup dan ditolak ke dashboard setiap hari (Isnin–Sabtu, selepas belian 9:35 NY). Merah jika lebih 30 jam tanpa kemas kini (74 jam merentas hujung minggu).',e:'"2026-10-19 22:25 MYT · data tutup 2026-10-16" = data hingga tutup Jumaat 16 Okt, ditolak Isnin malam.'},
   kat_asal:{t:'Asal kaedah',d:'Pencipta (orang atau pihak yang memperkenalkan teknik) dan sumbernya: buku, artikel, laman atau saluran YouTube. "Tidak dinyatakan" = sumber tidak menamakan pencipta; tidak diteka.',e:'Mark Minervini · Trade Like a Stock Market Wizard (2013).'},
   kat_masuk:{t:'Masuk (entry)',d:'Syarat isyarat beli varian yang sedang digunakan dalam kod. Isyarat dikira pada harga tutup; belian pada harga buka hari dagangan berikutnya.',e:''},
   kat_keluar:{t:'Keluar (exit)',d:'Sasaran untung atau isyarat jual kaedah (selain henti rugi). Isyarat jual pada tutup dilaksanakan pada harga buka esok; sasaran dijual pada paras sasaran.',e:''},

@@ -1,0 +1,72 @@
+# Segar semula gred P (pemangkin: berita/analisis/orang dalam Yahoo + kalendar earnings Nasdaq) bagi senarai_beli dan
+# watchlist sebelum buka AS, supaya gred yang disalin ke posisi pada 9:35 NY memakai berita terkini (sama seperti imbasan
+# malam Claude ~8 malam MYT). Tanpa LLM. Masa (UTC): 11:47 (7:47 malam MYT), sandaran 12:17. Dilangkau selepas 9:20 NY
+# (elak berita selepas buka) atau jika senarai_beli bukan untuk sesi hari ini.
+name: Gred petang
+
+on:
+  schedule:
+    - cron: '47 11 * * 1-5'
+    - cron: '17 12 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: papertrade
+  cancel-in-progress: false
+
+jobs:
+  petang:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Masa New York
+        id: masa
+        run: |
+          JAM=$(TZ=America/New_York date +%H%M)
+          if [ "$((10#$JAM))" -ge 920 ] && [ "$GITHUB_EVENT_NAME" = "schedule" ]; then echo "jalan=tidak" >> "$GITHUB_OUTPUT"; echo "terlalu lewat ($JAM NY)"; else echo "jalan=ya" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/checkout@v4
+        if: steps.masa.outputs.jalan == 'ya'
+      - uses: actions/setup-python@v5
+        if: steps.masa.outputs.jalan == 'ya'
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        if: steps.masa.outputs.jalan == 'ya'
+        run: pip install -q pandas numpy requests yfinance exchange_calendars
+      - name: Gred
+        id: gred
+        if: steps.masa.outputs.jalan == 'ya'
+        run: |
+          MOD=$(tr -d '[:space:]' < BacktestShariah2/MOD_ACTIONS 2>/dev/null || echo bayang)
+          if [ "$MOD" = "rasmi" ]; then F=BacktestShariah2/papertrade; P=BacktestShariah2/data/pemangkin
+          else MOD=bayang; F=BacktestShariah2/bayang/papertrade; P=BacktestShariah2/bayang/pemangkin; fi
+          [ -f "$F/senarai_beli.csv" ] || { echo "tiada senarai_beli"; exit 0; }
+          SEMASA=$(python3 - <<EOF
+          import csv, exchange_calendars as xc, pandas as pd
+          c = xc.get_calendar('XNYS'); d = pd.Timestamp.now(tz='America/New_York').normalize().tz_localize(None)
+          rows = list(csv.DictReader(open('$F/senarai_beli.csv')))
+          print('ya' if c.is_session(d) and rows and rows[0]['tarikh_isyarat'] == str(c.previous_session(d).date()) else 'tidak')
+          EOF
+          )
+          [ "$SEMASA" = "ya" ] || { echo "senarai_beli bukan untuk sesi hari ini"; exit 0; }
+          mkdir -p "$P"
+          python3 BacktestShariah2/standard/harian_c.py gred --folder "$F" --pemangkin "$P"
+          python3 BacktestShariah2/standard/sahkan.py --folder "$F"
+          echo "ubah=ya" >> "$GITHUB_OUTPUT"; echo "mod=$MOD" >> "$GITHUB_OUTPUT"; echo "folder=$F" >> "$GITHUB_OUTPUT"; echo "pemangkin=$P" >> "$GITHUB_OUTPUT"
+      - name: Commit dan push
+        if: steps.gred.outputs.ubah == 'ya'
+        run: |
+          git config user.name "gred[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${{ steps.gred.outputs.folder }}" "${{ steps.gred.outputs.pemangkin }}"
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Gred petang Actions (${{ steps.gred.outputs.mod }}): $(date -u +%Y-%m-%d)"
+          for n in 1 2 3 4; do
+            if git pull -q --rebase -X theirs origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 20))
+          done
+          exit 1

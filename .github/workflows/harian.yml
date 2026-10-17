@@ -1,0 +1,122 @@
+# Harian Actions (selepas tutup AS): harga yfinance muktamad -> stor harga repo -> Papertrade C
+# (standard/harian_c.py: kemas kini posisi + imbas 134 kaedah + gred). Menggantikan rutin Claude 6:02 pagi dan imbas malam
+# (keputusan pengguna 17 Okt 2026). Tanpa LLM, tanpa Moomoo, tiada order.
+# Masa (UTC): 05:07 Sel–Sab = 1:07 petang MYT. Data Yahoo yang ditarik sejurus selepas tutup boleh memberi harga buka
+# sementara (URBN 16 Okt: 88.56 pada 23:51 UTC, 87.64 = Moomoo pada 04:43 UTC), jadi tunggu data muktamad.
+# Sandaran 07:07, 09:07, 11:07 (jadual GitHub boleh lewat 2–4 jam atau hilang). Tenggat: senarai_beli siap sebelum
+# buka AS 13:30 UTC. Setiap langkah idempoten (larian berulang bagi sesi sama dilangkau).
+# Mod (BacktestShariah2/MOD_ACTIONS): "bayang" = Papertrade C ditulis ke BacktestShariah2/bayang/ sahaja (mod selari,
+# rutin Claude kekal rasmi) + banding harian; "rasmi" = ditulis ke BacktestShariah2/papertrade/.
+name: Harian Actions
+
+on:
+  schedule:
+    - cron: '7 5 * * 2-6'
+    - cron: '7 7 * * 2-6'
+    - cron: '7 9 * * 2-6'
+    - cron: '7 11 * * 2-6'
+  workflow_dispatch:
+    inputs:
+      paksa:
+        description: 'Proses semula sesi terakhir walaupun sudah diproses (ya/tidak)'
+        required: false
+        default: 'tidak'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: papertrade
+  cancel-in-progress: false
+
+jobs:
+  harian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy yfinance exchange_calendars requests
+      - name: Mod
+        id: mod
+        run: |
+          MOD=$(tr -d '[:space:]' < BacktestShariah2/MOD_ACTIONS 2>/dev/null || echo bayang)
+          if [ "$MOD" = "rasmi" ]; then
+            echo "folder=BacktestShariah2/papertrade" >> "$GITHUB_OUTPUT"
+            echo "isyarat=BacktestShariah2/data/isyarat" >> "$GITHUB_OUTPUT"
+            echo "pemangkin=BacktestShariah2/data/pemangkin" >> "$GITHUB_OUTPUT"
+            echo "log=BacktestShariah2/standard/binaan_v2_log_tambahan.md" >> "$GITHUB_OUTPUT"
+          else
+            MOD=bayang
+            echo "folder=BacktestShariah2/bayang/papertrade" >> "$GITHUB_OUTPUT"
+            echo "isyarat=BacktestShariah2/bayang/isyarat" >> "$GITHUB_OUTPUT"
+            echo "pemangkin=BacktestShariah2/bayang/pemangkin" >> "$GITHUB_OUTPUT"
+            echo "log=BacktestShariah2/bayang/LOG.md" >> "$GITHUB_OUTPUT"
+          fi
+          echo "mod=$MOD" >> "$GITHUB_OUTPUT"; echo "Mod: $MOD"
+      - name: Harga yfinance (10 sesi terakhir; sejarah saham baharu)
+        run: |
+          python3 BacktestShariah2/standard/harga_yf.py terkini
+          if [ -f BacktestShariah2/data/harga/perlu_sejarah.txt ]; then python3 BacktestShariah2/standard/harga_yf.py sejarah; fi
+      - name: Stor harga repo (Lejar Penuh kekal dalam lejar.yml 06:17 UTC)
+        run: python3 BacktestShariah2/standard/lejar.py stor
+      - name: Papertrade C — kemas kini posisi + imbas 134 kaedah
+        id: malam
+        continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
+        env:
+          PAKSA: ${{ github.event.inputs.paksa }}
+        run: |
+          F="${{ steps.mod.outputs.folder }}"
+          if [ ! -d "$F" ]; then mkdir -p "$F" && cp BacktestShariah2/papertrade/*.csv BacktestShariah2/papertrade/*.json "$F"/ && rm -f "$F/status_harian.json"; fi
+          X=""; [ "$PAKSA" = "ya" ] && X="--paksa"
+          SEBELUM=$(python3 -c "import json,os;p='$F/status_harian.json';print(json.load(open(p)).get('malam',{}).get('sesi','') if os.path.exists(p) else '')")
+          python3 BacktestShariah2/standard/harian_c.py malam --folder "$F" --isyarat "${{ steps.mod.outputs.isyarat }}" --proses 4 $X
+          SELEPAS=$(python3 -c "import json;print(json.load(open('$F/status_harian.json'))['malam']['sesi'])")
+          if [ "$SEBELUM" != "$SELEPAS" ] || [ -n "$X" ]; then echo "baru=ya" >> "$GITHUB_OUTPUT"; else echo "baru=tidak" >> "$GITHUB_OUTPUT"; fi
+          echo "sesi=$SELEPAS" >> "$GITHUB_OUTPUT"
+      - name: Gred senarai beli + watchlist (S, I, R, Q, P)
+        continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
+        if: steps.malam.outputs.baru == 'ya'
+        run: |
+          mkdir -p "${{ steps.mod.outputs.pemangkin }}"
+          python3 BacktestShariah2/standard/harian_c.py gred --folder "${{ steps.mod.outputs.folder }}" --pemangkin "${{ steps.mod.outputs.pemangkin }}" \
+            || echo "::warning::gred gagal (senarai beli tetap sah; gred kosong)"
+      - name: Semak data (sahkan.py --betulkan, pecah_claude.py, saiz db)
+        continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
+        if: steps.malam.outputs.baru == 'ya'
+        run: |
+          F="${{ steps.mod.outputs.folder }}"
+          python3 BacktestShariah2/standard/pecah_claude.py --pecah --folder "$F"
+          python3 BacktestShariah2/standard/sahkan.py --betulkan --folder "$F"
+          python3 BacktestShariah2/standard/jana_db.py --folder "$F" --keluar /tmp/db_semak > /dev/null
+          python3 BacktestShariah2/standard/harian_c.py log --folder "$F" --peringkat malam --log "${{ steps.mod.outputs.log }}"
+      - name: Banding mod selari (Actions lawan rutin Claude, tarikh MYT semalam)
+        if: steps.mod.outputs.mod == 'bayang'
+        run: |
+          D=$(TZ=Asia/Kuala_Lumpur date -d yesterday +%F)
+          if [ ! -f "BacktestShariah2/bayang/BANDING_$D.md" ]; then
+            python3 BacktestShariah2/standard/banding_bayang.py hari --tarikh "$D" || echo "::warning::banding $D gagal"
+          fi
+      - name: Ujian unit
+        continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
+        run: pip install -q -r requirements.txt && python3 -m unittest discover -s BacktestShariah2/ujian
+      - name: Commit dan push
+        run: |
+          git config user.name "harian[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/harga BacktestShariah2/bayang 2>/dev/null || true
+          git add "${{ steps.mod.outputs.folder }}" "${{ steps.mod.outputs.isyarat }}" "${{ steps.mod.outputs.pemangkin }}" "${{ steps.mod.outputs.log }}" 2>/dev/null || true
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Harian Actions (${{ steps.mod.outputs.mod }}): sesi ${{ steps.malam.outputs.sesi }}"
+          for n in 1 2 3 4; do
+            if git pull -q --rebase -X theirs origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 20))
+          done
+          echo "Push gagal; larian sandaran seterusnya memproses semula daripada keadaan repo." >&2
+          exit 1

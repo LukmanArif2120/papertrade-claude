@@ -1,0 +1,76 @@
+# Beli maya 9:35 NY (Papertrade C) tanpa LLM: harga buka yfinance bagi calon senarai_beli.csv, peraturan langkau
+# tugasan_v3 §4, rekod 1 unit ke claude_N.csv (standard/harian_c.py beli). Menggantikan rutin Claude 9:35 NY.
+# TIADA order Moomoo (simulasi atau sebenar); hanya baca harga awam.
+# Masa (UTC): 13:40 (9:40 NY waktu musim panas) dan 14:40 (9:40 NY waktu piawai / sandaran); sandaran 16:25 dan 19:25.
+# Harga buka satu hari tidak berubah, jadi larian lewat masih merekod harga yang sama; harga sementara disahkan dengan
+# bar harian muktamad oleh Harian Actions keesokannya (tugasan_v3 §5.2).
+name: Beli 9:35 NY
+
+on:
+  schedule:
+    - cron: '40 13 * * 1-5'
+    - cron: '40 14 * * 1-5'
+    - cron: '25 16 * * 1-5'
+    - cron: '25 19 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: papertrade
+  cancel-in-progress: false
+
+jobs:
+  beli:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Masa New York
+        id: masa
+        run: |
+          JAM=$(TZ=America/New_York date +%H%M)
+          echo "NY $JAM"
+          if [ "$((10#$JAM))" -lt 931 ] || [ "$((10#$JAM))" -ge 1700 ]; then echo "jalan=tidak" >> "$GITHUB_OUTPUT"; else echo "jalan=ya" >> "$GITHUB_OUTPUT"; fi
+          if [ "$((10#$JAM))" -ge 1500 ]; then echo "akhir=--akhir" >> "$GITHUB_OUTPUT"; else echo "akhir=" >> "$GITHUB_OUTPUT"; fi
+      - uses: actions/checkout@v4
+        if: steps.masa.outputs.jalan == 'ya'
+      - uses: actions/setup-python@v5
+        if: steps.masa.outputs.jalan == 'ya'
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        if: steps.masa.outputs.jalan == 'ya'
+        run: pip install -q pandas numpy yfinance exchange_calendars
+      - name: Beli maya
+        id: beli
+        if: steps.masa.outputs.jalan == 'ya'
+        run: |
+          MOD=$(tr -d '[:space:]' < BacktestShariah2/MOD_ACTIONS 2>/dev/null || echo bayang)
+          if [ "$MOD" = "rasmi" ]; then F=BacktestShariah2/papertrade; L=BacktestShariah2/standard/binaan_v2_log_tambahan.md
+          else MOD=bayang; F=BacktestShariah2/bayang/papertrade; L=BacktestShariah2/bayang/LOG.md; fi
+          if [ ! -f "$F/senarai_beli.csv" ]; then echo "tiada $F/senarai_beli.csv"; exit 0; fi
+          SEBELUM=$(python3 -c "import json,os;p='$F/status_harian.json';print(json.load(open(p)).get('beli',{}).get('tarikh','') if os.path.exists(p) else '')")
+          python3 BacktestShariah2/standard/harian_c.py beli --folder "$F" ${{ steps.masa.outputs.akhir }}
+          SELEPAS=$(python3 -c "import json,os;p='$F/status_harian.json';print(json.load(open(p)).get('beli',{}).get('tarikh','') if os.path.exists(p) else '')")
+          if [ "$SEBELUM" != "$SELEPAS" ]; then
+            python3 BacktestShariah2/standard/pecah_claude.py --pecah --folder "$F"
+            python3 BacktestShariah2/standard/sahkan.py --betulkan --folder "$F"
+            python3 BacktestShariah2/standard/harian_c.py log --folder "$F" --peringkat beli --log "$L"
+            echo "ubah=ya" >> "$GITHUB_OUTPUT"
+          fi
+          echo "mod=$MOD" >> "$GITHUB_OUTPUT"; echo "folder=$F" >> "$GITHUB_OUTPUT"; echo "log=$L" >> "$GITHUB_OUTPUT"; echo "tarikh=$SELEPAS" >> "$GITHUB_OUTPUT"
+      - name: Commit dan push
+        if: steps.beli.outputs.ubah == 'ya'
+        run: |
+          git config user.name "beli[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "${{ steps.beli.outputs.folder }}" "${{ steps.beli.outputs.log }}"
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Beli Actions (${{ steps.beli.outputs.mod }}): ${{ steps.beli.outputs.tarikh }}"
+          for n in 1 2 3 4; do
+            if git pull -q --rebase -X theirs origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 20))
+          done
+          exit 1

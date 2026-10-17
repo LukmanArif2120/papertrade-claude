@@ -323,3 +323,13 @@
 - Pengawal baharu `lejar.py jalan`: sesi ditangguh jika < 99% saham layak ada bar sesi itu, atau tarikan yfinance sesi itu < 00:20 UTC selepas sesi (`--paksa` untuk mengatasi). Jadual dianjak ke 06:17 UTC (sandaran 10:17). Ujian `UjiLiputan`.
 - Moomoo menang (§6): `lejar.py stor` menampal buka rasmi kline Moomoo yang disahkan 6:02 (claude*.csv) ke stor jika beza > 0.5%, bagi sesi yang belum diproses sahaja (`data/harga/stor/buka_moomoo.csv`, dipakai semula setiap larian).
 - Tiada order. Tiada wang sebenar.
+
+## 17 Okt 2026 — Peralihan ke GitHub Actions (keputusan pengguna: jimat token; mod selari 3 hari dagangan)
+- Ukuran token rutin (16–17 Okt): 6:02 ~15.2J, imbas ~12.9J, beli ~5.7J, pengawas ~3.6J; jumlah ~37J sehari. Punca utama: sesi rutin kekal (konteks 200–545K dibaca semula setiap panggilan alat) dan kod ad hoc setiap larian.
+- `standard/harian_c.py` (malam / gred / beli / log): logik rutin dalam skrip tetap; `standard/jana_db.py` (dokumen db + batch + pengawas); `standard/banding_bayang.py` (ulang tayang setiap rutin Claude atas keadaan repo sebelum commitnya dan banding). Ujian `ujian/test_harian_c.py`.
+- Ulang tayang: kemas kini 17 Okt 2,696/2,696 sama (133 keluar, 60 menunggu, 553 harga dibetulkan, ANF M153 tidak dibeli); imbas 16 Okt 847/847 sama dengan isyarat yang sama (dipegang 184, had 2,473, mingguan 97); isyarat 3,600/3,601 sama (92 tambahan daripada 15 saham tanpa sejarah pada larian Claude); beli 16 Okt 819/820 sama, harga 819/819 = buka rasmi.
+- Peraturan tersirat rutin Claude yang kini dikodkan: had 10 sekaedah dikira atas semua isyarat tidak dipegang (431 dahulu, kemudian rank); calon watchlist di luar 10 teratas ditambah di luar had; calon watchlist tanpa jarak pencetus tidak dimasukkan.
+- Harga: yfinance yang ditarik sejurus selepas tutup memberi harga buka sementara (URBN 16 Okt 88.56 pada 23:51 UTC; 87.64 = Moomoo pada 04:43 UTC; INTU, CTSH sama). `harian.yml` (05:07 UTC) menarik harga sendiri dan `harian_c.py malam` memakai pengawal data muktamad yang sama dengan `lejar.py` (sesi sebelumnya ditangguh jika tarikan < 00:20 UTC selepas sesi atau liputan bar < 99%). Lejar kekal dalam `lejar.yml` (06:17 UTC; pembetulan sesi lain 17 Okt).
+- Workflow baharu: `harian.yml`, `beli.yml`, `petang.yml`; `lejar.yml` tidak diubah. `MOD_ACTIONS` = bayang: Actions menulis ke `bayang/` sahaja; rutin Claude kekal rasmi. Folder bayang dimulakan daripada papertrade 17 Okt dan diproses bagi sesi 16 Okt (603 calon untuk 19 Okt).
+- Dashboard v59: "Kemas kini terakhir" di atas kanan (harian/status `dikemaskini`, sandaran `kemaskini_pagi`; merah jika > 30 jam, 74 jam merentas hujung minggu).
+- Prosedur selepas peralihan: `jadual/tolak_db.md`, `jadual/mingguan.md`, `jadual/PERALIHAN.md`.

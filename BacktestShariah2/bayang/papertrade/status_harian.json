@@ -1,0 +1,52 @@
+{
+ "malam": {
+  "sesi": "2026-10-16",
+  "masa": "2026-10-17 15:56 MYT",
+  "ralat_kaedah": [],
+  "kaedah_tanpa_modul": [],
+  "masa_kaedah_s": 188,
+  "keluar_baru": {
+   "M": {},
+   "C": {}
+  },
+  "keluar_baru_jumlah": {
+   "M": 0,
+   "C": 0
+  },
+  "menunggu": 60,
+  "harga_beli_dibetulkan": 0,
+  "harga_beli_beza_besar": 0,
+  "tidak_dibeli": [],
+  "nota": [
+   "M BB M31: bar isyarat 2026-09-30 tiada dalam stor"
+  ],
+  "senarai_beli": 603,
+  "saham_unik": 251,
+  "kaedah": 98,
+  "belian_semula": 22,
+  "dari_watchlist": 61,
+  "isyarat": 2195,
+  "ditolak": {
+   "dipegang": 202,
+   "had": 1390
+  },
+  "watchlist": 270,
+  "watchlist_baharu": 173,
+  "watchlist_dibuang": 0,
+  "watchlist_ke_senarai": 61,
+  "minggu_akhir": true,
+  "fail_isyarat": "bayang/isyarat/2026-10-16_malam.csv.gz"
+ },
+ "gred": {
+  "tarikh": "2026-10-17",
+  "masa": "2026-10-17 15:59 MYT",
+  "pemangkin": {
+   "–": 182,
+   "B": 54,
+   "C": 180,
+   "E": 39,
+   "D": 106,
+   "A": 42
+  }
+ }
+}
