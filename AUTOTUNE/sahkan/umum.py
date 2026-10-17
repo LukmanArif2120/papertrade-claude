@@ -49,12 +49,14 @@ def sambung(senarai):
 
 # ---------- metrik ----------
 def cagr(r):
-    """CAGR daripada pulangan harian: (∏(1+r))^(252/n) − 1. Sama bagi kaedah dan SPY (tarikh serupa)."""
+    """CAGR daripada pulangan harian (modal awal 1.0), formula teras/objektif.cagr:
+    ekuiti_akhir^(1/tahun) − 1, tahun = (hari kalendar pertama..terakhir + 1) / 365.25. Sama bagi kaedah dan SPY."""
     r = pd.Series(r).dropna()
     if len(r) == 0: return float('nan')
     g = float(np.prod(1.0 + r.values))
     if g <= 0: return -1.0
-    return g ** (HARI_TAHUN / len(r)) - 1
+    y = ((r.index[-1] - r.index[0]).days + 1) / 365.25 if isinstance(r.index, pd.DatetimeIndex) else len(r) / HARI_TAHUN
+    return g ** (1 / y) - 1
 
 
 def mdd(r):
@@ -79,24 +81,25 @@ def spy_pulangan(idx_spy_close, tarikh):
     return p.reindex(pd.DatetimeIndex(tarikh)).fillna(0.0)
 
 
-def dsr(r, n_cubaan, var_sr=None):
-    """Deflated Sharpe Ratio (Bailey & López de Prado 2014), Sharpe harian.
-    SR0 = √V·((1−γ)Φ⁻¹(1−1/N) + γΦ⁻¹(1−1/(N·e))); V lalai = 1/T (varians penganggar SR di bawah hipotesis nol)."""
-    r = pd.Series(r).dropna().values
-    T = len(r)
-    if T < 3 or not n_cubaan or n_cubaan < 1: return float('nan')
-    sd = r.std(ddof=1)
-    if not sd > 0: return float('nan')
-    sr = r.mean() / sd
-    z = (r - r.mean()) / r.std(ddof=0)
-    g3 = float((z ** 3).mean()); g4 = float((z ** 4).mean())
-    V = (1.0 / T) if var_sr is None else float(var_sr)
-    nd = NormalDist(); em = 0.5772156649015329
-    if n_cubaan <= 1: sr0 = 0.0
-    else: sr0 = math.sqrt(V) * ((1 - em) * nd.inv_cdf(1 - 1 / n_cubaan) + em * nd.inv_cdf(1 - 1 / (n_cubaan * math.e)))
-    pen = 1 - g3 * sr + (g4 - 1) / 4 * sr ** 2
-    if pen <= 0: return float('nan')
-    return float(nd.cdf((sr - sr0) * math.sqrt(T - 1) / math.sqrt(pen)))
+class ObjektifGanti:
+    """Salinan formula DSR teras/objektif.py (dipakai hanya jika modul itu tiada, cth. ujian awal)."""
+    @staticmethod
+    def sharpe(r):
+        r = pd.Series(r, dtype=float).dropna()
+        if len(r) < 30 or r.std() == 0: return float('nan'), float('nan'), float('nan'), len(r)
+        return float(r.mean() / r.std()), float(r.skew()), float(r.kurt() + 3), len(r)
+
+    @staticmethod
+    def sr0(srs, n_cuba=None):
+        srs = [s for s in srs if not math.isnan(s)]
+        nk = n_cuba or len(srs); v = np.var(srs) if len(srs) > 1 else 0
+        g = 0.5772156649; N = NormalDist()
+        return math.sqrt(v) * ((1 - g) * N.inv_cdf(1 - 1 / nk) + g * N.inv_cdf(1 - 1 / (nk * math.e))) if nk > 1 else 0
+
+    @staticmethod
+    def dsr(sr, sk, ku, n, sr0_):
+        d = math.sqrt(max(1e-12, 1 - sk * sr + (ku - 1) / 4 * sr ** 2))
+        return NormalDist().cdf((sr - sr0_) * math.sqrt(n - 1) / d)
 
 
 # ---------- label SPEC §5 ----------

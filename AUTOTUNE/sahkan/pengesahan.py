@@ -26,58 +26,53 @@ def ambil(d, *nama, lalai=None):
     return lalai
 
 
-K_PARAM = ('param', 'params', 'P', 'parameter', 'terbaik.param', 'pilihan.param')
-K_NCUBA = ('n_cubaan', 'n_trials', 'cubaan')
-K_RALAT = ('ralat', 'error', 'errors')
-K_PULANG = ('pulangan_ujian', 'ujian.pulangan', 'pulangan', 'returns', 'test_returns')
-K_MUJI = ('metrik_ujian', 'ujian.metrik', 'test', 'metrik.ujian')
-KUMP_AB = ('AB', 'A+B', 'gabung', 'semua')
-
-
-def _kump(blok, g):
-    """Ambil sub-blok kumpulan g ('A', 'B', 'AB') daripada dict {A:..., B:..., AB:...}."""
-    if not isinstance(blok, dict): return None
-    if g == 'AB':
-        for k in KUMP_AB:
-            if k in blok: return blok[k]
-        return None
-    return blok.get(g)
-
-
+# Skema AUTOTUNE/tala/tala.py (kNN.json): status 'SIAP'|'RALAT', ralat [..], belum_ditala, n_trials,
+# latih [L0, L1], ujian [U0, U1]|None, params (TALA sahaja), params_penuh, latih_A, ujian_A/ujian_B(/ujian_AB k12)
+# {cagr, mdd, n, win, avg, days, thn_min, tahunan}, harian_ujian {tarikh: [...], A: [...], B: [...](, AB: [...])},
+# k00: bersih_AB, harian_bersih_AB {tarikh, r}; k12: dataran {nisbah, ...}, pbo {pbo, ...}.
 def pulangan(d, g):
-    return U.siri(_kump(ambil(d, *K_PULANG), g))
+    """Pulangan harian ujian kumpulan g ('A', 'B', 'AB') daripada harian_ujian."""
+    h = d.get('harian_ujian') if isinstance(d, dict) else None
+    if not isinstance(h, dict) or g not in h or 'tarikh' not in h: return pd.Series(dtype=float)
+    if len(h['tarikh']) != len(h[g]): raise ValueError(f'harian_ujian {g}: panjang tarikh tidak sama')
+    return U.siri(dict(tarikh=h['tarikh'], r=h[g]))
 
 
 def metrik_ujian(d, g):
-    return _kump(ambil(d, *K_MUJI), g) or {}
+    return (d.get(f'ujian_{g}') if isinstance(d, dict) else None) or {}
 
 
 def n_cubaan(d):
-    x = ambil(d, *K_NCUBA, lalai=0)
-    if isinstance(x, (list, tuple)): return len(x)
-    try: return int(x)
+    try: return int(d.get('n_trials') or 0)
     except Exception: return 0
 
 
 def param(d):
-    p = ambil(d, *K_PARAM)
+    p = d.get('params') if isinstance(d, dict) else None
     return p if isinstance(p, dict) else None
 
 
+def param_penuh(d):
+    p = d.get('params_penuh') if isinstance(d, dict) else None
+    return p if isinstance(p, dict) else param(d)
+
+
 def rosak(d, k):
-    """True jika kajian k tidak boleh digunakan (tiada parameter pilihan, atau tiada pulangan ujian untuk k ≤ 12)."""
-    if not isinstance(d, dict) or param(d) is None: return True
-    if k <= U.K_AKHIR:
-        bl = ambil(d, *K_PULANG)
-        if not isinstance(bl, dict) or not bl: return True
-    return False
+    """True jika kajian k tidak boleh digunakan: status bukan SIAP, tiada params, atau tiada pulangan ujian
+    (A dan B bagi 0–11; AB bagi 12)."""
+    if not isinstance(d, dict) or d.get('status') != 'SIAP' or param(d) is None: return True
+    perlu = ('A', 'B') if k < U.K_AKHIR else ('AB',) if k == U.K_AKHIR else ()
+    h = d.get('harian_ujian') or {}
+    return any(g not in h for g in perlu)
+
+
+def belum_json(kaj):
+    return any(bool(d.get('belum_ditala')) for d in kaj.values() if isinstance(d, dict))
 
 
 # ---------- statistik dagangan agregat ----------
 def _stat(m):
-    n = ambil(m, 'n', 'n_dagangan', 'dagangan', 'trades', 'n_trades', lalai=0) or 0
-    h = ambil(m, 'hari', 'purata_hari', 'avg_days', 'days', 'hari_pegang')
-    w = ambil(m, 'menang', 'kadar_menang', 'win', 'win_rate', 'wr')
+    n = m.get('n') or 0; h = m.get('days'); w = m.get('win')
     return float(n), (None if h is None else float(h)), (None if w is None else float(w))
 
 
@@ -129,13 +124,17 @@ def spy_julat(spy, mula, akhir):
 
 
 # ---------- penilaian satu kaedah ----------
-def nilai(kid, kaj, spy, N_jumlah, belum_modul=False, nama=''):
+def nilai(kid, kaj, spy, belum_modul=False, nama=''):
+    """Rekod metrik satu kaedah (tanpa DSR, yang memerlukan semua kaedah) dan siri OOS-A."""
     rek = dict(kaedah=kid, nama=nama, catatan='')
     hilang = [k for k in range(U.K_AKHIR + 1) if k not in kaj or rosak(kaj[k], k)]
+    belum_j = belum_json(kaj)
     catat = []
-    if belum_modul: catat.append('modul gagal kesetaraan')
+    if belum_modul or belum_j: catat.append('modul gagal kesetaraan / tiada salinan berparameter')
     if hilang: catat.append('kajian tiada/rosak: ' + ','.join(f'k{k:02d}' for k in hilang))
     if U.K_SEMASA not in kaj or rosak(kaj[U.K_SEMASA], U.K_SEMASA): catat.append('SEMASA tiada')
+    n_had = [k for k, d in kaj.items() if any('had masa' in str(x) for x in (d.get('ralat') or []))]
+    if n_had: catat.append('had masa: ' + ','.join(f'k{k:02d}' for k in sorted(n_had)))
     rek['n_cubaan'] = int(sum(n_cubaan(d) for d in kaj.values()))
     rek['param_semasa'] = json.dumps(param(kaj.get(U.K_SEMASA, {})) or {}, sort_keys=True)
     rek['param_akhir'] = json.dumps(param(kaj.get(U.K_AKHIR, {})) or {}, sort_keys=True)
@@ -149,33 +148,49 @@ def nilai(kid, kaj, spy, N_jumlah, belum_modul=False, nama=''):
         m[f'spy_{g}'] = spy_cagr(spy, r.index)
     m['oos_mula'] = rA.index[0].strftime('%Y-%m-%d') if len(rA) else ''
     m['oos_akhir'] = rA.index[-1].strftime('%Y-%m-%d') if len(rA) else ''
-    # tempoh kunci (k12, A+B)
+    # tempoh kunci (k12, parameter AKHIR, A+B)
     d12 = sah.get(U.K_AKHIR, {})
-    rK = pulangan(d12, 'AB') if d12 else pd.Series(dtype=float)
-    if d12 and not len(rK): rK = pulangan(d12, 'A')            # tala.py mungkin simpan A+B di bawah kunci lain
+    rK = pulangan(d12, 'AB')
     m['cagr_kunci'] = U.cagr(rK); m['mdd_kunci'] = U.mdd(rK); m['spy_kunci'] = spy_cagr(spy, rK.index)
     m['kunci_mula'] = rK.index[0].strftime('%Y-%m-%d') if len(rK) else ''
     m['kunci_akhir'] = rK.index[-1].strftime('%Y-%m-%d') if len(rK) else ''
     # ujian bersih (k00): PARAM asal 2013–2018 A+B
-    b = ambil(kaj.get(0, {}), 'bersih')
-    if isinstance(b, dict):
-        rb = U.siri(ambil(b, 'pulangan', 'returns', 'r'))
-        if len(rb):
-            m['cagr_bersih'] = U.cagr(rb); m['spy_bersih'] = spy_cagr(spy, rb.index)
-        else:
-            m['cagr_bersih'] = ambil(b, 'cagr', 'metrik.cagr', lalai=float('nan'))
-            m['spy_bersih'] = spy_julat(spy, BERSIH_MULA, BERSIH_AKHIR)
-    else:
-        m['cagr_bersih'] = float('nan'); m['spy_bersih'] = float('nan')
-    # DSR, dataran, PBO
-    m['dsr'] = U.dsr(rA, N_jumlah) if len(rA) else float('nan')
-    m['dataran'] = _f(ambil(d12, 'dataran', 'nisbah_dataran', 'plateau', 'kepekaan.dataran', 'kepekaan.nisbah'))
-    m['pbo'] = _f(ambil(d12, 'pbo', 'PBO', 'pbo.nilai'))
-    belum = belum_modul or bool(hilang)
+    hb = (kaj.get(0) or {}).get('harian_bersih_AB')
+    rb = U.siri(hb) if isinstance(hb, dict) else pd.Series(dtype=float)
+    m['cagr_bersih'] = U.cagr(rb); m['spy_bersih'] = spy_cagr(spy, rb.index)
+    # dataran, PBO (k12)
+    m['dataran'] = _f((d12.get('dataran') or {}).get('nisbah'))
+    m['pbo'] = _f((d12.get('pbo') or {}).get('pbo'))
+    m['dsr'] = float('nan')
     rek.update(m)
-    rek['label'] = U.label(m, belum=belum)
+    rek['_belum'] = bool(belum_modul or belum_j or hilang)
     rek['catatan'] = '; '.join(catat)
     return rek, rA
+
+
+def dsr_semua(siri_a, N):
+    """DSR setiap kaedah: SR harian OOS-A, SR0 = jangkaan maksimum nasib dengan V = varians SR antara kaedah
+    dan N = jumlah percubaan semua kaedah (formula teras/objektif.py = WFO/kod/wfo_laporan.py)."""
+    O = _objektif()
+    S = {k: O.sharpe(r) for k, r in siri_a.items() if len(r)}
+    srs = [v[0] for v in S.values() if not math.isnan(v[0])]
+    if len(srs) < 2 or N < 2: return {k: float('nan') for k in siri_a}, float('nan')
+    s0 = O.sr0(srs, N)
+    out = {}
+    for k in siri_a:
+        sr, sk, ku, n = S.get(k, (float('nan'),) * 3 + (0,))
+        out[k] = float(O.dsr(sr, sk, ku, n, s0)) if not math.isnan(sr) else float('nan')
+    return out, s0
+
+
+def _objektif():
+    try:
+        sys.path.insert(0, os.path.join(U.AT, 'teras'))
+        import objektif
+        if all(hasattr(objektif, f) for f in ('sharpe', 'sr0', 'dsr')): return objektif
+    except ImportError:
+        pass
+    return U.ObjektifGanti
 
 
 def _f(x):
@@ -197,11 +212,15 @@ def jalan(tala=None, keluar=None, spy=None, kaedah=None, kaedah_dir=None):
     semua = {k: U.baca_kajian(k, os.path.join(tala, k)) for k in ids}
     N = int(sum(n_cubaan(d) for kaj in semua.values() for d in kaj.values()))
     if spy is None: spy = muat_spy()
-    rek = []
+    rek = []; rA = {}
     for k in ids:
-        r, _ = nilai(k, semua[k], spy, N, belum_modul=U.belum_ditala_modul(k, kaedah_dir),
-                     nama=U.nama_modul(k, kaedah_dir))
+        r, rA[k] = nilai(k, semua[k], spy, belum_modul=U.belum_ditala_modul(k, kaedah_dir),
+                         nama=U.nama_modul(k, kaedah_dir))
         rek.append(r)
+    D, s0 = dsr_semua(rA, N)
+    for r in rek:
+        r['dsr'] = D.get(r['kaedah'], float('nan'))
+        r['label'] = U.label(r, belum=r.pop('_belum'))
     df = pd.DataFrame(rek, columns=LAJUR)
     os.makedirs(keluar, exist_ok=True)
     df.to_csv(os.path.join(keluar, 'parameter_sedia.csv'), index=False, float_format='%.6g')
@@ -214,7 +233,7 @@ def jalan(tala=None, keluar=None, spy=None, kaedah=None, kaedah_dir=None):
     t_k = df.kunci_mula[df.kunci_mula != ''], df.kunci_akhir[df.kunci_akhir != '']
     ring = dict(
         dijana=pd.Timestamp.now(tz='UTC').strftime('%Y-%m-%dT%H:%MZ'),
-        n_kaedah=len(df), n_cubaan_jumlah=N, kiraan_label=kira,
+        n_kaedah=len(df), n_cubaan_jumlah=N, sr0_harian=s0, kiraan_label=kira,
         tempoh=dict(oos=[t_oos[0].min() if len(t_oos[0]) else None, t_oos[1].max() if len(t_oos[1]) else None],
                     kunci=[t_k[0].min() if len(t_k[0]) else None, t_k[1].max() if len(t_k[1]) else None],
                     bersih=[BERSIH_MULA, BERSIH_AKHIR],

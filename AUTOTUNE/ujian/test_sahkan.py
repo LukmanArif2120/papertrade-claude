@@ -21,25 +21,28 @@ def siri_json(t, r): return dict(tarikh=[d.strftime('%Y-%m-%d') for d in t], r=[
 
 def buat_kaedah(akar, kid, mu_a, mu_b, mu_k, sd=0.01, hari_pegang=10, pbo=0.1, dataran=0.8, ncuba=120,
                 benih=0, langkau=(), ralat=()):
+    """Fikstur kNN.json mengikut skema AUTOTUNE/tala/tala.py."""
     rng = np.random.default_rng(benih)
     d = os.path.join(akar, kid); os.makedirs(d, exist_ok=True)
     for k in range(14):
         if k in langkau: continue
-        j = dict(kaedah=kid, kajian=k, param={'n': 10 + k}, n_cubaan=ncuba, ralat=None)
-        if k in ralat: j = dict(kaedah=kid, kajian=k, ralat='gagal', n_cubaan=0)
-        elif k <= 11:
-            t = hari(*UJI[k])
-            j['ujian'] = dict(mula=UJI[k][0], akhir=UJI[k][1])
-            j['pulangan_ujian'] = dict(A=siri_json(t, rng.normal(mu_a, sd, len(t))),
-                                       B=siri_json(t, rng.normal(mu_b, sd, len(t))))
-            j['metrik_ujian'] = dict(A=dict(n=20, hari=hari_pegang, menang=0.5), B=dict(n=10, hari=hari_pegang, menang=0.6))
+        j = dict(kaedah=kid, kajian=k, status='SIAP', ralat=[], belum_ditala=False, params={'n': 10 + k},
+                 params_penuh={'n': 10 + k, 'm': 3}, n_trials=ncuba, n_trials_diminta=120)
+        if k in ralat: j = dict(kaedah=kid, kajian=k, status='RALAT', ralat=['gagal'], n_trials=0)
+        elif k <= 12:
+            t = hari(*UJI[k]) if k <= 11 else hari('2024-10-01', '2026-09-30')
+            j['latih'] = [str((t[0] - pd.DateOffset(years=3)).date()), str((t[0] - pd.Timedelta(days=1)).date())]
+            j['ujian'] = [str(t[0].date()), str(t[-1].date())]
+            j['harian_ujian'] = dict(tarikh=[str(x.date()) for x in t])
+            for g, mu in (('A', mu_a), ('B', mu_b)) if k <= 11 else (('A', mu_k), ('B', mu_k), ('AB', mu_k)):
+                j['harian_ujian'][g] = [float(x) for x in rng.normal(mu, sd, len(t))]
+                j[f'ujian_{g}'] = dict(cagr=0.1, mdd=-0.1, n=20 if g == 'A' else 10, win=0.5 if g == 'A' else 0.6,
+                                       avg=0.01, days=hari_pegang)
             if k == 0:
                 tb = hari('2013-01-01', '2018-12-31')
-                j['bersih'] = dict(pulangan=siri_json(tb, rng.normal(mu_a, sd, len(tb))))
-        elif k == 12:
-            t = hari('2024-10-01', '2026-09-30')
-            j['pulangan_ujian'] = dict(AB=siri_json(t, rng.normal(mu_k, sd, len(t))))
-            j['pbo'] = pbo; j['dataran'] = dataran
+                j['harian_bersih_AB'] = siri_json(tb, rng.normal(mu_a, sd, len(tb)))
+            if k == 12:
+                j['pbo'] = dict(pbo=pbo, n_gabung=70); j['dataran'] = dict(nisbah=dataran, n=8)
         with open(os.path.join(d, f'k{k:02d}.json'), 'w') as f: json.dump(j, f)
 
 
@@ -96,7 +99,9 @@ class TestMetrik(unittest.TestCase):
     def test_cagr_mdd(self):
         r = pd.Series([0.1, -0.5, 0.2], index=hari('2020-01-01', '2020-01-03'))
         self.assertAlmostEqual(U.mdd(r), -0.5)
-        self.assertAlmostEqual(U.cagr(pd.Series(np.full(252, 0.001))), 1.001 ** 252 - 1)
+        t = pd.date_range('2020-01-01', '2020-12-31')                                      # 366 hari kalendar
+        self.assertAlmostEqual(U.cagr(pd.Series(0.0, t).add(pd.Series([0.1], [t[-1]]), fill_value=0)),
+                               1.1 ** (365.25 / 366) - 1)
         self.assertAlmostEqual(U.mdd(pd.Series([-0.1, 0.0])), -0.1)                       # modal awal 1.0 dikira
 
     def test_siri_format(self):
@@ -107,17 +112,18 @@ class TestMetrik(unittest.TestCase):
 
     def test_dsr(self):
         rng = np.random.default_rng(1)
-        r = pd.Series(rng.normal(0.002, 0.01, 2500))
-        d1, d2, d3 = U.dsr(r, 1), U.dsr(r, 1000), U.dsr(r, 300000)
-        self.assertGreater(d1, d2); self.assertGreater(d2, d3)
-        self.assertGreater(d1, 0.99)
-        self.assertTrue(math.isnan(U.dsr(r, 0)))
-        self.assertLess(U.dsr(pd.Series(rng.normal(0, 0.01, 2500)), 300000), 0.5)
+        siri = {f'X{i}': pd.Series(rng.normal(0.0002 * i, 0.01, 2500)) for i in range(6)}
+        d1, s1 = P.dsr_semua(siri, 10)
+        d2, s2 = P.dsr_semua(siri, 300000)
+        self.assertGreater(s2, s1)                                  # N lebih besar → SR0 lebih tinggi
+        for k in siri: self.assertGreater(d1[k], d2[k])
+        self.assertGreater(d1['X5'], d1['X0'])
+        self.assertTrue(math.isnan(P.dsr_semua({'X': siri['X1']}, 100)[0]['X']))     # perlu ≥ 2 kaedah
 
     def test_spy_tarikh_sama(self):
         spy = spy_palsu(0.001)
         t = hari('2015-01-01', '2015-12-31')
-        self.assertAlmostEqual(P.spy_cagr(spy, t), 1.001 ** 252 - 1, places=9)
+        self.assertAlmostEqual(P.spy_cagr(spy, t), (1.001 ** len(t)) ** (365.25 / 365) - 1, places=9)
 
 
 class TestPengesahan(unittest.TestCase):
@@ -130,10 +136,15 @@ class TestPengesahan(unittest.TestCase):
         buat_kaedah(self.tala, 'M04', 0.0012, 0.0012, 0.0012, sd=0.004, benih=4)                  # modul belum
         buat_kaedah(self.tala, 'M05', 0.0012, 0.0012, 0.0012, sd=0.004, benih=5, hari_pegang=1.5)
         buat_kaedah(self.tala, 'M06', 0.0012, 0.0012, 0.0012, sd=0.004, benih=6, ralat=(12,))     # k12 ralat
-        for k in ('M01', 'M02', 'M03', 'M05', 'M06'): buat_modul(self.kd, k)
+        buat_kaedah(self.tala, 'M07', 0.0012, 0.0012, 0.0012, sd=0.004, benih=7)                  # JSON belum_ditala
+        f = os.path.join(self.tala, 'M07', 'k03.json')
+        with open(f) as h: j = json.load(h)
+        j['belum_ditala'] = True
+        with open(f, 'w') as h: json.dump(j, h)
+        for k in ('M01', 'M02', 'M03', 'M05', 'M06', 'M07'): buat_modul(self.kd, k)
         buat_modul(self.kd, 'M04', belum=True)
         self.df, self.ring = P.jalan(self.tala, self.out, spy=spy_palsu(), kaedah_dir=self.kd,
-                                     kaedah=['M01', 'M02', 'M03', 'M04', 'M05', 'M06'])
+                                     kaedah=['M01', 'M02', 'M03', 'M04', 'M05', 'M06', 'M07'])
         self.r = self.df.set_index('kaedah')
 
     def tearDown(self): shutil.rmtree(self.d)
@@ -146,6 +157,7 @@ class TestPengesahan(unittest.TestCase):
         self.assertEqual(self.r.loc['M04', 'label'], 'BELUM DITALA')
         self.assertEqual(self.r.loc['M05', 'label'], 'BUKAN SWING')
         self.assertEqual(self.r.loc['M06', 'label'], 'BELUM DITALA')
+        self.assertEqual(self.r.loc['M07', 'label'], 'BELUM DITALA')
 
     def test_sambungan_dan_n(self):
         n_hari = sum(len(hari(*u)) for u in UJI)
@@ -157,16 +169,18 @@ class TestPengesahan(unittest.TestCase):
         self.assertEqual(self.r.loc['M01', 'oos_mula'], '2013-01-01')
         self.assertEqual(self.r.loc['M01', 'oos_akhir'], '2024-09-30')
         # N DSR = jumlah percubaan semua kaedah (M03 13 kajian, M06 k12 ralat → 0)
-        self.assertEqual(self.ring['n_cubaan_jumlah'], 120 * (14 * 4 + 13 + 13))
-        dsr = U.dsr(P.oos(kaj, 'A'), self.ring['n_cubaan_jumlah'])
-        self.assertAlmostEqual(self.r.loc['M01', 'dsr'], dsr, places=5)
+        self.assertEqual(self.ring['n_cubaan_jumlah'], 120 * (14 * 5 + 13 + 13))
+        semua = {k: P.oos(U.baca_kajian(k, os.path.join(self.tala, k)), 'A') for k in self.r.index}
+        dsr, _ = P.dsr_semua(semua, self.ring['n_cubaan_jumlah'])
+        self.assertAlmostEqual(self.r.loc['M01', 'dsr'], dsr['M01'], places=5)
         self.assertEqual(json.loads(self.r.loc['M01', 'param_semasa']), {'n': 23})
         self.assertEqual(json.loads(self.r.loc['M01', 'param_akhir']), {'n': 22})
+        self.assertAlmostEqual(self.r.loc['M01', 'dataran'], 0.8)
         self.assertAlmostEqual(self.r.loc['M01', 'pbo'], 0.1)
         self.assertEqual(self.r.loc['M01', 'kunci_mula'], '2024-10-01')
 
     def test_ringkasan_dan_laporan(self):
-        self.assertEqual(sum(self.ring['kiraan_label'].values()), 6)
+        self.assertEqual(sum(self.ring['kiraan_label'].values()), 7)
         self.assertEqual(self.ring['top20_cagr_a'][0]['kaedah'] in ('M01', 'M05'), True)
         h = G.jalan(keluar=self.out, tala=self.tala, spy=spy_palsu(), penjana=object()) \
             if not (self.df.label.isin(['TINGGI', 'SEDERHANA'])).any() else None
@@ -175,10 +189,10 @@ class TestPengesahan(unittest.TestCase):
             U.tulis_json(os.path.join(self.out, 'gabungan.json'), dict(terpilih=[], penjelasan='ujian', terbaik3_oos_a=[]))
         baris, papan = L.jana(self.out)
         self.assertLessEqual(len(baris), 150)
-        self.assertEqual(len(papan), 6)
+        self.assertEqual(len(papan), 7)
         for p in papan: self.assertLessEqual(len(json.dumps(p, ensure_ascii=False, separators=(',', ':')).encode()), 2048)
         with open(os.path.join(self.out, 'LAPORAN.md'), encoding='utf-8') as f: teks = f.read()
-        self.assertIn('BELUM DITALA (3)', teks)
+        self.assertIn('BELUM DITALA (4)', teks)
         with open(os.path.join(self.out, 'papan.json')) as f: json.load(f)
 
 
@@ -253,6 +267,8 @@ class TestGabungan(unittest.TestCase):
         self.assertEqual(G.tetingkap_kajian({}, 0), ('2010-01-01', '2013-01-01', '2013-12-31'))
         self.assertEqual(G.tetingkap_kajian({}, 11), ('2021-01-01', '2024-01-01', '2024-09-30'))
         self.assertEqual(G.tetingkap_kajian({}, 12), ('2021-10-01', '2024-10-01', None))
+        d = dict(latih=['2021-10-01', '2024-09-30'], ujian=['2024-10-01', '2026-10-16'])
+        self.assertEqual(G.tetingkap_kajian(d, 12), ('2021-10-01', '2024-10-01', '2026-10-16'))
 
 
 if __name__ == '__main__':

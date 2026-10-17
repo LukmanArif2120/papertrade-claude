@@ -15,7 +15,6 @@ import pengesahan as P
 HAD_KOR = 0.7
 MAKS = 6
 CACHE_G = os.path.join(U.CACHE, 'gabungan')
-KUNCI_AKHIR = '2100-01-01'
 
 
 # ---------- logik pemilihan (tulen; diuji dengan data palsu) ----------
@@ -68,28 +67,32 @@ def kongsi(senarai_T):
 
 # ---------- tetingkap ----------
 def tetingkap_kajian(d, k):
-    """(latih_mula, ujian_mula, ujian_akhir) daripada JSON kajian; jika tiada, ikut SPEC §4."""
-    lm = P.ambil(d, 'latih.mula', 'latih_mula', 'train.mula', 'tetingkap.latih.0', 'latih.0')
-    um = P.ambil(d, 'ujian.mula', 'ujian_mula', 'test.mula', 'tetingkap.ujian.0', 'ujian.0')
-    ua = P.ambil(d, 'ujian.akhir', 'ujian_akhir', 'test.akhir', 'tetingkap.ujian.1', 'ujian.1')
-    if um is None:
-        if k <= 10: um, ua = f'{2013 + k}-01-01', f'{2013 + k}-12-31'
-        elif k == 11: um, ua = '2024-01-01', '2024-09-30'
-        else: um, ua = '2024-10-01', None
-    if lm is None: lm = (pd.Timestamp(um) - pd.DateOffset(years=3)).strftime('%Y-%m-%d')
-    return str(lm)[:10], str(um)[:10], (str(ua)[:10] if ua else None)
+    """(latih_mula, ujian_mula, ujian_akhir|None) daripada JSON kajian (latih [L0, L1], ujian [U0, U1]);
+    jika tiada, ikut SPEC §4."""
+    lt = d.get('latih') if isinstance(d, dict) else None
+    uj = d.get('ujian') if isinstance(d, dict) else None
+    if isinstance(uj, (list, tuple)) and len(uj) == 2:
+        um, ua = str(uj[0])[:10], str(uj[1])[:10]
+    elif k <= 10: um, ua = f'{2013 + k}-01-01', f'{2013 + k}-12-31'
+    elif k == 11: um, ua = '2024-01-01', '2024-09-30'
+    else: um, ua = '2024-10-01', None
+    lm = str(lt[0])[:10] if isinstance(lt, (list, tuple)) and lt else \
+        (pd.Timestamp(um) - pd.DateOffset(years=3)).strftime('%Y-%m-%d')
+    return lm, um, ua
 
 
-# ---------- penjana dagangan (data + kaedah + enjin_at) ----------
+# ---------- penjana dagangan: logik ujian AUTOTUNE/tala/tala.py (sedia atas AB, topeng kumpulan) ----------
 class Penjana:
-    """Jana dan cache dagangan (kaedah, kajian, kumpulan). Satu muatan data AB bagi setiap kajian."""
+    """Jana semula dagangan ujian (kaedah, kajian, kumpulan) sama seperti tala.tala(): data AB
+    [latih_mula − 400 hari, ujian_akhir], sedia(salin(fr), idx, PARAM ∪ params), Susun.dengan_topeng(kumpulan)
+    .dagangan(tmax, WARM, U0, U1). Dagangan dicache ke parquet; Pasaran (tutup AB) dicache bagi setiap kajian."""
     def __init__(self, data_dir=None):
-        sys.path.insert(0, U.AT)
-        self.D = importlib.import_module('teras.data')
-        self.E = importlib.import_module('teras.enjin_at')
-        self.data_dir = data_dir
-        self._k = None; self._fr = self._idx = self._univ = None
-        self._pasaran = {}
+        sys.path.insert(0, os.path.join(U.AT, 'tala'))
+        self.T = importlib.import_module('tala')
+        self.E = self.T.E
+        self.sumber = self.T.Sumber(data_dir)
+        self._k = None; self._d = None
+        self._pasaran = {}; self._mod = {}
         os.makedirs(CACHE_G, exist_ok=True)
 
     def _laluan(self, kid, k, g, Pm):
@@ -97,55 +100,55 @@ class Penjana:
         return os.path.join(CACHE_G, f'dag_{kid}_k{k:02d}_{g}_{h}.parquet')
 
     def _muat(self, k, lm, um, ua):
-        if self._k == k: return
-        mula = (pd.Timestamp(lm) - pd.Timedelta(days=400)).strftime('%Y-%m-%d')
-        akhir = ua or KUNCI_AKHIR
-        self._fr, self._idx, self._univ = self.D.muat(mula, akhir, 'AB', self.data_dir)
-        u = self._univ.drop_duplicates('ticker')
-        self._kump = dict(zip(u.ticker.astype(str), u.kumpulan.astype(str)))
+        if self._k == k: return self._d
+        self._d = None; self.sumber._fr.clear()
+        U1 = pd.Timestamp(ua) if ua else self.sumber.akhir_data()
+        fr, idx, univ = self.sumber.muat(pd.Timestamp(lm) - self.T.PANAS, U1, 'AB')
+        kum = ['A', 'B', 'AB'] if k == U.K_AKHIR else ['A', 'B']
+        self._d = dict(fr=fr, idx=idx, U0=pd.Timestamp(um), U1=U1, kum=kum,
+                       tp={g: self.sumber.topeng(fr, univ, g) for g in kum})
         self._k = k
+        return self._d
 
     def pasaran(self, k, g, um, ua, lm):
-        """enjin_at.Pasaran bagi tetingkap ujian kajian k, kumpulan g (tutup dicache ke parquet)."""
-        kunci = (k, g)
-        if kunci in self._pasaran: return self._pasaran[kunci]
-        f = os.path.join(CACHE_G, f'tutup_k{k:02d}_{g}.parquet')
+        if k in self._pasaran: return self._pasaran[k]
+        f = os.path.join(CACHE_G, f'tutup_k{k:02d}.parquet')
         if os.path.exists(f):
             W = pd.read_parquet(f)
+            U1 = W.index.max() if ua is None else pd.Timestamp(ua)
         else:
-            self._muat(k, lm, um, ua)
-            t0 = pd.Timestamp(um) - pd.Timedelta(days=15)
-            kol = {t: x.close[x.index >= t0] for t, x in self._fr.items() if self._dlm(t, g)}
-            W = pd.DataFrame(kol).sort_index() if kol else pd.DataFrame()
+            d = self._muat(k, lm, um, ua); t0 = d['U0'] - pd.Timedelta(days=10); U1 = d['U1']
+            W = pd.DataFrame({t: x.close[x.index >= t0] for t, x in d['fr'].items()}).sort_index().astype('float64')
             W.columns = W.columns.astype(str)
             W.to_parquet(f)
         fr = {t: pd.DataFrame({'close': W[t].dropna()}) for t in W.columns}
-        fr = {t: x for t, x in fr.items() if len(x)}
-        p = self.E.Pasaran(fr, um, ua)
-        self._pasaran[kunci] = p
+        p = self.E.Pasaran({t: x for t, x in fr.items() if len(x)}, pd.Timestamp(um), U1)
+        self._pasaran[k] = p
         return p
 
-    def _dlm(self, t, g):
-        kp = self._kump.get(t)
-        return kp is not None and kp in g
+    def modul(self, kid):
+        if kid not in self._mod: self._mod[kid] = self.T.muat_kaedah(kid)
+        return self._mod[kid]
 
     def dagangan(self, kid, k, g, Pm, lm, um, ua):
         f = self._laluan(kid, k, g, Pm)
         if os.path.exists(f): return pd.read_parquet(f)
-        self._muat(k, lm, um, ua)
-        mod = importlib.import_module(f'kaedah.{kid}')
-        silang = bool(getattr(mod, 'SILANG', False))
-        cols = [c for c in ('open', 'high', 'low', 'close', 'volume', 'turnover') if c in next(iter(self._fr.values()))]
-        fr = {t: x[cols].copy() for t, x in self._fr.items() if silang or self._dlm(t, g)}
-        idx = {t: x.copy() for t, x in self._idx.items()}
-        mod.sedia(fr, idx, Pm)
-        tp = {t: self.D.topeng(x, t, self._univ, g) for t, x in fr.items()}
-        T = self.E.Susun(fr, tp).dagangan(getattr(mod, 'TMAX', None), getattr(mod, 'WARM', 200), um, ua)
-        T = T[['ticker', 'sig', 'ent', 'ex', 'ret', 'days', 'why', 'rank']].copy()
-        for c in ('sig', 'ent', 'ex'): T[c] = pd.to_datetime(T[c])
-        T['ticker'] = T.ticker.astype(str)
-        T.to_parquet(f)
-        return T
+        d = self._muat(k, lm, um, ua)
+        m = self.modul(kid)
+        Pp = dict(m.PARAM); Pp.update(Pm or {})
+        fr = self.T.salin(d['fr']); m.sedia(fr, d['idx'], Pp)
+        tmax = Pp['tmax'] if 'tmax' in Pp else m.TMAX
+        S = self.E.Susun(fr)
+        out = None
+        for gg in d['kum']:
+            T = S.dengan_topeng(d['tp'][gg]).dagangan(tmax, m.WARM, d['U0'], d['U1'])
+            T = T[['ticker', 'sig', 'ent', 'ex', 'ret', 'days', 'why', 'rank']].copy()
+            for c in ('sig', 'ent', 'ex'): T[c] = pd.to_datetime(T[c])
+            T['ticker'] = T.ticker.astype(str); T['rank'] = T['rank'].astype(float)
+            T.to_parquet(self._laluan(kid, k, gg, Pm))
+            if gg == g: out = T
+        del fr
+        return out
 
 
 class Penilai:
@@ -236,6 +239,7 @@ def jalan(csv=None, tala=None, keluar=None, data_dir=None, maks=MAKS, penjana=No
         metrik=dict(A=_metrik(gA, spy), B=_metrik(gB, spy), kunci=_metrik(gK, spy)),
         param_semasa={k: json.loads(df.set_index('kaedah').loc[k, 'param_semasa'] or '{}') for k in pilih},
         param_akhir={k: json.loads(df.set_index('kaedah').loc[k, 'param_akhir'] or '{}') for k in pilih},
+        param_semasa_penuh={k: P.param_penuh(kaj[k].get(U.K_SEMASA, {})) for k in pilih},
         ekuiti_bulanan=dict(A=U.ekuiti_bulanan(gA), B=U.ekuiti_bulanan(gB), kunci=U.ekuiti_bulanan(gK),
                             spy_A=U.ekuiti_bulanan(sA), spy_kunci=U.ekuiti_bulanan(sK)),
         masa_s=round(time.time() - t0))
