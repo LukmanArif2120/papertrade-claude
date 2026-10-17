@@ -300,3 +300,6 @@
 - Gred (SST market_events 30 hari, Nasdaq): S, I, R, Q dikira. Pemangkin: Moomoo tidak dipakai (tiada pengumpulan Moomoo); semua 394 saham daripada Yahoo + Nasdaq (`pemangkin.json`, 0 Moomoo, 394 Yahoo, 0 tiada).
 - db: `papertrade/senarai_beli` (+_2.._5), `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `harian/status` v19.
 - Tiada order. Tiada wang sebenar.
+
+## Analisis mingguan 2026-10-17 (Sabtu)
+- `WFO/kod/analisis_sebenar.py`: 111 kaedah; AMARAN 0, SELARI 0, data belum cukup 111 (tiada kaedah matang). Kaedah AMARAN: tiada. db `analisis/sebenar` ditulis. Tiada order. Tiada wang sebenar.
