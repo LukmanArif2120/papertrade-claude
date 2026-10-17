@@ -106,7 +106,8 @@ def jana(keluar=None):
                      f"OOS-B {pc(r.get('cagr_b'))}, kunci {pc(r.get('cagr_kunci'))}")
     L += ['', '## Nota DSR dan PBO',
           '- DSR (Bailey & López de Prado): Sharpe harian OOS-A dideflasi dengan N = jumlah semua percubaan semua kaedah; '
-          'V[SR] = 1/T. TINGGI memerlukan DSR ≥ 0.95.',
+          f"V[SR] = varians SR OOS-A antara kaedah (formula teras/objektif.py). SR0 = {nb(_ann(ring.get('sr0_harian')))} "
+          'setahun. TINGGI memerlukan DSR ≥ 0.95.',
           '- PBO (CSCV, 8 blok, 50 percubaan teratas kajian AKHIR, pulangan latih): kebarangkalian pilihan terbaik dalam '
           'sampel jatuh di bawah median luar sampel. TINGGI memerlukan PBO ≤ 0.30.',
           '- Nisbah dataran (±10%, ±25% setiap parameter TALA): < 0.5 bermakna pilihan berada di puncak sempit.',
@@ -126,6 +127,11 @@ def jana(keluar=None):
     U.tulis_json(os.path.join(keluar, 'papan.json'), dict(dijana=ring.get('dijana'), tempoh=t,
                  gabungan=gab.get('terpilih', []), kaedah=papan))
     return L, papan
+
+
+def _ann(x):
+    try: return float(x) * math.sqrt(252)
+    except (TypeError, ValueError): return None
 
 
 def _jul(x):
