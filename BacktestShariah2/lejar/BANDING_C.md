@@ -2,52 +2,7 @@
 
 Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-10-16. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
 
-- Posisi C (isyarat >= 2026-10-15): 819; ada dalam lejar: 796; tiada: 23 {'isyarat ada, belum diproses': 23}
-- Posisi lejar: 3404 (C hanya 819; lejar 4.2×)
-- Harga beli berbeza > 0.5%: 42 daripada 796
-- Status keluar sama: 796 daripada 796; berbeza: 0
-
-## Harga beli berbeza > 0.5%
-
-- M87 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M92 INTU 2026-10-15: C 334.68 / lejar 332.34 (+0.70%)
-- M102 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M111 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M115 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M116 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M122 KARO 2026-10-15: C 62.82 / lejar 63.34 (-0.82%)
-- M132 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M136 INTU 2026-10-15: C 334.68 / lejar 332.34 (+0.70%)
-- M137 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M137 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M139 MSEX 2026-10-15: C 53.92 / lejar 54.31 (-0.72%)
-- M150 INTU 2026-10-15: C 334.68 / lejar 332.34 (+0.70%)
-- M152 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M04 INTA 2026-10-15: C 43.7 / lejar 43.99 (-0.66%)
-- M05 COLM 2026-10-15: C 60.69 / lejar 61.18 (-0.80%)
-- M27 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M27 PTEN 2026-10-15: C 11.6 / lejar 11.5 (+0.87%)
-- M28 NESR 2026-10-15: C 19.0 / lejar 19.12 (-0.63%)
-- M30 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M73 OKTA 2026-10-15: C 209.6 / lejar 212.0 (-1.13%)
-- M95 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M100 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M125 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M129 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M131 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M153 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M155 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M156 OKTA 2026-10-15: C 209.6 / lejar 212.0 (-1.13%)
-- M158 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M159 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M02 KARO 2026-10-15: C 62.82 / lejar 63.34 (-0.82%)
-- M12 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M13 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M20 TENB 2026-10-15: C 39.24 / lejar 39.49 (-0.63%)
-- M25 INTA 2026-10-15: C 43.7 / lejar 43.99 (-0.66%)
-- M32 INTA 2026-10-15: C 43.7 / lejar 43.99 (-0.66%)
-- M34 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M36 CTSH 2026-10-15: C 66.89 / lejar 66.54 (+0.53%)
-- M36 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
-- M49 INTA 2026-10-15: C 43.7 / lejar 43.99 (-0.66%)
-- M54 URBN 2026-10-15: C 87.64 / lejar 88.56 (-1.04%)
+- Posisi C (isyarat >= 2026-10-15): 819; ada dalam lejar: 819; tiada: 0 {}
+- Posisi lejar: 3486 (C hanya 819; lejar 4.3×)
+- Harga beli berbeza > 0.5%: 0 daripada 819
+- Status keluar sama: 819 daripada 819; berbeza: 0

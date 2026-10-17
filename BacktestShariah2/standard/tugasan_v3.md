@@ -76,5 +76,5 @@ Dashboard Prestasi memaparkan prestasi setiap gred; sesuatu gred hanya dinilai s
 
 ## 9. Lejar Penuh (fasa 1 sejak 16 Okt 2026; keputusan pengguna: data adil untuk semua kaedah)
 - SEMUA isyarat setiap kaedah dibeli pada buka rasmi esok dan dikeluarkan mengikut peraturan kaedah itu (enjin v1.2), tanpa had 10 sekaedah dan tanpa keutamaan 431. Harga: stor repo (yfinance), semakan silang sampel Moomoo oleh rutin 6:02.
-- Dijalankan oleh GitHub Actions `.github/workflows/lejar.yml` (02:17 UTC Sel–Sab, sandaran 06:17), tanpa LLM dan tanpa Moomoo; larian terlepas ditampung. Butiran: `lejar/README.md`, kod `standard/lejar.py`.
+- Dijalankan oleh GitHub Actions `.github/workflows/lejar.yml` (06:17 UTC Sel–Sab, sandaran 10:17; sesi ditangguh jika data yfinance belum muktamad), tanpa LLM dan tanpa Moomoo; larian terlepas ditampung. Butiran: `lejar/README.md`, kod `standard/lejar.py`.
 - Fasa 1 (2 minggu): berjalan selari; Papertrade C dan tiga rutin tidak berubah (kecuali sumber stor harga, §6). Rutin tidak menulis ke `lejar/`. Peralihan (rutin 9:35 NY dibersarakan, dsb.) hanya selepas pengguna meluluskan berdasarkan perbandingan.

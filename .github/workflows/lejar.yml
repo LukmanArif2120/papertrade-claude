@@ -1,14 +1,15 @@
 # Lejar Penuh (BacktestShariah2/standard/lejar.py): stor harga repo + beli/keluar SEMUA isyarat semua kaedah,
 # satu peraturan untuk semua (tiada had sekaedah, tiada keutamaan 431). Tanpa LLM, tanpa Moomoo.
-# Masa (UTC): 02:17 Sel–Sab (~6 jam selepas tutup; volum muktamad daripada Harga harian 00:23), sandaran 06:17.
+# Masa (UTC): 06:17 Sel–Sab, sandaran 10:17. lejar.py menangguh sesi jika data yfinance belum muktamad (tarikan < 00:20 UTC
+# selepas sesi, atau < 99% saham ada bar); larian seterusnya memproses sesi itu.
 # Setiap larian memproses semua sesi yang belum diproses mengikut urutan (larian terlepas ditampung) sebelum buka AS seterusnya.
 # Papertrade C (claude*.csv) dan rutin Claude tidak disentuh.
 name: Lejar penuh
 
 on:
   schedule:
-    - cron: '17 2 * * 2-6'
     - cron: '17 6 * * 2-6'
+    - cron: '17 10 * * 2-6'
   workflow_dispatch:
 
 permissions:

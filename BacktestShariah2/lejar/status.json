@@ -1,7 +1,7 @@
 {
  "mula": "2026-10-15",
  "sesi_terakhir": "2026-10-16",
- "kemaskini": "2026-10-17 12:39 MYT",
+ "kemaskini": "2026-10-17 15:38 MYT",
  "bil_kaedah": 134,
  "larian": [
   {
@@ -19,16 +19,16 @@
   },
   {
    "sesi": "2026-10-16",
-   "beli": 3404,
-   "tutup": 149,
-   "langkau": 109,
-   "isyarat": 2080,
-   "terbuka": 3255,
-   "tunggu": 1298,
-   "kaedah_isyarat": 97,
+   "beli": 3486,
+   "tutup": 150,
+   "langkau": 112,
+   "isyarat": 2195,
+   "terbuka": 3336,
+   "tunggu": 1302,
+   "kaedah_isyarat": 98,
    "ralat": [],
    "nota": [],
-   "masa_s": 307
+   "masa_s": 180
   }
  ]
 }

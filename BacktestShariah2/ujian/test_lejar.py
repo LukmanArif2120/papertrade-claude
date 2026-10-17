@@ -1,5 +1,5 @@
 # Ujian Lejar Penuh (standard/lejar.py): dagangan lejar sesi demi sesi = enjin.trades v1.2 atas data sama.
-import os, sys, types, tempfile, unittest, argparse
+import os, sys, types, tempfile, unittest, argparse, json
 import numpy as np, pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'standard'))
@@ -179,3 +179,29 @@ class UjiDuaLorong(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class UjiLiputan(unittest.TestCase):
+    def test_sesi_data_tidak_lengkap_ditangguh(self):
+        modul('M9001'); fr, idx = data(n=300)
+        akhir = idx['SPY'].index[-1]
+        fr['AAA'] = fr['AAA'][fr['AAA'].index < akhir]          # 1/4 saham tiada bar sesi terakhir
+        with tempfile.TemporaryDirectory() as d:
+            stor = os.path.join(d, 'stor'); os.makedirs(stor)
+            pd.concat([g.assign(ticker=t, date=g.index.strftime('%Y%m%d').astype(int)) for t, g in fr.items()])[lejar.LAJ] \
+                .to_csv(os.path.join(stor, 'harga_A.csv'), index=False)
+            pd.concat([g.assign(ticker=t, date=g.index.strftime('%Y%m%d').astype(int)) for t, g in idx.items()])[lejar.LAJ] \
+                .to_csv(os.path.join(stor, 'harga_idx.csv'), index=False)
+            lama = lejar.STOR, lejar.LEJAR
+            lejar.STOR, lejar.LEJAR = stor, os.path.join(d, 'lejar')
+            os.environ['LEJAR_UNIV'] = os.path.join(d, 'tiada.txt')
+            try:
+                a = argparse.Namespace(mula=str(MULA.date()), hingga=None, proses=1, hanya='M9001', paksa=False)
+                lejar.cmd_jalan(a)
+                st = json.load(open(os.path.join(d, 'lejar', 'status.json')))
+                self.assertLess(pd.Timestamp(st['sesi_terakhir']), akhir)
+                a.paksa = True; lejar.cmd_jalan(a)
+                st = json.load(open(os.path.join(d, 'lejar', 'status.json')))
+                self.assertEqual(pd.Timestamp(st['sesi_terakhir']), akhir)
+            finally:
+                lejar.STOR, lejar.LEJAR = lama; os.environ.pop('LEJAR_UNIV', None)

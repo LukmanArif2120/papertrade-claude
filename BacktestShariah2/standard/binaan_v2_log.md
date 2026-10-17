@@ -316,3 +316,10 @@
 - `WFO/kaedah_baru/step2_L02.py`; laporan `WFO/laporan/L02_meta_label.md`; hasil `WFO/data/hasil/L02_*.csv(.gz)`. Luar sampel 2023–Okt 2026, latih semula setiap suku (purge 20 + embargo 5). **DITOLAK**: V1 1/6, V2 0/6, V3 1/6, V4 0/6 (perlu ≥ 4/6). Nota: V2 (rank = p) menaikkan CAGR 4/6 kaedah, tidak konsisten (M30 −33.9 mata). `scikit-learn` ditambah ke `requirements.txt` (V3). Tiada perubahan rutin.
 - M164: aliran kerja manual `.github/workflows/tarikh_pendapatan.yml` (Nasdaq + Yahoo) dicetus untuk membina `data/pemangkin/tarikh_pendapatan.csv`.
 - Tiada order. Tiada wang sebenar.
+
+## 17 Okt 2026 — Lejar Penuh: larian pertama, proses semula sesi 16 Okt
+- Larian bot (04:39 UTC) memproses sesi 16 Okt dengan tarikan yfinance awal (22:05 UTC): hanya 892/924 saham universe ada bar 16 Okt, dan buka 23 saham berbeza > 0.5% daripada tarikan muktamad (04:43 UTC). Akibat: 110 posisi (17 saham) berharga beli salah dan 85 isyarat 15 Okt tertunggak; banding C: 42/796 harga beli berbeza > 0.5%.
+- Dibetulkan: keadaan lejar dikembalikan ke sesi 15 Okt dan sesi 16 Okt diproses semula dengan data muktamad: 3,486 belian, 150 keluar, 112 dilangkau, 2,195 isyarat, 0 ralat. Banding C: 819/819 posisi C ada dalam lejar; harga beli berbeza > 0.5%: 0; status keluar sama 819/819.
+- Pengawal baharu `lejar.py jalan`: sesi ditangguh jika < 99% saham layak ada bar sesi itu, atau tarikan yfinance sesi itu < 00:20 UTC selepas sesi (`--paksa` untuk mengatasi). Jadual dianjak ke 06:17 UTC (sandaran 10:17). Ujian `UjiLiputan`.
+- Moomoo menang (§6): `lejar.py stor` menampal buka rasmi kline Moomoo yang disahkan 6:02 (claude*.csv) ke stor jika beza > 0.5%, bagi sesi yang belum diproses sahaja (`data/harga/stor/buka_moomoo.csv`, dipakai semula setiap larian).
+- Tiada order. Tiada wang sebenar.

@@ -43,6 +43,7 @@ LEJAR = os.environ.get('LEJAR_DIR', os.path.join(BS2, 'lejar'))
 HARGA_MIN = 10.0
 TAMAT_TUNGGU = 5      # sesi maksimum isyarat menunggu bar masuk (saham digantung / data lewat)
 TOLERANSI_LARAS = 0.003
+LIPUTAN_MIN = 0.99   # pecahan saham layak (ada bar sesi sebelum) yang mesti ada bar sesi S sebelum diproses
 # Dua lorong keluar (keputusan pengguna 17 Okt 2026; standard/keluar_lorong.py): lorong 1 = peraturan kaedah (enjin, lajur
 # tarikh_keluar …), lorong 2 = pegang selagi naik (2 tutup turun berturut atau henti). Posisi kekal dalam terbuka.csv
 # (dan menyekat isyarat baharu kaedah+saham sama) sehingga kedua-dua lorong keluar; kemudian dipindah ke tutup/.
@@ -129,6 +130,36 @@ def tulis_stor(d, p):
     return True
 
 
+def tampal_moomoo(stor):
+    """Moomoo menang (tugasan_v3 §6): buka rasmi kline Moomoo yang disahkan rutin 6:02 (claude*.csv, nota 'kline')
+    menggantikan buka yfinance jika beza > 0.5%. Entri baharu hanya bagi tarikh selepas sesi terakhir lejar (posisi yang sudah
+    direkod tidak berubah); semua entri dalam buka_moomoo.csv dipakai semula setiap larian supaya tidak ditimpa yfinance."""
+    p = os.path.join(STOR, 'buka_moomoo.csv')
+    T = pd.read_csv(p, dtype={'ticker': str}) if os.path.exists(p) else pd.DataFrame(columns=['ticker', 'date', 'open'])
+    stp = os.path.join(LEJAR, 'status.json')
+    akhir = int(json.load(open(stp)).get('sesi_terakhir', '0').replace('-', '')) if os.path.exists(stp) else 0
+    fs = sorted(glob.glob(os.path.join(BS2, 'papertrade', 'claude*.csv')))
+    if fs:
+        C = pd.concat([pd.read_csv(f, dtype=str, keep_default_na=False) for f in fs])
+        C = C[(C.tidak_dibeli != 'True') & (C.harga_beli != '') & C.nota.str.contains('kline')]
+        C = C.assign(date=C.tarikh_beli.str.replace('-', '').astype(int), open=pd.to_numeric(C.harga_beli, errors='coerce'))
+        C = C[C.date > akhir].groupby(['saham', 'date'], as_index=False).open.median().rename(columns={'saham': 'ticker'})
+        T = pd.concat([T, C]).drop_duplicates(['ticker', 'date'], keep='first')
+    T = T.assign(date=T.date.astype('int64'), open=pd.to_numeric(T.open, errors='coerce').astype(float)).dropna(subset=['open'])
+    n = 0
+    for nm, d in stor.items():
+        m = d.reset_index().merge(T, on=['ticker', 'date'], suffixes=('', '_mm'))
+        m = m[(m.open_mm / m.open - 1).abs() > 0.005]
+        if len(m):
+            i = m['index'].values
+            d.loc[i, 'open'] = m.open_mm.values
+            d.loc[i, 'high'] = np.maximum(d.loc[i, 'high'].values, m.open_mm.values)
+            d.loc[i, 'low'] = np.minimum(d.loc[i, 'low'].values, m.open_mm.values)
+            n += len(m)
+    T.sort_values(['date', 'ticker']).to_csv(p, index=False)
+    return n
+
+
 def cmd_stor(a):
     import harga_yf
     stor = muat(STOR)
@@ -151,6 +182,7 @@ def cmd_stor(a):
         r = (m.close_k / m.close_l).groupby(m.ticker).median()
         laras = {t: round(float(v), 6) for t, v in r.items() if abs(v - 1) > TOLERANSI_LARAS}
     stor, nota = harga_yf.gabung(stor, baru)
+    nota['moomoo'] = tampal_moomoo(stor)
     ubah = [nm for nm, d in stor.items() if tulis_stor(d, os.path.join(STOR, nm))]
     # saham universe tanpa sejarah mencukupi -> minta sejarah 3 tahun (harga_harian.yml)
     u = univ_layak() or set()
@@ -373,6 +405,21 @@ def cmd_jalan(a):
     with ctx.Pool(a.proses) as pool:
         for S in todo:
             t0 = time.time()
+            # data sesi S mesti lengkap (Harga harian awal kadang-kadang belum ada bar bagi sebahagian saham);
+            # jika tidak, berhenti tanpa memajukan sesi — larian sandaran / esok memproses semula dengan data penuh
+            sb = [x for x in sesi if x < S]
+            if sb and not getattr(a, 'paksa', False):
+                ada = [t for t, g in FR.items() if (layak is None or t in layak) and sb[-1] in g.index]
+                cukup = sum(1 for t in ada if S in FR[t].index) / max(len(ada), 1)
+                if cukup < LIPUTAN_MIN:
+                    print(json.dumps(dict(sesi=str(S.date()), ditangguh=f'liputan bar {cukup:.1%} < {LIPUTAN_MIN:.0%}')), flush=True)
+                    break
+                # tarikan yfinance awal (< 00:20 UTC selepas sesi) boleh tersilap harga buka; tunggu data muktamad
+                tk = json.load(open(os.path.join(HARGA, 'status.json'))).get('terkini', {}) if os.path.exists(os.path.join(HARGA, 'status.json')) else {}
+                if str(tk.get('sesi')) == S.strftime('%Y%m%d') and \
+                        pd.Timestamp(tk.get('dijana', '1970-01-01 00:00 UTC').replace(' UTC', '')) < S + pd.Timedelta(hours=24, minutes=20):
+                    print(json.dumps(dict(sesi=str(S.date()), ditangguh=f"data yfinance awal ({tk.get('dijana')})")), flush=True)
+                    break
             Tm = {}; Wm = {}
             for p in T: Tm.setdefault(p['id_kaedah'], []).append(p)
             for w in W: Wm.setdefault(w['id_kaedah'], []).append(w)
@@ -549,7 +596,8 @@ def main():
     x = s.add_parser('banding'); x.set_defaults(f=cmd_banding)
     x = s.add_parser('stor'); x.set_defaults(f=cmd_stor)
     x = s.add_parser('jalan'); x.add_argument('--mula'); x.add_argument('--hingga'); x.add_argument('--proses', type=int, default=4)
-    x.add_argument('--hanya'); x.set_defaults(f=cmd_jalan)
+    x.add_argument('--hanya'); x.add_argument('--paksa', action='store_true', help='proses walaupun liputan bar < LIPUTAN_MIN')
+    x.set_defaults(f=cmd_jalan)
     x = s.add_parser('ringkas'); x.set_defaults(f=cmd_ringkas)
     x = s.add_parser('semak'); x.set_defaults(f=cmd_semak)
     a = p.parse_args(); a.f(a)
