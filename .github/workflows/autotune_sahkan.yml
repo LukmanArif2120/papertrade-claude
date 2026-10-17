@@ -1,0 +1,76 @@
+# AUTOTUNE F6 (SPEC §5–§7): pengesahan → portfolio gabungan → laporan, selepas tala selesai.
+# Input: AUTOTUNE/hasil/tala/Mxx/kNN.json (dalam main) + aset Release autotune-data.
+# Output (commit ke main): AUTOTUNE/hasil/{parameter_sedia.csv,ringkasan.json,gabungan.json,LAPORAN.md,papan.json}.
+# dry_run = true: jalan penuh tetapi TIDAK commit; output dimuat naik sebagai artifact workflow sahaja.
+name: AUTOTUNE sahkan
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Larian kering (tanpa commit; output sebagai artifact)'
+        type: boolean
+        default: true
+      maks:
+        description: 'Bilangan maksimum kaedah dalam gabungan'
+        default: '6'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autotune-sahkan
+  cancel-in-progress: false
+
+jobs:
+  sahkan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q -r requirements.txt pyarrow
+      - name: Muat turun data (Release autotune-data)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p AUTOTUNE/.cache
+          gh release download autotune-data -R "${{ github.repository }}" -D AUTOTUNE/.cache --skip-existing
+          ls AUTOTUNE/.cache | wc -l
+      - name: Ujian unit sahkan
+        run: python3 -m unittest AUTOTUNE/ujian/test_sahkan.py
+      - name: Pengesahan
+        run: python3 AUTOTUNE/sahkan/pengesahan.py
+      - name: Portfolio gabungan
+        run: python3 AUTOTUNE/sahkan/gabungan.py --maks "${{ inputs.maks }}"
+      - name: Laporan
+        run: python3 AUTOTUNE/sahkan/laporan.py
+      - name: Simpan output (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autotune-sahkan
+          path: |
+            AUTOTUNE/hasil/parameter_sedia.csv
+            AUTOTUNE/hasil/ringkasan.json
+            AUTOTUNE/hasil/gabungan.json
+            AUTOTUNE/hasil/LAPORAN.md
+            AUTOTUNE/hasil/papan.json
+          if-no-files-found: warn
+      - name: Commit dan push
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "autotune[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          F="AUTOTUNE/hasil/parameter_sedia.csv AUTOTUNE/hasil/ringkasan.json AUTOTUNE/hasil/gabungan.json AUTOTUNE/hasil/LAPORAN.md AUTOTUNE/hasil/papan.json"
+          git add $F
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE F6: pengesahan, gabungan, laporan"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 10))
+          done
+          exit 1
