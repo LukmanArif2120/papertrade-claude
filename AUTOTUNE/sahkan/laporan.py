@@ -86,7 +86,10 @@ def jana(keluar=None):
         for b, n in (('A', 'OOS-A'), ('B', 'OOS-B'), ('kunci', 'Tempoh kunci')):
             x = m.get(b, {})
             L.append(f"| {n} | {pc(x.get('cagr'))} | {pc(x.get('mdd'))} | {pc(x.get('spy'))} | {x.get('mula')} – {x.get('akhir')} |")
-        L += ['', 'Parameter SEMASA (sedia digunakan; selebihnya = PARAM asal):', '']
+        kalah = [n for b, n in (('A', 'OOS-A'), ('B', 'OOS-B'), ('kunci', 'tempoh kunci'))
+                 if not (_f(m.get(b, {}).get('cagr')) > _f(m.get(b, {}).get('spy')))]
+        if kalah: L += ['', f"**Amaran: gabungan TIDAK mengatasi SPY pada {', '.join(kalah)}.**"]
+        L += ['', 'Parameter SEMASA (untuk cadangan dagangan; parameter lain = PARAM asal):', '']
         for k in gab['terpilih']:
             p = gab.get('param_semasa', {}).get(k, {})
             L.append(f"- **{k}**: " + (', '.join(f'{a}={_v(v)}' for a, v in p.items()) or 'PARAM asal'))
@@ -127,6 +130,11 @@ def jana(keluar=None):
     U.tulis_json(os.path.join(keluar, 'papan.json'), dict(dijana=ring.get('dijana'), tempoh=t,
                  gabungan=gab.get('terpilih', []), kaedah=papan))
     return L, papan
+
+
+def _f(x):
+    try: return float(x)
+    except (TypeError, ValueError): return float('nan')
 
 
 def _ann(x):
