@@ -81,5 +81,8 @@ def _hari_ke_rotasi(akhir):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'rank_ambang_0_8': ('float', 0.4, 0.99),
+    'shift_21': ('int', 10, 42),
+}
+TALA = ['rank_ambang_0_8', 'shift_21']

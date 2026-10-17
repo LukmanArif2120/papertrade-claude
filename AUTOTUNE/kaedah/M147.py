@@ -48,5 +48,13 @@ def sedia(fr, idx, P=None):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'trix_9': ('int', 4, 18),
+    'ema_3': ('int', 2, 6),
+    'shift_2': ('int', 2, 4),
+    'shift_3': ('int', 2, 6),
+    'rank_shift_63': ('int', 32, 126),
+    'henti_pct': ('float', 7.5, 22.5),
+    'had_henti': ('float', 0.425, 0.99),
+}
+TALA = ['henti_pct', 'had_henti', 'trix_9', 'ema_3', 'shift_2', 'shift_3']

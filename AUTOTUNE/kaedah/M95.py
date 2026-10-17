@@ -114,5 +114,14 @@ def _jarak(paras, tutup):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'clip_a1_30': ('int', 15, 60),
+    'rma_atr_kali_2': ('float', 1.0, 3.0),
+    'rolling_50': ('int', 25, 100),
+    'hshp_ambang_21': ('int', 10, 32),
+    'pth_ambang_0_85': ('float', 0.425, 0.99),
+    'rma_atr_14': ('int', 7, 28),
+    'rolling_20': ('int', 10, 40),
+    'shift_63': ('int', 32, 126),
+}
+TALA = ['rma_atr_kali_2', 'rma_atr_14', 'rolling_50', 'hshp_ambang_21', 'pth_ambang_0_85', 'rolling_20']

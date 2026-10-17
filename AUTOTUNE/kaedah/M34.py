@@ -105,5 +105,13 @@ def _esok(g, X):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'sd_kali_2': ('float', 1.0, 3.0),
+    'a20_kali_1_5': ('float', 0.75, 2.25),
+    'rolling_50': ('int', 25, 100),
+    'shift_5': ('int', 2, 10),
+    'bahagi_20': ('int', 10, 40),
+    'rolling_10': ('int', 5, 20),
+    'shift_63': ('int', 32, 126),
+}
+TALA = ['rolling_10', 'rolling_50', 'sd_kali_2', 'a20_kali_1_5', 'bahagi_20', 'shift_5']

@@ -164,5 +164,12 @@ def _hari_ke_hb(d):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'hari_sejak_max_ambang_21': ('int', 10, 32),
+    'rma_atr_kali_3': ('float', 1.5, 4.5),
+    'shift_126': ('int', 63, 252),
+    'clip_a1_50': ('int', 25, 100),
+    'rma_atr_14': ('int', 7, 28),
+    'clip_50': ('int', 25, 100),
+}
+TALA = ['hari_sejak_max_ambang_21', 'rma_atr_kali_3', 'rma_atr_14', 'shift_126']

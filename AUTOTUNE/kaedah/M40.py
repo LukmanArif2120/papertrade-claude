@@ -169,5 +169,13 @@ def _hari_ke_R(d):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'skor_90': ('int', 45, 180),
+    'rma_atr_kali_3': ('float', 1.5, 4.5),
+    'nb_kali_0_2': ('float', 0.1, 0.3),
+    'rma_atr_20': ('int', 10, 40),
+    'rolling_90': ('int', 45, 180),
+    'loc_kali_0_2': ('float', 0.1, 0.3),
+    'c_ambang_0_15': ('float', 0.075, 0.225),
+}
+TALA = ['skor_90', 'rma_atr_kali_3', 'nb_kali_0_2', 'rma_atr_20', 'rolling_90', 'c_ambang_0_15']

@@ -68,5 +68,11 @@ def _keadaan_esok(g, C):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'rolling_9': ('int', 4, 18),
+    'rolling_26': ('int', 13, 52),
+    'rolling_52': ('int', 26, 104),
+    'shift_26': ('int', 13, 52),
+    'shift_63': ('int', 32, 126),
+}
+TALA = ['rolling_9', 'rolling_26', 'rolling_52', 'shift_26']

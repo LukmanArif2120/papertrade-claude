@@ -97,5 +97,14 @@ def _hasil(sebab, syarat, pencetus, paras, jarak, n, N):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'l_max': ('int', 15, 60),
+    'tiang_min': ('float', 0.25, 0.75),
+    'l_min': ('int', 5, 20),
+    'dalam_ambang_0_2': ('float', 0.1, 0.3),
+    'rr_kali_0_99': ('float', 0.495, 0.99),
+    'close_kali_0_88': ('float', 0.44, 0.99),
+    'rolling_50': ('int', 25, 100),
+    'vol50_kali_1_5': ('float', 0.75, 2.25),
+}
+TALA = ['rr_kali_0_99', 'close_kali_0_88', 'rolling_50', 'l_max', 'tiang_min', 'l_min']

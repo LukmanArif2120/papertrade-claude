@@ -1,0 +1,1304 @@
+kaedah,nama,nilai_asal,jenis,bawah,atas,tala,peranan,catatan
+M01,r13_ambang_25,25,int,12,38,Y,sig,
+M01,rolling_30,30,int,15,60,Y,sig|tgt,
+M01,rsi_13,13,int,6,26,Y,rank|sig,
+M01,sd_kali_2,2,float,1.0,3.0,Y,sig,
+M02,ewm_span_12,12,int,6,24,Y,sig|tgt,
+M02,ewm_span_26,26,int,13,52,N,sig|tgt,
+M02,ewm_span_9,9,int,4,18,Y,sig|tgt,
+M02,r,3.0,float,1.5,4.5,Y,tgt,
+M02,rolling_200,200,int,100,400,Y,sig|stop|tgt,
+M02,s200_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop|tgt,
+M02,shift_63,63,int,32,126,N,rank,
+M02,tmax,20,int,10,40,Y,tmax,
+M03,i_tolak_30,30,beku,,,N,rank|sig|stop,indeks gelung
+M03,i_tolak_5,5,beku,,,N,rank|sig|stop,indeks gelung
+M03,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M03,range_31,31,beku,,,N,rank|sig|stop,julat gelung
+M03,rolling_20,20,int,10,40,Y,rank|sig|stop|tgt,
+M03,rsi_14,14,int,7,28,Y,rank|sig|stop,
+M03,sd_kali_2,2,float,1.0,3.0,Y,rank|sig|stop|tgt,
+M04,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M04,quantile_0_2,0.2,float,0.1,0.3,N,sig,
+M04,rolling_10,10,int,5,20,N,sig,
+M04,rolling_11,11,int,6,22,Y,sig|stop,
+M04,rolling_126,126,int,63,252,N,sig,
+M04,rolling_20,20,int,10,40,Y,sig,
+M04,rolling_50,50,int,25,100,Y,exitc,
+M04,sd_kali_2,2,float,1.0,3.0,Y,sig,
+M04,sd_kali_4,4,float,2.0,6.0,Y,sig,
+M04,shift_63,63,int,32,126,N,rank,
+M04,vs20_kali_1_5,1.5,float,0.75,2.25,N,sig,
+M05,ewm_span_12,12,int,6,24,Y,exitc|rank|sig|stop,
+M05,ewm_span_26,26,int,13,52,N,exitc|rank|sig|stop,
+M05,i_ambang_15,15,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M05,i_tolak_3,3,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M05,l_kali_0_99,0.99,float,0.495,0.99,N,sig|stop,
+M05,len_ambang_2,2,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M05,n_tolak_3,3,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M05,nilai_2,2,beku,,,N,exitc|rank|sig|stop,indeks
+M05,p2_ambang_5,5,int,2,8,Y,rank|sig|stop,
+M05,p_p2_ambang_5_ambang_40,40,int,20,60,Y,rank|sig|stop,
+M05,p_q2_ambang_5_ambang_40,40,int,20,60,Y,exitc,
+M05,q2_ambang_5,5,int,2,8,Y,exitc,
+M05,range_10,10,beku,,,N,exitc|rank|sig|stop,julat gelung
+M05,range_3,3,beku,,,N,exitc|rank|sig|stop,julat gelung
+M05,rolling_200,200,int,100,400,Y,rank|sig|stop,
+M05,t_tambah_4,4,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M05,t_tolak_3,3,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M06,bm_kali_0_92,0.92,float,0.46,0.99,Y,sig|stop,
+M06,cl_kali_0_2,0.2,float,0.1,0.3,Y,rank|sig,
+M06,cl_kali_0_4,0.4,float,0.2,0.6,Y,rank|sig,
+M06,h_kali_0_75,0.75,float,0.375,0.99,N,sig,
+M06,l_kali_1_3,1.3,float,0.65,1.95,N,sig,
+M06,lb3_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M06,piv_kali_1_05,1.05,float,0.525,1.575,N,sig,
+M06,rank_kali_100,100,beku,,,N,rank|sig,struktur
+M06,rolling_15,15,int,8,30,Y,sig|stop,
+M06,rolling_150,150,int,75,300,N,sig,
+M06,rolling_200,200,int,100,400,N,sig,
+M06,rolling_252,252,beku,,,N,sig,struktur
+M06,rolling_50,50,int,25,100,Y,exitc|sig,
+M06,rsp_ambang_70,70,int,35,105,N,sig,
+M06,shift_126,126,int,63,252,N,rank|sig,
+M06,shift_189,189,int,94,378,N,rank|sig,
+M06,shift_21,21,int,10,42,N,sig,
+M06,shift_252,252,beku,,,N,rank|sig,struktur
+M06,shift_63,63,int,32,126,N,rank|sig,
+M06,vola_kali_1_4,1.4,float,0.7,2.1,N,sig,
+M07,adr_ambang_0_04,0.04,float,0.02,0.06,Y,sig,
+M07,adr_kali_3,3,float,1.5,4.5,Y,sig,
+M07,atrw_14,14,int,7,28,N,sig,
+M07,i_tolak_10,10,beku,,,N,sig,indeks gelung
+M07,i_tolak_126,126,beku,,,N,sig,indeks gelung
+M07,i_tolak_4,4,beku,,,N,sig,indeks gelung
+M07,i_tolak_5,5,beku,,,N,sig,indeks gelung
+M07,i_tolak_6,6,beku,,,N,sig,indeks gelung
+M07,i_tolak_9,9,beku,,,N,,indeks gelung
+M07,k_tolak_63,63,beku,,,N,sig,indeks gelung
+M07,range_132,132,beku,,,N,sig,julat gelung
+M07,rolling_10,10,int,5,20,Y,sig,
+M07,rolling_20,20,int,10,40,Y,exitc|sig,
+M07,rolling_50,50,int,25,100,N,sig,
+M07,run_ambang_0_3,0.3,float,0.15,0.45,Y,sig,
+M07,s10_kali_1_01,1.01,float,0.505,1.515,Y,sig,
+M07,shift_126,126,int,63,252,N,rank,
+M08,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M08,rolling_10,10,int,5,20,Y,sig,
+M08,rolling_20,20,int,10,40,Y,exitc|rank|sig,
+M08,rolling_6,6,int,3,12,Y,sig|stop,
+M08,s20_kali_1_01,1.01,float,0.505,1.515,N,sig,
+M08,s20_kali_1_05,1.05,float,0.525,1.575,Y,sig,
+M08,shift_5,5,int,2,10,N,rank|sig,
+M08,sl20_ambang_0_01,0.01,float,0.01,0.015,Y,sig,
+M09,a14_kali_0_5,0.5,float,0.25,0.75,Y,sig|stop,
+M09,a200_kali_2,2,float,1.0,3.0,Y,exitc|rank|sig|stop,
+M09,a_bahagi_100,100,beku,,,N,exitc|rank|sig|stop,struktur
+M09,age_ambang_50,50,int,25,75,N,,
+M09,atrw_14,14,int,7,28,N,sig|stop,
+M09,atrw_200,200,int,100,400,N,exitc|rank|sig|stop,
+M09,bahagi_2,2,float,1.0,3.0,Y,exitc|rank|sig|stop,
+M09,bahagi_2_bahagi_11,11,float,5.5,16.5,Y,exitc|rank|sig|stop,
+M09,buy_bahagi_2,2,beku,,,N,rank|sig|stop,purata
+M09,buy_kali_100,100,beku,,,N,rank|sig|stop,struktur
+M09,cc_tambah_4,4,beku,,,N,sig|stop,indeks
+M09,cc_tolak_3,3,beku,,,N,sig|stop,indeks
+M09,dl_ambang_30,30,int,15,45,Y,sig|stop,
+M09,i_tolak_3,3,beku,,,N,sig|stop,indeks gelung
+M09,range_7,7,beku,,,N,sig|stop,julat gelung
+M09,rolling_15,15,int,8,30,N,exitc|rank|sig|stop,
+M09,rolling_20,20,int,10,40,Y,exitc|rank|sig|stop,
+M09,up_kali_100,100,beku,,,N,exitc|rank|sig|stop,struktur
+M10,cci_20,20,int,10,40,Y,sig,
+M10,cci_ambang_100,100,beku,,,N,sig,struktur
+M10,e125_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M10,ewm_span_125,125,int,62,250,Y,exitc|sig|stop,
+M10,ewm_span_250,250,int,125,500,Y,rank|sig,
+M10,ewm_span_60,60,int,30,120,Y,sig,
+M10,high_bahagi_3,3,beku,,,N,sig,purata
+M10,md_kali_0_015,0.015,beku,,,N,sig,struktur
+M10,rolling_11,11,int,6,22,Y,sig,
+M11,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M11,rolling_11,11,int,6,22,Y,sig|stop,
+M11,rolling_20,20,int,10,40,Y,sig,
+M11,rolling_50,50,int,25,100,Y,exitc,
+M11,rolling_7,7,int,4,14,Y,sig,
+M11,shift_63,63,int,32,126,N,rank,
+M12,psar_a0_0_02,0.02,float,0.01,0.03,Y,sig|stop,
+M12,psar_amax_0_2,0.2,float,0.1,0.3,Y,sig|stop,
+M12,psar_da_0_02,0.02,float,0.01,0.03,Y,sig|stop,
+M12,rolling_50,50,int,25,100,Y,exitc|sig,
+M12,shift_63,63,int,32,126,N,rank,
+M12,t_tolak_2,2,beku,,,N,sig|stop,indeks gelung
+M13,k,3,int,2,6,Y,exitc|sig|stop,
+M13,len_ambang_2,2,beku,,,N,,indeks gelung
+M13,nilai_2,2,beku,,,N,exitc|sig|stop,indeks
+M13,shift_63,63,int,32,126,N,rank,
+M13,win,252,beku,,,N,exitc|sig|stop,struktur
+M14,rolling_50,50,int,25,100,Y,exitc|sig,
+M14,shift_2,2,int,2,4,Y,rank|sig|stop,
+M15,a14_kali_0_5,0.5,float,0.25,0.75,N,,
+M15,atrw_14,14,int,7,28,Y,sig|stop,
+M15,bb_tolak_4,4,beku,,,N,sig|stop,indeks gelung
+M15,h_kali_0_382,0.382,float,0.191,0.573,Y,sig,
+M15,i_tolak_16,16,beku,,,N,sig|stop,indeks gelung
+M15,i_tolak_60,60,beku,,,N,sig,indeks gelung
+M15,range_70,70,beku,,,N,sig|stop,julat gelung
+M15,rolling_20,20,int,10,40,Y,exitc|sig,
+M15,rolling_7,7,int,4,14,Y,sig|stop,
+M15,shift_63,63,int,32,126,N,rank,
+M18,ema_a1_21,21,int,10,42,Y,exitc|sig,
+M18,ema_a1_9,9,int,4,18,Y,sig,
+M18,rr_ambang_2,2,int,1,3,Y,sig,
+M19,fillna_9_0,9.0,float,4.5,13.5,N,rank,
+M19,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop|tgt,
+M19,rolling_20,20,int,10,40,Y,sig|tgt,
+M19,shift_2,2,int,2,4,Y,sig|stop|tgt,
+M19,shift_3,3,int,2,6,Y,sig|tgt,
+M19,shift_63,63,int,32,126,N,rank,
+M19,tmax,20,int,10,40,Y,tmax,
+M20,atrw_14,14,int,7,28,N,rank,
+M20,c_kali_2,2,float,1.0,3.0,Y,sig|tgt,
+M20,ema_a1_10,10,int,5,20,Y,rank|sig|tgt,
+M20,ema_a1_15,15,int,8,30,Y,sig|tgt,
+M20,fillna_99_0,99.0,float,49.5,148.5,N,rank,
+M20,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop|tgt,
+M20,range_a1_6,6,beku,,,N,sig|tgt,julat gelung
+M20,rolling_100,100,beku,,,N,sig|tgt,struktur
+M20,shift_5,5,int,2,10,N,rank,
+M20,tmax,20,int,10,40,Y,tmax,
+M21,adr_ambang_0_05,0.05,float,0.025,0.075,N,,
+M21,adr_kali_2_5,2.5,float,1.25,3.75,N,exitc|sig,
+M21,atr_14,14,int,7,28,Y,exitc|sig,
+M21,c_ambang_0_75,0.75,float,0.375,0.99,Y,exitc|sig,
+M21,c_ambang_1000000_0,1000000.0,beku,,,N,,struktur
+M21,hk_kali_0_75,0.75,float,0.375,0.99,N,exitc|sig,
+M21,i_tolak_10,10,beku,,,N,exitc|sig,indeks gelung
+M21,i_tolak_11,11,beku,,,N,exitc|sig,indeks gelung
+M21,i_tolak_2,2,beku,,,N,exitc|sig,indeks gelung
+M21,i_tolak_20,20,beku,,,N,exitc|sig,indeks gelung
+M21,i_tolak_63,63,beku,,,N,exitc|sig,indeks gelung
+M21,k_tolak_63,63,beku,,,N,exitc|sig,indeks gelung
+M21,max_0_04,0.04,float,0.02,0.06,N,exitc|sig,
+M21,o_ambang_0_05,0.05,float,0.025,0.075,Y,exitc|sig,
+M21,range_70,70,beku,,,N,exitc|sig,julat gelung
+M21,rolling_10,10,int,5,20,N,exitc|sig,
+M21,rolling_20,20,int,10,40,Y,exitc|sig,
+M21,rolling_252,252,beku,,,N,rank,struktur
+M21,rolling_40,40,int,20,80,N,rank,
+M21,rolling_50,50,int,25,100,Y,exitc|sig,
+M21,run_ambang_0_3,0.3,float,0.15,0.45,Y,exitc|sig,
+M21,vol50_kali_2,2,float,1.0,3.0,N,exitc|sig,
+M21,vol50_kali_3,3,float,1.5,4.5,N,exitc|sig,
+M22,ema_a1_10,10,int,5,20,Y,sig,
+M22,ema_a1_20,20,int,10,40,Y,sig,
+M22,g_ambang_0_1,0.1,beku,,,N,sig,indeks gelung
+M22,rolling_10,10,int,5,20,Y,exitc,
+M22,rolling_20,20,int,10,40,Y,sig,
+M22,rolling_50,50,int,25,100,Y,rank|sig,
+M22,vr_ambang_3,3,int,2,4,Y,sig,
+M23,rolling_126,126,int,63,252,Y,sig|stop,
+M23,rolling_20,20,int,10,40,Y,exitc,
+M23,rolling_50,50,int,25,100,Y,rank|sig,
+M23,vs50_kali_1_5,1.5,float,0.75,2.25,Y,sig,
+M24,k,2,int,2,4,Y,exitc|sig,
+M24,rolling_200,200,int,100,400,Y,exitc|sig,
+M24,shift_252,252,beku,,,N,exitc|rank|sig,struktur
+M25,a_tolak_2,2,beku,,,N,sig,indeks gelung
+M25,high_bahagi_3,3,beku,,,N,exitc|sig,purata
+M25,i_tolak_10,10,beku,,,N,sig,indeks gelung
+M25,i_tolak_11,11,beku,,,N,sig,indeks gelung
+M25,low_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M25,max_a1_11,11,int,6,22,Y,sig,
+M25,n,20,int,10,40,Y,exitc|sig,
+M25,n_tolak_2,2,beku,,,N,sig,indeks gelung
+M25,range_12,12,beku,,,N,sig,julat gelung
+M25,range_2,2,beku,,,N,sig,julat gelung
+M25,rolling_20,20,int,10,40,Y,sig,
+M25,shift_63,63,int,32,126,N,rank,
+M25,tmax,20,int,10,40,Y,tmax,
+M25,tp_kuasa_2,2,beku,,,N,sig,struktur
+M25,vs20_kali_0_7,0.7,float,0.35,0.99,Y,sig,
+M26,a_kali_0_25,0.25,beku,,,N,sig|stop|tgt,indeks gelung
+M26,atrw_14,14,int,7,28,Y,sig|stop|tgt,
+M26,j_tambah_11,11,beku,,,N,sig|stop|tgt,indeks gelung
+M26,j_tolak_3,3,beku,,,N,sig|stop|tgt,indeks gelung
+M26,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop|tgt,
+M26,l_tolak_1em12,1e-12,beku,,,N,sig|stop|tgt,struktur
+M26,len_ambang_2,2,beku,,,N,sig|stop|tgt,indeks gelung
+M26,nilai_2,2,beku,,,N,sig|stop|tgt,indeks
+M26,pivot_k_3,3,int,2,6,Y,sig|stop|tgt,
+M26,range_10,10,beku,,,N,sig|stop|tgt,julat gelung
+M26,shift_63,63,int,32,126,N,rank,
+M27,a14_kali_0_5,0.5,float,0.25,0.75,Y,exitc|sig|stop,
+M27,atr_14,14,int,7,28,Y,exitc|sig|stop,
+M27,b_tolak_250,250,beku,,,N,exitc|sig|stop,indeks gelung
+M27,b_tolak_4,4,beku,,,N,exitc|sig|stop,indeks gelung
+M27,eq_4,4,int,2,8,N,,
+M27,i_tolak_14,14,beku,,,N,exitc|sig|stop,indeks gelung
+M27,i_tolak_15,15,beku,,,N,exitc|sig|stop,indeks gelung
+M27,i_tolak_4,4,beku,,,N,exitc|sig|stop,indeks gelung
+M27,np_ambang_2,2,int,1,3,Y,exitc|sig|stop,
+M27,pivot_k_3,3,int,2,6,Y,exitc|sig|stop,
+M27,range_5,5,beku,,,N,exitc|sig|stop,julat gelung
+M27,rolling_20,20,int,10,40,Y,exitc,
+M27,rolling_4,4,int,2,8,N,,
+M27,rolling_50,50,int,25,100,Y,exitc|sig|stop,
+M27,shift_63,63,int,32,126,N,rank,
+M28,ambang,3.0,float,1.5,4.5,Y,sig,
+M28,atrw_14,14,int,7,28,Y,rank|sig,
+M28,c_kali_2,2,float,1.0,3.0,N,sig,
+M28,h_bahagi_3,3,beku,,,N,rank|sig|tgt,purata
+M28,h_kali_0_6,0.6,float,0.3,0.9,N,sig,
+M28,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M28,l_kali_1_01,1.01,float,0.505,1.515,Y,sig,
+M28,o_bahagi_2,2,beku,,,N,sig,purata
+M28,rolling_20,20,int,10,40,Y,rank|sig|tgt,
+M28,tmax,10,int,5,20,Y,tmax,
+M29,c_kali_100,100,beku,,,N,sig,struktur
+M29,k_ambang_20,20,beku,,,N,sig,indeks gelung
+M29,p1,50,int,25,100,Y,sig|stop,
+M29,p2,110,int,55,220,Y,sig|stop,
+M29,p3,250,int,125,500,Y,exitc|sig|stop,
+M29,r75_ambang_50,50,int,25,75,Y,exitc|sig,
+M29,rolling_14,14,int,7,28,N,sig,
+M29,rolling_3,3,int,2,6,N,sig,
+M29,rolling_6,6,int,3,12,Y,sig|stop,
+M29,rsi_75,75,int,38,150,Y,exitc|rank|sig,
+M29,shift_5,5,int,2,10,N,sig,
+M29,z_kali_0_99,0.99,float,0.495,0.99,N,sig|stop,
+M30,atrw_14,14,int,7,28,Y,sig,
+M30,atrw_kali_0_5,0.5,float,0.25,0.75,N,sig,
+M30,l_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M30,quantile_0_2,0.2,float,0.1,0.3,N,sig,
+M30,rolling_10,10,int,5,20,Y,sig,
+M30,rolling_11,11,int,6,22,Y,sig|stop,
+M30,rolling_126,126,int,63,252,N,sig,
+M30,rolling_20,20,int,10,40,Y,sig,
+M30,rolling_50,50,int,25,100,Y,exitc,
+M30,sd_kali_2,2,float,1.0,3.0,N,sig,
+M30,sd_kali_4,4,float,2.0,6.0,N,sig,
+M30,shift_63,63,int,32,126,N,rank,
+M31,rolling_10,10,int,5,20,Y,exitc|sig,
+M31,rolling_20,20,int,10,40,Y,exitc|sig,
+M31,sd_kali_2,2,float,1.0,3.0,Y,exitc|sig,
+M31,shift_5,5,int,2,10,Y,exitc|sig,
+M31,shift_63,63,int,32,126,N,rank,
+M32,clv_ambang_0_75,0.75,float,0.375,0.99,N,sig,
+M32,h_kali_0_8,0.8,float,0.4,0.99,Y,exitc|sig,
+M32,r_ambang_0_02,0.02,float,0.01,0.03,Y,exitc|sig,
+M32,r_ambang_0_04,0.04,float,0.02,0.06,Y,exitc|sig,
+M32,rolling_20,20,int,10,40,Y,exitc|sig,
+M32,rolling_3,3,int,2,6,Y,exitc|sig,
+M32,rolling_50,50,int,25,100,Y,exitc|sig,
+M32,shift_2,2,int,2,4,N,exitc|sig,
+M32,shift_3,3,int,2,6,N,exitc|sig,
+M32,shift_6,6,int,3,12,N,exitc|sig,
+M32,shift_63,63,int,32,126,N,rank,
+M32,shift_64,64,int,32,128,N,exitc|sig,
+M33,h_bahagi_2,2,beku,,,N,exitc|sig|stop,purata
+M33,high_ambang_0_25,0.25,float,0.125,0.375,Y,sig,
+M33,rolling_20,20,int,10,40,Y,sig,
+M33,shift_63,63,int,32,126,N,rank,
+M33,supertrend_10,10,int,5,20,Y,exitc|sig|stop,
+M33,supertrend_k_3_0,3.0,float,1.5,4.5,Y,exitc|sig|stop,
+M34,a20_kali_1_5,1.5,float,0.75,2.25,Y,sig,
+M34,bahagi_20,20,int,10,40,Y,sig,
+M34,dm_bahagi_2,2,beku,,,N,sig,purata
+M34,h_bahagi_2,2,beku,,,N,sig,purata
+M34,linreg_end_20,20,beku,,,N,sig,manual
+M34,rolling_10,10,int,5,20,Y,stop,
+M34,rolling_20,20,beku,,,N,sig,manual
+M34,rolling_50,50,int,25,100,Y,exitc|sig,
+M34,sd_kali_2,2,float,1.0,3.0,Y,sig,
+M34,shift_5,5,int,2,10,Y,sig,
+M34,shift_63,63,int,32,126,N,rank,
+M35,rolling_10,10,int,5,20,Y,exitc|sig,
+M35,rolling_200,200,int,100,400,Y,sig,
+M35,rolling_50,50,int,25,100,Y,sig,
+M35,s10_kali_1_02,1.02,float,0.51,1.53,Y,sig,
+M35,shift_63,63,int,32,126,N,rank,
+M36,n_20,20,int,10,40,Y,stop,
+M36,n_kali_2,2,float,1.0,3.0,Y,stop,
+M36,out_bahagi_20,20,beku,,,N,stop,purata
+M36,out_kali_19,19,float,9.5,28.5,Y,stop,
+M36,rolling_50,50,int,25,100,Y,exitc|sig,
+M36,rolling_55,55,int,28,110,Y,sig,
+M36,shift_63,63,int,32,126,N,rank,
+M37,rolling_10,10,int,5,20,Y,sig|stop,
+M37,rolling_26,26,int,13,52,Y,sig|stop,
+M37,rolling_30,30,int,15,60,Y,sig|stop,
+M37,rolling_4,4,int,2,8,Y,sig|stop,
+M37,rolling_50,50,int,25,100,N,exitc|sig,
+M37,rolling_52,52,int,26,104,Y,sig|stop,
+M37,shift_4,4,int,2,8,N,sig|stop,
+M37,shift_63,63,int,32,126,N,rank,
+M37,vol4_kali_2,2,float,1.0,3.0,Y,sig|stop,
+M38,n_sah,3,int,2,6,Y,exitc|sig|stop,
+M38,rolling_52,52,int,26,104,Y,exitc|sig|stop,
+M38,shift_63,63,int,32,126,N,rank,
+M38,weekday_ambang_4,4,beku,,,N,sig,kalendar
+M39,c_kali_0_85,0.85,float,0.425,0.99,Y,sig|stop,
+M39,rolling_100,100,beku,,,N,exitc|sig|stop,struktur
+M39,sd_kali_2,2,float,1.0,3.0,Y,sig,
+M39,shift_63,63,int,32,126,N,rank,
+M40,b_kali_252,252,beku,,,N,exitc|rank|sig|stop,struktur
+M40,b_kuasa_2,2,beku,,,N,exitc|rank|sig|stop,struktur
+M40,c_ambang_0_15,0.15,float,0.075,0.225,Y,exitc|rank|sig|stop,
+M40,d_kuasa_2,2,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M40,loc_kali_0_2,0.2,float,0.1,0.3,N,,
+M40,n_bahagi_2,2,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M40,nb_kali_0_2,0.2,float,0.1,0.3,Y,exitc|rank|sig|stop,
+M40,rma_atr_20,20,int,10,40,Y,rank|sig|stop,
+M40,rma_atr_kali_3,3,float,1.5,4.5,Y,rank|sig|stop,
+M40,rolling_100,100,beku,,,N,exitc|rank|sig|stop,struktur
+M40,rolling_90,90,int,45,180,Y,exitc|rank|sig|stop,
+M40,skor_90,90,int,45,180,Y,exitc|rank|sig|stop,
+M40,slot,8,beku,,,N,,struktur
+M40,weekday_ambang_2,2,beku,,,N,exitc|rank|sig|stop,kalendar
+M40,weekday_mod_7,7,beku,,,N,exitc|rank|sig|stop,kalendar
+M40,weekday_tolak_2,2,beku,,,N,exitc|rank|sig|stop,kalendar
+M40,x_kuasa_2,2,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M41,c_ambang_0_2,0.2,float,0.1,0.3,Y,exitc|sig|stop,
+M41,ema_sma_12,12,int,6,24,Y,exitc|sig|stop,
+M41,ema_sma_26,26,int,13,52,Y,exitc|sig|stop,
+M41,ema_sma_9,9,int,4,18,Y,exitc|sig|stop,
+M41,n_bahagi_2,2,beku,,,N,exitc|sig|stop,indeks gelung
+M41,nilai_10,10,beku,,,N,,indeks
+M41,nilai_6,6,beku,,,N,,indeks
+M41,rint_bahagi_2,2,beku,,,N,exitc|sig|stop,purata
+M41,rolling_10,10,int,5,20,N,exitc|sig|stop,
+M41,rolling_20,20,int,10,40,N,exitc|sig|stop,
+M41,rolling_6,6,int,3,12,Y,exitc|sig|stop,
+M41,saiz_ambang_0_05,0.05,float,0.025,0.075,N,exitc|sig|stop,
+M41,saiz_ambang_0_2,0.2,float,0.1,0.3,N,exitc|sig|stop,
+M41,shift_63,63,int,32,126,N,rank,
+M41,sumbu_ambang_0_5,0.5,float,0.25,0.75,N,exitc|sig|stop,
+M41,volume_kali_1_3,1.3,float,0.65,1.95,Y,exitc|sig|stop,
+M41,weekday_ambang_4,4,beku,,,N,exitc|sig|stop,kalendar
+M44,c_ambang_0_2,0.2,float,0.1,0.3,N,sig,
+M44,iloc_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M44,open_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M44,rolling_25,25,int,12,50,Y,sig,
+M44,rolling_50,50,int,25,100,Y,exitc|sig,
+M44,rolling_9,9,int,4,18,N,sig,
+M44,shift_26,26,int,13,52,N,sig,
+M44,shift_63,63,int,32,126,N,rank,
+M44,shift_89,89,int,44,178,N,sig,
+M44,t_ambang_0_15,0.15,float,0.075,0.225,Y,sig,
+M44,t_tambah_0_1,0.1,float,0.05,0.15,Y,sig,
+M44,tb_kali_1_05,1.05,float,0.525,1.575,N,sig,
+M45,clip_50,50,int,25,100,N,rank,
+M45,clip_a1_50,50,int,25,100,N,rank,
+M45,hari_sejak_max_252,252,beku,,,N,rank|sig|stop,struktur
+M45,hari_sejak_max_ambang_21,21,int,10,32,Y,rank|sig|stop,
+M45,len_kali_0_3,0.3,beku,,,N,rank|sig|stop,indeks gelung
+M45,r_kali_1em06,1e-06,beku,,,N,rank,struktur
+M45,rma_atr_14,14,int,7,28,Y,rank|sig|stop,
+M45,rma_atr_kali_3,3,float,1.5,4.5,Y,rank|sig|stop,
+M45,rolling_252,252,beku,,,N,rank|sig|stop,struktur
+M45,shift_126,126,int,63,252,Y,rank|sig|stop,
+M45,slot,8,beku,,,N,,struktur
+M45,tmax,126,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M46,a40_kali_0_75,0.75,float,0.375,0.99,Y,sig,
+M46,atr_40,40,int,20,80,Y,sig,
+M46,rolling_200,200,int,100,400,Y,sig,
+M46,rolling_50,50,int,25,100,Y,exitc|sig,
+M46,shift_31,31,int,16,62,Y,sig,
+M46,shift_63,63,int,32,126,N,rank,
+M46,vol50_kali_1_5,1.5,float,0.75,2.25,Y,sig,
+M47,adx_14,14,int,7,28,Y,sig|tgt,
+M47,adx_ambang_30,30,int,15,45,Y,sig|tgt,
+M47,ewm_span_20,20,int,10,40,Y,sig|tgt,
+M47,mdm_kali_100,100,beku,,,N,sig|tgt,struktur
+M47,pdi_kali_100,100,beku,,,N,sig|tgt,struktur
+M47,pdm_kali_100,100,beku,,,N,sig|tgt,struktur
+M47,rolling_20,20,int,10,40,Y,sig|tgt,
+M47,shift_63,63,int,32,126,N,rank,
+M48,adx_ambang_30,30,int,15,45,Y,sig,
+M48,high_tambah_0_125,0.125,float,0.0625,0.1875,Y,sig,
+M48,mdm_kali_100,100,beku,,,N,sig,struktur
+M48,pdi_kali_100,100,beku,,,N,sig,struktur
+M48,pdm_kali_100,100,beku,,,N,sig,struktur
+M48,rendah_ambang_2,2,int,1,3,Y,sig,
+M48,rolling_3,3,int,2,6,Y,sig,
+M48,rolling_50,50,int,25,100,Y,exitc|sig,
+M48,shift_63,63,int,32,126,N,rank,
+M48,wilder_14,14,int,7,28,Y,sig|stop,
+M49,h_bahagi_2,2,beku,,,N,exitc|sig|stop,purata
+M49,rolling_26,26,int,13,52,Y,exitc|sig|stop,
+M49,rolling_52,52,int,26,104,Y,exitc|sig,
+M49,rolling_9,9,int,4,18,Y,exitc|sig,
+M49,shift_26,26,int,13,52,Y,exitc|sig,
+M49,shift_63,63,int,32,126,N,rank,
+M49,ten_bahagi_2,2,beku,,,N,exitc|sig,purata
+M50,dayofweek_ambang_4,4,beku,,,N,sig,kalendar
+M50,ewm_span_12,12,int,6,24,Y,sig,
+M50,ewm_span_2,2,int,2,4,Y,sig,
+M50,ewm_span_26,26,int,13,52,Y,sig,
+M50,ewm_span_9,9,int,4,18,Y,sig,
+M50,rolling_50,50,int,25,100,Y,exitc|sig,
+M50,shift_63,63,int,32,126,N,rank,
+M51,bo_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M51,c_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M51,dalam_max,0.5,float,0.25,0.75,Y,sig,
+M51,dc_ambang_0_12,0.12,float,0.06,0.18,N,sig,
+M51,i_ambang_475,475,beku,,,N,sig,indeks gelung
+M51,i_tolak_25,25,beku,,,N,sig,indeks gelung
+M51,i_tolak_4,4,beku,,,N,sig,indeks gelung
+M51,kiri_bahagi_2,2,beku,,,N,sig,purata
+M51,kiri_kali_0_9,0.9,float,0.45,0.99,N,sig,
+M51,kiri_kali_1_05,1.05,float,0.525,1.575,N,sig,
+M51,lft_tolak_130,130,beku,,,N,sig,indeks
+M51,naik_ambang_0_3,0.3,float,0.15,0.45,N,sig,
+M51,p_kali_1_05,1.05,beku,,,N,sig,indeks gelung
+M51,panjang_ambang_35,35,int,18,52,Y,sig,
+M51,panjang_ambang_35_ambang_325,325,int,162,488,Y,sig,
+M51,r_tolak_29,29,beku,,,N,sig,indeks
+M51,r_tolak_320,320,beku,,,N,sig,indeks
+M51,range_475,475,beku,,,N,sig,julat gelung
+M51,rolling_50,50,int,25,100,Y,exitc,
+M51,rp_ambang_0_12,0.12,float,0.06,0.18,N,sig,
+M51,shift_63,63,int,32,126,N,rank,
+M51,v50_kali_1_4,1.4,float,0.7,2.1,N,,
+M52,bo_kali_0_6,0.6,float,0.3,0.9,Y,stop,
+M52,c_kali_0_6,0.6,float,0.3,0.9,Y,stop,
+M52,roc_ambang_0_3,0.3,float,0.15,0.45,Y,sig,
+M52,rolling_10,10,int,5,20,Y,sig,
+M52,rolling_20,20,int,10,40,Y,sig,
+M52,rolling_50,50,int,25,100,Y,exitc|sig,
+M52,shift_20,20,int,10,40,N,rank|sig,
+M54,ewm_span_21,21,int,10,42,Y,exitc|sig,
+M54,rma_atr_14,14,int,7,28,Y,stop,
+M54,rma_atr_kali_2,2,float,1.0,3.0,Y,stop,
+M54,rolling_10,10,int,5,20,Y,sig,
+M54,rolling_20,20,int,10,40,N,sig,
+M54,rolling_5,5,int,2,10,Y,sig,
+M54,rolling_50,50,int,25,100,Y,exitc|sig,
+M54,shift_5,5,int,2,10,N,sig,
+M54,shift_63,63,int,32,126,N,rank,
+M55,nilai_15,15,beku,,,N,sig,indeks
+M55,nilai_30,30,beku,,,N,sig,indeks
+M55,nilai_60,60,beku,,,N,sig,indeks
+M55,rolling_3,3,int,2,6,Y,sig,
+M55,rolling_4,4,int,2,8,Y,sig|stop,
+M55,shift_10,10,int,5,20,Y,sig,
+M55,shift_63,63,int,32,126,N,rank,
+M56,len_ambang_252,252,beku,,,N,exitc|rank|sig|stop,indeks gelung
+M56,len_kali_0_1,0.1,beku,,,N,,indeks gelung
+M56,max_16,16,int,8,32,N,,
+M56,nilai_8,8,beku,,,N,exitc|sig,indeks
+M56,open_kali_0_8,0.8,float,0.4,0.99,Y,stop,
+M56,p_ambang_252,252,beku,,,N,exitc|sig,indeks gelung
+M56,range_4,4,beku,,,N,,julat gelung
+M56,shift_21,21,int,10,42,Y,exitc|rank|sig|stop,
+M56,shift_252,252,beku,,,N,exitc|rank|sig|stop,struktur
+M57,aliran_lag_2,2,int,2,4,Y,sig,
+M57,c_ambang_0_15,0.15,float,0.075,0.225,Y,sig,
+M57,rolling_10,10,int,5,20,Y,sig,
+M57,rolling_50,50,int,25,100,Y,exitc|sig,
+M57,rolling_63,63,int,32,126,Y,sig,
+M57,shift_10,10,int,5,20,N,sig,
+M57,shift_2,2,int,2,4,N,sig,
+M57,shift_63,63,int,32,126,Y,rank|sig,
+M59,atas,69,int,34,138,N,sig,
+M59,bawah,39,int,20,78,Y,sig,
+M59,lb,65,int,32,130,Y,sig,
+M59,r_ambang_40,40,int,20,60,Y,exitc,
+M59,rma_atr_14,14,int,7,28,Y,stop,
+M59,rma_atr_kali_3,3,float,1.5,4.5,Y,stop,
+M59,rsi_14,14,int,7,28,Y,exitc|sig,
+M59,shift_63,63,int,32,126,N,rank,
+M64,c_ambang_0_2,0.2,float,0.1,0.3,Y,stop,
+M64,concat_tambah_0_1,0.1,float,0.05,0.15,Y,stop,
+M64,ketat,0.015,beku,,,N,stop,struktur
+M64,piv_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M64,rolling_50,50,int,25,100,Y,exitc|sig,
+M64,sah,15,int,8,30,Y,stop,
+M64,shift_10,10,int,5,20,N,stop,
+M64,shift_2,2,int,2,4,N,stop,
+M64,shift_63,63,int,32,126,N,rank,
+M66,akhir_999,999,int,500,1998,Y,sig,
+M66,i_ambang_10,10,beku,,,N,sig,indeks gelung
+M66,rolling_4,4,int,2,8,Y,sig|stop,
+M66,rolling_50,50,int,25,100,Y,exitc|sig,
+M66,s50_kali_1_02,1.02,float,0.51,1.53,Y,sig,
+M66,shift_10,10,int,5,20,Y,sig,
+M66,shift_63,63,int,32,126,N,rank,
+M67,a_kali_2,2,float,1.0,3.0,Y,stop,
+M67,b_ambang_3,3,int,2,4,Y,sig,
+M67,ewm_span_20,20,int,10,40,Y,sig,
+M67,ewm_span_50,50,int,25,100,Y,exitc|sig,
+M67,i_tolak_6,6,beku,,,N,sig,indeks gelung
+M67,nilai_2,2,beku,,,N,,indeks
+M67,nilai_3,3,beku,,,N,,indeks
+M67,rma_atr_14,14,int,7,28,Y,stop,
+M67,rolling_200,200,int,100,400,Y,sig,
+M67,shift_10,10,int,5,20,N,sig,
+M67,shift_63,63,int,32,126,N,rank,
+M68,ewm_span_10,10,int,5,20,Y,sig,
+M68,ewm_span_20,20,int,10,40,Y,sig,
+M68,n,10,int,5,20,Y,sig|stop,
+M68,pangsi_ambang_0_12,0.12,float,0.06,0.18,Y,sig,
+M68,pangsi_ambang_0_2,0.2,float,0.1,0.3,Y,sig,
+M68,rolling_30,30,int,15,60,N,sig,
+M68,rolling_50,50,int,25,100,Y,exitc|sig,
+M68,rolling_63,63,int,32,126,N,sig,
+M68,shift_63,63,int,32,126,N,rank,
+M70,ewm_span_10,10,int,5,20,Y,sig,
+M70,ewm_span_21,21,int,10,42,Y,sig,
+M70,rolling_200,200,int,100,400,Y,sig,
+M70,rolling_50,50,int,25,100,Y,exitc|sig,
+M70,shift_63,63,int,32,126,N,rank,
+M73,adx_5,5,int,2,10,Y,sig,
+M73,adx_ambang_40,40,int,20,60,Y,sig,
+M73,pdi_kali_100,100,beku,,,N,sig,struktur
+M73,rma_kali_100,100,beku,,,N,sig,struktur
+M73,rolling_5,5,int,2,10,Y,sig,
+M73,shift_63,63,int,32,126,N,rank,
+M74,h252_kali_0_75,0.75,float,0.375,0.99,N,sig,
+M74,l252_kali_1_3,1.3,float,0.65,1.95,Y,sig,
+M74,rma_atr_14,14,int,7,28,Y,sig|stop,
+M74,rma_atr_kali_1_5,1.5,float,0.75,2.25,Y,sig|stop,
+M74,rolling_150,150,int,75,300,Y,sig,
+M74,rolling_20,20,int,10,40,N,sig,
+M74,rolling_200,200,int,100,400,Y,sig,
+M74,rolling_252,252,beku,,,N,sig,struktur
+M74,rolling_50,50,int,25,100,Y,exitc|sig|stop,
+M74,shift_21,21,int,10,42,N,sig,
+M74,shift_63,63,int,32,126,N,rank,
+M76,clv_ambang_0_6,0.6,float,0.3,0.9,Y,sig,
+M76,i_tolak_2,2,beku,,,N,sig,indeks gelung
+M76,i_tolak_8,8,beku,,,N,sig,indeks gelung
+M76,n,40,int,20,80,Y,sig,
+M76,n_tolak_2,2,beku,,,N,sig,indeks gelung
+M76,rolling_20,20,int,10,40,N,,
+M76,rolling_200,200,int,100,400,Y,sig,
+M76,rolling_3,3,int,2,6,Y,sig|stop,
+M76,rp_kali_1_05,1.05,float,0.525,1.575,Y,sig,
+M76,shift_63,63,int,32,126,N,rank,
+M77,clv_ambang_0_6,0.6,float,0.3,0.9,Y,sig,
+M77,rolling_20,20,int,10,40,Y,sig,
+M77,rolling_200,200,int,100,400,Y,sig,
+M77,rolling_5,5,int,2,10,Y,sig,
+M77,rolling_50,50,int,25,100,Y,exitc|sig,
+M77,shift_10,10,int,5,20,Y,sig,
+M77,shift_2,2,int,2,4,N,sig,
+M77,shift_63,63,int,32,126,N,rank,
+M78,dv21_ambang_15000000_0,15000000.0,float,7500000.0,22500000.0,Y,sig,
+M78,k_atr,5,int,2,10,Y,exitc,
+M78,open_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M78,r20_ambang_0_3,0.3,float,0.15,0.45,Y,sig,
+M78,rma_atr_100,100,beku,,,N,,struktur
+M78,rolling_100,100,beku,,,N,sig,struktur
+M78,rolling_19,19,int,10,38,Y,sig,
+M78,rolling_21,21,int,10,42,Y,sig,
+M78,shift_20,20,int,10,40,N,rank|sig,
+M78,weekday_ambang_4,4,beku,,,N,rank|sig,kalendar
+M79,a,0.15,float,0.075,0.225,Y,exitc|sig|stop,
+M79,shift_63,63,int,32,126,N,rank,
+M80,n_atas_ambang_5,5,int,2,8,Y,sig,
+M80,rma_atr_14,14,int,7,28,Y,stop,
+M80,rma_atr_kali_3,3,float,1.5,4.5,Y,stop,
+M80,rolling_10,10,int,5,20,Y,sig,
+M80,rolling_5,5,int,2,10,Y,exitc|sig,
+M80,rolling_8,8,int,4,16,Y,exitc,
+M80,shift_5,5,int,2,10,N,sig,
+M80,shift_63,63,int,32,126,N,rank,
+M81,a20_kali_3,3,float,1.5,4.5,Y,exitc|stop,
+M81,close_ambang_5,5,int,2,8,Y,exitc|sig,
+M81,nilai20_ambang_50000000,50000000,int,25000000,75000000,Y,exitc|sig,
+M81,rma_atr_20,20,int,10,40,Y,exitc|stop,
+M81,rolling_100,100,beku,,,N,exitc|sig,struktur
+M81,rolling_20,20,int,10,40,N,exitc|sig,
+M81,rolling_25,25,int,12,50,Y,exitc|sig,
+M81,rolling_50,50,int,25,100,N,exitc|sig,
+M81,shift_200,200,int,100,400,N,rank,
+M81,tt_kali_0_75,0.75,float,0.375,0.99,Y,exitc,
+M82,e_kali_1_1,1.1,float,0.55,1.65,Y,exitc,
+M82,ewm_span_125,125,int,62,250,N,exitc|sig,
+M82,ewm_span_200,200,int,100,400,N,exitc|sig,
+M82,ewm_span_25,25,int,12,50,N,exitc|sig,
+M82,ewm_span_50,50,int,25,100,N,exitc|sig,
+M82,rolling_20,20,int,10,40,Y,exitc|sig,
+M82,rolling_250,250,int,125,500,Y,exitc|sig,
+M82,sd250_ambang_20,20,int,10,30,Y,exitc|sig,
+M82,sd250_kali_100,100,beku,,,N,exitc|sig,struktur
+M82,shift_125,125,int,62,250,N,rank,
+M82,shift_65,65,int,32,130,N,exitc|sig,
+M82,sma20_ambang_10,10,int,5,15,Y,exitc|sig,
+M82,sma20_ambang_5000000,5000000,int,2500000,7500000,Y,exitc|sig,
+M84,close_ambang_5,5,int,2,8,Y,exitc|sig,
+M84,p_ambang_90,90,beku,,,N,exitc|sig,indeks gelung
+M84,pmad_ambang_90,90,int,45,135,N,,
+M84,rank_kali_100,100,beku,,,N,exitc|sig,struktur
+M84,rma_atr_14,14,int,7,28,Y,stop,
+M84,rma_atr_kali_3,3,float,1.5,4.5,Y,stop,
+M84,rolling_200,200,int,100,400,Y,exitc|rank|sig,
+M84,rolling_21,21,int,10,42,Y,exitc|rank|sig,
+M84,rolling_50,50,int,25,100,Y,exitc|sig,
+M87,beli_kali_1_05,1.05,float,0.525,1.575,N,sig,
+M87,d_ambang_0_1,0.1,beku,,,N,sig,indeks gelung
+M87,hr_kali_0_9,0.9,float,0.45,0.99,Y,sig,
+M87,i_ambang_45,45,beku,,,N,sig,indeks gelung
+M87,lr_kali_1_1,1.1,float,0.55,1.65,N,sig,
+M87,open_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M87,p3_tambah_0_1,0.1,float,0.05,0.15,Y,sig,
+M87,p_ambang_3,3,beku,,,N,,indeks gelung
+M87,p_d_ambang_0_1_ambang_0_2,0.2,float,0.1,0.3,Y,sig,
+M87,p_i_ambang_45_ambang_80,80,int,40,120,Y,sig,
+M87,p_tolak_2,2,beku,,,N,sig,indeks gelung
+M87,p_tolak_3,3,beku,,,N,sig,indeks gelung
+M87,rolling_50,50,int,25,100,Y,exitc|sig,
+M87,shift_63,63,int,32,126,N,rank,
+M88,bm_kali_0_92,0.92,float,0.46,0.99,Y,stop,
+M88,d2_tolak_40,40,int,20,80,Y,sig,
+M88,d2_tolak_5,5,int,2,10,Y,sig,
+M88,i_tolak_15,15,beku,,,N,sig|stop,indeks gelung
+M88,l1_kali_0_9,0.9,float,0.45,0.99,Y,sig,
+M88,l1_kali_1_1,1.1,float,0.55,1.65,Y,sig,
+M88,range_16,16,beku,,,N,sig|stop,julat gelung
+M88,rolling_20,20,int,10,40,Y,exitc,
+M88,rolling_50,50,int,25,100,N,sig,
+M88,shift_63,63,int,32,126,N,rank,
+M89,rma_atr_14,14,int,7,28,Y,stop,
+M89,rma_atr_kali_2,2,float,1.0,3.0,Y,stop,
+M89,rolling_14,14,int,7,28,Y,exitc,
+M89,rolling_65,65,int,32,130,Y,sig,
+M89,shift_10,10,int,5,20,Y,sig,
+M89,shift_2,2,int,2,4,N,sig,
+M89,shift_3,3,int,2,6,Y,sig,
+M89,shift_63,63,int,32,126,N,rank,
+M90,c_kali_100,100,beku,,,N,sig,struktur
+M90,rma_atr_14,14,int,7,28,Y,stop,
+M90,rma_atr_kali_2,2,float,1.0,3.0,Y,stop,
+M90,roc_10,10,int,5,20,N,sig,
+M90,roc_15,15,int,8,30,N,sig,
+M90,roc_20,20,int,10,40,N,sig,
+M90,roc_30,30,int,15,60,N,sig,
+M90,roc_kali_2,2,float,1.0,3.0,N,sig,
+M90,roc_kali_3,3,float,1.5,4.5,Y,sig,
+M90,roc_kali_4,4,float,2.0,6.0,Y,sig,
+M90,rolling_10,10,int,5,20,Y,sig,
+M90,rolling_15,15,int,8,30,N,sig,
+M90,rolling_50,50,int,25,100,Y,exitc|sig,
+M90,rolling_9,9,int,4,18,N,sig,
+M90,shift_63,63,int,32,126,N,rank,
+M91,adx_14,14,int,7,28,N,sig,
+M91,adx_ambang_20,20,int,10,30,N,sig,
+M91,close_kali_100,100,beku,,,N,exitc|sig,struktur
+M91,mdm_kali_100,100,beku,,,N,sig,struktur
+M91,pdi_kali_100,100,beku,,,N,sig,struktur
+M91,pdm_kali_100,100,beku,,,N,sig,struktur
+M91,rolling_10,10,int,5,20,Y,stop,
+M91,rolling_20,20,int,10,40,N,sig,
+M91,rolling_250,250,int,125,500,N,sig,
+M91,rolling_3,3,int,2,6,Y,exitc|sig,
+M91,s14_ambang_50,50,int,25,75,Y,exitc,
+M91,s14_ambang_80,80,int,40,120,Y,sig,
+M91,s70_ambang_50,50,int,25,75,N,sig,
+M91,shift_63,63,int,32,126,N,rank,
+M91,sto_14,14,int,7,28,Y,exitc|sig,
+M91,sto_70,70,int,35,140,N,sig,
+M91,where_a1_50_0,50.0,float,25.0,75.0,Y,exitc|sig,
+M92,cci_50,50,int,25,100,Y,exitc|sig,
+M92,cci_ambang_100,100,beku,,,N,exitc,struktur
+M92,high_bahagi_3,3,beku,,,N,exitc|sig,purata
+M92,rma_atr_14,14,int,7,28,Y,stop,
+M92,rma_atr_kali_2,2,float,1.0,3.0,Y,stop,
+M92,shift_63,63,int,32,126,N,rank,
+M92,sp_kali_0_015,0.015,beku,,,N,exitc|sig,struktur
+M93,high_bahagi_3,3,beku,,,N,exitc|sig,purata
+M93,i_ambang_2,2,beku,,,N,stop,indeks gelung
+M93,i_tolak_2,2,beku,,,N,stop,indeks gelung
+M93,mfi_10,10,int,5,20,N,exitc|sig,
+M93,mfi_ambang_20,20,int,10,30,Y,exitc,
+M93,mfi_ambang_80,80,int,40,99,N,sig,
+M93,n_ambang_2,2,beku,,,N,stop,indeks gelung
+M93,pb_ambang_0_2,0.2,float,0.1,0.3,Y,exitc,
+M93,pb_ambang_0_8,0.8,float,0.4,0.99,N,sig,
+M93,pos_bahagi_100,100,beku,,,N,exitc|sig,struktur
+M93,pos_tolak_100,100,beku,,,N,exitc|sig,struktur
+M93,psar_mx_0_2,0.2,float,0.1,0.3,Y,stop,
+M93,psar_step_0_02,0.02,float,0.01,0.03,Y,stop,
+M93,rma_atr_14,14,int,7,28,N,stop,
+M93,rma_atr_kali_2,2,int,2,4,N,stop,
+M93,rolling_20,20,int,10,40,Y,exitc|sig,
+M93,sd_kali_2,2,float,1.0,3.0,Y,exitc|sig,
+M93,shift_63,63,int,32,126,N,rank,
+M93,where_a1_0_5,0.5,float,0.25,0.75,N,exitc|sig,
+M93,where_a1_100_0,100.0,beku,,,N,exitc|sig,struktur
+M94,n,252,beku,,,N,rank|sig,struktur
+M94,nilai_2,2,beku,,,N,rank|sig,indeks
+M94,rank_ambang_0_8,0.8,float,0.4,0.99,Y,sig,
+M94,shift_21,21,int,10,42,Y,rank|sig,
+M94,shift_252,252,beku,,,N,sig,struktur
+M94,tmax,126,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M95,clip_a1_30,30,int,15,60,N,rank,
+M95,hsh_252,252,beku,,,N,rank|sig,struktur
+M95,hshp_ambang_21,21,int,10,32,Y,sig,
+M95,hshp_bahagi_252,252,beku,,,N,rank,struktur
+M95,pth_ambang_0_85,0.85,float,0.425,0.99,Y,sig,
+M95,rma_atr_14,14,int,7,28,Y,stop,
+M95,rma_atr_kali_2,2,float,1.0,3.0,Y,stop,
+M95,roc_kali_1em05,1e-05,beku,,,N,rank,struktur
+M95,rolling_20,20,int,10,40,Y,sig,
+M95,rolling_252,252,beku,,,N,sig,struktur
+M95,rolling_50,50,int,25,100,Y,exitc|sig,
+M95,shift_63,63,int,32,126,N,rank,
+M96,atr_14,14,int,7,28,Y,stop,
+M96,atr_kali_3,3,float,1.5,4.5,Y,stop,
+M96,c_ambang_0_05,0.05,float,0.025,0.075,Y,exitc|sig,
+M96,c_kali_0_75,0.75,float,0.375,0.99,Y,exitc|sig,
+M96,k_ambang_20,20,beku,,,N,exitc,indeks gelung
+M96,k_ambang_8,8,beku,,,N,sig,indeks gelung
+M96,nilai_126,126,int,63,252,N,exitc|rank|sig,
+M96,nilai_252,252,beku,,,N,exitc|rank|sig,struktur
+M96,nilai_63,63,int,32,126,N,exitc|rank|sig,
+M96,rolling_200,200,int,100,400,Y,exitc|sig,
+M96,s_bahagi_3,3,float,1.5,4.5,Y,exitc|rank|sig,
+M96,shift_252,252,beku,,,N,exitc|sig,struktur
+M96,sqrt_252,252,beku,,,N,exitc|rank|sig,fungsi struktur
+M99,h_ambang_3,3,int,2,4,Y,sig|stop,
+M99,n_balik,3,int,2,6,Y,exitc|sig|stop,
+M99,nilai_3,3,beku,,,N,sig|stop,indeks
+M99,rolling_200,200,int,100,400,Y,sig,
+M99,shift_63,63,int,32,126,N,rank,
+M100,b_kali_1_03,1.03,float,0.515,1.545,Y,sig|tgt,
+M100,i_tolak_4,4,beku,,,N,sig|stop|tgt,indeks gelung
+M100,i_tolak_63,63,beku,,,N,sig|tgt,indeks gelung
+M100,nl3_ambang_2,2,beku,,,N,sig|tgt,indeks gelung
+M100,nl4_ambang_2,2,int,1,3,N,sig|tgt,
+M100,nl4_ambang_3,3,int,2,4,N,sig|tgt,
+M100,np_ambang_2,2,int,1,3,Y,sig|tgt,
+M100,np_ambang_3,3,int,2,4,N,sig|tgt,
+M100,np_ambang_5,5,int,2,8,Y,sig|tgt,
+M100,p_w_tambah_63,63,int,32,126,Y,sig|stop|tgt,
+M100,rolling_7,7,int,4,14,Y,sig|stop|tgt,
+M100,shift_63,63,int,32,126,N,rank,
+M100,t_kali_0_98,0.98,float,0.49,0.99,N,sig|tgt,
+M100,w,40,int,20,80,Y,sig|stop|tgt,
+M101,a_tolak_63,63,beku,,,N,sig,indeks
+M101,b_ambang_5,5,int,2,8,N,,
+M101,cc_ambang_5,5,int,2,8,N,,
+M101,i_ambang_126,126,beku,,,N,,indeks gelung
+M101,lc_kali_0_99,0.99,float,0.495,0.99,Y,sig|stop,
+M101,p,5,int,2,10,Y,sig|stop,
+M101,p_b_ambang_5_ambang_60,60,int,30,90,N,,
+M101,p_cc_ambang_5_ambang_60,60,int,30,90,N,,
+M101,p_kali_2,2,beku,,,N,sig|stop,indeks gelung
+M101,ptr_ambang_3,3,int,2,4,N,,
+M101,ptr_tolak_2,2,beku,,,N,,indeks
+M101,ptr_tolak_3,3,beku,,,N,sig,indeks
+M101,rolling_50,50,int,25,100,Y,exitc|sig,
+M101,shift_63,63,int,32,126,N,rank,
+M102,c_ambang_3,3,int,2,4,N,sig,
+M102,fillna_1000000000_0,1000000000.0,beku,,,N,rank,struktur
+M102,minv_ambang_100000,100000,int,50000,150000,N,sig,
+M102,r_ambang_0_02,0.02,float,0.01,0.03,Y,sig,
+M102,rolling_3,3,int,2,6,Y,sig,
+M102,rolling_50,50,int,25,100,Y,exitc|sig,
+M102,rolling_65,65,int,32,130,Y,sig,
+M102,rolling_7,7,int,4,14,Y,sig,
+M102,shift_63,63,int,32,126,N,rank,
+M102,ti65_ambang_1_05,1.05,float,0.525,1.575,Y,sig,
+M104,close_kali_0_88,0.88,float,0.44,0.99,Y,stop,
+M104,dalam_ambang_0_2,0.2,float,0.1,0.3,N,sig,
+M104,fillna_1000000000_0,1000000000.0,beku,,,N,rank,struktur
+M104,i_tolak_30,30,beku,,,N,rank|sig|stop,indeks gelung
+M104,l_max,30,int,15,60,Y,sig,
+M104,l_min,10,int,5,20,Y,sig,
+M104,p_tolak_40,40,beku,,,N,rank|sig,indeks gelung
+M104,range_41,41,beku,,,N,rank|sig|stop,julat gelung
+M104,rolling_50,50,int,25,100,Y,exitc|sig,
+M104,rr_kali_0_99,0.99,float,0.495,0.99,Y,stop,
+M104,tiang_min,0.5,float,0.25,0.75,Y,sig,
+M104,vol50_kali_1_5,1.5,float,0.75,2.25,N,sig,
+M105,close_kali_0_88,0.88,float,0.44,0.99,Y,sig|stop,
+M105,high_bahagi_2,2,beku,,,N,exitc|sig|stop,purata
+M105,m,3.0,float,1.5,4.5,Y,exitc|sig|stop,
+M105,n,10,int,5,20,Y,exitc|sig|stop,
+M105,shift_63,63,int,32,126,N,rank,
+M106,a14_kali_2,2,float,1.0,3.0,Y,sig|stop,
+M106,adx_ambang_25,25,int,12,38,Y,sig,
+M106,adx_bahagi_14,14,beku,,,N,sig,purata
+M106,adx_kali_13,13,float,6.5,19.5,Y,sig,
+M106,dmi_14,14,int,7,28,Y,exitc|sig|stop,
+M106,np_kali_100,100,beku,,,N,sig,struktur
+M106,shift_63,63,int,32,126,N,rank,
+M106,wn_kali_100,100,beku,,,N,exitc|sig,struktur
+M106,wp_kali_100,100,beku,,,N,exitc|sig,struktur
+M107,rma_atr_14,14,int,7,28,Y,stop,
+M107,rma_atr_kali_3,3,float,1.5,4.5,Y,stop,
+M107,rolling_200,200,int,100,400,Y,exitc|sig,
+M107,rolling_50,50,int,25,100,Y,exitc|sig,
+M107,shift_63,63,int,32,126,N,rank,
+M111,close_kali_0_88,0.88,float,0.44,0.99,Y,stop,
+M111,m,3.0,float,1.5,4.5,Y,exitc|sig|stop,
+M111,n,7,int,4,14,Y,exitc|sig|stop,
+M111,rolling_50,50,int,25,100,Y,sig,
+M111,shift_63,63,int,32,126,N,rank,
+M111,sistem_mula_199,199,int,100,398,Y,exitc|sig,
+M115,between_3,3,int,2,6,Y,sig,
+M115,between_a1_5,5,int,2,10,Y,sig,
+M115,ema_20,20,int,10,40,Y,sig,
+M115,ema_30,30,int,15,60,N,sig,
+M115,had_henti,0.85,float,0.425,0.99,Y,stop,
+M115,rank_shift_63,63,int,32,126,N,rank,
+M115,shift_2,2,int,2,4,N,sig,
+M115,sma_10,10,int,5,20,Y,sig,
+M115,tmax,42,int,21,60,Y,tmax,
+M116,ema_20,20,int,10,40,Y,exitc|sig|stop,
+M116,had_henti,0.85,float,0.425,0.99,Y,stop,
+M116,henti_pct,10,float,5.0,15.0,Y,stop,
+M116,rank_shift_63,63,int,32,126,N,rank,
+M116,shift_2,2,int,2,4,Y,sig,
+M116,tmax,10,int,5,20,Y,tmax,
+M117,c_ambang_0_04,0.04,float,0.02,0.06,Y,sig,
+M117,had_henti,0.85,float,0.425,0.99,Y,stop,
+M117,henti_atr,3.0,float,1.5,4.5,Y,stop,
+M117,lp_ambang_2,2,int,1,3,Y,sig,
+M117,p_lp_ambang_2_ambang_7,7,int,4,10,Y,sig,
+M117,rank_shift_63,63,int,32,126,N,rank,
+M117,rolling_42,42,int,21,84,Y,sig,
+M118,had_henti,0.85,float,0.425,0.99,Y,stop,
+M118,henti_low,5,int,2,10,Y,stop,
+M118,keluar_sma,50,int,25,100,Y,exitc,
+M118,rank_shift_63,63,int,32,126,N,rank,
+M118,rolling_9,9,int,4,18,Y,sig,
+M118,sma_50,50,int,25,100,Y,sig,
+M119,had_henti,0.85,float,0.425,0.99,N,stop,
+M119,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M119,keluar_chan_atr,22,int,11,44,Y,exitc,
+M119,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M119,pos_ambang_0_25,0.25,float,0.125,0.375,Y,sig,
+M119,pos_ambang_0_75,0.75,float,0.375,0.99,N,sig,
+M119,rank_shift_63,63,int,32,126,N,rank,
+M119,sma_10,10,int,5,20,N,sig,
+M119,sma_50,50,int,25,100,Y,sig,
+M119,tmax,42,int,21,60,Y,tmax,
+M120,c_ambang_30,30,int,15,45,Y,sig,
+M120,had_henti,0.85,float,0.425,0.99,Y,stop,
+M120,keluar_sma,50,int,25,100,Y,exitc,
+M120,rank_shift_63,63,int,32,126,N,rank,
+M120,rolling_5,5,int,2,10,Y,sig,
+M120,rolling_60,60,int,30,120,Y,sig,
+M121,ema_20,20,int,10,40,Y,sig,
+M121,had_henti,0.85,float,0.425,0.99,Y,stop,
+M121,henti_pct,15,float,7.5,22.5,Y,stop,
+M121,i_tolak_2,2,beku,,,N,sig,indeks gelung
+M121,kira_ambang_2,2,int,1,3,Y,sig,
+M121,pos_ambang_0_75,0.75,float,0.375,0.99,Y,sig,
+M121,range_2,2,beku,,,N,sig,julat gelung
+M121,rank_shift_63,63,int,32,126,N,rank,
+M121,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M122,had_henti,0.85,float,0.425,0.99,Y,stop,
+M122,henti_low,5,int,2,10,Y,stop,
+M122,k_ambang_20,20,beku,,,N,sig,indeks gelung
+M122,macd_hist_a_12,12,int,6,24,Y,exitc|sig,
+M122,macd_hist_b_26,26,int,13,52,Y,exitc|sig,
+M122,macd_hist_s_9,9,int,4,18,Y,exitc|sig,
+M122,rank_shift_63,63,int,32,126,N,rank,
+M122,rolling_10,10,int,5,20,N,sig,
+M122,sma_150,150,int,75,300,N,exitc|sig,
+M122,sma_20,20,int,10,40,N,exitc|sig,
+M122,stoch_k_14,14,int,7,28,N,sig,
+M122,stoch_k_d_3,3,int,2,6,N,sig,
+M122,tmax,42,int,21,60,Y,tmax,
+M123,cci_20,20,int,10,40,Y,exitc|sig,
+M123,cd_ambang_100,100,beku,,,N,sig,struktur
+M123,cds_ambang_100,100,beku,,,N,exitc,struktur
+M123,had_henti,0.85,float,0.425,0.99,Y,stop,
+M123,henti_low,1,int,1,2,Y,stop,
+M123,keluar_sma,50,int,25,100,Y,exitc,
+M123,rank_shift_63,63,int,32,126,N,rank,
+M123,v_ambang_100,100,beku,,,N,sig,indeks gelung
+M124,had_henti,0.85,float,0.425,0.99,N,stop,
+M124,henti_atr,2.0,float,1.0,3.0,Y,stop,
+M124,k_ambang_50,50,beku,,,N,exitc|sig,indeks gelung
+M124,keluar_chan,3,float,1.5,4.5,Y,exitc,
+M124,keluar_chan_atr,22,int,11,44,Y,exitc,
+M124,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M124,rank_shift_63,63,int,32,126,N,rank,
+M124,stoch_k_39,39,int,20,78,Y,exitc|sig,
+M124,stoch_k_d_3,3,int,2,6,Y,exitc|sig,
+M124,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M125,had_henti,0.85,float,0.425,0.99,Y,stop,
+M125,henti_atr,2.5,float,1.25,3.75,Y,stop,
+M125,rank_shift_63,63,int,32,126,N,rank,
+M125,shift_2,2,int,2,4,Y,sig,
+M125,shift_3,3,int,2,6,Y,sig,
+M126,had_henti,0.85,float,0.425,0.99,Y,stop,
+M126,henti_atr,3.0,float,1.5,4.5,Y,stop,
+M126,keluar_sma,50,int,25,100,Y,exitc,
+M126,pos_ambang_0_25,0.25,float,0.125,0.375,Y,sig,
+M126,rank_shift_63,63,int,32,126,N,rank,
+M126,rolling_20,20,int,10,40,Y,sig,
+M126,shift_20,20,int,10,40,N,sig,
+M126,sma_50,50,int,25,100,Y,sig,
+M127,had_henti,0.85,float,0.425,0.99,N,stop,
+M127,henti_low,1,int,1,2,Y,stop,
+M127,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M127,keluar_chan_atr,22,int,11,44,Y,exitc,
+M127,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M127,rank_shift_63,63,int,32,126,N,rank,
+M127,rolling_42,42,int,21,84,Y,sig,
+M127,shift_2,2,int,2,4,Y,sig,
+M128,h_ambang_0_45,0.45,float,0.225,0.675,Y,sig,
+M128,had_henti,0.85,float,0.425,0.99,Y,stop,
+M128,henti_pct,10,float,5.0,15.0,Y,stop,
+M128,keluar_sma,20,int,10,40,Y,exitc,
+M128,rank_shift_63,63,int,32,126,N,rank,
+M128,shift_20,20,int,10,40,N,sig,
+M128,sma_50,50,int,25,100,Y,sig,
+M128,tmax,42,int,21,60,Y,tmax,
+M129,h_ambang_0_4,0.4,float,0.2,0.6,Y,sig,
+M129,had_henti,0.85,float,0.425,0.99,Y,stop,
+M129,henti_low,10,int,5,20,Y,stop,
+M129,rank_shift_63,63,int,32,126,N,rank,
+M129,shift_20,20,int,10,40,Y,sig,
+M129,sma_50,50,int,25,100,Y,sig,
+M129,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M130,b_kali_0_5,0.5,float,0.25,0.75,N,sig,
+M130,had_henti,0.85,float,0.425,0.99,Y,stop,
+M130,henti_atr,3.5,float,1.75,5.25,Y,stop,
+M130,pb_kali_1_5,1.5,float,0.75,2.25,Y,sig,
+M130,rank_shift_63,63,int,32,126,N,rank,
+M130,rolling_20,20,int,10,40,Y,sig,
+M130,rolling_3,3,int,2,6,Y,sig|stop,
+M130,shift_2,2,int,2,4,N,sig,
+M130,sma_10,10,int,5,20,Y,sig,
+M130,sma_20,20,int,10,40,N,sig,
+M130,sma_5,5,int,2,10,N,sig,
+M131,had_henti,0.85,float,0.425,0.99,Y,stop,
+M131,henti_atr,2.0,float,1.0,3.0,Y,stop,
+M131,i_tolak_2,2,beku,,,N,sig|stop,indeks gelung
+M131,k_tambah_2,2,beku,,,N,sig|stop,indeks gelung
+M131,k_tolak_2,2,beku,,,N,sig|stop,indeks gelung
+M131,len_ambang_2,2,beku,,,N,sig|stop,indeks gelung
+M131,nilai_2,2,beku,,,N,sig|stop,indeks
+M131,range_4,4,beku,,,N,sig|stop,julat gelung
+M131,rank_shift_63,63,int,32,126,N,rank,
+M131,tahap_2,2,beku,,,N,sig|stop,kod keadaan
+M131,tahap_3,3,beku,,,N,sig|stop,kod keadaan
+M131,tahap_ambang_2,2,beku,,,N,sig|stop,kod keadaan
+M131,tahap_ambang_3,3,beku,,,N,sig|stop,kod keadaan
+M131,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M132,dalam_ambang_0_08,0.08,float,0.04,0.12,N,,
+M132,had_henti,0.85,float,0.425,0.99,N,stop,
+M132,henti_atr,4.0,float,2.0,6.0,Y,stop,
+M132,i_ambang_3,3,beku,,,N,,indeks gelung
+M132,i_tolak_40,40,beku,,,N,sig|stop,indeks gelung
+M132,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M132,keluar_chan_atr,22,int,11,44,N,exitc,
+M132,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M132,p_dalam_ambang_0_08_ambang_0_35,0.35,float,0.175,0.525,N,,
+M132,pv_kali_1_02,1.02,float,0.51,1.53,N,sig|stop,
+M132,range_100,100,beku,,,N,sig|stop,julat gelung
+M132,rank_shift_63,63,int,32,126,N,rank,
+M132,shift_20,20,int,10,40,N,,
+M132,sma_50,50,int,25,100,N,,
+M132,t_ambang_40,40,int,20,60,N,,
+M132,t_tolak_5,5,int,2,10,Y,sig|stop,
+M132,t_tolak_60,60,int,30,120,Y,sig|stop,
+M132,tmax,42,int,21,60,Y,tmax,
+M133,atr_20,20,int,10,40,Y,sig|stop,
+M133,atr_kali_6,6,float,3.0,9.0,Y,sig|stop,
+M133,had_henti,0.85,float,0.425,0.99,Y,stop,
+M133,henti_atr,2.0,float,1.0,3.0,Y,stop,
+M133,keluar_sma,50,int,25,100,Y,exitc,
+M133,rank_shift_63,63,int,32,126,N,rank,
+M133,sma_10,10,int,5,20,N,sig,
+M133,sma_kali_2,2,float,1.0,3.0,N,sig,
+M133,tmax,21,int,10,42,Y,tmax,
+M134,had_henti,0.85,float,0.425,0.99,N,stop,
+M134,henti_atr,2.0,float,1.0,3.0,Y,stop,
+M134,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M134,keluar_chan_atr,22,int,11,44,Y,exitc,
+M134,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M134,rank_shift_63,63,int,32,126,N,rank,
+M134,rolling_60,60,int,30,120,Y,sig,
+M134,run_ambang_5,5,int,2,8,N,sig,
+M134,sma_10,10,int,5,20,Y,sig,
+M135,dekat_ambang_2,2,int,1,3,Y,sig,
+M135,had_henti,0.85,float,0.425,0.99,Y,stop,
+M135,henti_low,10,int,5,20,Y,stop,
+M135,keluar_sma,50,int,25,100,Y,exitc,
+M135,paras_kali_0_97,0.97,float,0.485,0.99,N,sig,
+M135,rank_shift_63,63,int,32,126,N,rank,
+M135,rolling_106,106,int,53,212,Y,sig,
+M135,rolling_126,126,int,63,252,N,sig,
+M135,rolling_20,20,int,10,40,Y,sig,
+M135,shift_2,2,int,2,4,N,sig,
+M135,shift_21,21,int,10,42,N,sig,
+M135,shift_3,3,int,2,6,N,sig,
+M135,shift_4,4,int,2,8,N,sig,
+M135,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M135,v_kali_1_5,1.5,float,0.75,2.25,N,sig,
+M136,had_henti,0.85,float,0.425,0.99,Y,stop,
+M136,henti_pct,10,float,5.0,15.0,Y,stop,
+M136,i_ambang_10,10,beku,,,N,sig|stop,indeks gelung
+M136,len_ambang_3,3,beku,,,N,sig|stop,indeks gelung
+M136,nilai_2,2,beku,,,N,sig|stop,indeks
+M136,nilai_3,3,beku,,,N,sig|stop,indeks
+M136,range_2,2,beku,,,N,sig|stop,julat gelung
+M136,rank_shift_63,63,int,32,126,N,rank,
+M137,a_kali_4,4,float,2.0,6.0,Y,exitc|sig,
+M137,atr_14,14,int,7,28,N,exitc|sig,
+M137,atr_20,20,int,10,40,N,sig|stop,
+M137,atr_kali_6,6,float,3.0,9.0,Y,sig|stop,
+M137,had_henti,0.85,float,0.425,0.99,N,stop,
+M137,henti_atr,2.5,float,1.25,3.75,Y,stop,
+M137,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M137,keluar_chan_atr,22,int,11,44,Y,exitc,
+M137,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M137,len_ambang_2,2,beku,,,N,sig,indeks gelung
+M137,nilai_2,2,beku,,,N,sig,indeks
+M137,rank_shift_63,63,int,32,126,N,rank,
+M138,brun_kali_0_5,0.5,float,0.25,0.75,N,sig,
+M138,had_henti,0.85,float,0.425,0.99,Y,stop,
+M138,henti_atr,4.0,float,2.0,6.0,Y,stop,
+M138,r_ambang_5,5,int,2,8,N,sig,
+M138,rank_shift_63,63,int,32,126,N,rank,
+M138,rolling_20,20,int,10,40,Y,exitc|sig,
+M138,rolling_5,5,int,2,10,Y,sig,
+M138,shift_6,6,int,3,12,N,sig,
+M138,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M138,v_kali_3,3,float,1.5,4.5,Y,exitc,
+M138,vrun_kali_0_5,0.5,float,0.25,0.75,Y,sig,
+M139,atr_14,14,int,7,28,N,sig,
+M139,atr_kali_0_5,0.5,float,0.25,0.75,Y,sig,
+M139,had_henti,0.85,float,0.425,0.99,Y,stop,
+M139,henti_pct,15,float,7.5,22.5,Y,stop,
+M139,rank_shift_63,63,int,32,126,N,rank,
+M139,rolling_20,20,int,10,40,N,sig,
+M139,shift_2,2,int,2,4,N,sig,
+M139,sma_10,10,int,5,20,Y,sig,
+M139,sma_20,20,int,10,40,N,sig,
+M139,sma_5,5,int,2,10,Y,sig,
+M139,tmax,21,int,10,42,Y,tmax,
+M140,c_ambang_0_045,0.045,float,0.0225,0.0675,N,sig,
+M140,float_ambang_40,40,int,20,60,Y,sig,
+M140,h_kali_0_85,0.85,float,0.425,0.99,N,sig,
+M140,had_henti,0.85,float,0.425,0.99,Y,stop,
+M140,henti_atr,3.0,float,1.5,4.5,Y,stop,
+M140,keluar_sma,50,int,25,100,Y,exitc,
+M140,rank_shift_63,63,int,32,126,N,rank,
+M140,rolling_120,120,int,60,240,N,sig,
+M140,rolling_20,20,int,10,40,N,sig,
+M140,rolling_60,60,int,30,120,Y,sig,
+M140,sma_60,60,int,30,120,Y,sig,
+M140,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M141,a_kali_3,3,float,1.5,4.5,Y,sig|stop,
+M141,atr_14,14,int,7,28,Y,sig|stop,
+M141,had_henti,0.85,float,0.425,0.99,Y,stop,
+M141,henti_atr,2.5,float,1.25,3.75,Y,stop,
+M141,i_ambang_15,15,beku,,,N,,indeks gelung
+M141,range_61,61,beku,,,N,sig|stop,julat gelung
+M141,rank_shift_63,63,int,32,126,N,rank,
+M141,rolling_60,60,int,30,120,Y,sig|stop,
+M141,tmax,63,beku,,,N,tmax,tmax >= 60 (enjin had 60)
+M142,h20_kali_1_03,1.03,float,0.515,1.545,N,sig|stop,
+M142,had_henti,0.85,float,0.425,0.99,N,stop,
+M142,henti_atr,3.5,float,1.75,5.25,Y,stop,
+M142,i_ambang_10,10,beku,,,N,sig|stop,indeks gelung
+M142,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M142,keluar_chan_atr,22,int,11,44,Y,exitc,
+M142,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M142,rank_shift_63,63,int,32,126,N,rank,
+M142,rolling_20,20,int,10,40,Y,sig|stop,
+M142,shift_20,20,int,10,40,N,sig|stop,
+M142,sma_250,250,int,125,500,Y,sig|stop,
+M142,v20_kali_2,2,float,1.0,3.0,N,sig|stop,
+M143,c_kali_1_07,1.07,float,0.535,1.605,N,sig,
+M143,had_henti,0.85,float,0.425,0.99,N,stop,
+M143,henti_atr,3.5,float,1.75,5.25,Y,stop,
+M143,hh_ambang_0_15,0.15,float,0.075,0.225,N,sig,
+M143,i_ambang_10,10,beku,,,N,sig,indeks gelung
+M143,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M143,keluar_chan_atr,22,int,11,44,N,exitc,
+M143,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M143,rank_shift_63,63,int,32,126,N,rank,
+M143,rolling_20,20,int,10,40,Y,sig,
+M143,sma_5,5,int,2,10,Y,exitc|sig,
+M143,tmax,21,int,10,42,Y,tmax,
+M143,v20_kali_2,2,float,1.0,3.0,N,sig,
+M144,adr_ambang_0_04,0.04,float,0.02,0.06,Y,sig,
+M144,atr_14,14,int,7,28,N,sig,
+M144,atr_kali_4,4,float,2.0,6.0,N,sig,
+M144,had_henti,0.85,float,0.425,0.99,Y,stop,
+M144,henti_atr,4.0,float,2.0,6.0,Y,stop,
+M144,keluar_sma,50,int,25,100,Y,exitc,
+M144,pos_ambang_0_1,0.1,float,0.05,0.15,N,sig,
+M144,rank_shift_63,63,int,32,126,N,rank,
+M144,rolling_20,20,int,10,40,Y,sig,
+M144,sma_20,20,int,10,40,Y,exitc,
+M144,sma_50,50,int,25,100,N,sig,
+M145,ema_20,20,int,10,40,Y,sig|stop,
+M145,ffill_limit_3,3,int,2,6,Y,sig|stop,
+M145,had_henti,0.85,float,0.425,0.99,Y,stop,
+M145,henti_low,10,int,5,20,Y,stop,
+M145,pos_ambang_0_75,0.75,float,0.375,0.99,Y,sig|stop,
+M145,rank_shift_63,63,int,32,126,N,rank,
+M145,rolling_10,10,int,5,20,N,sig|stop,
+M145,rolling_20,20,int,10,40,Y,sig|stop,
+M145,rolling_3,3,int,2,6,N,sig,
+M146,had_henti,0.85,float,0.425,0.99,Y,stop,
+M146,henti_pct,6,float,3.0,9.0,Y,stop,
+M146,keluar_sma,50,int,25,100,Y,exitc,
+M146,rank_shift_63,63,int,32,126,N,rank,
+M146,rolling_20,20,int,10,40,Y,sig,
+M146,shift_2,2,int,2,4,Y,sig|stop,
+M146,shift_3,3,int,2,6,Y,sig,
+M147,ema_3,3,int,2,6,Y,sig,
+M147,had_henti,0.85,float,0.425,0.99,Y,stop,
+M147,henti_pct,15,float,7.5,22.5,Y,stop,
+M147,rank_shift_63,63,int,32,126,N,rank,
+M147,shift_2,2,int,2,4,Y,sig,
+M147,shift_3,3,int,2,6,Y,sig,
+M147,trix_9,9,int,4,18,Y,sig,
+M148,had_henti,0.85,float,0.425,0.99,Y,stop,
+M148,henti_pct,6,float,3.0,9.0,Y,stop,
+M148,i_ambang_20,20,beku,,,N,sig|stop,indeks gelung
+M148,keluar_ema,10,int,5,20,Y,exitc,
+M148,p_ambang_100,100,beku,,,N,sig|stop,indeks gelung
+M148,p_ambang_20,20,beku,,,N,sig|stop,indeks gelung
+M148,p_ambang_500,500,beku,,,N,sig|stop,indeks gelung
+M148,pulang_10_0,10.0,float,5.0,15.0,N,sig|stop,
+M148,pulang_50_0,50.0,float,25.0,75.0,N,sig|stop,
+M148,pulang_5_0,5.0,float,2.5,7.5,Y,sig|stop,
+M148,rank_shift_63,63,int,32,126,N,rank,
+M148,tmax,42,int,21,60,Y,tmax,
+M148,wma_180,180,int,90,360,Y,exitc|sig|stop,
+M149,a_kali_2,2,float,1.0,3.0,N,sig,
+M149,a_kali_4,4,float,2.0,6.0,Y,sig,
+M149,atr_15,15,int,8,30,Y,sig|stop,
+M149,atr_kali_2_5,2.5,float,1.25,3.75,Y,sig|stop,
+M149,ema_15,15,int,8,30,Y,sig,
+M149,had_henti,0.85,float,0.425,0.99,Y,stop,
+M149,k_ambang_15,15,beku,,,N,sig,indeks gelung
+M149,k_ambang_3,3,beku,,,N,sig,indeks gelung
+M149,p_susut_ambang_0_2_ambang_0_8,0.8,float,0.4,0.99,N,sig,
+M149,rank_shift_63,63,int,32,126,N,rank,
+M149,susut_ambang_0_2,0.2,float,0.1,0.3,Y,sig,
+M150,ema_20,20,int,10,40,Y,sig,
+M150,had_henti,0.85,float,0.425,0.99,Y,stop,
+M150,henti_pct,12,float,6.0,18.0,Y,stop,
+M150,keluar_sma,20,int,10,40,Y,exitc,
+M150,r_kali_0_5,0.5,float,0.25,0.75,Y,sig,
+M150,rank_shift_63,63,int,32,126,N,rank,
+M150,shift_2,2,int,2,4,N,sig,
+M150,tmax,21,int,10,42,Y,tmax,
+M151,had_henti,0.85,float,0.425,0.99,N,stop,
+M151,henti_atr,1.5,float,0.75,2.25,Y,stop,
+M151,i_ambang_10,10,beku,,,N,,indeks gelung
+M151,keluar_chan,4,float,2.0,6.0,Y,exitc,
+M151,keluar_chan_atr,22,int,11,44,Y,exitc,
+M151,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M151,range_21,21,beku,,,N,sig,julat gelung
+M151,rank_shift_63,63,int,32,126,N,rank,
+M151,sma_20,20,int,10,40,Y,sig,
+M152,had_henti,0.85,float,0.425,0.99,Y,stop,
+M152,henti_pct,15,float,7.5,22.5,Y,stop,
+M152,naik_aliran_shift_20,20,int,10,40,N,,
+M152,naik_aliran_sma_50,50,int,25,100,N,,
+M152,pos_ambang_0_75,0.75,float,0.375,0.99,N,,
+M152,range_12,12,beku,,,N,sig|stop,julat gelung
+M152,range_5,5,beku,,,N,sig|stop,julat gelung
+M152,range_a1_12,12,beku,,,N,sig|stop,julat gelung
+M152,rank_shift_63,63,int,32,126,N,rank,
+M152,rolling_5,5,int,2,10,N,,
+M152,tmax,42,int,21,60,Y,tmax,
+M153,h_bahagi_2,2,beku,,,N,sig,purata
+M153,had_henti,0.85,float,0.425,0.99,N,stop,
+M153,henti_pct,12,float,6.0,18.0,Y,stop,
+M153,keluar_chan,2,float,1.0,3.0,Y,exitc,
+M153,keluar_chan_atr,22,int,11,44,N,exitc,
+M153,keluar_chan_tinggi,22,int,11,44,Y,exitc,
+M153,rank_shift_63,63,int,32,126,N,rank,
+M153,tmax,10,int,5,20,Y,tmax,
+M154,had_henti,0.85,float,0.425,0.99,Y,stop,
+M154,henti_atr,2.5,float,1.25,3.75,Y,stop,
+M154,i_tolak_20,20,beku,,,N,sig|stop,indeks gelung
+M154,naik_aliran_shift_20,20,int,10,40,N,,
+M154,naik_aliran_sma_50,50,int,25,100,N,,
+M154,range_21,21,beku,,,N,sig|stop,julat gelung
+M154,rank_shift_63,63,int,32,126,N,rank,
+M154,tmax,42,int,21,60,Y,tmax,
+M155,had_henti,0.85,float,0.425,0.99,Y,stop,
+M155,henti_atr,3.0,float,1.5,4.5,Y,stop,
+M155,rank_shift_63,63,int,32,126,N,rank,
+M155,rolling_21,21,int,10,42,N,sig,
+M155,s1_ambang_0_1,0.1,float,0.05,0.15,N,sig,
+M155,stoch_k_13,13,int,6,26,Y,exitc|sig,
+M155,stoch_k_21,21,int,10,42,Y,exitc|sig,
+M155,stoch_k_34,34,int,17,68,N,exitc|sig,
+M155,stoch_k_d_13,13,int,6,26,N,exitc|sig,
+M155,stoch_k_d_21,21,int,10,42,N,exitc|sig,
+M155,stoch_k_d_8,8,int,4,16,Y,exitc|sig,
+M155,tmax,21,int,10,42,Y,tmax,
+M155,v_ambang_1_2,1.2,float,0.6,1.8,N,sig,
+M156,h_kali_0_382,0.382,float,0.191,0.573,Y,sig|stop,
+M156,h_kali_0_618,0.618,float,0.309,0.927,Y,sig|stop,
+M156,had_henti,0.85,float,0.425,0.99,Y,stop,
+M156,henti_atr,3.0,float,1.5,4.5,Y,stop,
+M156,i_tolak_10,10,beku,,,N,sig|stop,indeks gelung
+M156,k_tolak_20,20,beku,,,N,sig|stop,indeks gelung
+M156,naik_aliran_shift_20,20,int,10,40,N,,
+M156,naik_aliran_sma_50,50,int,25,100,N,,
+M156,range_41,41,beku,,,N,sig|stop,julat gelung
+M156,rank_shift_63,63,int,32,126,N,rank,
+M156,tmax,10,int,5,20,Y,tmax,
+M157,adr5_ambang_0_03,0.03,float,0.015,0.045,N,sig,
+M157,c_ambang_0_15,0.15,float,0.075,0.225,N,sig,
+M157,c_ambang_0_25,0.25,float,0.125,0.375,N,sig,
+M157,ema_10,10,int,5,20,Y,sig,
+M157,ema_21,21,int,10,42,Y,sig,
+M157,h_ambang_0_02,0.02,float,0.01,0.03,N,sig,
+M157,h_kali_0_85,0.85,float,0.425,0.99,N,sig,
+M157,had_henti,0.85,float,0.425,0.99,Y,stop,
+M157,henti_pct,6,float,3.0,9.0,Y,stop,
+M157,rank_shift_63,63,int,32,126,N,rank,
+M157,rolling_5,5,int,2,10,Y,sig,
+M157,rolling_50,50,int,25,100,Y,sig,
+M157,shift_20,20,int,10,40,N,sig,
+M157,shift_40,40,int,20,80,N,sig,
+M157,shift_5,5,int,2,10,N,sig,
+M157,v_kali_0_8,0.8,float,0.4,0.99,N,sig,
+M158,adx_14,14,int,7,28,Y,sig,
+M158,atr_20,20,int,10,40,Y,sig|stop,
+M158,atr_kali_4,4,float,2.0,6.0,Y,sig|stop,
+M158,had_henti,0.85,float,0.425,0.99,Y,stop,
+M158,henti_pct,12,float,6.0,18.0,Y,stop,
+M158,rank_shift_63,63,int,32,126,N,rank,
+M158,sma_50,50,int,25,100,Y,exitc|sig,
+M159,had_henti,0.85,float,0.425,0.99,Y,stop,
+M159,henti_pct,15,float,7.5,22.5,Y,stop,
+M159,hh_kali_0_1,0.1,float,0.05,0.15,Y,sig,
+M159,ho_bahagi_2,2,beku,,,N,exitc|sig,purata
+M159,keluar_sma,20,int,10,40,Y,exitc,
+M159,o_bahagi_2,2,beku,,,N,exitc|sig,purata
+M159,o_bahagi_4,4,beku,,,N,exitc|sig,purata
+M159,rank_shift_63,63,int,32,126,N,rank,
+M159,shift_5,5,int,2,10,Y,sig,
+M159,tmax,10,int,5,20,Y,tmax,
+M160,a_kali_3,3,float,1.5,4.5,Y,sig|stop,
+M160,atr_14,14,int,7,28,Y,sig|stop,
+M160,had_henti,0.85,float,0.425,0.99,Y,stop,
+M160,henti_low,10,int,5,20,Y,stop,
+M160,keluar_ema,21,int,10,42,Y,exitc,
+M160,p_rt_ambang_0_3_ambang_0_7,0.7,float,0.35,0.99,N,sig|stop,
+M160,rank_shift_63,63,int,32,126,N,rank,
+M160,rt_ambang_0_3,0.3,float,0.15,0.45,N,sig|stop,
+M160,tmax,42,int,21,60,Y,tmax,
+M161,atr_14,14,int,7,28,N,sig,
+M161,atr_kali_1_5,1.5,float,0.75,2.25,N,sig,
+M161,ema_10,10,int,5,20,N,sig,
+M161,ema_21,21,int,10,42,Y,exitc|sig,
+M161,had_henti,0.85,float,0.425,0.99,Y,stop,
+M161,henti_pct,15,float,7.5,22.5,Y,stop,
+M161,rank_shift_63,63,int,32,126,N,rank,
+M161,rolling_10,10,int,5,20,Y,sig|stop,
+M161,rolling_5,5,int,2,10,Y,sig,
+M161,supertrend_hijau_10,10,int,5,20,Y,sig,
+M161,supertrend_hijau_k_3_0,3.0,float,1.5,4.5,N,sig,

@@ -164,5 +164,17 @@ def _corak_esok(g, W=W):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'w': ('int', 20, 80),
+    'p_w_tambah_63': ('int', 32, 126),
+    'np_ambang_2': ('int', 1, 3),
+    'np_ambang_5': ('int', 2, 8),
+    'b_kali_1_03': ('float', 0.515, 1.545),
+    'rolling_7': ('int', 4, 14),
+    'np_ambang_3': ('int', 2, 4),
+    'nl4_ambang_2': ('int', 1, 3),
+    'nl4_ambang_3': ('int', 2, 4),
+    't_kali_0_98': ('float', 0.49, 0.99),
+    'shift_63': ('int', 32, 126),
+}
+TALA = ['w', 'np_ambang_2', 'b_kali_1_03', 'rolling_7', 'p_w_tambah_63', 'np_ambang_5']

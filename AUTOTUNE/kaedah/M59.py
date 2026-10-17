@@ -77,5 +77,14 @@ def _cari(au, ad, c0, sasar, naik=True):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'bawah': ('int', 20, 78),
+    'atas': ('int', 34, 138),
+    'lb': ('int', 32, 130),
+    'rsi_14': ('int', 7, 28),
+    'r_ambang_40': ('int', 20, 60),
+    'rma_atr_kali_3': ('float', 1.5, 4.5),
+    'shift_63': ('int', 32, 126),
+    'rma_atr_14': ('int', 7, 28),
+}
+TALA = ['r_ambang_40', 'rma_atr_kali_3', 'rma_atr_14', 'rsi_14', 'lb', 'bawah']

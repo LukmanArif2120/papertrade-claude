@@ -79,5 +79,11 @@ def _bb_esok(c_last19, X):
 BELUM_DITALA = False
 
 # --- JULAT/TALA (pilih_julat.py) ---
-JULAT = {}
-TALA = []
+JULAT = {
+    'rolling_20': ('int', 10, 40),
+    'sd_kali_2': ('float', 1.0, 3.0),
+    'rolling_10': ('int', 5, 20),
+    'shift_63': ('int', 32, 126),
+    'shift_5': ('int', 2, 10),
+}
+TALA = ['rolling_20', 'sd_kali_2', 'rolling_10', 'shift_5']
