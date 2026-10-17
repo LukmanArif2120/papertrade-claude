@@ -117,21 +117,30 @@ def salin(fr):
 
 # ---------- penilaian ----------
 class Penilai:
-    """sedia() + dagangan + portfolio bagi satu set data dan tetingkap. Pasaran dibina sekali."""
+    """sedia() + dagangan + portfolio bagi satu set data dan tetingkap. Pasaran, medv dan topeng dikira sekali."""
     def __init__(self, m, fr, idx, univ, sumber, mula, akhir, kumpulan_list):
+        tpd = {k: sumber.topeng(fr, univ, k) for k in kumpulan_list}
+        if not m.SILANG:   # tanpa kebergantungan merentas saham: buang saham yang tiada hari topeng dalam tetingkap
+            fr = {t: g for t, g in fr.items()
+                  if any(bool(d[t][(g.index >= mula) & (g.index <= akhir)].any()) for d in tpd.values())}
         self.m, self.fr, self.idx, self.mula, self.akhir = m, fr, idx, mula, akhir
         self.pasaran = E.Pasaran(fr, mula, akhir)
-        self.tp = {k: sumber.topeng(fr, univ, k) for k in kumpulan_list}
+        self.nama = list(fr); self.panjang = [len(g) for g in fr.values()]
+        self.medv = E.medv_bersambung(fr)
+        self.tp = {k: E.topeng_bersambung(d, fr) for k, d in tpd.items()}
+        self.univ, self.sumber = univ, sumber
 
     def jalan(self, P, kumpulan_list=None, harian=False):
         """Pulang {kumpulan: (metrik, pulangan_harian | None)} bagi P (digabung atas PARAM)."""
         m = self.m; Pp = dict(m.PARAM); Pp.update(P or {})
         f = salin(self.fr); m.sedia(f, self.idx, Pp)
         tmax = Pp['tmax'] if 'tmax' in Pp else m.TMAX
-        S = E.Susun(f)
+        sejajar = list(f) == self.nama and [len(g) for g in f.values()] == self.panjang
+        S = E.Susun(f, medv=self.medv if sejajar else None)
         out = {}
         for k in (kumpulan_list or list(self.tp)):
-            T = S.dengan_topeng(self.tp[k]).dagangan(tmax, m.WARM, self.mula, self.akhir)
+            tp = self.tp[k] if sejajar else self.sumber.topeng(f, self.univ, k)
+            T = S.dengan_topeng(tp).dagangan(tmax, m.WARM, self.mula, self.akhir)
             cv = self.pasaran.lengkung(T)
             out[k] = (O.ringkas(T, cv), E.pulangan_harian(cv) if harian else None)
         return out

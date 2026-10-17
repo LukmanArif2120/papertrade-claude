@@ -84,8 +84,9 @@ def _trades(o, h, l, c, sig, st, tg, ex, kos, mula, akhir, i0, n1, tmax, warm, g
 
 class Susun:
     """Tatasusunan bersambung bagi fr yang sudah melalui sedia() (urutan dict dikekalkan).
-    topeng: None, atau dict ticker -> bool Series/array sejajar g.index (isyarat di luar topeng dibuang)."""
-    def __init__(self, fr, topeng=None):
+    topeng: None, atau dict ticker -> bool Series/array sejajar g.index (isyarat di luar topeng dibuang).
+    medv: tatasusunan bersambung median nilai dagangan 20 hari (dikira sekali; tidak bergantung parameter)."""
+    def __init__(self, fr, topeng=None, medv=None):
         fr = {t: siap(g) for t, g in fr.items()}
         self.nama = list(fr); self._q = {t: q for q, t in enumerate(self.nama)}; panjang = [len(g) for g in fr.values()]
         self.akhir = np.cumsum(panjang).astype(np.int64); self.mula = self.akhir - np.array(panjang, np.int64)
@@ -101,14 +102,17 @@ class Susun:
         self.tg = cat(lambda g: g['tgt'].astype(float).values)
         self.ex = cat(lambda g: g.exitc.fillna(False).astype(bool).values, bool)
         self.rank = cat(lambda g: g['rank'].astype(float).values)
-        self.medv = cat(lambda g: (g.close.astype(float) * g.volume.astype(float)).rolling(20).median().values
-                        if 'volume' in g else np.full(len(g), np.nan))
+        self.medv = medv if medv is not None else medv_bersambung(fr)
+        if len(self.medv) != len(self.o): raise ValueError('medv tidak sejajar')
 
     def dengan_topeng(self, topeng):
         """Salinan cetek dengan isyarat ditapis topeng (sedia() sekali, beberapa kumpulan)."""
         import copy
         b = copy.copy(self)
-        if topeng is not None and len(self.nama):
+        if isinstance(topeng, np.ndarray):
+            if len(topeng) != len(self.sig): raise ValueError('topeng tidak sejajar')
+            b.sig = self.sig & topeng
+        elif topeng is not None and len(self.nama):
             b.sig = self.sig & np.concatenate([_topeng(topeng, t, self._g(t)) for t in self.nama])
         return b
 
@@ -139,6 +143,19 @@ class Susun:
         return pd.DataFrame(dict(ticker=[self.nama[x] for x in t], sig=self.tarikh[b + i], ent=self.tarikh[b + i + 1],
                                  ex=self.tarikh[b + j], ret=ret, days=(j - i).astype(np.int64),
                                  why=[SEBAB[x] for x in w], rank=self.rank[b + i], mfe=mfe, kos=kk))
+
+
+def medv_bersambung(fr):
+    """Median 20 hari (tutup × volum) bagi setiap saham, bersambung ikut urutan fr."""
+    if not fr: return np.empty(0)
+    return np.concatenate([(g.close.astype(float) * g.volume.astype(float)).rolling(20).median().values
+                           if 'volume' in g else np.full(len(g), np.nan) for g in fr.values()])
+
+
+def topeng_bersambung(tp, fr):
+    """Topeng bersambung ikut urutan fr (dict ticker -> Series/array, atau callable(g, t))."""
+    if not fr: return np.empty(0, bool)
+    return np.concatenate([_topeng(tp, t, g) for t, g in fr.items()])
 
 
 def _topeng(tp, t, g):
