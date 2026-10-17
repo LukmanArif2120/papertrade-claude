@@ -1,0 +1,14 @@
+{
+ "dibina": "2026-10-17T14:59Z",
+ "dokumen": [
+  {
+   "collection": "autotune",
+   "doc_id": "status",
+   "path": "AUTOTUNE/dashboard/db/autotune/status.json",
+   "bait": 491
+  }
+ ],
+ "batch": [
+  "AUTOTUNE/dashboard/db/_batch_0.json"
+ ]
+}

@@ -1,0 +1,164 @@
+--- a/BacktestShariah2/standard/dashboard_v2.html
++++ b/BacktestShariah2/standard/dashboard_v2.html
+@@ -262,6 +262,7 @@
+       <button role="tab" data-tab="ptc" aria-selected="false">Papertrade C</button>
+       <button role="tab" data-tab="prestasi" aria-selected="false">Prestasi</button>
+       <button role="tab" data-tab="kaedah" aria-selected="false">Kaedah</button>
++      <button role="tab" data-tab="autotune" aria-selected="false">AUTOTUNE</button>
+     </nav>
+     <div class="subbar" id="subBar">
+       <div class="seg" role="tablist" id="subSeg" aria-label="Sub-tab"></div>
+@@ -283,6 +284,7 @@
+   <section class="view" id="v-pr-c" hidden></section>
+   <section class="view" id="v-pr-gab" hidden></section>
+   <section class="view" id="v-kaedah" hidden></section>
++  <section class="view" id="v-autotune" hidden></section>
+ </div>
+ <div class="scrim" id="scrim" hidden></div>
+ <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="shTitle"></div>
+@@ -297,14 +299,14 @@
+ const KVAR={'GUNA':'--guna','UJI KERTAS':'--uji','SIMPAN':'--simpan','DITOLAK':'--tolak'};
+ const CMPCOL=['--accent','--uji','--violet'];
+ const HARI=['5','10','15','20','30','40','60'];
+-const MAIN=['backtest','sektor','watch','ptm','ptc','prestasi','kaedah'];
++const MAIN=['backtest','sektor','watch','ptm','ptc','prestasi','kaedah','autotune'];
+ const SUBS={backtest:[['ringkasan','Ringkasan'],['papan','Papan Kedudukan'],['banding','Banding']],prestasi:[['m','Papertrade M'],['c','Papertrade C'],['gab','Combine']]};
+ const S={set:'431',tab:'backtest',sub:{backtest:'ringkasan',prestasi:'m'},docs:{},meta:null,live:false,
+   f:{jenis:'semua',kep:new Set(),q:'',best:true,gaya:false,shown:40},cmp:[],cmpTouched:false,
+-  ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,beli:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:60},kat:null,kf:{q:''}};
++  ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,beli:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:60},kat:null,kf:{q:''},at:{},af:{lbl:'',q:'',eq:'oos'}};
+ try{const t=localStorage.getItem('pbs2_tab');if(MAIN.includes(t))S.tab=t;const s=localStorage.getItem('pbs_set');if(SETS.includes(s))S.set=s;
+   const sb=JSON.parse(localStorage.getItem('pbs2_sub')||'null');if(sb){if(SUBS.backtest.some(x=>x[0]===sb.backtest))S.sub.backtest=sb.backtest;if(SUBS.prestasi.some(x=>x[0]===sb.prestasi))S.sub.prestasi=sb.prestasi;}}catch(e){}
+-{const h=(location.hash||'').slice(1);const map={ringkasan:['backtest','ringkasan'],papan:['backtest','papan'],banding:['backtest','banding'],sektor:['sektor'],watchlist:['watch'],ptm:['ptm'],ptc:['ptc'],prestasi:['prestasi'],kaedah:['kaedah']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];}}
++{const h=(location.hash||'').slice(1);const map={ringkasan:['backtest','ringkasan'],papan:['backtest','papan'],banding:['backtest','banding'],sektor:['sektor'],watchlist:['watch'],ptm:['ptm'],ptc:['ptc'],prestasi:['prestasi'],kaedah:['kaedah'],autotune:['autotune']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];}}
+ 
+ const $=s=>document.querySelector(s);
+ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+@@ -1155,6 +1157,95 @@
+   const q=$('#katQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{kf.q=q.value.trim();renderAll();const n=$('#katQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
+ }
+ 
++/* ================= AUTOTUNE (F7) =================
++   Dokumen db koleksi autotune (AUTOTUNE/dashboard/jana_db.py): status (kemajuan tala), ringkasan, gabungan, kaedah_<ID>.
++   Hanya kaedah_<ID> yang tersenarai dalam ringkasan.kaedah_doc dan sama `dibina` dipapar (dokumen lama diabaikan). */
++const AT_LBL=['TINGGI','SEDERHANA','RENDAH','GAGAL','BUKAN SWING','BELUM DITALA'];
++const AT_CLS={'TINGGI':'k-GUNA','SEDERHANA':'k-UJI','RENDAH':'k-SIMPAN','GAGAL':'k-DITOLAK','BUKAN SWING':'p-near','BELUM DITALA':''};
++const AT_SUB={'TINGGI':'A & B > SPY, MDD ≥ −30%, kunci > SPY, DSR ≥ 0.95, PBO ≤ 0.30','SEDERHANA':'A & B > SPY, MDD OOS-A ≥ −30%','RENDAH':'CAGR OOS-A > 0 sahaja','GAGAL':'CAGR OOS-A ≤ 0','BUKAN SWING':'purata pegang < 2 atau > 60 hari','BELUM DITALA':'gagal kesetaraan atau kajian tidak lengkap'};
++const AT_KAVEAT='Had atas: data tanpa saham delist (yfinance); hasil backtest, bukan jaminan.';
++const atPill=l=>`<span class="pill ${AT_CLS[l]||''}"${AT_CLS[l]?'':' style="background:var(--sunk);color:var(--muted)"'}>${esc(l||'–')}</span>`;
++const atV=v=>typeof v==='number'&&!Number.isInteger(v)?String(+v.toPrecision(4)):String(v);
++const atParam=p=>p&&Object.keys(p).length?Object.entries(p).map(([k,v])=>`${esc(k)}=${esc(atV(v))}`).join(', '):'PARAM asal';
++const atJul=x=>Array.isArray(x)&&x[0]?`${esc(x[0])} – ${esc(x[1]||'')}`:'–';
++const atMdd=v=>`<span class="${v!=null&&v<-0.3?'neg':''}">${pct(v)}</span>`;
++function atKaedah(){const D=S.at||{},rg=D.ringkasan;if(!rg)return [];const ids=new Set(rg.kaedah_doc||[]);
++  return Object.entries(D).filter(([id,d])=>ids.has(id)&&d&&d.dibina===rg.dibina).map(([,d])=>d);}
++function atSiri(gb){const e=gb.ekuiti_bulanan||{};return S.af.eq==='kunci'
++  ?[{nama:'Gabungan · kunci',col:'--accent',pts:e.kunci||[]},{nama:'SPY',col:'--ref',dash:1,pts:e.spy_kunci||[]}]
++  :[{nama:'Gabungan · OOS-A',col:'--accent',pts:e.A||[]},{nama:'Gabungan · OOS-B',col:'--violet',pts:e.B||[]},{nama:'SPY',col:'--ref',dash:1,pts:e.spy_A||[]}];}
++function drawAtEq(box,series){
++  if(!box)return;const W=Math.max(280,box.clientWidth||520),H=220,P={l:46,r:12,t:12,b:24};
++  const bln=[...new Set(series.flatMap(s=>s.pts.map(p=>p[0])))].sort();
++  const vals=series.flatMap(s=>s.pts.map(p=>p[1])).filter(v=>v!=null&&v>0&&isFinite(v));
++  if(bln.length<2||!vals.length){box.innerHTML='<p class="empty">Tiada data ekuiti bulanan.</p>';return;}
++  const lo=Math.min(1,...vals),hi=Math.max(1,...vals),lg=hi/lo>3,tr=v=>lg?Math.log(v):v,iv=v=>lg?Math.exp(v):v;
++  const a=tr(lo),b=tr(hi),pad=(b-a)*.05||.05,ymin=a-pad,ymax=b+pad;const ix={};bln.forEach((m,i)=>ix[m]=i);
++  const X=i=>P.l+i/(bln.length-1)*(W-P.l-P.r),Y=v=>P.t+(ymax-tr(v))/(ymax-ymin)*(H-P.t-P.b);
++  let g='<g class="grid">',t='';for(let k=0;k<=4;k++){const v=iv(ymin+(ymax-ymin)*k/4),y=Y(v).toFixed(1);g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}"/>`;t+=`<text x="${P.l-6}" y="${(+y+4).toFixed(1)}" text-anchor="end">${v.toFixed(v<10?2:1)}×</text>`;}g+='</g>';
++  const thn=bln.filter((m,i)=>i===0||m.endsWith('-01')),lgk=Math.max(1,Math.ceil(thn.length/Math.max(2,Math.floor((W-P.l-P.r)/56))));
++  thn.forEach((m,j)=>{if(j%lgk)return;t+=`<text x="${X(ix[m]).toFixed(1)}" y="${H-6}" text-anchor="middle">${m.slice(0,4)}</text>`;});
++  const ref=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(1).toFixed(1)}" y2="${Y(1).toFixed(1)}" stroke="var(--line-2)"/>`;
++  let ln='';series.forEach(s=>{const pts=s.pts.filter(p=>p[1]>0&&ix[p[0]]!=null);if(!pts.length)return;
++    ln+=`<polyline points="${pts.map(p=>X(ix[p[0]]).toFixed(1)+','+Y(p[1]).toFixed(1)).join(' ')}" fill="none" stroke="var(${s.col})" stroke-width="${s.dash?1.6:2.2}"${s.dash?' stroke-dasharray="5 4"':''} stroke-linejoin="round"/>`;
++    const L=pts[pts.length-1];ln+=`<circle cx="${X(ix[L[0]]).toFixed(1)}" cy="${Y(L[1]).toFixed(1)}" r="3" fill="var(${s.col})"><title>${esc(s.nama)} ${esc(L[0])}: ${L[1].toFixed(2)}×</title></circle>`;});
++  box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Ekuiti bulanan portfolio gabungan lawan SPY${lg?' (skala log)':''}">${g}${ref}${ln}${t}</svg>`;
++}
++function atGabHtml(gb){
++  const hd=`<div class="panel-h"><h2>Portfolio gabungan</h2><span class="sub">8 slot × 12.5% · pilihan tamak atas OOS-A (maks ${gb&&gb.had&&gb.had.maks||6} kaedah, korelasi ≤ ${gb&&gb.had&&gb.had.korelasi||0.7}, MDD ≥ −30%)</span></div>`;
++  if(!gb)return `<div class="panel">${hd}<p class="empty">Portfolio gabungan belum dijana.</p></div>`;
++  if(!(gb.terpilih||[]).length)return `<div class="panel">${hd}<p class="mut" style="margin:0 0 8px">${esc(gb.penjelasan||'Tiada kaedah dipilih.')}</p>${(gb.terbaik3_oos_a||[]).map(r=>`<div style="margin:4px 0">${atPill(r.label)} <b>${esc(r.kaedah)}</b> · OOS-A ${pct(r.cagr_a)} (MDD ${pct(r.mdd_a)}) · OOS-B ${pct(r.cagr_b)} · kunci ${pct(r.cagr_kunci)}</div>`).join('')}</div>`;
++  const m=gb.metrik||{},B=[['A','OOS-A','at_oosa'],['B','OOS-B','at_oosb'],['kunci','Tempoh kunci','at_kunci']],ps=gb.param_semasa||{};
++  const kalah=B.filter(([b])=>!(m[b]&&m[b].cagr!=null&&m[b].spy!=null&&m[b].cagr>m[b].spy)).map(x=>x[1]);
++  return `<div class="panel">${hd}
++    ${kalah.length?`<p style="margin:0 0 10px"><span class="pill p-exit">Tidak mengatasi SPY: ${esc(kalah.join(', '))}</span></p>`:''}
++    <div class="kpis">${B.map(([b,n,tip])=>{const x=m[b]||{},bz=x.cagr!=null&&x.spy!=null?x.cagr-x.spy:null;
++      return `<div class="kpi"><div class="lbl" data-tip="${tip}">${n} · CAGR</div><div class="v ${cls(bz)}">${pct(x.cagr)}</div><div class="s">SPY ${pct(x.spy)} · beza <span class="${cls(bz)}">${sgn(bz)}</span> · MDD ${atMdd(x.mdd)}<br>${esc(x.mula||'–')} – ${esc(x.akhir||'–')}</div></div>`;}).join('')}</div>
++    <div class="filters" style="justify-content:space-between;margin:14px 0 6px"><b style="color:var(--fg)">Ekuiti bulanan (mula 1.0×)</b><div class="seg" id="atEq">${[['oos','OOS 2013–2024'],['kunci','Tempoh kunci']].map(([v,x])=>`<button type="button" data-v="${v}" aria-pressed="${S.af.eq===v}">${x}</button>`).join('')}</div></div>
++    <div class="chartbox" id="atChart"></div>
++    <div class="legend">${atSiri(gb).map(s=>`<span><i style="background:var(${s.col})${s.dash?';height:2px;width:14px;border-radius:0;vertical-align:3px':''}"></i>${esc(s.nama)}</span>`).join('')}</div>
++    <div class="tablewrap" style="margin-top:12px"><table><thead><tr><th class="l">Kaedah</th><th class="l">Label</th><th class="l" data-tip="at_param"><span>Param SEMASA</span></th></tr></thead><tbody>${gb.terpilih.map(k=>{const r=(S.at||{})['kaedah_'+k]||{};
++      return `<tr><td class="l name"><b>${esc(k)}</b><span class="vv">${esc(r.nama||'')}</span></td><td class="l">${atPill(r.label)}</td><td class="l wrap">${atParam(ps[k])}</td></tr>`;}).join('')}</tbody></table></div>
++  </div>`;
++}
++function renderAutotune(){
++  const el=$('#v-autotune');const D=S.at||{},st=D.status,rg=D.ringkasan,af=S.af;
++  const gb=D.gabungan&&rg&&D.gabungan.dibina===rg.dibina?D.gabungan:null;
++  if(!st&&!rg){el.innerHTML=`<div class="panel empty">${S.live?'Belum ada data AUTOTUNE dalam pangkalan data.':'Memuatkan AUTOTUNE…'}</div>`;return;}
++  const kav=`<div class="strip"><b class="t">Kaveat</b><span style="color:var(--warn);font-weight:600">${esc(rg&&rg.kaveat||AT_KAVEAT)}</span><span>Universe 2000 saham AS tanpa penapis Shariah; berasingan daripada Papertrade C. Tiada order, tiada wang sebenar.</span></div>`;
++  let stH='';if(st&&st.n_kaedah){const pen=Object.values(st.kaedah||{}).filter(o=>(o.siap||[]).length>=(st.kajian_penuh||14)).length;
++    stH=`<div class="kpi"><div class="lbl" data-tip="at_tala">Kemajuan tala</div><div class="v">${pen}<span class="mut" style="font-size:1rem"> / ${st.n_kaedah||0}</span></div><div class="s">kaedah lengkap ${st.kajian_penuh||14} kajian · ${st.n_kajian_siap||0} kajian siap · ${Number(st.n_percubaan||0).toLocaleString('en-US')} percubaan · terakhir ${esc(st.tala_terakhir||'–')}</div></div>`;}
++  if(!rg){el.innerHTML=`<p class="headline">AUTOTUNE sedang menala parameter kaedah. Label, OOS-A/OOS-B, tempoh kunci dan portfolio gabungan dipapar selepas pengesahan (F6) selesai.</p>${kav}<div class="kpis">${stH}</div><div class="foot"><span>Sumber: AUTOTUNE/hasil/tala</span><span>Dibina ${esc(st.dibina||'–')}</span></div>`;return;}
++  const kl=rg.kiraan_label||{},all=atKaedah(),gab=new Set(rg.gabungan||[]),t=rg.tempoh||{};let rows=all;
++  if(af.lbl)rows=rows.filter(r=>r.label===af.lbl);
++  if(af.q){const q=af.q.toLowerCase();rows=rows.filter(r=>[r.id,r.nama,r.catatan].join(' ').toLowerCase().includes(q));}
++  el.innerHTML=`
++  <p class="headline">AUTOTUNE menala parameter <b>${rg.n_kaedah??all.length}</b> kaedah secara walk-forward (12 tetingkap ujian, 2013 – Sep 2024) atas saham kumpulan A, menyemak pada saham kumpulan B (OOS-B), dan membuka tempoh kunci sekali sahaja.${rg.contoh?' <span class="pill p-warn">DATA CONTOH</span>':''}</p>
++  ${kav}
++  <div class="kpis"><div class="kpi" style="grid-column:span 2"><div class="lbl" data-tip="at_label">Kiraan label</div><div style="display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:4px">${AT_LBL.map(l=>`<span title="${esc(AT_SUB[l])}" style="white-space:nowrap">${atPill(l)} <b style="font-size:1.15rem;color:var(--fg)">${kl[l]??0}</b></span>`).join('')}</div><div class="s">Calon gabungan: TINGGI + SEDERHANA = ${(kl.TINGGI||0)+(kl.SEDERHANA||0)} · N percubaan ${esc(rg.n_cubaan_jumlah??'–')}</div></div>${stH}</div>
++  ${atGabHtml(gb)}
++  <div class="panel"><div class="panel-h"><h2>Semua kaedah</h2><span class="sub">${rows.length} daripada ${all.length} · ketik tajuk lajur untuk susun</span></div>
++    <div class="filters" style="margin-bottom:10px"><select id="atLbl" aria-label="Tapis label"><option value="">Semua label</option>${AT_LBL.map(l=>`<option value="${esc(l)}" ${af.lbl===l?'selected':''}>${esc(l)} (${kl[l]??0})</option>`).join('')}</select><input type="search" id="atQ" placeholder="Cari ID atau nama kaedah" value="${esc(af.q)}" aria-label="Cari kaedah AUTOTUNE"></div>
++    ${sortTable({id:'autotune',rows,def:{k:'cagr_a',dir:-1},empty:all.length?'Tiada kaedah sepadan.':'Belum ada rekod kaedah.',cols:[
++      {k:'id',t:'Kaedah',tip:'kaedah',l:1,frz:1,v:r=>+String(r.id).replace(/\D/g,''),f:r=>`<b class="nw">${esc(r.id)}</b>${gab.has(r.id)?' <span class="pill p-buy">gabungan</span>':''}<span class="vv">${esc(r.nama||'')}</span>`,c:()=>'name'},
++      {k:'label',t:'Label',tip:'at_label',l:1,v:r=>AT_LBL.indexOf(r.label),f:r=>atPill(r.label)},
++      {k:'cagr_a',t:'OOS-A CAGR',tip:'at_oosa',f:r=>`<b class="${cls(r.cagr_a!=null&&r.spy_a!=null?r.cagr_a-r.spy_a:null)}">${pct(r.cagr_a)}</b><span class="vv">SPY ${pct(r.spy_a)}</span>`},
++      {k:'mdd_a',t:'OOS-A MDD',tip:'at_oosa',f:r=>atMdd(r.mdd_a)},
++      {k:'cagr_b',t:'OOS-B CAGR',tip:'at_oosb',f:r=>`<b class="${cls(r.cagr_b!=null&&r.spy_b!=null?r.cagr_b-r.spy_b:null)}">${pct(r.cagr_b)}</b><span class="vv">SPY ${pct(r.spy_b)}</span>`},
++      {k:'mdd_b',t:'OOS-B MDD',tip:'at_oosb',f:r=>atMdd(r.mdd_b)},
++      {k:'cagr_kunci',t:'Kunci CAGR',tip:'at_kunci',f:r=>`<b class="${cls(r.cagr_kunci!=null&&r.spy_kunci!=null?r.cagr_kunci-r.spy_kunci:null)}">${pct(r.cagr_kunci)}</b><span class="vv">SPY ${pct(r.spy_kunci)}</span>`},
++      {k:'mdd_kunci',t:'Kunci MDD',tip:'at_kunci',f:r=>atMdd(r.mdd_kunci)},
++      {k:'dsr',t:'DSR',tip:'at_dsr',f:r=>fx(r.dsr,2)},
++      {k:'pbo',t:'PBO',tip:'at_dsr',f:r=>fx(r.pbo,2)},
++      {k:'param',t:'Param SEMASA',tip:'at_param',l:1,ns:1,f:r=>`${atParam(r.param)}${r.catatan?`<span class="vv">${esc(r.catatan)}</span>`:''}`,c:()=>'wrap'}]})}
++  </div>
++  <div class="foot"><span>Sumber: AUTOTUNE/hasil (papan.json, gabungan.json, ringkasan.json) · OOS ${atJul(t.oos)} · kunci ${atJul(t.kunci)} · SPY OOS ${pct(rg.spy&&rg.spy.oos)} · N percubaan ${esc(rg.n_cubaan_jumlah??'–')}</span><span>Dijana ${esc(rg.dijana||'–')} · dibina ${esc(rg.dibina||'–')}</span></div>`;
++  const q=$('#atQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{af.q=q.value.trim();renderAll();const n=$('#atQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
++  $('#atLbl').onchange=e=>{af.lbl=e.target.value;renderAll();};
++  const eq=$('#atEq');if(eq)eq.onclick=e=>{const b=e.target.closest('button');if(!b)return;af.eq=b.dataset.v;renderAll();};
++  if(gb&&(gb.terpilih||[]).length)drawAtEq($('#atChart'),atSiri(gb));
++}
++
+ function emptyState(){return `<div class="panel empty">${S.live?'Belum ada keputusan backtest dalam pangkalan data.':'Memuatkan keputusan backtest…'}</div>`;}
+ function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
+ function topScrolls(root){
+@@ -1164,7 +1255,7 @@
+     w.querySelectorAll('tbody tr').forEach(tr=>{let c=0;[...tr.children].forEach(td=>{td.setAttribute('data-label',hs[c]||'');c+=td.colSpan||1;});});
+   });
+ }
+-const R={ringkasan:renderRingkasan,papan:renderPapan,banding:renderBanding,sektor:renderSektor,watch:renderWatch,ptm:renderPtm,ptc:renderPtc,'pr-m':()=>renderPrestasi('m'),'pr-c':()=>renderPrestasi('c'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah};
++const R={ringkasan:renderRingkasan,papan:renderPapan,banding:renderBanding,sektor:renderSektor,watch:renderWatch,ptm:renderPtm,ptc:renderPtc,'pr-m':()=>renderPrestasi('m'),'pr-c':()=>renderPrestasi('c'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune};
+ function renderAll(){const vid=viewId();const el=document.getElementById(vid);
+   const sx={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;});
+   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
+@@ -1174,6 +1265,13 @@
+ 
+ /* ================= tooltip istilah (ganti tab Panduan istilah) ================= */
+ const TIPS={
++  at_label:{t:'Label AUTOTUNE',d:'TINGGI: CAGR OOS-A dan OOS-B > SPY, MDD OOS-A ≥ −30%, CAGR tempoh kunci > SPY, DSR ≥ 0.95 dan PBO ≤ 0.30. SEDERHANA: tiga syarat pertama sahaja. RENDAH: CAGR OOS-A > 0. GAGAL: selain itu. BUKAN SWING: purata pegang OOS-A < 2 atau > 60 hari. BELUM DITALA: modul gagal kesetaraan atau kajian tidak lengkap.',e:'Hanya TINGGI dan SEDERHANA menjadi calon portfolio gabungan.'},
++  at_oosa:{t:'OOS-A',d:'Gabungan 12 tetingkap ujian walk-forward (2013 – Sep 2024). Setiap tetingkap memakai parameter yang ditala atas 3 tahun sebelumnya, saham kumpulan A (kumpulan tala). SPY = tempoh yang sama.',e:'CAGR OOS-A 15% lawan SPY 12% = mengatasi SPY.'},
++  at_oosb:{t:'OOS-B',d:'Tetingkap dan parameter sama seperti OOS-A, tetapi atas saham kumpulan B yang tidak digunakan semasa tala (semakan merentas saham).',e:'OOS-B jauh di bawah OOS-A menandakan parameter terlalu sesuai dengan saham A.'},
++  at_kunci:{t:'Tempoh kunci',d:'1 Okt 2024 hingga data terakhir, parameter AKHIR, saham A+B. Dibuka sekali sahaja selepas semua pilihan dibuat.',e:'Kunci jauh di bawah OOS menandakan overfitting atau perubahan rejim pasaran.'},
++  at_dsr:{t:'DSR dan PBO',d:'DSR (Deflated Sharpe Ratio): Sharpe OOS-A selepas mengambil kira jumlah semua percubaan; TINGGI perlu ≥ 0.95. PBO (Probability of Backtest Overfitting, CSCV 8 blok): kebarangkalian pilihan terbaik dalam sampel jatuh di bawah median luar sampel; TINGGI perlu ≤ 0.30.',e:'DSR 0.40 = Sharpe mungkin kebetulan daripada banyak percubaan.'},
++  at_param:{t:'Param SEMASA',d:'Parameter yang ditala atas 3 tahun data terakhir (kajian SEMASA), untuk cadangan dagangan. Parameter lain kekal PARAM asal kaedah.',e:'rsi_13=16: tempoh RSI ditala daripada 13 kepada 16.'},
++  at_tala:{t:'Kemajuan tala',d:'Kaedah yang semua 14 kajian (12 tetingkap walk-forward, AKHIR dan SEMASA) sudah siap, daripada semua kaedah yang sudah mula ditala.',e:'5 / 160 = 5 kaedah lengkap.'},
+   kaedah:{t:'Kaedah / varian',d:'Kod dan nama kaedah. M = kaedah dagangan lengkap (masuk, henti rugi, keluar). I = satu indikator sahaja, keluar apabila harga tutup di bawah SMA20. Baris kecil ialah varian, iaitu variasi tetapan bagi kaedah yang sama.',e:'"M96 · V1 Dikunci (+henti tutup−3×ATR14)" = kaedah M96, varian V1 dengan henti rugi 3×ATR di bawah harga tutup.'},
+   keputusan:{t:'Keputusan',d:'Penilaian enjin v1.2. DITOLAK jika gagal walau satu gate. Jika lulus semua gate: GUNA (skor ≥ 75 dan atasi QQQ di kedua-dua separuh), UJI KERTAS (skor 60–75) atau SIMPAN (skor < 60).',e:'Skor 80 tetapi gagal G4 tetap DITOLAK, kerana gate dinilai dahulu.'},
+   skor:{t:'Skor (0–100)',d:'Markah gabungan, hanya dikira jika lulus semua gate. Tujuh bahagian: CAGR lawan SPY/QQQ (25), MAR (20), tahun atasi SPY (15), keseimbangan dua separuh (10), tutup ≥ +10% (15), kekerapan dan tempoh dagangan (10), untung purata setiap dagangan (5).',e:'Kosong (–) bermaksud kaedah itu DITOLAK oleh gate.'},
+@@ -1345,6 +1443,8 @@
+   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
+   sub('prestasi/mae','mae',['prestasi']);
+   sub('kaedah/katalog','kat',['kaedah']);
++  /* AUTOTUNE: semua dokumen koleksi autotune (status, ringkasan, gabungan, kaedah_<ID>) */
++  db.collection('autotune').limit(1000).onSnapshot(snap=>{const d={};snap.docs.forEach(x=>{if(x.exists)d[x.id]=x.data();});S.at=d;S.live=true;re('autotune');},()=>{});
+ })();
+ })();
+ </script>
