@@ -1,6 +1,6 @@
 {
  "terkini": {
-  "dijana": "2026-10-17 04:43 UTC",
+  "dijana": "2026-10-17 08:18 UTC",
   "sesi": 20261016,
   "bil_ticker": 938,
   "bil_universe": 938,
@@ -14,15 +14,9 @@
   "bil_tiada_bar_sesi": 4
  },
  "sejarah": {
-  "dijana": "2026-10-17 04:43 UTC",
-  "bil_ticker": 7,
+  "dijana": "2026-10-17 08:18 UTC",
+  "bil_ticker": 1,
   "diminta": [
-   "ADSE",
-   "ARHS",
-   "CX",
-   "ERIC",
-   "FTW",
-   "NRDS",
    "REF"
   ],
   "tiada_data": []
