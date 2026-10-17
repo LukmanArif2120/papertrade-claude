@@ -141,3 +141,4 @@
 - pecah_claude: claude.csv–claude_12.csv dipecah ke claude_13–claude_23 (lajur baharu menambah saiz).
 - Pindaan lorong 2 (keputusan pengguna 17 Okt 2026): "pegang selagi naik" — keluar pada buka esok selepas 2 tutup berturut < tutup semalam, atau kena henti kaedah. Dikira semula (`keluar_tiga.py --semula henti`): keluar lorong 2 = 902, tutup semua = 498.
 - Lorong 10% dibuang (keputusan pengguna 17 Okt 2026): dua lorong sahaja — kaedah dan pegang selagi naik. `keluar_tiga.py` dinamakan semula `keluar_lorong.py`; lajur `*_10` dibuang daripada fail posisi; tutup semua = 557.
+- Gred isi semula (keputusan pengguna 17 Okt 2026): 1,126 posisi tanpa gred (isyarat 7–12 Okt dan Moomoo lama) diisi oleh `standard/gred_isi_semula.py`. RS dan QR pada tarikh isyarat; sektor/industri snapshot sektor_pasaran terkini; pemangkin '–'. Ditanda dalam `gred_pada` ("isi semula …"). claude_6 dipecah ke claude_24.
