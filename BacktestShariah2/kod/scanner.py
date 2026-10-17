@@ -106,17 +106,22 @@ def terbuka(r):
 
 def pegangan_c(folder):
     """papertrade/claude*.csv -> (set (kaedah, saham) masih terbuka, Counter (kaedah, saham) bilangan belian).
-    Saham yang sudah keluar (henti/sasaran/isyarat keluar/had masa) TIDAK dikecualikan: isyarat baharu = belian ke-2, ke-3 ..."""
+    Saham yang sudah keluar TIDAK dikecualikan: isyarat baharu = belian ke-2, ke-3 ...
+    Sejak 17 Okt 2026 (tiga lorong keluar, standard/keluar_tiga.py) posisi kekal terbuka sehingga ketiga-tiga lorong keluar
+    (`tutup_semua` = True). Fail tanpa lajur tutup_semua: ikut `keluar` (lorong 1) seperti dahulu."""
     import csv
     from collections import Counter
     buka, bil = set(), Counter()
     for f in sorted(glob.glob(os.path.join(folder, 'claude*.csv'))):
-        for r in csv.DictReader(open(f, newline='', encoding='utf-8')):
+        rd = csv.DictReader(open(f, newline='', encoding='utf-8'))
+        tiga = 'tutup_semua' in (rd.fieldnames or [])
+        for r in rd:
             if r.get('tidak_dibeli') == 'True' or not r.get('tarikh_beli'):
                 continue
             k = (r.get('kaedah'), r.get('saham'))
             bil[k] += 1
-            if r.get('keluar') != 'True' and r.get('tidak_sah') != 'True':
+            tutup = r.get('tutup_semua') == 'True' if tiga else r.get('keluar') == 'True'
+            if not tutup and r.get('tidak_sah') != 'True':
                 buka.add(k)
     return buka, bil
 
