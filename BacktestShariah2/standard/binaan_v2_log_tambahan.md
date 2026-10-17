@@ -133,3 +133,9 @@
 - Sektor: sektor_pasaran.csv 16 Okt (3,827 saham dipetakan; peta industri 14 Okt masih baharu); sektor.csv 16 Okt; `sektor/snapshot` dibina semula. SST: breadth A/D 226/525, volum luar biasa (20) dikemas kini; aliran institusi tidak berubah. Medan SST per kumpulan tidak dikira semula (`screen_stocks` SST tidak ditarik).
 - Prestasi (baris sah): M 200 dagangan −0.39%; C 2,488 −0.81%; Combine 2,688 −0.77%. HENTIKAN: C — M14, M35, M102, M20, M73, M08; Combine — M18, M14, M20, M35, M102, M73, M08, M50. Tiada TERUSKAN.
 - `pecah_claude.py --pecah`: tiada pemecahan diperlukan (unjuran tertinggi claude_12 236,593 B). sahkan.py --betulkan: 0 ralat, 0 amaran (2,696 posisi dibeli). Db: moomoo v9, claude v10, claude_2 v9, claude_3 v5, claude_4 v3, claude_5 v3, claude_6 v2, claude_7 v3, claude_8–10 v2, claude_11–12 v2, watchlist v11, watchlist_2 v2, sektor/snapshot v11, prestasi/mae v10, prestasi/ringkasan v9, harian/status v20.
+
+## 17 Okt 2026 — Tiga lorong keluar (keputusan pengguna)
+- Lorong 1 kaedah (sedia ada), lorong 2 henti sahaja (tanpa henti: tutup < harga beli → buka esok), lorong 3 sasaran 10% (sebelum capai ikut lorong 2; selepas tutup ≥ +10%, tutup < low semalam → buka esok). Belian semula hanya selepas `tutup_semua`. Kod: `standard/keluar_tiga.py`; lejar.py, scanner.pegangan_c, sahkan.py, pecah_claude.py, dashboard dikemas kini.
+- Isi semula 2,696 posisi dibeli (stor repo + terkini.csv hingga 16 Okt): keluar henti 621, capai +10% 42, keluar 10% 624, tutup semua 510; 24 tidak dinilai (23 belian 16 Okt tanpa bar dalam stor, BB moomoo 1 Okt) — diisi oleh rutin 6:02.
+- Pembetulan NCNO M20 (claude_3): capai sasaran 15 Okt @ 20.5002 (+4.91%); rekod lama 16 Okt @ 21.5784 (+10.43%) tidak sepadan dengan harga 16 Okt (buka 21.46, tinggi 21.75).
+- pecah_claude: claude.csv–claude_12.csv dipecah ke claude_13–claude_23 (lajur baharu menambah saiz).
