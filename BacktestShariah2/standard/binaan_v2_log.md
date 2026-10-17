@@ -311,3 +311,8 @@
 - `standard/jana_papan.py` (baharu) menjana semula `laporan/PAPAN_KEDUDUKAN_M.md` (140 kaedah; varian kaedah yang semua DITOLAK kini CAGR tertinggi ikut tugasan_v3 §3, dahulu V0). `laporan/SEMAKAN_H1_H2.md` dijana semula (`semak_h1_h2.py`).
 - Jejak kertas M166 V1 (keputusan pengguna: jejak sahaja, tiada belian C): `WFO/kaedah_baru/jejak_M166.py` membaca stor harga repo → `uji_kertas/jejak_M166.csv`; langkah 4b dalam `jadual/imbas_2002.md`; tempoh hingga 15 Jan 2027.
 - Tiada order. Tiada wang sebenar.
+
+## 17 Okt 2026 — STEP-2 L02 Meta-label
+- `WFO/kaedah_baru/step2_L02.py`; laporan `WFO/laporan/L02_meta_label.md`; hasil `WFO/data/hasil/L02_*.csv(.gz)`. Luar sampel 2023–Okt 2026, latih semula setiap suku (purge 20 + embargo 5). **DITOLAK**: V1 1/6, V2 0/6, V3 1/6, V4 0/6 (perlu ≥ 4/6). Nota: V2 (rank = p) menaikkan CAGR 4/6 kaedah, tidak konsisten (M30 −33.9 mata). `scikit-learn` ditambah ke `requirements.txt` (V3). Tiada perubahan rutin.
+- M164: aliran kerja manual `.github/workflows/tarikh_pendapatan.yml` (Nasdaq + Yahoo) dicetus untuk membina `data/pemangkin/tarikh_pendapatan.csv`.
+- Tiada order. Tiada wang sebenar.

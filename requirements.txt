@@ -4,3 +4,4 @@ exchange_calendars>=4.5
 requests>=2.31
 numba>=0.60
 optuna>=4.0
+scikit-learn>=1.5
