@@ -333,3 +333,8 @@
 - Workflow baharu: `harian.yml`, `beli.yml`, `petang.yml`; `lejar.yml` tidak diubah. `MOD_ACTIONS` = bayang: Actions menulis ke `bayang/` sahaja; rutin Claude kekal rasmi. Folder bayang dimulakan daripada papertrade 17 Okt dan diproses bagi sesi 16 Okt (603 calon untuk 19 Okt).
 - Dashboard v59: "Kemas kini terakhir" di atas kanan (harian/status `dikemaskini`, sandaran `kemaskini_pagi`; merah jika > 30 jam, 74 jam merentas hujung minggu).
 - Prosedur selepas peralihan: `jadual/tolak_db.md`, `jadual/mingguan.md`, `jadual/PERALIHAN.md`.
+
+## 17 Okt 2026 — STEP-2 M164 EAR
+- Tarikh pendapatan: aliran kerja `tarikh_pendapatan.yml` (Nasdaq 2018-10 – 2026-10, 0 hari ralat; Yahoo 40 suku) → `data/pemangkin/tarikh_pendapatan.csv` (12,422; dua sumber sepadan 11,704 tepat); sah 11,919; liputan 424/431 (`data/pemangkin/M164_liputan.csv`).
+- `WFO/kaedah_baru/step2_M164.py`; laporan `laporan/M164.md`; registry `kod/registry/M164.csv` + gabungan (141 kaedah); db `registry/M164`; papan dan H1/H2 dijana semula. **TIDAK LAYAK**: V1 SIMPAN 59.7 (24.5%); V5 tanpa tmax GUNA 82.1 (39.4%) tetapi subset 2/4, tanpa 8 saham 25.4%.
+- Tiada order. Tiada wang sebenar.
