@@ -338,3 +338,9 @@
 - Tarikh pendapatan: aliran kerja `tarikh_pendapatan.yml` (Nasdaq 2018-10 – 2026-10, 0 hari ralat; Yahoo 40 suku) → `data/pemangkin/tarikh_pendapatan.csv` (12,422; dua sumber sepadan 11,704 tepat); sah 11,919; liputan 424/431 (`data/pemangkin/M164_liputan.csv`).
 - `WFO/kaedah_baru/step2_M164.py`; laporan `laporan/M164.md`; registry `kod/registry/M164.csv` + gabungan (141 kaedah); db `registry/M164`; papan dan H1/H2 dijana semula. **TIDAK LAYAK**: V1 SIMPAN 59.7 (24.5%); V5 tanpa tmax GUNA 82.1 (39.4%) tetapi subset 2/4, tanpa 8 saham 25.4%.
 - Tiada order. Tiada wang sebenar.
+
+## 17 Okt 2026 — L02B (ujian semula V2 rank = p) dan jadual semakan peralihan
+- Kriteria pra-daftar dicommit dahulu (`WFO/laporan/L02B_V2_rank.md`), kemudian `WFO/kaedah_baru/step2_L02B.py`: Ujian A (6 kaedah baharu M74, M05, M80, M12, M46, M40) 2/6, median ΔCAGR −0.5 mata; Ujian B (subset S1–S4 kaedah asal) 3/6 → **DITOLAK**. Tiada jejak, tiada perubahan rutin.
+- Peralihan Actions belum boleh: hanya 2 laporan BANDING separa (16–17 Okt). Semakan dijadualkan 22 Okt 2026 09:30 UTC (`trig_011dxs6z7c8Nf66GcgAh2tao`, send_later sesi ini).
+- M167 V2 (OVN252): tidak dijejak (proksi RS12, sama dengan M114 V4).
+- Tiada order. Tiada wang sebenar.
