@@ -82,18 +82,32 @@ def _trades(o, h, l, c, sig, st, tg, ex, kos, mula, akhir, i0, n1, tmax, warm, g
     return r_t[:k], r_i[:k], r_j[:k], ret, r_w[:k], mfe, r_k[:k]
 
 
-class Susun:
-    """Tatasusunan bersambung bagi fr yang sudah melalui sedia() (urutan dict dikekalkan).
-    topeng: None, atau dict ticker -> bool Series/array sejajar g.index (isyarat di luar topeng dibuang).
-    medv: tatasusunan bersambung median nilai dagangan 20 hari (dikira sekali; tidak bergantung parameter)."""
-    def __init__(self, fr, topeng=None, medv=None):
-        fr = {t: siap(g) for t, g in fr.items()}
-        self.nama = list(fr); self._q = {t: q for q, t in enumerate(self.nama)}; panjang = [len(g) for g in fr.values()]
-        self.akhir = np.cumsum(panjang).astype(np.int64); self.mula = self.akhir - np.array(panjang, np.int64)
+class Asas:
+    """Tatasusunan harga bersambung (tarikh, o, h, l, c, medv) — tidak bergantung parameter; dikira sekali."""
+    def __init__(self, fr):
+        self.nama = list(fr); self.panjang = [len(g) for g in fr.values()]
         cat = lambda f, d=float: np.concatenate([f(g) for g in fr.values()]) if fr else np.empty(0, d)
         self.tarikh = (np.concatenate([g.index.values for g in fr.values()]) if fr
                        else np.empty(0, 'datetime64[ns]'))
         self.o, self.h, self.l, self.c = (cat(lambda g, k=k: g[k].values.astype(float)) for k in ('open', 'high', 'low', 'close'))
+        self.medv = medv_bersambung(fr)
+
+    def sejajar(self, fr):
+        return list(fr) == self.nama and [len(g) for g in fr.values()] == self.panjang
+
+
+class Susun:
+    """Tatasusunan bersambung bagi fr yang sudah melalui sedia() (urutan dict dikekalkan).
+    topeng: None, atau dict ticker -> bool Series/array sejajar g.index (isyarat di luar topeng dibuang).
+    asas: Asas bagi data yang sama (harga + medv dikira sekali); None → dikira di sini."""
+    def __init__(self, fr, topeng=None, asas=None):
+        fr = {t: siap(g) for t, g in fr.items()}
+        if asas is not None and not asas.sejajar(fr): asas = None
+        if asas is None: asas = Asas(fr)
+        self.nama = asas.nama; self._q = {t: q for q, t in enumerate(self.nama)}
+        self.akhir = np.cumsum(asas.panjang).astype(np.int64); self.mula = self.akhir - np.array(asas.panjang, np.int64)
+        cat = lambda f, d=float: np.concatenate([f(g) for g in fr.values()]) if fr else np.empty(0, d)
+        self.tarikh, self.o, self.h, self.l, self.c, self.medv = asas.tarikh, asas.o, asas.h, asas.l, asas.c, asas.medv
         sig = cat(lambda g: g.sig.fillna(False).astype(bool).values, bool)
         if topeng is not None:
             sig = sig & np.concatenate([_topeng(topeng, t, g) for t, g in fr.items()]) if fr else sig
@@ -102,8 +116,6 @@ class Susun:
         self.tg = cat(lambda g: g['tgt'].astype(float).values)
         self.ex = cat(lambda g: g.exitc.fillna(False).astype(bool).values, bool)
         self.rank = cat(lambda g: g['rank'].astype(float).values)
-        self.medv = medv if medv is not None else medv_bersambung(fr)
-        if len(self.medv) != len(self.o): raise ValueError('medv tidak sejajar')
 
     def dengan_topeng(self, topeng):
         """Salinan cetek dengan isyarat ditapis topeng (sedia() sekali, beberapa kumpulan)."""

@@ -126,7 +126,7 @@ class Penilai:
         self.m, self.fr, self.idx, self.mula, self.akhir = m, fr, idx, mula, akhir
         self.pasaran = E.Pasaran(fr, mula, akhir)
         self.nama = list(fr); self.panjang = [len(g) for g in fr.values()]
-        self.medv = E.medv_bersambung(fr)
+        self.asas = E.Asas(fr)
         self.tp = {k: E.topeng_bersambung(d, fr) for k, d in tpd.items()}
         self.univ, self.sumber = univ, sumber
 
@@ -135,8 +135,8 @@ class Penilai:
         m = self.m; Pp = dict(m.PARAM); Pp.update(P or {})
         f = salin(self.fr); m.sedia(f, self.idx, Pp)
         tmax = Pp['tmax'] if 'tmax' in Pp else m.TMAX
-        sejajar = list(f) == self.nama and [len(g) for g in f.values()] == self.panjang
-        S = E.Susun(f, medv=self.medv if sejajar else None)
+        sejajar = self.asas.sejajar(f)
+        S = E.Susun(f, asas=self.asas if sejajar else None)
         out = {}
         for k in (kumpulan_list or list(self.tp)):
             tp = self.tp[k] if sejajar else self.sumber.topeng(f, self.univ, k)
