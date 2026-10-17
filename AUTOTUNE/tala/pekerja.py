@@ -26,7 +26,9 @@ def _kerja(t):
 
 def _sudah(f, n):
     try:
-        H = json.load(open(f)); return H.get('status') == 'SIAP' and H.get('n_trials_diminta', 0) >= n
+        H = json.load(open(f))
+        return (H.get('status') == 'SIAP' and H.get('n_trials_diminta', 0) >= n
+                and H.get('n_trials', 0) >= H.get('n_sasaran', n))
     except Exception: return False
 
 

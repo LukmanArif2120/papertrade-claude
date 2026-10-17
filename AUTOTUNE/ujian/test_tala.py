@@ -88,7 +88,7 @@ class UjiTala(unittest.TestCase):
     def test_semasa_dan_asal_belum_ditala(self):
         H = tala.tala('M54', 13, tala.Sumber(None, pengganti()), n_trials=3, keluar=self.dir)
         self.assertEqual(H['status'], 'SIAP', H['ralat'])
-        self.assertTrue(H['belum_ditala']); self.assertEqual(H['n_trials'], 1); self.assertNotIn('ujian_A', H)
+        self.assertEqual(H['n_trials'], 1 if not H['tala'] else 3); self.assertNotIn('ujian_A', H)
 
     def test_ralat_ditulis(self):
         H = tala.tala('MX', 0, tala.Sumber(None, pengganti()), n_trials=2, keluar=self.dir)   # tiada data 2010

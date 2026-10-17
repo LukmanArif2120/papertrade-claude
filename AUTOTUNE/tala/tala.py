@@ -238,7 +238,7 @@ def tala(mid, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=None, ke
         t = time.time()
         st.optimize(obj, n_trials=n_cuba, callbacks=[henti], catch=(Exception,))
         masa['optuna'] = time.time() - t
-        H['n_trials'] = len(st.trials); H['n_unik'] = len(rekod)
+        H['n_trials'] = len(st.trials); H['n_unik'] = len(rekod); H['n_sasaran'] = n_cuba
         masa['s_percubaan'] = float(np.mean(s_cuba)) if s_cuba else None
         if len(st.trials) < n_cuba: H['ralat'].append(f'had masa: {len(st.trials)}/{n_cuba} percubaan')
         sah = [r for r in rekod if r['m'] is not None]
