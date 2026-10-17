@@ -1,8 +1,8 @@
-import glob, json, os, re, unittest
+import csv, glob, json, os, re, unittest
 
 BS2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 KATALOG = os.path.join(BS2, 'standard', 'katalog_kaedah.json')
-MEDAN = ['id', 'nama', 'varian', 'pencipta', 'sumber', 'masuk', 'keluar', 'pegang', 'henti']
+MEDAN = ['id', 'nama', 'varian', 'varian_kod', 'pencipta', 'sumber', 'masuk', 'keluar', 'pegang', 'henti']
 
 
 class TestKatalogKaedah(unittest.TestCase):
@@ -28,9 +28,19 @@ class TestKatalogKaedah(unittest.TestCase):
     def test_nama_sama_dengan_kod(self):
         for r in self.doc['rows']:
             with open(os.path.join(BS2, 'kod', 'kaedah', r['id'] + '.py'), encoding='utf-8') as f:
-                m = re.search(r'^NAMA\s*=\s*([\'"])(.*?)\1', f.read(), re.M)
+                kod = f.read()
+            m = re.search(r'^NAMA\s*=\s*([\'"])(.*?)\1', kod, re.M)
             self.assertIsNotNone(m, r['id'])
             self.assertEqual(r['nama'], m.group(2), r['id'])
+            v = re.search(r'^VARIAN\s*=\s*([\'"])(.*?)\1', kod, re.M)
+            self.assertEqual(r['varian_kod'], v.group(2), r['id'])
+
+    def test_varian_kod_ada_dalam_registry(self):
+        # lajur Backtest tab Kaedah memadankan registry set 431 dengan varian_kod
+        for r in self.doc['rows']:
+            with open(os.path.join(BS2, 'kod', 'registry', r['id'] + '.csv'), encoding='utf-8') as f:
+                ada = [x for x in csv.DictReader(f) if x['set'] == '431' and x['varian'] == r['varian_kod']]
+            self.assertEqual(len(ada), 1, r['id'])
 
     def test_saiz_dokumen_db(self):
         self.assertLess(len(json.dumps(self.doc, ensure_ascii=False, separators=(',', ':')).encode()), 240_000)

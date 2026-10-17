@@ -1,6 +1,6 @@
 {
  "dibina": "2026-10-17",
- "nota": "Satu baris setiap modul kod/kaedah/Mxx.py (varian aktif). Sumber: kod, SPEC_SEMUA_KAEDAH.md, KATALOG_K145.md. Tulis ke db kaedah/katalog.",
+ "nota": "Satu baris setiap modul kod/kaedah/Mxx.py (varian aktif; varian_kod = VARIAN dalam kod, kunci padanan registry set 431). Sumber: kod, SPEC_SEMUA_KAEDAH.md, KATALOG_K145.md. Tulis ke db kaedah/katalog.",
  "rows": [
   {
    "id": "M01",
@@ -11,7 +11,8 @@
    "masuk": "Tutup di bawah band bawah Bollinger (SMA30 − 2 SD) dan RSI13 < 25; beli pada harga buka esok.",
    "keluar": "Sasaran = band tengah (SMA30, bergerak); jual apabila harga mencecah SMA30.",
    "pegang": "Tiada had masa; pegang sehingga sasaran dicapai.",
-   "henti": "Tiada henti (sumber tidak menyatakan)."
+   "henti": "Tiada henti (sumber tidak menyatakan).",
+   "varian_kod": "V0 Video tulen"
   },
   {
    "id": "M02",
@@ -22,7 +23,8 @@
    "masuk": "Tutup > SMA200; garis MACD (12/26) silang naik garis isyarat (9) ketika kedua-duanya di bawah sifar; beli buka esok (langkau jika buka ≤ henti).",
    "keluar": "Sasaran tetap = harga masuk + 3 × (harga masuk − henti), iaitu 3R.",
    "pegang": "Maks 20 hari dagangan; jual pada tutup hari ke-20 jika henti/sasaran belum kena.",
-   "henti": "1% di bawah SMA200 pada hari isyarat (0.99 × SMA200), tetap."
+   "henti": "1% di bawah SMA200 pada hari isyarat (0.99 × SMA200), tetap.",
+   "varian_kod": "V5 V1+sasaran 3R"
   },
   {
    "id": "M03",
@@ -33,7 +35,8 @@
    "masuk": "Dalam 30 hari ada tutup bawah band bawah BB20/2; low baharu lebih rendah tetapi RSI14 lebih tinggi (divergence); hari ini tutup > high semalam dan lilin hijau.",
    "keluar": "Sasaran = band atas Bollinger (SMA20 + 2 SD, bergerak).",
    "pegang": "Tiada had masa; pegang sehingga sasaran atau henti.",
-   "henti": "1% di bawah low kedua (low divergence): 0.99 × low itu."
+   "henti": "1% di bawah low kedua (low divergence): 0.99 × low itu.",
+   "varian_kod": "V1 Spesifikasi dikunci"
   },
   {
    "id": "M04",
@@ -44,7 +47,8 @@
    "masuk": "Lebar band BB20/2 berada dalam 20% terendah 126 hari (himpitan) dalam 10 hari lepas; hari ini tutup tembus band atas buat kali pertama dengan volum ≥ 1.5× purata 20 hari.",
    "keluar": "Tutup di bawah SMA50 → jual pada buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA50.",
-   "henti": "1% di bawah low terendah 11 hari (0.99 × low 11 hari), tetap."
+   "henti": "1% di bawah low terendah 11 hari (0.99 × low 11 hari), tetap.",
+   "varian_kod": "U2 asas V2 + E1 volume>=1.5xSMA20"
   },
   {
    "id": "M05",
@@ -55,7 +59,8 @@
    "masuk": "Dua pivot low (jarak 5–40 hari): low kedua lebih rendah tetapi MACD lebih tinggi (divergence); harga kemudian tutup tembus high antara dua pivot dan tutup > SMA200.",
    "keluar": "Divergence menurun: dua pivot high (high lebih tinggi, MACD lebih rendah) lalu tutup pecah ke bawah low antara keduanya → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat divergence menurun atau henti.",
-   "henti": "1% di bawah low pivot kedua (0.99 × low itu)."
+   "henti": "1% di bawah low pivot kedua (0.99 × low itu).",
+   "varian_kod": "V3 V1+close>SMA200"
   },
   {
    "id": "M06",
@@ -66,7 +71,8 @@
    "masuk": "Trend Template: tutup > SMA50 > SMA150 > SMA200, SMA200 naik, ≥30% atas low 52 minggu, ≤25% bawah high 52 minggu, RS ≥ persentil 70; tutup tembus high 15 hari dengan volum ≥ 1.4× purata 50 hari.",
    "keluar": "Tutup di bawah SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA50.",
-   "henti": "Yang lebih tinggi antara 0.99 × low 15 hari dan 8% di bawah harga masuk."
+   "henti": "Yang lebih tinggi antara 0.99 × low 15 hari dan 8% di bawah harga masuk.",
+   "varian_kod": "V5 V1 tanpa VCP"
   },
   {
    "id": "M07",
@@ -77,7 +83,8 @@
    "masuk": "Naik ≥30% dalam 3 bulan, SMA10 > SMA20, asas sempit 5 hari dengan low makin tinggi, ADR ≥ 4%, pasaran QQQ SMA10 > SMA20; tutup tembus high 5 hari.",
    "keluar": "Tutup di bawah SMA20 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA20.",
-   "henti": "Low hari isyarat."
+   "henti": "Low hari isyarat.",
+   "varian_kod": "V11 V7 keluar close<SMA20"
   },
   {
    "id": "M08",
@@ -88,7 +95,8 @@
    "masuk": "SMA20 naik ≥1% dalam 5 hari; low menyentuh SMA20 (≤1% atasnya), tutup > SMA20 dan lilin hijau; high 10 hari ≥ 5% atas SMA20. Langkau jika buka esok > 1.05× SMA20.",
    "keluar": "SMA20 mula menurun (SMA20 hari ini < semalam) → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi SMA20 terus naik.",
-   "henti": "1% di bawah low terendah 6 hari (0.99 × low 6 hari)."
+   "henti": "1% di bawah low terendah 6 hari (0.99 × low 6 hari).",
+   "varian_kod": "V1 Spesifikasi dikunci"
   },
   {
    "id": "M09",
@@ -99,7 +107,8 @@
    "masuk": "VIDYA dalam aliran naik; harga undur menyentuh paras pivot low tetapi tutup ≥ paras itu dengan lilin hijau dan delta volum ≥ 30%.",
    "keluar": "Aliran VIDYA bertukar turun (tutup pecah band bawah) → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi aliran VIDYA naik.",
-   "henti": "Low hari sentuhan − 0.5 × ATR14."
+   "henti": "Low hari sentuhan − 0.5 × ATR14.",
+   "varian_kod": "V2 V1 tanpa sasaran"
   },
   {
    "id": "M10",
@@ -110,7 +119,8 @@
    "masuk": "EMA60 > EMA125 > EMA250 dan tutup > EMA250; dalam 11 hari low menyentuh EMA60 dan CCI20 < −100; hari ini CCI silang naik +100 dan tutup > EMA60.",
    "keluar": "Tutup di bawah EMA125 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ EMA125.",
-   "henti": "1% di bawah EMA125 hari isyarat (0.99 × EMA125)."
+   "henti": "1% di bawah EMA125 hari isyarat (0.99 × EMA125).",
+   "varian_kod": "V4 V1 pencetus CCI>+100"
   },
   {
    "id": "M11",
@@ -121,7 +131,8 @@
    "masuk": "Semalam hari NR7 (julat tersempit 7 hari) dan hari dalam (inside day); hari ini tutup > high semalam dengan volum > purata 20 hari.",
    "keluar": "Tutup di bawah SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA50.",
-   "henti": "1% di bawah low terendah 11 hari (0.99 × low 11 hari)."
+   "henti": "1% di bawah low terendah 11 hari (0.99 × low 11 hari).",
+   "varian_kod": "V3 V1+NR7 hari dalam (NR7-ID)"
   },
   {
    "id": "M12",
@@ -132,7 +143,8 @@
    "masuk": "Parabolic SAR (0.02/0.02/0.20) bertukar ke mod naik hari ini dan tutup > SMA50.",
    "keluar": "Tutup di bawah SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA50.",
-   "henti": "Nilai SAR pada hari isyarat, tetap."
+   "henti": "Nilai SAR pada hari isyarat, tetap.",
+   "varian_kod": "V5 V1 keluar close<SMA50"
   },
   {
    "id": "M13",
@@ -143,7 +155,8 @@
    "masuk": "Tutup tembus garis trend menurun (Action Line, dilukis dari high tertinggi 252 hari melalui pivot high) buat kali pertama.",
    "keluar": "Tutup di bawah Safety Line (garis trend naik dari low terendah) → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup di atas Safety Line.",
-   "henti": "Paras Safety Line pada hari isyarat."
+   "henti": "Paras Safety Line pada hari isyarat.",
+   "varian_kod": "V1 Spesifikasi dikunci"
   },
   {
    "id": "M14",
@@ -154,7 +167,8 @@
    "masuk": "Low hari ini masuk ke kotak 2 hari lepas (≤ low tertinggi dua hari itu) tetapi tutup > low terendahnya; tutup > SMA50.",
    "keluar": "Tutup di bawah SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA50.",
-   "henti": "Low terendah antara hari ini dan dua hari lepas."
+   "henti": "Low terendah antara hari ini dan dua hari lepas.",
+   "varian_kod": "V3 V1 pegang ikut SMA50"
   },
   {
    "id": "M15",
@@ -165,7 +179,8 @@
    "masuk": "Dalam 15 hari harga pecah atas pivot high (rintangan); kini undur menguji paras itu (±0.5 ATR) dengan lilin pengesahan, tutup > SMA20, ruang ke high 60 hari ≥ 1R.",
    "keluar": "Tutup di bawah SMA20 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA20.",
-   "henti": "Low terendah sejak pecahan − 1 × ATR14."
+   "henti": "Low terendah sejak pecahan − 1 × ATR14.",
+   "varian_kod": "V2 Ekori SMA20 tanpa sasaran"
   },
   {
    "id": "M18",
@@ -176,7 +191,8 @@
    "masuk": "EMA9 > EMA21, tutup > EMA21, low undur sentuh EMA9; lilin hijau pantul (low < low semalam, tutup > low semalam); R:R ke paras tertinggi sepanjang masa ≥ 2.",
    "keluar": "Sasaran = paras tertinggi sepanjang masa (ATH); atau tutup di bawah EMA21 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga ATH dicapai atau tutup < EMA21.",
-   "henti": "Low hari isyarat."
+   "henti": "Low hari isyarat.",
+   "varian_kod": "V2 V1 Model A sahaja"
   },
   {
    "id": "M19",
@@ -187,7 +203,8 @@
    "masuk": "Dua hari lepas low cecah low terendah 20 hari; semalam lilin hijau; hari ini tutup > high semalam tetapi masih < high 20 hari.",
    "keluar": "Sasaran = high 20 hari (dikunci pada hari isyarat).",
    "pegang": "Maks 20 hari dagangan; jual pada tutup hari ke-20.",
-   "henti": "1% di bawah low terendah dua hari sebelum (0.99 × min low)."
+   "henti": "1% di bawah low terendah dua hari sebelum (0.99 × min low).",
+   "varian_kod": "V1 Spesifikasi dikunci"
   },
   {
    "id": "M20",
@@ -198,7 +215,8 @@
    "masuk": "Tutup silang naik atas EMA10 dan EMA15 selepas berada di bawahnya dalam 5 hari lepas; tutup > SMA100.",
    "keluar": "Sasaran tetap 2R: tutup isyarat + 2 × (tutup − henti).",
    "pegang": "Maks 20 hari dagangan; jual pada tutup hari ke-20.",
-   "henti": "1% di bawah low hari isyarat (0.99 × low)."
+   "henti": "1% di bawah low hari isyarat (0.99 × low).",
+   "varian_kod": "V3 V1 tanpa syarat sudut"
   },
   {
    "id": "M21",
@@ -209,7 +227,8 @@
    "masuk": "Mana-mana satu: pecahan asas sempit selepas naik ≥30%; jurang buka ≥5% dengan volum ≥3× atas high 63 hari; atau naik ≥4% dengan volum ≥2× ketika SPY turun. Saham ADR ≥5%.",
    "keluar": "Tutup di bawah SMA20, atau hari pertama selepas masuk tutup merah → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA20.",
-   "henti": "Low hari isyarat."
+   "henti": "Low hari isyarat.",
+   "varian_kod": "V5 V1 keluar close<SMA20"
   },
   {
    "id": "M22",
@@ -220,7 +239,8 @@
    "masuk": "Jurang buka ≥10% dengan volum ≥3× purata 50 hari; tutup ≥ buka; risiko (tutup − low) ≤ ADR; pasaran QQQ EMA10 > EMA20 dan kedua-duanya naik.",
    "keluar": "Tutup di bawah SMA10 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA10.",
-   "henti": "Low hari jurang (hari isyarat)."
+   "henti": "Low hari jurang (hari isyarat).",
+   "varian_kod": "V0 Sumber tulen (QQQ EMA, jurang>=10%, vol>=3x, henti low hari jurang, keluar<SMA10)"
   },
   {
    "id": "M23",
@@ -231,7 +251,8 @@
    "masuk": "Tutup tembus high 126 hari (≈6 bulan) buat kali pertama dengan volum ≥ 1.5× purata 50 hari.",
    "keluar": "Tutup di bawah SMA20 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA20.",
-   "henti": "Paras high 126 hari yang dipecahkan."
+   "henti": "Paras high 126 hari yang dipecahkan.",
+   "varian_kod": "V5 V4 keluar close<SMA20"
   },
   {
    "id": "M24",
@@ -242,7 +263,8 @@
    "masuk": "Hari akhir bulan: saham tutup > SMA200 dan berada dalam 2 teratas ROC 12 bulan (pulangan 252 hari) antara semua saham; beli buka hari pertama bulan baharu.",
    "keluar": "Semakan akhir bulan: jual jika tidak lagi dalam 2 teratas atau tutup ≤ SMA200.",
    "pegang": "Pegang sekurang-kurangnya sebulan; disemak setiap akhir bulan.",
-   "henti": "Tiada henti."
+   "henti": "Tiada henti.",
+   "varian_kod": "V0 Sumber tulen (K=2, tiada henti)"
   },
   {
    "id": "M25",
@@ -253,7 +275,8 @@
    "masuk": "Dalam 10 hari harga diterima atas band atas VWAP20 (2 tutup berturut di atas); hari ini sentuhan pertama band itu, tutup di atasnya, lilin hijau, volum ≥ 0.7× purata 20 hari.",
    "keluar": "Tutup di bawah VWAP 20 hari → jual buka esok.",
    "pegang": "Maks 20 hari dagangan; jual pada tutup hari ke-20.",
-   "henti": "1% di bawah low hari isyarat (0.99 × low)."
+   "henti": "1% di bawah low hari isyarat (0.99 × low).",
+   "varian_kod": "V2 V1 tanpa sasaran"
   },
   {
    "id": "M26",
@@ -264,7 +287,8 @@
    "masuk": "Garis trend naik dari dua pivot low; harga sentuh kali ketiga tanpa tutup bawah garis; dalam 10 hari tutup tembus high sejak sentuhan.",
    "keluar": "Sasaran = swing high di kiri (high tertinggi dari pivot kedua hingga sentuhan).",
    "pegang": "Tiada had masa; pegang sehingga sasaran atau henti.",
-   "henti": "1% di bawah low terendah sejak sentuhan (0.99 × low kotak)."
+   "henti": "1% di bawah low terendah sejak sentuhan (0.99 × low kotak).",
+   "varian_kod": "V0 Sumber tulen (henti 0.99x low kotak, sasaran swing high kiri)"
   },
   {
    "id": "M27",
@@ -275,7 +299,8 @@
    "masuk": "Paras rintangan (≥2 sentuhan) dipecah dalam 15 hari dan bertahan; hari ini uji semula paras (±0.5 ATR) dan tutup di atasnya; QQQ > SMA50; bukan 5 hari naik berturut.",
    "keluar": "Tutup di bawah paras flip atau di bawah SMA20 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup di atas paras dan SMA20.",
-   "henti": "Paras flip − 1 × ATR14."
+   "henti": "Paras flip − 1 × ATR14.",
+   "varian_kod": "V2 Persediaan A sahaja (flip & hold)"
   },
   {
    "id": "M28",
@@ -286,7 +311,8 @@
    "masuk": "Low jauh ≥3 ATR di bawah VWAP 20 hari, low hampir paras terendah 20 hari, lilin pembalikan (sumbu panjang, telan atau tarik balik 50%), tutup < VWAP.",
    "keluar": "Sasaran = VWAP 20 hari (bergerak).",
    "pegang": "Maks 10 hari dagangan; jual pada tutup hari ke-10.",
-   "henti": "1% di bawah low hari isyarat (0.99 × low)."
+   "henti": "1% di bawah low hari isyarat (0.99 × low).",
+   "varian_kod": "V2 Pemisahan ≥3 ATR"
   },
   {
    "id": "M29",
@@ -297,7 +323,8 @@
    "masuk": "EMA50 > EMA110 > EMA250, ketiga-tiganya naik; RSI75 > 50; dalam 6 hari low sentuh salah satu EMA dan Stokastik %K < 20; hari ini %K silang naik %D dan tutup > EMA250.",
    "keluar": "Tutup di bawah EMA250 atau RSI75 < 50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ EMA250 dan RSI75 ≥ 50.",
-   "henti": "1% di bawah EMA terdalam yang disentuh (0.99 × EMA itu)."
+   "henti": "1% di bawah EMA terdalam yang disentuh (0.99 × EMA itu).",
+   "varian_kod": "V4 V1 EMA 50/110/250"
   },
   {
    "id": "M30",
@@ -308,7 +335,8 @@
    "masuk": "Himpitan BB20/2 (lebar dalam 20% terendah 126 hari) dalam 10 hari lepas; hari ini tutup ≥ band atas + 0.5 ATR (pertama dalam 10 hari) dan tutup > high 20 hari.",
    "keluar": "Tutup di bawah SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi tutup ≥ SMA50.",
-   "henti": "1% di bawah low terendah 11 hari (0.99 × low 11 hari)."
+   "henti": "1% di bawah low terendah 11 hari (0.99 × low 11 hari).",
+   "varian_kod": "V3 V1 tetapi BB20/2"
   },
   {
    "id": "M31",
@@ -319,7 +347,8 @@
    "masuk": "Tutup tembus band atas BB20/2 buat kali pertama, band melebar, SMA20 naik berbanding 5 hari lepas, SMA10 > SMA20.",
    "keluar": "SMA20 lebih rendah daripada 5 hari lepas, atau tutup < band bawah hari isyarat → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi SMA20 naik (\"berjalan\" di band atas).",
-   "henti": "Tiada henti harga; henti tutup di bawah band bawah hari isyarat dikira sebagai isyarat keluar."
+   "henti": "Tiada henti harga; henti tutup di bawah band bawah hari isyarat dikira sebagai isyarat keluar.",
+   "varian_kod": "V0 Peraturan pengguna (henti tutup<LOWER isyarat, keluar MID turun)"
   },
   {
    "id": "M32",
@@ -330,7 +359,8 @@
    "masuk": "Hari naik ≥4% dengan volum > semalam, selepas 3 hari rehat ketat (gerak < ADR20, semalam naik <2%); aliran naik atas SMA50; tutup di 25% atas julat hari. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual pada buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari isyarat (tetap)."
+   "henti": "Low hari isyarat (tetap).",
+   "varian_kod": "V2 V1 keluar close<SMA50"
   },
   {
    "id": "M33",
@@ -341,7 +371,8 @@
    "masuk": "Supertrend (10, 3) bertukar hijau (naik); julat 20 hari sebelum ≤25%; volum hari isyarat > purata volum 20 hari. Beli buka esok.",
    "keluar": "Supertrend bertukar merah (tutup bawah garis Supertrend) → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Garis Supertrend pada hari isyarat (tetap)."
+   "henti": "Garis Supertrend pada hari isyarat (tetap).",
+   "varian_kod": "V5 V1 + volum>VOL20"
   },
   {
    "id": "M34",
@@ -352,7 +383,8 @@
    "masuk": "Himpitan dilepaskan: semalam Bollinger (20, 2) di dalam Keltner (20, 1.5 ATR), hari ini keluar; momentum TTM > 0 dan naik; tutup > SMA50 yang menaik. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah 10 hari (pada hari isyarat)."
+   "henti": "Low terendah 10 hari (pada hari isyarat).",
+   "varian_kod": "V2 V1 keluar close<SMA50"
   },
   {
    "id": "M35",
@@ -363,7 +395,8 @@
    "masuk": "Hari naik dengan volum > volum hari turun tertinggi 10 hari lalu; tutup > SMA50 dan SMA200; low dalam 2% daripada SMA10 dan tutup > SMA10. Beli buka esok.",
    "keluar": "Semalam tutup < SMA10 dan hari ini low < low semalam → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari isyarat (tetap)."
+   "henti": "Low hari isyarat (tetap).",
+   "varian_kod": "V3 V1 DEKAT10 sahaja"
   },
   {
    "id": "M36",
@@ -374,7 +407,8 @@
    "masuk": "Tutup menembusi high tertinggi 55 hari buat kali pertama dan tutup > SMA50. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Harga beli − 2 × N (N = ATR 20 hari Wilder)."
+   "henti": "Harga beli − 2 × N (N = ATR 20 hari Wilder).",
+   "varian_kod": "V2 V1 keluar tutup<SMA50 + sig tutup>SMA50"
   },
   {
    "id": "M37",
@@ -385,7 +419,8 @@
    "masuk": "Mingguan: tutup > SMA30 minggu yang tidak menurun, SMA10 minggu naik; tutup pecah high 26 minggu; volum minggu ≥2× purata 4 minggu; kekuatan relatif lawan SPY positif; tutup harian > SMA50.",
    "keluar": "Tutup harian < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah 4 minggu terakhir (tetap)."
+   "henti": "Low terendah 4 minggu terakhir (tetap).",
+   "varian_kod": "V2 V1 keluar tutup harian<SMA50 + tutup>SMA50"
   },
   {
    "id": "M38",
@@ -396,7 +431,8 @@
    "masuk": "Mingguan: saham buat high 52 minggu; atas kotak disahkan 3 minggu, bawah kotak disahkan 3 minggu; tutup minggu > atas kotak. Beli buka esok.",
    "keluar": "Tutup minggu < bawah kotak semasa (bawah kotak dinaikkan apabila kotak baharu terbentuk) → jual buka esok.",
    "pegang": "Tiada had masa; pegang selagi kotak terus naik (henti ikut kotak baharu)",
-   "henti": "Bawah kotak pada hari isyarat (tetap)."
+   "henti": "Bawah kotak pada hari isyarat (tetap).",
+   "varian_kod": "V4 V1 atas bar mingguan"
   },
   {
    "id": "M39",
@@ -407,7 +443,8 @@
    "masuk": "Tutup melintasi ke atas jalur Bollinger atas (SMA100 + 2 SD). Beli buka esok.",
    "keluar": "Tutup < SMA100 − 1 SD → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Lebih tinggi antara (SMA100 − 1 SD) dan 85% tutup isyarat."
+   "henti": "Lebih tinggi antara (SMA100 − 1 SD) dan 85% tutup isyarat.",
+   "varian_kod": "V4 V1 jalur atas 2 SD"
   },
   {
    "id": "M40",
@@ -418,7 +455,8 @@
    "masuk": "Setiap Rabu: skor = cerun regresi 90 hari (setahun) × R²; saham dalam 20% skor teratas, tutup > SMA100, tiada jurang ≥15% dalam 90 hari. Beli ikut skor tertinggi hingga 8 slot.",
    "keluar": "Pada hari Rabu: keluar jika tidak lagi dalam 20% teratas, tutup < SMA100 atau ada jurang ≥15% → jual buka esok.",
    "pegang": "Tiada had masa; disemak semula setiap minggu (Rabu)",
-   "henti": "Tutup isyarat − 3 × ATR20."
+   "henti": "Tutup isyarat − 3 × ATR20.",
+   "varian_kod": "V4 V1 tanpa penapis pasaran"
   },
   {
    "id": "M41",
@@ -429,7 +467,8 @@
    "masuk": "Minggu siap: tutup > SMA20 minggu, MACD > isyarat, tutup > high 6 minggu, naik 5–20%, tutup tertinggi 10 minggu, sumbu atas < 50% julat, volum ≥1.3× minggu lalu.",
    "keluar": "Selepas MACD mingguan silang turun, tutup harian < low minggu silang itu → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Titik tengah julat 6 minggu sebelum (tetap)."
+   "henti": "Titik tengah julat 6 minggu sebelum (tetap).",
+   "varian_kod": "V0 Sumber sahaja (tanpa had julat 25%)"
   },
   {
    "id": "M44",
@@ -440,7 +479,8 @@
    "masuk": "Tapak 25 hari dalam ≤15%, sebelumnya naik ≥20%; tutup pertama > atas tapak + $0.10, tidak lebih 5% di atasnya; tutup > SMA50. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "8% bawah harga beli (0.92 × buka masuk)."
+   "henti": "8% bawah harga beli (0.92 × buka masuk).",
+   "varian_kod": "V3 V1 tanpa syarat volum"
   },
   {
    "id": "M45",
@@ -451,7 +491,8 @@
    "masuk": "Hujung bulan: 30% saham dengan tutup paling hampir high 52 minggu, dan buat high 52 minggu dalam 21 hari terakhir. Beli hingga 8 slot.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 126 hari dagangan (~6 bulan); keluar pada tutup hari ke-126",
-   "henti": "Tutup isyarat − 3 × ATR14."
+   "henti": "Tutup isyarat − 3 × ATR14.",
+   "varian_kod": "V4 V1 + high 52 minggu dicapai dalam 21 hari"
   },
   {
    "id": "M46",
@@ -462,7 +503,8 @@
    "masuk": "Jurang naik: low > high semalam + 0.75 × ATR40 dan low > tutup semalam; volum ≥1.5× purata 50 hari; aliran naik atas SMA200 menaik; tutup > SMA50. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari jurang (tetap)."
+   "henti": "Low hari jurang (tetap).",
+   "varian_kod": "V2 V1 dengan jurang ketat (low>high semalam+0.75xATR40)"
   },
   {
    "id": "M47",
@@ -473,7 +515,8 @@
    "masuk": "Hari persediaan: ADX14 > 30, +DI > −DI, low sentuh EMA20. Hari isyarat: tutup > high hari persediaan. Langkau jika buka ≤ henti atau ≥ sasaran.",
    "keluar": "Sasaran = high tertinggi 20 hari sebelum isyarat (dikunci) → jual apabila dicapai.",
    "pegang": "Tiada had masa; pegang sehingga sasaran atau henti",
-   "henti": "Low hari persediaan."
+   "henti": "Low hari persediaan.",
+   "varian_kod": "V3 V1 tanpa syarat ADX naik"
   },
   {
    "id": "M48",
@@ -484,7 +527,8 @@
    "masuk": "ADX14 ≥30 dan +DI > −DI; undur 3 hari (low lebih rendah atau hari dalam, ≥2 low lebih rendah); hari ke-4 tutup > high hari 3 + $0.125; tutup > SMA50. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari ke-3 − 1 × ATR14."
+   "henti": "Low hari ke-3 − 1 × ATR14.",
+   "varian_kod": "V3 V1 henti low hari 3 - 1xATR14"
   },
   {
    "id": "M49",
@@ -495,7 +539,8 @@
    "masuk": "Hari pertama tutup > awan, Tenkan > Kijun dan tutup > Kijun; awan hadapan hijau (Senkou A > B). Beli buka esok.",
    "keluar": "Tutup < bawah awan → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Kijun-sen pada hari isyarat (tetap)."
+   "henti": "Kijun-sen pada hari isyarat (tetap).",
+   "varian_kod": "V4 V1 + awan hadapan hijau (RA>RB)"
   },
   {
    "id": "M50",
@@ -506,7 +551,8 @@
    "masuk": "Histogram MACD mingguan (12/26/9) naik; Force Index EMA2 semalam < 0 (undur); hari ini high > high semalam; tutup > SMA50. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah hari ini atau semalam."
+   "henti": "Low terendah hari ini atau semalam.",
+   "varian_kod": "V2 V1 keluar tutup<SMA50 + tutup>SMA50"
   },
   {
    "id": "M51",
@@ -517,7 +563,8 @@
    "masuk": "Cawan 35–325 hari, dalam 12–50%, selepas naik ≥30%; pemegang ≤12% di separuh atas; tutup pertama > pivot (≤5% di atas), volum ≥1.4× purata 50 hari, tutup > SMA50.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "8% bawah harga beli (0.92 × buka masuk)."
+   "henti": "8% bawah harga beli (0.92 × buka masuk).",
+   "varian_kod": "V3 V1 kedalaman cawan 12-50%"
   },
   {
    "id": "M52",
@@ -528,7 +575,8 @@
    "masuk": "Hari akhir minggu: tutup minggu = tertinggi 20 minggu, ROC 20 minggu ≥30%, SPY mingguan > purata 10 minggu; tutup harian > SMA50. Beli buka esok.",
    "keluar": "Tutup harian < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "40% bawah harga beli (0.60 × buka masuk)."
+   "henti": "40% bawah harga beli (0.60 × buka masuk).",
+   "varian_kod": "V3 V1 keluar tutup<SMA50 harian"
   },
   {
    "id": "M54",
@@ -539,7 +587,8 @@
    "masuk": "Power Trend saham aktif (low > EMA21 10 hari, EMA21 > SMA50 5 hari, SMA50 naik; tamat bila EMA21 < SMA50) dan tutup > high 20 hari. Beli buka esok.",
    "keluar": "EMA21 < SMA50 (Power Trend tamat) → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup isyarat − 2 × ATR14."
+   "henti": "Tutup isyarat − 2 × ATR14.",
+   "varian_kod": "V4 V1 sig=PT benar & tutup>high 20 hari"
   },
   {
    "id": "M55",
@@ -550,7 +599,8 @@
    "masuk": "EMA30 > EMA60 dan EMA60 naik; purata kumpulan pendek > kumpulan panjang; low sentuh kumpulan panjang dalam 3 hari; tutup melintasi atas EMA15. Beli buka esok.",
    "keluar": "Purata kumpulan EMA pendek < purata kumpulan EMA panjang → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah 4 hari."
+   "henti": "Low terendah 4 hari.",
+   "varian_kod": "V4 Undur ke kumpulan panjang lalu lantun (Persediaan 2)"
   },
   {
    "id": "M56",
@@ -561,7 +611,8 @@
    "masuk": "Hujung Feb, Mei, Ogos, Nov: kira pulangan 12 bulan lalu tolak bulan terakhir (MOM); beli 8 saham MOM tertinggi.",
    "keluar": "Pada imbang semula suku seterusnya, keluar jika tidak lagi dalam 8 teratas → jual buka esok.",
    "pegang": "Tiada had masa; disemak semula setiap suku tahun",
-   "henti": "20% bawah harga beli (0.80 × buka masuk)."
+   "henti": "20% bawah harga beli (0.80 × buka masuk).",
+   "varian_kod": "V4 V1 tanpa FIP (8 MOM tertinggi)"
   },
   {
    "id": "M57",
@@ -572,7 +623,8 @@
    "masuk": "Aliran kuat (atas SMA50 menaik, naik ≥15% 3 bulan, high 10 hari = high 63 hari); semalam low tembus bawah low 2 hari sebelumnya; hari ini high > high semalam, tutup > SMA50.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah semalam atau hari ini."
+   "henti": "Low terendah semalam atau hari ini.",
+   "varian_kod": "V1 Dikunci (keluar tutup<SMA50)"
   },
   {
    "id": "M59",
@@ -583,7 +635,8 @@
    "masuk": "Hari pertama RSI14 terendah 65 hari > 39 dan RSI tertinggi 65 hari > 69 (julat RSI beranjak ke zon kuat). Beli buka esok.",
    "keluar": "RSI14 < 40 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup isyarat − 3 × ATR14."
+   "henti": "Tutup isyarat − 3 × ATR14.",
+   "varian_kod": "V3 V1 LB65 ambang 39/69 (imbasan Hill 2019)"
   },
   {
    "id": "M64",
@@ -594,7 +647,8 @@
    "masuk": "Dua tutup minggu berturut dalam 1.5% antara satu sama lain selepas naik ≥20%; dalam 15 hari, tutup pertama > pivot (high 3 minggu + $0.10); tutup > SMA50.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "8% bawah pivot (0.92 × pivot)."
+   "henti": "8% bawah pivot (0.92 × pivot).",
+   "varian_kod": "V5 V1 henti 0.92xPIVOT"
   },
   {
    "id": "M66",
@@ -605,7 +659,8 @@
    "masuk": "Low dalam 2% daripada SMA50 dalam 4 hari; SMA50 naik; hari ini lilin hijau, tutup > high semalam dan > SMA50; tiada isyarat dalam 10 hari lalu. Beli buka esok.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah 4 hari."
+   "henti": "Low terendah 4 hari.",
+   "varian_kod": "V0 Sumber tulen (UNDUR+NAIK50+PUSING+BARU; tanpa PERTAMA/HIGHBARU/NIPIS)"
   },
   {
    "id": "M67",
@@ -616,7 +671,8 @@
    "masuk": "Aliran naik (atas SMA200, EMA20 > EMA50 menaik); ujian ketiga: low sentuh EMA20 tetapi tutup ≥ EMA50; dalam 5 hari tutup naik dan > EMA50. Beli buka esok.",
    "keluar": "Tutup < EMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Harga beli − 2 × ATR14."
+   "henti": "Harga beli − 2 × ATR14.",
+   "varian_kod": "V6 Versi Financial Wisdom: zon EMA20-EMA50, henti 2xATR"
   },
   {
    "id": "M68",
@@ -627,7 +683,8 @@
    "masuk": "Tapak 10 hari julat ≤12%, tutup sentiasa ≥ EMA20, EMA10 > EMA20; atas tapak = high 63 hari; naik ≥20% sebelum tapak; tutup > atas tapak dan > SMA50.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah tapak 10 hari."
+   "henti": "Low terendah tapak 10 hari.",
+   "varian_kod": "V3 V1 keluar close<SMA50 (+tutup>SMA50)"
   },
   {
    "id": "M70",
@@ -638,7 +695,8 @@
    "masuk": "Hari dalam (high < high semalam, low > low semalam) dengan tutup di atas EMA10, EMA21, SMA50 dan SMA200. Beli buka esok tanpa tunggu pecahan.",
    "keluar": "Tutup < SMA50 → jual buka esok.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari dalam (tetap)."
+   "henti": "Low hari dalam (tetap).",
+   "varian_kod": "V5 V1 masuk awal tanpa pengesahan"
   },
   {
    "id": "M73",
@@ -649,7 +707,8 @@
    "masuk": "ADX 5 hari > 40 (aliran kuat) dan julat hari ini (high − low) paling kecil berbanding 5 hari sebelumnya; beli pada harga buka esok.",
    "keluar": "Jual pada buka esok apabila tutup hari ini > high semalam.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti (biasanya beberapa hari sahaja).",
-   "henti": "Tiada henti"
+   "henti": "Tiada henti",
+   "varian_kod": "V0 Sumber tulen (ADX5>40 + NR6; tiada henti; keluar tutup>high semalam)"
   },
   {
    "id": "M74",
@@ -660,7 +719,8 @@
    "masuk": "Hari pertama saham lulus 7 syarat Trend Template (tutup > SMA50 > SMA150 > SMA200, SMA200 naik 1 bulan, ≥30% atas low 52 minggu, ≤25% bawah high 52 minggu) selepas tidak lulus 20 hari.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Paras lebih tinggi antara (tutup − 1.5 × ATR14) dan SMA50; langkau jika buka masuk ≤ henti."
+   "henti": "Paras lebih tinggi antara (tutup − 1.5 × ATR14) dan SMA50; langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V2 V1 tanpa S8 (7 syarat harga)"
   },
   {
    "id": "M76",
@@ -671,7 +731,8 @@
    "masuk": "Harga menembus bawah low penting 40 hari lalu (low 3 hari < low itu) lalu tutup semula di atasnya; tutup di 40% atas julat hari (CLV > 0.60) dan tutup > SMA200.",
    "keluar": "Selepas harga pernah tutup > SMA20 sejak masuk, jual pada buka esok apabila tutup < SMA20.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Low terendah 3 hari terakhir (low tembusan); langkau jika buka masuk ≤ henti."
+   "henti": "Low terendah 3 hari terakhir (low tembusan); langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V1 Dikunci (UR + CLV>0.60 + tutup>SMA200)"
   },
   {
    "id": "M77",
@@ -682,7 +743,8 @@
    "masuk": "Harga tutup bawah SMA50 semalam (selepas berada di atasnya dalam 5 hari sebelum), hari ini tutup semula atas SMA50; SMA50 naik 10 hari, tutup > SMA200, CLV > 0.60, volum > purata 20 hari.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Low hari isyarat; langkau jika buka masuk ≤ henti."
+   "henti": "Low hari isyarat; langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V2 V1 henti=low hari isyarat"
   },
   {
    "id": "M78",
@@ -693,7 +755,8 @@
    "masuk": "Tutup mingguan (Jumaat) pada paras tertinggi 20 minggu, naik > 30% dalam 20 minggu, nilai dagangan purata 21 hari > USD15 juta, dan SPY > SMA100.",
    "keluar": "Henti mengekor: jual pada buka esok apabila tutup < tutup tertinggi sejak masuk − 5 × ATR100.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; pegang selagi henti mengekor tidak kena.",
-   "henti": "8% bawah harga buka masuk (0.92 × buka)."
+   "henti": "8% bawah harga buka masuk (0.92 × buka).",
+   "varian_kod": "V2 V1 henti mengekor 5xATR100"
   },
   {
    "id": "M79",
@@ -704,7 +767,8 @@
    "masuk": "Tutup naik ≥ 15% daripada tutup terendah sejak aliran turun terakhir (aliran bertukar naik).",
    "keluar": "Jual pada buka esok apabila tutup jatuh ≥ 15% daripada tutup tertinggi sejak aliran naik.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "15% bawah tutup hari isyarat."
+   "henti": "15% bawah tutup hari isyarat.",
+   "varian_kod": "V3 V1 dengan A=0.15 (masuk/keluar/henti 15%)"
   },
   {
    "id": "M80",
@@ -715,7 +779,8 @@
    "masuk": "Low berada di atas garis atas saluran (SMA10 harga tinggi) selama tepat 5 hari berturut-turut.",
    "keluar": "Jual pada buka esok apabila high berada di bawah garis bawah saluran (SMA8 harga rendah) selama 5 hari berturut-turut.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; sistem pegangan panjang.",
-   "henti": "Tutup hari isyarat − 3 × ATR14."
+   "henti": "Tutup hari isyarat − 3 × ATR14.",
+   "varian_kod": "V2 V1 dengan henti tutup-3xATR14"
   },
   {
    "id": "M81",
@@ -726,7 +791,8 @@
    "masuk": "SMA25 > SMA50, harga ≥ USD5, nilai dagangan purata 20 hari > USD50 juta, dan SPY > SMA100; keutamaan ROC 200 hari tertinggi.",
    "keluar": "Henti mengekor 25%: jual apabila harga jatuh 25% daripada tutup tertinggi sejak masuk.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; pegang selagi henti mengekor 25% tidak kena.",
-   "henti": "Tutup hari isyarat − 3 × ATR20 (henti awal)."
+   "henti": "Tutup hari isyarat − 3 × ATR20 (henti awal).",
+   "varian_kod": "V4 V1 henti awal 3xATR20"
   },
   {
    "id": "M82",
@@ -737,7 +803,8 @@
    "masuk": "EMA25 > EMA125, ROC65 < 100%, SMA20 > USD10, turun naik 250 hari < 20%, cukup cair, dan EMA50 SPY > EMA200 SPY.",
    "keluar": "Jual pada buka esok apabila tutup ≥ 10% atas harga masuk (sasaran) atau EMA25 < EMA125.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Tiada henti"
+   "henti": "Tiada henti",
+   "varian_kod": "V0 Sumber tulen (sasaran 10% tutup / EMA25<EMA125, tiada henti)"
   },
   {
    "id": "M84",
@@ -748,7 +815,8 @@
    "masuk": "Hari dagangan terakhir bulan: nisbah SMA21/SMA200 dalam 10% teratas semua saham (harga ≥ USD5) dan tutup > SMA50.",
    "keluar": "Jual pada buka esok jika tutup < SMA50 (bila-bila hari) atau pada hujung bulan saham keluar daripada 10% teratas MAD.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; disemak semula setiap hujung bulan.",
-   "henti": "Tutup hari isyarat − 3 × ATR14."
+   "henti": "Tutup hari isyarat − 3 × ATR14.",
+   "varian_kod": "V5 V1 + SMA50"
   },
   {
    "id": "M87",
@@ -759,7 +827,8 @@
    "masuk": "Tiga undur 10–20% dengan puncak dan lembah makin tinggi dalam 45–80 hari; tutup menembus puncak ketiga + USD0.10 (tidak lebih 5% atasnya) dan tutup > SMA50.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "8% bawah harga buka masuk (0.92 × buka)."
+   "henti": "8% bawah harga buka masuk (0.92 × buka).",
+   "varian_kod": "V4 V1 tanpa DAHULU"
   },
   {
    "id": "M88",
@@ -770,7 +839,8 @@
    "masuk": "Dasar bentuk W: low kedua menembus sedikit (≤10%) bawah low pertama (L1); tutup melintas ke atas 1.10 × L1 dengan volum > purata 50 hari.",
    "keluar": "Jual pada buka esok apabila tutup < low terendah 20 hari sebelumnya.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Paras lebih tinggi antara low kedua dan 8% bawah harga masuk."
+   "henti": "Paras lebih tinggi antara low kedua dan 8% bawah harga masuk.",
+   "varian_kod": "V1 Dikunci (BELI 1.10xL1; vol>VOL50; henti max(L2;0.92x masuk); keluar tutup<low20)"
   },
   {
    "id": "M89",
@@ -781,7 +851,8 @@
    "masuk": "Tiga tutup berturut-turut di atas SMA65 (selepas berada di bawahnya) dan SMA65 lebih tinggi daripada 10 hari lalu.",
    "keluar": "Jual pada buka esok apabila tutup < low terendah 14 hari sebelumnya.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Tutup hari isyarat − 2 × ATR14."
+   "henti": "Tutup hari isyarat − 2 × ATR14.",
+   "varian_kod": "V5 V1+SMA65 naik (>SMA65 10h lalu)"
   },
   {
    "id": "M90",
@@ -792,7 +863,8 @@
    "masuk": "Garis KST (gabungan ROC 10/15/20/30 hari) melintas ke atas garis isyaratnya (SMA9), KST > 0 dan tutup > SMA50.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Tutup hari isyarat − 2 × ATR14."
+   "henti": "Tutup hari isyarat − 2 × ATR14.",
+   "varian_kod": "V3 V1 + tutup>SMA50, keluar tutup<SMA50"
   },
   {
    "id": "M91",
@@ -803,7 +875,8 @@
    "masuk": "Stokastik 14 hari melonjak atas 80, Stokastik 70 hari > 50, ADX14 < 20, volum > purata 250 hari, dan tutup > high tertinggi 20 hari.",
    "keluar": "Jual pada buka esok apabila Stokastik 14 hari < 50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Low terendah 10 hari."
+   "henti": "Low terendah 10 hari.",
+   "varian_kod": "V2 V1 + tutup>HH20 (pecah keluar)"
   },
   {
    "id": "M92",
@@ -814,7 +887,8 @@
    "masuk": "CCI 50 hari melintas dari bawah ke atas paras 0.",
    "keluar": "Jual pada buka esok apabila CCI 50 jatuh dari atas ke bawah paras 100.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Tutup hari isyarat − 2 × ATR14."
+   "henti": "Tutup hari isyarat − 2 × ATR14.",
+   "varian_kod": "V2 V1 isyarat silang atas sifar (NAIK0)"
   },
   {
    "id": "M93",
@@ -825,7 +899,8 @@
    "masuk": "Hari pertama %b (BB 20, 2) > 0.80 dan MFI 10 hari > 80 serentak.",
    "keluar": "Jual pada buka esok apabila %b < 0.20 dan MFI10 < 20.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Parabolic SAR jika di bawah tutup; jika tidak, tutup − 2 × ATR14."
+   "henti": "Parabolic SAR jika di bawah tutup; jika tidak, tutup − 2 × ATR14.",
+   "varian_kod": "V2 V1, keluar LEMAH (%b<0.20 & MFI10<20)"
   },
   {
    "id": "M94",
@@ -836,7 +911,8 @@
    "masuk": "Hujung bulan: 21 hari dagangan lalu saham dalam 20% teratas pulangan 12 bulan DAN 20% teratas pecutan harga (pekali kuadratik 252 hari).",
    "keluar": "Tiada; hanya had masa.",
    "pegang": "Maks 126 hari dagangan (kira-kira 6 bulan); jual pada tutup hari ke-126.",
-   "henti": "Tiada henti"
+   "henti": "Tiada henti",
+   "varian_kod": "V0 Rotasi sumber (bulanan, langkau 21h, pegang 126h)"
   },
   {
    "id": "M95",
@@ -847,7 +923,8 @@
    "masuk": "Tutup > high tertinggi 20 hari, tutup ≥ 85% high 52 minggu, high 52 minggu dibuat dalam 21 hari dagangan terakhir, dan tutup > SMA50.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Tutup hari isyarat − 2 × ATR14."
+   "henti": "Tutup hari isyarat − 2 × ATR14.",
+   "varian_kod": "V1 Dikunci: PECAH20+PTH>=0.85+HSHP<=21+tutup>SMA50"
   },
   {
    "id": "M96",
@@ -858,7 +935,8 @@
    "masuk": "Hujung bulan: saham ≥ 75% daripada tutup tertinggi, tutup > SMA200, naik > 5% dalam 12 bulan, dan berada dalam 8 teratas skor Sharpe purata 3/6/12 bulan.",
    "keluar": "Jual pada buka esok pada hujung bulan jika saham gagal syarat penapis atau jatuh ke luar 20 teratas.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; disemak semula setiap hujung bulan.",
-   "henti": "Tutup hari isyarat − 3 × ATR14 (purata mudah)."
+   "henti": "Tutup hari isyarat − 3 × ATR14 (purata mudah).",
+   "varian_kod": "V1 Dikunci (+henti tutup-3xATR14)"
   },
   {
    "id": "M99",
@@ -869,7 +947,8 @@
    "masuk": "Carta Three Line Break: selepas ≥ 3 garisan hitam (turun), tutup melepasi atas 3 garisan terakhir (garisan putih pembalikan) dan tutup > SMA200.",
    "keluar": "Jual pada buka esok apabila muncul garisan hitam pembalikan (tutup bawah low 3 garisan terakhir).",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Bawah garisan hitam terakhir sebelum isyarat; langkau jika buka masuk ≤ henti."
+   "henti": "Bawah garisan hitam terakhir sebelum isyarat; langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V4 V1 + close>SMA200"
   },
   {
    "id": "M100",
@@ -880,7 +959,8 @@
    "masuk": "Corak segi empat atau segi tiga menaik dalam 40 hari (≥ 2–3 sentuhan rintangan rata) dan tutup menembus rintangan (high 40 hari).",
    "keluar": "Sasaran = rintangan + ketinggian corak (rintangan − sokongan), dikunci pada hari isyarat.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; pegang sehingga sasaran atau henti.",
-   "henti": "Low pangsi kecil terakhir dalam corak; langkau jika buka masuk ≤ henti."
+   "henti": "Low pangsi kecil terakhir dalam corak; langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V0 Sumber tulen (proksi): sasaran T+tinggi, tiada exitc"
   },
   {
    "id": "M101",
@@ -891,7 +971,8 @@
    "masuk": "Tiga lembah dengan low makin tinggi (jarak 5–60 hari, dalam 126 hari), harga dahulu naik dalam 63 hari, tutup menembus puncak corak dan tutup > SMA50.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "1% bawah lembah ketiga (0.99 × low); langkau jika buka masuk ≤ henti."
+   "henti": "1% bawah lembah ketiga (0.99 × low); langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V3 V1 + corak sambungan (tutup_a>tutup_a-63)"
   },
   {
    "id": "M102",
@@ -902,7 +983,8 @@
    "masuk": "Harga ≥ USD3, volum min 3 hari ≥ 100,000, SMA7/SMA65 ≥ 1.05, hari hijau naik lebih kuat daripada semalam (semalam naik < 2%), tutup > SMA50, volum > semalam.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Low hari isyarat; langkau jika buka masuk ≤ henti."
+   "henti": "Low hari isyarat; langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V5 V1 + volum hari ini > semalam"
   },
   {
    "id": "M104",
@@ -913,7 +995,8 @@
    "masuk": "Harga naik ≥ 50% dalam 40 hari (tiang), rehat 10–30 hari dengan undur ≤ 20% (bendera), kemudian tutup menembus puncak dengan volum ≥ 1.5 × purata 50 hari.",
    "keluar": "Jual pada buka esok apabila tutup < SMA50.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Paras lebih tinggi antara 1% bawah low rehat dan 12% bawah tutup isyarat."
+   "henti": "Paras lebih tinggi antara 1% bawah low rehat dan 12% bawah tutup isyarat.",
+   "varian_kod": "V2 V1 + tiang >=50%"
   },
   {
    "id": "M105",
@@ -924,7 +1007,8 @@
    "masuk": "Supertrend (10, 3) bertukar daripada turun kepada naik (tutup melepasi garis atas).",
    "keluar": "Jual pada buka esok apabila Supertrend bertukar arah turun (tutup < garis Supertrend).",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; garis Supertrend bertindak sebagai henti mengekor.",
-   "henti": "Paras lebih tinggi antara garis Supertrend dan 12% bawah tutup; langkau jika buka masuk ≤ henti."
+   "henti": "Paras lebih tinggi antara garis Supertrend dan 12% bawah tutup; langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V1 Dikunci (V0 + had henti 12%)"
   },
   {
    "id": "M106",
@@ -935,7 +1019,8 @@
    "masuk": "+DI melintas ke atas −DI dengan ADX14 > 25.",
    "keluar": "Jual pada buka esok apabila −DI > +DI.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti.",
-   "henti": "Tutup hari isyarat − 2 × ATR14; langkau jika buka masuk ≤ henti."
+   "henti": "Tutup hari isyarat − 2 × ATR14; langkau jika buka masuk ≤ henti.",
+   "varian_kod": "V5 V1 dengan henti tutup-2xATR14"
   },
   {
    "id": "M107",
@@ -946,7 +1031,8 @@
    "masuk": "SMA50 melintas ke atas SMA200 dan SPY > SMA200.",
    "keluar": "Jual pada buka esok apabila SMA50 < SMA200 (silang maut).",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; pegangan jangka panjang.",
-   "henti": "Tutup hari isyarat − 3 × ATR14."
+   "henti": "Tutup hari isyarat − 3 × ATR14.",
+   "varian_kod": "V5 V1 + SPY>SMA200"
   },
   {
    "id": "M111",
@@ -957,7 +1043,8 @@
    "masuk": "Sistem henti-dan-pusing bertukar naik: tutup > tutup terendah (SIC) + 3 × ATR7, dan tutup > SMA50.",
    "keluar": "Jual pada buka esok apabila sistem bertukar turun: tutup < tutup tertinggi sejak naik (SIC) − 3 × ATR7.",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti; garis SIC − 3 × ATR7 bertindak sebagai henti mengekor.",
-   "henti": "Paras lebih tinggi antara tutup − 3 × ATR7 dan 12% bawah tutup."
+   "henti": "Paras lebih tinggi antara tutup − 3 × ATR7 dan 12% bawah tutup.",
+   "varian_kod": "V5 V1 henti maks(tutup-3xATR7; 0.88xtutup)"
   },
   {
    "id": "M115",
@@ -968,7 +1055,8 @@
    "masuk": "SMA10 > EMA20 > EMA30 baru tersusun 3–5 hari; 2 hari naik, kemudian 1 hari undur (tutup dan high lebih rendah). Isyarat: tutup > high hari undur; beli harga buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 42 hari dagangan (jual pada harga tutup)",
-   "henti": "Low hari undur (bar persediaan); had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low hari undur (bar persediaan); had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ASAL, keluar ASAL, tmax 42"
   },
   {
    "id": "M116",
@@ -979,7 +1067,8 @@
    "masuk": "Low 2 hari berturut di atas EMA20; kemudian tutup > high tertinggi 2 hari itu. Beli harga buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 10 hari dagangan (jual pada harga tutup)",
-   "henti": "10% bawah tutup hari isyarat"
+   "henti": "10% bawah tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT10, keluar TIADA, tmax 10"
   },
   {
    "id": "M117",
@@ -990,7 +1079,8 @@
    "masuk": "High baharu 42 hari, kemudian 2–7 hari high menurun; isyarat tutup > high semalam dengan jarak tutup ke low hari itu ≤ 4%. Beli harga buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 3×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 3×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR3, keluar ASAL, tmax tiada"
   },
   {
    "id": "M118",
@@ -1001,7 +1091,8 @@
    "masuk": "Hari julat terbesar 10 hari, lilin hijau, low hari itu/semalam ≤ SMA50 dan tutup > SMA50; esoknya tutup > high hari itu. Beli harga buka esok",
    "keluar": "Tutup < SMA50 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low terendah 5 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low terendah 5 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti LOW5, keluar SMA50, tmax tiada"
   },
   {
    "id": "M119",
@@ -1012,7 +1103,8 @@
    "masuk": "Semalam tutup dalam 25% bawah julat; hari ini tutup dalam 25% atas julat dan > SMA10 dan SMA50. Esok tutup > high hari itu → beli harga buka lusa",
    "keluar": "Chandelier: tutup < high tertinggi 22 hari − 4×ATR22 → jual pada harga buka esok",
    "pegang": "Maks 42 hari dagangan (jual pada harga tutup)",
-   "henti": "Low hari persediaan; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low hari persediaan; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ASAL, keluar CHAN4, tmax 42"
   },
   {
    "id": "M120",
@@ -1023,7 +1115,8 @@
    "masuk": "Harga > $30; hari luar (low < low semalam, high > high semalam) dengan julat terbesar 5 hari dan high baharu 60 hari. Esok tutup > high hari luar → beli buka lusa",
    "keluar": "Tutup < SMA50 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari luar; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low hari luar; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ASAL, keluar SMA50, tmax tiada"
   },
   {
    "id": "M121",
@@ -1034,7 +1127,8 @@
    "masuk": "Tutup > EMA20 yang naik; dalam undur, bar kedua yang buat high > high semalam (H2) dan tutup dalam 25% atas julat. Esok tutup > high H2 → beli buka lusa",
    "keluar": "Tiada; hanya henti/had masa (sasaran 2R sumber tidak dimodelkan)",
    "pegang": "Maks 63 hari dagangan (jual pada harga tutup)",
-   "henti": "15% bawah tutup hari isyarat"
+   "henti": "15% bawah tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT15, keluar ASAL, tmax 63"
   },
   {
    "id": "M122",
@@ -1045,7 +1139,8 @@
    "masuk": "SMA20 > SMA150; Stokastik (14,3) < 20 dalam 10 hari lepas; histogram MACD (12,26,9) silang naik melepasi 0. Beli harga buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 42 hari dagangan (jual pada harga tutup)",
-   "henti": "Low terendah 5 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low terendah 5 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti LOW5, keluar TIADA, tmax 42"
   },
   {
    "id": "M123",
@@ -1056,7 +1151,8 @@
    "masuk": "Bias mingguan naik (CCI20 mingguan > +100, belum < −100); CCI20 harian jatuh < −100 kemudian silang naik melepasi 0. Beli harga buka esok",
    "keluar": "Tutup < SMA50 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti LOW1, keluar SMA50, tmax tiada"
   },
   {
    "id": "M124",
@@ -1067,7 +1163,8 @@
    "masuk": "%K perlahan (39,3) silang naik melepasi 50 dan tutup > tutup tertinggi minggu lepas. Beli harga buka esok",
    "keluar": "Chandelier: tutup < high tertinggi 22 hari − 3×ATR22 → jual pada harga buka esok",
    "pegang": "Maks 63 hari dagangan (jual pada harga tutup)",
-   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR2, keluar CHAN3, tmax 63"
   },
   {
    "id": "M125",
@@ -1078,7 +1175,8 @@
    "masuk": "High semalam > high 2 hari sebelumnya dan tutup hari ini > tutup semalam. Beli harga buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 2.5×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 2.5×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR2.5, keluar ASAL, tmax tiada"
   },
   {
    "id": "M126",
@@ -1089,7 +1187,8 @@
    "masuk": "Dalam aliran naik (tutup > SMA50 dan SMA50 lebih tinggi daripada 20 hari lepas), hari smash: high 20 hari tetapi tutup dalam 25% bawah julat. Esok tutup > high hari smash → beli buka lusa",
    "keluar": "Tutup < SMA50 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 3×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 3×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR3, keluar SMA50, tmax tiada"
   },
   {
    "id": "M127",
@@ -1100,7 +1199,8 @@
    "masuk": "Hari A buat high 42 hari; hari B low < low hari A; hari C tutup > high hari A. Beli harga buka esok",
    "keluar": "Chandelier: tutup < high tertinggi 22 hari − 4×ATR22 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Low hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti LOW1, keluar CHAN4, tmax tiada"
   },
   {
    "id": "M128",
@@ -1111,7 +1211,8 @@
    "masuk": "Dalam aliran naik (tutup > SMA50 dan SMA50 lebih tinggi daripada 20 hari lepas), bar IRB: buka dan tutup ≥ 45% julat di bawah high. Esok tutup > high IRB → beli buka lusa",
    "keluar": "Tutup < SMA20 → jual pada harga buka esok",
    "pegang": "Maks 42 hari dagangan (jual pada harga tutup)",
-   "henti": "10% bawah tutup hari isyarat"
+   "henti": "10% bawah tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT10, keluar SMA20, tmax 42"
   },
   {
    "id": "M129",
@@ -1122,7 +1223,8 @@
    "masuk": "Dalam aliran naik: hari 1 sumbu atas ≥ 40% julat; hari 2 buka dalam sumbu dan low ≥ atas badan hari 1; hari 3 tutup > high hari 2. Beli buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 63 hari dagangan (jual pada harga tutup)",
-   "henti": "Low terendah 10 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low terendah 10 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti LOW10, keluar TIADA, tmax 63"
   },
   {
    "id": "M130",
@@ -1133,7 +1235,8 @@
    "masuk": "Lilin hijau besar (badan ≥ 1.5× purata 20 hari), lilin merah kecil volum rendah, lilin hijau volum tinggi menutup jurang; SMA5 > SMA10 > SMA20. Beli buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 3.5×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 3.5×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR3.5, keluar ASAL, tmax tiada"
   },
   {
    "id": "M131",
@@ -1144,7 +1247,8 @@
    "masuk": "Corak 1-2-3 naik (low 1, high 2, low 3 lebih tinggi daripada low 1); selepas tutup > titik 2 dan high gagal naik (cangkuk), tutup > cangkuk. Beli buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 63 hari dagangan (jual pada harga tutup)",
-   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR2, keluar TIADA, tmax 63"
   },
   {
    "id": "M132",
@@ -1155,7 +1259,8 @@
    "masuk": "Dalam aliran naik, bentuk J: puncak kiri, lembah 8–35% lebih rendah dalam 5–40 hari; tutup melepasi puncak kiri. Beli harga buka esok",
    "keluar": "Chandelier: tutup < high tertinggi 22 hari − 4×ATR22 → jual pada harga buka esok (sasaran 62% sumber tidak dimodelkan)",
    "pegang": "Maks 42 hari dagangan (jual pada harga tutup)",
-   "henti": "Tutup hari isyarat − 4×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 4×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR4, keluar CHAN4, tmax 42"
   },
   {
    "id": "M133",
@@ -1166,7 +1271,8 @@
    "masuk": "Hari hook: buka > high semalam, tutup < tutup semalam, julat lebih kecil. Esok tutup > buka + Stretch (2× purata 10 hari jarak buka terdekat ke high/low). Beli buka lusa",
    "keluar": "Tutup < SMA50 → jual pada harga buka esok",
    "pegang": "Maks 21 hari dagangan (jual pada harga tutup)",
-   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR2, keluar SMA50, tmax 21"
   },
   {
    "id": "M134",
@@ -1177,7 +1283,8 @@
    "masuk": "Low terendah 60 hari dalam 60 hari lepas; ≥ 5 hari low di atas SMA10, kemudian low pertama sentuh SMA10 (ciuman). Esok tutup > high hari ciuman → beli buka lusa",
    "keluar": "Chandelier: tutup < high tertinggi 22 hari − 4×ATR22 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 2×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR2, keluar CHAN4, tmax tiada"
   },
   {
    "id": "M135",
@@ -1188,7 +1295,8 @@
    "masuk": "Paras = high tertinggi ~6 bulan; tiada high baharu 20 hari; ≥ 2 puncak dalam 3% bawah paras; tutup > paras dengan volum ≥ 1.5× purata 20 hari. Beli buka esok",
    "keluar": "Tutup < SMA50 → jual pada harga buka esok",
    "pegang": "Maks 63 hari dagangan (jual pada harga tutup)",
-   "henti": "Low terendah 10 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Low terendah 10 hari setakat hari isyarat; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti LOW10, keluar SMA50, tmax 63"
   },
   {
    "id": "M136",
@@ -1199,7 +1307,8 @@
    "masuk": "Low pertengahan terbentuk (low jangka pendek lebih rendah daripada low jangka pendek sebelum dan selepasnya); dalam 10 hari, tutup > high semalam. Beli buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "10% bawah tutup hari isyarat"
+   "henti": "10% bawah tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT10, keluar ASAL, tmax tiada"
   },
   {
    "id": "M137",
@@ -1210,7 +1319,8 @@
    "masuk": "Pivot ayunan ≥ 4×ATR14; tutup melepasi kedua-dua swing high terkini. Beli harga buka esok",
    "keluar": "Chandelier: tutup < high tertinggi 22 hari − 4×ATR22 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 2.5×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 2.5×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR2.5, keluar CHAN4, tmax tiada"
   },
   {
    "id": "M138",
@@ -1221,7 +1331,8 @@
    "masuk": "≥ 5 hari naik berturut dengan volum di atas purata 20 hari, kemudian lilin merah kecil dengan volum < separuh purata larian. Isyarat pada tutup lilin merah; beli buka esok",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 63 hari dagangan (jual pada harga tutup)",
-   "henti": "Tutup hari isyarat − 4×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)"
+   "henti": "Tutup hari isyarat − 4×ATR14; had 15% bawah tutup isyarat (diambil yang lebih ketat)",
+   "varian_kod": "V1 WFO beku: henti ATR4, keluar TIADA, tmax 63"
   },
   {
    "id": "M139",
@@ -1232,7 +1343,8 @@
    "masuk": "SMA5/10/20 berhimpun rapat (sebaran ≤ 0.5×ATR14) buat kali pertama dalam 20 hari; esoknya tutup melepasi MA tertinggi. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 21 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-21 jika belum keluar",
-   "henti": "Tetap 15% bawah harga tutup hari isyarat"
+   "henti": "Tetap 15% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT15, keluar TIADA, tmax 21"
   },
   {
    "id": "M140",
@@ -1243,7 +1355,8 @@
    "masuk": "Selepas jatuh lama (tutup < MA60 ≥ 40 daripada 60 hari, ≤ 85% high 120 hari) dan volum kering, tutup silang atas MA60 dan naik > 4.5% sehari. Beli pada harga buka esok.",
    "keluar": "Tutup di bawah SMA50 → jual pada harga buka esok",
    "pegang": "Maks 63 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-63 jika belum keluar",
-   "henti": "Tutup hari isyarat − 3×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 3×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR3, keluar SMA50, tmax 63"
   },
   {
    "id": "M141",
@@ -1254,7 +1367,8 @@
    "masuk": "Low terendah 60 hari baharu, rali tajam (≥ 3×ATR14) dalam 15 hari, kemudian undur satu bar pertama; isyarat apabila tutup melepasi high bar undur itu. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 63 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-63 jika belum keluar",
-   "henti": "Tutup hari isyarat − 2.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 2.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR2.5, keluar ASAL, tmax 63"
   },
   {
    "id": "M142",
@@ -1265,7 +1379,8 @@
    "masuk": "Hari pecah: volum ≥ 2× purata 20 hari, tutup > 3% atas high 20 hari, atas MA250 yang naik. Dalam 10 hari, hari turun pertama yang kekal atas paras pecah. Beli pada harga buka esok.",
    "keluar": "Chandelier: tutup di bawah (high tertinggi 22 hari − 4×ATR22) → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 3.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 3.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR3.5, keluar CHAN4, tmax tiada"
   },
   {
    "id": "M143",
@@ -1276,7 +1391,8 @@
    "masuk": "Selepas mendatar (julat 20 hari ≤ 15%), lilin hijau naik ≥ 7% dengan volum ≥ 2× purata; dalam 10 hari, sentuhan pertama SMA5 (low ≤ SMA5, tutup ≥ SMA5). Beli pada harga buka esok.",
    "keluar": "Chandelier: tutup di bawah (high tertinggi 22 hari − 4×ATR22) → jual pada harga buka esok",
    "pegang": "Maks 21 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-21 jika belum keluar",
-   "henti": "Tutup hari isyarat − 3.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 3.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR3.5, keluar CHAN4, tmax 21"
   },
   {
    "id": "M144",
@@ -1287,7 +1403,8 @@
    "masuk": "Semalam tutup dekat low (10% bawah julat); hari ini buka dan tutup atas high semalam; jarak dari SMA50 < 4×ATR14; ADR 20 hari ≥ 4%. Beli pada harga buka esok.",
    "keluar": "Tutup di bawah SMA50 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 4×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 4×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR4, keluar SMA50, tmax tiada"
   },
   {
    "id": "M145",
@@ -1298,7 +1415,8 @@
    "masuk": "Aliran naik (tutup > EMA20 naik); bar julat lebar menembus high 20 hari, tutup di 25% atas julat. Dalam 1–3 bar, tutup pertama atas high bar itu. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa dan tiada isyarat keluar; pegang sehingga kena henti",
-   "henti": "Low terendah 10 hari hingga hari isyarat, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Low terendah 10 hari hingga hari isyarat, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti LOW10, keluar ASAL, tmax tiada"
   },
   {
    "id": "M146",
@@ -1309,7 +1427,8 @@
    "masuk": "3 bar hijau dengan julat, tutup, low dan high masing-masing naik serta kenaikan makin laju; high > high tertinggi 20 bar. Beli pada harga buka esok.",
    "keluar": "Tutup di bawah SMA50 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tetap 6% bawah harga tutup hari isyarat"
+   "henti": "Tetap 6% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT6, keluar SMA50, tmax tiada"
   },
   {
    "id": "M147",
@@ -1320,7 +1439,8 @@
    "masuk": "TRIX(9) atas garis isyaratnya (EMA3) dan 3 tutup menurun berturut; esoknya tutup melepasi high bar ke-3. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa dan tiada isyarat keluar; pegang sehingga kena henti",
-   "henti": "Tetap 15% bawah harga tutup hari isyarat"
+   "henti": "Tetap 15% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT15, keluar ASAL, tmax tiada"
   },
   {
    "id": "M148",
@@ -1331,7 +1451,8 @@
    "masuk": "Tutup pertama silang atas WMA180; dalam 20 hari (selagi atas WMA180) tutup melepasi nombor bulat seterusnya atas high bar itu (langkah $1/$5/$10/$50 ikut harga). Beli pada harga buka esok.",
    "keluar": "Tutup di bawah EMA10 → jual pada harga buka esok",
    "pegang": "Maks 42 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-42 jika belum keluar",
-   "henti": "Tetap 6% bawah harga tutup hari isyarat"
+   "henti": "Tetap 6% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT6, keluar EMA10, tmax 42"
   },
   {
    "id": "M149",
@@ -1342,7 +1463,8 @@
    "masuk": "Tutup atas saluran Keltner atas (EMA15 + 2×ATR15); undur 3–15 bar sebanyak 20–80% lebar saluran; kemudian bar hijau yang tutup atas high semalam. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa dan tiada isyarat keluar; pegang sehingga kena henti",
-   "henti": "Tutup hari isyarat − 2.5×ATR15, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 2.5×ATR15, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ASAL, keluar ASAL, tmax tiada"
   },
   {
    "id": "M150",
@@ -1353,7 +1475,8 @@
    "masuk": "EMA20 naik; bar merah besar (badan > 50% julat), bar seterusnya low lebih rendah; bar selepas itu tutup melepasi high bar merah. Beli pada harga buka esok.",
    "keluar": "Tutup di bawah SMA20 → jual pada harga buka esok",
    "pegang": "Maks 21 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-21 jika belum keluar",
-   "henti": "Tetap 12% bawah harga tutup hari isyarat"
+   "henti": "Tetap 12% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT12, keluar SMA20, tmax 21"
   },
   {
    "id": "M151",
@@ -1364,7 +1487,8 @@
    "masuk": "SMA20 naik; bar luar merah (high lebih tinggi, low lebih rendah); selepas low-nya ditembus, tutup melepasi high bar hijau pertama. Batal selepas 10 bar. Beli pada harga buka esok.",
    "keluar": "Chandelier: tutup di bawah (high tertinggi 22 hari − 4×ATR22) → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tutup hari isyarat − 1.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 1.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR1.5, keluar CHAN4, tmax tiada"
   },
   {
    "id": "M152",
@@ -1375,7 +1499,8 @@
    "masuk": "Aliran naik (tutup > SMA50 naik); hari lonjakan buat low 5 hari baharu tetapi tutup di 25% atas julat; para 4–10 bar atas low itu; tutup melepasi tutup tertinggi para. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 42 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-42 jika belum keluar",
-   "henti": "Tetap 15% bawah harga tutup hari isyarat"
+   "henti": "Tetap 15% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT15, keluar ASAL, tmax 42"
   },
   {
    "id": "M153",
@@ -1386,7 +1511,8 @@
    "masuk": "Julat hari ini > julat semalam dan titik tengah hari ini > high semalam. Beli pada harga buka esok; langkau jika buka esok bawah titik tengah.",
    "keluar": "Chandelier: tutup di bawah (high tertinggi 22 hari − 2×ATR22) → jual pada harga buka esok",
    "pegang": "Maks 10 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-10 jika belum keluar",
-   "henti": "Tetap 12% bawah harga tutup hari isyarat"
+   "henti": "Tetap 12% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT12, keluar CHAN2, tmax 10"
   },
   {
    "id": "M154",
@@ -1397,7 +1523,8 @@
    "masuk": "Aliran naik (tutup > SMA50 naik); cari bar low terendah 20 hari; tutup pertama melepasi high bar itu. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 42 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-42 jika belum keluar",
-   "henti": "Tutup hari isyarat − 2.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 2.5×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR2.5, keluar ASAL, tmax 42"
   },
   {
    "id": "M155",
@@ -1408,7 +1535,8 @@
    "masuk": "Hari pertama Stokastik (13,8) > (21,13) > (34,21), jarak S1 atas S3 > 10%, dan S1 & S2 naik atau volum > 1.2× purata 21 hari. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 21 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-21 jika belum keluar",
-   "henti": "Tutup hari isyarat − 3×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 3×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR3, keluar TIADA, tmax 21"
   },
   {
    "id": "M156",
@@ -1419,7 +1547,8 @@
    "masuk": "Aliran naik (tutup > SMA50 naik); high 20 hari baharu dalam 10 hari; sentuhan pertama paras undur 38.2% tujahan itu dengan tutup kekal atas paras 61.8%. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Maks 10 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-10 jika belum keluar",
-   "henti": "Tutup hari isyarat − 3×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Tutup hari isyarat − 3×ATR14, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti ATR3, keluar TIADA, tmax 10"
   },
   {
    "id": "M157",
@@ -1430,7 +1559,8 @@
    "masuk": "Hari persediaan: naik > 15%/20 hari atau > 25%/40 hari, ≤ 15% bawah high 50 hari, EMA10 > EMA21 naik, ADR5 < 3%, julat < 2%, volum kering; esok tutup atas high-nya. Beli pada harga buka esok.",
    "keluar": "Tiada; hanya henti/had masa",
    "pegang": "Tiada had masa dan tiada isyarat keluar; pegang sehingga kena henti",
-   "henti": "Tetap 6% bawah harga tutup hari isyarat"
+   "henti": "Tetap 6% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT6, keluar ASAL, tmax tiada"
   },
   {
    "id": "M158",
@@ -1441,7 +1571,8 @@
    "masuk": "Hari A: tutup > SMA50 dan ADX14 naik. Hari B: buka atas high A, kemudian low turun menyentuh high A. Isyarat pada tutup B. Beli pada harga buka esok.",
    "keluar": "Tutup di bawah SMA50 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tetap 12% bawah harga tutup hari isyarat"
+   "henti": "Tetap 12% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT12, keluar ASAL, tmax tiada"
   },
   {
    "id": "M159",
@@ -1452,7 +1583,8 @@
    "masuk": "Bar Heikin-Ashi hijau dengan bayang bawah ≤ 10% julat dan tutup > tutup 5 hari lepas. Beli pada harga buka esok.",
    "keluar": "Tutup di bawah SMA20 → jual pada harga buka esok",
    "pegang": "Maks 10 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-10 jika belum keluar",
-   "henti": "Tetap 15% bawah harga tutup hari isyarat"
+   "henti": "Tetap 15% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT15, keluar SMA20, tmax 10"
   },
   {
    "id": "M160",
@@ -1463,7 +1595,8 @@
    "masuk": "Kaki naik pertama A→B (ayunan ≥ 3×ATR14), pembetulan 30–70% kaki itu dengan low kekal atas A; tutup melepasi high semalam. Beli pada harga buka esok.",
    "keluar": "Tutup di bawah EMA21 → jual pada harga buka esok",
    "pegang": "Maks 42 hari dagangan dari hari isyarat; jual pada harga tutup hari ke-42 jika belum keluar",
-   "henti": "Low terendah 10 hari hingga hari isyarat, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)"
+   "henti": "Low terendah 10 hari hingga hari isyarat, tetapi tidak lebih rendah daripada 15% bawah tutup (henti tetap)",
+   "varian_kod": "V1 WFO beku: henti LOW10, keluar EMA21, tmax 42"
   },
   {
    "id": "M161",
@@ -1474,7 +1607,8 @@
    "masuk": "EMA10 > EMA21 dan Supertrend(10,3) hijau; (A) undur sentuh EMA10 dengan lilin hijau tutup atas EMA10, ATAU (B) tutup pecah julat sempit 5 hari. Beli pada harga buka esok.",
    "keluar": "2 tutup berturut di bawah EMA21 → jual pada harga buka esok",
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
-   "henti": "Tetap 15% bawah harga tutup hari isyarat"
+   "henti": "Tetap 15% bawah harga tutup hari isyarat",
+   "varian_kod": "V1 WFO beku: henti PCT15, keluar ASAL, tmax tiada"
   }
  ]
 }

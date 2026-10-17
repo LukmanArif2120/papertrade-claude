@@ -1092,10 +1092,21 @@ function renderPrestasi(which){
 }
 
 /* ================= Kaedah: katalog semua kaedah aktif (kaedah/katalog, sumber standard/katalog_kaedah.json) ================= */
+/* backtest = baris registry set 431 bagi varian aktif (varian_kod = VARIAN kod); papertrade = prStats M+C (dagangan sah sahaja) */
+const katGabungM=memo((rows,docs,src)=>{const bt={};for(const d of Object.values(docs))for(const x of (d.rows||[]))if(x.set==='431')bt[x.id+'|'+x.varian]=x;
+  let pt={};if(src.length){let st=prStatsC.get(src);if(!st){st=prStats(src);prStatsC.set(src,st);}st.forEach(o=>{pt[o.kaedah]=o;});
+    src.forEach(r=>{const o=pt[r.kaedah];if(o){o.nM=(o.nM||0)+(r.akaun==='M');o.nC=(o.nC||0)+(r.akaun==='C');}});}
+  return rows.map(r=>Object.assign({},r,{bt:bt[r.id+'|'+r.varian_kod]||null,pt:pt[r.id]||null}));});
+const katGabung=rows=>katGabungM(rows,S.docs,prSrc('gab'));
+function selBt(r){const b=r.bt;if(!b)return `<span class="mut">${S.live&&Object.keys(S.docs).length?'Tiada dalam registry':'Memuatkan…'}</span>`;
+  return `${pill(b.keputusan)}<span class="vv"><b class="${cls(b.cagr)}">CAGR ${pct(b.cagr)}</b> · MDD ${pct(b.mdd,0)}${b.skor!=null?' · skor '+fx(b.skor,0):''}</span><span class="vv">Untung/dag <span class="${cls(b.avg)}">${sgn(b.avg)}</span> · menang ${pct(b.win,0)}</span><span class="vv">${fx(b.n,0)} entry · pegang ${fx(b.days,0)} hari${b.gate_gagal?' · gagal '+esc(b.gate_gagal):''}</span>`;}
+function selPt(r){const o=r.pt;if(!o)return `<span class="mut">${ptcRows()||ptmRows()?'Belum ada dagangan':'Memuatkan…'}</span>`;
+  return `${kptPill(o.kep)}<span class="vv"><b class="${cls(o.avg)}">Untung purata ${sg2(o.avg)}</b></span><span class="vv">Menang ${fx(o.win,0)}% · terburuk <span class="${cls(o.worst)}">${sg2(o.worst)}</span></span><span class="vv">${o.n} dagangan (${o.ex} keluar)${o.nM?' · M '+o.nM:''}${o.nC?' · C '+o.nC:''}</span>`;}
 function renderKaedah(){
   const el=$('#v-kaedah');const k=S.kat;
   if(!k||!Array.isArray(k.rows)||!k.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Belum ada katalog kaedah dalam pangkalan data.':'Memuatkan katalog kaedah…'}</div>`;return;}
-  const kf=S.kf;const all=k.rows;let rows=all;
+  const kf=S.kf;const all=katGabung(k.rows);let rows=all;
+  const nBt=all.filter(r=>r.bt).length,nPt=all.filter(r=>r.pt).length,ptN=all.reduce((t,r)=>t+(r.pt?r.pt.n:0),0);
   if(kf.q){const q=kf.q.toLowerCase();rows=rows.filter(r=>[r.id,r.nama,r.varian,r.pencipta,r.sumber,r.masuk,r.keluar,r.pegang,r.henti].join(' ').toLowerCase().includes(q));}
   const tiada=all.filter(r=>/^tidak dinyatakan/i.test(r.pencipta||'')).length;
   const tmax=all.filter(r=>/maks/i.test(r.pegang||'')).length;
@@ -1104,6 +1115,7 @@ function renderKaedah(){
   <p class="headline">Katalog <b>${all.length}</b> kaedah aktif yang diimbas setiap malam dan dibeli maya dalam Papertrade C. Setiap baris ialah varian yang <b>sedang digunakan</b> dalam kod: dari mana asalnya, bila beli, bila jual, berapa lama pegang dan di mana henti rugi.</p>
   <div class="kpis">
     <div class="kpi"><div class="lbl">Kaedah aktif</div><div class="v">${all.length}</div><div class="s">${new Set(all.map(r=>r.pencipta).filter(x=>x&&!/^tidak dinyatakan/i.test(x))).size} pencipta berbeza · ${tiada} tanpa nama pencipta</div></div>
+    <div class="kpi"><div class="lbl" data-tip="kat_bt">Backtest / papertrade</div><div class="v">${nBt}<span class="mut" style="font-size:1rem"> / ${nPt}</span></div><div class="s">kaedah ada keputusan backtest set 431 / ada dagangan papertrade (${ptN} dagangan)</div></div>
     <div class="kpi"><div class="lbl" data-tip="kat_pegang">Ada had masa</div><div class="v">${tmax}</div><div class="s">${all.length-tmax} kaedah pegang sehingga isyarat keluar atau henti</div></div>
     <div class="kpi"><div class="lbl" data-tip="kat_umum">Beli</div><div class="v" style="font-size:1.25rem">Buka esok</div><div class="s">Isyarat pada harga tutup hari ini · 1 unit maya</div></div>
     <div class="kpi"><div class="lbl" data-tip="dua_lorong">Dua lorong keluar</div><div class="v" style="font-size:1.25rem">Kaedah + selagi naik</div><div class="s">Lorong 2 sama untuk semua kaedah</div></div>
@@ -1117,10 +1129,12 @@ function renderKaedah(){
       {k:'masuk',t:'Masuk (entry)',tip:'kat_masuk',l:1,ns:1,c:wrap},
       {k:'keluar',t:'Keluar (exit)',tip:'kat_keluar',l:1,ns:1,c:wrap},
       {k:'pegang',t:'Pegang (hold)',tip:'kat_pegang',l:1,c:()=>'wrap lrg'},
-      {k:'henti',t:'Henti rugi',tip:'kat_henti',l:1,ns:1,c:wrap}]})}
+      {k:'henti',t:'Henti rugi',tip:'kat_henti',l:1,ns:1,c:wrap},
+      {k:'bt',t:'Backtest (set 431)',tip:'kat_bt',v:r=>r.bt?r.bt.cagr:null,f:selBt,c:()=>'wrap lrg'},
+      {k:'pt',t:'Papertrade (M+C)',tip:'kat_pt',v:r=>r.pt?r.pt.avg:null,f:selPt,c:()=>'wrap lrg'}]})}
   </div>
   <div class="strip"><b class="t">Sama untuk semua</b><span>Isyarat dikira pada harga tutup; beli pada harga buka hari dagangan berikutnya, dibatalkan jika buka ≤ henti. Urutan keluar setiap hari: henti rugi dahulu, kemudian sasaran, isyarat keluar (jual pada buka esok) dan akhir sekali had masa (jual pada tutup). Setiap posisi juga dinilai dalam lorong 2 <b>Pegang selagi naik</b>: jual selepas 2 tutup berturut lebih rendah, henti kaedah kekal.</span></div>
-  <div class="foot"><span>Sumber: kod BacktestShariah2/kod/kaedah, SPEC_SEMUA_KAEDAH.md, KATALOG_K145.md</span><span>Dibina ${esc(k.dibina||'–')}</span></div>`;
+  <div class="foot"><span>Sumber: kod BacktestShariah2/kod/kaedah, SPEC_SEMUA_KAEDAH.md, KATALOG_K145.md · backtest: registry varian aktif · papertrade: papertrade/moomoo + papertrade/claude (kiraan langsung)</span><span>Dibina ${esc(k.dibina||'–')}</span></div>`;
   const q=$('#katQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{kf.q=q.value.trim();renderAll();const n=$('#katQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
 }
 
@@ -1239,6 +1253,8 @@ const TIPS={
   kat_keluar:{t:'Keluar (exit)',d:'Sasaran untung atau isyarat jual kaedah (selain henti rugi). Isyarat jual pada tutup dilaksanakan pada harga buka esok; sasaran dijual pada paras sasaran.',e:''},
   kat_pegang:{t:'Pegang (hold)',d:'Berapa lama posisi dipegang: had masa maksimum dalam hari dagangan (jual pada tutup hari terakhir), atau tiada had iaitu pegang sehingga isyarat keluar atau henti rugi.',e:'Maks 21 hari = jual pada tutup hari ke-21 jika belum keluar.'},
   kat_henti:{t:'Henti rugi',d:'Paras jual untuk menghadkan rugi. Jika harga rendah menyentuh henti, jual pada paras henti; jika harga buka sudah di bawah henti, jual pada harga buka.',e:'Henti 12% bawah tutup isyarat: beli 100 → jual jika jatuh ke 88.'},
+  kat_bt:{t:'Backtest (set 431)',d:'Keputusan enjin v1.2 bagi varian yang sama seperti dalam kod, atas 431 saham Shariah dari 1 Nov 2019 hingga 2 Okt 2026: keputusan, CAGR portfolio, MDD, skor, untung purata setiap dagangan, kadar menang, bilangan entry dan purata hari pegang. Susun ikut CAGR.',e:'UJI KERTAS · CAGR 33.3% · untung/dag +2.1% · menang 41%.'},
+  kat_pt:{t:'Papertrade (M+C)',d:'Prestasi sebenar setakat ini dalam Paper Trade M (Moomoo simulasi) dan Papertrade C (maya), sama seperti tab Prestasi · Combine: untung purata (akhir bagi yang keluar, semasa bagi yang dipegang), kadar menang, kerugian terbesar dan bilangan dagangan. Label TERUSKAN/PERHATI/HENTIKAN hanya selepas ≥ 20 dagangan tertutup. Susun ikut untung purata.',e:'BELUM CUKUP DATA · +1.8% · menang 60% · 5 dagangan (2 keluar) · C 5.'},
   kat_umum:{t:'Peraturan belian',d:'Semua kaedah: isyarat pada harga tutup hari ini, beli 1 unit maya pada harga buka esok dalam Papertrade C. Dibatalkan jika harga buka ≤ henti. Tiada order Moomoo dan tiada wang sebenar.',e:''},
   slot_c:{t:'Slot Claude',d:'Posisi maya Claude bagi kaedah itu: dipegang (belum keluar) dan jumlah semua (termasuk yang sudah keluar). Tiada had.',e:''}
 };
@@ -1281,7 +1297,8 @@ renderNav();renderAll();
 (async function connect(){
   const db=window.claude?.use?await window.claude.use('db'):null;
   if(!db){setLive(false,'Data langsung tidak tersedia di paparan ini');S.live=true;renderAll();return;}
-  const re=(...tabs)=>{if(!tabs.length||tabs.includes(S.tab))renderSoon();};
+  /* tab Kaedah membaca registry dan papertrade juga */
+  const re=(...tabs)=>{if(!tabs.length||tabs.includes(S.tab)||S.tab==='kaedah'&&tabs.some(t=>['backtest','ptc','ptm','prestasi'].includes(t)))renderSoon();};
   db.collection('registry').limit(1000).onSnapshot(snap=>{
     const d={};snap.docs.forEach(x=>{if(!x.exists)return;const v=x.data();d[x.id]=Object.assign({},v,{rows:(v.rows||[]).map(r=>Object.assign({},r,{jumlah:jumlahDari(r.cagr),nisbah:(r.avgwin!=null&&r.avgloss<0)?r.avgwin/-r.avgloss:null,harian:(r.avg!=null&&r.days>0)?r.avg/r.days:null}))});});S.docs=d;
     const ts=Object.values(d).map(x=>x.tarikh||'').sort().pop()||'';S.live=true;
