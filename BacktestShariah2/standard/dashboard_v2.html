@@ -142,6 +142,7 @@ td.name b{font-weight:700;color:var(--fg);margin-right:6px}
 td .vv{display:block;color:var(--muted);font-size:.76rem;line-height:1.3;white-space:nowrap}
 td.name .vv,td.wrap .vv{white-space:normal}
 td.wrap{white-space:normal;min-width:220px;max-width:380px;text-align:left}
+td.wrap.lrg{min-width:150px;max-width:210px}
 td.tk b{color:var(--fg);font-weight:700}
 .frz{position:sticky;left:0;z-index:2;background:var(--surface);box-shadow:1px 0 0 var(--line)}
 th.frz{z-index:3;background:var(--sunk)}
@@ -722,16 +723,20 @@ function normPT(r){const keluar=!!(r.keluar||r.tarikh_keluar);const kk=r.kaedah_
   tutup_semua:r.tutup_semua==null||r.tutup_semua===''?null:benar(r.tutup_semua),
   untung_henti_pct:nomb(r.untung_henti_pct),untung_10_pct:nomb(r.untung_10_pct),harga_keluar_henti:nomb(r.harga_keluar_henti),harga_keluar_10:nomb(r.harga_keluar_10)});}
 /* tiga lorong keluar (sejak 17 Okt 2026): 1 kaedah, 2 henti sahaja, 3 sasaran 10% (standard/keluar_tiga.py) */
-const LORONG={henti:['keluar_henti','tarikh_keluar_henti','harga_keluar_henti','untung_henti_pct','status_henti'],
+const LORONG={kaedah:['keluar','tarikh_keluar','harga_keluar','untung_akhir_pct','isyarat_keluar'],henti:['keluar_henti','tarikh_keluar_henti','harga_keluar_henti','untung_henti_pct','status_henti'],
   '10':['keluar_10','tarikh_keluar_10','harga_keluar_10','untung_10_pct','status_10']};
 /* untung lorong: akhir jika lorong itu sudah keluar, semasa jika masih dipegang */
-const hasilL=(r,l)=>l==='kaedah'?(r.keluar?r.untung_akhir_pct:r.untung_pct):(r[LORONG[l][0]]?r[LORONG[l][3]]:r.untung_pct);
+const hasilL=(r,l)=>r[LORONG[l][0]]?r[LORONG[l][3]]:r.untung_pct;
+const BLN=['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
+const tkO=t=>/^\d{4}-\d\d-\d\d/.test(t||'')?(+t.slice(8,10))+' '+BLN[+t.slice(5,7)-1]:'';
+/* satu sel bagi setiap lorong, format seragam: status · tarikh @ harga · untung · sebab */
 function selLorong(r,l){const [k,t,h,u,st]=LORONG[l];if(r.tidak_dibeli)return '<span class="mut">–</span>';
-  if(r[k])return `<span class="pill p-exit">Keluar ${esc(t&&r[t]?r[t].slice(5):'')}</span><span class="vv">@ ${fx(r[h],2)} · <b class="${cls(r[u])}">${sg2(r[u])}</b></span><span class="vv">${esc((r[st]||'').replace(/^Keluar: /,'').replace(/ \(.*\)$/,''))}</span>`;
-  if(!r[st])return '<span class="mut">belum dinilai</span>';
-  const cp=l==='10'&&r.capai_10?`<span class="pill p-buy" title="Tutup capai +10% pada ${esc(r.tarikh_capai_10||'')}">+10% ✓</span> `:'';
+  const kini=r.untung_pct==null?'':`<span class="vv">kini <span class="${cls(r.untung_pct)}">${sg2(r.untung_pct)}</span></span>`;
+  if(r[k])return `<span class="pill p-exit">Keluar ${esc(tkO(r[t]))}</span><span class="vv nw">@ ${fx(r[h],2)} · <b class="${cls(r[u])}">${sg2(r[u])}</b></span><span class="vv">${esc((r[st]||'').replace(/^Keluar:? ?/,'').replace(/ \([^)]*\)\s*$/,''))}</span>`;
+  if(!r[st])return `<span class="mut">belum dinilai</span>${kini}`;
+  const cp=l==='10'&&r.capai_10?`<span class="pill p-buy" title="Tutup capai +10% pada ${esc(tkO(r.tarikh_capai_10))}">+10% ✓</span> `:'';
   const tunggu=/menunggu/.test(r[st]),m=/\(([^)]*)\)\s*$/.exec(r[st]);
-  return `${cp}<span class="pill ${tunggu?'p-warn':'p-hold'}">${tunggu?'Menunggu':'Pegang'}</span><span class="vv">${esc(tunggu||!m?r[st].replace(/ \(menunggu\)$/,''):m[1])}</span>`;}
+  return `${cp}<span class="pill ${tunggu?'p-warn':'p-hold'}">${tunggu?'Menunggu':'Pegang'}</span>${r[st]==='Pegang'?'':`<span class="vv">${esc(tunggu||!m?r[st].replace(/ \(menunggu\)$/,''):m[1])}</span>`}${kini}`;}
 const sahSahaja=rs=>rs.filter(r=>!r.tidak_sah);
 function benar(v){return v===true||v==='True'||v==='true';}
 function nomb(v){return v==null||v===''||isNaN(+v)?null:+v;}
@@ -784,12 +789,9 @@ function ptCols(akaun){return [
   {k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)},
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`<b class="${cls(r.untung_pct)}">${sg2(r.untung_pct)}</b>`},
   {k:'hari',t:'Hari dipegang',tip:'hari_pt',f:r=>fx(r.hari,0)},
-  {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}<span class="pill ${r.keluar?'p-exit':'p-hold'}">${esc(r.isyarat_keluar)}</span>${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`},
-  {k:'tarikh_keluar',t:'Tarikh keluar',tip:'tarikh_keluar',l:1,f:r=>esc(r.tarikh_keluar||'–')},
-  {k:'harga_keluar',t:'Harga keluar',tip:'harga_keluar',f:r=>fx(r.harga_keluar,2)},
-  {k:'untung_akhir_pct',t:'Untung akhir %',tip:'untung_akhir',f:r=>r.untung_akhir_pct==null?'–':`<b class="${cls(r.untung_akhir_pct)}">${sg2(r.untung_akhir_pct)}</b>`},
-  {k:'untung_henti_pct',t:'Keluar henti',tip:'keluar_henti',l:1,v:r=>r.keluar_henti?r.untung_henti_pct:null,f:r=>selLorong(r,'henti'),c:()=>'wrap'},
-  {k:'untung_10_pct',t:'Keluar 10%',tip:'keluar_10',l:1,v:r=>r.keluar_10?r.untung_10_pct:null,f:r=>selLorong(r,'10'),c:()=>'wrap'},
+  {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}${selLorong(r,'kaedah')}${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`,c:()=>'wrap lrg'},
+  {k:'untung_henti_pct',t:'Keluar henti',tip:'keluar_henti',l:1,v:r=>hasilL(r,'henti'),f:r=>selLorong(r,'henti'),c:()=>'wrap lrg'},
+  {k:'untung_10_pct',t:'Keluar 10%',tip:'keluar_10',l:1,v:r=>hasilL(r,'10'),f:r=>selLorong(r,'10'),c:()=>'wrap lrg'},
   ...grCols()];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
   const up=rows.filter(r=>r.untung_pct>0).length,ex=rows.filter(r=>r.keluar).length;const a=avgOf(rows.map(r=>r.keluar?r.untung_akhir_pct:r.untung_pct));
@@ -1143,7 +1145,7 @@ const TIPS={
   harga_terkini:{t:'Harga terkini',d:'Harga tutup terkini dalam data imbasan.',e:''},
   untung_pct:{t:'Untung %',d:'Harga terkini ÷ harga beli − 1. Bagi posisi yang sudah keluar, ini untung pada harga keluar.',e:'+5.0% = RM100 kini bernilai RM105.'},
   hari_pt:{t:'Hari dipegang',d:'Bilangan hari dagangan sejak tarikh beli (hingga tarikh keluar jika sudah keluar).',e:''},
-  isyarat_keluar:{t:'Keluar kaedah (lorong 1)',d:'Status mengikut peraturan keluar penuh kaedah itu: Pegang, atau Keluar (henti rugi, sasaran, isyarat jual, had masa). Keputusan rasmi papertrade. Baris ditanda merah hanya apabila ketiga-tiga lorong sudah keluar.',e:''},
+  isyarat_keluar:{t:'Keluar kaedah (lorong 1)',d:'Status mengikut peraturan keluar penuh kaedah itu: Pegang, atau Keluar (henti rugi, sasaran, isyarat jual, had masa). Keputusan rasmi papertrade. Baris ditanda merah hanya apabila ketiga-tiga lorong sudah keluar. Susun ikut untung lorong ini (akhir jika keluar, semasa jika dipegang).',e:'Keluar 15 Okt · @ 20.50 · +4.91% · capai sasaran.'},
   keluar_henti:{t:'Keluar henti (lorong 2)',d:'Henti kaedah sahaja: pegang sehingga harga rendah sentuh henti (jual pada paras henti, atau harga buka jika buka di bawah henti). Kaedah tanpa henti (M01, M24, M31, M73, M82, M94): pegang selagi untung, jual pada buka esok selepas tutup pertama di bawah harga beli. Susun ikut untung lorong ini.',e:'Keluar 10-16 @ 19.31 · −1.15% = kena henti 16 Okt.'},
   keluar_10:{t:'Keluar 10% (lorong 3)',d:'Sebelum tutup capai harga beli × 1.10: keluar ikut henti kaedah (atau tutup di bawah harga beli bagi kaedah tanpa henti). Selepas capai +10%: pegang selagi tutup tidak jatuh di bawah low semalam; tutup pertama di bawah low semalam → jual pada buka esok.',e:'+10% ✓ Pegang (keluar jika tutup < 21.30) = sudah capai, masih naik.'},
   tiga_lorong:{t:'Tiga lorong keluar',d:'Setiap posisi dinilai serentak dengan tiga peraturan keluar dari harga beli yang sama: Kaedah (peraturan penuh kaedah), Henti (henti sahaja) dan 10% (sasaran 10% kemudian ikut low semalam). Kaedah+saham sama hanya dibeli semula selepas ketiga-tiga lorong keluar. Purata = untung akhir bagi lorong yang keluar, semasa bagi yang dipegang.',e:'Kaedah +1.2% · Henti +2.5% · 10% +3.1%: memegang lebih lama lebih untung setakat ini.'},
