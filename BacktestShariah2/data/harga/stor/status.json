@@ -1,5 +1,5 @@
 {
- "dikemaskini": "2026-10-17 06:59 UTC",
+ "dikemaskini": "2026-10-17 12:56 UTC",
  "bar_terakhir": 20261016,
  "laras": {},
  "perlu_sejarah": [
@@ -16,5 +16,6 @@
  "harga_idx.csv": {
   "ticker_dikemaskini": 2,
   "bar_terakhir": 20261016
- }
+ },
+ "moomoo": 0
 }
