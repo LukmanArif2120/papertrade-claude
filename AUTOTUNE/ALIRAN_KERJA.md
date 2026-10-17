@@ -26,3 +26,5 @@ Sasaran siap: Ahad 18 Okt 2026, 23:59 MYT. Peraturan teknikal: `SPEC.md`. Penggu
 - 17 Okt ~22:40 MYT: F2 siap (134/134 salinan SAMA bait demi bait; BELUM DITALA = 0; median TALA 6). Catatan: M15, M100, M101 guna `rolling(center=True)` (dibekukan; kod asal perlu disemak berasingan); TMAX ≥ 60 dibekukan (had enjin 60).
 - 17 Okt ~22:40 MYT: F3 siap (enjin_at setara v1.2 bila perubahan dimatikan; perintis 5 kaedah lulus; ~12 s/percubaan; unjuran penuh ~10 jam → dua larian).
 - 17 Okt 22:45 MYT: F5 larian 1 dimulakan (run 39042108317; 120 percubaan, 20 shard). Larian 2 menyambung tugas yang belum SIAP.
+- 18 Okt 04:18 MYT: F5 larian 1 selesai: 847/1876 tugas SIAP (lebih perlahan daripada unjuran, ~31 min/tugas). 04:51 MYT: larian 2 dimulakan (run 39068478949; tetapan sama; tugas SIAP dilangkau).
+- F6 (pengesahan/gabungan), F7 (patch tab + jana_db) dan F8 (autotune_suku.yml) siap dibina; menunggu tala.
