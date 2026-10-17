@@ -37,15 +37,15 @@ h1{font-size:1.2rem;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:bal
 .gr small{font-weight:500;opacity:.75;margin-right:1px}
 .nw{white-space:nowrap}
 /* jadual bergred: angka dan perkataan tidak dipecah; skrol mendatar dalam jadual jika terlalu lebar */
-.tablewrap:has(td.grd){overflow-x:auto}.tablewrap:has(td.grd) td,.tablewrap:has(td.grd) th{overflow-wrap:break-word;padding-inline:4px}
-td.grd{min-width:0}.tablewrap:has(td.grd) td.wrap{min-width:150px}td.grd .vv{font-size:.72rem}td.grp{min-width:320px}.tablewrap td .nw{white-space:nowrap}
+.tablewrap.tw-grd{overflow-x:auto}.tablewrap.tw-grd td,.tablewrap.tw-grd th{overflow-wrap:break-word;padding-inline:4px}
+td.grd{min-width:0}.tablewrap.tw-grd td.wrap{min-width:150px}td.grd .vv{font-size:.72rem}td.grp{min-width:320px}.tablewrap td .nw{white-space:nowrap}
 .grc{display:inline-flex;gap:8px;align-items:center;text-align:left;vertical-align:middle}
 .grc>.gr{flex:none;display:flex;align-items:center;justify-content:center;min-width:2em;height:2.1em;margin:0;padding:0 6px;font-size:1.05rem;border-radius:6px}
 .grt{min-width:0;display:flex;flex-direction:column;justify-content:center}.grt b{color:var(--fg)}.grt .pill{align-self:flex-start}
 td.grd{text-align:center;vertical-align:middle}
 td.ctr,th[data-tip="hari_watch"]{text-align:center}
-.tablewrap:has(td.grd) td{vertical-align:middle}
-.tablewrap:has(td.grd) th[data-tip^="g_"],.tablewrap:has(td.grd) th[data-tip="gred"]{text-align:center}
+.tablewrap.tw-grd td{vertical-align:middle}
+.tablewrap.tw-grd th[data-tip^="g_"],.tablewrap.tw-grd th[data-tip="gred"]{text-align:center}
 td.grd .vv.nm1{white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;max-width:110px;overflow-wrap:normal}
 a.berita{color:var(--accent);text-decoration:none;margin-top:2px}a.berita:hover{text-decoration:underline}
 .g-A{background:var(--pos-soft);color:var(--pos)}.g-B{background:var(--accent-soft);color:var(--accent)}.g-C{background:var(--sunk);color:var(--fg-2);box-shadow:inset 0 0 0 1px var(--line)}.g-D{background:var(--warn-soft);color:var(--warn)}.g-E{background:var(--neg-soft);color:var(--neg)}.g-x{background:var(--sunk);color:var(--muted)}
@@ -69,7 +69,7 @@ nav.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--
 .fold-btn:hover{border-color:var(--line-2)}
 
 /* paparan */
-section.view{padding-top:18px;display:grid;gap:16px}
+section.view{padding-top:18px;display:grid;gap:16px;grid-template-columns:minmax(0,1fr)}
 h2{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-2);margin:0;text-wrap:balance;display:flex;align-items:center;gap:8px}
 h2::before{content:"";width:3px;height:12px;border-radius:2px;background:linear-gradient(var(--accent),var(--violet));flex:none}
 h3{font-size:1rem;margin:0}
@@ -302,6 +302,10 @@ const TEMPOH=(Date.UTC(2026,9,2)-Date.UTC(2019,10,1))/86400000/365.25;
 const jumlahDari=c=>c==null||isNaN(c)?null:Math.pow(1+c,TEMPOH)-1;
 const avgOf=a=>{const v=a.filter(x=>x!=null&&!isNaN(x));return v.length?v.reduce((s,x)=>s+x,0)/v.length:null;};
 
+/* memo: kira semula hanya bila objek sumber berubah (data langsung menggantikan objek dokumen) */
+const memo=fn=>{let k=null,v;return (...d)=>{if(k&&d.length===k.length&&d.every((x,i)=>x===k[i]))return v;k=d;v=fn(...d);return v;};};
+/* satu render bagi setiap bingkai walaupun banyak dokumen tiba serentak */
+let tmR=0;const renderSoon=()=>{if(!tmR)tmR=setTimeout(()=>{tmR=0;renderAll();},30);};
 function allRows(){const out=[];for(const d of Object.values(S.docs)){for(const r of (d.rows||[]))out.push(r);}return out;}
 function rowsForSet(set){return allRows().filter(r=>r.set===set);}
 function bench(set){const m=S.meta||{};return{ew:m.ew?.[set],spy:m.spy?.[set],qqq:m.qqq?.[set],ewmdd:m.ew_mdd?.[set]};}
@@ -323,7 +327,8 @@ function sortTable(o){
   if(o.limit)rows=rows.slice(0,o.limit);
   const th=o.cols.map(c=>`<th class="${c.l?'l':''} ${c.frz?'frz':''}"${c.ns?'':` data-k="${c.k}" data-d="${c.l?'asc':'desc'}" aria-sort="${st.k===c.k?(st.dir<0?'descending':'ascending'):'none'}"`}${c.tip?` data-tip="${c.tip}"`:''}><span>${c.t}</span></th>`).join('');
   const tb=rows.map((r,i)=>`<tr${o.attr?' '+o.attr(r):''} class="${o.rcls?o.rcls(r):''}">${o.cols.map(c=>`<td class="${c.l?'l':''} ${c.frz?'frz':''} ${c.c?c.c(r):''}">${c.f?c.f(r,i):esc(isNil(r[c.k])?'–':r[c.k])}</td>`).join('')}</tr>`).join('');
-  return `<div class="tablewrap"><table data-st="${o.id}"><thead><tr>${th}</tr></thead><tbody>${tb}</tbody></table>${total?'':`<p class="empty">${o.empty||'Tiada data.'}</p>`}</div>`+(o.foot?o.foot(Math.min(total,rows.length),total):'');
+  const grd=o.cols.some(c=>c.c&&/\bgrd\b/.test(c.c({})||''));
+  return `<div class="tablewrap${grd?' tw-grd':''}"><table data-st="${o.id}"><thead><tr>${th}</tr></thead><tbody>${tb}</tbody></table>${total?'':`<p class="empty">${o.empty||'Tiada data.'}</p>`}</div>`+(o.foot?o.foot(Math.min(total,rows.length),total):'');
 }
 document.addEventListener('click',e=>{const th=e.target.closest&&e.target.closest('table[data-st] th[data-k]');if(!th)return;
   const id=th.closest('table').dataset.st;const st=SORT[id];if(!st)return;const k=th.dataset.k;
@@ -659,8 +664,8 @@ const okK=(r,st)=>!st.k||r.kaedah===st.k,okS=(r,st)=>!st.sk||r.sektor===st.sk,ok
 function selSI(id,rows,st){const sk=uniq(rows.filter(r=>okK(r,st)&&okI(r,st)).map(r=>r.sektor)),ind=uniq(rows.filter(r=>okK(r,st)&&okS(r,st)).map(r=>r.industri));
   const opt=(a,v)=>a.map(x=>`<option value="${esc(x)}" ${v===x?'selected':''}>${esc(x)}</option>`).join('');
   return `<select id="${id}Sk" aria-label="Tapis sektor"><option value="">Semua sektor</option>${opt(sk,st.sk)}</select><select id="${id}In" aria-label="Tapis industri"><option value="">Semua industri</option>${opt(ind,st.ind)}</select>`;}
-function bindSI(id,st,reset,rows){const a=$('#'+id+'Sk'),b=$('#'+id+'In');if(!a)return;
-  a.onchange=e=>{st.sk=e.target.value;if(st.ind&&st.sk&&!(rows||[]).some(r=>r.sektor===st.sk&&r.industri===st.ind))st.ind='';reset&&reset();renderAll();};b.onchange=e=>{st.ind=e.target.value;reset&&reset();renderAll();};}
+function bindSI(id,st,reset,rows,rr){const a=$('#'+id+'Sk'),b=$('#'+id+'In');if(!a)return;rr=rr||renderAll;
+  a.onchange=e=>{st.sk=e.target.value;if(st.ind&&st.sk&&!(rows||[]).some(r=>r.sektor===st.sk&&r.industri===st.ind))st.ind='';reset&&reset();rr();};b.onchange=e=>{st.ind=e.target.value;reset&&reset();rr();};}
 function renderWatch(){
   const el=$('#v-watch');const w=S.watch;
   const all=w&&w.rows?w.rows.filter(r=>(r.pct_dipenuhi??0)>=90&&(r.pct_dipenuhi??0)<=100):[];
@@ -712,8 +717,24 @@ function normPT(r){const keluar=!!(r.keluar||r.tarikh_keluar);const kk=r.kaedah_
   kaedah:r.kaedah||r.id_kaedah||'–',hari:r.tidak_dibeli?null:(r.hari??hariDari(r.tarikh_beli)),keluar,
   isyarat_keluar:r.isyarat_keluar||(keluar?'Keluar':'Pegang'),
   untung_akhir_pct:keluar?(r.untung_akhir_pct??r.untung_pct):null,
-  harga_terkini:keluar&&r.harga_keluar!=null?r.harga_keluar:r.harga_terkini,tidak_sah:!!r.tidak_sah});}
+  harga_terkini:keluar&&r.harga_keluar!=null?r.harga_keluar:r.harga_terkini,tidak_sah:!!r.tidak_sah,
+  keluar_henti:benar(r.keluar_henti),keluar_10:benar(r.keluar_10),capai_10:benar(r.capai_10),
+  tutup_semua:r.tutup_semua==null||r.tutup_semua===''?null:benar(r.tutup_semua),
+  untung_henti_pct:nomb(r.untung_henti_pct),untung_10_pct:nomb(r.untung_10_pct),harga_keluar_henti:nomb(r.harga_keluar_henti),harga_keluar_10:nomb(r.harga_keluar_10)});}
+/* tiga lorong keluar (sejak 17 Okt 2026): 1 kaedah, 2 henti sahaja, 3 sasaran 10% (standard/keluar_tiga.py) */
+const LORONG={henti:['keluar_henti','tarikh_keluar_henti','harga_keluar_henti','untung_henti_pct','status_henti'],
+  '10':['keluar_10','tarikh_keluar_10','harga_keluar_10','untung_10_pct','status_10']};
+/* untung lorong: akhir jika lorong itu sudah keluar, semasa jika masih dipegang */
+const hasilL=(r,l)=>l==='kaedah'?(r.keluar?r.untung_akhir_pct:r.untung_pct):(r[LORONG[l][0]]?r[LORONG[l][3]]:r.untung_pct);
+function selLorong(r,l){const [k,t,h,u,st]=LORONG[l];if(r.tidak_dibeli)return '<span class="mut">–</span>';
+  if(r[k])return `<span class="pill p-exit">Keluar ${esc(t&&r[t]?r[t].slice(5):'')}</span><span class="vv">@ ${fx(r[h],2)} · <b class="${cls(r[u])}">${sg2(r[u])}</b></span><span class="vv">${esc((r[st]||'').replace(/^Keluar: /,'').replace(/ \(.*\)$/,''))}</span>`;
+  if(!r[st])return '<span class="mut">belum dinilai</span>';
+  const cp=l==='10'&&r.capai_10?`<span class="pill p-buy" title="Tutup capai +10% pada ${esc(r.tarikh_capai_10||'')}">+10% ✓</span> `:'';
+  const tunggu=/menunggu/.test(r[st]),m=/\(([^)]*)\)\s*$/.exec(r[st]);
+  return `${cp}<span class="pill ${tunggu?'p-warn':'p-hold'}">${tunggu?'Menunggu':'Pegang'}</span><span class="vv">${esc(tunggu||!m?r[st].replace(/ \(menunggu\)$/,''):m[1])}</span>`;}
 const sahSahaja=rs=>rs.filter(r=>!r.tidak_sah);
+function benar(v){return v===true||v==='True'||v==='true';}
+function nomb(v){return v==null||v===''||isNaN(+v)?null:+v;}
 /* gred pada hari isyarat (standard/gred.py) */
 const GDIM=[['gred_sektor','S','Sektor','skor_sektor'],['gred_industri','I','Industri','skor_industri'],['gred_rs','R','RS rating','rs_rating'],['gred_pemangkin','P','Pemangkin','pemangkin'],['gred_qr','Q','QR (jarak earnings)','hari_ke_earnings']];
 const GORD={A:0,B:1,C:2,D:3,E:4};
@@ -723,9 +744,11 @@ const adaGred=r=>GDIM.some(([k])=>GORD[r[k]]!=null);
 const grNil=v=>v==null||v===''?null:Number(v);
 const grSel1=(g,body)=>GORD[g]!=null?`<div class="grc">${grB(g)}<div class="grt">${body}</div></div>`:'<span class="mut">–</span>';
 /* prestasi 1 bulan sektor/industri semasa daripada tab Sector (padanan nama) */
+/* peta disimpan di luar objek db: objek data langsung boleh dibekukan (iPhone), jadi jangan tulis medan padanya */
+const skPetaC=new WeakMap();
 function skPerf(jenis,nama){const sk=S.sektor;if(!nama||!sk||!Array.isArray(sk.rows))return null;
-  if(!sk._peta||sk._peta.src!==sk.rows){const m={};sk.rows.forEach(x=>{m[x.jenis+'|'+x.nama]=x;});sk._peta={src:sk.rows,m};}
-  return sk._peta.m[jenis+'|'+nama]||null;}
+  let m=skPetaC.get(sk.rows);if(!m){m={};sk.rows.forEach(x=>{m[x.jenis+'|'+x.nama]=x;});skPetaC.set(sk.rows,m);}
+  return m[jenis+'|'+nama]||null;}
 function grKump(r,jenis){const g=r[jenis==='Sektor'?'gred_sektor':'gred_industri'],sk=grNil(r[jenis==='Sektor'?'skor_sektor':'skor_industri']);
   const asal=jenis==='Sektor'?r.sektor:r.industri,us=jenis==='Sektor'?r.sektor_us:r.industri_us;const x=skPerf(jenis,us||asal);
   if(GORD[g]==null)return asal?`<span class="grt">${esc(asal)}</span>`:'<span class="mut">belum</span>';
@@ -751,7 +774,7 @@ const grCols=()=>[
   {k:'hari_ke_earnings',t:'QR',tip:'g_q',l:1,c:()=>'grd',v:r=>GORD[r.gred_qr]??9,f:grQR},
   {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??9,f:grPem,c:()=>'grd grp'},
   {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:r=>grSel1(r.gred_keseluruhan,'')}];
-const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.keluar?'exit':'');
+const rclsPT=r=>(r.tidak_sah?'void ':'')+((r.tutup_semua??r.keluar)?'exit':'');
 function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>esc(r.tarikh_beli||'–')},
   {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`<b>${esc(r.saham)}</b>${akaun&&r.akaun?` <span class="pill p-mute" title="${r.akaun==='M'?'Moomoo':'Claude'}">${r.akaun}</span>`:''}`,c:()=>'tk'},
@@ -761,10 +784,12 @@ function ptCols(akaun){return [
   {k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)},
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`<b class="${cls(r.untung_pct)}">${sg2(r.untung_pct)}</b>`},
   {k:'hari',t:'Hari dipegang',tip:'hari_pt',f:r=>fx(r.hari,0)},
-  {k:'isyarat_keluar',t:'Isyarat keluar',tip:'isyarat_keluar',l:1,f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}<span class="pill ${r.keluar?'p-exit':'p-hold'}">${esc(r.isyarat_keluar)}</span>${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`},
+  {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}<span class="pill ${r.keluar?'p-exit':'p-hold'}">${esc(r.isyarat_keluar)}</span>${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`},
   {k:'tarikh_keluar',t:'Tarikh keluar',tip:'tarikh_keluar',l:1,f:r=>esc(r.tarikh_keluar||'–')},
   {k:'harga_keluar',t:'Harga keluar',tip:'harga_keluar',f:r=>fx(r.harga_keluar,2)},
   {k:'untung_akhir_pct',t:'Untung akhir %',tip:'untung_akhir',f:r=>r.untung_akhir_pct==null?'–':`<b class="${cls(r.untung_akhir_pct)}">${sg2(r.untung_akhir_pct)}</b>`},
+  {k:'untung_henti_pct',t:'Keluar henti',tip:'keluar_henti',l:1,v:r=>r.keluar_henti?r.untung_henti_pct:null,f:r=>selLorong(r,'henti'),c:()=>'wrap'},
+  {k:'untung_10_pct',t:'Keluar 10%',tip:'keluar_10',l:1,v:r=>r.keluar_10?r.untung_10_pct:null,f:r=>selLorong(r,'10'),c:()=>'wrap'},
   ...grCols()];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
   const up=rows.filter(r=>r.untung_pct>0).length,ex=rows.filter(r=>r.keluar).length;const a=avgOf(rows.map(r=>r.keluar?r.untung_akhir_pct:r.untung_pct));
@@ -772,15 +797,22 @@ function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.le
   return `<div class="kpis">
     <div class="kpi"><div class="lbl">Posisi ${label}</div><div class="v">${rows.length}</div><div class="s">${kd} kaedah · ${ex} kena isyarat keluar${nv?` · ${nv} ${all.some(r=>r.tidak_dibeli)?'isyarat tidak dibeli':'dibeli luar peraturan (tidak dikira)'}`:''}</div></div>
     <div class="kpi"><div class="lbl">Purata untung</div><div class="v ${cls(a)}">${sg2(a)}</div><div class="s">Untung akhir bagi yang keluar, semasa bagi yang dipegang</div></div>
+    <div class="kpi"><div class="lbl" data-tip="tiga_lorong">Purata ikut lorong keluar</div><div class="v" style="font-size:1.05rem;white-space:normal">${['kaedah','henti','10'].map(l=>`<span class="${cls(avgOf(rows.map(r=>hasilL(r,l))))}">${sg2(avgOf(rows.map(r=>hasilL(r,l))))}</span>`).join('<span class="mut"> · </span>')}</div><div class="s">Kaedah · Henti · 10% — keluar ${ex} · ${rows.filter(r=>r.keluar_henti).length} · ${rows.filter(r=>r.keluar_10).length} · capai +10%: ${rows.filter(r=>r.capai_10).length} · tutup semua: ${rows.filter(r=>r.tutup_semua).length}</div></div>
     <div class="kpi"><div class="lbl">Sedang untung</div><div class="v">${up}<span class="mut" style="font-size:1rem"> / ${rows.length}</span></div><div class="s">${rows.length?(up/rows.length*100).toFixed(0):0}% posisi positif</div></div>
     <div class="kpi"><div class="lbl">Tanpa sektor</div><div class="v ${rows.some(r=>!r.sektor)?'neg':'pos'}">${rows.filter(r=>!r.sektor).length}</div><div class="s">Setiap saham wajib ada sektor & industri</div></div>
   </div>`;}
-function ptFilterBar(id,rows){const st=S['pf_'+id]||(S['pf_'+id]={k:'',sk:'',ind:'',q:''});const kd=[...new Set(rows.filter(r=>okS(r,st)&&okI(r,st)).map(r=>r.kaedah))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
+/* jadual panjang: papar 100 baris dahulu supaya halaman kekal laju apabila data bertambah */
+const LAGI=100;
+const kakiLagi=id=>(n,t)=>`<div class="tablefoot"><span>${n} daripada ${t}</span>${t>n?`<button type="button" class="more" id="${id}">Papar ${LAGI} lagi</button>`:''}</div>`;
+const bindLagi=(id,st,rr)=>{const b=$('#'+id);if(b)b.onclick=()=>{st.shown=(st.shown||LAGI)+LAGI;(rr||renderAll)();};};
+function ptFilterBar(id,rows,rr){rr=rr||renderAll;const st=S['pf_'+id]||(S['pf_'+id]={k:'',sk:'',ind:'',q:'',shown:LAGI});st.onUbah=()=>{st.shown=LAGI;};const kd=[...new Set(rows.filter(r=>okS(r,st)&&okI(r,st)).map(r=>r.kaedah))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
   return {st,html:`<div class="filters" style="margin-bottom:10px"><select id="${id}K" aria-label="Tapis kaedah"><option value="">Semua kaedah</option>${kd.map(k=>`<option value="${esc(k)}" ${st.k===k?'selected':''}>${esc(k)}</option>`).join('')}</select>${selSI(id,rows,st)}<input type="search" id="${id}Q" placeholder="Cari saham atau sektor" value="${esc(st.q)}" aria-label="Cari"></div>`,
    apply:rs=>rs.filter(r=>(!st.k||r.kaedah===st.k)&&(!st.sk||r.sektor===st.sk)&&(!st.ind||r.industri===st.ind)&&(!st.q||[r.saham,r.sektor,r.industri].join(' ').toLowerCase().includes(st.q.toLowerCase()))),
-   bind:()=>{const s=$('#'+id+'K'),q=$('#'+id+'Q');if(!s)return;s.onchange=e=>{st.k=e.target.value;if(st.k){if(!rows.some(r=>r.kaedah===st.k&&okS(r,st)))st.sk='';if(!rows.some(r=>r.kaedah===st.k&&okS(r,st)&&okI(r,st)))st.ind='';}renderAll();};bindSI(id,st,null,rows);let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{st.q=q.value.trim();renderAll();const n=$('#'+id+'Q');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};}};}
-function ptmRows(){const d=S.ptm&&S.ptm.rows&&S.ptm.rows.length?S.ptm:S.ptmPeta;return d&&d.rows?{d,rows:d.rows.map(normPT),pratonton:d===S.ptmPeta}:null;}
-function ptcRows(){const ds=[S.ptc,...Object.keys(S.ptcN).map(Number).sort((a,b)=>a-b).map(n=>S.ptcN[n])].filter(d=>d&&d.rows&&d.rows.length);return ds.length?{d:S.ptc||ds[0],rows:ds.flatMap(d=>d.rows).map(normPT)}:null;}
+   bind:()=>{const s=$('#'+id+'K'),q=$('#'+id+'Q');if(!s)return;s.onchange=e=>{st.k=e.target.value;if(st.k){if(!rows.some(r=>r.kaedah===st.k&&okS(r,st)))st.sk='';if(!rows.some(r=>r.kaedah===st.k&&okS(r,st)&&okI(r,st)))st.ind='';}st.onUbah&&st.onUbah();rr();};bindSI(id,st,()=>st.onUbah&&st.onUbah(),rows,rr);let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{st.q=q.value.trim();st.onUbah&&st.onUbah();rr();const n=$('#'+id+'Q');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};}};}
+const ptmRowsM=memo(d=>d&&d.rows?{d,rows:d.rows.map(normPT),pratonton:d===S.ptmPeta}:null);
+function ptmRows(){return ptmRowsM(S.ptm&&S.ptm.rows&&S.ptm.rows.length?S.ptm:S.ptmPeta);}
+const ptcRowsM=memo((...ds)=>{ds=ds.filter(d=>d&&d.rows&&d.rows.length);return ds.length?{d:S.ptc||ds[0],rows:ds.flatMap(d=>d.rows).map(normPT)}:null;});
+function ptcRows(){return ptcRowsM(S.ptc,...Object.keys(S.ptcN).map(Number).sort((a,b)=>a-b).map(n=>S.ptcN[n]));}
 
 /* ================= Paper Trade M ================= */
 function renderPtm(){
@@ -793,8 +825,8 @@ function renderPtm(){
    `<div class="strip"><b class="t">Sumber</b><span>${p.rows.filter(r=>r.sumber==='harian').length} posisi sistem harian · ${p.rows.filter(r=>r.sumber==='log_v1').length} pegangan warisan v1 · ${p.rows.filter(r=>r.sumber==='luar').length} strategi luar 87 M (tidak dikira dalam slot). Isyarat keluar dinilai ikut peraturan kaedah sehingga tutup terakhir yang lengkap; harga terkini daripada Moomoo.</span></div>`}
   ${ptKpis(p.rows,'Moomoo')}
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik tajuk lajur untuk susun</span></div>
-    ${fb.html}${sortTable({id:'ptm',rows,cols:ptCols(),def:{k:'untung_pct',dir:-1},rcls:rclsPT})}</div>`;
-  fb.bind();
+    ${fb.html}${sortTable({id:'ptm',rows,cols:ptCols(),def:{k:'untung_pct',dir:-1},rcls:rclsPT,limit:fb.st.shown,foot:kakiLagi('ptmMore')})}</div>`;
+  fb.bind();bindLagi('ptmMore',fb.st);
 }
 /* ================= Papertrade C ================= */
 function renderPtc(){
@@ -813,12 +845,12 @@ function renderPtc(){
         {k:'moomoo_termasuk_warisan',t:'Moomoo + warisan',tip:'slot_w',f:r=>fx(r.moomoo_termasuk_warisan,0)},
         {k:'claude_terbuka',t:'Claude dipegang',tip:'slot_c',f:r=>fx(r.claude_terbuka,0)},
         {k:'claude_jumlah',t:'Claude jumlah',tip:'slot_c',f:r=>fx(r.claude_jumlah,0)}]})}</div>`;
-    html+=`<div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi dibeli</span></div>${fb.html}${sortTable({id:'ptc',rows,cols:ptCols(),def:{k:'untung_pct',dir:-1},rcls:rclsPT})}</div>`;
+    html+=`<div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi dibeli</span></div>${fb.html}${sortTable({id:'ptc',rows,cols:ptCols(),def:{k:'untung_pct',dir:-1},rcls:rclsPT,limit:fb.st.shown,foot:kakiLagi('ptcMore')})}</div>`;
     if(tdb.length)html+=`<div class="panel"><div class="panel-h"><h2>Isyarat tidak dibeli</h2><span class="sub">${tdb.length} isyarat · dilangkau ikut peraturan kaedah · tidak dikira dalam Prestasi</span></div>${sortTable({id:'ptctdb',rows:tdb,def:{k:'kaedah',dir:1},cols:[
       {k:'tarikh_beli_dirancang',t:'Tarikh',l:1,f:r=>esc(r.tarikh_beli_dirancang||r.tarikh_beli||'–')},{k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b>`,c:()=>'tk'},{k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1},
       {k:'harga_buka_rujukan',t:'Harga buka',f:r=>fx(r.harga_buka_rujukan,2)},{k:'henti',t:'Henti',f:r=>fx(r.henti,2)},
       {k:'sebab_tidak_sah',t:'Sebab tidak dibeli',l:1,f:r=>esc(r.sebab_tidak_sah||''),c:()=>'wrap'}]})}</div>`;
-    el.innerHTML=html;fb.bind();return;}
+    el.innerHTML=html;fb.bind();bindLagi('ptcMore',fb.st);return;}
   html+=`<div class="ph"><h3>Belum ada belian maya</h3><p style="margin:0">Peringkat 2 (01:15 MYT) membina rekod Papertrade C. ${plan.length?`Imbasan malam ${esc(S.beli.dibina||'')} sudah menyenaraikan <b style="color:var(--fg)">${plan.length}</b> isyarat untuk Claude (kaedah 10/10).`:''}</p></div>`;
   if(plan.length)html+=`<div class="panel"><div class="panel-h"><h2>Isyarat dirancang untuk Claude</h2><span class="sub">Belum dibeli · ${plan.length} baris</span></div>${sortTable({id:'ptcplan',rows:plan,def:{k:'kaedah',dir:1},limit:200,cols:[
     {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`<b>${esc(r.saham)}</b><span class="vv">${esc(r.nama||'')}</span>`,c:()=>'tk'},{k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1},
@@ -835,9 +867,11 @@ const median=a=>{const v=a.filter(x=>x!=null&&!isNaN(x)).sort((x,y)=>x-y);if(!v.
 const minOf=a=>{const v=a.filter(x=>x!=null&&!isNaN(x));return v.length?Math.min(...v):null;};
 const kptPill=k=>`<span class="pill ${KPT[k].cls}" data-tip="keputusan_pr"><span aria-hidden="true">${KPT[k].ik}</span> ${k}</span>`;
 function maeOf(r){const m=S.mae&&S.mae.rows;if(!m)return null;const v=m[`${r.akaun}|${r.saham}|${r.kaedah}|${r.tarikh_beli}`];return v==null?null:v;}
-function prSrc(which){const M=ptmRows(),C=ptcRows();const tag=(p,a)=>p?sahSahaja(p.rows).map(r=>Object.assign({},r,{akaun:a})):[];
+const prSrcM={};
+function prSrc(which){return (prSrcM[which]||(prSrcM[which]=memo((M,C)=>{const tag=(p,a)=>p?sahSahaja(p.rows).map(r=>Object.assign({},r,{akaun:a})):[];
   const rows=which==='m'?tag(M,'M'):which==='c'?tag(C,'C'):[...tag(M,'M'),...tag(C,'C')];
-  rows.forEach(r=>{r.hasil=r.keluar?r.untung_akhir_pct:r.untung_pct;r.mae=maeOf(r);if(r.mae==null&&r.hasil!=null)r.mae=Math.min(0,r.hasil);});return rows;}
+  rows.forEach(r=>{r.hasil=r.keluar?r.untung_akhir_pct:r.untung_pct;r.mae=maeOf(r);if(r.mae==null&&r.hasil!=null)r.mae=Math.min(0,r.hasil);});return rows;})))(ptmRows(),ptcRows(),S.mae);}
+const prStatsC=new WeakMap();
 /* statistik setiap kaedah + skor Untung×Selamat + keputusan */
 function prStats(rows){const by={};rows.forEach(r=>{(by[r.kaedah]=by[r.kaedah]||[]).push(r);});
   return Object.entries(by).map(([k,a])=>{const v=a.map(r=>r.hasil).filter(x=>x!=null);const rugi=v.filter(x=>x<0);const ex=a.filter(r=>r.keluar);
@@ -881,6 +915,22 @@ function prGred(rows){const ada=rows.filter(adaGred);
       {k:'avg',t:'Untung purata',tip:'untung_purata',f:o=>`<b class="${cls(o.avg)}">${sg2(o.avg)}</b>`},
       {k:'avgT',t:'Untung akhir purata',tip:'untung_akhir',f:o=>o.avgT==null?'–':`<span class="${cls(o.avgT)}">${sg2(o.avgT)}</span>`}],def:{k:'dim',dir:1}})}
     <p class="sub" style="margin-top:8px">Bandingkan baris A dengan E dalam dimensi yang sama. Jika A tidak lebih untung selepas cukup data, gred itu tidak berguna untuk memilih saham. Bukti backtest 2019–2026: RS ≥ 90 mendahului setiap tahun; kekuatan sektor/industri tidak meramal.</p></div>`;}
+/* banding tiga lorong keluar setiap kaedah: untung akhir bagi lorong yang keluar, semasa bagi yang masih dipegang */
+function prLorong(rows){const by={};rows.forEach(r=>{(by[r.kaedah]=by[r.kaedah]||[]).push(r);});
+  const st=a=>({n:a.length,k:avgOf(a.map(r=>hasilL(r,'kaedah'))),h:avgOf(a.map(r=>hasilL(r,'henti'))),t:avgOf(a.map(r=>hasilL(r,'10'))),
+    xk:a.filter(r=>r.keluar).length,xh:a.filter(r=>r.keluar_henti).length,xt:a.filter(r=>r.keluar_10).length,cp:a.filter(r=>r.capai_10).length,ts:a.filter(r=>r.tutup_semua).length});
+  const out=Object.entries(by).map(([k,a])=>Object.assign({kaedah:k},st(a)));out.forEach(o=>{const m=[['Kaedah',o.k],['Henti',o.h],['10%',o.t]].filter(x=>x[1]!=null).sort((x,y)=>y[1]-x[1]);o.terbaik=!m.length?'–':m.length>1&&m[0][1]-m[1][1]<0.005?'Seri':m[0][0];});
+  const T=st(rows);const menang={};out.forEach(o=>{menang[o.terbaik]=(menang[o.terbaik]||0)+1;});
+  const sel=(v,x)=>`<b class="${cls(v)}">${sg2(v)}</b><span class="vv">${x} keluar</span>`;
+  return `<div class="panel"><div class="panel-h"><h2 data-tip="tiga_lorong">Banding tiga lorong keluar</h2><span class="sub">Semua ${T.n} dagangan: kaedah ${sg2(T.k)} · henti ${sg2(T.h)} · 10% ${sg2(T.t)} · lorong terbaik: kaedah ${menang['Kaedah']||0}, henti ${menang['Henti']||0}, 10% ${menang['10%']||0}, seri ${menang['Seri']||0} kaedah</span></div>
+    ${sortTable({id:'prl-'+S.tab+S.sub.prestasi,rows:out,def:{k:'n',dir:-1},limit:60,cols:[
+      {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,frz:1,f:o=>`<b>${esc(o.kaedah)}</b>`,c:()=>'tk'},
+      {k:'n',t:'Dagangan',tip:'jumlah_dag',f:o=>`${o.n}<span class="vv">${o.ts} tutup semua</span>`},
+      {k:'k',t:'Lorong kaedah',tip:'isyarat_keluar',f:o=>sel(o.k,o.xk)},
+      {k:'h',t:'Lorong henti',tip:'keluar_henti',f:o=>sel(o.h,o.xh)},
+      {k:'t',t:'Lorong 10%',tip:'keluar_10',f:o=>`${sel(o.t,o.xt)}<span class="vv">${o.cp} capai +10%</span>`},
+      {k:'terbaik',t:'Terbaik setakat ini',l:1,f:o=>`<span class="pill p-near">${esc(o.terbaik)}</span>`}]})}
+    <p class="sub" style="margin-top:8px">Untung setiap lorong = untung akhir jika lorong itu sudah keluar, untung semasa jika masih dipegang. Lorong kaedah kekal keputusan rasmi; henti dan 10% ialah rekod perbandingan. Nilai selepas ≥ ${PR_MIN_TUTUP} dagangan tertutup setiap kaedah.</p></div>`;}
 /* carta bar mendatar: untung purata setiap kaedah, disusun */
 function drawPrBars(box,st){
   const rows=[...st].filter(o=>o.avg!=null).sort((a,b)=>b.avg-a.avg);if(!rows.length){box.innerHTML='<p class="empty">Tiada data.</p>';return;}
@@ -958,12 +1008,22 @@ function drawPrScatter(box,st){
 const legendKpt=()=>`<div class="legend">${Object.keys(KPT).map(k=>`<span><svg width="12" height="12" viewBox="0 0 12 12" style="vertical-align:-1px;margin-right:5px" fill="var(${KPT[k].c})">${shapeAt(k,6,6,4.5)}</svg>${k}</span>`).join('')}<span>saiz = bilangan dagangan</span></div>`;
 function teruk(list,title,tip,val,fmt,bad,sub){
   return `<div class="worst"><div class="lbl" data-tip="${tip}" style="margin-bottom:8px">${title}</div>${list.length?list.map((o,i)=>`<div class="wrow"><span class="rkn">${i+1}</span><b>${esc(o.kaedah)}</b><span class="mut wsub">${sub(o)}</span><span class="num ${bad(o)?'neg':''}" style="margin-left:auto;font-weight:600">${fmt(val(o))}</span>${bad(o)?'<span class="pill p-exit" title="Amaran">⚠ AMARAN</span>':''}</div>`).join(''):'<p class="mut" style="margin:0">Tiada</p>'}</div>`;}
+/* panel "Semua dagangan": penapis, susun dan "papar lagi" hanya melukis semula panel ini, bukan seluruh tab */
+function prAllHtml(which,src){const fb=ptFilterBar('pr'+which,src,()=>renderPrAll(which));const trows=fb.apply(src);
+  return `<div class="panel"><div class="panel-h"><h2>Semua dagangan</h2><span class="sub">${trows.length} dagangan · lajur sama seperti Paper Trade M / Papertrade C${which==='gab'?' · M/C di bawah simbol':''}</span></div>
+    ${fb.html}${sortTable({id:'prall-'+which,rows:trows,cols:ptCols(which==='gab'),def:{k:'untung_pct',dir:-1},limit:fb.st.shown||LAGI,rcls:r=>r.keluar?'exit':'',rerender:()=>renderPrAll(which),empty:'Tiada dagangan sepadan dengan penapis ini.',foot:kakiLagi('prMore'+which)})}</div>`;}
+function bindPrAll(which,src){const fb=ptFilterBar('pr'+which,src,()=>renderPrAll(which));fb.bind();bindLagi('prMore'+which,fb.st,()=>renderPrAll(which));}
+function renderPrAll(which){const w=$('#prAllW'+which);if(!w||viewId()!=='v-pr-'+which){renderAll();return;}const src=prSrc(which);
+  const ae=document.activeElement,fid=ae&&w.contains(ae)?ae.id:null;
+  w.innerHTML=prAllHtml(which,src);bindPrAll(which,src);applyFold(w);applyTips(w);
+  if(fid){const n=document.getElementById(fid);if(n){n.focus();if(n.type==='search')n.setSelectionRange(n.value.length,n.value.length);}}
+  requestAnimationFrame(()=>topScrolls(w));}
 function renderPrestasi(which){
   const el=$('#v-pr-'+which);const src=prSrc(which);
   const nama=which==='m'?'Papertrade M':which==='c'?'Papertrade C':'Combine (M + C)';
   if(!src.length){el.innerHTML=`<div class="panel empty">${S.live?nama+': belum ada posisi dalam pangkalan data.':'Memuatkan posisi…'}</div>`;return;}
   const pf=S.prf||(S.prf={minN:1});
-  const all=prStats(src);const st=all.filter(o=>o.n>=pf.minN);
+  let all=prStatsC.get(src);if(!all){all=prStats(src);prStatsC.set(src,all);}const st=all.filter(o=>o.n>=pf.minN);
   const cnt={TERUSKAN:0,PERHATI:0,HENTIKAN:0,'BELUM CUKUP DATA':0};all.forEach(o=>cnt[o.kep]++);
   const best=[...all].filter(o=>o.kep==='TERUSKAN').sort((a,b)=>b.skor-a.skor);
   const top=best[0]||[...all].filter(o=>o.ex>=PR_MIN_TUTUP).sort((a,b)=>b.skor-a.skor)[0];
@@ -974,10 +1034,10 @@ function renderPrestasi(which){
   const W4=[...all].filter(o=>o.exrugi>0).sort((a,b)=>b.exrugi-a.exrugi||a.exrugiAvg-b.exrugiAvg).slice(0,5);
   const nAm=all.filter(o=>o.amaran.length).length;
   const maeAda=!!(S.mae&&S.mae.rows);
-  const fb=ptFilterBar('pr'+which,src);const trows=fb.apply(src);
   el.innerHTML=`
   <p class="headline">${nama}: <b>${src.length}</b> dagangan dalam <b>${all.length}</b> kaedah. ${top?`Calon terbaik setakat ini: <b>${esc(top.kaedah)}</b> (skor ${top.skor}, untung purata ${sg2(top.avg)}, penurunan maks purata ${sg2(top.maeAvg)}). `:''}<b class="pos">${cnt.TERUSKAN}</b> TERUSKAN · <b style="color:var(--warn)">${cnt.PERHATI}</b> PERHATI · <b class="neg">${cnt.HENTIKAN}</b> HENTIKAN · <b class="mut">${cnt['BELUM CUKUP DATA']}</b> belum cukup data (label hanya diberi selepas ≥ ${PR_MIN_TUTUP} dagangan tertutup setiap kaedah).</p>
   ${prKpis(src)}
+  ${prLorong(src)}
   ${prGred(src)}
   <div class="filters"><span class="lbl" data-tip="min_n">Minimum dagangan setiap kaedah</span>
     <div class="seg" id="prMin${which}">${[1,3,5,10].map(n=>`<button type="button" data-v="${n}" aria-pressed="${pf.minN===n}">${n===1?'Semua':'≥ '+n}</button>`).join('')}</div>
@@ -1013,15 +1073,13 @@ function renderPrestasi(which){
       {k:'exrugi',t:'Keluar rugi',tip:'keluar_rugi',f:o=>o.exrugi?`<span class="${o.exrugi>=3?'neg':''}">${o.exrugi}</span><span class="vv">daripada ${o.ex} keluar</span>`:'–'},
       {k:'hari',t:'Hari purata',tip:'hari_purata',f:o=>fx(o.hari,1)}]})}
   </div>
-  <div class="panel"><div class="panel-h"><h2>Semua dagangan</h2><span class="sub">${trows.length} dagangan · lajur sama seperti Paper Trade M / Papertrade C${which==='gab'?' · M/C di bawah simbol':''}</span></div>
-    ${fb.html}${sortTable({id:'prall-'+which,rows:trows,cols:ptCols(which==='gab'),def:{k:'untung_pct',dir:-1},limit:pf['shown'+which]||100,rcls:r=>r.keluar?'exit':'',
-      foot:(n,t)=>`<div class="tablefoot"><span>${n} daripada ${t} dagangan</span>${t>n?`<button type="button" class="more" id="prMore${which}">Papar 100 lagi</button>`:''}</div>`})}</div>
+  <div id="prAllW${which}">${prAllHtml(which,src)}</div>
   <div class="strip"><b class="t">Cara baca</b><span>Pilih kaedah yang <b>TERUSKAN</b> dan berada dalam kuadran <b>Untung & Selamat</b>. Kaedah berlencana <b class="neg">⚠ AMARAN</b> perlu disemak: kadar gagal tinggi, satu kerugian besar, atau banyak isyarat keluar rugi. Label diberi hanya selepas ≥ 20 dagangan tertutup setiap kaedah; sebelum itu BELUM CUKUP DATA.</span></div>
   <div class="foot"><span>Kiraan langsung daripada papertrade/moomoo + papertrade/claude${maeAda?' · penurunan maks: prestasi/mae ('+esc(S.mae.dibina||'')+')':''}</span><span>Tiada order · tiada wang sebenar</span></div>`;
   drawPrBars($('#prBar'+which),st);drawPrScatter($('#prSc'+which),st);drawPrWin($('#prWin'+which),st);drawPrDonut($('#prDn'+which),src);
   const sg=$('#prMin'+which);sg.onclick=e=>{const b=e.target.closest('button');if(!b)return;pf.minN=+b.dataset.v;renderAll();};
-  fb.bind();const mb=$('#prMore'+which);if(mb)mb.onclick=()=>{pf['shown'+which]=(pf['shown'+which]||100)+100;renderAll();};
-  el.querySelectorAll('[data-hk]').forEach(n=>n.addEventListener('click',e=>{if(e.target.closest('th'))return;const k=n.dataset.hk;const s=S['pf_pr'+which];s.k=k;s.q='';renderAll();
+  bindPrAll(which,src);
+  el.querySelectorAll('[data-hk]').forEach(n=>n.addEventListener('click',e=>{if(e.target.closest('th'))return;const k=n.dataset.hk;const s=S['pf_pr'+which];s.k=k;s.q='';s.shown=LAGI;renderPrAll(which);
     requestAnimationFrame(()=>{const t=document.querySelector(`#v-pr-${which} table[data-st="prall-${which}"]`);if(t)t.closest('.panel').scrollIntoView({behavior:'smooth',block:'start'});});toast('Jadual dagangan ditapis: '+k);}));
 }
 
@@ -1037,7 +1095,8 @@ function topScrolls(root){
 const R={ringkasan:renderRingkasan,papan:renderPapan,banding:renderBanding,sektor:renderSektor,watch:renderWatch,ptm:renderPtm,ptc:renderPtc,'pr-m':()=>renderPrestasi('m'),'pr-c':()=>renderPrestasi('c'),'pr-gab':()=>renderPrestasi('gab')};
 function renderAll(){const vid=viewId();const el=document.getElementById(vid);
   const sx={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;});
-  R[vid.slice(2)]();applyFold(el);applyTips(el);
+  try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
+  applyFold(el);applyTips(el);
   requestAnimationFrame(()=>{topScrolls(el);el.querySelectorAll('table[data-st]').forEach(t=>{if(sx[t.dataset.st])t.parentElement.scrollLeft=sx[t.dataset.st];});});}
 let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(window.innerWidth-lw)<40)return;lw=window.innerWidth;clearTimeout(rz);rz=setTimeout(renderAll,200);});
 
@@ -1084,7 +1143,10 @@ const TIPS={
   harga_terkini:{t:'Harga terkini',d:'Harga tutup terkini dalam data imbasan.',e:''},
   untung_pct:{t:'Untung %',d:'Harga terkini ÷ harga beli − 1. Bagi posisi yang sudah keluar, ini untung pada harga keluar.',e:'+5.0% = RM100 kini bernilai RM105.'},
   hari_pt:{t:'Hari dipegang',d:'Bilangan hari dagangan sejak tarikh beli (hingga tarikh keluar jika sudah keluar).',e:''},
-  isyarat_keluar:{t:'Isyarat keluar',d:'Status mengikut peraturan keluar kaedah itu: Pegang, atau Keluar (henti rugi, sasaran, isyarat jual, had masa). Posisi Moomoo tidak dijual; baris ditanda merah sahaja.',e:''},
+  isyarat_keluar:{t:'Keluar kaedah (lorong 1)',d:'Status mengikut peraturan keluar penuh kaedah itu: Pegang, atau Keluar (henti rugi, sasaran, isyarat jual, had masa). Keputusan rasmi papertrade. Baris ditanda merah hanya apabila ketiga-tiga lorong sudah keluar.',e:''},
+  keluar_henti:{t:'Keluar henti (lorong 2)',d:'Henti kaedah sahaja: pegang sehingga harga rendah sentuh henti (jual pada paras henti, atau harga buka jika buka di bawah henti). Kaedah tanpa henti (M01, M24, M31, M73, M82, M94): pegang selagi untung, jual pada buka esok selepas tutup pertama di bawah harga beli. Susun ikut untung lorong ini.',e:'Keluar 10-16 @ 19.31 · −1.15% = kena henti 16 Okt.'},
+  keluar_10:{t:'Keluar 10% (lorong 3)',d:'Sebelum tutup capai harga beli × 1.10: keluar ikut henti kaedah (atau tutup di bawah harga beli bagi kaedah tanpa henti). Selepas capai +10%: pegang selagi tutup tidak jatuh di bawah low semalam; tutup pertama di bawah low semalam → jual pada buka esok.',e:'+10% ✓ Pegang (keluar jika tutup < 21.30) = sudah capai, masih naik.'},
+  tiga_lorong:{t:'Tiga lorong keluar',d:'Setiap posisi dinilai serentak dengan tiga peraturan keluar dari harga beli yang sama: Kaedah (peraturan penuh kaedah), Henti (henti sahaja) dan 10% (sasaran 10% kemudian ikut low semalam). Kaedah+saham sama hanya dibeli semula selepas ketiga-tiga lorong keluar. Purata = untung akhir bagi lorong yang keluar, semasa bagi yang dipegang.',e:'Kaedah +1.2% · Henti +2.5% · 10% +3.1%: memegang lebih lama lebih untung setakat ini.'},
   tarikh_keluar:{t:'Tarikh keluar',d:'Hari peraturan keluar dicetuskan.',e:''},
   harga_keluar:{t:'Harga keluar',d:'Harga yang dipakai peraturan keluar (contohnya paras henti atau harga buka esok).',e:''},
   untung_akhir:{t:'Untung akhir %',d:'Untung dibekukan pada harga keluar. Kosong bagi posisi yang masih dipegang.',e:''},
@@ -1173,7 +1235,7 @@ renderNav();renderAll();
 (async function connect(){
   const db=window.claude?.use?await window.claude.use('db'):null;
   if(!db){setLive(false,'Data langsung tidak tersedia di paparan ini');S.live=true;renderAll();return;}
-  const re=(...tabs)=>{if(!tabs.length||tabs.includes(S.tab))renderAll();};
+  const re=(...tabs)=>{if(!tabs.length||tabs.includes(S.tab))renderSoon();};
   db.collection('registry').limit(1000).onSnapshot(snap=>{
     const d={};snap.docs.forEach(x=>{if(!x.exists)return;const v=x.data();d[x.id]=Object.assign({},v,{rows:(v.rows||[]).map(r=>Object.assign({},r,{jumlah:jumlahDari(r.cagr),nisbah:(r.avgwin!=null&&r.avgloss<0)?r.avgwin/-r.avgloss:null,harian:(r.avg!=null&&r.days>0)?r.avg/r.days:null}))});});S.docs=d;
     const ts=Object.values(d).map(x=>x.tarikh||'').sort().pop()||'';S.live=true;

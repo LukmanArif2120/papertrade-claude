@@ -14,6 +14,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PT = os.path.join(os.path.dirname(HERE), 'papertrade')
 HAD_DB = 262144          # had keras dokumen db
 TUMBUH = 140             # bait tambahan bagi setiap posisi terbuka apabila keluar (diukur 113–128; dibundar ke atas)
+TUMBUH_LORONG = 150      # bait tambahan apabila lorong 2 (henti) atau 3 (10%) keluar (keluar_tiga.py; anggaran 125–146)
 META = {'claude': 12000}  # meta dokumen (slot, batal, nota_slot) dalam papertrade/claude
 META_LAIN = 1000
 
@@ -48,6 +49,17 @@ def terbuka(hdr, r):
         str(d.get('tidak_dibeli', '')).strip().lower() not in ('true', '1')
 
 
+def tumbuh(hdr, r):
+    """Bait yang akan ditambah pada baris ini apabila semua lorong keluar yang masih terbuka keluar."""
+    d = dict(zip(hdr, r))
+    if str(d.get('tidak_dibeli', '')).strip().lower() in ('true', '1'):
+        return 0
+    n = TUMBUH if terbuka(hdr, r) else 0
+    if 'tutup_semua' in d:
+        n += sum(TUMBUH_LORONG for c in ('keluar_henti', 'keluar_10') if str(d.get(c, '')).strip().lower() != 'true')
+    return n
+
+
 def baca(path):
     rows = list(csv.reader(open(path, encoding='utf-8', newline='')))
     return rows[0], [r for r in rows[1:] if r]
@@ -65,7 +77,7 @@ def ukur(n, hdr, rows):
     meta = META.get('claude' if n == 1 else '', META_LAIN)
     kini = meta + 13 + sum(saiz_baris(hdr, r) for r in rows)
     buka = sum(terbuka(hdr, r) for r in rows)
-    return dict(baris=len(rows), terbuka=buka, anggaran=kini, unjuran=kini + buka * TUMBUH)
+    return dict(baris=len(rows), terbuka=buka, anggaran=kini, unjuran=kini + sum(tumbuh(hdr, r) for r in rows))
 
 
 def main(argv=None):
@@ -91,10 +103,10 @@ def main(argv=None):
         u = ukur(n, hdr, rows)
         if a.pecah and u['unjuran'] > a.had and len(rows) > 1:
             k = len(rows)
-            unj = u['unjuran'] - sum(saiz_baris(hdr, r) + terbuka(hdr, r) * TUMBUH for r in rows)
+            unj = u['unjuran'] - sum(saiz_baris(hdr, r) + tumbuh(hdr, r) for r in rows)
             awal = [unj]
             for r in rows:
-                awal.append(awal[-1] + saiz_baris(hdr, r) + terbuka(hdr, r) * TUMBUH)
+                awal.append(awal[-1] + saiz_baris(hdr, r) + tumbuh(hdr, r))
             while k > 1 and awal[k] > a.sasaran:
                 k -= 1
             baru = max(fail) + 1

@@ -37,6 +37,19 @@ class UjiSahkan(unittest.TestCase):
             kod = sahkan.main(['--folder', self.d, *arg])
         return kod, out.getvalue()
 
+    def test_tiga_lorong(self):
+        tiga = dict(keluar_henti='True', tarikh_keluar_henti='2026-10-14', harga_keluar_henti='95', untung_henti_pct='-5.00',
+                    status_henti='Keluar: kena henti', capai_10='False', tarikh_capai_10='', keluar_10='True',
+                    tarikh_keluar_10='2026-10-14', harga_keluar_10='95', untung_10_pct='-5.00', status_10='Keluar', tutup_semua='False')
+        tulis(self.d, 'claude.csv', [dict(ASAS, **tiga)])
+        self.assertEqual(self.jalan()[0], 0)
+        tulis(self.d, 'claude.csv', [dict(ASAS, **dict(tiga, tutup_semua='True'))])   # lorong 1 belum keluar
+        kod, out = self.jalan()
+        self.assertEqual(kod, 1); self.assertIn('tutup_semua', out)
+        tulis(self.d, 'claude.csv', [dict(ASAS, **dict(tiga, untung_henti_pct='-4'))])
+        kod, out = self.jalan()
+        self.assertEqual(kod, 1); self.assertIn('untung_henti_pct', out)
+
     def test_data_bersih_lulus(self):
         kod, out = self.jalan()
         self.assertEqual(kod, 0, out)

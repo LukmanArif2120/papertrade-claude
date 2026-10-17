@@ -27,6 +27,18 @@ class UjiBelianSemula(unittest.TestCase):
         self.assertEqual(buka, {('M20', 'FSLY'), ('M81', 'FSLY')})
         self.assertEqual((bil[('M13', 'FSLY')], bil[('M20', 'FSLY')], bil[('M13', 'AAA')]), (1, 2, 0))
 
+    def test_tiga_lorong(self):
+        # sejak 17 Okt 2026: belian semula hanya selepas ketiga-tiga lorong keluar (tutup_semua = True)
+        with tempfile.TemporaryDirectory() as d:
+            lajur = ['tarikh_beli', 'saham', 'kaedah', 'keluar', 'tidak_dibeli', 'tidak_sah', 'tutup_semua']
+            with open(os.path.join(d, 'claude.csv'), 'w', newline='', encoding='utf-8') as f:
+                w = csv.writer(f); w.writerow(lajur)
+                w.writerows([['2026-10-09', 'FSLY', 'M13', 'True', '', '', 'True'],    # semua lorong keluar: layak semula
+                             ['2026-10-12', 'NCNO', 'M20', 'True', '', '', 'False'],   # lorong 1 keluar, lorong 2/3 belum
+                             ['2026-10-16', 'AAA', 'M20', 'False', '', '', '']])       # baharu, belum dinilai
+            buka, _ = S.pegangan_c(d)
+        self.assertEqual(buka, {('M20', 'NCNO'), ('M20', 'AAA')})
+
 
 if __name__ == '__main__':
     unittest.main()

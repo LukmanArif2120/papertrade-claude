@@ -19,6 +19,7 @@ Laluan lama dalam dokumen (`standard/x`, `papertrade/x`, `spec/`) = `BacktestSha
 - Dashboard: artifact sedia ada https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (db melalui ArtifactData). Jangan cipta artifact baharu. Stor harga dan status harian kekal dalam aset/db dashboard. Kod kaedah: sumber di `BacktestShariah2/kod/`, aset kod dashboard ialah salinan (lihat `kod/README.md`).
 - Papertrade C (Claude, maya) sahaja untuk belian baharu sejak 13 Okt 2026. Tiada order Moomoo, tiada wang sebenar.
 - "Kalau tak beli, cakap tak beli." Data mesti betul; jangan reka.
+- Tiga lorong keluar (17 Okt 2026): kaedah, henti, 10% — direkod berasingan (`standard/keluar_tiga.py`, `papertrade/SKEMA.md`). Belian semula kaedah+saham sama hanya selepas ketiga-tiga keluar (`tutup_semua`).
 - Penerangan teknikal dalam Bahasa Melayu baku.
 - Setiap larian berjadual: `git pull --rebase` dahulu, tulis fail di repo ini, kemudian commit dan push ke `main`. Jangan tulis lagi ke Project claude.ai (salinan di sana dibekukan pada 14 Okt 2026).
 - Sebelum push data: `python3 BacktestShariah2/standard/sahkan.py --betulkan` mesti keluar 0.
