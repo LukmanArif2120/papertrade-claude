@@ -1,0 +1,48 @@
+# Sekali jalan (manual): bina tarikh pendapatan sejarah 431 saham untuk STEP-2 M164 (Nasdaq + Yahoo).
+# Output: BacktestShariah2/data/pemangkin/tarikh_pendapatan.csv (+ _status.txt). Tiada kesan pada rutin harian.
+name: Tarikh pendapatan (M164)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dari:
+        description: 'Tarikh mula (YYYY-MM-DD)'
+        required: false
+        default: '2018-10-01'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tarikh-pendapatan
+  cancel-in-progress: false
+
+jobs:
+  tarikh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas requests yfinance
+      - name: Tarik tarikh
+        env:
+          DARI: ${{ github.event.inputs.dari }}
+        run: |
+          python3 BacktestShariah2/standard/tarikh_pendapatan_actions.py --dari "${DARI:-2018-10-01}" \
+            --keluar BacktestShariah2/data/pemangkin/tarikh_pendapatan.csv
+      - name: Commit dan push
+        run: |
+          git config user.name "pemangkin[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/pemangkin/tarikh_pendapatan.csv BacktestShariah2/data/pemangkin/tarikh_pendapatan_status.txt
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Tarikh pendapatan M164 (Nasdaq + Yahoo): $(date -u +%Y-%m-%d)"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1
