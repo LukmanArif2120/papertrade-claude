@@ -1,0 +1,200 @@
+# AUTOTUNE F8: tala semula setiap suku (SPEC §7). pintu → data → rancang → tala (matriks shard) → cadangan.
+# Kajian 13 (SEMASA, 3 tahun terkini) sahaja, semua kaedah. Output berasingan: AUTOTUNE/hasil/suku/<YYYY-Qn>/ (tala/, CADANGAN.md,
+# cadangan.json). CADANGAN SAHAJA: tidak menyentuh papertrade, hasil/tala atau parameter semasa; perlu kelulusan pengguna.
+# Data: mencetus autotune_data.yml (aset Release autotune-data ditimpa --clobber) dan menunggu ia siap.
+name: autotune_suku
+
+on:
+  schedule:
+    # 03:17 UTC, Sabtu pertama (hari 1-7) Jan/Apr/Jul/Okt. Cron dom+dow ialah ATAU, maka pintu menapis hari > 7.
+    - cron: '17 3 1-7 1,4,7,10 6'
+  workflow_dispatch:
+    inputs:
+      suku:
+        description: "label suku YYYY-Qn (kosong = suku semasa)"
+        default: ''
+      percubaan:
+        description: "percubaan Optuna setiap kaedah"
+        default: '120'
+      shard:
+        description: "bilangan shard (job serentak)"
+        default: '20'
+      segar_data:
+        description: "muat turun data baharu dahulu (ya/tidak)"
+        default: 'ya'
+      simpan:
+        description: "commit hasil/suku ke main (ya/tidak)"
+        default: 'ya'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autotune-suku
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: '1'
+  NUMBA_CACHE_DIR: ${{ github.workspace }}/.numba
+
+jobs:
+  pintu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      jalan: ${{ steps.p.outputs.jalan }}
+      suku: ${{ steps.p.outputs.suku }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - id: p
+        env:
+          ACARA: ${{ github.event_name }}
+          SUKU_IN: ${{ inputs.suku }}
+        run: |
+          if [ "$ACARA" = "schedule" ] && [ "$(date -u +%-d)" -gt 7 ]; then
+            echo "bukan Sabtu pertama bulan: langkau"
+            echo "jalan=tidak" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          echo "jalan=ya" >> "$GITHUB_OUTPUT"
+          python3 AUTOTUNE/suku/jalan.py label --suku "$SUKU_IN" --github-output
+
+  data:
+    needs: pintu
+    if: needs.pintu.outputs.jalan == 'ya' && inputs.segar_data != 'tidak'
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    permissions:
+      actions: write
+      contents: read
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Cetus autotune_data.yml dan tunggu siap
+        run: |
+          mula=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          gh workflow run autotune_data.yml --ref main
+          id=""
+          for i in $(seq 1 20); do
+            sleep 15
+            id=$(gh run list --workflow autotune_data.yml --event workflow_dispatch --limit 10 \
+                 --json databaseId,createdAt -q "[.[] | select(.createdAt >= \"$mula\")] | sort_by(.createdAt) | .[0].databaseId // empty")
+            [ -n "$id" ] && break
+          done
+          [ -n "$id" ] || { echo "run data tidak ditemui"; exit 1; }
+          echo "run data: $id"
+          while true; do
+            st=$(gh run view "$id" --json status,conclusion -q '.status + " " + (.conclusion // "")')
+            case "$st" in
+              "completed success") echo "data siap"; exit 0 ;;
+              completed*) echo "data gagal: $st"; exit 1 ;;
+            esac
+            sleep 60
+          done
+
+  rancang:
+    needs: [pintu, data]
+    if: always() && needs.pintu.outputs.jalan == 'ya' && (needs.data.result == 'success' || needs.data.result == 'skipped')
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      matriks: ${{ steps.r.outputs.matriks }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - id: r
+        env:
+          PERCUBAAN: ${{ inputs.percubaan || '120' }}
+          SHARD: ${{ inputs.shard || '20' }}
+        run: python3 AUTOTUNE/suku/jalan.py rancang --percubaan "$PERCUBAAN" --shard "$SHARD" --keluar plan.json --ukur --github-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plan
+          path: plan.json
+          retention-days: 7
+
+  tala:
+    needs: [pintu, rancang]
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard: ${{ fromJSON(needs.rancang.outputs.matriks) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - uses: actions/download-artifact@v4
+        with:
+          name: plan
+      - name: Muat turun data Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data -R "${{ github.repository }}" -D AUTOTUNE/.cache --clobber && break
+            sleep 20
+          done
+          ls AUTOTUNE/.cache | wc -l
+      - name: Pekerja shard ${{ matrix.shard }}
+        env:
+          SUKU: ${{ needs.pintu.outputs.suku }}
+        run: |
+          ( while true; do sleep 600; echo "[memori] $(free -m | awk 'NR==2{print $3"/"$2" MB"}')"; done ) &
+          python3 AUTOTUNE/suku/jalan.py pekerja --suku "$SUKU" --shard ${{ matrix.shard }} --plan plan.json --proses 4 --had-minit 330
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: suku-hasil-${{ matrix.shard }}
+          path: AUTOTUNE/hasil/suku/${{ needs.pintu.outputs.suku }}/tala/
+          if-no-files-found: warn
+          retention-days: 14
+
+  cadangan:
+    needs: [pintu, rancang, tala]
+    if: always() && needs.rancang.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      SUKU: ${{ needs.pintu.outputs.suku }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: suku-hasil-*
+          path: AUTOTUNE/hasil/suku/${{ needs.pintu.outputs.suku }}/tala
+          merge-multiple: true
+      - name: Jana cadangan
+        run: |
+          python3 AUTOTUNE/suku/cadangan.py --suku "$SUKU"
+          head -30 "AUTOTUNE/hasil/suku/$SUKU/CADANGAN.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit AUTOTUNE/hasil/suku sahaja
+        if: inputs.simpan != 'tidak'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AUTOTUNE/hasil/suku
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE F8: cadangan tala semula $SUKU (cadangan sahaja)"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 15))
+          done
+          exit 1
