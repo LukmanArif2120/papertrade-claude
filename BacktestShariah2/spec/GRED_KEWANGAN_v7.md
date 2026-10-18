@@ -16,7 +16,7 @@ Asas: S&P Corporate Methodology, Moody's, Simply Wall St (MODEL.markdown, Nov 20
 - Untung luar biasa: suku dengan |Other Income| atau |Special Income| > 5% hasil atau > 20% untung sebelum cukai. Untung bersih dan EPS teras = dilapor tolak item itu selepas cukai (kadar cukai suku, had 0–35%). ROE, ROA, OCF > untung, akruan dan semua ujian EPS memakai angka teras; nota `untung_luar_biasa`.
 - Q4 Moomoo = tahunan − 9 bulan. Jika Q4 ada baris kos negatif, belanja operasi > 2× purata Q1–Q3, atau caj khas bertentangan tanda dengan Q1–Q3 (> 5% hasil), tetingkap TTM itu memakai EBIT = untung sebelum cukai + faedah; nota `q4_ragu`.
 - ROE: untung induk / purata ekuiti induk (t, t−4). Ekuiti ≤ 0 → ROE tidak dikira. ROA: untung disatukan / aset. Modal dilabur: jumlah ekuiti (termasuk minoriti) + hutang − tunai.
-- Point-in-time: tempoh dipakai mulai tarikh siaran (+1 hari jika selepas tutup); tanpa rekod: akhir + 45 hari (Q1–Q3) atau + 60 hari (Q4/FY). Suku terakhir tamat > 200 hari lalu → `–`.
+- Point-in-time: tempoh dipakai mulai tarikh siaran (+1 hari jika selepas tutup; tarikh hanya dipercayai jika 1–120 hari selepas akhir tempoh, kerana rekod Moomoo kadang tersalah label); tanpa rekod: akhir + 45 hari (Q1–Q3) atau + 60 hari (Q4/FY). Suku terakhir tamat > 200 hari lalu → `–`.
 - Moomoo menimpa angka apabila syarikat menyata semula (tiada versi); kesan look-ahead diterima dan dicatat. `kewangan_butiran` menyimpan input setiap gred (rekod point-in-time).
 - Tiada dalam data: pampasan saham (SBC), capex kasar (kebanyakan), bilangan saham dalam penyata, tarikh matang hutang/covenant, pendapat going concern, KPI sektor (NRR, jualan kedai sama, rizab). Tidak dianggar.
 
@@ -71,7 +71,7 @@ Nisbah lulus daripada semakan yang boleh dikira: 6/6 A, ≥ 5/6 B, ≥ 3/6 C, �
 - `gagal` (gred → E): hutang atau pendapatan faedah melebihi had dalam SEMUA kaedah yang boleh dikira (minimum 2). `gagal_sebahagian`: sebahagian kaedah, atau tunai sahaja (Moomoo tidak membezakan deposit Islam/konvensional). `hampir_had`: dalam 2 mata daripada had. Dua yang terakhir menurunkan keyakinan.
 
 ## 8. Keyakinan
-Tinggi: ≥ 90% semakan boleh dikira dan jurang sub-gred ≤ 2 huruf. Rendah: < 70% atau A dan E serentak. Selainnya sederhana. Turun satu tahap bagi: ada bendera F; industri perisian/internet (FCF belum tolak SBC); Syariah `gagal_sebahagian`/`hampir_had`.
+Tinggi: ≥ 90% semakan boleh dikira dan jurang sub-gred ≤ 2 huruf. Rendah: < 70% atau A dan E serentak. Selainnya sederhana. Turun satu tahap bagi: ada bendera F; jumlah 4 suku ≠ tahunan (> 2%) dalam 5 tahun terakhir (penyataan semula atau penukaran mata wang; nota `suku_tidak_sepadan_tahunan`); industri perisian/internet (FCF belum tolak SBC); Syariah `gagal_sebahagian`/`hampir_had`.
 
 ## 9. Pengumpulan data (dalam sesi; Moomoo tiada dalam GitHub Actions)
 Bagi setiap saham: `quote_financials_statements` statement_type 1, 2, 3 × financial_type 9 dan 7 (limit 50), `quote_financials_earnings_price_history`, `quote_market_snapshot`. Simpan setiap hasil sebagai `<T>_<jenis>_<tempoh>.json`, `<T>_eph.json`, `<T>_snap.json` dalam satu folder, kemudian:

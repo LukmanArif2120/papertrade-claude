@@ -102,6 +102,17 @@ class UjiMasa(unittest.TestCase):
         self.assertTrue(GK.tersedia(e, t, date(2026, 7, 30)))
         self.assertFalse(GK.tersedia({'label': '2025/Q4', 'tamat': '2025-12-31'}, {}, date(2026, 2, 28)))
 
+    def test_tarikh_terbit_tidak_munasabah(self):
+        e = {'label': '2025/Q4', 'tamat': '2025-12-31'}
+        t = {'2025/Q4': {'pub': '2027-01-19', 'jenis': 1}}       # label salah -> sandaran 60 hari
+        self.assertTrue(GK.tersedia(e, t, date(2026, 3, 1)))
+
+    def test_tidak_sepadan(self):
+        k = syarikat(n=12, mula=2023)
+        self.assertFalse(GK.tidak_sepadan(k, date(2026, 10, 18)))
+        k['tahunan'][-1][P]['Total Operating Revenue'] *= 0.9      # tahunan dinyata semula
+        self.assertTrue(GK.tidak_sepadan(k, date(2026, 10, 18)))
+
     def test_suku_berturut(self):
         k = syarikat(12)
         q = k['suku'][:5] + k['suku'][6:]

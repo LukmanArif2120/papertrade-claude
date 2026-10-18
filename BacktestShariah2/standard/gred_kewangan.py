@@ -213,8 +213,10 @@ def tarikh(s):
 def tersedia(e, terbit, hari_ini):
     """Tempoh dianggap diketahui pasaran: tarikh siaran (+1 hari jika selepas tutup), sandaran akhir + 45/60 hari."""
     t = (terbit or {}).get(e['label'])
-    if t:
-        d = tarikh(t['pub']) + timedelta(days=1 if t.get('jenis') == 2 else 0)
+    p = tarikh(t['pub']) if t else None
+    # rekod Moomoo kadang tersalah label (cth. FAST 2025/Q4 -> 2027-01-19): hanya dipercayai jika 1–120 hari selepas akhir tempoh
+    if p and 0 < (p - tarikh(e['tamat'])).days <= 120:
+        d = p + timedelta(days=1 if t.get('jenis') == 2 else 0)
     else:
         d = tarikh(e['tamat']) + timedelta(days=60 if e['label'].endswith(('Q4', 'FY')) else 45)
     return d <= hari_ini
@@ -788,6 +790,8 @@ def kira(k, harga=None, hari_ini=None, med=None, sektor='', industri=''):
         r['nota'].append('fcf_belum_tolak_sbc'); tahap -= 1
     if sy['status'] in ('gagal_sebahagian', 'hampir_had'):
         tahap -= 1
+    if tidak_sepadan(k, hari_ini):
+        r['nota'].append('suku_tidak_sepadan_tahunan'); tahap -= 1
     yakin = ['rendah', 'sederhana', 'tinggi'][max(0, tahap)]
     bil_semak = sum(len(d) for d in r['semak'].values())
     ring = (f'{g} (K:{r["K"]} U:{r["U"]} T:{r["T"]} S:{r["S"]}) · {r["peringkat"]} · F:{len(r["F"])} · keyakinan {yakin}'
@@ -800,6 +804,23 @@ def kira(k, harga=None, hari_ini=None, med=None, sektor='', industri=''):
     return {'gred': g, 'K': r['K'], 'U': r['U'], 'T': r['T'], 'S': r['S'], 'peringkat': r['peringkat'],
             'bendera': r['F'], 'keyakinan': yakin, 'syariah': sy['status'], 'ringkas': ring,
             'tempoh': qs[-1]['label'], 'butiran': butiran}
+
+
+def tidak_sepadan(k, hari_ini, tahun=5, had=0.02):
+    """Jumlah 4 suku != angka tahunan (> 2%) dalam 5 tahun kewangan terakhir: penyataan semula
+    (operasi dihentikan) atau penukaran mata wang; perbandingan YoY mungkin bercampur asas."""
+    suku = k.get('suku') or []
+    for a in [x for x in k.get('tahunan') or [] if tarikh(x['tamat']) <= hari_ini][-tahun:]:
+        fy = a['label'][:4]
+        qs = [e for e in suku if e['label'][:4] == fy and e['label'][5:] in ('Q1', 'Q2', 'Q3', 'Q4')]
+        if len(qs) != 4:
+            continue
+        for f in ('Total Operating Revenue', 'Net Profit'):
+            v = (a.get(P) or {}).get(f)
+            s = [e[P].get(f) for e in qs]
+            if v and None not in s and abs(sum(s) - v) > had * abs(v) + 1.0:
+                return True
+    return False
 
 
 def hasil_kosong(sebab):
