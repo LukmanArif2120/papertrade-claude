@@ -221,10 +221,10 @@ def tersedia(e, terbit, hari_ini):
 
 
 def suku_berturut(suku):
-    """Rantaian suku berturut di hujung senarai (jarak 75–110 hari)."""
+    """Rantaian suku berturut di hujung senarai (jarak 70–125 hari; suku 16 minggu dan tahun 52/53 minggu)."""
     out = []
     for e in reversed(suku):
-        if out and not 75 <= (tarikh(out[-1]['tamat']) - tarikh(e['tamat'])).days <= 110:
+        if out and not 70 <= (tarikh(out[-1]['tamat']) - tarikh(e['tamat'])).days <= 125:
             break
         out.append(e)
     return list(reversed(out))
@@ -488,8 +488,9 @@ def sub_gred(qs, semua, tah, med, sektor, industri):
         peringkat = 'matang'
 
     # --- K: kekukuhan (S&P standard / medial untuk utiliti) ---
-    jalur_de = (1.75, 3.5, 4.5, 5.5) if utiliti else (1.5, 3.0, 4.0, 5.0)
-    jalur_ffo = (0.50, 0.23, 0.13, 0.09) if utiliti else (0.60, 0.30, 0.20, 0.12)
+    # utiliti (dikawal selia): jadual S&P low volatility; selainnya standard volatility
+    jalur_de = (2.0, 4.0, 5.0, 6.0) if utiliti else (1.5, 3.0, 4.0, 5.0)
+    jalur_ffo = (0.35, 0.13, 0.09, 0.06) if utiliti else (0.60, 0.30, 0.20, 0.12)
     tiada_hutang = aset is not None and b['hutang'] <= 0.01 * aset
     hutang_bersih = b['hutang'] - b['tunai']   # S&P: hutang diselaras tolak tunai
     ut['hutang_bersih'] = hutang_bersih
@@ -525,8 +526,8 @@ def sub_gred(qs, semua, tah, med, sektor, industri):
     z = None
     if aset and b['liabiliti'] and None not in (b['ca'], b['cl'], b['ut'], b['ekuiti'], m['ebit']):
         z = 6.56 * (b['ca'] - b['cl']) / aset + 3.26 * b['ut'] / aset + 6.72 * m['ebit'] / aset + 1.05 * b['ekuiti'] / b['liabiliti']
-        if z < 1.10:
-            k = had_atas(k, 'D')
+        if z < 1.10:   # semakan silang sahaja: had D dikenakan dalam kira() jika distance-to-default juga < 2
+            nota.append('altman_z2<1.1')
     ut['altman_z2'] = z
 
     # --- U: keuntungan ---
@@ -570,7 +571,7 @@ def sub_gred(qs, semua, tah, med, sektor, industri):
     eps4 = m4['eps'] if m4 else None
     eps20 = m20['eps'] if m20 else None
     g1, g5 = tumbuh(m['eps'], eps4), tumbuh(m['eps'], eps20)
-    g5a = None if g5 is None else (1 + g5) ** 0.2 - 1
+    g5a = None if g5 is None or 1 + g5 <= 0 else (1 + g5) ** 0.2 - 1
     roic_t = None
     if m20 and b20 and m['nopat'] is not None and m20['nopat'] is not None:
         dic = (modal_dilabur(b) or 0) - (modal_dilabur(b20) or 0)
@@ -769,7 +770,7 @@ def kira(k, harga=None, hari_ini=None, med=None, sektor='', industri=''):
     if dd is not None and dd != math.inf:
         if dd < 0:
             g = had_atas(g, 'E'); r['K'] = had_atas(r['K'], 'E')
-        elif dd < 1:
+        elif dd < 1 or (dd < 2 and 'altman_z2<1.1' in r['nota']):
             g = had_atas(g, 'D'); r['K'] = had_atas(r['K'], 'D')
     sy = syariah(r['b'], r['m'], hp, saham)
     if sy['status'] == 'gagal':

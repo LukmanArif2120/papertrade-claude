@@ -176,6 +176,15 @@ class UjiKekukuhan(unittest.TestCase):
         r = self.sub(syarikat(hutang_aset=0.05, tunai_aset=0.30))
         self.assertEqual(r['k_asas'], {'hutang_ebitda': 'A', 'ffo_hutang': 'A'})
 
+    def test_altman_semakan_silang(self):
+        # untung tertahan sangat negatif (belian balik) -> Z'' rendah tetapi K tidak dihadkan tanpa DD lemah
+        k = syarikat()
+        for e in k['suku']:
+            e[K]['Retained Earnings'] = -e[K]['Total Assets'] * 2
+        r = self.sub(k)
+        self.assertIn('altman_z2<1.1', r['nota'])
+        self.assertEqual(r['K'], 'A')
+
     def test_larian_tunai(self):
         r = self.sub(syarikat(muda=True, g=0.30, tunai_aset=0.30))
         self.assertIn(r['K'], ('D', 'E'))

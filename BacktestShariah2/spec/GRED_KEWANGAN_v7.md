@@ -11,7 +11,7 @@ Asas: S&P Corporate Methodology, Moody's, Simply Wall St (MODEL.markdown, Nov 20
 - Sumber: Moomoo `quote_financials_statements` (US GAAP), suku tunggal (financial_type 9) dan tahunan (7); `quote_financials_earnings_price_history` (tarikh siaran); `quote_market_snapshot` (`issued_shares`).
 - Nisbah siap Moomoo (statement_type 4) TIDAK dipakai: ia TTM, liputan faedahnya termasuk untung luar biasa dan meletup apabila faedah ≈ 0.
 - Tempoh dikenal pasti ikut label (`period_text`); tarikh akhir = `date_time` + 8 jam (UTC+8). Penyata berbeza boleh berbeza 1 hari, digabung ikut label.
-- TTM = 4 suku berturut (jarak 75–110 hari). Minimum 8 suku berturut; 24 suku untuk ujian 5 tahun.
+- TTM = 4 suku berturut (jarak 70–125 hari; suku 16 minggu dan tahun 52/53 minggu). Minimum 8 suku berturut; 24 suku untuk ujian 5 tahun.
 - Medan yang tiada = tidak dikira (bukan 0), kecuali hutang pendek/panjang (tiada = 0).
 - Untung luar biasa: suku dengan |Other Income| atau |Special Income| > 5% hasil atau > 20% untung sebelum cukai. Untung bersih dan EPS teras = dilapor tolak item itu selepas cukai (kadar cukai suku, had 0–35%). ROE, ROA, OCF > untung, akruan dan semua ujian EPS memakai angka teras; nota `untung_luar_biasa`.
 - Q4 Moomoo = tahunan − 9 bulan. Jika Q4 ada baris kos negatif, belanja operasi > 2× purata Q1–Q3, atau caj khas bertentangan tanda dengan Q1–Q3 (> 5% hasil), tetingkap TTM itu memakai EBIT = untung sebelum cukai + faedah; nota `q4_ragu`.
@@ -21,12 +21,12 @@ Asas: S&P Corporate Methodology, Moody's, Simply Wall St (MODEL.markdown, Nov 20
 - Tiada dalam data: pampasan saham (SBC), capex kasar (kebanyakan), bilangan saham dalam penyata, tarikh matang hutang/covenant, pendapat going concern, KPI sektor (NRR, jualan kedai sama, rizab). Tidak dianggar.
 
 ## 3. Sub-gred
-### K – Kekukuhan (S&P standard volatility; utiliti: medial)
-- Hutang bersih (hutang termasuk pajakan − tunai) / EBITDA TTM: < 1.5 A, < 3 B, < 4 C, < 5 D, selainnya E (utiliti: 1.75 / 3.5 / 4.5 / 5.5).
-- FFO (OCF − perubahan modal kerja) / hutang bersih: > 60% A, > 30% B, > 20% C, > 12% D, selainnya E (utiliti: 50 / 23 / 13 / 9).
+### K – Kekukuhan (S&P standard volatility; utiliti: low volatility)
+- Hutang bersih (hutang termasuk pajakan − tunai) / EBITDA TTM: < 1.5 A, < 3 B, < 4 C, < 5 D, selainnya E (utiliti dikawal selia, jadual low volatility: 2 / 4 / 5 / 6).
+- FFO (OCF − perubahan modal kerja) / hutang bersih: > 60% A, > 30% B, > 20% C, > 12% D, selainnya E (utiliti: 35 / 13 / 9 / 6).
 - K = yang lebih teruk antara dua. Hutang bersih ≤ 1% aset → A.
 - Turun 1 huruf jika ≥ 2 semakan Simply Wall St gagal: aset semasa > liabiliti semasa; aset semasa > liabiliti jangka panjang; hutang/ekuiti tidak naik dalam 5 tahun; EBIT ≥ 5× faedah (had 100×; faedah tiada dan hutang ≤ 1% aset = lulus; faedah tiada dengan hutang = tidak dikira).
-- Altman Z'' (6.56, 3.26, 6.72, 1.05) < 1.10 → maksimum D.
+- Altman Z'' (6.56, 3.26, 6.72, 1.05) < 1.10 = semakan silang sahaja (nota `altman_z2<1.1`): maksimum D hanya jika distance-to-default juga < 2. Sebab: Z'' menghukum syarikat sihat yang untung tertahannya negatif kerana belian balik saham (DOCU, ADSK) atau modal kerja negatif (pengedar, perisian langganan); kajian mendapati model diskriminan Altman paling lemah (Wu, Gaunt & Gray 2010).
 - EBITDA ≤ 0 dan FCF < 0: tunai / pembakaran FCF ≥ 1 tahun → D, selainnya E.
 - Distance-to-default naif (Bharath & Shumway 2008; F = hutang pendek + 0.5 hutang panjang, σD = 0.05 + 0.25σE, T = 1, harga 1 tahun daripada stor harga, `issued_shares`): DD < 1 → K dan gred maksimum D; DD < 0 → E. Dikenakan selepas histerisis. Ambang DD ialah andaian.
 
@@ -79,4 +79,4 @@ Bagi setiap saham: `quote_financials_statements` statement_type 1, 2, 3 × finan
 Kemas kini hanya selepas syarikat melapor (tarikh earnings). Jika folder `data/kewangan` wujud, `harian_c.py gred` dan `gred.py tambah --kewangan` mengisi lajur; tanpa fail saham → `–`.
 
 ## 10. Belum disahkan / andaian
-Baris S&P selain minimal dan aggressive; jadual medial selepas significant; zon Z'' 1.10; had S&P Shariah 2026 (30% atau 33%); ambang EBIT/faedah SWS (dokumen 5×, laman 3×); kos modal 9%; ambang DD; ambang forensik; ambang peringkat. Semua ambang ditetapkan sebelum ujian; komponen baharu hanya selepas ujian luar sampel.
+Baris S&P selain minimal dan aggressive; jadual low volatility (utiliti) daripada ingatan; zon Z'' 1.10; had S&P Shariah 2026 (30% atau 33%); ambang EBIT/faedah SWS (dokumen 5×, laman 3×); kos modal 9%; ambang DD; ambang forensik; ambang peringkat. Semua ambang ditetapkan sebelum ujian; komponen baharu hanya selepas ujian luar sampel.
