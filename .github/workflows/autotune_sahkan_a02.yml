@@ -1,0 +1,140 @@
+# AUTOTUNE A02 (SPEC_A02 §4–§5): imbasan pandang ke hadapan (matriks) → pengesahan, label, gabungan, laporan, db dashboard.
+# Input: AUTOTUNE/hasil_a02/{pilihan.json,saringan.csv,tala/<ID>_<lorong>/kNN.json} (main) + Release autotune-data-a02.
+# dry_run = true: jalan penuh tetapi TIDAK commit; output sebagai artifact sahaja.
+name: autotune_sahkan_a02
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Larian kering (tanpa commit; output sebagai artifact)'
+        type: boolean
+        default: true
+      maks:
+        description: 'Bilangan maksimum kaedah dalam gabungan'
+        default: '6'
+      calon_maks:
+        description: 'Calon gabungan teratas yang dagangannya dijana semula'
+        default: '12'
+      shard:
+        description: 'Bilangan shard imbasan'
+        default: '10'
+      skop:
+        description: 'Catatan pengurangan skop untuk LAPORAN (pisah dengan |)'
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autotune-sahkan-a02
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: '1'
+  NUMBA_CACHE_DIR: ${{ github.workspace }}/.numba
+
+jobs:
+  matriks:
+    runs-on: ubuntu-latest
+    outputs:
+      m: ${{ steps.m.outputs.m }}
+    steps:
+      - id: m
+        run: echo "m=$(python3 -c "import json; print(json.dumps(list(range(int('${{ inputs.shard }}')))))")" >> "$GITHUB_OUTPUT"
+
+  imbas:
+    needs: matriks
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ${{ fromJSON(needs.matriks.outputs.m) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - name: Muat turun data Release A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -D AUTOTUNE/.cache_a02 --clobber && break
+            sleep 20
+          done
+      - name: Imbas shard ${{ matrix.shard }}
+        run: python3 AUTOTUNE/sahkan/imbas_a02.py --shard ${{ matrix.shard }} --n-shard ${{ inputs.shard }} --proses 4 --cache AUTOTUNE/.cache_a02 --keluar kirim
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: imbas-${{ matrix.shard }}
+          path: kirim/
+          if-no-files-found: warn
+          retention-days: 14
+
+  sahkan:
+    needs: imbas
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - name: Muat turun data Release A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -D AUTOTUNE/.cache_a02 --clobber && break
+            sleep 20
+          done
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: imbas-*
+          path: imbas/
+      - name: Ujian unit A02
+        run: python3 -m unittest AUTOTUNE/ujian/test_a02.py
+      - name: Tulis imbasan
+        run: python3 AUTOTUNE/sahkan/imbas_a02.py --tulis imbas/*
+      - name: Pengesahan, label, gabungan, laporan
+        run: |
+          ARGS=()
+          IFS='|' read -ra S <<< "${{ inputs.skop }}"
+          for s in "${S[@]}"; do [ -n "$s" ] && ARGS+=(--skop "$s"); done
+          python3 AUTOTUNE/sahkan/sahkan_a02.py --cache AUTOTUNE/.cache_a02 --proses 4 --maks "${{ inputs.maks }}" --calon-maks "${{ inputs.calon_maks }}" "${ARGS[@]}"
+      - name: Dokumen db dashboard (A02)
+        run: python3 AUTOTUNE/dashboard/jana_db.py --hasil AUTOTUNE/hasil_a02 --keluar AUTOTUNE/dashboard/db_a02
+      - name: Simpan output (artifact)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: autotune-sahkan-a02
+          path: |
+            AUTOTUNE/hasil_a02/*.csv
+            AUTOTUNE/hasil_a02/*.json
+            AUTOTUNE/hasil_a02/*.md
+            AUTOTUNE/dashboard/db_a02/
+          if-no-files-found: warn
+      - name: Commit dan push
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "autotune[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AUTOTUNE/hasil_a02/parameter_sedia.csv AUTOTUNE/hasil_a02/ringkasan.json AUTOTUNE/hasil_a02/gabungan.json \
+                  AUTOTUNE/hasil_a02/papan.json AUTOTUNE/hasil_a02/LAPORAN.md AUTOTUNE/hasil_a02/PANDANG_HADAPAN.md \
+                  AUTOTUNE/hasil_a02/pandang_hadapan.json AUTOTUNE/dashboard/db_a02
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE A02: imbasan, pengesahan, gabungan, laporan, db dashboard"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 10))
+          done
+          exit 1

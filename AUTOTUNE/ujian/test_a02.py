@@ -304,6 +304,12 @@ class UjiHujungA02(unittest.TestCase):
         self.assertAlmostEqual(r.lebihan_a, r.cagr_a - r.spy_oos, places=9)
         for f in ('parameter_sedia.csv', 'gabungan.json', 'ringkasan.json', 'papan.json', 'LAPORAN.md'):
             self.assertTrue(os.path.exists(os.path.join(self.dir, f)), f)
+        sys.path.insert(0, os.path.join(AKAR, 'AUTOTUNE', 'dashboard'))
+        import jana_db
+        docs = jana_db.bina(self.dir, '2026-10-18T00:00Z')
+        self.assertTrue(all(k.startswith('a02_') for k in docs), list(docs))
+        self.assertIn('a02_kaedah_MX_had60', docs); self.assertEqual(docs['a02_ringkasan']['versi'], 'A02')
+        self.assertEqual(set(docs['a02_ringkasan']['kiraan_label']), set(SA.LABEL))
         if gab.get('terpilih'):
             self.assertIn('oos_A', gab); self.assertIn('pengesahan', gab)
             if gab['terpilih'] == [gab['calon_dinilai'][0]]:   # gabungan satu kaedah = OOS kaedah itu (rank persentil monoton)

@@ -8,6 +8,8 @@
 # Dokumen: autotune/status (sentiasa), autotune/ringkasan, autotune/gabungan, autotune/kaedah_<ID> (satu setiap kaedah).
 # Setiap dokumen membawa `dibina` yang sama; tab hanya memapar kaedah_<ID> yang tersenarai dalam ringkasan.kaedah_doc
 # dan sama `dibina` (dokumen lama diabaikan, tidak perlu dipadam).
+# A02 (ringkasan/papan.json `versi` = 'A02', cth. --hasil AUTOTUNE/hasil_a02 --keluar AUTOTUNE/dashboard/db_a02): doc_id
+# berawalan `a02_` (A01 tidak ditindih), label A02 daripada ringkasan.label, kajian_penuh 8, setiap dokumen `versi: A02`.
 import argparse, csv, glob, json, math, os, sys
 from datetime import datetime, timezone
 
@@ -52,7 +54,7 @@ def _rel(p):
 
 
 # ---------- dokumen ----------
-def doc_status(hasil, dibina):
+def doc_status(hasil, dibina, kajian_penuh=14):
     """Kemajuan tala daripada <hasil>/tala/Mxx/kNN.json (medan kecil sahaja; tidak bergantung pada F6)."""
     kaedah = {}
     for p in sorted(glob.glob(os.path.join(hasil, 'tala', '*', 'k*.json'))):
@@ -75,18 +77,18 @@ def doc_status(hasil, dibina):
     return dict(dibina=dibina, kaedah=kaedah, n_kaedah=len(kaedah),
                 n_kajian_siap=sum(len(o['siap']) for o in kaedah.values()),
                 n_percubaan=sum(o['percubaan'] for o in kaedah.values()), tala_terakhir=masa, fail_f6=ada,
-                kajian_penuh=14)
+                kajian_penuh=kajian_penuh)
 
 
-def doc_ringkasan(ring, papan, gab, dibina, contoh, kaedah_doc):
+def doc_ringkasan(ring, papan, gab, dibina, contoh, kaedah_doc, label=LABEL):
     ring = ring or {}
     kira = ring.get('kiraan_label')
     if not kira and papan:
-        kira = {l: sum(1 for r in papan.get('kaedah', []) if r.get('label') == l) for l in LABEL}
+        kira = {l: sum(1 for r in papan.get('kaedah', []) if r.get('label') == l) for l in label}
     return dict(dibina=dibina, contoh=contoh, dijana=ring.get('dijana') or (papan or {}).get('dijana'),
                 n_kaedah=ring.get('n_kaedah', len((papan or {}).get('kaedah', []))),
                 n_cubaan_jumlah=ring.get('n_cubaan_jumlah'), sr0_harian=ring.get('sr0_harian'),
-                kiraan_label={l: int((kira or {}).get(l, 0)) for l in LABEL},
+                kiraan_label={l: int((kira or {}).get(l, 0)) for l in label},
                 tempoh=ring.get('tempoh') or (papan or {}).get('tempoh') or {},
                 spy=ring.get('spy') or {}, belum_ditala=ring.get('belum_ditala', []),
                 gabungan=(gab or {}).get('terpilih') or (papan or {}).get('gabungan') or [],
@@ -121,16 +123,21 @@ def bina(hasil, dibina=None, contoh=None):
     dibina = dibina or datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%MZ')
     if contoh is None: contoh = os.path.basename(os.path.normpath(hasil)) == 'contoh'
     ring, gab, papan = (bersih(baca(os.path.join(hasil, f))) for f in ('ringkasan.json', 'gabungan.json', 'papan.json'))
-    docs = {'status': doc_status(hasil, dibina)}
+    a02 = 'A02' in ((ring or {}).get('versi'), (papan or {}).get('versi'))
+    awal = 'a02_' if a02 else ''
+    label = (ring or {}).get('label') or LABEL
+    docs = {awal + 'status': doc_status(hasil, dibina, 8 if a02 else 14)}
     kaedah_doc = []
     for r in (papan or {}).get('kaedah', []):
         if not r.get('id'): continue
-        did = 'kaedah_' + str(r['id'])
+        did = awal + 'kaedah_' + str(r['id'])
         docs[did] = doc_kaedah(r, dibina); kaedah_doc.append(did)
     if ring or papan:
-        docs['ringkasan'] = doc_ringkasan(ring, papan, gab, dibina, contoh, kaedah_doc)
+        docs[awal + 'ringkasan'] = doc_ringkasan(ring, papan, gab, dibina, contoh, kaedah_doc, label)
     if gab:
-        docs['gabungan'] = doc_gabungan(gab, dibina, contoh)
+        docs[awal + 'gabungan'] = doc_gabungan(gab, dibina, contoh)
+    if a02:
+        for d in docs.values(): d['versi'] = 'A02'
     return {k: bersih(v) for k, v in docs.items()}
 
 
@@ -176,7 +183,7 @@ def main(argv=None):
     versi = baca(a.versi) if a.versi else {}
     docs = bina(a.hasil, a.dibina)
     indeks, fail = tulis(docs, a.keluar, versi)
-    st = docs['status']
+    st = docs.get('status') or docs['a02_status']
     print(f"autotune db: {len(indeks)} dokumen ({', '.join(i['doc_id'] for i in indeks[:6])}{' …' if len(indeks) > 6 else ''}); "
           f"terbesar {max(i['bait'] for i in indeks)} B; batch {len(fail)}")
     print(f"  tala: {st['n_kaedah']} kaedah, {st['n_kajian_siap']} kajian siap; fail F6: "
