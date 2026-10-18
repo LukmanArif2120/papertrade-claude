@@ -5,7 +5,7 @@
 #   analisis.csv.gz    : ticker, tarikh (New York), firma, dari, ke, tindakan, tindakan_sasaran, sasaran, sasaran_lalu
 #                        (yfinance upgrades_downgrades, semua sejarah)
 #   eps.csv            : ticker, tarikh (New York), masa, eps_anggaran, eps_sebenar, kejutan_pct (yfinance, 40 suku)
-#   harga.csv.gz       : ticker, date, open, close, volume (yfinance, dilaras pecahan/dividen, sejak --dari)
+#   harga.csv.gz       : ticker, date, open, close, volume (yfinance, dilaras pecahan/dividen, sejak --dari; + SPY, QQQ)
 #   orang_dalam.csv.gz : ticker, tarikh_fail, tarikh_dagang, pemilik_cik, pemilik, hubungan, jawatan, kod (P/S),
 #                        saham, harga, rancangan_10b5 (set data pukal SEC Form 3/4/5, sejak --dari)
 #   status_<bahagian>.txt : liputan dan ralat setiap larian
@@ -16,6 +16,7 @@ from datetime import date
 AKAR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 BS2 = os.path.join(AKAR, 'BacktestShariah2')
 KELUAR = os.path.join(BS2, 'data', 'pemangkin', 'sejarah')
+INDEKS = ['SPY', 'QQQ']  # penanda aras (harga sahaja)
 SEC_URL = 'https://www.sec.gov/files/structureddata/data/insider-transactions-data-sets/{t}q{q}_form345.zip'
 SEC_UA = 'papertrade-claude kajian-pemangkin 41898282+github-actions[bot]@users.noreply.github.com'
 
@@ -233,7 +234,7 @@ def main(argv=None):
             status.append(f'eps {len(E)} baris; {len({x[0] for x in E})} saham')
         status.append(f'ralat yahoo {len(r)}'); status += r[:100]
     if 'harga' in bahagian:
-        H, r = tarik_harga(S, a.dari)
+        H, r = tarik_harga(S + [t for t in INDEKS if t not in S], a.dari)
         H.to_csv(os.path.join(KELUAR, 'harga.csv.gz'), index=False)
         status.append(f'harga {len(H)} baris; {H["ticker"].nunique() if len(H) else 0} saham; ralat {len(r)}'); status += r[:100]
     if 'sec' in bahagian:
