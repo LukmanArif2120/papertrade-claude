@@ -1,6 +1,6 @@
 kaedah,kajian,status,n_trials,n_trials_diminta,s_percubaan,s_jumlah,s_muat,s_ujian,rss_mb,silang,belum_ditala,mula,ralat
 M01,0,SIAP,20,20.0,4.84,184.6,2.46,31.1,1229.0,False,False,2026-10-17T14:32:34Z,
-M01,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M01,1,SIAP,120,120.0,4.25,552.63,2.29,27.58,935.0,False,False,2026-10-17T23:18:16Z,
 M01,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M01,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M01,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -43,7 +43,7 @@ M03,12,SIAP,120,120.0,30.55,4185.16,4.71,104.99,1600.0,False,False,2026-10-17T14
 M03,13,SIAP,120,120.0,31.91,3849.2,4.33,,828.0,False,False,2026-10-17T16:20:55Z,
 M04,0,SIAP,120,120.0,2.74,373.75,1.11,15.55,1300.0,False,False,2026-10-17T20:04:45Z,
 M04,1,SIAP,97,120.0,2.62,273.76,1.35,10.7,945.0,False,False,2026-10-17T20:12:12Z,had masa: 97/120 percubaan
-M04,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M04,2,SIAP,120,120.0,5.35,687.29,2.47,30.43,931.0,False,False,2026-10-18T00:21:10Z,
 M04,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M04,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M04,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -51,7 +51,7 @@ M04,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M04,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M04,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M04,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M04,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M04,10,SIAP,120,120.0,7.26,913.1,3.93,24.58,1419.0,False,False,2026-10-18T00:26:14Z,
 M04,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M04,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M04,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -99,7 +99,7 @@ M07,12,SIAP,120,120.0,20.51,2959.94,2.17,65.5,1568.0,False,False,2026-10-17T14:4
 M07,13,SIAP,120,120.0,32.95,3972.47,3.9,,819.0,False,False,2026-10-17T15:26:28Z,
 M08,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M08,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M08,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M08,2,SIAP,120,120.0,4.96,639.26,2.48,29.22,972.0,False,False,2026-10-17T22:09:19Z,
 M08,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M08,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M08,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -154,7 +154,7 @@ M11,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M11,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M11,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M12,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M12,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M12,1,SIAP,120,120.0,5.71,731.43,2.33,31.12,959.0,False,False,2026-10-17T23:48:53Z,
 M12,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M12,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M12,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -181,7 +181,6 @@ M13,10,SIAP,120,120.0,57.82,436.3,3.08,132.12,1281.0,False,False,2026-10-17T14:4
 M13,11,SIAP,120,120.0,41.21,303.44,2.1,86.79,1321.0,False,False,2026-10-17T14:47:45Z,
 M13,12,SIAP,120,120.0,84.33,875.13,4.47,263.54,1474.0,False,False,2026-10-17T14:47:53Z,
 M13,13,SIAP,120,120.0,84.0,441.49,4.37,,738.0,False,False,2026-10-17T14:47:57Z,
-M14,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -191,7 +190,7 @@ M14,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M14,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M14,10,SIAP,120,120.0,7.75,704.78,3.87,36.38,1288.0,False,False,2026-10-17T22:48:24Z,
 M14,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M14,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -210,7 +209,6 @@ M15,11,SIAP,120,120.0,22.45,2767.66,3.12,59.73,1463.0,False,False,2026-10-17T15:
 M15,12,SIAP,120,120.0,20.38,2758.05,3.45,71.53,1543.0,False,False,2026-10-17T15:21:30Z,
 M15,13,SIAP,120,120.0,22.45,2708.01,3.09,,833.0,False,False,2026-10-17T15:47:43Z,
 M18,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M18,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M18,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M18,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M18,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -223,9 +221,8 @@ M18,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M18,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M18,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M18,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M19,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M19,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M19,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M19,2,SIAP,120,120.0,4.98,641.23,2.36,28.93,999.0,False,False,2026-10-17T21:19:12Z,
 M19,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M19,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M19,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -238,7 +235,7 @@ M19,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M19,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M19,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M20,0,SIAP,120,120.0,4.26,567.02,1.33,19.94,1366.0,False,False,2026-10-17T18:19:55Z,
-M20,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M20,1,SIAP,120,120.0,7.58,955.4,2.14,32.2,935.0,False,False,2026-10-17T22:33:03Z,
 M20,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M20,3,SIAP,120,120.0,5.16,650.42,1.53,22.22,1017.0,False,False,2026-10-17T18:26:32Z,
 M20,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -249,13 +246,13 @@ M20,8,SIAP,120,120.0,7.41,926.6,1.97,27.51,1334.0,False,False,2026-10-17T18:35:5
 M20,9,SIAP,85,120.0,11.97,1071.65,3.02,40.22,1342.0,False,False,2026-10-17T19:58:56Z,had masa: 85/120 percubaan
 M20,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M20,11,SIAP,120,120.0,12.02,1496.49,3.35,39.84,1439.0,False,False,2026-10-17T19:51:26Z,
-M20,12,SIAP,21,120.0,14.73,661.52,4.07,56.68,1526.0,False,False,2026-10-17T20:05:19Z,had masa: 21/120 percubaan
+M20,12,SIAP,120,120.0,13.46,1882.49,3.88,51.6,1563.0,False,False,2026-10-17T21:39:47Z,
 M20,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M21,0,SIAP,20,120.0,8.85,273.63,2.26,37.74,1244.0,False,False,2026-10-17T20:12:26Z,had masa: 20/120 percubaan
 M21,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M21,2,SIAP,120,120.0,5.97,757.77,2.02,28.47,946.0,False,False,2026-10-17T18:18:15Z,
 M21,3,SIAP,120,120.0,4.78,605.19,1.44,22.28,975.0,False,False,2026-10-17T17:24:10Z,
-M21,4,SIAP,7,120.0,11.11,137.09,3.01,41.43,984.0,False,False,2026-10-17T20:14:43Z,had masa: 7/120 percubaan
+M21,4,SIAP,120,120.0,8.37,1055.75,2.62,36.18,1035.0,False,False,2026-10-17T21:26:37Z,
 M21,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M21,6,SIAP,120,120.0,8.8,1103.92,2.44,34.33,1137.0,False,False,2026-10-17T18:21:17Z,
 M21,7,SIAP,120,120.0,8.99,1130.56,2.52,38.18,1168.0,False,False,2026-10-17T18:32:55Z,
@@ -275,11 +272,10 @@ M22,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M22,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M22,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M22,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M22,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M22,10,SIAP,120,120.0,6.0,756.6,3.58,20.86,1372.0,False,False,2026-10-18T00:56:06Z,
 M22,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M22,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M22,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M23,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M23,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M23,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M23,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -357,7 +353,7 @@ M28,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M28,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M28,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M28,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M28,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M28,8,SIAP,120,120.0,11.32,1418.64,3.21,44.63,1301.0,False,False,2026-10-17T22:19:50Z,
 M28,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M28,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M28,11,SIAP,120,120.0,7.85,978.76,2.19,26.88,1390.0,False,False,2026-10-17T19:04:15Z,
@@ -369,7 +365,7 @@ M29,2,SIAP,120,120.0,8.36,1050.29,1.92,34.67,1017.0,False,False,2026-10-17T18:36
 M29,3,SIAP,5,120.0,13.73,136.36,3.02,49.79,987.0,False,False,2026-10-17T20:14:35Z,had masa: 5/120 percubaan
 M29,4,SIAP,58,120.0,12.38,781.62,2.76,47.14,1061.0,False,False,2026-10-17T20:03:54Z,had masa: 58/120 percubaan
 M29,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M29,6,SIAP,89,120.0,14.27,1337.01,3.08,49.74,1210.0,False,False,2026-10-17T19:54:32Z,had masa: 89/120 percubaan
+M29,6,SIAP,120,120.0,12.61,1572.85,3.05,44.46,1206.0,False,False,2026-10-17T20:52:47Z,
 M29,7,SIAP,120,120.0,14.47,1804.52,3.16,51.66,1262.0,False,False,2026-10-17T19:25:02Z,
 M29,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M29,9,SIAP,120,120.0,9.33,1159.5,2.08,29.74,1422.0,False,False,2026-10-17T17:07:04Z,
@@ -387,7 +383,7 @@ M30,6,SIAP,120,120.0,6.99,873.03,1.53,25.25,1197.0,False,False,2026-10-17T17:22:
 M30,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M30,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M30,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M30,10,SIAP,70,120.0,17.6,1300.46,3.98,50.48,1304.0,False,False,2026-10-17T19:55:07Z,had masa: 70/120 percubaan
+M30,10,SIAP,120,120.0,16.35,2029.1,3.77,50.53,1355.0,False,False,2026-10-17T20:52:47Z,
 M30,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M30,12,SIAP,1,120.0,19.57,434.69,4.47,45.82,1582.0,False,False,2026-10-17T20:10:28Z,had masa: 1/120 percubaan | had masa: dataran tidak lengkap
 M30,13,SIAP,120,120.0,14.06,1702.05,3.07,,868.0,False,False,2026-10-17T19:06:22Z,
@@ -400,7 +396,7 @@ M31,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M31,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M31,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M31,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M31,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M31,9,SIAP,120,120.0,8.15,1033.91,3.7,38.44,1334.0,False,False,2026-10-17T23:55:47Z,
 M31,10,SIAP,79,120.0,4.83,410.12,2.1,18.57,1373.0,False,False,2026-10-17T20:09:56Z,had masa: 79/120 percubaan
 M31,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M31,12,SIAP,120,120.0,4.36,608.67,2.07,23.67,1658.0,False,False,2026-10-17T19:58:51Z,
@@ -419,7 +415,6 @@ M32,10,SIAP,120,120.0,7.36,919.2,2.15,25.18,1354.0,False,False,2026-10-17T19:15:
 M32,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M32,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M32,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M33,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M33,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M33,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M33,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -451,13 +446,13 @@ M35,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M35,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M35,4,SIAP,120,120.0,6.0,764.9,2.65,30.08,1050.0,False,False,2026-10-18T00:37:02Z,
 M35,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,6,SIAP,120,120.0,3.99,507.2,1.6,19.84,1198.0,False,False,2026-10-17T19:56:16Z,
 M35,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M35,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M35,10,SIAP,120,120.0,9.08,1143.53,3.7,36.74,1343.0,False,False,2026-10-18T00:37:03Z,
 M35,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M35,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -475,7 +470,6 @@ M36,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M36,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M36,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M36,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M37,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M37,1,SIAP,120,120.0,5.22,656.66,1.32,21.13,963.0,False,False,2026-10-17T17:50:55Z,
 M37,2,SIAP,120,120.0,8.36,1048.53,1.99,33.34,963.0,False,False,2026-10-17T18:58:23Z,
 M37,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -510,7 +504,7 @@ M39,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M39,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M39,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M39,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M39,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M39,7,SIAP,120,120.0,5.9,758.32,3.13,33.86,1201.0,False,False,2026-10-17T23:02:14Z,
 M39,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M39,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M39,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -558,7 +552,7 @@ M44,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M44,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M44,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M44,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M44,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M44,13,SIAP,120,120.0,9.86,1200.71,3.89,,809.0,False,False,2026-10-18T00:13:14Z,
 M45,0,SIAP,120,120.0,11.58,1454.66,1.81,22.31,1834.0,True,False,2026-10-17T15:23:20Z,
 M45,1,SIAP,120,120.0,24.61,3022.68,4.6,48.59,1338.0,True,False,2026-10-17T16:40:49Z,
 M45,2,SIAP,120,120.0,23.53,2890.52,4.25,47.55,1391.0,True,False,2026-10-17T16:51:50Z,
@@ -635,7 +629,7 @@ M50,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M50,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M50,4,SIAP,120,120.0,4.61,583.11,1.54,20.99,1013.0,False,False,2026-10-17T19:51:43Z,
 M50,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M50,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M50,6,SIAP,120,120.0,9.47,1192.36,3.07,39.55,1154.0,False,False,2026-10-17T23:48:03Z,
 M50,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M50,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M50,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -672,7 +666,7 @@ M52,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M52,12,SIAP,120,120.0,5.93,877.6,2.02,26.05,1631.0,False,False,2026-10-17T19:22:27Z,
 M52,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M54,0,SIAP,20,20.0,6.96,211.41,2.35,23.68,1246.0,False,False,2026-10-17T14:32:32Z,
-M54,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M54,1,SIAP,120,120.0,6.32,805.43,2.33,31.71,945.0,False,False,2026-10-17T23:00:09Z,
 M54,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M54,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M54,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -695,7 +689,6 @@ M55,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M55,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M55,8,SIAP,120,120.0,7.01,618.34,1.95,25.8,1243.0,False,False,2026-10-17T18:52:27Z,
 M55,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M55,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M55,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M55,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M55,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -728,13 +721,11 @@ M57,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M57,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M57,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M59,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M59,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M59,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M59,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M59,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M59,5,SIAP,120,120.0,4.74,598.65,1.64,20.88,1116.0,False,False,2026-10-17T19:54:46Z,
 M59,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M59,7,SIAP,102,120.0,5.06,546.23,1.71,21.2,1191.0,False,False,2026-10-17T20:07:45Z,had masa: 102/120 percubaan
 M59,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M59,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M59,10,SIAP,60,120.0,6.64,434.24,2.19,25.68,1373.0,False,False,2026-10-17T20:09:39Z,had masa: 60/120 percubaan
@@ -745,7 +736,6 @@ M64,0,SIAP,120,120.0,7.21,948.84,1.73,30.42,1270.0,False,False,2026-10-17T18:33:
 M64,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M64,2,SIAP,120,120.0,5.57,700.55,1.35,22.98,964.0,False,False,2026-10-17T17:25:28Z,
 M64,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M64,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M64,5,SIAP,120,120.0,6.79,850.02,1.74,25.31,1096.0,False,False,2026-10-17T17:44:57Z,
 M64,6,SIAP,120,120.0,11.05,1378.2,2.53,38.75,1151.0,False,False,2026-10-17T18:55:56Z,
 M64,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -763,13 +753,12 @@ M66,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M66,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M66,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M66,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M66,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M66,8,SIAP,120,120.0,7.4,941.65,3.42,37.0,1193.0,False,False,2026-10-17T22:22:44Z,
 M66,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M66,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M66,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M66,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M66,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M67,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,3,SIAP,120,120.0,4.62,583.1,1.41,20.0,1010.0,False,False,2026-10-17T18:28:05Z,
@@ -778,13 +767,13 @@ M67,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,8,SIAP,120,120.0,6.63,832.25,1.92,27.35,1285.0,False,False,2026-10-17T18:46:08Z,
-M67,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M67,9,SIAP,120,120.0,12.76,1594.39,3.69,46.4,1300.0,False,False,2026-10-17T22:38:26Z,
 M67,10,SIAP,120,120.0,7.85,980.61,2.15,28.46,1385.0,False,False,2026-10-17T18:35:51Z,
 M67,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M67,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M68,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M68,1,SIAP,120,120.0,4.86,626.89,2.31,28.86,915.0,False,False,2026-10-18T00:10:43Z,
 M68,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,4,SIAP,120,120.0,3.28,420.58,1.52,18.28,1043.0,False,False,2026-10-17T20:09:00Z,
@@ -792,7 +781,7 @@ M68,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M68,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M68,9,SIAP,120,120.0,8.6,1087.92,3.73,38.78,1322.0,False,False,2026-10-18T00:13:01Z,
 M68,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M68,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -910,7 +899,7 @@ M80,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M80,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M80,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M81,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M81,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M81,1,SIAP,120,120.0,6.18,787.29,2.27,31.42,953.0,False,False,2026-10-17T23:35:45Z,
 M81,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M81,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M81,4,SIAP,120,120.0,4.28,543.11,1.52,20.45,1092.0,False,False,2026-10-17T19:45:43Z,
@@ -979,15 +968,13 @@ M88,10,SIAP,120,120.0,31.81,3924.66,4.76,86.55,1375.0,False,False,2026-10-17T17:
 M88,11,SIAP,120,120.0,32.45,3997.74,4.31,83.82,1404.0,False,False,2026-10-17T18:09:41Z,
 M88,12,SIAP,120,120.0,13.38,1950.17,2.1,49.85,1677.0,False,False,2026-10-17T15:23:57Z,
 M88,13,SIAP,120,120.0,31.36,3783.91,4.51,,870.0,False,False,2026-10-17T18:22:04Z,
-M89,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M89,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M89,1,SIAP,120,120.0,5.25,674.5,2.32,29.49,928.0,False,False,2026-10-17T23:24:31Z,
 M89,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M89,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M89,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M89,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M89,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M89,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M89,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M89,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M89,10,SIAP,120,120.0,5.11,646.48,2.01,22.83,1366.0,False,False,2026-10-17T20:02:00Z,
 M89,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -998,7 +985,7 @@ M90,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M90,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M90,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M90,4,SIAP,120,120.0,4.34,549.81,1.53,19.82,1073.0,False,False,2026-10-17T19:28:00Z,
-M90,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M90,5,SIAP,120,120.0,9.06,1140.98,2.89,38.54,1117.0,False,False,2026-10-17T22:43:13Z,
 M90,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M90,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M90,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1032,7 +1019,7 @@ M92,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M92,8,SIAP,120,120.0,4.39,558.13,1.74,22.26,1268.0,False,False,2026-10-17T20:05:44Z,
 M92,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M92,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M92,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M92,11,SIAP,120,120.0,9.25,1167.05,3.82,39.07,1342.0,False,False,2026-10-17T23:51:15Z,
 M92,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M92,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M93,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1069,14 +1056,12 @@ M95,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M95,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M95,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M95,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M95,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M95,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M95,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M95,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M95,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M95,10,SIAP,120,120.0,13.68,1705.63,3.96,46.02,1371.0,False,False,2026-10-17T22:19:58Z,
 M95,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M95,12,SIAP,120,120.0,7.13,1042.56,2.1,30.97,1674.0,False,False,2026-10-17T18:08:51Z,
-M95,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M96,0,SIAP,120,120.0,16.39,2073.05,3.61,37.22,1445.0,True,False,2026-10-17T17:52:06Z,
 M96,1,SIAP,120,120.0,21.65,2664.81,4.59,45.22,1068.0,True,False,2026-10-17T18:29:14Z,
 M96,2,SIAP,120,120.0,23.88,2934.6,4.99,48.05,1133.0,True,False,2026-10-17T18:00:30Z,
@@ -1124,7 +1109,7 @@ M101,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M101,2,SIAP,120,120.0,7.89,998.55,2.45,36.62,989.0,False,False,2026-10-17T19:08:00Z,
 M101,3,SIAP,33,120.0,11.01,415.37,2.9,34.52,957.0,False,False,2026-10-17T20:09:56Z,had masa: 33/120 percubaan
 M101,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M101,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M101,5,SIAP,120,120.0,9.73,1224.27,2.96,41.33,1107.0,False,False,2026-10-17T21:35:22Z,
 M101,6,SIAP,120,120.0,8.95,1124.09,2.5,36.72,1144.0,False,False,2026-10-17T18:44:57Z,
 M101,7,SIAP,120,120.0,9.42,1182.98,2.64,38.75,1227.0,False,False,2026-10-17T18:26:15Z,
 M101,8,SIAP,120,120.0,10.25,1285.12,2.75,40.8,1295.0,False,False,2026-10-17T18:50:37Z,
@@ -1141,7 +1126,7 @@ M102,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M102,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M102,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M102,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M102,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M102,8,SIAP,120,120.0,8.73,1104.92,3.44,40.16,1256.0,False,False,2026-10-17T21:55:46Z,
 M102,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M102,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M102,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1175,7 +1160,7 @@ M105,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M105,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M105,12,SIAP,120,120.0,10.41,1423.31,3.2,44.64,1627.0,False,False,2026-10-17T19:33:07Z,
 M105,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M106,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M106,0,SIAP,120,120.0,6.49,870.66,2.09,31.31,1280.0,False,False,2026-10-17T22:28:42Z,
 M106,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M106,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M106,3,SIAP,120,120.0,4.62,584.6,1.46,21.03,1051.0,False,False,2026-10-17T18:26:14Z,
@@ -1184,7 +1169,7 @@ M106,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M106,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M106,7,SIAP,120,120.0,6.03,757.23,1.72,24.5,1214.0,False,False,2026-10-17T18:10:52Z,
 M106,8,SIAP,120,120.0,6.68,839.04,1.89,27.2,1263.0,False,False,2026-10-17T18:29:22Z,
-M106,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M106,9,SIAP,120,120.0,12.44,1556.18,3.7,46.61,1336.0,False,False,2026-10-17T22:34:03Z,
 M106,10,SIAP,120,120.0,7.37,922.02,2.01,26.71,1404.0,False,False,2026-10-17T18:08:14Z,
 M106,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M106,12,SIAP,120,120.0,7.36,1031.2,2.23,30.06,1625.0,False,False,2026-10-17T17:36:27Z,
@@ -1277,7 +1262,7 @@ M119,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M119,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M119,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M119,3,SIAP,120,120.0,4.55,575.51,1.47,20.86,958.0,False,False,2026-10-17T19:15:58Z,
-M119,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M119,4,SIAP,120,120.0,9.24,1163.17,2.72,39.04,1067.0,False,False,2026-10-17T22:03:21Z,
 M119,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M119,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M119,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1291,7 +1276,7 @@ M120,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M120,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M120,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M120,3,SIAP,120,120.0,4.43,560.54,1.53,20.14,1003.0,False,False,2026-10-17T19:40:02Z,
-M120,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M120,4,SIAP,120,120.0,8.7,1097.13,2.84,37.26,1054.0,False,False,2026-10-17T22:59:59Z,
 M120,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M120,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M120,7,SIAP,120,120.0,5.92,743.92,1.79,23.51,1211.0,False,False,2026-10-17T19:19:24Z,
@@ -1369,7 +1354,7 @@ M125,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M125,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M125,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M125,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M125,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M125,12,SIAP,120,120.0,12.83,1698.04,3.97,50.65,1532.0,False,False,2026-10-17T23:27:29Z,
 M125,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M126,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M126,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1418,7 +1403,7 @@ M129,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M129,2,SIAP,120,120.0,4.76,601.9,1.43,21.49,938.0,False,False,2026-10-17T18:35:59Z,
 M129,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M129,4,SIAP,120,120.0,5.47,687.15,1.4,22.41,1038.0,False,False,2026-10-17T18:23:36Z,
-M129,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M129,5,SIAP,120,120.0,11.72,1465.21,2.93,42.97,1112.0,False,False,2026-10-17T22:09:38Z,
 M129,6,SIAP,6,120.0,9.38,97.65,2.53,28.42,1062.0,False,False,2026-10-17T20:15:10Z,had masa: 6/120 percubaan
 M129,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M129,8,SIAP,120,120.0,7.35,920.91,2.01,29.14,1276.0,False,False,2026-10-17T18:37:23Z,
@@ -1436,7 +1421,7 @@ M130,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M130,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M130,7,SIAP,120,120.0,6.61,827.88,1.78,25.37,1191.0,False,False,2026-10-17T18:20:00Z,
 M130,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M130,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M130,9,SIAP,120,120.0,14.44,1799.47,3.69,49.28,1250.0,False,False,2026-10-17T21:39:19Z,
 M130,10,SIAP,120,120.0,8.15,1014.89,2.0,26.38,1369.0,False,False,2026-10-17T18:04:39Z,
 M130,11,SIAP,120,120.0,8.41,1046.79,2.24,27.19,1399.0,False,False,2026-10-17T18:28:37Z,
 M130,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1468,7 +1453,7 @@ M132,9,SIAP,120,120.0,15.79,1965.41,3.83,53.09,1280.0,False,False,2026-10-17T19:
 M132,10,SIAP,120,120.0,8.82,1097.42,2.04,29.4,1347.0,False,False,2026-10-17T17:02:47Z,
 M132,11,SIAP,120,120.0,12.43,1546.03,3.31,39.48,1396.0,False,False,2026-10-17T18:04:54Z,
 M132,12,SIAP,120,120.0,8.9,1328.59,2.3,35.24,1619.0,False,False,2026-10-17T16:55:50Z,
-M132,13,SIAP,5,120.0,18.65,113.37,4.28,,666.0,False,False,2026-10-17T20:14:58Z,had masa: 5/120 percubaan
+M132,13,SIAP,120,120.0,15.64,1895.38,4.04,,786.0,False,False,2026-10-17T20:52:50Z,
 M133,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M133,1,SIAP,120,120.0,5.02,631.65,1.26,20.51,924.0,False,False,2026-10-17T17:35:31Z,
 M133,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1479,7 +1464,7 @@ M133,6,SIAP,120,120.0,10.49,1309.86,2.45,37.91,1103.0,False,False,2026-10-17T19:
 M133,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M133,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M133,9,SIAP,119,120.0,16.27,2001.48,3.67,48.39,1272.0,False,False,2026-10-17T19:43:21Z,had masa: 119/120 percubaan
-M133,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M133,10,SIAP,120,120.0,16.95,2102.6,3.85,51.19,1302.0,False,False,2026-10-17T21:24:26Z,
 M133,11,SIAP,120,120.0,9.33,1157.64,2.27,27.54,1397.0,False,False,2026-10-17T17:32:51Z,
 M133,12,SIAP,120,120.0,8.94,1328.66,2.23,34.49,1578.0,False,False,2026-10-17T16:41:27Z,
 M133,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1568,7 +1553,6 @@ M139,11,SIAP,120,120.0,9.76,1212.49,2.29,30.38,1423.0,False,False,2026-10-17T17:
 M139,12,SIAP,120,120.0,20.35,3018.88,4.45,70.66,1536.0,False,False,2026-10-17T19:15:33Z,
 M139,13,SIAP,120,120.0,9.53,1153.58,2.17,,779.0,False,False,2026-10-17T17:17:14Z,
 M140,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M140,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M140,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M140,3,SIAP,120,120.0,4.94,622.4,1.51,20.96,964.0,False,False,2026-10-17T19:05:25Z,
 M140,4,SIAP,120,120.0,5.38,677.6,1.6,22.41,1031.0,False,False,2026-10-17T19:13:28Z,
@@ -1576,13 +1560,11 @@ M140,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M140,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M140,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M140,8,SIAP,120,120.0,7.16,895.54,2.08,26.33,1280.0,False,False,2026-10-17T18:52:12Z,
-M140,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M140,9,SIAP,120,120.0,13.93,1735.04,3.7,46.86,1241.0,False,False,2026-10-17T23:22:20Z,
 M140,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M140,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M140,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M140,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M141,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M141,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M141,1,SIAP,120,120.0,7.97,1006.83,2.33,35.61,914.0,False,False,2026-10-17T21:46:34Z,
 M141,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M141,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M141,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1605,7 +1587,6 @@ M142,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M142,7,SIAP,120,120.0,6.06,761.46,1.81,25.04,1212.0,False,False,2026-10-17T19:31:07Z,
 M142,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M142,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M142,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M142,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M142,12,SIAP,120,120.0,7.37,1088.74,2.28,30.03,1650.0,False,False,2026-10-17T18:17:47Z,
 M142,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1647,7 +1628,6 @@ M145,6,SIAP,120,120.0,9.6,1201.03,2.46,35.32,1147.0,False,False,2026-10-17T19:52
 M145,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M145,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M145,9,SIAP,120,120.0,12.2,1519.88,3.09,41.37,1291.0,False,False,2026-10-17T19:29:03Z,
-M145,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M145,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M145,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M145,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1657,14 +1637,14 @@ M146,2,SIAP,106,120.0,10.63,1182.37,2.51,39.55,939.0,False,False,2026-10-17T19:5
 M146,3,SIAP,120,120.0,11.29,1413.49,2.62,42.57,998.0,False,False,2026-10-17T19:41:45Z,
 M146,4,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M146,5,SIAP,120,120.0,7.2,898.01,1.62,24.91,1109.0,False,False,2026-10-17T17:07:39Z,
-M146,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M146,6,SIAP,120,120.0,13.5,1683.8,3.16,47.35,1101.0,False,False,2026-10-17T20:52:50Z,
 M146,7,SIAP,120,120.0,11.66,1454.08,2.55,41.69,1211.0,False,False,2026-10-17T18:30:40Z,
 M146,8,SIAP,120,120.0,9.1,1133.34,1.93,31.09,1279.0,False,False,2026-10-17T17:25:00Z,
 M146,9,SIAP,1,120.0,21.5,105.66,3.85,64.18,1225.0,False,False,2026-10-17T20:14:49Z,had masa: 1/120 percubaan
 M146,10,SIAP,120,120.0,17.9,2219.22,3.93,53.24,1315.0,False,False,2026-10-17T19:06:21Z,
 M146,11,SIAP,19,120.0,21.75,497.8,4.41,64.24,1221.0,False,False,2026-10-17T20:08:15Z,had masa: 19/120 percubaan
 M146,12,SIAP,120,120.0,13.89,1979.29,3.13,49.28,1529.0,False,False,2026-10-17T18:01:03Z,
-M146,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M146,13,SIAP,120,120.0,17.29,2093.3,3.99,,790.0,False,False,2026-10-17T20:52:50Z,
 M147,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M147,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M147,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1707,7 +1687,6 @@ M149,10,SIAP,120,120.0,24.8,3068.34,4.36,71.48,1305.0,False,False,2026-10-17T19:
 M149,11,SIAP,120,120.0,11.13,1378.28,2.31,32.2,1344.0,False,False,2026-10-17T16:50:23Z,
 M149,12,SIAP,120,120.0,18.94,2748.18,3.96,66.21,1542.0,False,False,2026-10-17T18:01:47Z,
 M149,13,SIAP,120,120.0,20.38,2463.75,3.84,,782.0,False,False,2026-10-17T19:18:09Z,
-M150,0,SIAP,20,20.0,7.85,254.51,2.51,31.45,1234.0,False,False,2026-10-17T14:32:34Z,
 M150,1,SIAP,120,120.0,3.88,492.64,1.26,18.87,934.0,False,False,2026-10-17T20:01:26Z,
 M150,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M150,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1727,7 +1706,6 @@ M151,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M151,3,SIAP,120,120.0,4.32,548.15,1.47,20.52,996.0,False,False,2026-10-17T19:26:57Z,
 M151,4,SIAP,120,120.0,4.71,595.39,1.52,21.16,1053.0,False,False,2026-10-17T19:39:05Z,
 M151,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M151,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M151,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M151,8,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M151,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
@@ -1745,14 +1723,12 @@ M152,6,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M152,7,SIAP,120,120.0,10.07,1260.53,2.6,38.5,1196.0,False,False,2026-10-17T19:19:17Z,
 M152,8,SIAP,120,120.0,7.05,882.66,1.78,27.81,1286.0,False,False,2026-10-17T17:46:03Z,
 M152,9,SIAP,120,120.0,8.24,1027.57,2.13,27.99,1385.0,False,False,2026-10-17T18:08:48Z,
-M152,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M152,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M152,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M152,13,SIAP,120,120.0,8.06,977.76,2.11,,786.0,False,False,2026-10-17T17:59:46Z,
 M153,0,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M153,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M153,2,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M153,3,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M153,4,SIAP,120,120.0,4.63,586.61,1.51,21.95,1029.0,False,False,2026-10-17T19:44:04Z,
 M153,5,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M153,6,SIAP,120,120.0,5.13,647.32,1.64,22.23,1142.0,False,False,2026-10-17T19:55:22Z,
@@ -1764,11 +1740,10 @@ M153,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M153,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M153,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M154,0,SIAP,120,120.0,4.36,581.96,1.16,20.56,1372.0,False,False,2026-10-17T16:53:47Z,
-M154,1,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M154,2,SIAP,120,120.0,7.42,935.04,2.0,31.62,949.0,False,False,2026-10-17T18:25:47Z,
 M154,3,SIAP,120,120.0,7.92,995.04,2.12,32.55,986.0,False,False,2026-10-17T18:34:02Z,
 M154,4,SIAP,120,120.0,5.91,742.5,1.54,24.17,1013.0,False,False,2026-10-17T17:14:44Z,
-M154,5,SIAP,3,120.0,13.15,105.26,3.26,47.64,1002.0,False,False,2026-10-17T20:15:05Z,had masa: 3/120 percubaan
+M154,5,SIAP,120,120.0,11.14,1395.74,2.95,42.71,1084.0,False,False,2026-10-17T21:16:03Z,
 M154,6,SIAP,120,120.0,6.52,817.22,1.71,25.44,1145.0,False,False,2026-10-17T17:03:36Z,
 M154,7,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M154,8,SIAP,72,120.0,14.16,1090.38,3.46,53.05,1246.0,False,False,2026-10-17T19:58:46Z,had masa: 72/120 percubaan
@@ -1846,7 +1821,7 @@ M159,9,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M159,10,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M159,11,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
 M159,12,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
-M159,13,RALAT,0,,,,,,,,,,had masa shard: tidak dimulakan
+M159,13,SIAP,120,120.0,11.51,1396.78,3.51,,810.0,False,False,2026-10-18T00:11:04Z,
 M160,0,SIAP,120,120.0,8.79,1159.44,2.09,37.45,1224.0,False,False,2026-10-17T18:47:02Z,
 M160,1,SIAP,120,120.0,8.11,1018.4,1.9,32.93,913.0,False,False,2026-10-17T18:27:58Z,
 M160,2,SIAP,60,120.0,13.04,848.54,2.8,48.45,905.0,False,False,2026-10-17T20:02:47Z,had masa: 60/120 percubaan
@@ -1861,7 +1836,6 @@ M160,10,SIAP,120,120.0,10.52,1305.77,2.1,33.48,1343.0,False,False,2026-10-17T17:
 M160,11,SIAP,120,120.0,14.76,1830.46,3.15,44.13,1406.0,False,False,2026-10-17T18:32:34Z,
 M160,12,SIAP,120,120.0,9.35,1353.06,2.08,34.83,1630.0,False,False,2026-10-17T16:43:18Z,
 M160,13,SIAP,120,120.0,13.63,1650.07,3.31,,795.0,False,False,2026-10-17T18:30:53Z,
-M161,0,SIAP,1,120.0,13.15,129.2,2.44,46.51,1232.0,False,False,2026-10-17T20:14:49Z,had masa: 1/120 percubaan
 M161,1,SIAP,78,120.0,13.98,1150.64,2.55,43.47,906.0,False,False,2026-10-17T19:57:38Z,had masa: 78/120 percubaan
 M161,2,SIAP,30,120.0,15.11,523.32,2.74,52.62,909.0,False,False,2026-10-17T20:08:04Z,had masa: 30/120 percubaan
 M161,3,SIAP,120,120.0,13.78,1718.78,2.66,48.89,992.0,False,False,2026-10-17T19:45:31Z,
