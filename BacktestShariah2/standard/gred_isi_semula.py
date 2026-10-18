@@ -73,8 +73,9 @@ def main(argv=None):
                 h = G.hari_dagangan(ref, te) if te else None
                 r['tarikh_earnings'] = te.isoformat() if te else ''
                 r['hari_ke_earnings'] = '' if h is None else h
-                r['sumber_earnings'] = 'Nasdaq' if te else 'tiada dalam 35 hari (Nasdaq)'
-                r['gred_qr'] = G.gred_qr(h)
+                sj = G.sejak_qr(G._tarikh(e.get('lalu')), ref)
+                r['sumber_earnings'] = G.tanda_pasca_qr('Nasdaq' if te else 'tiada dalam 35 hari (Nasdaq)', sj)
+                r['gred_qr'] = G.gred_qr(h, sj)
             else:
                 r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = G.TIADA
             r['mata_pemangkin'] = ''; r['pemangkin'] = 'tiada data (isi semula)'; r['gred_pemangkin'] = G.TIADA; r['pemangkin_url'] = ''

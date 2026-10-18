@@ -63,7 +63,7 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 | rs_rating, gred_rs | 1–99; A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40 |
 | gred_pemangkin, mata_pemangkin, pemangkin | Berita Panas (sejak 15 Okt 2026): A ≥ 5 mata, B 3–4.9, C 1–2.9, D 0–0.9, E < 0 (mata boleh berpecahan .5); ringkasan sebab, bermula "🔥 PANAS · " jika pemangkin Tier 1/2 disahkan harga + volum; "–" = belum dikumpul. Baris sebelum 15 Okt guna skala lama (A ≥ 4) |
 | pemangkin_url | JSON [{"tajuk", "url"}] maks 2 (pemangkin terkuat dahulu, kemudian terkini; URL https daripada quote_news_search / rating_summary); kosong jika tiada |
-| tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; sumber SST / anggaran / tiada data |
+| tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; selepas QR lalu: 0–1 hari sekurang-kurangnya C, 2–3 hari sekurang-kurangnya B (gred lebih buruk dipakai; sumber_earnings ditanda `; QR lalu N hari`); asas: kajian 18 Okt 2026 (659k dagangan 134 kaedah, 2019–2026; `standard/gred.py gred_qr`); sumber SST / Nasdaq / anggaran / tiada data |
 | gred_keseluruhan | purata mata gred yang ada (paparan sahaja; belum diuji) |
 | gred_pada | tarikh imbasan gred dikira |
 

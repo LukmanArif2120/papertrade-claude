@@ -184,7 +184,7 @@ class UjiGredYahooNasdaq(unittest.TestCase):
                     '--pemangkin', p('pem.json'), '--nasdaq', p('nas.json'), '--tarikh', '2026-10-16'])
             r = {x['saham']: x for x in csv.DictReader(open(p('senarai_beli.csv'), encoding='utf-8'))}
             self.assertEqual((r['BBB']['tarikh_earnings'], r['BBB']['sumber_earnings'], r['BBB']['gred_qr']), ('2026-10-27', 'Nasdaq', 'D'))
-            self.assertEqual((r['AAA']['sumber_earnings'], r['AAA']['gred_qr']), ('anggaran', 'A'))
+            self.assertEqual((r['AAA']['sumber_earnings'], r['AAA']['gred_qr']), ('anggaran; QR lalu 3 hari', 'B'))   # QR lalu 13 Okt: 3 hari -> B
             self.assertEqual((r['CCC']['sumber_earnings'], r['CCC']['gred_qr'], r['CCC']['gred_pemangkin']), ('tiada data', '–', '–'))
             self.assertIn('naik taraf', r['AAA']['pemangkin'])
             self.assertIn('earnings 3 hari lalu +8', r['AAA']['pemangkin'])

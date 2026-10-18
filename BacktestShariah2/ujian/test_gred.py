@@ -28,6 +28,16 @@ class UjiGred(unittest.TestCase):
                          ['A', 'B', 'B', 'C', 'D', 'E', '–'])
         self.assertEqual([G.gred_qr(x) for x in [None, 22, 21, 16, 15, 11, 10, 6, 5, 0]],
                          ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', 'E'])
+        # selepas QR: 0–1 hari -> sekurang-kurangnya C, 2–3 -> sekurang-kurangnya B; gred lebih buruk kekal
+        self.assertEqual([G.gred_qr(60, s) for s in [0, 1, 2, 3, 4, None]], ['C', 'C', 'B', 'B', 'A', 'A'])
+        self.assertEqual([G.gred_qr(None, 1), G.gred_qr(8, 1), G.gred_qr(3, 2), G.gred_qr(13, 3)], ['C', 'D', 'E', 'C'])
+
+    def test_pasca_qr(self):
+        self.assertEqual(G.sejak_qr(date(2026, 10, 15), date(2026, 10, 19)), 2)    # Khamis -> Isnin
+        self.assertIsNone(G.sejak_qr(date(2026, 10, 19), date(2026, 10, 19)))
+        self.assertIsNone(G.sejak_qr(None, date(2026, 10, 19)))
+        self.assertEqual(G.tanda_pasca_qr('Nasdaq', 2), 'Nasdaq; QR lalu 2 hari')
+        self.assertEqual(G.tanda_pasca_qr('Nasdaq', 4), 'Nasdaq')
 
     def test_hari_dagangan(self):
         self.assertEqual(G.hari_dagangan(date(2026, 10, 9), date(2026, 10, 13)), 2)  # Jumaat -> Selasa

@@ -89,12 +89,26 @@ def hari_dagangan(dari, ke):
     return int(np.busday_count(dari + timedelta(days=1), ke + timedelta(days=1)))
 
 
-def gred_qr(hari):
-    """Pegangan swing ~20 hari dagangan: makin jauh earnings, makin kecil risiko jurang harga semasa pegang.
-    hari=None bermaksud tiada earnings dalam tetingkap 30 hari kalendar (≈ 21 hari dagangan) -> A."""
-    if hari is None:
-        return 'A'
-    return 'A' if hari > 21 else 'B' if hari > 15 else 'C' if hari > 10 else 'D' if hari > 5 else 'E'
+def gred_qr(hari, sejak=None):
+    """Risiko jurang QR semasa pegang (kajian 18 Okt 2026: 659k dagangan isyarat 134 kaedah, 2019–2026; lompat
+    henti dan rugi <= -15% lawan beli > 30 hari sebelum QR; sempadan disahkan segmentasi optimum + bootstrap).
+    hari = hari dagangan ke QR seterusnya; None = tiada dalam tetingkap 30/35 hari kalendar (> ~21) -> A.
+    sejak = hari dagangan sejak QR lalu: 0–1 -> sekurang-kurangnya C, 2–3 -> sekurang-kurangnya B (volatiliti
+    selepas pengumuman belum reda). Gred akhir = yang lebih buruk."""
+    g = 'A' if hari is None or hari > 21 else 'B' if hari > 15 else 'C' if hari > 10 else 'D' if hari > 5 else 'E'
+    if sejak is not None and sejak <= 3:
+        g = max(g, 'C' if sejak <= 1 else 'B')
+    return g
+
+
+def sejak_qr(lalu, hari_ini):
+    """Tarikh QR lalu (sebelum hari ini) -> hari dagangan sejak; None jika tiada atau bukan sebelum hari ini."""
+    return hari_dagangan(lalu, hari_ini) if lalu and lalu < hari_ini else None
+
+
+def tanda_pasca_qr(sumber, sejak):
+    """Catatan pada sumber_earnings apabila QR lalu <= 3 hari dagangan (paparan dashboard)."""
+    return f'{sumber}; QR lalu {sejak} hari' if sejak is not None and sejak <= 3 else sumber
 
 
 def peta_earnings(path_json, hari_ini):
@@ -782,10 +796,13 @@ def tambah(a):
             r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = TIADA
         else:
             h = hari_dagangan(hari_ini, te) if te else None
+            lalu = [_tarikh(((nas or {}).get(t) or {}).get('lalu')), _tarikh((pem.get(t) or {}).get('earnings_lalu_tarikh'))]
+            sj = sejak_qr(max((d for d in lalu if d and d < hari_ini), default=None), hari_ini)
             r['tarikh_earnings'] = te.isoformat() if te else ''
             r['hari_ke_earnings'] = '' if h is None else h
-            r['sumber_earnings'] = sumber if te else 'tiada dalam 30 hari (SST)' if ear is not None else 'tiada dalam 35 hari (Nasdaq)'
-            r['gred_qr'] = gred_qr(h)
+            r['sumber_earnings'] = tanda_pasca_qr(sumber if te else 'tiada dalam 30 hari (SST)' if ear is not None
+                                                  else 'tiada dalam 35 hari (Nasdaq)', sj)
+            r['gred_qr'] = gred_qr(h, sj)
         if t in pem and segar(pem[t], hari_ini):
             p = dict(pem[t])
             if nas is not None and 'earnings_lalu_tarikh' not in p:
