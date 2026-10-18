@@ -521,7 +521,7 @@ def sub_gred(qs, semua, tah, med, sektor, industri):
            else b['hutang'] / b['ekuiti'] <= b20['hutang'] / b20['ekuiti'] + 1e-9,
            'ebit>5x_faedah': True if tiada_hutang else (None if ic is None else ic >= 5)}
     gagal_sws = [n for n, v in sws.items() if v is False]
-    if len(gagal_sws) >= 2:
+    if len(gagal_sws) >= 2 and not utiliti:   # utiliti dikawal selia gagal semakan kecairan secara struktur
         k = turun(k)
     z = None
     if aset and b['liabiliti'] and None not in (b['ca'], b['cl'], b['ut'], b['ekuiti'], m['ebit']):
