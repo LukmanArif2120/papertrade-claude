@@ -1,0 +1,260 @@
+[
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_status",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_status.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M30_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M30_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M82_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M82_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M04_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M04_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M149_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M149_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M33_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M33_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M121_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M121_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M161_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M161_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M93_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M93_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M136_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M136_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M37_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M37_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M80_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M80_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M11_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M11_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M38_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M38_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M118_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M118_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M59_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M59_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M147_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M147_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M135_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M135_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M29_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M29_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M105_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M105_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M95_had60",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M95_had60.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M131_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M131_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M30_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M30_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M121_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M121_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M125_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M125_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M04_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M04_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M37_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M37_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M78_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M78_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M161_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M161_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M80_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M80_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M29_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M29_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M136_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M136_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M38_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M38_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M130_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M130_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M117_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M117_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M105_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M105_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M10_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M10_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M95_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M95_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M34_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M34_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M100_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M100_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_kaedah_M142_asal",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_kaedah_M142_asal.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_ringkasan",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_ringkasan.json"
+ },
+ {
+  "op": "set",
+  "collection": "autotune",
+  "doc_id": "a02_gabungan",
+  "file_path": "/home/runner/work/papertrade-claude/papertrade-claude/AUTOTUNE/dashboard/db_a02/autotune/a02_gabungan.json"
+ }
+]

@@ -1,0 +1,402 @@
+{
+ "M04_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M04_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M10_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M11_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M29_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M29_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M30_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M30_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M33_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M34_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M37_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M37_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M38_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M38_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M59_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M78_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M80_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M80_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M82_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M93_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M95_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M95_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M100_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M105_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M105_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M117_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M118_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M121_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M121_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M125_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M130_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M131_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M135_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M136_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M136_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M142_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M147_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M149_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M161_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ },
+ "M161_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {}
+ }
+}
