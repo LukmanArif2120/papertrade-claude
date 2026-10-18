@@ -26,7 +26,9 @@ TIADA = '–'
 HERE_GRED = os.path.dirname(os.path.abspath(__file__))
 LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
          'rs_sah', 'rs_tanda', 'rs_industri', 'rs_sumber', 'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings', 'sumber_earnings', 'gred_qr',
-         'gred_keseluruhan', 'gred_pada']
+         'gred_keseluruhan', 'gred_pada',
+         # gred kewangan v7 (standard/gred_kewangan.py; spec/GRED_KEWANGAN_v7.md): tidak masuk gred_keseluruhan
+         'gred_kewangan', 'kewangan_ringkas', 'kewangan_tempoh', 'kewangan_butiran']
 
 
 # ---------- RS rating (gaya IBD, 1–99) ----------
@@ -954,6 +956,14 @@ def tambah(a):
     ear = peta_earnings(a.acara, hari_ini) if a.acara else None
     nas, nas_lengkap = baca_nasdaq(a.nasdaq, hari_ini) if getattr(a, 'nasdaq', None) else (None, False)
     pem = json.load(open(a.pemangkin, encoding='utf-8')) if a.pemangkin else {}
+    kew = getattr(a, 'kewangan', None)
+    if kew:
+        import gred_kewangan as GK
+        peta_ind = dict(pind) if pind else {}
+        for r in rows:
+            t = ambil(r, 'saham', 'Saham')
+            peta_ind.setdefault(t, ambil(r, 'industri', 'Industri'))
+        med = GK.median_industri(kew, peta_ind, hari_ini)
     for r in rows:
         t = ambil(r, 'saham', 'Saham')
         iu = pind.get(t); su = SEKTOR_INDUSTRI.get(iu) if iu else None
@@ -1009,13 +1019,30 @@ def tambah(a):
             r['gred_keseluruhan'] = gred_keseluruhan([gi, r['gred_pemangkin'], r['gred_qr']])
         else:
             r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
+        if kew:
+            p_k = os.path.join(kew, f'{t}.json')
+            if os.path.exists(p_k):
+                ind_k = iu or ambil(r, 'industri', 'Industri') or ''
+                hk = c[t].dropna() if t in c.columns else None
+                try:
+                    rk = GK.kira(json.load(open(p_k, encoding='utf-8')), hk, hari_ini, med.get(ind_k),
+                                 su or ambil(r, 'sektor', 'Sektor') or '', ind_k)
+                except Exception as ex:   # data rosak tidak boleh menghentikan imbasan malam
+                    rk = GK.hasil_kosong(f'ralat {type(ex).__name__}: {ex}'[:120])
+                r['gred_kewangan'] = rk['gred']; r['kewangan_ringkas'] = rk['ringkas']
+                r['kewangan_tempoh'] = rk['tempoh']
+                r['kewangan_butiran'] = json.dumps(rk['butiran'], ensure_ascii=False, separators=(',', ':'))
+            else:
+                r['gred_kewangan'] = TIADA; r['kewangan_ringkas'] = '– (tiada data kewangan)'
+                r['kewangan_tempoh'] = ''; r['kewangan_butiran'] = ''
         r['gred_pada'] = a.tarikh
     out = lajur + [k for k in LAJUR if k not in lajur]
     with open(a.csv, 'w', newline='', encoding='utf-8') as f:
         w = csv.DictWriter(f, fieldnames=out)
         w.writeheader(); w.writerows(rows)
     from collections import Counter
-    for k in ['gred_sektor', 'gred_industri', 'gred_rs', 'gred_pemangkin', 'gred_qr', 'gred_keseluruhan']:
+    for k in ['gred_sektor', 'gred_industri', 'gred_rs', 'gred_pemangkin', 'gred_qr', 'gred_keseluruhan'] + \
+            (['gred_kewangan'] if kew else []):
         print(k, dict(sorted(Counter(r[k] for r in rows).items())))
 
 
@@ -1034,6 +1061,7 @@ def main(argv=None):
     t.add_argument('--nasdaq', help='data/pemangkin/earnings_nasdaq.json (Actions): tarikh earnings kedua selepas SST')
     t.add_argument('--rs', default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'rs'),
                    help='folder rs_pasaran.csv + status.json (RS seluruh pasaran AS; sandaran stor harga)')
+    t.add_argument('--kewangan', help='folder data/kewangan (<T>.json, gred_kewangan.py simpan): isi lajur gred_kewangan')
     t.add_argument('--tarikh', required=True, help='tarikh imbasan YYYY-MM-DD')
     k = sp.add_parser('kumpul', help='fail mentah alat (berita/analisis/orangdalam/earnings/sst_<T>.json) -> pemangkin.json')
     k.add_argument('--folder', help='folder fail mentah alat Moomoo/SST (pilihan jika --yahoo diberi)')

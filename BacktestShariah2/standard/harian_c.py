@@ -52,7 +52,8 @@ WATCH_LAJUR = ['Saham', 'Nama', 'Kaedah', 'Sektor', 'Industri', 'Harga', '% hamp
                'Hari dalam watchlist', 'Skor', 'Set', 'tarikh_data', 'dibina']
 GRED_LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
               'rs_sah', 'rs_tanda', 'rs_industri', 'rs_sumber', 'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
-              'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada']
+              'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada',
+              'gred_kewangan', 'kewangan_ringkas', 'kewangan_tempoh', 'kewangan_butiran']
 
 
 # ---------------------------------------------------------------- bantu
@@ -709,6 +710,9 @@ def cmd_gred(a):
             cmd += ['--nasdaq', os.path.join(a.pemangkin, 'earnings_nasdaq.json')]
         if os.path.exists(acara) and (time.time() - os.path.getmtime(acara)) < 9 * 86400:
             cmd += ['--acara', acara]
+        kew = os.path.join(os.path.dirname(HERE), 'data', 'kewangan')
+        if os.path.isdir(kew):
+            cmd += ['--kewangan', kew]
         r = subprocess.run(cmd, capture_output=True, text=True)
         print(r.stdout[-2000:], r.stderr[-2000:])
         if r.returncode:

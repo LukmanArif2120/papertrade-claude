@@ -21,7 +21,7 @@ POSISI = ['tarikh_beli', 'saham', 'kaedah', 'id_kaedah', 'sektor', 'industri', '
           # dua lorong keluar (standard/keluar_lorong.py; sejak 17 Okt 2026): lorong 2 pegang selagi naik
           'keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct', 'status_henti',
           'tutup_semua']
-LAJUR_GRED = ['gred_sektor', 'gred_industri', 'gred_rs', 'gred_pemangkin', 'gred_qr', 'gred_keseluruhan']
+LAJUR_GRED = ['gred_sektor', 'gred_industri', 'gred_rs', 'gred_pemangkin', 'gred_qr', 'gred_keseluruhan', 'gred_kewangan']
 NILAI_GRED = {'', 'A', 'B', 'C', 'D', 'E', '–'}
 WAJIB_POSISI = ['tarikh_beli', 'saham', 'kaedah', 'sektor', 'industri', 'harga_beli', 'unit',
                 'harga_terkini', 'untung_pct', 'hari', 'isyarat_keluar', 'keluar', 'tarikh_keluar',
