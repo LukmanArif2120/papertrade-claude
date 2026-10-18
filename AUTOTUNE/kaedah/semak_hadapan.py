@@ -246,7 +246,8 @@ def tulis(baris):
           '- `stop/rank` dibanding hanya pada hari `sig` benar (enjin membaca st[i] dan rank[i] pada hari isyarat sahaja).', '',
           '| Kaedah | Lajur (ticker) |', '|---|---|']
     for mid, d in sorted(dibenar.items(), key=lambda x: int(x[0][1:])):
-        L.append(f"| {mid} | {', '.join(f'{k} ({e['ticker']})' for k, e in sorted(d.items()))} |")
+        isi = ', '.join(k + ' (' + str(e['ticker']) + ')' for k, e in sorted(d.items()))   # serasi Python 3.11
+        L.append(f"| {mid} | {isi} |")
     open(MD, 'w').write('\n'.join(L) + '\n')
     return n_l, n_b
 
