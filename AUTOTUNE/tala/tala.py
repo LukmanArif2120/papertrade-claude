@@ -315,8 +315,9 @@ def tala(mid, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=None, ke
 def simpan(H, keluar=KELUAR):
     d = os.path.join(keluar, H['kaedah']); os.makedirs(d, exist_ok=True)
     f = os.path.join(d, f"k{int(H['kajian']):02d}.json")
-    with open(f + '.tmp', 'w') as fh: json.dump(H, fh, separators=(',', ':'))
-    os.replace(f + '.tmp', f)
+    tmp = f'{f}.{os.getpid()}.tmp'   # nama sementara unik setiap proses; os.replace atomik (tiada sisa kandungan)
+    with open(tmp, 'w') as fh: json.dump(H, fh, separators=(',', ':'))
+    os.replace(tmp, f)
     return f
 
 

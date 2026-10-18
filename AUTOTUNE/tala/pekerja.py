@@ -17,11 +17,17 @@ def _mula(dir_, tamat, n, had_tugas, keluar):
 def _kerja(t):
     if time.time() > _G['tamat'] - 120:
         H = dict(kaedah=t['kaedah'], kajian=t['kajian'], status='RALAT', ralat=['had masa shard: tidak dimulakan'],
-                 n_trials=0, masa={})
-        tala.simpan(H, _G['keluar']); return H
+                 n_trials=0, masa={}, mula=time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()))
+        # Jangan tindih hasil sedia ada (cth. SIAP separa daripada larian lalu) dengan rekod kosong.
+        f = os.path.join(_G['keluar'], t['kaedah'], f"k{int(t['kajian']):02d}.json")
+        baru = not os.path.exists(f)
+        if baru: tala.simpan(H, _G['keluar'])
+        return dict(H, _ditulis=baru)
     H = tala.tala(t['kaedah'], t['kajian'], tala.Sumber(_G['dir']), _G['n'], _G['had'], tamat=_G['tamat'] - 60,
                   keluar=_G['keluar'])
-    return {k: H.get(k) for k in ('kaedah', 'kajian', 'status', 'n_trials', 'masa', 'rss_mb', 'ralat')}
+    R = {k: H.get(k) for k in ('kaedah', 'kajian', 'status', 'n_trials', 'masa', 'rss_mb', 'ralat')}
+    R['_ditulis'] = True
+    return R
 
 
 def _sudah(f, n):
@@ -61,16 +67,23 @@ def main(argv=None):
     panaskan()
     print(f'shard {x.shard}: {len(tugas)} tugasan, {x.proses} proses, had {x.had_minit} minit', flush=True)
     siap = ralat = 0; R = []
+    # Senarai fail yang ditulis dalam larian ini (relatif kepada --keluar); hanya fail ini dimuat naik sebagai
+    # artifak shard supaya salinan lapuk daripada checkout tidak menindih hasil shard lain semasa gabung.
+    os.makedirs(x.keluar, exist_ok=True)
+    senarai = open(os.path.join(x.keluar, f'_ditulis_shard{x.shard}.txt'), 'w')
     ctx = get_context('fork')
     with ctx.Pool(x.proses, initializer=_mula, initargs=(dir_, tamat, n, x.had_tugas, x.keluar), maxtasksperchild=1) as p:
         for H in p.imap_unordered(_kerja, tugas):
             R.append(H)
+            if H.get('_ditulis'):
+                senarai.write(f"{H['kaedah']}/k{int(H['kajian']):02d}.json\n"); senarai.flush()
             if H.get('status') == 'SIAP': siap += 1
             else: ralat += 1
             m = H.get('masa') or {}
             print(f"{H['kaedah']} k{H['kajian']:02d} {H.get('status')} n={H.get('n_trials')} "
                   f"s/cuba={m.get('s_percubaan')} jumlah={m.get('jumlah')} rss={H.get('rss_mb')}MB "
                   f"{(H.get('ralat') or [''])[0][:80]}", flush=True)
+    senarai.close()
     print(f'shard {x.shard} selesai: {siap} SIAP, {ralat} RALAT, {round((time.time() - t0) / 60, 1)} minit')
 
 

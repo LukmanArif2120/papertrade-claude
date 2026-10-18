@@ -1,0 +1,52 @@
+# AUTOTUNE: pulih hasil penalaan larian 39042108317 dan 39068478949 (gabung lama merosakkan/menindih fail).
+# Muat turun artifak hasil-* kedua-dua larian ke direktori berasingan, pilih versi terbaik setiap tugasan
+# (gabung_hasil.py), bina semula _masa.csv dan commit ke main.
+name: autotune_pulih
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: autotune-pulih
+  cancel-in-progress: false
+
+jobs:
+  pulih:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q pandas numpy
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 39042108317
+          github-token: ${{ github.token }}
+          pattern: hasil-*
+          path: run1/
+      - uses: actions/download-artifact@v4
+        with:
+          run-id: 39068478949
+          github-token: ${{ github.token }}
+          pattern: hasil-*
+          path: run2/
+      - run: ls run1 run2 | wc -l
+      - run: python3 AUTOTUNE/tala/gabung_hasil.py --keluar AUTOTUNE/hasil/tala --percubaan 120 AUTOTUNE/hasil/tala run1/* run2/*
+      - name: Commit hasil
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A AUTOTUNE/hasil/tala
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE pulih: gabung semula hasil larian 39042108317 dan 39068478949"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 15))
+          done
+          exit 1

@@ -86,11 +86,24 @@ jobs:
         run: |
           ( while true; do sleep 600; echo "[memori] $(free -m | awk 'NR==2{print $3"/"$2" MB"}')"; done ) &
           python3 AUTOTUNE/tala/pekerja.py --shard ${{ matrix.shard }} --plan plan.json --proses 4 --had-minit 330
+      # Muat naik HANYA fail yang ditulis oleh shard ini (senarai _ditulis_shard<i>.txt daripada pekerja.py);
+      # salinan lapuk daripada checkout tidak lagi dimasukkan ke dalam artifak.
+      - name: Sedia fail shard ${{ matrix.shard }}
+        if: always()
+        run: |
+          mkdir -p kirim
+          L=AUTOTUNE/hasil/tala/_ditulis_shard${{ matrix.shard }}.txt
+          if [ -f "$L" ]; then
+            ( cd AUTOTUNE/hasil/tala && sort -u "_ditulis_shard${{ matrix.shard }}.txt" | while read -r f; do
+                [ -f "$f" ] && cp --parents "$f" ../../../kirim/; done )
+            cp "$L" kirim/
+          fi
+          find kirim -name 'k*.json' | wc -l
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: hasil-${{ matrix.shard }}
-          path: AUTOTUNE/hasil/tala/
+          path: kirim/
           if-no-files-found: warn
           retention-days: 14
 
@@ -107,18 +120,19 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install -q pandas numpy
+      # Setiap artifak ke direktori berasingan (TANPA merge-multiple: pengekstrakan serentak fail sama laluan
+      # merosakkan JSON). gabung_hasil.py memilih versi terbaik setiap tugasan dan membina semula _masa.csv.
       - uses: actions/download-artifact@v4
         with:
           pattern: hasil-*
-          path: AUTOTUNE/hasil/tala
-          merge-multiple: true
-      - run: python3 AUTOTUNE/tala/masa.py
+          path: artifacts/
+      - run: python3 AUTOTUNE/tala/gabung_hasil.py --keluar AUTOTUNE/hasil/tala --percubaan "${{ inputs.percubaan }}" AUTOTUNE/hasil/tala artifacts/*
       - name: Commit hasil
         if: inputs.simpan == 'ya'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add AUTOTUNE/hasil/tala
+          git add -A AUTOTUNE/hasil/tala
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "AUTOTUNE tala: hasil ${{ inputs.kaedah }} kajian ${{ inputs.kajian }} (${{ inputs.percubaan }} percubaan)"
           for i in 1 2 3 4 5; do
