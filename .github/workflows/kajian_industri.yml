@@ -1,0 +1,46 @@
+# Kajian gred industri lawan seluruh pasaran AS (2005–kini) -> BacktestShariah2/kajian/industri/
+# Sesi Claude tidak boleh capai Yahoo; runner GitHub boleh. Manual atau bila skrip/aliran kerja ini berubah.
+name: Kajian Industri
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'BacktestShariah2/standard/kajian_industri.py'
+      - '.github/workflows/kajian_industri.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kajian-industri
+  cancel-in-progress: true
+
+jobs:
+  kajian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy yfinance
+      - name: Tarik harga (yfinance)
+        run: python3 BacktestShariah2/standard/kajian_industri.py tarik --cache /tmp/ind.pkl
+      - name: Uji gred industri
+        run: python3 BacktestShariah2/standard/kajian_industri.py uji --cache /tmp/ind.pkl --keluar BacktestShariah2/kajian/industri
+      - name: Commit dan push
+        run: |
+          git config user.name "kajian-industri[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/kajian/industri
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Kajian industri: $(date -u +%Y-%m-%d)"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1
