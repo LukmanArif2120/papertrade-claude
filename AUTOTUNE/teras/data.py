@@ -57,8 +57,11 @@ def _lengkap(cache):
         return False
 
 
-def ambil(cache=CACHE_LALAI):
-    """Pastikan data ada dalam `cache`; muat turun aset Release jika tiada. Pulangkan Path cache."""
+def ambil(cache=CACHE_LALAI, tag=TAG):
+    """Pastikan data ada dalam `cache`; muat turun aset Release `tag` jika tiada. Pulangkan Path cache.
+    Jika tag bukan lalai dan cache lalai, cache = CACHE_LALAI + '_' + tag (data A01 dan A02 tidak bercampur)."""
+    if tag != TAG and str(cache) == CACHE_LALAI:
+        cache = f'{CACHE_LALAI}_{tag}'
     cache = Path(cache)
     if not cache.is_absolute():
         cache = AKAR / cache
@@ -70,12 +73,12 @@ def ambil(cache=CACHE_LALAI):
     if _lengkap(cache):
         return cache
     if os.environ.get('GH_TOKEN') and shutil.which('gh'):
-        r = subprocess.run(['gh', 'release', 'download', TAG, '-R', REPO, '-D', str(cache), '--clobber'],
+        r = subprocess.run(['gh', 'release', 'download', tag, '-R', REPO, '-D', str(cache), '--clobber'],
                            capture_output=True, text=True)
         if r.returncode != 0:
             print('gh gagal, guna API awam:', r.stderr[-200:])
     if not _lengkap(cache):
-        rel = _url_json(f'https://api.github.com/repos/{REPO}/releases/tags/{TAG}')
+        rel = _url_json(f'https://api.github.com/repos/{REPO}/releases/tags/{tag}')
         for a in rel['assets']:
             tujuan = cache / a['name']
             if tujuan.exists() and tujuan.stat().st_size == a['size']:
@@ -89,18 +92,22 @@ def ambil(cache=CACHE_LALAI):
     return cache
 
 
-def _ke_fr(d):
-    """DataFrame ticker-tunggal (lajur date + LAJUR) -> float64 + turnover, indeks 'date'."""
+def _ke_fr(d, faktor=False):
+    """DataFrame ticker-tunggal (lajur date + LAJUR) -> float64 + turnover, indeks 'date'.
+    faktor=True dan lajur `faktor_split` ada (data A02): dikekalkan sebagai lajur faktor_split (float64)."""
     g = d.set_index('date')[LAJUR].astype('float64')
     g['turnover'] = g['close'] * g['volume']
+    if faktor and 'faktor_split' in d.columns:
+        g['faktor_split'] = d.set_index('date')['faktor_split'].astype('float64')
     return g
 
 
-def muat(mula, akhir, kumpulan='AB', dir=None):
+def muat(mula, akhir, kumpulan='AB', dir=None, tag=TAG, faktor=False):
     """(fr, idx, univ). fr: ticker -> DataFrame (indeks 'date', float64 open..volume, turnover) bagi ticker yang
     ada dalam universe (kumpulan A/B/AB) sekurang-kurangnya satu bulan dalam [mula, akhir]; bar mula..akhir
-    termasuk. idx: {'SPY','QQQ'}. univ: DataFrame universe penuh (bulan, ticker, kedudukan, kumpulan)."""
-    d = Path(dir) if dir else ambil()
+    termasuk. idx: {'SPY','QQQ'}. univ: DataFrame universe penuh (bulan, ticker, kedudukan, kumpulan).
+    tag: Release sumber bila dir tiada (cth 'autotune-data-a02'). faktor=True: kekalkan lajur faktor_split (A02)."""
+    d = Path(dir) if dir else ambil(tag=tag)
     mula, akhir = pd.Timestamp(mula), pd.Timestamp(akhir)
     univ = pd.read_parquet(d / 'universe.parquet')
     b0, b1 = mula.year * 100 + mula.month, akhir.year * 100 + akhir.month
@@ -117,10 +124,10 @@ def muat(mula, akhir, kumpulan='AB', dir=None):
         df = pd.concat(bahagian, ignore_index=True)
         df = df[(df['date'] >= mula) & (df['date'] <= akhir)]
         for t, g in df.groupby('ticker', sort=True):
-            fr[t] = _ke_fr(g.sort_values('date'))
+            fr[t] = _ke_fr(g.sort_values('date'), faktor)
     ix = pd.read_parquet(d / 'idx.parquet')
     ix = ix[(ix['date'] >= mula) & (ix['date'] <= akhir)]
-    idx = {t: _ke_fr(g.sort_values('date')) for t, g in ix.groupby('ticker')}
+    idx = {t: _ke_fr(g.sort_values('date'), faktor) for t, g in ix.groupby('ticker')}
     return fr, idx, univ
 
 
