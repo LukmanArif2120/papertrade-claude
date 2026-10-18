@@ -13,6 +13,8 @@
 #   - Sampel dinilai setiap 5 hari dagangan; saham layak: tutup >= USD5, purata nilai dagangan 50 hari >= USD1 juta.
 #   - Pulangan hadapan 5/21/63 hari; "lebihan" = pulangan saham tolak purata semua saham layak pada tarikh sama.
 #   - Portfolio bulanan (tidak bertindih, 21 hari): sama berat setiap kumpulan RS, kos diabaikan.
+#   - Pandangan pakar lain diuji: Novy-Marx 12-7, Frog-in-the-Pan (ID), Clenow (cerun x R²), RS / turun naik
+#     (Barroso-Santa-Clara), MAX (Bali et al.), Mansfield & peringkat 2 (Weinstein), momentum mutlak (Antonacci), saiz.
 #   - Bias: yfinance tiada saham yang sudah delist (bias saham terselamat); senarai = pasaran AS kini (tv_us.csv).
 import sys, os, glob, argparse, json, time
 from datetime import datetime, timezone
@@ -117,7 +119,33 @@ def ciri(D):
     rl = c.div(spy, axis=0)
     F['rsline_baru'] = (rl >= rl.rolling(252, min_periods=200).max() * 0.999).astype('float64').where(c.notna())
     F['atas200'] = (c > c.rolling(200).mean()).astype('float64').where(c.notna())
+    # Pandangan pakar lain (lihat RINGKASAN §14–16)
+    r = c.pct_change(fill_method=None)
+    F['m12_7'] = persentil(q[1] / q[3] - 1, harga_ok)                      # Novy-Marx 2012
+    F['m6_2'] = persentil(c.shift(21) / q[1] - 1, harga_ok)
+    naik = (r > 0).astype('float64').where(r.notna()).rolling(231, min_periods=200).mean().shift(21)
+    turun = (r < 0).astype('float64').where(r.notna()).rolling(231, min_periods=200).mean().shift(21)
+    F['id_fip'] = np.sign(c.shift(21) / q[3] - 1) * (turun - naik)        # Da-Gurun-Warachka; negatif = berterusan
+    y = np.log(c)
+    T = pd.Series(np.arange(len(c), dtype='float64'), index=c.index)
+    n = 90
+    sy, st = y.rolling(n).sum(), T.rolling(n).sum()
+    sty = y.mul(T, axis=0).rolling(n).sum()
+    kov = (sty - sy.mul(st, axis=0) / n) / n
+    vt = (n * n - 1) / 12.0
+    vy = y.rolling(n).var(ddof=0)
+    cerun = kov / vt
+    F['clenow'] = persentil(((np.exp(cerun * 252) - 1) * (kov ** 2 / (vt * vy))).replace([np.inf, -np.inf], np.nan), harga_ok)
+    sis = r.rolling(126, min_periods=100).std() * np.sqrt(252)
+    F['rs_vol'] = persentil((sk / sis).replace([np.inf, -np.inf], np.nan), harga_ok)  # Barroso-Santa-Clara (peringkat saham)
+    F['max21'] = persentil(r.rolling(21).max(), harga_ok)                 # Bali-Cakici-Whitelaw
+    F['mansfield'] = (rl / rl.rolling(252, min_periods=200).mean() - 1) * 100   # Weinstein
+    s150 = c.rolling(150).mean()
+    F['peringkat2'] = ((c > s150) & (s150 > s150.shift(21))).astype('float64').where(c.notna())
+    F['mutlak12'] = (c / q[3] - 1) * 100                                  # Antonacci (momentum mutlak)
     nilai = (c * v).rolling(50, min_periods=40).mean()
+    F['nilai_pct'] = persentil(nilai, harga_ok)                           # proksi saiz/kecairan (Hong-Lim-Stein)
+    F = {k: x.astype('float32') for k, x in F.items()}
     layak = harga_ok & (nilai >= NILAI_MIN)
     hadapan = {k: c.shift(-k) / c - 1 for k in UFUK}
     rejim = pd.DataFrame({'spy_atas200': spy > spy.rolling(200).mean(), 'spy_12b_negatif': spy / spy.shift(252) < 1}, index=c.index)
@@ -256,7 +284,7 @@ def uji(a):
         a4 = rs4.loc[tarikh].stack(); b4 = rs[k431].loc[tarikh].stack().reindex(a4.index)
         j4 = pd.DataFrame({'rs_431': bin_rs(a4), 'rs_pasaran': bin_rs(b4)}).dropna()
         R['banding_431'] = (pd.crosstab(j4.rs_431, j4.rs_pasaran, normalize='index') * 100).round(1).reset_index()
-        out431 = rs[k431].loc['2019-01-01':].stack().astype('int8').rename('rs_pasaran').reset_index()
+        out431 = rs[k431].loc['2019-01-01':].stack().dropna().astype('int8').rename('rs_pasaran').reset_index()
         out431.columns = ['date', 'ticker', 'rs_pasaran']
         out431['date'] = out431.date.dt.strftime('%Y%m%d')
         out431.to_csv(os.path.join(a.keluar, 'rs_pasaran_431.csv.gz'), index=False, compression='gzip')
@@ -268,6 +296,31 @@ def uji(a):
                      lambda t: bin_rs(F['rs'].loc[t]).astype(str).where(F['jarak52'].loc[t] >= -15, 'jauh'))]:
         P.append(portfolio(c, F, layak, fn, lab)[0])
     R['portfolio'] = pd.concat(P, ignore_index=True)
+    # Ukuran kekuatan alternatif: desil dan portfolio 10% teratas
+    alt = ['rs', 'm12_1', 'm12_7', 'm6_2', 'clenow', 'rs_vol']
+    R['pakar_desil'] = pd.concat([ikut(d.assign(DS=desil(d[k])), 'DS', (21, 63)).assign(ciri=k) for k in alt],
+                                 ignore_index=True)
+    atas = lambda k: (lambda t: pd.Series(np.where(F[k].loc[t] >= 90, 'D10', np.where(F[k].loc[t].notna(), 'lain', None)),
+                                          index=F[k].columns).dropna())
+    R['pakar_portfolio'] = pd.concat([portfolio(c, F, layak, atas(k), k)[0] for k in alt], ignore_index=True)
+    # Dalam RS >= 80: adakah syarat pakar memisahkan pemenang?
+    k80 = d[d.rs >= 80].copy()
+    ter = lambda x: pd.qcut(x.rank(method='first'), 3, labels=['rendah', 'tengah', 'tinggi'])
+    syarat = {
+        'id_fip (FIP; rendah = berterusan)': ter(k80.id_fip),
+        'max21 (lonjakan sehari)': ter(k80.max21),
+        'nilai dagangan (saiz)': ter(k80.nilai_pct),
+        'jarak52': np.where(k80.jarak52 >= -15, 'dekat (<=15%)', 'jauh (>15%)'),
+        'mansfield > 0': np.where(k80.mansfield > 0, 'ya', 'tidak'),
+        'peringkat 2 Weinstein': np.where(k80.peringkat2 == 1, 'ya', 'tidak'),
+        'r1 (pulangan 1 bulan)': ter(k80.r1),
+    }
+    R['dalam_rs80'] = pd.concat([ikut(k80.assign(S=v), 'S', (21, 63)).assign(syarat=s) for s, v in syarat.items()],
+                                ignore_index=True)
+    rj80 = rejim.reindex(k80.tarikh)
+    k80['mutlak'] = np.where((k80.mutlak12 > 0) & rj80.spy_atas200.values, 'saham & SPY positif', 'tidak')
+    R['dalam_rs80'] = pd.concat([R['dalam_rs80'], ikut(k80, 'mutlak', (21, 63)).assign(syarat='momentum mutlak (Antonacci)')],
+                                ignore_index=True)
     for k, x in R.items():
         x.to_csv(os.path.join(a.keluar, f'{k}.csv'), index=False, float_format='%.4g')
     meta = {'dijana': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), 'saham': int(c.shape[1]),
@@ -300,6 +353,13 @@ def ringkasan(keluar, R, meta):
            "\n## 12. Kekekalan gred: % kekal/berpindah selepas 21 hari\n", md(R['kekal21'], 1)]
     if 'banding_431' in R:
         lap += ["\n## 13. RS lawan 431 sahaja (baris) berbanding RS lawan pasaran (lajur), % baris\n", md(R['banding_431'], 1)]
+    lap += ["\n## 14. Ukuran kekuatan pakar: lebihan ikut tarikh mengikut desil (%)\n"
+            "rs = IBD 40/20/20/20; m12_1 = akademik; m12_7 = Novy-Marx; m6_2 = momentum terkini; clenow = cerun regresi log 90 hari x R²; "
+            "rs_vol = skor RS / turun naik 6 bulan (Barroso-Santa-Clara).\n",
+            md(R['pakar_desil'].pivot_table(index=['ciri', 'ufuk'], columns='kumpulan', values='lebihan_ikut_tarikh', observed=True).reset_index()),
+            "\n## 15. Portfolio bulanan 10% teratas setiap ukuran\n", md(R['pakar_portfolio']),
+            "\n## 16. Dalam RS >= 80: syarat pakar tambahan (63 hari)\n",
+            md(p(R['dalam_rs80'], 63)[['syarat', 'kumpulan', 'n', 'purata', 'median', 'menang', 'p5', 'lebihan_ikut_tarikh', 'tarikh_menang_pct']])]
     open(os.path.join(keluar, 'RINGKASAN.md'), 'w', encoding='utf-8').write('\n'.join(lap) + '\n')
 
 
