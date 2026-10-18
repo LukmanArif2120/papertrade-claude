@@ -1,0 +1,86 @@
+{
+ "dibina": "2026-10-18T13:57Z",
+ "dokumen": [
+  {
+   "collection": "autotune",
+   "doc_id": "a03_status",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_status.json",
+   "bait": 944
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M37_had60",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M37_had60.json",
+   "bait": 1024
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M38_had60",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M38_had60.json",
+   "bait": 956
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M121_asal",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M121_asal.json",
+   "bait": 1035
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M88_had60",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M88_had60.json",
+   "bait": 1104
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M121_had60",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M121_had60.json",
+   "bait": 1021
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M37_asal",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M37_asal.json",
+   "bait": 1044
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M88_asal",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M88_asal.json",
+   "bait": 1039
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M78_had60",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M78_had60.json",
+   "bait": 1101
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M51_asal",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M51_asal.json",
+   "bait": 1055
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_kaedah_M04_had60",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_kaedah_M04_had60.json",
+   "bait": 1033
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_ringkasan",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_ringkasan.json",
+   "bait": 725
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "a03_gabungan",
+   "path": "AUTOTUNE/dashboard/db_a03/autotune/a03_gabungan.json",
+   "bait": 192
+  }
+ ],
+ "batch": [
+  "AUTOTUNE/dashboard/db_a03/_batch_0.json"
+ ]
+}

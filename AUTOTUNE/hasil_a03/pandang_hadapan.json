@@ -1,0 +1,162 @@
+{
+ "M04_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M37_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M37_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M38_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M51_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M78_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M88_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M88_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M121_asal": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ },
+ "M121_had60": {
+  "status": "BERSIH",
+  "set": [
+   "AKHIR",
+   "F",
+   "SEMASA"
+  ],
+  "catatan": "",
+  "lajur": [],
+  "butiran": {},
+  "tersedia": {
+   "baris": 12931,
+   "langgar": 0,
+   "contoh": []
+  }
+ }
+}
