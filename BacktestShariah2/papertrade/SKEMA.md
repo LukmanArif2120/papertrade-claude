@@ -58,7 +58,7 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 | Lajur | Nilai |
 |---|---|
 | sektor_us, industri_us | sektor Morningstar dan industri Moomoo saham itu (seluruh pasaran AS) |
-| gred_sektor, gred_industri | A–E atau "–". v2 sejak 19 Okt 2026 (`standard/gred_kumpulan.py`, fail `data/kumpulan/gred_kumpulan.csv`; > 7 hari atau tiada → "–"): Industri = pangkat (Weinstein + median 1 bulan), Sektor = pangkat % saham > SMA200, kedua-duanya seluruh pasaran AS; A > 80, B > 60, C > 40, D > 20, E ≤ 20. Sebelum 19 Okt: v1 skor panas (A ≥ 80 …) |
+| gred_sektor, gred_industri | A–E atau "–". v2 sejak 19 Okt 2026 (`standard/gred_kumpulan.py`, fail `data/kumpulan/gred_kumpulan.csv` + `gred_kumpulan_sejarah.csv`; snapshot mesti sama tarikh dengan sesi isyarat baris itu (`tarikh_isyarat` / `tarikh_data`), jika tiada → "–"): Industri = pangkat (Weinstein + median 1 bulan), Sektor = pangkat % saham > SMA200, kedua-duanya seluruh pasaran AS; A > 80, B > 60, C > 40, D > 20, E ≤ 20. Sebelum 19 Okt: v1 skor panas (A ≥ 80 …) |
 | skor_sektor, skor_industri | 0–100 |
 | rs_rating, gred_rs | 1–99 (lawan seluruh pasaran AS harga ≥ USD5, `data/rs/rs_pasaran.csv`; sandaran stor harga). Sejak 18 Okt 2026: A = RS 90–99 disahkan, B = 80–89 disahkan, C = 70–79 atau ≥ 80 tidak/belum disahkan, D < 70; "–" = tiada data. Baris sebelum 18 Okt: skala lama (A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40) melainkan dikira semula (lihat gred_pada) |
 | rs_sah | ya / tidak: saham naik 12 bulan, SPY > SMA200 dan Mansfield > 0 (RS line atas purata 52 minggu); kosong = tiada data |

@@ -122,6 +122,26 @@ class UjiTambahV2(unittest.TestCase):
         r = self.jalan('2026-11-30')
         self.assertEqual((r['AAA']['gred_industri'], r['AAA']['gred_sektor'], r['AAA']['skor_industri']), ('–', '–', ''))
 
+    def test_snapshot_ikut_tarikh_isyarat(self):
+        # baris bertarikh: hanya snapshot sesi yang sama (tiada pandang hadapan / data basi)
+        with open(self.sb, 'w', newline='') as f:
+            w = csv.DictWriter(f, fieldnames=['saham', 'kaedah', 'sektor', 'industri', 'tarikh_isyarat']); w.writeheader()
+            w.writerow(dict(saham='AAA', kaedah='M05', sektor='Tech', industri='x', tarikh_isyarat='2026-10-16'))
+            w.writerow(dict(saham='BBB', kaedah='M05', sektor='Energy', industri='y', tarikh_isyarat='2026-10-15'))
+        r = self.jalan()
+        self.assertEqual(r['AAA']['gred_industri'], 'A')
+        self.assertEqual((r['BBB']['gred_industri'], r['BBB']['gred_sektor'], r['BBB']['skor_industri']), ('–', '–', ''))
+
+    def test_sejarah_dipakai(self):
+        sj = os.path.join(self.d, 'gred_kumpulan_sejarah.csv')
+        with open(sj, 'w', newline='') as f:
+            w = csv.DictWriter(f, fieldnames=K.LAJUR); w.writeheader()
+            w.writerow(dict(tarikh='2026-10-15', jenis='Industri', nama='Oil & Gas E&P', sektor='', n=10, skor=70.0, gred='B'))
+        p = G.peta_kumpulan(self.kum, date(2026, 10, 19))
+        self.assertEqual(sorted(p), ['2026-10-15', '2026-10-16'])
+        self.assertEqual(G.snapshot_kumpulan(p, '2026-10-15', date(2026, 10, 19))[1]['Oil & Gas E&P'], (70.0, 'B'))
+        self.assertEqual(G.snapshot_kumpulan(p, '2026-10-14', date(2026, 10, 19)), ({}, {}))
+
     def test_jenis_kaedah(self):
         j = G.peta_jenis_kaedah()
         self.assertEqual(len(j), 134)

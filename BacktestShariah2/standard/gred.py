@@ -155,21 +155,32 @@ HARI_KUMPULAN = 7   # data/kumpulan/gred_kumpulan.csv lebih lama daripada ini (h
 
 
 def peta_kumpulan(path_csv, hari_ini):
-    """data/kumpulan/gred_kumpulan.csv -> ({sektor: (skor, gred)}, {industri: (skor, gred)}, tarikh) atau
-    ({}, {}, tarikh/None) jika fail tiada atau basi (> HARI_KUMPULAN hari sebelum hari_ini)."""
+    """data/kumpulan/gred_kumpulan.csv (+ gred_kumpulan_sejarah.csv dalam folder sama) ->
+    {tarikh sesi: ({sektor: (skor, gred)}, {industri: (skor, gred)})}. Setiap baris calon memakai snapshot yang
+    tarikhnya SAMA dengan sesi isyaratnya (tarikh_isyarat / tarikh_data): tiada pandang hadapan, tiada data basi."""
+    out = {}
     if not path_csv or not os.path.exists(path_csv):
-        return {}, {}, None
-    rows = list(csv.DictReader(open(path_csv, newline='', encoding='utf-8')))
-    if not rows:
-        return {}, {}, None
-    t = max(r['tarikh'] for r in rows)
-    if (hari_ini - date.fromisoformat(t)).days > HARI_KUMPULAN:
-        return {}, {}, t
-    sek, ind = {}, {}
-    for r in rows:
-        if r['tarikh'] == t and r['gred'] in GRED:
-            (sek if r['jenis'] == 'Sektor' else ind)[r['nama']] = (float(r['skor']), r['gred'])
-    return sek, ind, t
+        return out
+    fail = [os.path.join(os.path.dirname(path_csv), 'gred_kumpulan_sejarah.csv'), path_csv]
+    for f in fail:
+        if not os.path.exists(f):
+            continue
+        for r in csv.DictReader(open(f, newline='', encoding='utf-8')):
+            if r.get('gred') in GRED:
+                sek, ind = out.setdefault(r['tarikh'], ({}, {}))
+                (sek if r['jenis'] == 'Sektor' else ind)[r['nama']] = (float(r['skor']), r['gred'])
+    return out
+
+
+def snapshot_kumpulan(peta, tarikh_baris, hari_ini):
+    """Snapshot bagi satu baris: tarikh sesi baris itu jika ada; baris tanpa tarikh -> snapshot terkini
+    (<= HARI_KUMPULAN hari sebelum hari_ini). Tiada -> ({}, {})."""
+    if tarikh_baris:
+        return peta.get(str(tarikh_baris)[:10], ({}, {}))
+    if not peta:
+        return {}, {}
+    t = max(peta)
+    return peta[t] if (hari_ini - date.fromisoformat(t)).days <= HARI_KUMPULAN else ({}, {})
 
 
 def peta_jenis_kaedah(path_csv=None):
@@ -944,9 +955,8 @@ def tambah(a):
         pind = {r['ticker']: r['industri'] for r in csv.DictReader(open(a.peta, newline='', encoding='utf-8'))}
     if v2:
         # v2 (sejak 19 Okt 2026): Weinstein + 1 bulan (industri), % > SMA200 (sektor); fail basi/tiada -> "–"
-        ksek, kind, ktarikh = peta_kumpulan(a.kumpulan, hari_ini)
-        if not kind:
-            print(f'AMARAN: gred_kumpulan tiada atau basi (tarikh {ktarikh}); gred sektor/industri "–"')
+        kpeta = peta_kumpulan(a.kumpulan, hari_ini)
+        ktiada = {}
     else:
         sek, ind = peta_sektor(a.sektor)
         pusek, puind = {}, {}
@@ -969,6 +979,10 @@ def tambah(a):
         iu = pind.get(t); su = SEKTOR_INDUSTRI.get(iu) if iu else None
         r['industri_us'] = iu or ''; r['sektor_us'] = su or ''
         if v2:
+            ts = ambil(r, 'tarikh_isyarat', 'tarikh_data')
+            ksek, kind = snapshot_kumpulan(kpeta, ts, hari_ini)
+            if not kind:
+                ktiada[ts or '?'] = ktiada.get(ts or '?', 0) + 1
             s1, g1 = ksek.get(su, (None, TIADA)); s2, g2 = kind.get(iu, (None, TIADA))
         else:
             s1 = pusek.get(su) if su in pusek else sek.get(ambil(r, 'sektor', 'Sektor'))
@@ -1036,6 +1050,8 @@ def tambah(a):
                 r['gred_kewangan'] = TIADA; r['kewangan_ringkas'] = '– (tiada data kewangan)'
                 r['kewangan_tempoh'] = ''; r['kewangan_butiran'] = ''
         r['gred_pada'] = a.tarikh
+    if v2 and ktiada:
+        print(f'AMARAN: tiada snapshot gred_kumpulan bagi sesi {ktiada} (ada: {sorted(kpeta)[-3:]}); gred sektor/industri "–"')
     out = lajur + [k for k in LAJUR if k not in lajur]
     with open(a.csv, 'w', newline='', encoding='utf-8') as f:
         w = csv.DictWriter(f, fieldnames=out)
