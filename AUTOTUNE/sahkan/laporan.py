@@ -141,7 +141,7 @@ def seksyen_hadapan(keluar):
     L = ['## Imbasan pandang ke hadapan (Pindaan 18 Okt 2026)', '',
          '- Audit [M81](AUDIT_M81.md): hasil asal ialah ARTIFAK — `_exit_ekor` menanda `exitc[j-1]` daripada rendah hari j, '
          'jadi enjin keluar pada buka j dengan pengetahuan hari j.',
-         '- Semua 134 salinan diimbas (`kaedah/semak_hadapan.py`, data 431, PARAM asal, potong 2021-06-30, 2023-03-31, '
+         '- Semua 134 salinan diimbas (`AUTOTUNE/kaedah/semak_hadapan.py`, data 431, PARAM asal, potong 2021-06-30, 2023-03-31, '
          '2025-06-30): `exitc/stop/tgt` mesti sama hingga hari potong; `sig/rank` hingga hari sebelumnya, dan pada hari '
          'potong hanya boleh bergantung pada buka esok. Butiran: [PANDANG_HADAPAN.md](PANDANG_HADAPAN.md).',
          f"- Dibaiki dan ditala semula ({len(baiki)}): " + (', '.join(f"{k} ({', '.join(ph[k].get('lajur') or [])})" for k in baiki) or 'tiada') + '.',
