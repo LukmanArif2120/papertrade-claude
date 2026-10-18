@@ -29,3 +29,5 @@ Sasaran siap: Ahad 18 Okt 2026, 23:59 MYT. Peraturan teknikal: `SPEC.md`. Penggu
 - 18 Okt 04:18 MYT: F5 larian 1 selesai: 847/1876 tugas SIAP (lebih perlahan daripada unjuran, ~31 min/tugas). 04:51 MYT: larian 2 dimulakan (run 39068478949; tetapan sama; tugas SIAP dilangkau).
 - F6 (pengesahan/gabungan), F7 (patch tab + jana_db) dan F8 (autotune_suku.yml) siap dibina; menunggu tala.
 - 18 Okt ~11:00 MYT: pepijat gabung ditemui (artifact shard menimpa hasil baharu; 26 fail rosak). Dipulih daripada artifact larian 1–2 (run 39092319772): 1761 SIAP penuh, 41 separa, 74 RALAT, 0 rosak. Gabung dibetulkan (gabung_hasil.py, pilih versi terbaik). Larian 3 dimulakan untuk 115 tugas baki (120 percubaan).
+
+- 18 Okt 2026 (selepas "terbit"): tab AUTOTUNE diterbitkan ke dashboard sedia ada (versi 1792333477-0d05) dengan pemilih versi A03/A02/A01; 193 dokumen db koleksi `autotune` ditulis (A01 137, A02 43, A03 13).
