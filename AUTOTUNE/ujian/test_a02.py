@@ -11,6 +11,7 @@ import data as D
 import enjin_at as E
 import objektif as O
 import tala, tala_a02 as T2, saringan_a02 as SR, pekerja_a02 as PA
+import sahkan_a02 as SA, imbas_a02 as IA
 from gabung_hasil import versi_kod
 
 _F = {}
@@ -235,6 +236,79 @@ class UjiSaringanPelan(unittest.TestCase):
         semua = sum((SR.shard(ids, i, 20) for i in range(20)), [])
         self.assertEqual(sorted(semua), sorted(ids))
         self.assertEqual(versi_kod('M54_had60'), versi_kod('M54')); self.assertIsNotNone(versi_kod('M54'))
+
+
+class UjiLabelA02(unittest.TestCase):
+    def asas(self, **kw):
+        m = dict(lebihan_a=0.02, lebihan_b=0.01, lebihan_peng=0.03, mdd_oos=-0.25, spy_mdd_oos=-0.20, dsr=0.95,
+                 imbasan='BERSIH'); m.update(kw); return m
+
+    def test_label(self):
+        self.assertEqual(SA.label(self.asas()), 'LULUS')
+        self.assertEqual(SA.label(self.asas(dsr=0.5)), 'CALON')
+        self.assertEqual(SA.label(self.asas(mdd_oos=-0.31)), 'CALON')
+        self.assertEqual(SA.label(self.asas(imbasan='TIDAK DIIMBAS')), 'CALON')
+        self.assertEqual(SA.label(self.asas(lebihan_b=-0.01)), 'TIDAK LULUS')
+        self.assertEqual(SA.label(self.asas(lebihan_peng=float('nan'))), 'TIDAK LULUS')
+        self.assertEqual(SA.label(self.asas(imbasan='PANDANG HADAPAN')), 'PANDANG HADAPAN')
+
+    def test_tamak(self):
+        ix = pd.bdate_range('2013-01-01', periods=300); rng = np.random.default_rng(1)
+        a = pd.Series(rng.normal(0, 0.01, 300), ix)
+        r = {'X': a, 'Y': a * 1.01, 'Z': pd.Series(rng.normal(0, 0.01, 300), ix)}
+        nil = {('X',): (0.05, -0.1), ('X', 'Z'): (0.06, -0.12)}
+        p, log, _ = SA.pilih_tamak(['X', 'Y', 'Z'], r, lambda ids: nil[tuple(ids)], had_mdd=-0.3)
+        self.assertEqual(p, ['X', 'Z']); self.assertEqual(log[1]['tindakan'], 'langkau: korelasi')
+        p, log, _ = SA.pilih_tamak(['X', 'Z'], r, lambda ids: nil[tuple(ids)], had_mdd=-0.11)
+        self.assertEqual(p, ['X']); self.assertIn('MDD', log[1]['tindakan'])
+
+
+class UjiHujungA02(unittest.TestCase):
+    """Tala MX kedua-dua lorong k0–7 (3 percubaan) → imbasan → sahkan_a02.jalan (dengan gabungan) atas data sintetik."""
+    @classmethod
+    def setUpClass(cls):
+        warnings.filterwarnings('ignore')
+        cls.dir = tempfile.mkdtemp(); cls.tala = os.path.join(cls.dir, 'tala')
+        cls.asal = tala.muat_kaedah
+        tala.muat_kaedah = lambda mid: kaedah_tiruan() if mid == 'MX' else cls.asal(mid)
+        cls.S = tala.Sumber(modul=pengganti())
+        for lo in T2.LORONG:
+            for k in range(8): T2.tala('MX', lo, k, cls.S, n_trials=3, keluar=cls.tala)
+        json.dump(dict(pilihan={'had60': ['MX'], 'asal': ['MX']}, tugas=['MX_had60', 'MX_asal']),
+                  open(os.path.join(cls.dir, 'pilihan.json'), 'w'))
+        pd.DataFrame([dict(kaedah='MX', lorong=lo, status='SIAP', skor=0.01, sr_lebih_A=s, saat=1.0)
+                      for lo, s in (('had60', 0.01), ('asal', 0.02))]).to_csv(os.path.join(cls.dir, 'saringan.csv'), index=False)
+
+    @classmethod
+    def tearDownClass(cls):
+        tala.muat_kaedah = cls.asal
+        shutil.rmtree(cls.dir, ignore_errors=True)
+
+    def test_imbas_dan_sahkan(self):
+        fr, idx = sintetik()
+        IA._D.update(fr={t: g[g.index >= '2010-01-01'] for t, g in list(fr.items())[:6]}, idx=idx, tala=self.tala)
+        R = IA.semak('MX_had60')
+        self.assertNotIn('ralat', R, R.get('jejak')); self.assertTrue(R['set'])
+        self.assertEqual(IA.status(R), 'BERSIH')
+        d = os.path.join(self.dir, 'imbas'); os.makedirs(d); json.dump(R, open(os.path.join(d, 'MX_had60.json'), 'w'))
+        out = IA.tulis([d], self.dir)
+        self.assertEqual(out['MX_had60']['status'], 'BERSIH')
+        self.assertTrue(os.path.exists(os.path.join(self.dir, 'PANDANG_HADAPAN.md')))
+        D, gab, ring, n = SA.jalan(self.S, proses=2, keluar=self.dir, tala=self.tala)
+        self.assertEqual(len(D), 2); self.assertLessEqual(n, 150)
+        r = D.set_index('tugas').loc['MX_had60']
+        self.assertEqual(r.kajian_siap, '01234567'); self.assertEqual(r.imbasan, 'BERSIH')
+        self.assertEqual(D.set_index('tugas').loc['MX_asal'].imbasan, 'TIDAK DIIMBAS')
+        self.assertEqual(r.oos_mula[:4], '2013'); self.assertEqual(r.oos_akhir[:4], '2018')
+        self.assertEqual(r.peng_mula[:4], '2019')
+        self.assertAlmostEqual(r.lebihan_a, r.cagr_a - r.spy_oos, places=9)
+        for f in ('parameter_sedia.csv', 'gabungan.json', 'ringkasan.json', 'papan.json', 'LAPORAN.md'):
+            self.assertTrue(os.path.exists(os.path.join(self.dir, f)), f)
+        if gab.get('terpilih'):
+            self.assertIn('oos_A', gab); self.assertIn('pengesahan', gab)
+            if gab['terpilih'] == [gab['calon_dinilai'][0]]:   # gabungan satu kaedah = OOS kaedah itu (rank persentil monoton)
+                x = D.set_index('tugas').loc[gab['terpilih'][0]]
+                self.assertAlmostEqual(gab['oos_A']['cagr'], x.cagr_a, places=3)
 
 
 if __name__ == '__main__':
