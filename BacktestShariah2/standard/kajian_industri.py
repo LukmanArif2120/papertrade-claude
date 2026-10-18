@@ -108,7 +108,7 @@ def skor_industri(f):
     if len(ok) < 10:
         return None
     g = f[f.ind.isin(ok)].groupby('ind')
-    med = g[['r1w', 'r1m', 'r3m', 'r6m']].median()
+    med = g[['r1w', 'r1m', 'r3m', 'r6m', 'r1m_s']].median()
     br = g.r1m.apply(lambda x: (x > 0).mean())
     vw = lambda k: g.apply(lambda x: purata_wajaran(x[k], x.w))
     ew1m = g.r1m.mean()
@@ -120,6 +120,8 @@ def skor_industri(f):
         'K2 1W median sahaja': pk(med.r1w),
         'K3 1M median sahaja': pk(med.r1m),
         'K4 3M median sahaja': pk(med.r3m),
+        'K5 1M langkau 1W, median': pk(med.r1m_s),
+        'K6 3M+6M median': 0.5 * pk(med.r3m) + 0.5 * pk(med.r6m),
         'V1 1M wajaran nilai (Moskowitz-Grinblatt)': pk(v1m),
         'V1e 1M purata sama berat': pk(ew1m),
         'V4 3M wajaran nilai': pk(v3m),
@@ -138,7 +140,13 @@ def kuintil(s):
 
 # ---------- jadual panjang ----------
 def bina(D, s431):
+    spy = D['c']['SPY'].astype('float64') if 'SPY' in D['c'] else None
     c = bersih(D['c'].drop(columns='SPY', errors='ignore')).astype('float64')
+    if spy is not None:
+        spy = spy.reindex(c.index).ffill()
+        rejim = pd.Series(np.where(spy > spy.rolling(200).mean(), 'SPY > SMA200', 'SPY < SMA200'), index=c.index)
+    else:
+        rejim = pd.Series('tiada SPY', index=c.index)
     o = D['o'][c.columns].astype('float64').where(c.notna())
     v = D['v'][c.columns].astype('float64')
     pi = peta()
@@ -149,7 +157,7 @@ def bina(D, s431):
     w20 = (c * v).rolling(20, min_periods=15).mean()
     layak = (c >= HARGA_MIN) & (nilai50 >= NILAI_MIN) & c.shift(21).notna()
     R = {'r1w': c / c.shift(5) - 1, 'r1m': c / c.shift(21) - 1, 'r3m': c / c.shift(63) - 1,
-         'r6m': c / c.shift(126) - 1, 'r12_1': c.shift(21) / c.shift(252) - 1}
+         'r6m': c / c.shift(126) - 1, 'r12_1': c.shift(21) / c.shift(252) - 1, 'r1m_s': c.shift(5) / c.shift(26) - 1}
     R = {k: x.astype('float32') for k, x in R.items()}   # jimat memori (~5,600 saham x 5,500 bar)
     H = {h: (c.shift(-h) / o.shift(-1) - 1).clip(-0.95, 5).astype('float32') for h in UFUK}
     # indeks industri harian (sama berat & wajaran nilai) untuk kegunaan setempat
@@ -161,6 +169,7 @@ def bina(D, s431):
     harian = pd.concat({'ew': ew, 'vw': vwr, 'n': nn}, axis=1)
     tarikh = c.index[260:-max(UFUK) - 1][::LANGKAH]
     rows = []
+    lalu = {}   # skor beberapa tarikh sampel lepas (pelicinan)
     for t in tarikh:
         m = layak.loc[t]
         f = pd.DataFrame({k: x.loc[t] for k, x in R.items()})[m]
@@ -173,12 +182,20 @@ def bina(D, s431):
         S = skor_industri(f)
         if S is None:
             continue
+        for k in ('V0 semasa (1M.30 3M.25 1W.15 breadth.30, median)', 'K4 3M median sahaja'):
+            lalu.setdefault(k, []).append(S[k]); lalu[k] = lalu[k][-4:]
+            S[k.split(' ')[0] + ' licin 4 sampel (~20 hari)'] = pd.concat(lalu[k], axis=1).mean(axis=1).reindex(S.index)
         f = f[f.ind.isin(S.index)].copy()
         for h in UFUK:
             f[f'x{h}'] = f[f'f{h}'] - f[f'f{h}'].mean()
         for k in S.columns.drop('n'):
             f['G:' + k] = f.ind.map(kuintil(S[k].dropna())).astype(object)
         f['saiz'] = pd.qcut(f.w.rank(method='first'), 3, labels=['kecil', 'sederhana', 'besar']).astype(object)
+        f['rs6'] = pd.qcut(f.r6m.rank(method='first'), 3, labels=['RS 6B rendah', 'RS 6B sederhana', 'RS 6B tinggi']).astype(object)
+        rel = f.r1m - f.groupby('ind').r1m.transform('median')
+        f['rel_ind'] = np.where(rel >= 0, 'atas median industri 1M', 'bawah median industri 1M')
+        f['n_kump'] = pd.cut(f.ind.map(S.n), [0, 9, 29, 10**6], labels=['3-9 saham', '10-29 saham', '30+ saham']).astype(object)
+        f['rejim'] = rejim.loc[t]
         f['tarikh'] = t
         rows.append(f.reset_index(names='ticker'))
     d = pd.concat(rows, ignore_index=True)
@@ -248,8 +265,26 @@ def uji(a):
             out.append(nilai_varian(d[d.set == '431'], v, h, 'saham 431 (Shariah)'))
             for z in ('kecil', 'sederhana', 'besar'):
                 out.append(nilai_varian(d[d.saiz == z], v, h, f'saiz {z}'))
+    utama = [v for v in var if v.split(' ')[0] in ('V0', 'K4', 'K6', 'V1e', 'V3', 'V0', 'K4') or 'licin' in v]
+    for v in utama:
+        for kol in ('rs6', 'rel_ind', 'n_kump', 'rejim'):
+            for z in sorted(d[kol].dropna().unique()):
+                out.append(nilai_varian(d[d[kol] == z], v, 21, f'{kol}: {z}'))
+                out.append(nilai_varian(d[(d[kol] == z) & (d.set == '431')], v, 21, f'431 {kol}: {z}'))
     R = pd.DataFrame([r for r in out if r])
     R.to_csv(os.path.join(a.keluar, 'varian.csv'), index=False, float_format='%.4g')
+    # kekekalan gred: gred 4 sampel (~20 hari) kemudian
+    kek = []
+    for v in utama:
+        g = 'G:' + v
+        z = d.dropna(subset=[g]).drop_duplicates(['tarikh', 'ind'])[['tarikh', 'ind', g]]
+        tt = sorted(z.tarikh.unique()); nxt = dict(zip(tt[:-4], tt[4:]))
+        z2 = z.assign(tarikh=z.tarikh.map(nxt)).dropna(subset=['tarikh'])
+        j = z.merge(z2, on=['tarikh', 'ind'], suffixes=('_nanti', '_kini'))
+        x = (pd.crosstab(j[g + '_kini'], j[g + '_nanti'], normalize='index') * 100).reindex(index=GRED, columns=GRED)
+        kek.append(x.round(1).reset_index().rename(columns={g + '_kini': 'gred_kini'}).assign(varian=v))
+    K = pd.concat(kek, ignore_index=True)
+    K.to_csv(os.path.join(a.keluar, 'kekekalan.csv'), index=False)
     # tahun bagi varian utama
     th = []
     for v in var:
@@ -271,11 +306,11 @@ def uji(a):
             'industri_purata_sehari': round(float(d.groupby('tarikh').ind.nunique().mean()), 1),
             'gagal_tarik': len(D.get('gagal', []))}
     json.dump(meta, open(os.path.join(a.keluar, 'meta.json'), 'w'), indent=1)
-    ringkasan(a.keluar, R, T, meta)
+    ringkasan(a.keluar, R, T, meta, K)
     print(json.dumps(meta))
 
 
-def ringkasan(keluar, R, T, meta):
+def ringkasan(keluar, R, T, meta, K=None):
     kol = ['varian'] + GRED + ['A-E', 't', 'tahun_positif_pct', 'monotonik', 'menang_A', 'menang_E'] + [f'A-E {t[0]}' for t in TEMPOH]
     bah = lambda s, h: md(R[(R.set == s) & (R.ufuk == h)][kol])
     lap = ["# Kajian gred industri lawan seluruh pasaran AS\n",
@@ -290,7 +325,15 @@ def ringkasan(keluar, R, T, meta):
         for h in UFUK:
             lap += [f"## {n}. {s}: {h} hari\n", bah(s, h), '']
             n += 1
-    lap += [f"## {n}. A-E 21 hari ikut tahun, semua saham (%)\n", md(T)]
+    seg = R[R.set.str.contains(': ')]
+    if len(seg):
+        n += 1
+        lap += [f"## {n}. Segmen (21 hari): RS saham 6 bulan, kedudukan dalam industri, saiz kumpulan, rejim\n",
+                md(seg[['set'] + kol]), '']
+    if K is not None:
+        n += 1
+        lap += [f"## {n}. Kekekalan gred industri: % gred ~20 hari kemudian (baris = gred kini)\n", md(K, 1), '']
+    lap += [f"## {n + 1}. A-E 21 hari ikut tahun, semua saham (%)\n", md(T)]
     open(os.path.join(keluar, 'RINGKASAN.md'), 'w', encoding='utf-8').write('\n'.join(lap) + '\n')
 
 
