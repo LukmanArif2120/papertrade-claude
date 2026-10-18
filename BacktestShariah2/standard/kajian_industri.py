@@ -81,6 +81,8 @@ def tarik(a):
 def muat_dataset(folder):
     d = pd.concat([pd.read_csv(f, usecols=['ticker', 'date', 'open', 'close', 'volume'])
                    for f in sorted(glob.glob(os.path.join(folder, 'dataset_S*.csv')))]).drop_duplicates(['ticker', 'date'])
+    ix = pd.read_csv(os.path.join(folder, 'index_benchmark.csv'), usecols=['ticker', 'date', 'open', 'close', 'volume'])
+    d = pd.concat([d, ix[ix.ticker == 'SPY']])
     d['date'] = pd.to_datetime(d.date.astype(str))
     p = lambda k: d.pivot(index='date', columns='ticker', values=k).sort_index().astype('float32')
     return {'o': p('open'), 'c': p('close'), 'v': p('volume'), 'gagal': []}
@@ -167,6 +169,16 @@ def bina(D, s431):
     vwr = (r * w).T.groupby(ind).sum().T / w.T.groupby(ind).sum().T
     nn = r.notna().T.groupby(ind).sum().T
     harian = pd.concat({'ew': ew, 'vw': vwr, 'n': nn}, axis=1)
+    # Weinstein peringkat industri (sama seperti standard/gred_kumpulan.py, gred v2 sejak 19 Okt 2026):
+    # purata 3 syarat: Mansfield RS lawan SPY > 0, Mansfield RS naik dalam 21 sesi, indeks > SMA150 yang naik (20 sesi)
+    wst = None
+    if spy is not None:
+        I = (1 + ew.fillna(0)).cumprod().where(nn.cumsum() > 0)
+        rs = I.div(spy, axis=0); mrs = rs / rs.rolling(252).mean() - 1; ma = I.rolling(150).mean()
+        w1 = (mrs > 0).astype(float).where(mrs.notna())
+        w2 = (mrs > mrs.shift(21)).astype(float).where(mrs.notna() & mrs.shift(21).notna())
+        w3 = ((I > ma) & (ma > ma.shift(20))).astype(float).where(mrs.notna() & ma.shift(20).notna())
+        wst = (w1 + w2 + w3) / 3
     tarikh = c.index[260:-max(UFUK) - 1][::LANGKAH]
     rows = []
     lalu = {}   # skor beberapa tarikh sampel lepas (pelicinan)
@@ -182,6 +194,12 @@ def bina(D, s431):
         S = skor_industri(f)
         if S is None:
             continue
+        if wst is not None:
+            w = wst.loc[t].reindex(S.index)
+            pk = lambda x: x.rank(pct=True)
+            S['W0 Weinstein sahaja'] = pk(w)
+            S['W1 Weinstein + 1M median (gred v2 langsung)'] = pk(w + pk(S['K3 1M median sahaja']))
+            S['W2 Weinstein + 1M + 12-1'] = pk(w + pk(S['K3 1M median sahaja']) + S['V3 12-1 bulan wajaran nilai'])
         for k in ('V0 semasa (1M.30 3M.25 1W.15 breadth.30, median)', 'K4 3M median sahaja'):
             lalu.setdefault(k, []).append(S[k]); lalu[k] = lalu[k][-4:]
             S[k.split(' ')[0] + ' licin 4 sampel (~20 hari)'] = pd.concat(lalu[k], axis=1).mean(axis=1).reindex(S.index)
@@ -265,7 +283,7 @@ def uji(a):
             out.append(nilai_varian(d[d.set == '431'], v, h, 'saham 431 (Shariah)'))
             for z in ('kecil', 'sederhana', 'besar'):
                 out.append(nilai_varian(d[d.saiz == z], v, h, f'saiz {z}'))
-    utama = [v for v in var if v.split(' ')[0] in ('V0', 'K4', 'K6', 'V1e', 'V3', 'V0', 'K4') or 'licin' in v]
+    utama = [v for v in var if v.split(' ')[0] in ('V0', 'K4', 'K6', 'V1e', 'V3', 'W0', 'W1', 'W2') or 'licin' in v]
     for v in utama:
         for kol in ('rs6', 'rel_ind', 'n_kump', 'rejim'):
             for z in sorted(d[kol].dropna().unique()):
