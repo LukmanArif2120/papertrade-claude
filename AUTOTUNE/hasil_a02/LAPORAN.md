@@ -1,6 +1,6 @@
 # LAPORAN AUTOTUNE A02
 
-Dijana oleh `AUTOTUNE/sahkan/sahkan_a02.py` (2026-10-18 11:33 UTC). Spec: `AUTOTUNE/SPEC_A02.md`. A01 (`AUTOTUNE/hasil/`) kekal tidak diubah. Parameter SEMASA ialah cadangan sahaja; tiada dagangan wang sebenar.
+Dijana oleh `AUTOTUNE/sahkan/sahkan_a02.py` (2026-10-18 11:40 UTC). Spec: `AUTOTUNE/SPEC_A02.md`. A01 (`AUTOTUNE/hasil/`) kekal tidak diubah. Parameter SEMASA ialah cadangan sahaja; tiada dagangan wang sebenar.
 
 ## Kaveat data
 
@@ -17,6 +17,15 @@ Dijana oleh `AUTOTUNE/sahkan/sahkan_a02.py` (2026-10-18 11:33 UTC). Spec: `AUTOT
 - #17: pemanasan = maks(400 hari, 1.6 × (tetingkap terpanjang julat atas + WARM)) hari kalendar.
 - #12: reka bentuk bersih 2010–2018 (saringan 2013–2018; walk-forward 2013–2018); 2019–kini = pengesahan sahaja.
 - Dua lorong: `had60` (had pegang 60 hari, seperti A01) dan `asal` (tiada had enjin; TMAX asal).
+
+## Pengurangan skop
+
+- Tiada: 20 kaedah setiap lorong, 120 percubaan setiap kajian, 8 kajian (skop penuh SPEC_A02).
+
+## Kesimpulan
+
+- 2/40 kaedah-lorong mengatasi SPY atas OOS bersih 2013–2018 pada A dan B; 1/40 mengatasi SPY dalam pengesahan 2019 – hujung data (parameter AKHIR, A+B).
+- LULUS 0, CALON 0: tiada kaedah yang boleh dicadangkan; kalau tak beli, cakap tak beli.
 
 ## Saringan (peringkat 1)
 

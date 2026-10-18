@@ -1,6 +1,6 @@
 # Imbasan pandang ke hadapan A02
 
-Dijana oleh `AUTOTUNE/sahkan/imbas_a02.py` (2026-10-18 11:33 UTC). Logik `semak_hadapan.imbas` (peraturan Pindaan 18 Okt 2026) atas parameter AKHIR (k06) dan SEMASA (k07) setiap kaedah-lorong terpilih; data Release `autotune-data-a02`, sampel 150 ticker universe (susunan md5, sejarah sejak 2010), 12 tarikh potong: 2012-06-29, 2013-09-30, 2014-12-31, 2016-03-31, 2017-06-30, 2018-09-28, 2019-12-31, 2021-03-31, 2022-06-30, 2023-09-29, 2024-12-31, 2026-03-31.
+Dijana oleh `AUTOTUNE/sahkan/imbas_a02.py` (2026-10-18 11:40 UTC). Logik `semak_hadapan.imbas` (peraturan Pindaan 18 Okt 2026) atas parameter AKHIR (k06) dan SEMASA (k07) setiap kaedah-lorong terpilih; data Release `autotune-data-a02`, sampel 150 ticker universe (susunan md5, sejarah sejak 2010), 12 tarikh potong: 2012-06-29, 2013-09-30, 2014-12-31, 2016-03-31, 2017-06-30, 2018-09-28, 2019-12-31, 2021-03-31, 2022-06-30, 2023-09-29, 2024-12-31, 2026-03-31.
 
 Kaedah-lorong diimbas: 40. Bersih: 40. PANDANG HADAPAN (melanggar atau ralat): 0.
 
