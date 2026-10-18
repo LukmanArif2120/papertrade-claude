@@ -89,19 +89,57 @@ class UjiGred(unittest.TestCase):
         self.assertEqual(G.nilai_tajuk('Morgan Stanley Initiates KB Home With Sell Rating'), -1)
         self.assertEqual(G.nilai_tajuk('DHI, LEN, KBH: Trending With Analysts'), 0)
 
-    def test_mata_pemangkin(self):
-        m, ring = G.mata_pemangkin({'berita': [{'tajuk': 'X upgrades Y', 'hari_lalu': 1},
-                                               {'tajuk': 'Y beats estimates', 'hari_lalu': 2},
-                                               {'tajuk': 'Y news', 'hari_lalu': 3}],
-                                    'earnings_lalu_hari': 5, 'earnings_gerak_pct': 6.0,
-                                    'volum_nisbah': 2.5, 'naik_5h': 4.0, 'institusi': 'kumpul'})
-        # naik taraf 2 + atasi 2 (<= 3 hari, penuh) + 3 berita 1 + earnings 2 + volum 1 + institusi 1
-        self.assertEqual(m, 2 + 2 + 1 + 2 + 1 + 1)
-        self.assertEqual(G.gred_pemangkin(m), 'A')
-        self.assertEqual(G.mata_pemangkin({})[0], 0)
-        self.assertEqual(G.gred_pemangkin(-1), 'E')
-        m, _ = G.mata_pemangkin({'berita': [{'tajuk': 'old upgrade', 'hari_lalu': 20}]})
-        self.assertEqual(m, 0)
+    def test_pemangkin_v3_k1_dan_gred(self):
+        hari = date(2026, 10, 16)
+        self.assertEqual(G.nilai_pemangkin({}, hari, 10)[:2], (2, 'B'))
+        self.assertEqual(G.nilai_pemangkin({}, hari, 21)[:2], (2, 'B'))
+        self.assertEqual(G.nilai_pemangkin({}, hari, 5)[:2], (1, 'C'))
+        self.assertEqual(G.nilai_pemangkin({}, hari, 0)[:2], (0, 'D'))   # earnings hari ini: tiada premium tersisa
+        m, g, ring = G.nilai_pemangkin({}, hari, None)
+        self.assertEqual((m, g, ring), (0, 'D', 'tiada pemangkin'))
+        self.assertEqual(G.nilai_pemangkin({}, hari, 22)[1], 'D')
+        self.assertEqual([G.gred_pemangkin(x) for x in [4, 3, 2, 1, 0, -1, None]], ['A', 'A', 'B', 'C', 'D', 'E', '–'])
+
+    def test_pemangkin_v3_k2_reaksi_melampau(self):
+        idx = pd.bdate_range('2026-08-03', '2026-10-15')
+        c = pd.Series(10.0, index=idx); v = pd.Series(1e6, index=idx); spy = pd.Series(500.0, index=idx)
+        c.loc['2026-10-09':] = 12.5; v.loc['2026-10-09'] = 5e6        # selepas tutup 8 Okt: +25% pada 9 Okt
+        p = {'earnings_lalu_tarikh': '2026-10-08', 'earnings_selepas_tutup': None}
+        m, g, ring = G.nilai_pemangkin(p, date(2026, 10, 16), None, c, v, spy)
+        self.assertEqual((m, g), (4, 'A'))                             # umur 4 hari dagangan
+        self.assertTrue(ring.startswith('🔥 PANAS'))
+        self.assertIn('+25.0%', ring)
+        m, g, _ = G.nilai_pemangkin(p, date(2026, 10, 16), 8, c, v, spy)
+        self.assertEqual((m, g), (6, 'A'))
+        spy.loc['2026-10-09':] = 550.0                                  # pasaran +10% hari sama -> lebihan +15%
+        self.assertEqual(G.nilai_pemangkin(p, date(2026, 10, 16), None, c, v, spy)[:2], (0, 'D'))
+        c2 = c[:'2026-10-09']; c2 = pd.concat([c2, pd.Series(12.5, index=pd.bdate_range('2026-10-12', periods=14))])
+        v2 = v.reindex(c2.index).fillna(1e6)
+        m, g, _ = G.nilai_pemangkin(p, date(2026, 10, 30), None, c2, v2, None)
+        self.assertEqual((m, g), (3, 'A'))                              # umur 14 hari: separuh
+        c3 = pd.concat([c2, pd.Series(12.5, index=pd.bdate_range('2026-10-30', periods=7))]); v3 = v.reindex(c3.index).fillna(1e6)
+        self.assertEqual(G.nilai_pemangkin(p, date(2026, 11, 9), None, c3, v3, None)[:2], (0, 'D'))   # umur > 20
+        self.assertEqual(G.nilai_pemangkin({'earnings_gerak_pct': 22.0, 'earnings_lalu_hari': 3}, date(2026, 10, 16))[:2], (4, 'A'))
+        m, g, ring = G.nilai_pemangkin({'earnings_gerak_pct': 22.0, 'earnings_lalu_hari': 3,
+                                        'berita': [{'tajuk': 'Acme prices $500 million convertible notes offering', 'hari_lalu': 1}]}, date(2026, 10, 16))
+        self.assertEqual((m, g), (4, 'C'))
+        self.assertFalse(ring.startswith('🔥'))
+        self.assertEqual(G.nilai_pemangkin({'earnings_gerak_pct': 12.0, 'earnings_lalu_hari': 3}, date(2026, 10, 16))[:2], (0, 'D'))
+
+    def test_pemangkin_v3_veto(self):
+        hari = date(2026, 10, 16)
+        b = lambda tajuk, h=3: {'berita': [{'tajuk': tajuk, 'hari_lalu': h}]}
+        m, g, ring = G.nilai_pemangkin(b('Acme announces $20 million registered direct offering'), hari, 10)
+        self.assertEqual((m, g), (2, 'C'))
+        self.assertIn('pencairan', ring)
+        self.assertEqual(G.nilai_pemangkin(b('Acme prices secondary offering of shares by selling stockholders'), hari, 10)[1], 'B')
+        self.assertEqual(G.nilai_pemangkin(b('Acme agrees to be acquired by Globex for $30 per share in cash'), hari, 10)[1], 'D')
+        self.assertEqual(G.nilai_pemangkin(b('Acme PDUFA date set for November 12'), hari, 10)[1], 'C')
+        self.assertEqual(G.nilai_pemangkin(b('Acme reports positive topline results from Phase 3 trial'), hari, 3)[1], 'C')  # K1 sahaja
+        self.assertEqual(G.nilai_pemangkin(b('FDA advisory committee to review Acme drug on Nov 3'), hari, 10)[1], 'C')
+        self.assertEqual(G.nilai_pemangkin(b('Acme announces $20 million registered direct offering', 40), hari, 10)[1], 'B')
+        self.assertEqual(G.nilai_pemangkin(b('Acme upgraded to Buy at UBS'), hari, 10)[:2], (2, 'B'))   # analisis: tiada mata
+        self.assertEqual(G.veto_tajuk('Acme Keeps Quarterly Dividend'), None)
 
     def test_pautan_berita(self):
         import json
@@ -131,14 +169,6 @@ class UjiGred(unittest.TestCase):
         self.assertTrue(G.relevan('Fertilizer stocks rally (CF)', 'CF', ''))
         self.assertTrue(G.relevan('Why INFQ stock is soaring', 'INFQ', ''))
         self.assertFalse(G.relevan('Why AI stocks are soaring', 'AI', ''))
-
-    def test_susutan_dan_offering(self):
-        m, _ = G.mata_pemangkin({'berita': [{'tajuk': 'X upgrades Y', 'hari_lalu': 7}]})
-        self.assertEqual(m, 1)  # 2 x 0.5
-        m, ring = G.mata_pemangkin({'berita': [{'tajuk': 'Y announces $20 million registered direct offering', 'hari_lalu': 1}]})
-        self.assertEqual(m, -3)
-        self.assertEqual(G.gred_pemangkin(m), 'E')
-        self.assertIn('pencairan', ring)
 
     def test_analisis_dan_orang_dalam(self):
         hari = date(2026, 10, 15)
@@ -177,13 +207,6 @@ class UjiGred(unittest.TestCase):
         self.assertEqual(s['gerak_pct'], 10.0)
         self.assertEqual(s['volum_x'], 3.5)
         self.assertTrue(s['kekal'])
-        p = {'berita': [{'tajuk': 'Acme beats, raises guidance', 'tarikh': '2026-10-08', 'selepas_tutup': True}]}
-        m, ring = G.mata_pemangkin({**p, 'pengesahan': s}, date(2026, 10, 9))
-        self.assertEqual(m, 3 + 2)
-        self.assertTrue(ring.startswith('🔥 PANAS'))
-        m, ring = G.mata_pemangkin({**p, 'pengesahan': {**s, 'gerak_pct': -4.0, 'kekal': False}}, date(2026, 10, 9))
-        self.assertEqual(m, 3 - 1)
-        self.assertIn('pasaran tolak', ring)
         self.assertIsNone(G.pengesahan(c, v, '2026-10-20'))
 
     def test_kumpul(self):

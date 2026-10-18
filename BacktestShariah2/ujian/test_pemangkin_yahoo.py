@@ -149,7 +149,7 @@ class UjiGredYahooNasdaq(unittest.TestCase):
                 for i, x in enumerate(idx):
                     c = mula * (1 + 0.001 * i)
                     if t == 'AAA' and x >= pd.Timestamp('2026-10-14'):
-                        c *= 1.08                                   # reaksi earnings 13 Okt selepas tutup: +8%
+                        c *= 1.25                                   # reaksi earnings 13 Okt selepas tutup: +25%
                     hr.append([t, x.strftime('%Y-%m-%d'), round(c, 4), 1e6])
             pd.DataFrame(hr, columns=['ticker', 'date', 'close', 'volume']).to_csv(p('harga_A.csv'), index=False)
             with open(p('sektor.csv'), 'w', encoding='utf-8') as h:
@@ -186,8 +186,12 @@ class UjiGredYahooNasdaq(unittest.TestCase):
             self.assertEqual((r['BBB']['tarikh_earnings'], r['BBB']['sumber_earnings'], r['BBB']['gred_qr']), ('2026-10-27', 'Nasdaq', 'D'))
             self.assertEqual((r['AAA']['sumber_earnings'], r['AAA']['gred_qr']), ('anggaran; QR lalu 3 hari', 'B'))   # QR lalu 13 Okt: 3 hari -> B
             self.assertEqual((r['CCC']['sumber_earnings'], r['CCC']['gred_qr'], r['CCC']['gred_pemangkin']), ('tiada data', '–', '–'))
-            self.assertIn('naik taraf', r['AAA']['pemangkin'])
-            self.assertIn('earnings 3 hari lalu +8', r['AAA']['pemangkin'])
+            # pemangkin v3: K2 (reaksi +25%, umur 1 hari dagangan dalam stor) -> A; K1 (earnings 7 hari dagangan lagi) -> B; naik taraf: tiada mata
+            self.assertEqual((r['AAA']['gred_pemangkin'], r['AAA']['mata_pemangkin']), ('A', '4'))
+            self.assertTrue(r['AAA']['pemangkin'].startswith('🔥 PANAS · reaksi earnings +25.1% lawan pasaran (1 hari lalu) +4'))
+            self.assertEqual((r['BBB']['gred_pemangkin'], r['BBB']['mata_pemangkin']), ('B', '2'))
+            self.assertIn('earnings 7 hari dagangan lagi', r['BBB']['pemangkin'])
+            self.assertEqual(r['DDD']['gred_pemangkin'], '–')   # tiada data earnings dan berita
             # fail Yahoo semalam tidak dipakai
             yahoo['tarikh'] = '2026-10-15'; json.dump(yahoo, open(p('yahoo.json'), 'w'))
             os.remove(p('pem.json'))

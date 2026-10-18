@@ -7,7 +7,7 @@
 #       --sektor papertrade/sektor.csv --acara <market_events.json> --pemangkin <pemangkin.json> --tarikh YYYY-MM-DD
 #   (ulang untuk papertrade/watchlist.csv; --pemangkin pilihan)
 #   python3 gred.py kumpul --folder <fail mentah alat> --csv papertrade/senarai_beli.csv papertrade/watchlist.csv \
-#       --keluar papertrade/pemangkin.json --tarikh YYYY-MM-DD      (Berita Panas; lihat jadual/imbas_2002.md)
+#       --keluar papertrade/pemangkin.json --tarikh YYYY-MM-DD      (berita untuk veto/pautan pemangkin v3)
 #   Sumber percuma (Actions, pemangkin_actions.py): `kumpul --yahoo data/pemangkin/yahoo.json --nasdaq
 #   data/pemangkin/earnings_nasdaq.json` (--folder pilihan; data Moomoo hari ini diutamakan) dan `tambah --nasdaq …`
 #   (tarikh earnings kedua selepas SST; reaksi earnings lalu dikira daripada stor harga).
@@ -253,14 +253,22 @@ def ringkas_earnings(path_json, hari_ini):
     return out
 
 
-# ---------- Pemangkin: Berita Panas (sebab orang terus membeli) ----------
-# Tiga lapis (belum diuji; paparan sahaja):
-#  1. Kumpul: berita Moomoo (+ SST jika ada) yang benar-benar tentang saham itu, tindakan analisis berstruktur
-#     (Moomoo quote_research_rating_summary) dan belian orang dalam (Form 4). Lihat `kumpul_pemangkin`.
-#  2. Kelaskan ikut kuasa pemangkin: Tier 1 +3, Tier 2 +2, Tier 3 +1, negatif -1 hingga -3; susutan masa
-#     0–3 hari penuh, 4–10 hari separuh, > 10 hari diabaikan.
-#  3. Pengesahan pasaran bagi pemangkin terkuat: hari reaksi naik, volum >= 2x purata 20 hari, dan harga kini
-#     masih di atas tutup sebelum berita -> +2 dan tanda PANAS; pasaran menolak (turun / jurang ditutup) -> -1.
+# ---------- Pemangkin v3 (sejak 18 Okt 2026) ----------
+# Kajian 18 Okt 2026 (pandangan pakar + data sejarah data/pemangkin/sejarah/: 945 saham semasa, 2012–2026; AR21 = masuk
+# buka esok, 21 hari, lawan purata sama berat saham cair). Hanya komponen yang lulus luar sampel (latih 2012–2018,
+# uji 2019–2026) diberi mata — lihat `nilai_pemangkin`. Kalibrasi gred (AR21 latih / uji): A +1.7 / +1.4%,
+# B +0.38 / +0.35%, C +0.24 / +0.20%, D −0.11 / −0.01% (menurun A→D dalam kedua-dua tempoh). Bias survivorship: alam
+# saham semasa sahaja.
+#  K1 premium pengumuman: earnings dijadualkan 6–21 hari dagangan lagi +2 (AR21 +0.38% / +0.35%, t 3.4 luar sampel),
+#     1–5 hari lagi +1 (+0.24% / +0.20%).
+#  K2 reaksi earnings melampau: hari reaksi >= +20% lawan pasaran, umur <= 10 hari dagangan +4, 11–20 hari +3
+#     (AR21 +1.7% / +1.4%; ~640 peristiwa, t < 2 — bukti lemah). Reaksi 3–20% dan reaksi negatif: 0.
+#  Diuji dan dibuang: mata tajuk berita, bilangan berita, tindakan analisis (termasuk 'disahkan pasaran'),
+#     volum, penalti perhatian. Belum diuji (data SEC gagal): orang dalam. Institusi: tiada data.
+#  Veto (bukti pakar sahaja): tawaran saham/pencairan atau peristiwa binari FDA/klinikal <= 20 hari dagangan
+#     -> had C; sasaran ambil alih -> had D.
+#  Gred: A >= 3, B 2, C 1, D 0 (tiada pemangkin). E tidak dipakai (tiada isyarat negatif sahih dalam data).
+# Pengelas tajuk (KELAS) dan peristiwa analisis kekal untuk veto, pautan dan paparan sahaja.
 KELAS = [  # (kategori, mata, corak); disemak mengikut susunan, negatif dahulu
     ('offering', -3, r'(public|secondary|registered direct|follow-on|at-the-market|atm|stock|share|equity|convertible) (notes )?offering'
                      r'|\bdilut|\bprices? .*\boffering|\bfiles? .*\bshelf'),
@@ -394,11 +402,6 @@ def peristiwa(p, hari_ini=None):
     return ev
 
 
-def terkuat(ev):
-    pos = [e for e in ev if e['w'] > 0 and e['kategori'] != 'orang_dalam_beli' and e.get('tarikh')]
-    return max(pos, key=lambda e: (e['w'], -(e['hari_lalu'] or 0))) if pos else None
-
-
 def pengesahan(close, vol, tarikh, selepas_tutup=False):
     """Reaksi pasaran pada hari pertama selepas berita. close, vol: Series (index tarikh) satu saham.
     Pulangkan {hari, gerak_pct, volum_x, kekal} atau None jika data tidak cukup."""
@@ -419,58 +422,79 @@ def pengesahan(close, vol, tarikh, selepas_tutup=False):
             'volum_x': round(float(v.iloc[i]) / purata, 2), 'kekal': bool(float(c.iloc[-1]) > sebelum)}
 
 
-def reaksi_earnings(close, vol, tarikh, selepas_tutup=None):
-    """Gerak % hari reaksi earnings (tutup hari reaksi lawan tutup sebelumnya). selepas_tutup None (masa
-    pengumuman tidak diketahui, cth. kalendar Nasdaq 'time-not-supplied'): hari reaksi = hari volum lebih tinggi
-    antara hari pengumuman dan hari dagangan berikutnya; None jika hari berikutnya belum ada dalam stor harga."""
+def hari_reaksi(close, vol, tarikh, selepas_tutup=None):
+    """Reaksi earnings: `pengesahan` pada hari reaksi. selepas_tutup None (masa pengumuman tidak diketahui, cth.
+    kalendar Nasdaq 'time-not-supplied'): hari reaksi = hari volum lebih tinggi antara hari pengumuman dan hari
+    dagangan berikutnya (disahkan pada data sejarah: volum memuncak pada hari itu); None jika hari berikutnya
+    belum ada dalam stor harga."""
     if selepas_tutup is not None:
-        s = pengesahan(close, vol, tarikh, selepas_tutup)
-    else:
-        a, b = pengesahan(close, vol, tarikh, False), pengesahan(close, vol, tarikh, True)
-        s = None if not a or not b else a if a['volum_x'] >= b['volum_x'] else b
+        return pengesahan(close, vol, tarikh, selepas_tutup)
+    a, b = pengesahan(close, vol, tarikh, False), pengesahan(close, vol, tarikh, True)
+    return None if not a or not b else a if a['volum_x'] >= b['volum_x'] else b
+
+
+def reaksi_earnings(close, vol, tarikh, selepas_tutup=None):
+    """Gerak % hari reaksi earnings (tutup hari reaksi lawan tutup sebelumnya); lihat `hari_reaksi`."""
+    s = hari_reaksi(close, vol, tarikh, selepas_tutup)
     return s['gerak_pct'] if s else None
 
 
-def mata_pemangkin(p, hari_ini=None):
-    """p: dict satu saham (papertrade/pemangkin.json; dibina oleh `gred.py kumpul`):
-         berita: [{tajuk, tarikh (New York), selepas_tutup, hari_lalu, url}]   (sudah ditapis relevan)
-         analisis: [{kategori, mata, firma, tarikh, sasaran, url}]           (Moomoo rating_summary)
-         orang_dalam: {bilangan, tarikh}                                      (Form 4 belian, 30 hari)
-         earnings_lalu_hari, earnings_gerak_pct; institusi: 'kumpul'|'agih'|None
-         pengesahan: hasil `pengesahan` bagi pemangkin terkuat (diisi oleh `tambah`)
-         volum_nisbah (volum 5 hari / purata 50), naik_5h (%)
-       Pulangkan (mata, ringkasan). Ringkasan bermula '🔥 PANAS · ' jika pemangkin Tier 1/2 disahkan pasaran."""
-    ev = peristiwa(p, hari_ini)
-    pos = sorted([e for e in ev if e['w'] > 0], key=lambda e: -e['w'])
-    neg = sorted([e for e in ev if e['w'] < 0], key=lambda e: e['w'])
-    m = min(sum(e['w'] for e in pos), 6) + max(sum(e['w'] for e in neg), -6)
-    ring = [f"{LABEL[e['kategori']]}" + (f" ({e['hari_lalu']} hari)" if e.get('hari_lalu') is not None else '') for e in pos[:3]]
-    panas = False
-    top, sah = terkuat(ev), p.get('pengesahan')
-    if top and sah:
-        if sah['gerak_pct'] > 0 and sah['volum_x'] >= 2 and sah['kekal']:
-            m += 2; panas = top['mata'] >= 2
-            ring.append(f"disahkan pasaran {sah['gerak_pct']:+.1f}%, volum {sah['volum_x']:.1f}×")
-        elif sah['gerak_pct'] < 0 or not sah['kekal']:
-            m -= 1; ring.append(f"pasaran tolak ({sah['gerak_pct']:+.1f}%{'' if sah['kekal'] else ', jurang ditutup'})")
-    berita = [b for b in (p.get('berita') or []) if 0 < susut(_hari_lalu(b, hari_ini))]
-    if len(berita) >= 3:
-        m += 1; ring.append(f'{len(berita)} berita/10 hari')
-    eh, eg = p.get('earnings_lalu_hari'), p.get('earnings_gerak_pct')
-    if eh is not None and eh <= 30 and eg is not None:
-        if eg >= 3: m += 2; ring.append(f'earnings {eh} hari lalu +{eg:.1f}%')
-        elif eg <= -3: m -= 2; ring.append(f'earnings {eh} hari lalu {eg:.1f}%')
-    vn, n5 = p.get('volum_nisbah'), p.get('naik_5h')
-    if not sah and vn is not None and vn >= 2 and (n5 or 0) > 0:
-        m += 1; ring.append(f'volum {vn:.1f}× naik')
-    ins = p.get('institusi')
-    if ins == 'kumpul': m += 1; ring.append('institusi kumpul')
-    elif ins == 'agih': m -= 1; ring.append('institusi agih')
-    ring += [LABEL[e['kategori']] + (f" ({e['hari_lalu']} hari)" if e.get('hari_lalu') is not None else '') for e in neg[:2]]
-    m = round(m, 1)
-    m = int(m) if m == int(m) else m
-    teks = '; '.join(ring) or 'tiada pemangkin dikesan'
-    return m, ('🔥 PANAS · ' + teks) if panas else teks
+VETO = [  # (had gred, sebab, corak tajuk) — bukti pakar; tidak diuji pada data repo
+    ('D', 'sasaran ambil alih (harga terkunci pada tawaran)',
+     r'to be acquired|agrees? to be (bought|acquired)|definitive (merger )?agreement to be acquired|\bto go private|take[- ]private'),
+    ('C', 'tawaran saham (pencairan)', KELAS[0][2]),
+    ('C', 'peristiwa binari FDA/klinikal',
+     r'\bpdufa\b|advisory committee|\badcom\b|fda (decision|action date)|target action date'),  # keputusan akan datang
+]
+BUKAN_PENCAIRAN = r'selling (share|stock)holders?|by (a |the )?selling|secondary (public )?offering .*\bby\b'
+HARI_VETO = 28  # 20 hari dagangan ~ 28 hari kalendar
+
+
+def veto_tajuk(tajuk):
+    """Tajuk berita -> (had gred, sebab) atau None."""
+    t = bersih(tajuk).lower()
+    for had, sebab, corak in VETO:
+        if re.search(corak, t) and not (sebab.startswith('tawaran') and re.search(BUKAN_PENCAIRAN, t)):
+            return had, sebab
+    return None
+
+
+def nilai_pemangkin(p, hari_ini, hari_ke_earnings=None, close=None, vol=None, pasaran=None):
+    """Pemangkin v3 -> (mata, gred, ringkasan). Ringkasan bermula '🔥 PANAS · ' jika K2 aktif dan tiada veto.
+    p: entri pemangkin.json (boleh {}), dengan earnings_lalu_tarikh / earnings_selepas_tutup (Nasdaq) atau
+       earnings_gerak_pct / earnings_lalu_hari (Moomoo) dan berita [{tajuk, tarikh, hari_lalu}] untuk veto.
+    hari_ke_earnings: hari dagangan ke earnings seterusnya (sama seperti QR). close, vol: Series satu saham;
+    pasaran: Series tutup SPY (pelarasan reaksi). Umur reaksi = hari dagangan dalam stor selepas hari reaksi."""
+    p = p or {}
+    mata, ring = 0, []
+    g = umur = None
+    if p.get('earnings_lalu_tarikh') and close is not None and vol is not None:
+        s = hari_reaksi(close, vol, p['earnings_lalu_tarikh'], p.get('earnings_selepas_tutup'))
+        if s:
+            g, t = s['gerak_pct'], pd.Timestamp(s['hari'])
+            ps = pasaran.dropna().sort_index() if pasaran is not None else None
+            if ps is not None and t in ps.index and ps.index.get_loc(t) > 0:
+                k = ps.index.get_loc(t)
+                g = round(g - (float(ps.iloc[k]) / float(ps.iloc[k - 1]) - 1) * 100, 2)
+            umur = int((close.dropna().index > t).sum())
+    if g is None and p.get('earnings_gerak_pct') is not None and p.get('earnings_lalu_hari') is not None:
+        g, umur = p['earnings_gerak_pct'], p['earnings_lalu_hari']   # Moomoo: belum dilaras pasaran
+    panas = g is not None and g >= 20 and umur is not None and umur <= 20
+    if panas:
+        k2 = 4 if umur <= 10 else 3
+        mata += k2; ring.append(f'reaksi earnings {g:+.1f}% lawan pasaran ({umur} hari lalu) +{k2}')
+    h = hari_ke_earnings
+    if h is not None and 1 <= h <= 21:
+        k1 = 2 if h >= 6 else 1
+        mata += k1; ring.append(f'earnings {h} hari dagangan lagi (premium pengumuman) +{k1}')
+    gred = gred_pemangkin(mata)
+    for b in p.get('berita') or []:
+        hl = _hari_lalu(b, hari_ini)
+        v = veto_tajuk(b.get('tajuk')) if hl is not None and 0 <= hl <= HARI_VETO else None
+        if v and GRED.index(gred) < GRED.index(v[0]):
+            gred = v[0]; ring.append(f'had {v[0]}: {v[1]} ({hl} hari lalu)')
+    teks = '; '.join(ring) or 'tiada pemangkin'
+    return mata, gred, ('🔥 PANAS · ' + teks) if panas and gred == 'A' else teks   # veto membuang tanda PANAS
 
 
 def pautan_berita(berita, maks=2, hari_ini=None):
@@ -487,9 +511,10 @@ def pautan_berita(berita, maks=2, hari_ini=None):
 
 
 def gred_pemangkin(mata):
+    """Pemangkin v3: A >= 3 (K2), B 2 (earnings 6–21 hari lagi), C 1 (1–5 hari lagi), D 0 (tiada); E < 0 (tidak dipakai)."""
     if mata is None:
         return TIADA
-    return 'A' if mata >= 5 else 'B' if mata >= 3 else 'C' if mata >= 1 else 'D' if mata >= 0 else 'E'
+    return 'A' if mata >= 3 else 'B' if mata >= 2 else 'C' if mata >= 1 else 'D' if mata >= 0 else 'E'
 
 
 # ---------- Kumpul: fail mentah alat -> papertrade/pemangkin.json ----------
@@ -870,9 +895,8 @@ def tambah(a):
     lajur = list(rows[0].keys()) if rows else []
     hari_ini = date.fromisoformat(a.tarikh)
     c, v = muat_harga(a.harga)
-    rsd, spy_atas = rs_semua(c, muat_spy(a.harga), getattr(a, 'rs', None))
-    vn = (v.iloc[-5:].mean() / v.iloc[-50:].mean()) if len(v) >= 50 else pd.Series(dtype=float)
-    n5 = (c.iloc[-1] / c.iloc[-6] - 1) * 100 if len(c) >= 6 else pd.Series(dtype=float)
+    spy = muat_spy(a.harga)
+    rsd, spy_atas = rs_semua(c, spy, getattr(a, 'rs', None))
     sek, ind = peta_sektor(a.sektor)
     # Utama: kekuatan seluruh pasaran AS (sektor_pasaran.py) dengan industri Moomoo setiap saham
     pusek, puind, pind = {}, {}, {}
@@ -903,6 +927,7 @@ def tambah(a):
                 te = None
         # Nasdaq tanpa ralat dan saham itu ada earnings lalu dalam kalendar -> ketiadaan tarikh hadapan boleh dipercayai
         liput_nas = nas is not None and nas_lengkap and bool((nas.get(t) or {}).get('lalu'))
+        h = None
         if te is None and ear is None and not liput_nas:
             r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = TIADA
         else:
@@ -914,25 +939,19 @@ def tambah(a):
             r['sumber_earnings'] = tanda_pasca_qr(sumber if te else 'tiada dalam 30 hari (SST)' if ear is not None
                                                   else 'tiada dalam 35 hari (Nasdaq)', sj)
             r['gred_qr'] = gred_qr(h, sj)
-        if t in pem and segar(pem[t], hari_ini):
-            p = dict(pem[t])
-            if nas is not None and 'earnings_lalu_tarikh' not in p:
-                p.update(earnings_nasdaq(nas.get(t), hari_ini)[0])
-            # reaksi earnings lalu (sumber Nasdaq; entri Moomoo sudah mengira sendiri): daripada stor harga
-            if p.get('earnings_lalu_tarikh') and p.get('earnings_gerak_pct') is None \
-                    and 'earnings_selepas_tutup' in p and t in c.columns:
-                p['earnings_gerak_pct'] = reaksi_earnings(c[t], v[t], p['earnings_lalu_tarikh'], p['earnings_selepas_tutup'])
-            p.setdefault('volum_nisbah', None if t not in vn.index or pd.isna(vn[t]) else float(vn[t]))
-            p.setdefault('naik_5h', None if t not in n5.index or pd.isna(n5[t]) else float(n5[t]))
-            top = terkuat(peristiwa(p, hari_ini))
-            if top and 'pengesahan' not in p and t in c.columns:
-                p['pengesahan'] = pengesahan(c[t], v[t], top['tarikh'], top.get('selepas_tutup'))
-            m, ring = mata_pemangkin(p, hari_ini)
-            r['mata_pemangkin'] = m; r['pemangkin'] = ring; r['gred_pemangkin'] = gred_pemangkin(m)
-            r['pemangkin_url'] = pautan_berita(peristiwa(p, hari_ini) + list(p.get('berita') or []), hari_ini=hari_ini)
-        else:
+        # Pemangkin v3: K1 (earnings seterusnya, sama seperti QR) dan K2 (reaksi earnings lalu daripada stor harga)
+        # tidak memerlukan pemangkin.json; berita (veto dan pautan) hanya jika entri segar ada.
+        p = dict(pem[t]) if t in pem and segar(pem[t], hari_ini) else {}
+        if nas is not None and 'earnings_lalu_tarikh' not in p:
+            p.update(earnings_nasdaq(nas.get(t), hari_ini)[0])
+        if r['gred_qr'] == TIADA and not p.get('earnings_lalu_tarikh') and not p.get('berita'):
             r['mata_pemangkin'] = ''; r['pemangkin'] = 'belum dikumpul'; r['gred_pemangkin'] = TIADA
             r['pemangkin_url'] = ''
+        else:
+            ada = t in c.columns
+            m, g, ring = nilai_pemangkin(p, hari_ini, h, c[t] if ada else None, v[t] if ada else None, spy)
+            r['mata_pemangkin'] = m; r['pemangkin'] = ring; r['gred_pemangkin'] = g
+            r['pemangkin_url'] = pautan_berita(p.get('berita'), hari_ini=hari_ini)
         r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
         r['gred_pada'] = a.tarikh
     out = lajur + [k for k in LAJUR if k not in lajur]
