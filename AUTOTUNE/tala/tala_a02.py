@@ -88,12 +88,20 @@ class Penilai02(T1.Penilai):
 
 def metrik_json(mt):
     d = {k: mt[k] for k in ('cagr', 'mdd', 'n', 'win', 'avg', 'days', 'thn_min', 'spy_cagr', 'spy_mdd', 'lebihan')}
+    for k in ('n_menang', 'n_kalah', 'jumlah_untung', 'jumlah_rugi'):   # A03 (statistik dagangan); tiada dalam A02
+        if k in mt: d[k] = mt[k]
     d['tahunan'] = {str(y): v for y, v in mt['tahunan'].items()}
     d['tahunan_lebih'] = {str(y): v for y, v in mt['tahunan_lebih'].items()}
     return _bulat(d)
 
 
-def tala(mid, lorong, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=None, keluar=KELUAR, tulis=True):
+def tala(mid, lorong, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=None, keluar=KELUAR, tulis=True,
+         penilai=None, tambah=None, skor_fn=None, lulus_fn=None):
+    """penilai (A03): kilang Penilai02-serasi (m, fr, idx, univ, sumber, mula, akhir, kumpulan) — lalai Penilai02.
+    tambah: medan tambahan rekod H (cth. versi/sistem A03). skor_fn/lulus_fn (A03): objektif/kekangan ganti.
+    Lalai None = tingkah laku A02 tidak berubah."""
+    PN = penilai or Penilai02
+    SK = skor_fn or O.skor_a02; LU = lulus_fn or O.lulus_a02
     import optuna
     optuna.logging.set_verbosity(optuna.logging.WARNING); warnings.filterwarnings('ignore')
     t0 = time.time(); masa = {}
@@ -101,6 +109,7 @@ def tala(mid, lorong, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=
     H = dict(kaedah=nama_tugas(mid, lorong), id_kaedah=mid, lorong=lorong, kajian=k, kajian_a02=True,
              nama_kajian=NAMA_KAJIAN.get(k, f'WF{k:02d}'), n_trials_diminta=n_trials, ralat=[], status='MULA',
              versi_kod=versi_kod(mid), mula=pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'))
+    if tambah: H.update(tambah)
     try:
         E.had60_lorong(lorong)
         m = T1.muat_kaedah(mid)
@@ -114,7 +123,7 @@ def tala(mid, lorong, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=
         t = time.time(); fr, idx, univ = sumber.muat(L0 - panas, L1, kl); masa['muat_latih'] = time.time() - t
         H['n_ticker_latih'] = len(fr)
         if not fr or not any((g.index >= L0).any() for g in fr.values()): raise RuntimeError('tiada data latih')
-        pn = Penilai02(m, fr, idx, univ, sumber, L0, L1, ['A'])
+        pn = PN(m, fr, idx, univ, sumber, L0, L1, ['A'])
         rekod = []; jejak = {}; s_cuba = []
 
         def obj(tr):
@@ -125,7 +134,7 @@ def tala(mid, lorong, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=
                 tr.set_user_attr('ulang', True); return jejak[kunci]['skor']
             try:
                 mt, rh, _ = pn.jalan02(P, ['A'], (lorong,), harian=True)[(lorong, 'A')]
-                r = dict(P=P, skor=O.skor_a02(mt), lulus=O.lulus_a02(mt), thn_min=mt['thn_min'], m=mt,
+                r = dict(P=P, skor=SK(mt), lulus=LU(mt), thn_min=mt['thn_min'], m=mt,
                          rh=(rh - pn.spy_r.reindex(rh.index).fillna(0.0)).values.astype(np.float32))
             except Exception as e:
                 r = dict(P=P, skor=-2.0, lulus=False, thn_min=-1.0, m=None, rh=None, ralat=f'{type(e).__name__}: {e}'[:300])
@@ -172,7 +181,7 @@ def tala(mid, lorong, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=
             U0, U1 = w['ujian']; t = time.time()
             fr, idx, univ = sumber.muat(U0 - panas, U1, 'AB')
             kum = ['A', 'B', 'AB'] if k == K_AKHIR else ['A', 'B']
-            pu = Penilai02(m, fr, idx, univ, sumber, U0, U1, kum)
+            pu = PN(m, fr, idx, univ, sumber, U0, U1, kum)
             hs = pu.jalan02(pil['P'], kum, (lorong,), harian=True)
             H['harian_ujian'] = dict(tarikh=[str(d.date()) for d in pu.pasaran.tarikh],
                                      SPY=[round(float(x), 6) for x in pu.spy_r])

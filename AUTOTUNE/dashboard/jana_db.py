@@ -10,6 +10,7 @@
 # dan sama `dibina` (dokumen lama diabaikan, tidak perlu dipadam).
 # A02 (ringkasan/papan.json `versi` = 'A02', cth. --hasil AUTOTUNE/hasil_a02 --keluar AUTOTUNE/dashboard/db_a02): doc_id
 # berawalan `a02_` (A01 tidak ditindih), label A02 daripada ringkasan.label, kajian_penuh 8, setiap dokumen `versi: A02`.
+# A03 (`versi` = 'A03', --hasil AUTOTUNE/hasil_a03 --keluar AUTOTUNE/dashboard/db_a03): sama seperti A02 dengan awalan `a03_`.
 import argparse, csv, glob, json, math, os, sys
 from datetime import datetime, timezone
 
@@ -123,8 +124,10 @@ def bina(hasil, dibina=None, contoh=None):
     dibina = dibina or datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%MZ')
     if contoh is None: contoh = os.path.basename(os.path.normpath(hasil)) == 'contoh'
     ring, gab, papan = (bersih(baca(os.path.join(hasil, f))) for f in ('ringkasan.json', 'gabungan.json', 'papan.json'))
-    a02 = 'A02' in ((ring or {}).get('versi'), (papan or {}).get('versi'))
-    awal = 'a02_' if a02 else ''
+    vs = ((ring or {}).get('versi'), (papan or {}).get('versi'))
+    versi = 'A03' if 'A03' in vs else ('A02' if 'A02' in vs else None)     # A03: doc_id `a03_*` (A01/A02 tidak ditindih)
+    a02 = versi is not None
+    awal = versi.lower() + '_' if a02 else ''
     label = (ring or {}).get('label') or LABEL
     docs = {awal + 'status': doc_status(hasil, dibina, 8 if a02 else 14)}
     kaedah_doc = []
@@ -137,7 +140,7 @@ def bina(hasil, dibina=None, contoh=None):
     if gab:
         docs[awal + 'gabungan'] = doc_gabungan(gab, dibina, contoh)
     if a02:
-        for d in docs.values(): d['versi'] = 'A02'
+        for d in docs.values(): d['versi'] = versi
     return {k: bersih(v) for k, v in docs.items()}
 
 
@@ -183,7 +186,7 @@ def main(argv=None):
     versi = baca(a.versi) if a.versi else {}
     docs = bina(a.hasil, a.dibina)
     indeks, fail = tulis(docs, a.keluar, versi)
-    st = docs.get('status') or docs['a02_status']
+    st = docs.get('status') or docs.get('a02_status') or docs['a03_status']
     print(f"autotune db: {len(indeks)} dokumen ({', '.join(i['doc_id'] for i in indeks[:6])}{' …' if len(indeks) > 6 else ''}); "
           f"terbesar {max(i['bait'] for i in indeks)} B; batch {len(fail)}")
     print(f"  tala: {st['n_kaedah']} kaedah, {st['n_kajian_siap']} kajian siap; fail F6: "

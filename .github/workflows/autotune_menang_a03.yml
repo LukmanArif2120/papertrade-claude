@@ -1,0 +1,67 @@
+# AUTOTUNE A03 (SPEC_A03 §6): kriteria MENANG dikira semula atas 40 kaedah-lorong A02 yang ditala (rekod hasil_a02 dibaca
+# sahaja; dagangan dipegang dijana semula dengan parameter setiap kajian) → AUTOTUNE/hasil_a03/menang_a02.csv.
+name: autotune_menang_a03
+
+on:
+  workflow_dispatch:
+    inputs:
+      simpan:
+        description: "commit hasil ke main (ya/tidak)"
+        default: 'ya'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autotune-menang-a03
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: '1'
+  NUMBA_CACHE_DIR: ${{ github.workspace }}/.numba
+
+jobs:
+  menang:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - name: Muat turun data Release A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -D AUTOTUNE/.cache_a02 --clobber && break
+            sleep 20
+          done
+      - name: Kira semula kriteria MENANG A02
+        run: |
+          ( while true; do sleep 300; echo "[memori] $(free -m | awk 'NR==2{print $3"/"$2" MB"}')"; done ) &
+          python3 AUTOTUNE/sahkan/menang_a03.py --a02 --cache AUTOTUNE/.cache_a02 --proses 4
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: menang-a02
+          path: AUTOTUNE/hasil_a03/menang_a02.csv
+          if-no-files-found: warn
+      - name: Commit hasil
+        if: inputs.simpan == 'ya'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AUTOTUNE/hasil_a03/menang_a02.csv
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE A03: kriteria MENANG atas 40 kaedah-lorong A02
+
+          Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01UbVUYB21nm7A8gfMBBRU4q"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 15))
+          done
+          exit 1

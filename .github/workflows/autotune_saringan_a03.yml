@@ -1,0 +1,124 @@
+# AUTOTUNE A03 peringkat 1 (SPEC_A03 §4): 20 kaedah × 2 lorong × 4 sistem (utama + 3 ablasi), PARAM asal, 2013–2018, A dan B.
+# saring (matriks shard) → gabung: AUTOTUNE/hasil_a03/saringan.csv + pilihan.json (10 sistem utama teratas).
+name: autotune_saringan_a03
+
+on:
+  workflow_dispatch:
+    inputs:
+      shard:
+        description: "bilangan shard (job serentak)"
+        default: '10'
+      pilih:
+        description: "bilangan sistem utama dipilih untuk ditala"
+        default: '10'
+      simpan:
+        description: "commit hasil ke main (ya/tidak)"
+        default: 'ya'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autotune-saringan-a03
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: '1'
+  NUMBA_CACHE_DIR: ${{ github.workspace }}/.numba
+
+jobs:
+  matriks:
+    runs-on: ubuntu-latest
+    outputs:
+      m: ${{ steps.m.outputs.m }}
+    steps:
+      - id: m
+        run: echo "m=$(python3 -c "import json; print(json.dumps(list(range(int('${{ inputs.shard }}')))))")" >> "$GITHUB_OUTPUT"
+
+  saring:
+    needs: matriks
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard: ${{ fromJSON(needs.matriks.outputs.m) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - name: Muat turun data Release A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -D AUTOTUNE/.cache_a02 --clobber && break
+            sleep 20
+          done
+          ls AUTOTUNE/.cache_a02 | wc -l
+      - name: Muat turun data Release fundamental A03
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-fundamental-a03 -R "${{ github.repository }}" -D AUTOTUNE/.cache_fund_a03 --clobber && break
+            sleep 20
+          done
+          ls -la AUTOTUNE/.cache_fund_a03
+      - name: Saringan shard ${{ matrix.shard }}
+        run: |
+          ( while true; do sleep 300; echo "[memori] $(free -m | awk 'NR==2{print $3"/"$2" MB"}')"; done ) &
+          python3 AUTOTUNE/tala/saringan_a03.py --shard ${{ matrix.shard }} --n-shard ${{ inputs.shard }} --proses 2 --cache AUTOTUNE/.cache_a02 --fund AUTOTUNE/.cache_fund_a03 --keluar kirim
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: saringan-a03-${{ matrix.shard }}
+          path: kirim/
+          if-no-files-found: warn
+          retention-days: 14
+
+  gabung:
+    needs: [saring]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q -r requirements.txt pyarrow
+      # Setiap artifak ke direktori berasingan (tanpa merge-multiple).
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: saringan-a03-*
+          path: artifacts/
+      - run: python3 AUTOTUNE/tala/saringan_a03.py --gabung artifacts/* --pilih "${{ inputs.pilih }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: saringan-a03-gabung
+          path: |
+            AUTOTUNE/hasil_a03/saringan.csv
+            AUTOTUNE/hasil_a03/pilihan.json
+      - name: Commit hasil
+        if: inputs.simpan == 'ya'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AUTOTUNE/hasil_a03/saringan.csv AUTOTUNE/hasil_a03/pilihan.json
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE A03: saringan 20 kaedah × 2 lorong × 4 sistem + pilihan
+
+          Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+          Claude-Session: https://claude.ai/code/session_01UbVUYB21nm7A8gfMBBRU4q"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 15))
+          done
+          exit 1

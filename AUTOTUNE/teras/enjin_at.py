@@ -9,6 +9,9 @@
 #   topeng — isyarat sah hanya jika topeng (universe bulan itu & kumpulan) benar.
 #   mula/akhir — hanya kemasukan dalam [mula, akhir]; data selepas akhir diabaikan (posisi terbuka ditutup
 #            pada tutup bar terakhir <= akhir, sebab 'hujung'); dagangan sebelum mula tidak menyekat.
+#   had_rugi — A03 (SPEC_A03 §2; lalai None = mati): henti = maksimum(henti kaedah, (1 − had_rugi) × harga masuk).
+#            Harga masuk (buka hari masuk) diketahui pada buka, jadi paras had berkuat kuasa mulai hari masuk + 1;
+#            peraturan gap dan rendah hari masuk (hari 1) kekal memakai henti kaedah sahaja.
 # Portfolio: 8 slot x 12.5%, susunan ikut rank (tertinggi dahulu), satu posisi setiap ticker (v1.2).
 import numpy as np, pandas as pd
 from numba import njit
@@ -41,7 +44,7 @@ def kos_sisi(medv):
 
 
 @njit(cache=True)
-def _trades(o, h, l, c, sig, st, tg, ex, kos, mula, akhir, i0, n1, tmax, warm, gap):
+def _trades(o, h, l, c, sig, st, tg, ex, kos, mula, akhir, i0, n1, tmax, warm, gap, had_rugi=0.0):
     N = len(o)
     r_t = np.empty(N, np.int64); r_i = np.empty(N, np.int64); r_j = np.empty(N, np.int64)
     r_x = np.empty(N); r_w = np.empty(N, np.int64); r_mfe = np.empty(N); r_e = np.empty(N); r_k = np.empty(N)
@@ -54,13 +57,16 @@ def _trades(o, h, l, c, sig, st, tg, ex, kos, mula, akhir, i0, n1, tmax, warm, g
             e = o[s + i + 1]
             sp = st[s + i]
             if np.isnan(sp): sp = -np.inf
+            sh = sp                                   # henti hari >= masuk + 1 (A03: had rugi)
+            if had_rugi > 0.0 and (1.0 - had_rugi) * e > sh: sh = (1.0 - had_rugi) * e
             j = i + 1; jumpa = False; x = 0.0; why = 0
             while j < n:
                 tgt = tg[s + j - 1] if j > i + 1 else np.nan
-                if (j > i + 1 or gap) and o[s + j] <= sp:
+                spj = sh if j > i + 1 else sp
+                if (j > i + 1 or gap) and o[s + j] <= spj:
                     x = o[s + j]; why = 1; jumpa = True; break
-                if l[s + j] <= sp:
-                    x = sp; why = 1; jumpa = True; break
+                if l[s + j] <= spj:
+                    x = spj; why = 1; jumpa = True; break
                 if not np.isnan(tgt):
                     if j > i + 1 and o[s + j] >= tgt:
                         x = o[s + j]; why = 2; jumpa = True; break
@@ -151,13 +157,14 @@ class Susun:
             if a is not None: n1[t] = np.searchsorted(d, a, 'right')
         return i0, n1
 
-    def dagangan(self, tmax=None, warm=200, mula=None, akhir=None, gap=True, kos=True, had60=True):
+    def dagangan(self, tmax=None, warm=200, mula=None, akhir=None, gap=True, kos=True, had60=True, had_rugi=None):
         tm = int(tmax or 0)
         if had60: tm = HAD_HARI if tm <= 0 else min(tm, HAD_HARI)
         k = kos_sisi(self.medv) if kos else np.full(len(self.o), COST)
         i0, n1 = self._sempadan(mula, akhir)
         t, i, j, ret, w, mfe, kk = _trades(self.o, self.h, self.l, self.c, self.sig, self.st, self.tg, self.ex, k,
-                                           self.mula, self.akhir, i0, n1, tm, int(warm), bool(gap))
+                                           self.mula, self.akhir, i0, n1, tm, int(warm), bool(gap),
+                                           float(had_rugi or 0.0))
         if len(t) == 0: return pd.DataFrame(columns=LAJUR_T)
         b = self.mula[t]
         return pd.DataFrame(dict(ticker=[self.nama[x] for x in t], sig=self.tarikh[b + i], ent=self.tarikh[b + i + 1],
