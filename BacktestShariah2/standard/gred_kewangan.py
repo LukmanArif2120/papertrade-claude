@@ -45,8 +45,18 @@ def tamat_tempoh(ms):
     return (datetime.fromtimestamp(ms / 1000, tz=timezone.utc) + timedelta(hours=8)).date()
 
 
-def baca_laporan(path):
+def baca_json_alat(path):
+    """Hasil alat MCP: JSON mentah, atau pembungkus [{"type": "text", "text": "<json>"}]."""
     d = json.load(open(path, encoding='utf-8'))
+    if isinstance(d, list) and d and isinstance(d[0], dict) and d[0].get('type') == 'text':
+        d = json.loads(d[0]['text'])
+    return d
+
+
+def baca_laporan(path):
+    d = baca_json_alat(path)
+    if d.get('ret_code') not in (None, 0):
+        return []
     d = d.get('data', d)
     out = []
     for r in d.get('report_list') or []:
@@ -71,7 +81,7 @@ def gabung_tempoh(senarai):
 
 def baca_terbit(path):
     """quote_financials_earnings_price_history -> {label: {'pub': 'YYYY-MM-DD', 'jenis': 0|1|2}} (tanpa is_current)."""
-    d = json.load(open(path, encoding='utf-8'))
+    d = baca_json_alat(path)
     d = d.get('data', d)
     out = {}
     for r in d.get('records') or []:
@@ -101,8 +111,8 @@ def simpan(folder, keluar, tarikh):
             k['terbit'].update(baca_terbit(pe))
         ps = os.path.join(folder, f'{t}_snap.json')
         if os.path.exists(ps):
-            s = json.load(open(ps, encoding='utf-8'))
-            s = s.get('data', s)
+            s = baca_json_alat(ps)
+            s = s.get('data', s) if isinstance(s, dict) else s
             s = s[0] if isinstance(s, list) and s else s
             v = (s or {}).get('issued_shares') if isinstance(s, dict) else None
             if v:
