@@ -1,0 +1,56 @@
+# RS rating seluruh pasaran AS setiap sesi -> BacktestShariah2/data/rs/ (dibaca oleh gred.py; skema gred RS 18 Okt 2026)
+# Sesi Claude tidak boleh capai Yahoo; runner GitHub boleh. Masa (UTC): 22:41 Isn–Jum selepas tutup New York; sandaran 03:17.
+name: RS pasaran
+
+on:
+  schedule:
+    - cron: '41 22 * * 1-5'
+    - cron: '17 3 * * 2-6'
+  workflow_dispatch:
+    inputs:
+      sejak:
+        description: 'Isi sejarah sejak YYYY-MM-DD (kosong = 10 sesi terakhir)'
+        required: false
+        default: ''
+  push:
+    branches: [main]
+    paths:
+      - 'BacktestShariah2/standard/rs_pasaran.py'
+      - '.github/workflows/rs_pasaran.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rs-pasaran
+  cancel-in-progress: false
+
+jobs:
+  rs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy yfinance exchange_calendars
+      - name: Kira RS seluruh pasaran
+        env:
+          SEJAK: ${{ github.event_name == 'push' && '2026-09-01' || github.event.inputs.sejak || '' }}
+        run: |
+          if [ -n "$SEJAK" ]; then X="--sejak $SEJAK"; else X=""; fi
+          python3 BacktestShariah2/standard/rs_pasaran.py --keluar BacktestShariah2/data/rs $X
+      - name: Commit dan push
+        run: |
+          git config user.name "rs-pasaran[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/rs
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "RS pasaran: $(python3 -c "import json;print(json.load(open('BacktestShariah2/data/rs/status.json'))['sesi_terakhir'])")"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1

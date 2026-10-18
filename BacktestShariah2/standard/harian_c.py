@@ -51,7 +51,7 @@ WATCH_LAJUR = ['Saham', 'Nama', 'Kaedah', 'Sektor', 'Industri', 'Harga', '% hamp
                'Syarat belum cukup', 'Syarat dipenuhi', 'Paras pencetus', 'Jarak %', 'Tarikh masuk watchlist',
                'Hari dalam watchlist', 'Skor', 'Set', 'tarikh_data', 'dibina']
 GRED_LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
-              'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
+              'rs_sah', 'rs_tanda', 'rs_industri', 'rs_sumber', 'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
               'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada']
 
 

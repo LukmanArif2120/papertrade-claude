@@ -60,11 +60,15 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 | sektor_us, industri_us | sektor Morningstar dan industri Moomoo saham itu (seluruh pasaran AS) |
 | gred_sektor, gred_industri | A–E atau "–" (skor panas seluruh pasaran AS, sandaran SST: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20; "–" = tiada data) |
 | skor_sektor, skor_industri | 0–100 |
-| rs_rating, gred_rs | 1–99; A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40 |
+| rs_rating, gred_rs | 1–99 (lawan seluruh pasaran AS harga ≥ USD5, `data/rs/rs_pasaran.csv`; sandaran stor harga). Sejak 18 Okt 2026: A = RS 90–99 disahkan, B = 80–89 disahkan, C = 70–79 atau ≥ 80 tidak/belum disahkan, D < 70; "–" = tiada data. Baris sebelum 18 Okt: skala lama (A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40) melainkan dikira semula (lihat gred_pada) |
+| rs_sah | ya / tidak: saham naik 12 bulan, SPY > SMA200 dan Mansfield > 0 (RS line atas purata 52 minggu); kosong = tiada data |
+| rs_tanda | sebab RS ≥ 80 tidak disahkan, atau "RS 95+: … berisiko"; kosong jika tiada |
+| rs_industri | 1–99: kekuatan industri (TradingView) saham itu antara industri; direkod, bukan gred |
+| rs_sumber | pasaran / stor |
 | gred_pemangkin, mata_pemangkin, pemangkin | Berita Panas (sejak 15 Okt 2026): A ≥ 5 mata, B 3–4.9, C 1–2.9, D 0–0.9, E < 0 (mata boleh berpecahan .5); ringkasan sebab, bermula "🔥 PANAS · " jika pemangkin Tier 1/2 disahkan harga + volum; "–" = belum dikumpul. Baris sebelum 15 Okt guna skala lama (A ≥ 4) |
 | pemangkin_url | JSON [{"tajuk", "url"}] maks 2 (pemangkin terkuat dahulu, kemudian terkini; URL https daripada quote_news_search / rating_summary); kosong jika tiada |
 | tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; selepas QR lalu: 0–1 hari sekurang-kurangnya C, 2–3 hari sekurang-kurangnya B (gred lebih buruk dipakai; sumber_earnings ditanda `; QR lalu N hari`); asas: kajian 18 Okt 2026 (659k dagangan 134 kaedah, 2019–2026; `standard/gred.py gred_qr`); sumber SST / Nasdaq / anggaran / tiada data |
-| gred_keseluruhan | purata mata gred yang ada (paparan sahaja; belum diuji) |
+| gred_keseluruhan | purata mata gred Sektor, Industri, Pemangkin, QR yang ada (RS tidak dikira sejak 18 Okt 2026; paparan sahaja; belum diuji) |
 | gred_pada | tarikh imbasan gred dikira |
 
 ## `pemangkin.json`

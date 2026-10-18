@@ -22,8 +22,11 @@ class UjiGred(unittest.TestCase):
         self.assertTrue(G.rs_rating(c).empty)
 
     def test_sempadan_gred(self):
-        self.assertEqual([G.gred_rs(x) for x in [99, 90, 89, 80, 79, 60, 59, 40, 39, None]],
-                         ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', 'E', '–'])
+        # skema 18 Okt 2026: A/B hanya jika disahkan; RS >= 80 tidak/belum disahkan -> C; < 70 -> D
+        self.assertEqual([G.gred_rs(x, True) for x in [99, 90, 89, 80, 79, 70, 69, 1, None]],
+                         ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D', '–'])
+        self.assertEqual([G.gred_rs(x, s) for x, s in [(99, False), (85, None), (75, False), (60, True)]],
+                         ['C', 'C', 'C', 'D'])
         self.assertEqual([G.gred_kumpulan(x) for x in [80, 79.9, 60, 40, 20, 19, None]],
                          ['A', 'B', 'B', 'C', 'D', 'E', '–'])
         self.assertEqual([G.gred_qr(x) for x in [None, 22, 21, 16, 15, 11, 10, 6, 5, 0]],
@@ -38,6 +41,43 @@ class UjiGred(unittest.TestCase):
         self.assertIsNone(G.sejak_qr(None, date(2026, 10, 19)))
         self.assertEqual(G.tanda_pasca_qr('Nasdaq', 2), 'Nasdaq; QR lalu 2 hari')
         self.assertEqual(G.tanda_pasca_qr('Nasdaq', 4), 'Nasdaq')
+
+    def test_rs_pengesahan(self):
+        self.assertTrue(G.disahkan(5.0, 1.0, True))
+        self.assertFalse(G.disahkan(5.0, 1.0, False))
+        self.assertFalse(G.disahkan(-1.0, 1.0, True))
+        self.assertFalse(G.disahkan(5.0, -0.5, True))
+        self.assertIsNone(G.disahkan(None, 1.0, True))
+        self.assertEqual(G.tanda_rs(96, 5.0, 1.0, True), 'RS 95+: purata tertinggi tetapi berisiko (median ≈ 0)')
+        self.assertEqual(G.tanda_rs(85, 5.0, 1.0, False), 'tidak disahkan: pasaran lemah (SPY < SMA200)')
+        self.assertEqual(G.tanda_rs(75, -5.0, -1.0, False), '')
+
+    def test_rs_stor_dan_pasaran(self):
+        import tempfile, json as _j
+        ix = pd.bdate_range('2025-01-01', periods=300)
+        c = pd.DataFrame({'KUAT': np.linspace(10, 40, 300), 'LEMAH': np.linspace(40, 10, 300),
+                          'MURAH': np.linspace(1, 4, 300), 'SED': np.linspace(10, 11, 300)}, index=ix)
+        spy = pd.Series(np.linspace(100, 150, 300), index=ix)
+        st, atas = G.rs_semua(c, spy, None)
+        self.assertTrue(atas)
+        self.assertNotIn('MURAH', st.rs.dropna().index)            # tutup < USD5 tidak dipangkat
+        self.assertEqual(set(st.rs_sumber), {'stor'})
+        r = {}; G.isi_rs(r, st.loc['KUAT'], atas)
+        self.assertEqual((r['gred_rs'], r['rs_sah'], r['rs_sumber']), ('A', 'ya', 'stor'))
+        r = {}; G.isi_rs(r, st.loc['LEMAH'], atas)
+        self.assertEqual(r['gred_rs'], 'D')
+        with tempfile.TemporaryDirectory() as d:   # rs_pasaran sesi sama diutamakan; sesi lain diabaikan
+            sesi = str(ix[-1].date())
+            pd.DataFrame([dict(tarikh=sesi, ticker='SED', rs=88, skor=0.1, mutlak12=3.0, mansfield=2.0, rs_industri=70)]
+                         ).to_csv(os.path.join(d, 'rs_pasaran.csv'), index=False)
+            _j.dump({'spy_atas200': {sesi: True}}, open(os.path.join(d, 'status.json'), 'w'))
+            st2, _ = G.rs_semua(c, spy, d)
+            self.assertEqual((st2.loc['SED', 'rs'], st2.loc['SED', 'rs_sumber']), (88, 'pasaran'))
+            self.assertEqual(st2.loc['KUAT', 'rs_sumber'], 'stor')
+            r = {}; G.isi_rs(r, st2.loc['SED'], True)
+            self.assertEqual((r['gred_rs'], r['rs_industri']), ('B', 70))
+            st3, _ = G.rs_semua(c.iloc[:-1], spy, d)
+            self.assertEqual(set(st3.rs_sumber), {'stor'})
 
     def test_hari_dagangan(self):
         self.assertEqual(G.hari_dagangan(date(2026, 10, 9), date(2026, 10, 13)), 2)  # Jumaat -> Selasa

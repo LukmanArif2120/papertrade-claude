@@ -16,7 +16,7 @@ POSISI = ['tarikh_beli', 'saham', 'kaedah', 'id_kaedah', 'sektor', 'industri', '
           'harga_buka_rujukan', 'tarikh_beli_dirancang',
           # gred pada hari isyarat (standard/gred.py; tugasan_v3 §8)
           'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
-          'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
+          'rs_sah', 'rs_tanda', 'rs_industri', 'rs_sumber', 'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
           'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada',
           # dua lorong keluar (standard/keluar_lorong.py; sejak 17 Okt 2026): lorong 2 pegang selagi naik
           'keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct', 'status_henti',
@@ -88,9 +88,14 @@ def semak_gred(nama, rows, ralat):
                 ok = False
             if not ok:
                 ralat.append(f'{nama}:{i}: pemangkin_url mesti JSON [{{"tajuk", "url" https}}]')
-        v = nombor(r.get('rs_rating'))
-        if not kosong(r.get('rs_rating')) and (v is None or not 1 <= v <= 99):
-            ralat.append(f'{nama}:{i}: rs_rating {r.get("rs_rating")!r} di luar 1–99')
+        for k in ('rs_rating', 'rs_industri'):
+            v = nombor(r.get(k))
+            if not kosong(r.get(k)) and (v is None or not 1 <= v <= 99):
+                ralat.append(f'{nama}:{i}: {k} {r.get(k)!r} di luar 1–99')
+        if (r.get('rs_sah') or '') not in ('', 'ya', 'tidak'):
+            ralat.append(f'{nama}:{i}: rs_sah {r.get("rs_sah")!r} bukan ya/tidak')
+        if (r.get('rs_sumber') or '') not in ('', 'pasaran', 'stor'):
+            ralat.append(f'{nama}:{i}: rs_sumber {r.get("rs_sumber")!r} bukan pasaran/stor')
 
 
 def semak_posisi(nama, lajur, rows, ralat, amaran, kunci):

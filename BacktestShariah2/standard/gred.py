@@ -22,31 +22,127 @@ GRED = ['A', 'B', 'C', 'D', 'E']
 MATA = {'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0}
 TIADA = '–'
 LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
-         'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings', 'sumber_earnings', 'gred_qr',
+         'rs_sah', 'rs_tanda', 'rs_industri', 'rs_sumber', 'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings', 'sumber_earnings', 'gred_qr',
          'gred_keseluruhan', 'gred_pada']
 
 
 # ---------- RS rating (gaya IBD, 1–99) ----------
-def rs_rating(close):
-    """close: DataFrame (index tarikh, lajur ticker). Pulangkan Series RS 1–99 pada bar terakhir.
-    Skor = 40% pulangan 63 hari terkini + 20% setiap satu daripada tiga suku sebelumnya; pangkat persentil
-    berbanding semua saham dalam stor harga. Saham dengan < 253 bar tiada RS."""
+# Skema 18 Okt 2026 (kajian 3,830 saham AS 2005–2026: kajian/rs/RINGKASAN.md; tugasan_v3.md §8):
+#   RS dipangkat berbanding SELURUH pasaran AS (data/rs/rs_pasaran.csv, Actions rs_pasaran.yml); sandaran stor harga.
+#   Kelebihan RS hanya sah jika "disahkan": saham naik dalam 12 bulan, SPY > SMA200, Mansfield > 0 (RS line atas purata 52 minggu).
+#   Lebihan 63 hari atas pasaran: A +1.5% (CI95 +0.8..+2.3), RS 95+ +1.9% tetapi median ≈ 0 (ditanda), B +0.6%, C ≈ 0, D −0.2..−0.4%.
+#   RS >= 80 yang tidak disahkan ≈ 0 (pasaran lemah: RS tinggi kalah kepada pasaran) -> C.
+RS_SAH = ('mutlak12', 'mansfield', 'spy_atas200')
+
+
+def skor_rs(close):
+    """close: DataFrame (index tarikh, lajur ticker). Skor IBD pada bar terakhir: 40% pulangan 63 hari terkini + 20% setiap
+    satu daripada tiga suku sebelumnya. Saham dengan < 253 bar atau tiada harga 252 hari lalu tiada skor."""
     c = close.sort_index()
     if len(c) < 253:
         return pd.Series(dtype=float)
     a = c.iloc[-1]
     q = [c.iloc[-64], c.iloc[-127], c.iloc[-190], c.iloc[-253]]
     skor = 0.4 * (a / q[0] - 1) + 0.2 * (q[0] / q[1] - 1) + 0.2 * (q[1] / q[2] - 1) + 0.2 * (q[2] / q[3] - 1)
-    skor = skor.replace([np.inf, -np.inf], np.nan).dropna()
+    return skor.replace([np.inf, -np.inf], np.nan).dropna()
+
+
+def rs_rating(close, harga_min=5.0):
+    """Pangkat persentil 1–99 skor RS berbanding semua saham dalam `close` dengan tutup terakhir >= harga_min."""
+    skor = skor_rs(close)
+    if skor.empty:
+        return skor
+    akhir = close.sort_index().iloc[-1].reindex(skor.index)
+    skor = skor[akhir >= harga_min] if harga_min else skor
     return (skor.rank(pct=True) * 98 + 1).round().astype(int).clip(1, 99)
 
 
-def gred_rs(rs):
-    """Ujian 2019–2026 (431 saham, pulangan 21 hari): RS 90+ purata +4.2% lawan +1.6–2.2% bagi gred lain,
-    dan mendahului setiap tahun. Sempadan ikut ujian itu."""
+def sah_rs(close, spy):
+    """Pengesahan pada bar terakhir: DataFrame (ticker) mutlak12 (% 252 hari), mansfield (% RS line atas purata 252 hari),
+    dan skalar spy_atas200. close dan spy (Series) berindeks tarikh sama."""
+    c = close.sort_index()
+    s = spy.reindex(c.index).ffill()
+    out = pd.DataFrame(index=c.columns, dtype=float)
+    out['mutlak12'] = ((c.iloc[-1] / c.iloc[-253] - 1) * 100) if len(c) >= 253 else np.nan
+    rl = c.div(s, axis=0)
+    out['mansfield'] = ((rl.iloc[-1] / rl.iloc[-252:].mean() - 1) * 100) if len(c) >= 252 else np.nan
+    atas = bool(s.iloc[-1] > s.iloc[-200:].mean()) if len(s.dropna()) >= 200 else None
+    return out, atas
+
+
+def disahkan(mutlak12, mansfield, spy_atas200):
+    """True/False, atau None jika data pengesahan tiada."""
+    v = [mutlak12, mansfield, spy_atas200]
+    if any(x is None or (isinstance(x, float) and np.isnan(x)) for x in v):
+        return None
+    return bool(mutlak12 > 0 and mansfield > 0 and spy_atas200)
+
+
+def gred_rs(rs, sah=None):
+    """A: RS 90–99 disahkan; B: 80–89 disahkan; C: 70–79, atau >= 80 tidak/belum disahkan; D: < 70."""
     if rs is None or (isinstance(rs, float) and np.isnan(rs)):
         return TIADA
-    return 'A' if rs >= 90 else 'B' if rs >= 80 else 'C' if rs >= 60 else 'D' if rs >= 40 else 'E'
+    if rs < 70:
+        return 'D'
+    if rs < 80 or not sah:
+        return 'C'
+    return 'A' if rs >= 90 else 'B'
+
+
+def tanda_rs(rs, mutlak12=None, mansfield=None, spy_atas200=None):
+    """Teks amaran bagi paparan: sebab RS >= 80 tidak disahkan, atau risiko RS 95+."""
+    if rs is None or (isinstance(rs, float) and np.isnan(rs)) or rs < 80:
+        return ''
+    sah = disahkan(mutlak12, mansfield, spy_atas200)
+    if sah is None:
+        return 'pengesahan tiada data'
+    if not sah:
+        s = [x for x, b in (('pasaran lemah (SPY < SMA200)', not spy_atas200), ('saham turun 12 bulan', mutlak12 <= 0),
+                            ('Mansfield < 0', mansfield <= 0)) if b]
+        return 'tidak disahkan: ' + ', '.join(s)
+    return 'RS 95+: purata tertinggi tetapi berisiko (median ≈ 0)' if rs >= 95 else ''
+
+
+def baca_rs_pasaran(folder, sesi):
+    """data/rs/rs_pasaran.csv -> DataFrame (ticker) bagi `sesi` (YYYY-MM-DD) dan spy_atas200; (None, None) jika tiada."""
+    f = os.path.join(folder, 'rs_pasaran.csv') if folder else None
+    st = os.path.join(folder, 'status.json') if folder else None
+    if not f or not os.path.exists(f) or not os.path.exists(st):
+        return None, None
+    d = pd.read_csv(f, dtype={'tarikh': str})
+    d = d[d.tarikh == sesi]
+    spy = (json.load(open(st, encoding='utf-8')).get('spy_atas200') or {}).get(sesi)
+    if d.empty or spy is None:
+        return None, None
+    return d.set_index('ticker'), bool(spy)
+
+
+def muat_spy(folder):
+    p = os.path.join(folder, 'harga_idx.csv')
+    if not os.path.exists(p):
+        return None
+    d = pd.read_csv(p, usecols=['ticker', 'date', 'close'])
+    d = d[d.ticker == 'SPY']
+    return pd.Series(d.close.values, index=pd.to_datetime(d.date.astype(str))).sort_index()
+
+
+def rs_semua(c, spy, folder_rs=None):
+    """RS dan pengesahan bagi bar terakhir `c`: utama seluruh pasaran (rs_pasaran.csv sesi sama), sandaran stor harga.
+    Pulang (DataFrame ticker: rs, mutlak12, mansfield, rs_industri, rs_sumber; spy_atas200)."""
+    sesi = str(c.index[-1].date())
+    pas, atas = baca_rs_pasaran(folder_rs, sesi)
+    st = pd.DataFrame({'rs': rs_rating(c)})
+    if spy is not None:
+        sh, atas_st = sah_rs(c, spy)
+        st = st.join(sh, how='outer')
+        atas = atas_st if atas is None else atas
+    st['rs_industri'] = np.nan
+    st['rs_sumber'] = 'stor'
+    if pas is not None:
+        p = pas.reindex(columns=['rs', 'mutlak12', 'mansfield', 'rs_industri']).copy()
+        p['rs_sumber'] = 'pasaran'
+        st = pd.concat([p, st[~st.index.isin(p.index)]])
+    return st, atas
 
 
 # ---------- Sektor / Industri (skor panas SST, 0–100) ----------
@@ -659,12 +755,28 @@ def pemangkin_yahoo(d, hari_ini, nama=None, tickers=None, institusi=None, nas=No
 
 
 def gred_keseluruhan(gred):
-    """Purata mata gred yang ada (A=4 … E=0) -> huruf. Belum diuji; untuk paparan sahaja."""
+    """Purata mata gred yang ada (A=4 … E=0) -> huruf. Belum diuji; untuk paparan sahaja. Sejak 18 Okt 2026 RS tidak
+    dimasukkan (gred RS sudah menggabung pengesahan pasaran; dinilai berasingan)."""
     v = [MATA[g] for g in gred if g in MATA]
     if not v:
         return TIADA
     x = sum(v) / len(v)
     return 'A' if x >= 3.5 else 'B' if x >= 2.5 else 'C' if x >= 1.5 else 'D' if x >= 0.5 else 'E'
+
+
+def isi_rs(r, x, spy_atas):
+    """Isi lajur RS satu baris daripada satu baris `rs_semua` (atau None)."""
+    nil = lambda k: None if x is None or k not in x or pd.isna(x[k]) else float(x[k])
+    rs = nil('rs')
+    rs = None if rs is None else int(rs)
+    m12, mf, ri = nil('mutlak12'), nil('mansfield'), nil('rs_industri')
+    sah = disahkan(m12, mf, spy_atas)
+    r['rs_rating'] = '' if rs is None else rs
+    r['gred_rs'] = gred_rs(rs, sah)
+    r['rs_sah'] = '' if rs is None or sah is None else 'ya' if sah else 'tidak'
+    r['rs_tanda'] = tanda_rs(rs, m12, mf, spy_atas)
+    r['rs_industri'] = '' if ri is None else int(ri)
+    r['rs_sumber'] = '' if rs is None else x['rs_sumber']
 
 
 # ---------- CLI ----------
@@ -758,7 +870,7 @@ def tambah(a):
     lajur = list(rows[0].keys()) if rows else []
     hari_ini = date.fromisoformat(a.tarikh)
     c, v = muat_harga(a.harga)
-    rs = rs_rating(c)
+    rsd, spy_atas = rs_semua(c, muat_spy(a.harga), getattr(a, 'rs', None))
     vn = (v.iloc[-5:].mean() / v.iloc[-50:].mean()) if len(v) >= 50 else pd.Series(dtype=float)
     n5 = (c.iloc[-1] / c.iloc[-6] - 1) * 100 if len(c) >= 6 else pd.Series(dtype=float)
     sek, ind = peta_sektor(a.sektor)
@@ -779,8 +891,7 @@ def tambah(a):
         s2 = puind.get(iu) if iu in puind else ind.get(ambil(r, 'industri', 'Industri'))
         r['skor_sektor'] = '' if s1 is None else round(s1, 1); r['gred_sektor'] = gred_kumpulan(s1)
         r['skor_industri'] = '' if s2 is None else round(s2, 1); r['gred_industri'] = gred_kumpulan(s2)
-        x = int(rs[t]) if t in rs.index else None
-        r['rs_rating'] = '' if x is None else x; r['gred_rs'] = gred_rs(x)
+        isi_rs(r, rsd.loc[t] if t in rsd.index else None, spy_atas)
         te, sumber = (ear or {}).get(t), 'SST'
         if te is None and nas is not None:
             d = earnings_nasdaq(nas.get(t), hari_ini)[1]
@@ -822,8 +933,7 @@ def tambah(a):
         else:
             r['mata_pemangkin'] = ''; r['pemangkin'] = 'belum dikumpul'; r['gred_pemangkin'] = TIADA
             r['pemangkin_url'] = ''
-        r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_rs'],
-                                                  r['gred_pemangkin'], r['gred_qr']])
+        r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
         r['gred_pada'] = a.tarikh
     out = lajur + [k for k in LAJUR if k not in lajur]
     with open(a.csv, 'w', newline='', encoding='utf-8') as f:
@@ -846,6 +956,8 @@ def main(argv=None):
     t.add_argument('--acara', help='JSON SST market_events (daysLookahead 30)')
     t.add_argument('--pemangkin', help='papertrade/pemangkin.json (hasil `gred.py kumpul`)')
     t.add_argument('--nasdaq', help='data/pemangkin/earnings_nasdaq.json (Actions): tarikh earnings kedua selepas SST')
+    t.add_argument('--rs', default=os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data', 'rs'),
+                   help='folder rs_pasaran.csv + status.json (RS seluruh pasaran AS; sandaran stor harga)')
     t.add_argument('--tarikh', required=True, help='tarikh imbasan YYYY-MM-DD')
     k = sp.add_parser('kumpul', help='fail mentah alat (berita/analisis/orangdalam/earnings/sst_<T>.json) -> pemangkin.json')
     k.add_argument('--folder', help='folder fail mentah alat Moomoo/SST (pilihan jika --yahoo diberi)')

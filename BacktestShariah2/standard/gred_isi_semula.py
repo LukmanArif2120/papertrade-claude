@@ -1,6 +1,7 @@
 # Isi semula gred bagi posisi papertrade yang dibeli sebelum gred mula direkod (14 Okt 2026). Keputusan pengguna 17 Okt 2026.
 # Hanya baris dibeli tanpa gred_keseluruhan diubah; baris yang sudah bergred tidak disentuh.
-#   RS        : dikira tepat pada tarikh rujukan (tarikh_isyarat, atau sesi sebelum tarikh_beli) daripada stor harga.
+#   RS        : dikira tepat pada tarikh rujukan (tarikh_isyarat, atau sesi sebelum tarikh_beli): seluruh pasaran
+#               (data/rs/rs_pasaran.csv) jika ada, sandaran stor harga; skema gred RS 18 Okt 2026 (gred.gred_rs).
 #   QR        : hari dagangan dari tarikh rujukan ke earnings terdekat (Nasdaq data/pemangkin/earnings_nasdaq.json).
 #   Sektor/Ind: snapshot sektor_pasaran.csv terkini (data hari isyarat tiada) — ditanda dalam gred_pada.
 #   Pemangkin : '–' (berita hari isyarat tiada).
@@ -30,8 +31,10 @@ def main(argv=None):
     ap.add_argument('--folder', default=PT)
     ap.add_argument('--nasdaq', default=os.path.join(BS2, 'data', 'pemangkin', 'earnings_nasdaq.json'))
     ap.add_argument('--tarikh', default=date.today().isoformat(), help='tarikh isi semula (untuk gred_pada)')
+    ap.add_argument('--rs', default=os.path.join(BS2, 'data', 'rs'), help='folder rs_pasaran.csv + status.json')
     a = ap.parse_args(argv)
     c, _ = G.muat_harga(a.harga)
+    spy = G.muat_spy(a.harga)
     sesi = list(c.index)
     pusek, puind = G.peta_pasaran(os.path.join(a.folder, 'sektor_pasaran.csv'))
     sek, ind = G.peta_sektor(os.path.join(a.folder, 'sektor.csv'))
@@ -55,8 +58,9 @@ def main(argv=None):
                     continue
                 ti = str(sb[-1].date())
             if ti not in rs_cache:
-                rs_cache[ti] = G.rs_rating(c[c.index <= pd.Timestamp(ti)])
-            rs = rs_cache[ti]
+                k = c[c.index <= pd.Timestamp(ti)]
+                rs_cache[ti] = G.rs_semua(k, spy, a.rs)
+            rsd, spy_atas = rs_cache[ti]
             ref = date.fromisoformat(ti)
             iu = pind.get(t); su = SEKTOR_INDUSTRI.get(iu) if iu else None
             s1 = pusek.get(su) if su in pusek else sek.get(r.get('sektor'))
@@ -64,8 +68,7 @@ def main(argv=None):
             r['sektor_us'] = su or ''; r['industri_us'] = iu or ''
             r['skor_sektor'] = '' if s1 is None else round(s1, 1); r['gred_sektor'] = G.gred_kumpulan(s1)
             r['skor_industri'] = '' if s2 is None else round(s2, 1); r['gred_industri'] = G.gred_kumpulan(s2)
-            x = int(rs[t]) if t in rs.index else None
-            r['rs_rating'] = '' if x is None else x; r['gred_rs'] = G.gred_rs(x)
+            G.isi_rs(r, rsd.loc[t] if t in rsd.index else None, spy_atas)
             e = nas.get(t) or {}
             cal = sorted(d for d in (G._tarikh(e.get('lalu')), G._tarikh(e.get('seterusnya'))) if d and d >= ref)
             te = cal[0] if cal else None
@@ -79,7 +82,7 @@ def main(argv=None):
             else:
                 r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = G.TIADA
             r['mata_pemangkin'] = ''; r['pemangkin'] = 'tiada data (isi semula)'; r['gred_pemangkin'] = G.TIADA; r['pemangkin_url'] = ''
-            r['gred_keseluruhan'] = G.gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_rs'], r['gred_pemangkin'], r['gred_qr']])
+            r['gred_keseluruhan'] = G.gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
             r['gred_pada'] = f'isi semula {a.tarikh} (RS & QR pada {ti}; sektor/industri snapshot {snap})'
             ubah += 1
             for k in ('gred_rs', 'gred_qr', 'gred_keseluruhan'):
