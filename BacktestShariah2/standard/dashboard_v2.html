@@ -942,9 +942,9 @@ function prKpis(rows){const v=rows.map(r=>r.hasil).filter(x=>x!=null);const w=mi
     <div class="kpi"><div class="lbl" data-tip="usd_sama">Jika USD1,000 setiap posisi</div><div class="v ${cls(usd)}">${usd==null?'–':(usd<0?'−':'+')+'USD'+Math.abs(usd).toLocaleString('en-US',{maximumFractionDigits:0})}</div><div class="s">modal USD${(v.length*USD_POSISI).toLocaleString('en-US')} · ${sg2(a)} setiap posisi</div></div>
   </div>`;}
 /* prestasi setiap gred: adakah gred A benar-benar lebih untung? */
-/* gred Sektor/Industri: hanya v2 (gred_pada >= 19 Okt 2026, standard/gred_kumpulan.py). v1 (skor panas) dan baris isi semula
+/* gred Sektor/Industri: hanya v2 (gred_pada >= 19 Okt 2026, atau ditanda "S/I v2" jika dikira semula; standard/gred_kumpulan.py). v1 (skor panas) dan baris isi semula
    (skor dikira SELEPAS belian) dikecualikan supaya dua formula tidak bercampur */
-const grSahKump=r=>{const t=String(r.gred_pada||'');return /^\d{4}-\d\d-\d\d/.test(t)&&t.slice(0,10)>='2026-10-19';};
+const grSahKump=r=>{const t=String(r.gred_pada||'');return /S\/I v2/.test(t)||(/^\d{4}-\d\d-\d\d/.test(t)&&t.slice(0,10)>='2026-10-19');};
 function prGred(rows){const ada=rows.filter(adaGred);
   if(!ada.length)return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">Gred direkod mulai belian 14 Okt 2026</span></div><p class="empty">Belum ada posisi bergred. Imbasan harian mengira gred Sektor, Industri, RS, Pemangkin dan QR; belian 9:35 NY menyalinnya ke setiap posisi.</p></div>`;
   const out=[];GDIM.forEach(([k,,nama])=>{const asal=(k==='gred_sektor'||k==='gred_industri')?ada.filter(grSahKump):ada;['A','B','C','D','E'].forEach(g=>{const a=asal.filter(r=>r[k]===g);if(!a.length)return;const v=a.map(r=>r.hasil).filter(x=>x!=null);const t=a.filter(r=>r.keluar);const vt=t.map(r=>r.untung_akhir_pct).filter(x=>x!=null);
