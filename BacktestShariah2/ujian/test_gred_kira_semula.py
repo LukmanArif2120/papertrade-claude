@@ -54,7 +54,7 @@ class UjiKiraSemula(unittest.TestCase):
         self.assertEqual(r['gred_pemangkin'], 'A')                 # +30% lawan pasaran, umur 2 hari
         self.assertEqual(r['gred_qr'], 'A')                        # QR lalu 4 hari dagangan sebelum 16 Okt: tiada had
         self.assertEqual(r['gred_keseluruhan'], 'A')
-        self.assertEqual(r['gred_pada'], '2026-10-16; lama; skema semasa 2026-10-18 (rujukan 2026-10-15)')
+        self.assertEqual(r['gred_pada'], '2026-10-16; lama; skema semasa 2026-10-18 (S/I v2, rujukan 2026-10-15)')
         r2 = dict(r, kaedah='M02')
         KS.kira_baris(r2, pd.Timestamp('2026-10-15'), date(2026, 10, 16), ctx, kira)
         self.assertEqual(r2['gred_pada'].count('skema semasa'), 1)  # catatan tidak berganda
