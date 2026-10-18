@@ -1,0 +1,174 @@
+{
+ "versi": "A03",
+ "dicipta": "2026-10-18T12:57:30Z",
+ "n_pilih": 10,
+ "tempoh": [
+  "2013-01-01",
+  "2018-12-31"
+ ],
+ "kaedah": [
+  "M06",
+  "M28",
+  "M35",
+  "M37",
+  "M38",
+  "M44",
+  "M51",
+  "M54",
+  "M64",
+  "M66",
+  "M74",
+  "M87",
+  "M88",
+  "M104",
+  "M131",
+  "M30",
+  "M121",
+  "M125",
+  "M04",
+  "M78"
+ ],
+ "pakar": [
+  "M06",
+  "M28",
+  "M35",
+  "M37",
+  "M38",
+  "M44",
+  "M51",
+  "M54",
+  "M64",
+  "M66",
+  "M74",
+  "M87",
+  "M88",
+  "M104"
+ ],
+ "lain": [
+  "M131",
+  "M30",
+  "M121",
+  "M125",
+  "M04",
+  "M78"
+ ],
+ "sistem": {
+  "varian": "utama",
+  "F": true,
+  "M": true,
+  "slot": 5,
+  "w": 0.2,
+  "had_rugi": 0.08,
+  "ambang_eps": 0.25
+ },
+ "ablasi": [
+  "f_sahaja",
+  "m_sahaja",
+  "tanpa"
+ ],
+ "peraturan": "skor_menang = min(kadar menang A, B) di kalangan CAGR A dan B > 0 (SPEC_A03 \u00a76); PARAM asal; sistem utama sahaja; SIAP dan ada TALA",
+ "n_saringan": 160,
+ "n_siap": 160,
+ "pilihan": {
+  "had60": [
+   "M37",
+   "M38",
+   "M88",
+   "M121",
+   "M78",
+   "M04"
+  ],
+  "asal": [
+   "M121",
+   "M37",
+   "M88",
+   "M51"
+  ]
+ },
+ "tugas": [
+  "M37_had60",
+  "M38_had60",
+  "M121_asal",
+  "M88_had60",
+  "M121_had60",
+  "M37_asal",
+  "M88_asal",
+  "M78_had60",
+  "M51_asal",
+  "M04_had60"
+ ],
+ "varian": {
+  "utama": {
+   "had60": {
+    "n": 20,
+    "skor_pos": 0,
+    "cagr_pos": 15,
+    "median_skor": -0.094125,
+    "median_menang_A": 0.368995,
+    "median_n_A": 161.0
+   },
+   "asal": {
+    "n": 20,
+    "skor_pos": 0,
+    "cagr_pos": 15,
+    "median_skor": -0.093688,
+    "median_menang_A": 0.353457,
+    "median_n_A": 126.0
+   }
+  },
+  "f_sahaja": {
+   "had60": {
+    "n": 20,
+    "skor_pos": 1,
+    "cagr_pos": 17,
+    "median_skor": -0.084377,
+    "median_menang_A": 0.375461,
+    "median_n_A": 195.0
+   },
+   "asal": {
+    "n": 20,
+    "skor_pos": 0,
+    "cagr_pos": 16,
+    "median_skor": -0.09157,
+    "median_menang_A": 0.361423,
+    "median_n_A": 157.0
+   }
+  },
+  "m_sahaja": {
+   "had60": {
+    "n": 20,
+    "skor_pos": 0,
+    "cagr_pos": 7,
+    "median_skor": -0.141341,
+    "median_menang_A": 0.327616,
+    "median_n_A": 196.5
+   },
+   "asal": {
+    "n": 20,
+    "skor_pos": 0,
+    "cagr_pos": 6,
+    "median_skor": -0.137812,
+    "median_menang_A": 0.32554,
+    "median_n_A": 160.0
+   }
+  },
+  "tanpa": {
+   "had60": {
+    "n": 20,
+    "skor_pos": 1,
+    "cagr_pos": 8,
+    "median_skor": -0.149931,
+    "median_menang_A": 0.349253,
+    "median_n_A": 250.0
+   },
+   "asal": {
+    "n": 20,
+    "skor_pos": 0,
+    "cagr_pos": 12,
+    "median_skor": -0.108094,
+    "median_menang_A": 0.335145,
+    "median_n_A": 185.0
+   }
+  }
+ }
+}
