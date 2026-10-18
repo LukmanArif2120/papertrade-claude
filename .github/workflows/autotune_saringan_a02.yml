@@ -1,0 +1,112 @@
+# AUTOTUNE A02 peringkat 1 (SPEC_A02 §3): saringan semua kaedah × 2 lorong, PARAM asal, 2013–2018, A dan B.
+# saring (matriks shard) → gabung: AUTOTUNE/hasil_a02/saringan.csv + pilihan.json (commit ke main jika simpan=ya).
+name: autotune_saringan_a02
+
+on:
+  workflow_dispatch:
+    inputs:
+      shard:
+        description: "bilangan shard (job serentak)"
+        default: '20'
+      pilih:
+        description: "bilangan kaedah dipilih setiap lorong"
+        default: '20'
+      simpan:
+        description: "commit hasil ke main (ya/tidak)"
+        default: 'ya'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autotune-saringan-a02
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: '1'
+  NUMBA_CACHE_DIR: ${{ github.workspace }}/.numba
+
+jobs:
+  matriks:
+    runs-on: ubuntu-latest
+    outputs:
+      m: ${{ steps.m.outputs.m }}
+    steps:
+      - id: m
+        run: echo "m=$(python3 -c "import json; print(json.dumps(list(range(int('${{ inputs.shard }}')))))")" >> "$GITHUB_OUTPUT"
+
+  saring:
+    needs: matriks
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard: ${{ fromJSON(needs.matriks.outputs.m) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - name: Muat turun data Release A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -D AUTOTUNE/.cache_a02 --clobber && break
+            sleep 20
+          done
+          ls AUTOTUNE/.cache_a02 | wc -l
+      - name: Saringan shard ${{ matrix.shard }}
+        run: |
+          ( while true; do sleep 300; echo "[memori] $(free -m | awk 'NR==2{print $3"/"$2" MB"}')"; done ) &
+          python3 AUTOTUNE/tala/saringan_a02.py --shard ${{ matrix.shard }} --n-shard ${{ inputs.shard }} --proses 4 --cache AUTOTUNE/.cache_a02 --keluar kirim
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: saringan-${{ matrix.shard }}
+          path: kirim/
+          if-no-files-found: warn
+          retention-days: 14
+
+  gabung:
+    needs: [saring]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q pandas numpy
+      # Setiap artifak ke direktori berasingan (tanpa merge-multiple).
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: saringan-*
+          path: artifacts/
+      - run: python3 AUTOTUNE/tala/saringan_a02.py --gabung artifacts/* --pilih "${{ inputs.pilih }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: saringan-gabung
+          path: |
+            AUTOTUNE/hasil_a02/saringan.csv
+            AUTOTUNE/hasil_a02/pilihan.json
+      - name: Commit hasil
+        if: inputs.simpan == 'ya'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AUTOTUNE/hasil_a02/saringan.csv AUTOTUNE/hasil_a02/pilihan.json
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE A02: saringan 2 lorong + pilihan"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 15))
+          done
+          exit 1

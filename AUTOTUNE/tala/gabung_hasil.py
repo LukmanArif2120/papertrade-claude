@@ -20,10 +20,12 @@ DIR_KAEDAH = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__fil
 
 
 def versi_kod(mid, dir_kaedah=DIR_KAEDAH):
-    """16 aksara pertama sha256 fail AUTOTUNE/kaedah/Mxx.py (None jika tiada)."""
-    try:
-        with open(os.path.join(dir_kaedah, mid + '.py'), 'rb') as fh: return hashlib.sha256(fh.read()).hexdigest()[:16]
-    except OSError: return None
+    """16 aksara pertama sha256 fail AUTOTUNE/kaedah/Mxx.py (None jika tiada). A02: 'Mxx_<lorong>' → Mxx.py."""
+    for nama in ([mid, mid.split('_')[0]] if '_' in str(mid) else [mid]):
+        try:
+            with open(os.path.join(dir_kaedah, nama + '.py'), 'rb') as fh: return hashlib.sha256(fh.read()).hexdigest()[:16]
+        except OSError: continue
+    return None
 
 
 def baca(f):

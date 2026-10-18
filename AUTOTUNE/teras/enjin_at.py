@@ -5,6 +5,7 @@
 #   kos    — kos setiap sisi = 0.001 + slippage ikut median 20 hari (tutup x volum) pada hari isyarat:
 #            >= 5e7 → 0.0005; >= 1e7 → 0.0010; selain itu (atau NaN) → 0.0025.
 #   had60  — pegangan maksimum 60 hari dagangan: tmax = min(TMAX, 60) (TMAX None/0 → 60).
+#            A02: lorong 'asal' = had60=False (tiada had enjin; TMAX asal kaedah dikekalkan). LORONG memetakan nama.
 #   topeng — isyarat sah hanya jika topeng (universe bulan itu & kumpulan) benar.
 #   mula/akhir — hanya kemasukan dalam [mula, akhir]; data selepas akhir diabaikan (posisi terbuka ditutup
 #            pada tutup bar terakhir <= akhir, sebab 'hujung'); dagangan sebelum mula tidak menyekat.
@@ -18,6 +19,13 @@ HAD_HARI = 60
 SLIP = ((5e7, 0.0005), (1e7, 0.0010), (0.0, 0.0025))
 SEBAB = ['hujung', 'henti', 'sasaran', 'isyarat keluar', 'masa']
 LAJUR_T = ['ticker', 'sig', 'ent', 'ex', 'ret', 'days', 'why', 'rank', 'mfe', 'kos']
+LORONG = {'had60': True, 'asal': False}   # A02 (SPEC_A02 §2): nama lorong → nilai bendera had60
+
+
+def had60_lorong(lorong):
+    """'had60' → True (A01, lalai); 'asal' → False (tiada had enjin)."""
+    if lorong not in LORONG: raise ValueError(f'lorong tidak sah: {lorong}')
+    return LORONG[lorong]
 
 
 def siap(g):
@@ -209,7 +217,7 @@ def _jumlah_py(v, np_, n):
 
 @njit(cache=True)
 def _portfolio(A, tk, ent, ex, ret, g0, g1, slots, w):
-    D = A.shape[1]; curve = np.empty(D)
+    D = A.shape[1]; curve = np.empty(D); dipegang = np.zeros(len(tk), np.bool_)
     p_t = np.empty(slots, np.int64); p_ex = np.empty(slots, np.int64); p_ret = np.empty(slots)
     p_a = np.empty(slots); p_ent = np.empty(slots, np.int64); p_np = np.zeros(slots, np.bool_); n = 0
     v = np.empty(slots); vn = np.zeros(slots, np.bool_)
@@ -235,6 +243,7 @@ def _portfolio(A, tk, ent, ex, ret, g0, g1, slots, w):
             if a <= 0: break
             cash -= a; cash_np = cash_np or a_np
             p_t[n] = tk[r]; p_ex[n] = ex[r]; p_ret[n] = ret[r]; p_a[n] = a; p_ent[n] = d; p_np[n] = a_np; n += 1
+            dipegang[r] = True
         m = 0
         for q in range(n):
             if p_ex[q] == d and p_ent[q] == d:
@@ -253,7 +262,7 @@ def _portfolio(A, tk, ent, ex, ret, g0, g1, slots, w):
             mv, mv_np = _jumlah_py(v, vn, n)
             eq = cash + mv; eq_np = cash_np or mv_np
         curve[d] = eq
-    return curve
+    return curve, dipegang
 
 
 class Pasaran:
@@ -274,7 +283,8 @@ class Pasaran:
             if len(s): self.A[q] = s.reindex(self.tarikh, method='ffill').values
         self.pos = pd.Series(np.arange(len(self.tarikh)), self.tarikh)
 
-    def lengkung(self, T, slots=8, w=0.125):
+    def lengkung(self, T, slots=8, w=0.125, pegang=False):
+        """Lengkung ekuiti. pegang=True (A02): pulang (lengkung, dagangan yang benar-benar dipegang portfolio)."""
         if len(T):
             k = T.ent >= self.mula
             if self.akhir is not None: k &= T.ent <= self.akhir
@@ -294,7 +304,10 @@ class Pasaran:
             if g1[d] == 0: g1[d] = r + 1
             g0[d] = r
         if not (tk >= 0).all(): raise KeyError('saham dalam T tiada dalam fr')
-        return pd.Series(_portfolio(self.A, tk, en, ek, ret, g0, g1, slots, w), index=self.tarikh)
+        cv, dp = _portfolio(self.A, tk, en, ek, ret, g0, g1, slots, w)
+        cv = pd.Series(cv, index=self.tarikh)
+        if pegang: return cv, (T[dp] if len(T) else T)
+        return cv
 
 
 def portfolio(T, fr, slots=8, w=0.125, mula=None, akhir=None):

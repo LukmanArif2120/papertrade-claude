@@ -1,0 +1,137 @@
+# AUTOTUNE A02 peringkat 2 (SPEC_A02 §3): tala kaedah-lorong dalam hasil_a02/pilihan.json, kajian 0–7.
+# rancang → tala (matriks shard, 4 proses) → gabung (gabung_hasil.py; artifak setiap shard = fail yang ditulis sahaja).
+name: autotune_tala_a02
+
+on:
+  workflow_dispatch:
+    inputs:
+      kajian:
+        description: "julat kajian (0-7)"
+        default: '0-7'
+      percubaan:
+        description: "percubaan Optuna setiap kajian"
+        default: '120'
+      shard:
+        description: "bilangan shard (job serentak)"
+        default: '20'
+      simpan:
+        description: "commit hasil ke main (ya/tidak)"
+        default: 'ya'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: autotune-tala-a02
+  cancel-in-progress: false
+
+env:
+  PYTHONUNBUFFERED: '1'
+  NUMBA_CACHE_DIR: ${{ github.workspace }}/.numba
+
+jobs:
+  rancang:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      matriks: ${{ steps.r.outputs.matriks }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - id: r
+        run: >-
+          python3 AUTOTUNE/tala/pekerja_a02.py --rancang --kajian "${{ inputs.kajian }}" --percubaan "${{ inputs.percubaan }}"
+          --shard "${{ inputs.shard }}" --plan plan_a02.json --github-output
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plan-a02
+          path: plan_a02.json
+          retention-days: 7
+
+  tala:
+    needs: rancang
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        shard: ${{ fromJSON(needs.rancang.outputs.matriks) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: pip install -q -r requirements.txt pyarrow
+      - uses: actions/download-artifact@v4
+        with:
+          name: plan-a02
+      - name: Muat turun data Release A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -D AUTOTUNE/.cache_a02 --clobber && break
+            sleep 20
+          done
+          ls AUTOTUNE/.cache_a02 | wc -l
+      - name: Pekerja shard ${{ matrix.shard }}
+        run: |
+          ( while true; do sleep 600; echo "[memori] $(free -m | awk 'NR==2{print $3"/"$2" MB"}')"; done ) &
+          python3 AUTOTUNE/tala/pekerja_a02.py --shard ${{ matrix.shard }} --plan plan_a02.json --proses 4 --had-minit 330 --cache AUTOTUNE/.cache_a02
+      - name: Sedia fail shard ${{ matrix.shard }}
+        if: always()
+        run: |
+          mkdir -p kirim
+          L=AUTOTUNE/hasil_a02/tala/_ditulis_shard${{ matrix.shard }}.txt
+          if [ -f "$L" ]; then
+            ( cd AUTOTUNE/hasil_a02/tala && sort -u "_ditulis_shard${{ matrix.shard }}.txt" | while read -r f; do
+                [ -f "$f" ] && cp --parents "$f" ../../../kirim/; done )
+            cp "$L" kirim/
+          fi
+          find kirim -name 'k*.json' | wc -l
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hasil-a02-${{ matrix.shard }}
+          path: kirim/
+          if-no-files-found: warn
+          retention-days: 14
+
+  gabung:
+    needs: [rancang, tala]
+    if: always() && needs.rancang.result == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -q pandas numpy
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: hasil-a02-*
+          path: artifacts/
+      - run: mkdir -p AUTOTUNE/hasil_a02/tala && python3 AUTOTUNE/tala/gabung_hasil.py --keluar AUTOTUNE/hasil_a02/tala --percubaan "${{ inputs.percubaan }}" AUTOTUNE/hasil_a02/tala artifacts/*
+      - name: Commit hasil
+        if: inputs.simpan == 'ya'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          rm -f AUTOTUNE/hasil_a02/tala/_ditulis_shard*.txt
+          git add -A AUTOTUNE/hasil_a02/tala
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "AUTOTUNE A02 tala: kajian ${{ inputs.kajian }} (${{ inputs.percubaan }} percubaan)"
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((i * 15))
+          done
+          exit 1

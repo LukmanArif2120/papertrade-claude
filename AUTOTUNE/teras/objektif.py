@@ -71,6 +71,68 @@ def pilih_teguh(rekod, k=10):
     return max(atas, key=lambda r: (r['thn_min'], r['skor'])), True
 
 
+# ---------- A02 (SPEC_A02 §2): pulangan berlebihan atas SPY tempoh sama ----------
+# Fungsi A01 di atas tidak berubah (lalai). A02 memakai fungsi *_a02 di bawah sahaja.
+MDD_LONGGAR_A02 = 0.10      # MDD portfolio >= MDD SPY tempoh sama − 10 mata peratus
+N_MIN_A02 = 30              # >= 30 dagangan yang benar-benar dipegang portfolio
+
+
+def spy_lengkung(spy_tutup, tarikh):
+    """Lengkung SPY (modal awal 1.0) atas tarikh yang SAMA dengan lengkung portfolio: pulangan hari pertama =
+    tutup hari itu / tutup sebelumnya (asof) − 1, seperti portfolio yang hari pertamanya sudah termasuk pulangan.
+    Hari tanpa tutup SPY dibawa ke hadapan (pulangan 0)."""
+    tarikh = pd.DatetimeIndex(tarikh)
+    c = pd.Series(spy_tutup, dtype=float).dropna().sort_index()
+    if not len(tarikh): return pd.Series(dtype=float)
+    sebelum = c[c.index < tarikh[0]]
+    asas = float(sebelum.iloc[-1]) if len(sebelum) else np.nan
+    v = c.reindex(c.index.union(tarikh)).ffill().reindex(tarikh)
+    if not np.isfinite(asas): asas = float(v.iloc[0]) if np.isfinite(v.iloc[0]) else np.nan
+    v = v.bfill()
+    return v / asas
+
+
+def tahunan_lebih(cv, spy_cv):
+    """Pulangan berlebihan setiap tahun kalendar: tahun portfolio − tahun SPY (tarikh sama)."""
+    a, b = tahunan(cv), tahunan(spy_cv)
+    return {y: a[y] - b.get(y, 0.0) for y in a}
+
+
+def ringkas_a02(T, cv, spy_cv):
+    """Metrik A02 satu tetingkap. T = dagangan yang DIPEGANG portfolio (enjin_at.Pasaran.lengkung(pegang=True)).
+    lebihan = CAGR portfolio − CAGR SPY; thn_min = pulangan berlebihan tahun kalendar terburuk."""
+    m = ringkas(T, cv)
+    m['spy_cagr'] = cagr(spy_cv); m['spy_mdd'] = mdd(spy_cv)
+    m['lebihan'] = m['cagr'] - m['spy_cagr']
+    tl = tahunan_lebih(cv, spy_cv) if _sah(cv) and _sah(spy_cv) else {}
+    m['tahunan_lebih'] = tl
+    m['thn_min'] = min(tl.values()) if tl else -1.0
+    return m
+
+
+def lulus_a02(m):
+    return m['n'] >= N_MIN_A02 and m['mdd'] >= m['spy_mdd'] - MDD_LONGGAR_A02
+
+
+def skor_a02(m):
+    """Objektif A02: lebihan jika lulus; jika tidak −1 + lebihan − 2 × lebihan MDD atas had (MDD SPY − 0.10)."""
+    if lulus_a02(m): return float(m['lebihan'])
+    return float(-1 + m['lebihan'] - 2 * max(0.0, (m['spy_mdd'] - MDD_LONGGAR_A02) - m['mdd']))
+
+
+def panas_a02(m, hari_min=400, faktor=1.6):
+    """Pemanasan latih A02 (hari kalendar) = maksimum(400, 1.6 × (tetingkap terpanjang dalam julat atas + WARM)).
+    Tetingkap terpanjang = nilai int terbesar antara had atas JULAT (int) dan PARAM int (parameter beku termasuk);
+    parameter ambang (nama mengandungi 'ambang', cth. nilai dagangan USD) bukan tetingkap dan diabaikan."""
+    w = 0
+    for k, (jenis, lo, hi) in (getattr(m, 'JULAT', {}) or {}).items():
+        if jenis == 'int' and 'ambang' not in k: w = max(w, int(hi))
+    for k, v in (getattr(m, 'PARAM', {}) or {}).items():
+        if isinstance(v, (int, np.integer)) and not isinstance(v, bool) and 'ambang' not in k: w = max(w, int(v))
+    warm = int(getattr(m, 'WARM', 0) or 0)
+    return int(max(hari_min, math.ceil(faktor * (w + warm))))
+
+
 # ---------- DSR (salinan formula WFO/kod/wfo_laporan.py) ----------
 def sharpe(r):
     """(SR harian, kecondongan, kurtosis (bukan lebihan), n) bagi pulangan harian."""
