@@ -9,6 +9,11 @@ on:
     - cron: '17 4 * * 2-6'
     - cron: '17 8 * * 2-6'
   workflow_dispatch:
+    inputs:
+      sejarah_sesi:
+        description: 'Isi juga gred_kumpulan_sejarah.csv bagi N sesi sebelum sesi terakhir (0 = biasa)'
+        required: false
+        default: '0'
 
 permissions:
   contents: write
@@ -29,7 +34,9 @@ jobs:
       - name: Pasang pakej
         run: pip install -q pandas numpy yfinance
       - name: Kira gred kumpulan
-        run: python3 BacktestShariah2/standard/gred_kumpulan.py
+        env:
+          SESI: ${{ github.event.inputs.sejarah_sesi || '0' }}
+        run: python3 BacktestShariah2/standard/gred_kumpulan.py --sejarah-sesi "$SESI"
       - name: Commit dan push
         run: |
           git config user.name "gred-kumpulan[bot]"

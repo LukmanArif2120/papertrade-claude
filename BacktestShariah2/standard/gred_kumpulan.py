@@ -109,10 +109,13 @@ def siri(C, peta, spy):
     return out
 
 
-def snapshot(S, peta, dibina):
+def snapshot(S, peta, dibina, pada=None):
+    """Gred setiap kumpulan pada sesi terakhir (atau sesi `pada`, Timestamp, untuk isi sejarah)."""
     rows = []
     for jenis, d in S.items():
-        t = d['skor'].dropna(how='all').index.max()
+        t = d['skor'].dropna(how='all').index.max() if pada is None else pada
+        if t not in d['skor'].index:
+            continue
         if pd.isna(t):
             continue
         for nama in d['skor'].columns:
@@ -139,6 +142,8 @@ def main(argv=None):
     ap.add_argument('--sejarah', default=os.path.join(BS2, 'data', 'kumpulan', 'gred_kumpulan_sejarah.csv'))
     ap.add_argument('--hari', type=int, default=470)
     ap.add_argument('--had', type=int, default=0)
+    ap.add_argument('--sejarah-sesi', type=int, default=0,
+                    help='tulis juga snapshot N sesi sebelum sesi terakhir ke --sejarah (isi semula gred posisi lama)')
     a = ap.parse_args(argv)
     peta = pd.read_csv(a.peta, keep_default_na=False).drop_duplicates('ticker').set_index('ticker')
     peta['sektor'] = peta.industri.map(SEKTOR_INDUSTRI).fillna('Lain-lain')
@@ -152,13 +157,16 @@ def main(argv=None):
     if C.shape[1] < 0.9 * len(tickers):
         raise SystemExit(f'hanya {C.shape[1]} daripada {len(tickers)} saham dimuat turun: gred tidak ditulis')
     dibina = datetime.now(timezone(timedelta(hours=8))).strftime('%Y-%m-%d %H:%M MYT')
-    snap = snapshot(siri(C, peta.loc[[t for t in peta.index if t in C.columns]], spy), peta, dibina)
+    S = siri(C, peta.loc[[t for t in peta.index if t in C.columns]], spy)
+    snap = snapshot(S, peta, dibina)
     os.makedirs(os.path.dirname(a.keluar), exist_ok=True)
     snap.to_csv(a.keluar, index=False)
     if a.sejarah:
         lama = pd.read_csv(a.sejarah, keep_default_na=False) if os.path.exists(a.sejarah) else pd.DataFrame(columns=LAJUR)
-        lama = lama[lama.tarikh.astype(str) != snap.tarikh.iloc[0]]
-        pd.concat([lama, snap]).to_csv(a.sejarah, index=False)
+        baru = [snap] + [snapshot(S, peta, dibina, t) for t in C.index[-1 - a.sejarah_sesi:-1]]
+        tarikh = {x for b in baru for x in b.tarikh.astype(str)}
+        lama = lama[~lama.tarikh.astype(str).isin(tarikh)]
+        pd.concat([lama] + baru).sort_values(['tarikh', 'jenis', 'skor'], ascending=[True, True, False]).to_csv(a.sejarah, index=False)
     for j in ['Industri', 'Sektor']:
         s = snap[snap.jenis == j]
         print(j, len(s), dict(s.gred.value_counts().sort_index()), '| teratas:', ', '.join(s.nama.head(5)))

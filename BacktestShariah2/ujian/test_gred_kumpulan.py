@@ -62,6 +62,16 @@ class UjiGredKumpulan(unittest.TestCase):
         self.assertEqual(ind.loc['Semiconductors', 'sektor'], 'Technology')
         self.assertIn(ind.loc['Oil & Gas E&P', 'gred'], 'DE')     # 3 industri: pangkat terendah = 33.3
 
+    def test_snapshot_sesi_lalu(self):
+        C, peta, spy = pasaran()
+        S = K.siri(C, peta, spy)
+        t = C.index[-5]
+        snap = K.snapshot(S, peta, '2026-10-19 12:00 MYT', t)
+        self.assertEqual(set(snap.tarikh), {t.strftime('%Y-%m-%d')})
+        ind = snap[snap.jenis == 'Industri'].set_index('nama')
+        self.assertAlmostEqual(ind.loc['Semiconductors', 'skor'], round(float(S['Industri']['skor'].at[t, 'Semiconductors']), 1))
+        self.assertTrue(K.snapshot(S, peta, 'x', pd.Timestamp('1990-01-02')).empty)   # sesi tiada
+
 
 class UjiTambahV2(unittest.TestCase):
     def setUp(self):
