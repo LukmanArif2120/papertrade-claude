@@ -928,9 +928,11 @@ function prKpis(rows){const v=rows.map(r=>r.hasil).filter(x=>x!=null);const w=mi
     <div class="kpi"><div class="lbl" data-tip="usd_sama">Jika USD1,000 setiap posisi</div><div class="v ${cls(usd)}">${usd==null?'–':(usd<0?'−':'+')+'USD'+Math.abs(usd).toLocaleString('en-US',{maximumFractionDigits:0})}</div><div class="s">modal USD${(v.length*USD_POSISI).toLocaleString('en-US')} · ${sg2(a)} setiap posisi</div></div>
   </div>`;}
 /* prestasi setiap gred: adakah gred A benar-benar lebih untung? */
+/* gred Sektor/Industri baris isi semula (belian sebelum 14 Okt 2026) dikira daripada snapshot SELEPAS belian: dikecualikan */
+const grSahKump=r=>!String(r.gred_pada||'').startsWith('isi semula')&&String(r.tarikh_beli||'')>='2026-10-14';
 function prGred(rows){const ada=rows.filter(adaGred);
   if(!ada.length)return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">Gred direkod mulai belian 14 Okt 2026</span></div><p class="empty">Belum ada posisi bergred. Imbasan harian mengira gred Sektor, Industri, RS, Pemangkin dan QR; belian 9:35 NY menyalinnya ke setiap posisi.</p></div>`;
-  const out=[];GDIM.forEach(([k,,nama])=>{['A','B','C','D','E'].forEach(g=>{const a=ada.filter(r=>r[k]===g);if(!a.length)return;const v=a.map(r=>r.hasil).filter(x=>x!=null);const t=a.filter(r=>r.keluar);const vt=t.map(r=>r.untung_akhir_pct).filter(x=>x!=null);
+  const out=[];GDIM.forEach(([k,,nama])=>{const asal=(k==='gred_sektor'||k==='gred_industri')?ada.filter(grSahKump):ada;['A','B','C','D','E'].forEach(g=>{const a=asal.filter(r=>r[k]===g);if(!a.length)return;const v=a.map(r=>r.hasil).filter(x=>x!=null);const t=a.filter(r=>r.keluar);const vt=t.map(r=>r.untung_akhir_pct).filter(x=>x!=null);
     out.push({dim:nama,g,n:a.length,tutup:t.length,win:v.length?v.filter(x=>x>0).length/v.length*100:null,avg:avgOf(v),avgT:avgOf(vt),cukup:t.length>=PR_MIN_TUTUP});});});
   return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">${ada.length} posisi bergred · gred pada hari isyarat · dinilai selepas ≥ ${PR_MIN_TUTUP} dagangan tertutup setiap gred</span></div>
     ${sortTable({id:'prg-'+S.tab+S.sub.prestasi,rows:out,cols:[
@@ -940,7 +942,7 @@ function prGred(rows){const ada=rows.filter(adaGred);
       {k:'win',t:'Kadar menang',tip:'win_p',f:o=>fx(o.win,0)+'%'},
       {k:'avg',t:'Untung purata',tip:'untung_purata',f:o=>`<b class="${cls(o.avg)}">${sg2(o.avg)}</b>`},
       {k:'avgT',t:'Untung akhir purata',tip:'untung_akhir',f:o=>o.avgT==null?'–':`<span class="${cls(o.avgT)}">${sg2(o.avgT)}</span>`}],def:{k:'dim',dir:1}})}
-    <p class="sub" style="margin-top:8px">Bandingkan baris A dengan E dalam dimensi yang sama. Jika A tidak lebih untung selepas cukup data, gred itu tidak berguna untuk memilih saham. Bukti backtest 2019–2026: RS ≥ 90 mendahului setiap tahun; kekuatan sektor/industri tidak meramal.</p></div>`;}
+    <p class="sub" style="margin-top:8px">Bandingkan baris A dengan E dalam dimensi yang sama. Jika A tidak lebih untung selepas cukup data, gred itu tidak berguna untuk memilih saham. Bukti backtest 2019–2026: RS ≥ 90 mendahului setiap tahun. Industri (kajian 18 Okt 2026): gred menyusun prestasi INDUSTRI dengan betul (A > E), tetapi kesan pada saham individu kecil. Sektor/Industri tidak mengira posisi isi semula (belian sebelum 14 Okt: skor dikira selepas belian).</p></div>`;}
 /* banding dua lorong keluar setiap kaedah: untung akhir bagi lorong yang keluar, semasa bagi yang masih dipegang */
 function prLorong(rows){const by={};rows.forEach(r=>{(by[r.kaedah]=by[r.kaedah]||[]).push(r);});
   const st=a=>({n:a.length,k:avgOf(a.map(r=>hasilL(r,'kaedah'))),h:avgOf(a.map(r=>hasilL(r,'henti'))),
