@@ -1,0 +1,4 @@
+dijana 2026-10-18; dari 2012-01-01; saham 945; bahagian analisis,eps
+analisis 139087 baris; 908 saham
+eps 37625 baris; 928 saham
+ralat yahoo 0
