@@ -1,0 +1,104 @@
+# AUTOTUNE A03 §1: muat turun EPS Yahoo (10 shard) bagi ticker universe A02 -> gabung -> Release `autotune-fundamental-a03`.
+# Manual sahaja. Data tidak dicommit; hanya AUTOTUNE/fundamental/LIPUTAN.md dan manifest_a03.json.
+name: AUTOTUNE fundamental A03
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: autotune-fundamental-a03
+  cancel-in-progress: false
+
+jobs:
+  muat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q yfinance pandas numpy pyarrow lxml
+      - name: Muat turun universe A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -p universe.parquet -D data_a02 --clobber && break
+            sleep 15
+          done
+          ls -la data_a02
+      - name: Muat turun EPS shard ${{ matrix.shard }}
+        run: python3 AUTOTUNE/fundamental/muat_eps.py --shard ${{ matrix.shard }} --shards 10 --universe data_a02/universe.parquet --keluar shard_out
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shard-${{ matrix.shard }}
+          path: shard_out/
+          if-no-files-found: ignore
+
+  gabung:
+    needs: muat
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy pyarrow
+      - name: Ujian unit
+        run: python3 -m unittest discover -s AUTOTUNE/ujian -p 'test_fundamental.py'
+      - name: Muat turun universe dan idx A02
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          for i in 1 2 3; do
+            gh release download autotune-data-a02 -R "${{ github.repository }}" -p universe.parquet -p idx.parquet -D data_a02 --clobber && break
+            sleep 15
+          done
+          ls -la data_a02
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: shard-*
+          path: shards
+      - name: Semak bilangan shard
+        run: |
+          n=$(find shards -name 'eps_shard_*.csv' | wc -l)
+          echo "shard ditemui: $n"
+          [ "$n" -eq 10 ] || { echo "jangkaan 10 shard"; exit 1; }
+      - name: Gabung, nyahpendua, tersedia, yoy, liputan
+        run: python3 AUTOTUNE/fundamental/gabung_eps.py --masuk shards --universe data_a02/universe.parquet --idx data_a02/idx.parquet --keluar keluar
+      - name: Terbit aset Release autotune-fundamental-a03
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -la keluar
+          gh release create autotune-fundamental-a03 --title "Fundamental AUTOTUNE A03" --notes "EPS sebenar setiap suku (Yahoo get_earnings_dates) bagi ticker universe A02, dengan tarikh tersedia titik-masa, eps_yoy dan eps_yoy_sebelum. Dijana oleh autotune_fundamental_a03.yml; sha256 dalam manifest.json." || true
+          gh release upload autotune-fundamental-a03 keluar/* --clobber
+          for a in $(gh release view autotune-fundamental-a03 --json assets -q '.assets[].name'); do
+            [ -f "keluar/$a" ] || gh release delete-asset autotune-fundamental-a03 "$a" -y
+          done
+      - name: Commit LIPUTAN.md dan manifest_a03.json ke main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AUTOTUNE/fundamental/LIPUTAN.md AUTOTUNE/fundamental/manifest_a03.json
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -m "AUTOTUNE A03: liputan EPS dan manifest fundamental"
+          for i in 1 2 3 4 5; do
+            git pull --rebase origin main && git push origin HEAD:main && break
+            sleep 5
+          done
+      - name: Ringkasan
+        run: |
+          head -45 AUTOTUNE/fundamental/LIPUTAN.md >> "$GITHUB_STEP_SUMMARY"
