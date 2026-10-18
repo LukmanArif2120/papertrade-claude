@@ -699,8 +699,9 @@ def cmd_gred(a):
     r = subprocess.run(kum, capture_output=True, text=True); print(r.stdout[-3000:], r.stderr[-2000:])
     acara = os.path.join(a.pemangkin, 'market_events.json')
     for f in (sb, wl):
+        # Sektor/Industri v2 (sejak 19 Okt 2026): data/kumpulan/gred_kumpulan.csv daripada Actions gred_kumpulan.yml
         cmd = [py, os.path.join(HERE, 'gred.py'), 'tambah', '--csv', f, '--harga', a.stor,
-               '--sektor', os.path.join(folder, 'sektor.csv'), '--pasaran', os.path.join(folder, 'sektor_pasaran.csv'),
+               '--kumpulan', os.path.join(os.path.dirname(HERE), 'data', 'kumpulan', 'gred_kumpulan.csv'),
                '--peta', os.path.join(folder, 'peta_industri.csv'), '--tarikh', D]
         if os.path.exists(os.path.join(folder, 'pemangkin.json')):
             cmd += ['--pemangkin', os.path.join(folder, 'pemangkin.json')]

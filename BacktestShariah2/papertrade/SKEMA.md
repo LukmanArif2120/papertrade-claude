@@ -58,7 +58,7 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 | Lajur | Nilai |
 |---|---|
 | sektor_us, industri_us | sektor Morningstar dan industri Moomoo saham itu (seluruh pasaran AS) |
-| gred_sektor, gred_industri | A–E atau "–" (skor panas seluruh pasaran AS, sandaran SST: A ≥ 80, B ≥ 60, C ≥ 40, D ≥ 20, E < 20; "–" = tiada data) |
+| gred_sektor, gred_industri | A–E atau "–". v2 sejak 19 Okt 2026 (`standard/gred_kumpulan.py`, fail `data/kumpulan/gred_kumpulan.csv`; > 7 hari atau tiada → "–"): Industri = pangkat (Weinstein + median 1 bulan), Sektor = pangkat % saham > SMA200, kedua-duanya seluruh pasaran AS; A > 80, B > 60, C > 40, D > 20, E ≤ 20. Sebelum 19 Okt: v1 skor panas (A ≥ 80 …) |
 | skor_sektor, skor_industri | 0–100 |
 | rs_rating, gred_rs | 1–99 (lawan seluruh pasaran AS harga ≥ USD5, `data/rs/rs_pasaran.csv`; sandaran stor harga). Sejak 18 Okt 2026: A = RS 90–99 disahkan, B = 80–89 disahkan, C = 70–79 atau ≥ 80 tidak/belum disahkan, D < 70; "–" = tiada data. Baris sebelum 18 Okt: skala lama (A ≥ 90, B ≥ 80, C ≥ 60, D ≥ 40, E < 40) melainkan dikira semula (lihat gred_pada) |
 | rs_sah | ya / tidak: saham naik 12 bulan, SPY > SMA200 dan Mansfield > 0 (RS line atas purata 52 minggu); kosong = tiada data |
@@ -68,7 +68,7 @@ Diisi oleh `standard/gred.py tambah` semasa imbasan 8:02 malam; disalin ke baris
 | gred_pemangkin, mata_pemangkin, pemangkin | Pemangkin v3 (sejak 18 Okt 2026; bukti dan kalibrasi: ulasan `standard/gred.py` dan data `data/pemangkin/sejarah/`): K1 earnings dijadualkan 6–21 hari dagangan lagi +2, 1–5 hari +1 (premium pengumuman; data 2012–2026: AR21 +0.2–0.4%, luar sampel t 3.4); K2 reaksi hari earnings ≥ +20% lawan SPY, umur ≤ 10 hari dagangan +4, 11–20 hari +3 (🔥 PANAS; AR21 +1.4–1.7%, bukti lemah); veto berita ≤ 20 hari dagangan: tawaran saham (pencairan) atau keputusan FDA akan datang → had C, sasaran ambil alih → had D. Gred A ≥ 3, B 2, C 1, D 0 (tiada pemangkin); E tidak dipakai. Tajuk berita, tindakan analisis, volum dan orang dalam tidak lagi diberi mata (diuji tiada nilai luar sampel / belum diuji). Ringkasan = sebab setiap mata/had, bermula "🔥 PANAS · " jika K2 aktif; "tiada pemangkin" = D; "–" = tiada data earnings dan berita. Baris 15–17 Okt 2026 guna skala Berita Panas (A ≥ 5); sebelum 15 Okt skala lama (A ≥ 4) — jangan campur skala bila menilai prestasi gred |
 | pemangkin_url | JSON [{"tajuk", "url"}] maks 2 (pemangkin terkuat dahulu, kemudian terkini; URL https daripada quote_news_search / rating_summary); kosong jika tiada |
 | tarikh_earnings, hari_ke_earnings, sumber_earnings, gred_qr | hari dagangan ke laporan suku: A > 21 (atau tiada dalam 30 hari), B 16–21, C 11–15, D 6–10, E ≤ 5; selepas QR lalu: 0–1 hari sekurang-kurangnya C, 2–3 hari sekurang-kurangnya B (gred lebih buruk dipakai; sumber_earnings ditanda `; QR lalu N hari`); asas: kajian 18 Okt 2026 (659k dagangan 134 kaedah, 2019–2026; `standard/gred.py gred_qr`); sumber SST / Nasdaq / anggaran / tiada data |
-| gred_keseluruhan | purata mata gred Sektor, Industri, Pemangkin, QR yang ada (RS tidak dikira sejak 18 Okt 2026; paparan sahaja; belum diuji) |
+| gred_keseluruhan | purata mata gred yang ada (paparan sahaja; belum diuji). Sejak 19 Okt 2026: Industri (kecuali kaedah pantulan dalam `kod/jenis_kaedah.csv`), Pemangkin, QR — Sektor dan RS tidak dikira (RS sejak 18 Okt) |
 | gred_pada | tarikh imbasan gred dikira |
 
 ## `pemangkin.json`
@@ -76,6 +76,12 @@ Ditulis oleh `standard/gred.py kumpul` (imbasan 8:02 malam) daripada hasil menta
 
 ## `peta_industri.csv`
 ticker, industri, plate_code — keahlian plate industri Moomoo bagi semua saham AS. Dibina semula jika lebih 30 hari (quote_plate_list INDUSTRY + quote_plate_stock setiap plate).
+
+## `data/kumpulan/gred_kumpulan.csv` (Actions `gred_kumpulan.yml`; jangan ubah secara manual)
+Snapshot terkini gred Sektor/Industri v2: tarikh (sesi data), jenis (Sektor/Industri), nama, sektor, n (saham layak), skor (0–100), gred, w_rs_positif / w_rs_naik / w_trend (syarat Weinstein 0/1), m1m_med (% median 1 bulan), pct_atas_sma200, dibina. `gred_kumpulan_sejarah.csv` = semua snapshot (tarikh sama diganti).
+
+## `kod/jenis_kaedah.csv`
+kaedah, jenis (momentum / pantulan = median pulangan 20 hari sebelum isyarat > 0 / ≤ 0 dalam dagangan 2019–2026), pre20_median (%), n_dagangan. Dipakai oleh gred_keseluruhan.
 
 ## `sektor_pasaran.csv`
 Snapshot harian kekuatan sektor/industri SELURUH pasaran AS (`standard/sektor_pasaran.py`): tarikh, jenis, nama, sektor, n, prestasi_1w, prestasi_1m, prestasi_3m (median %), breadth (% saham 1M > 0), rel_1m, rel_3m (lawan median pasaran), fasa, skor_panas, mcap_bilion, teratas, alam. Sejarah dikekalkan; snapshot tarikh sama diganti.

@@ -4,7 +4,9 @@
 #
 # Guna (imbasan 8:02 malam):
 #   python3 gred.py tambah --csv papertrade/senarai_beli.csv --harga <folder harga_A/B.csv> \
-#       --sektor papertrade/sektor.csv --acara <market_events.json> --pemangkin <pemangkin.json> --tarikh YYYY-MM-DD
+#       --kumpulan data/kumpulan/gred_kumpulan.csv --peta papertrade/peta_industri.csv \
+#       --acara <market_events.json> --pemangkin <pemangkin.json> --tarikh YYYY-MM-DD
+#   (Sektor/Industri v2 sejak 19 Okt 2026: standard/gred_kumpulan.py; tanpa --kumpulan = v1 skor panas, --sektor wajib)
 #   (ulang untuk papertrade/watchlist.csv; --pemangkin pilihan)
 #   python3 gred.py kumpul --folder <fail mentah alat> --csv papertrade/senarai_beli.csv papertrade/watchlist.csv \
 #       --keluar papertrade/pemangkin.json --tarikh YYYY-MM-DD      (berita untuk veto/pautan pemangkin v3)
@@ -21,6 +23,7 @@ import pandas as pd
 GRED = ['A', 'B', 'C', 'D', 'E']
 MATA = {'A': 4, 'B': 3, 'C': 2, 'D': 1, 'E': 0}
 TIADA = '–'
+HERE_GRED = os.path.dirname(os.path.abspath(__file__))
 LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
          'rs_sah', 'rs_tanda', 'rs_industri', 'rs_sumber', 'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings', 'sumber_earnings', 'gred_qr',
          'gred_keseluruhan', 'gred_pada']
@@ -145,7 +148,42 @@ def rs_semua(c, spy, folder_rs=None):
     return st, atas
 
 
-# ---------- Sektor / Industri (skor panas SST, 0–100) ----------
+# ---------- Sektor / Industri v2 (sejak 19 Okt 2026; standard/gred_kumpulan.py) ----------
+HARI_KUMPULAN = 7   # data/kumpulan/gred_kumpulan.csv lebih lama daripada ini (hari kalendar) -> gred "–"
+
+
+def peta_kumpulan(path_csv, hari_ini):
+    """data/kumpulan/gred_kumpulan.csv -> ({sektor: (skor, gred)}, {industri: (skor, gred)}, tarikh) atau
+    ({}, {}, tarikh/None) jika fail tiada atau basi (> HARI_KUMPULAN hari sebelum hari_ini)."""
+    if not path_csv or not os.path.exists(path_csv):
+        return {}, {}, None
+    rows = list(csv.DictReader(open(path_csv, newline='', encoding='utf-8')))
+    if not rows:
+        return {}, {}, None
+    t = max(r['tarikh'] for r in rows)
+    if (hari_ini - date.fromisoformat(t)).days > HARI_KUMPULAN:
+        return {}, {}, t
+    sek, ind = {}, {}
+    for r in rows:
+        if r['tarikh'] == t and r['gred'] in GRED:
+            (sek if r['jenis'] == 'Sektor' else ind)[r['nama']] = (float(r['skor']), r['gred'])
+    return sek, ind, t
+
+
+def peta_jenis_kaedah(path_csv=None):
+    """kod/jenis_kaedah.csv -> {kaedah: 'momentum'|'pantulan'} (pulangan median 20 hari sebelum isyarat > 0 = momentum)."""
+    path_csv = path_csv or os.path.join(os.path.dirname(HERE_GRED), 'kod', 'jenis_kaedah.csv')
+    if not os.path.exists(path_csv):
+        return {}
+    return {r['kaedah']: r['jenis'] for r in csv.DictReader(open(path_csv, newline='', encoding='utf-8'))}
+
+
+def id_kaedah(teks):
+    m = re.match(r'\s*(M\d+)', str(teks or ''))
+    return m.group(1) if m else ''
+
+
+# ---------- Sektor / Industri v1 (skor panas, 0–100; dipakai hanya jika --kumpulan tidak diberi) ----------
 def gred_kumpulan(skor):
     """Ujian 13 Okt 2026: skor panas/fasa sektor TIDAK meramal pulangan 1–3 bulan. Gred direkod untuk diuji
     semula dalam papertrade, bukan penapis."""
@@ -897,13 +935,22 @@ def tambah(a):
     c, v = muat_harga(a.harga)
     spy = muat_spy(a.harga)
     rsd, spy_atas = rs_semua(c, spy, getattr(a, 'rs', None))
-    sek, ind = peta_sektor(a.sektor)
-    # Utama: kekuatan seluruh pasaran AS (sektor_pasaran.py) dengan industri Moomoo setiap saham
-    pusek, puind, pind = {}, {}, {}
-    if a.pasaran and a.peta and os.path.exists(a.pasaran) and os.path.exists(a.peta):
-        from sektor_pasaran import SEKTOR_INDUSTRI
-        pusek, puind = peta_pasaran(a.pasaran)
+    from sektor_pasaran import SEKTOR_INDUSTRI
+    v2 = bool(getattr(a, 'kumpulan', None))
+    pind = {}
+    if a.peta and os.path.exists(a.peta):
         pind = {r['ticker']: r['industri'] for r in csv.DictReader(open(a.peta, newline='', encoding='utf-8'))}
+    if v2:
+        # v2 (sejak 19 Okt 2026): Weinstein + 1 bulan (industri), % > SMA200 (sektor); fail basi/tiada -> "–"
+        ksek, kind, ktarikh = peta_kumpulan(a.kumpulan, hari_ini)
+        if not kind:
+            print(f'AMARAN: gred_kumpulan tiada atau basi (tarikh {ktarikh}); gred sektor/industri "–"')
+    else:
+        sek, ind = peta_sektor(a.sektor)
+        pusek, puind = {}, {}
+        if a.pasaran and pind and os.path.exists(a.pasaran):
+            pusek, puind = peta_pasaran(a.pasaran)
+    jenis = peta_jenis_kaedah()
     ear = peta_earnings(a.acara, hari_ini) if a.acara else None
     nas, nas_lengkap = baca_nasdaq(a.nasdaq, hari_ini) if getattr(a, 'nasdaq', None) else (None, False)
     pem = json.load(open(a.pemangkin, encoding='utf-8')) if a.pemangkin else {}
@@ -911,10 +958,14 @@ def tambah(a):
         t = ambil(r, 'saham', 'Saham')
         iu = pind.get(t); su = SEKTOR_INDUSTRI.get(iu) if iu else None
         r['industri_us'] = iu or ''; r['sektor_us'] = su or ''
-        s1 = pusek.get(su) if su in pusek else sek.get(ambil(r, 'sektor', 'Sektor'))
-        s2 = puind.get(iu) if iu in puind else ind.get(ambil(r, 'industri', 'Industri'))
-        r['skor_sektor'] = '' if s1 is None else round(s1, 1); r['gred_sektor'] = gred_kumpulan(s1)
-        r['skor_industri'] = '' if s2 is None else round(s2, 1); r['gred_industri'] = gred_kumpulan(s2)
+        if v2:
+            s1, g1 = ksek.get(su, (None, TIADA)); s2, g2 = kind.get(iu, (None, TIADA))
+        else:
+            s1 = pusek.get(su) if su in pusek else sek.get(ambil(r, 'sektor', 'Sektor'))
+            s2 = puind.get(iu) if iu in puind else ind.get(ambil(r, 'industri', 'Industri'))
+            g1, g2 = gred_kumpulan(s1), gred_kumpulan(s2)
+        r['skor_sektor'] = '' if s1 is None else round(s1, 1); r['gred_sektor'] = g1
+        r['skor_industri'] = '' if s2 is None else round(s2, 1); r['gred_industri'] = g2
         isi_rs(r, rsd.loc[t] if t in rsd.index else None, spy_atas)
         te, sumber = (ear or {}).get(t), 'SST'
         if te is None and nas is not None:
@@ -952,7 +1003,12 @@ def tambah(a):
             m, g, ring = nilai_pemangkin(p, hari_ini, h, c[t] if ada else None, v[t] if ada else None, spy)
             r['mata_pemangkin'] = m; r['pemangkin'] = ring; r['gred_pemangkin'] = g
             r['pemangkin_url'] = pautan_berita(p.get('berita'), hari_ini=hari_ini)
-        r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
+        if v2:
+            # v2: Sektor paparan sahaja; Industri tidak terpakai bagi kaedah pantulan (kajian 18 Okt 2026)
+            gi = TIADA if jenis.get(id_kaedah(ambil(r, 'kaedah', 'Kaedah'))) == 'pantulan' else r['gred_industri']
+            r['gred_keseluruhan'] = gred_keseluruhan([gi, r['gred_pemangkin'], r['gred_qr']])
+        else:
+            r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
         r['gred_pada'] = a.tarikh
     out = lajur + [k for k in LAJUR if k not in lajur]
     with open(a.csv, 'w', newline='', encoding='utf-8') as f:
@@ -969,7 +1025,8 @@ def main(argv=None):
     t = sp.add_parser('tambah')
     t.add_argument('--csv', required=True)
     t.add_argument('--harga', required=True, help='folder harga_A.csv / harga_B.csv (stor harga dashboard)')
-    t.add_argument('--sektor', required=True, help='papertrade/sektor.csv (sandaran: snapshot SST)')
+    t.add_argument('--kumpulan', help='data/kumpulan/gred_kumpulan.csv (v2, utama sejak 19 Okt 2026; Actions gred_kumpulan.yml)')
+    t.add_argument('--sektor', help='papertrade/sektor.csv (v1, hanya jika --kumpulan tidak diberi)')
     t.add_argument('--pasaran', help='papertrade/sektor_pasaran.csv (utama: seluruh pasaran AS)')
     t.add_argument('--peta', help='papertrade/peta_industri.csv (ticker -> industri Moomoo)')
     t.add_argument('--acara', help='JSON SST market_events (daysLookahead 30)')
@@ -991,6 +1048,8 @@ def main(argv=None):
     e.add_argument('fail'); e.add_argument('--tarikh', required=True)
     a = ap.parse_args(argv)
     if a.cmd == 'tambah':
+        if not a.kumpulan and not a.sektor:
+            ap.error('tambah memerlukan --kumpulan (v2) atau --sektor (v1)')
         tambah(a)
     elif a.cmd == 'kumpul':
         if not a.folder and not a.yahoo:
