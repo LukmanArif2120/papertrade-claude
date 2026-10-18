@@ -22,6 +22,20 @@ ASET_HAD = 0.33           # had hutang/tunai berbanding jumlah aset (MSCI/FTSE/S
 PENDAPATAN_HAD = 0.05     # pendapatan faedah / hasil (AAOIFI)
 
 P, K, T = 'pendapatan', 'kunci', 'tunai'   # bahagian penyata
+MAKS_SUKU, MAKS_TAHUN = 60, 15             # had simpanan cache
+MEDAN = {   # medan yang dipakai (selainnya dibuang semasa simpan)
+    'pendapatan': {'Total Operating Revenue', 'Total Revenue as Reported', 'Cost of Revenue', 'Gross Profit',
+                   'Operating Expense', 'Selling and Admin Expenses', 'Research & Development', 'Operating Profit',
+                   'Non-Operating Interest Expense', 'Non-Operating Interest Income', 'Other Income (Expense)',
+                   'Special Income (Charges)', 'Pretax Profit', 'Tax', 'Net Profit', 'Net Income to Parent Company',
+                   'Net Income to Common Stockholders', 'Diluted EPS'},
+    'kunci': {'Total Assets', 'Total Current Assets', 'Total Current Liabilities', 'Total Non-Current Liabilities',
+              'Total Liabilities', 'Cash and Cash Equivalents & Short-Term Investments',
+              'Short-Term Debt and Capital Lease Obligation', 'Long Term Debt and Capital Lease Obligation',
+              '-Current Debt', '-Long Term Debt', 'Total Equity', "Stockholders' Equity", 'Minority Interests',
+              'Retained Earnings', 'Receivables', 'Inventory', 'Net PPE'},
+    'tunai': {'Operating Cash Flow', 'Change in Working Capital', 'Depreciation & Depletion & Amortization',
+              'Free Cash Flow', 'Net Common Stock Issuance', 'Net Income from Continuing Operations'}}
 JENIS = {'1': P, '2': K, '3': T}
 
 
@@ -37,6 +51,7 @@ def baca_laporan(path):
     out = []
     for r in d.get('report_list') or []:
         out.append({'tamat': tamat_tempoh(r['date_time']).isoformat(), 'label': r.get('period_text', ''),
+                    'mata_wang': r.get('currency_code') or '',
                     'medan': {it['display_name']: it['data'] for it in r.get('item_list') or []
                               if isinstance(it.get('data'), (int, float))}})
     return out
@@ -48,7 +63,9 @@ def gabung_tempoh(senarai):
     for bahagian, laporan in senarai:
         for r in laporan:   # kunci = label tempoh (tarikh akhir boleh berbeza 1 hari antara penyata)
             e = ix.setdefault(r['label'] or r['tamat'], {'tamat': r['tamat'], 'label': r['label'], P: {}, K: {}, T: {}})
-            e[bahagian].update(r['medan'])
+            e[bahagian].update({n: v for n, v in r['medan'].items() if n in MEDAN[bahagian]})
+            if r.get('mata_wang'):
+                e['mata_wang'] = r['mata_wang']
     return sorted(ix.values(), key=lambda e: e['tamat'])
 
 
@@ -76,8 +93,8 @@ def simpan(folder, keluar, tarikh):
         p = os.path.join(keluar, f'{t}.json')
         lama = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else {}
         k = {'ticker': t, 'dikumpul': tarikh,
-             'suku': gabung_lama(lama.get('suku'), gabung_tempoh(suku)),
-             'tahunan': gabung_lama(lama.get('tahunan'), gabung_tempoh(tahun)),
+             'suku': gabung_lama(lama.get('suku'), gabung_tempoh(suku))[-MAKS_SUKU:],
+             'tahunan': gabung_lama(lama.get('tahunan'), gabung_tempoh(tahun))[-MAKS_TAHUN:],
              'terbit': dict(lama.get('terbit') or {}), 'saham_terbit': lama.get('saham_terbit')}
         pe = os.path.join(folder, f'{t}_eph.json')
         if os.path.exists(pe):
@@ -729,6 +746,10 @@ def kira(k, harga=None, hari_ini=None, med=None, sektor='', industri=''):
     g = histerisis(urutan) if g_mentah != TIADA else TIADA
     # pasaran: distance-to-default naif (had semasa, selepas histerisis)
     hp = None
+    mw = {e.get('mata_wang') for e in qs[-8:] if e.get('mata_wang')}
+    if mw - {'USD'}:   # penyata bukan USD: nisbah berasaskan harga (USD) tidak dikira
+        r['nota'].append('mata_wang_' + '/'.join(sorted(mw)))
+        harga = None
     if harga is not None:
         import pandas as pd
         hp = harga[harga.index <= pd.Timestamp(hari_ini)].dropna()
