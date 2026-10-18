@@ -298,7 +298,9 @@ def laporan(D, ring, gab, saring, pilihan, hadapan, skop, a02_saring, a02_param,
     if len(a02_menang):
         k2 = {l: int((a02_menang.label == l).sum()) for l in LABEL}
         L.append(f"Dagangan dipegang A02 (8 slot × 12.5%, tanpa F/M) dijana semula dengan parameter setiap kajian: MENANG {k2['MENANG']}, "
-                 f"HAMPIR {k2['HAMPIR']}, TIDAK {k2['TIDAK']}. Lima teratas ikut min kadar menang A/B:")
+                 f"HAMPIR {k2['HAMPIR']}, TIDAK {k2['TIDAK']}. Beza kadar menang A berbanding rekod A02: maks "
+                 f"{pc((a02_menang.menang_a - a02_menang.menang_a_a02).abs().max())} (dagangan dijana semula atas data "
+                 "tetingkap A+B; susunan seri rank boleh berbeza). Lima teratas ikut min kadar menang A/B:")
         T2_ = a02_menang.assign(_m=a02_menang[['menang_a', 'menang_b']].min(axis=1)).sort_values('_m', ascending=False).head(5)
         L += ['', '| Kaedah-lorong | Label | Menang A / B / P | PF A / B | CAGR A / B / P | MDD OOS | Gagal |', '|---|---|---|---|---|---|---|']
         for r in T2_.itertuples():
