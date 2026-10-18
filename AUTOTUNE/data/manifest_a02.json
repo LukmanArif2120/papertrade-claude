@@ -1,0 +1,114 @@
+{
+ "tag": "autotune-data-a02",
+ "tarikan": "2026-10-18T08:59Z",
+ "n_ticker": 3260,
+ "tarikh_mula": "2009-01-02",
+ "tarikh_akhir": "2026-10-16",
+ "fail": [
+  {
+   "nama": "harga_2009.parquet",
+   "bait": 9577148,
+   "sha256": "ab759df30e91ca8b3b9829557c6f18c989af6183f5bbf401f9895bfee1a45e69"
+  },
+  {
+   "nama": "harga_2010.parquet",
+   "bait": 9745130,
+   "sha256": "786e9555c0a73b6d45badcd129fe5365478c30cf96a5b6e6f511404fd8144ebc"
+  },
+  {
+   "nama": "harga_2011.parquet",
+   "bait": 9975004,
+   "sha256": "5dbaba70a72aad9666f074a6eb69f1966029b45eea14504d91c869e16f9cc19d"
+  },
+  {
+   "nama": "harga_2012.parquet",
+   "bait": 10024234,
+   "sha256": "a5498fd20bdf63afac5c26534f70f5a9bb8f295a18219d334366b1bdcf76ef76"
+  },
+  {
+   "nama": "harga_2013.parquet",
+   "bait": 10364284,
+   "sha256": "9e92512559936877a6a56391ea46975250241f78981ffaf65564f5438d940552"
+  },
+  {
+   "nama": "harga_2014.parquet",
+   "bait": 10810534,
+   "sha256": "05e45460c81bf8d232a2c391cb453b0419f4fe9b3a706087a51702c2ee219f3e"
+  },
+  {
+   "nama": "harga_2015.parquet",
+   "bait": 11216916,
+   "sha256": "1377f928a067763b38ce892864fafca6fc35ddb988ab2ba5735fb89c35b2d908"
+  },
+  {
+   "nama": "harga_2016.parquet",
+   "bait": 11491771,
+   "sha256": "321aceaef9967fa70cb46b4aedaeb6e5cc1ac053a915b5200efb77909b7f4e56"
+  },
+  {
+   "nama": "harga_2017.parquet",
+   "bait": 11661572,
+   "sha256": "f7dc47b0da82bbddfbeea0c8b9a7c79a3730e47b486ebb3d16a7253b51174829"
+  },
+  {
+   "nama": "harga_2018.parquet",
+   "bait": 12216719,
+   "sha256": "4f85159fa89666bee6545a4f6116271cefd67a1c1859b581aa84261dc20e6385"
+  },
+  {
+   "nama": "harga_2019.parquet",
+   "bait": 12692943,
+   "sha256": "a6afd14c09d8af0e1f29708ccefe56d6000cb337c8b9743ef77d5e6f36ee8166"
+  },
+  {
+   "nama": "harga_2020.parquet",
+   "bait": 13389387,
+   "sha256": "185e8cf8c793acb985054ced5ef1a8fd8f6857a277e1aebb46dd3b48ee85737b"
+  },
+  {
+   "nama": "harga_2021.parquet",
+   "bait": 14173458,
+   "sha256": "921fa1220661b9769ba02b63512a9b6595bff60ccbb224bb78d4d9943160dd63"
+  },
+  {
+   "nama": "harga_2022.parquet",
+   "bait": 14398317,
+   "sha256": "e052f028c8a37284ed0c6590ea87e83ce36a2138f30cf5af8191c82af10ad145"
+  },
+  {
+   "nama": "harga_2023.parquet",
+   "bait": 14346574,
+   "sha256": "c2aae0ba49d885bceddb37e55ebb5c8d34a6dd72d0145b536420aedb9066beb7"
+  },
+  {
+   "nama": "harga_2024.parquet",
+   "bait": 14601370,
+   "sha256": "c7f29035de680afb3699060b0c43efe69578c7912f1482fcf23e3bd62e152365"
+  },
+  {
+   "nama": "harga_2025.parquet",
+   "bait": 14784136,
+   "sha256": "b10775e2747574461d5228db6cbd8462c47347c93d864b2d1c07677404e6d4dc"
+  },
+  {
+   "nama": "harga_2026.parquet",
+   "bait": 11492117,
+   "sha256": "b3495edeab51f086c38b432e53ab4ccaaf261be5ab2a32376c94efcf28c7a957"
+  },
+  {
+   "nama": "idx.parquet",
+   "bait": 292401,
+   "sha256": "b44b38ec883f928a92b6c8d9a804e4f1b37a2bf4a546b35844d53d421339a3e3"
+  },
+  {
+   "nama": "qc.csv",
+   "bait": 400382,
+   "sha256": "87f345edb5cfacbe0138328a339e0d42a2ad8b36a06299ec0979934337ea4683"
+  },
+  {
+   "nama": "universe.parquet",
+   "bait": 712463,
+   "sha256": "b3c1b36702829fd1e32af83bc6e4e5ff8a11f7faeffb3fab9363d95ef69026be"
+  }
+ ]
+}
