@@ -1,14 +1,832 @@
 {
- "dibina": "2026-10-17T14:59Z",
+ "dibina": "2026-10-18T05:10Z",
  "dokumen": [
   {
    "collection": "autotune",
    "doc_id": "status",
    "path": "AUTOTUNE/dashboard/db/autotune/status.json",
+   "bait": 11271
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M01",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M01.json",
+   "bait": 478
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M02",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M02.json",
+   "bait": 500
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M03",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M03.json",
+   "bait": 482
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M04",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M04.json",
+   "bait": 518
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M05",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M05.json",
+   "bait": 538
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M06",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M06.json",
+   "bait": 530
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M07",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M07.json",
+   "bait": 535
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M08",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M08.json",
+   "bait": 517
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M09",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M09.json",
+   "bait": 543
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M10",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M10.json",
+   "bait": 515
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M11",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M11.json",
+   "bait": 494
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M12",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M12.json",
+   "bait": 488
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M13",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M13.json",
+   "bait": 424
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M14",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M14.json",
+   "bait": 443
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M15",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M15.json",
+   "bait": 468
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M18",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M18.json",
+   "bait": 441
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M19",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M19.json",
+   "bait": 486
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M20",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M20.json",
+   "bait": 499
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M21",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M21.json",
+   "bait": 551
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M22",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M22.json",
+   "bait": 505
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M23",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M23.json",
+   "bait": 502
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M24",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M24.json",
+   "bait": 441
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M25",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M25.json",
+   "bait": 511
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M26",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M26.json",
+   "bait": 476
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M27",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M27.json",
+   "bait": 502
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M28",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M28.json",
+   "bait": 514
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M29",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M29.json",
+   "bait": 487
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M30",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M30.json",
+   "bait": 512
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M31",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M31.json",
+   "bait": 472
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M32",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M32.json",
+   "bait": 515
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M33",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M33.json",
+   "bait": 496
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M34",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M34.json",
+   "bait": 506
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M35",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M35.json",
+   "bait": 490
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M36",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M36.json",
+   "bait": 484
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M37",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M37.json",
+   "bait": 508
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M38",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M38.json",
+   "bait": 428
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M39",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M39.json",
+   "bait": 463
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M40",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M40.json",
+   "bait": 527
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M41",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M41.json",
+   "bait": 519
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M44",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M44.json",
+   "bait": 532
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M45",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M45.json",
+   "bait": 505
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M46",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M46.json",
+   "bait": 534
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M47",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M47.json",
+   "bait": 470
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M48",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M48.json",
+   "bait": 515
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M49",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M49.json",
+   "bait": 489
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M50",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M50.json",
+   "bait": 488
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M51",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M51.json",
+   "bait": 521
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M52",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M52.json",
+   "bait": 529
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M54",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M54.json",
+   "bait": 508
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M55",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M55.json",
+   "bait": 440
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M56",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M56.json",
+   "bait": 458
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M57",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M57.json",
+   "bait": 516
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M59",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M59.json",
+   "bait": 497
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M64",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M64.json",
+   "bait": 489
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M66",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M66.json",
+   "bait": 511
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M67",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M67.json",
+   "bait": 530
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M68",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M68.json",
+   "bait": 513
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M70",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M70.json",
+   "bait": 474
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M73",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M73.json",
+   "bait": 467
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M74",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M74.json",
+   "bait": 545
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M76",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M76.json",
+   "bait": 510
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M77",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M77.json",
+   "bait": 537
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M78",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M78.json",
+   "bait": 548
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M79",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M79.json",
+   "bait": 420
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M80",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M80.json",
+   "bait": 532
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M81",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M81.json",
+   "bait": 580
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M82",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M82.json",
+   "bait": 546
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M84",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M84.json",
+   "bait": 530
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M87",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M87.json",
+   "bait": 555
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M88",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M88.json",
+   "bait": 505
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M89",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M89.json",
+   "bait": 490
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M90",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M90.json",
+   "bait": 514
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M91",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M91.json",
+   "bait": 527
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M92",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M92.json",
+   "bait": 446
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M93",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M93.json",
+   "bait": 545
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M94",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M94.json",
+   "bait": 462
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M95",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M95.json",
+   "bait": 555
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M96",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M96.json",
+   "bait": 543
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M99",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M99.json",
+   "bait": 453
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M100",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M100.json",
+   "bait": 519
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M101",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M101.json",
+   "bait": 455
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M102",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M102.json",
+   "bait": 513
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M104",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M104.json",
+   "bait": 516
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M105",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M105.json",
+   "bait": 455
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M106",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M106.json",
+   "bait": 475
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M107",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M107.json",
+   "bait": 484
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M111",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M111.json",
+   "bait": 499
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M115",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M115.json",
    "bait": 491
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M116",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M116.json",
+   "bait": 493
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M117",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M117.json",
+   "bait": 544
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M118",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M118.json",
+   "bait": 492
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M119",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M119.json",
+   "bait": 526
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M120",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M120.json",
+   "bait": 494
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M121",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M121.json",
+   "bait": 512
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M122",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M122.json",
+   "bait": 524
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M123",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M123.json",
+   "bait": 490
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M124",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M124.json",
+   "bait": 512
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M125",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M125.json",
+   "bait": 469
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M126",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M126.json",
+   "bait": 537
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M127",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M127.json",
+   "bait": 512
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M128",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M128.json",
+   "bait": 536
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M129",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M129.json",
+   "bait": 484
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M130",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M130.json",
+   "bait": 540
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M131",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M131.json",
+   "bait": 449
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M132",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M132.json",
+   "bait": 522
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M133",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M133.json",
+   "bait": 502
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M134",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M134.json",
+   "bait": 540
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M135",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M135.json",
+   "bait": 500
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M136",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M136.json",
+   "bait": 476
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M137",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M137.json",
+   "bait": 535
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M138",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M138.json",
+   "bait": 560
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M139",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M139.json",
+   "bait": 558
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M140",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M140.json",
+   "bait": 523
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M141",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M141.json",
+   "bait": 501
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M142",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M142.json",
+   "bait": 546
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M143",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M143.json",
+   "bait": 574
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M144",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M144.json",
+   "bait": 502
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M145",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M145.json",
+   "bait": 516
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M146",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M146.json",
+   "bait": 504
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M147",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M147.json",
+   "bait": 501
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M148",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M148.json",
+   "bait": 515
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M149",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M149.json",
+   "bait": 519
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M150",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M150.json",
+   "bait": 516
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M151",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M151.json",
+   "bait": 509
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M152",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M152.json",
+   "bait": 458
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M153",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M153.json",
+   "bait": 478
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M154",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M154.json",
+   "bait": 459
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M155",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M155.json",
+   "bait": 512
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M156",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M156.json",
+   "bait": 517
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M157",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M157.json",
+   "bait": 526
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M158",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M158.json",
+   "bait": 509
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M159",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M159.json",
+   "bait": 509
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M160",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M160.json",
+   "bait": 497
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "kaedah_M161",
+   "path": "AUTOTUNE/dashboard/db/autotune/kaedah_M161.json",
+   "bait": 525
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "ringkasan",
+   "path": "AUTOTUNE/dashboard/db/autotune/ringkasan.json",
+   "bait": 2366
+  },
+  {
+   "collection": "autotune",
+   "doc_id": "gabungan",
+   "path": "AUTOTUNE/dashboard/db/autotune/gabungan.json",
+   "bait": 651
   }
  ],
  "batch": [
-  "AUTOTUNE/dashboard/db/_batch_0.json"
+  "AUTOTUNE/dashboard/db/_batch_0.json",
+  "AUTOTUNE/dashboard/db/_batch_1.json",
+  "AUTOTUNE/dashboard/db/_batch_2.json"
  ]
 }
