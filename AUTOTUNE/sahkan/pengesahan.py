@@ -218,14 +218,21 @@ def jalan(tala=None, keluar=None, spy=None, kaedah=None, kaedah_dir=None):
                          nama=U.nama_modul(k, kaedah_dir))
         rek.append(r)
     D, s0 = dsr_semua(rA, N)
+    ph = U.pandang_hadapan(os.path.join(keluar, 'pandang_hadapan.json'))   # Pindaan 18 Okt 2026
     for r in rek:
         r['dsr'] = D.get(r['kaedah'], float('nan'))
-        r['label'] = U.label(r, belum=r.pop('_belum'))
+        e = ph.get(r['kaedah']) or {}
+        hadapan = e.get('status') == 'PANDANG HADAPAN'
+        if hadapan:
+            r['catatan'] = '; '.join(x for x in ('pandang ke hadapan: ' + ','.join(e.get('lajur') or []), r['catatan']) if x)
+        elif e.get('status') == 'DIBAIKI':
+            r['catatan'] = '; '.join(x for x in ('dibaiki: pandang ke hadapan', r['catatan']) if x)
+        r['label'] = U.label(r, belum=r.pop('_belum'), hadapan=hadapan)
     df = pd.DataFrame(rek, columns=LAJUR)
     os.makedirs(keluar, exist_ok=True)
     df.to_csv(os.path.join(keluar, 'parameter_sedia.csv'), index=False, float_format='%.6g')
     kira = {l: int((df.label == l).sum()) for l in U.LABEL}
-    sah = df[df.label != 'BELUM DITALA'].sort_values('cagr_a', ascending=False)
+    sah = df[~df.label.isin(U.BUKAN_CALON)].sort_values('cagr_a', ascending=False)
     top = [U.bersih({c: r[c] for c in ('kaedah', 'nama', 'label', 'cagr_a', 'mdd_a', 'cagr_b', 'mdd_b',
                                           'cagr_kunci', 'spy_kunci', 'spy_a', 'dsr', 'pbo')}, 4)
            for _, r in sah.head(20).iterrows()]
@@ -241,7 +248,9 @@ def jalan(tala=None, keluar=None, spy=None, kaedah=None, kaedah_dir=None):
         spy=U.bersih(dict(oos=spy_julat(spy, OOS_MULA, OOS_AKHIR),
                           bersih=spy_julat(spy, BERSIH_MULA, BERSIH_AKHIR)), 4),
         top20_cagr_a=top,
-        belum_ditala=df.kaedah[df.label == 'BELUM DITALA'].tolist())
+        belum_ditala=df.kaedah[df.label == 'BELUM DITALA'].tolist(),
+        pandang_hadapan=df.kaedah[df.label == 'PANDANG HADAPAN'].tolist(),
+        dibaiki_hadapan=sorted(k for k, e in ph.items() if (e or {}).get('status') == 'DIBAIKI'))
     U.tulis_json(os.path.join(keluar, 'ringkasan.json'), U.bersih(ring))
     return df, ring
 

@@ -14,7 +14,8 @@ K_WFO = list(range(12))       # kajian 0–11: tetingkap ujian walk-forward
 K_AKHIR, K_SEMASA = 12, 13
 HAD_MDD = -0.30
 HARI_TAHUN = 252.0
-LABEL = ['TINGGI', 'SEDERHANA', 'RENDAH', 'GAGAL', 'BUKAN SWING', 'BELUM DITALA']
+LABEL = ['TINGGI', 'SEDERHANA', 'RENDAH', 'GAGAL', 'BUKAN SWING', 'PANDANG HADAPAN', 'BELUM DITALA']
+BUKAN_CALON = ('BELUM DITALA', 'PANDANG HADAPAN')    # tidak disenaraikan sebagai calon/teratas
 
 
 # ---------- siri pulangan harian ----------
@@ -116,8 +117,21 @@ def _le(a, b):
     return a is not None and not (isinstance(a, float) and math.isnan(a)) and a <= b
 
 
-def label(m, belum=False):
-    """m: dict metrik (cagr_a, cagr_b, mdd_a, hari_a, spy_a, spy_b, cagr_kunci, spy_kunci, dsr, pbo)."""
+def pandang_hadapan(f=None):
+    """Kandungan hasil/pandang_hadapan.json (imbasan semak_hadapan.py): {kaedah: {lajur, baiki, status}}.
+    status 'PANDANG HADAPAN' = dikecualikan; 'DIBAIKI' = salinan dibaiki dan ditala semula."""
+    f = f or os.path.join(HASIL, 'pandang_hadapan.json')
+    try:
+        with open(f, encoding='utf-8') as fh: d = json.load(fh)
+        return d if isinstance(d, dict) else {}
+    except (OSError, ValueError):
+        return {}
+
+
+def label(m, belum=False, hadapan=False):
+    """m: dict metrik (cagr_a, cagr_b, mdd_a, hari_a, spy_a, spy_b, cagr_kunci, spy_kunci, dsr, pbo).
+    hadapan: kaedah dikecualikan oleh imbasan pandang ke hadapan (Pindaan 18 Okt 2026)."""
+    if hadapan: return 'PANDANG HADAPAN'
     if belum: return 'BELUM DITALA'
     h = m.get('hari_a')
     if h is not None and not (isinstance(h, float) and math.isnan(h)) and (h < 2 or h > 60):

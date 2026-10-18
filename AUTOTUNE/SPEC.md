@@ -57,3 +57,17 @@ Ditetapkan 17 Okt 2026, 22:00 MYT, SEBELUM sebarang larian. Keputusan pengguna 1
 ## 7. Output (`AUTOTUNE/hasil/`)
 - `tala/Mxx.json` (setiap kajian: parameter terbaik, metrik latih/ujian), `parameter_sedia.csv`, `gabungan.json`, `LAPORAN.md` (dijana skrip), kemudian dashboard (terakhir).
 - Tala semula setiap suku (Actions cron): kajian SEMASA sahaja; cadangan, bukan perubahan automatik.
+
+## Pindaan 18 Okt 2026 (selepas audit M81)
+
+Ditulis 18 Okt 2026 SEBELUM melihat angka pengesahan baharu. Punca: [AUDIT_M81.md](hasil/AUDIT_M81.md) — hasil M81 ialah ARTIFAK (`_exit_ekor` menanda `exitc[j-1]` daripada rendah hari j; enjin keluar pada buka j dengan pengetahuan hari j).
+
+1. **Peraturan imbasan pandang ke hadapan** (`AUTOTUNE/kaedah/semak_hadapan.py`, ujian `AUTOTUNE/ujian/test_hadapan.py`). Data 431 saham, PARAM asal, tarikh potong c ∈ {2021-06-30, 2023-03-31, 2025-06-30}; `sedia()` atas data dipotong pada c (termasuk) dibanding dengan data penuh:
+   - `exitc`, `tgt`: sama bagi semua tarikh ≤ c. Pengecualian tunggal: `exitc` hari c yang hanya bergantung pada kewujudan bar c+1 (pengawal `j + 1 < n`; diuji dengan bar c+1 = tutup c tanpa maklumat baharu).
+   - `stop`, `rank`: sama bagi tarikh ≤ c pada hari `sig` benar (enjin membaca st[i] dan rank[i] pada hari isyarat sahaja); hari c boleh berbeza hanya jika bergantung pada buka c+1 sahaja.
+   - `sig`: sama bagi tarikh ≤ c−1; hari c boleh berbeza hanya jika bergantung pada buka c+1 sahaja (peraturan boleh laksana "langkau jika buka esok ≤ henti"). Ujian buka-sahaja: bar c+1 dengan high/low/close/volume/turnover = buka.
+   - Ralat atas data dipotong (ticker terlalu pendek) bagi kaedah bukan SILANG: ulang tanpa ticker < PERLU_BAR bar.
+   - Output: `AUTOTUNE/hasil/PANDANG_HADAPAN.md`, `AUTOTUNE/hasil/pandang_hadapan.json` ({kaedah: {lajur, baiki, status}}).
+2. **Pembetulan.** Hanya pembetulan minimum yang jelas dan setara jujur, dalam salinan AUTOTUNE sahaja (pengepala `# Dibaiki (pandang ke hadapan): …`; `BacktestShariah2/**` tidak diubah). Hasil imbasan: satu kaedah melanggar, M81 (`exitc`), dibaiki: `exitc[j] = True` apabila tutup[j] ≤ paras henti mengekor (paras daripada tutup hingga j−1), keluar pada buka j+1; henti awal tidak berubah. Imbasan semula 134 salinan: 0 pelanggaran. M81 ditanda DIBAIKI dalam `KESETARAAN.md` (sengaja tidak sama dengan modul asal). Kaedah yang tiada pembetulan minimum dikecualikan (label PANDANG HADAPAN) — tiada pada imbasan ini.
+3. **Tala semula.** Hasil lama `hasil/tala/M81/` tidak sah. M81 ditala semula k00–k13, 120 percubaan, mengikut §4 tanpa perubahan lain (JULAT kekal). Setiap JSON tala kini membawa `versi_kod` (sha256 fail kaedah, 16 aksara); `gabung_hasil.py` mendahulukan JSON yang `versi_kod`nya sama dengan fail semasa; input workflow `paksa=ya` membuat pekerja mengabaikan hasil SIAP lama kaedah tersenarai.
+4. **Label baharu PANDANG HADAPAN** (§5): kaedah berstatus PANDANG HADAPAN dalam `pandang_hadapan.json` diberi label ini (mengatasi label lain), tidak disenaraikan dalam teratas dan bukan calon gabungan (§6). Kaedah DIBAIKI dinilai seperti biasa dengan catatan "dibaiki: pandang ke hadapan". LAPORAN.md memuat seksyen ringkasan imbasan dan audit M81; dashboard menambah label ini (gaya pil seperti GAGAL).

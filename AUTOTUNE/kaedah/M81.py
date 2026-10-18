@@ -1,5 +1,10 @@
 # Salinan berparameter (AUTOTUNE) — sumber: BacktestShariah2/kod/kaedah/M81.py
 # Dijana oleh AUTOTUNE/kaedah/ekstrak_param.py dan pilih_julat.py; jangan sunting tangan.
+# Dibaiki (pandang ke hadapan): 18 Okt 2026 selepas AUTOTUNE/hasil/AUDIT_M81.md. `_exit_ekor` dahulu menanda
+#   exitc[j-1] apabila rendah[j] <= paras henti mengekor (enjin keluar pada buka j dengan pengetahuan hari j).
+#   Kini exitc[j] = True apabila tutup[j] <= paras henti mengekor (paras dikira daripada tutup hingga j-1), dan
+#   enjin keluar pada buka j+1. Henti awal (stop) tidak berubah. Salinan ini tidak lagi setara bait demi bait
+#   dengan BacktestShariah2/kod/kaedah/M81.py (DIBAIKI dalam KESETARAAN.md).
 import os as _os, sys as _sys
 _D = _os.path.dirname(_os.path.abspath(__file__))
 for _p in (_os.path.normpath(_os.path.join(_D, '..', '..', 'BacktestShariah2', 'kod')), _D):
@@ -33,7 +38,8 @@ def _rma_atr(g, n=20, *, P=PARAM):
     return tr.ewm(alpha=1 / n, adjust=False).mean()
 
 def _exit_ekor(g, sig, a20, warm, *, P=PARAM):
-    """Andaian saya: enjin v1.2 hanya ada henti tetap. Henti mengekor 25% (0.75 x tutup tertinggi sejak masuk,
+    """(Dibaiki 18 Okt 2026: lihat pengepala fail; perenggan asal di bawah tidak lagi tepat bagi exitc.)
+    Andaian saya: enjin v1.2 hanya ada henti tetap. Henti mengekor 25% (0.75 x tutup tertinggi sejak masuk,
     TT bermula = buka_masuk) disimulasi di sini mengikut gelung trades() enjin; hari keluar mengekor
     ditandakan sebagai exitc pada hari SEBELUMNYA supaya enjin keluar pada buka hari itu (masa keluar sama,
     harga keluar = buka, bukan paras henti). Henti awal buka_masuk-3xATR20 diserah kepada enjin melalui stop.
@@ -61,11 +67,12 @@ def _exit_ekor(g, sig, a20, warm, *, P=PARAM):
             if j > i + 1:
                 tt = max(tt, c[j - 1])
             tr = _p_tt_kali_0_75 * tt
-            sp = max(sp0, tr)
-            if j > i + 1 and o[j] <= sp or l[j] <= sp:
-                if tr > sp0 and j > i + 1:
-                    ex[j - 1] = True
+            if j > i + 1 and o[j] <= sp0 or l[j] <= sp0:   # henti awal (enjin, lajur stop)
                 jx = j
+                break
+            if c[j] <= tr and j + 1 < n:                     # henti mengekor atas tutup: keluar buka j+1
+                ex[j] = True
+                jx = j + 1
                 break
             j += 1
         i = jx + 1

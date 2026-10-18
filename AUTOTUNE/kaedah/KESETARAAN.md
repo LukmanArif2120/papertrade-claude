@@ -1,10 +1,11 @@
 # Kesetaraan salinan berparameter (F2)
 
-Dijana oleh `kesetaraan.py` (2026-10-17 14:39). Data 431 saham (`data_mentah/`); banding tepat lajur sig, stop, tgt, exitc, rank setiap ticker; nisbah = masa salinan ÷ masa asal (min hingga 4 ulangan bersilih susunan jika > 1.2).
+Dijana oleh `kesetaraan.py` (2026-10-18 04:45). Data 431 saham (`data_mentah/`); banding tepat lajur sig, stop, tgt, exitc, rank setiap ticker; nisbah = masa salinan ÷ masa asal (min hingga 4 ulangan bersilih susunan jika > 1.2).
 
-Ringkasan: SAMA 134
+Ringkasan: DIBAIKI 1, SAMA 133
 
 BELUM DITALA = salinan pembalut (modul asal dipanggil tanpa parameter; PARAM/JULAT/TALA kosong).
+DIBAIKI = salinan dibaiki kerana pandang ke hadapan (Pindaan 18 Okt 2026; `semak_hadapan.py`, `AUTOTUNE/hasil/PANDANG_HADAPAN.md`); sengaja tidak sama dengan modul asal.
 
 | Kaedah | Status | Param | Tala | Asal (s) | Salinan (s) | Nisbah | Catatan |
 |---|---|---|---|---|---|---|---|
@@ -73,7 +74,7 @@ BELUM DITALA = salinan pembalut (modul asal dipanggil tanpa parameter; PARAM/JUL
 | M78 | SAMA | 10 | 6 | 5.01 | 5.3 | 1.057 |  |
 | M79 | SAMA | 2 | 1 | 1.62 | 1.9 | 1.172 |  |
 | M80 | SAMA | 8 | 6 | 3.66 | 3.82 | 1.045 |  |
-| M81 | SAMA | 10 | 6 | 3.85 | 3.7 | 0.961 |  |
+| M81 | DIBAIKI | 10 | 6 | 2.76 | 2.52 | 0.913 | dibaiki pandang ke hadapan; beza dijangka (375 lajur-ticker): ADSK:exitc;ALAB:exitc;ALKS:exitc |
 | M82 | SAMA | 13 | 6 | 3.49 | 3.18 | 0.911 |  |
 | M84 | SAMA | 9 | 6 | 5.5 | 5.65 | 1.028 |  |
 | M87 | SAMA | 14 | 6 | 8.57 | 6.3 | 0.735 |  |

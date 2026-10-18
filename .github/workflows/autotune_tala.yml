@@ -19,6 +19,9 @@ on:
       simpan:
         description: "commit hasil ke main (ya/tidak)"
         default: 'ya'
+      paksa:
+        description: "ya = tala semula kaedah tersenarai walaupun ada hasil SIAP (versi_kod lain)"
+        default: 'tidak'
 
 permissions:
   contents: read
@@ -85,7 +88,9 @@ jobs:
       - name: Pekerja shard ${{ matrix.shard }}
         run: |
           ( while true; do sleep 600; echo "[memori] $(free -m | awk 'NR==2{print $3"/"$2" MB"}')"; done ) &
-          python3 AUTOTUNE/tala/pekerja.py --shard ${{ matrix.shard }} --plan plan.json --proses 4 --had-minit 330
+          PAKSA=""
+          if [ "${{ inputs.paksa }}" = "ya" ]; then PAKSA="${{ inputs.kaedah }}"; fi
+          python3 AUTOTUNE/tala/pekerja.py --shard ${{ matrix.shard }} --plan plan.json --proses 4 --had-minit 330 --paksa "$PAKSA"
       # Muat naik HANYA fail yang ditulis oleh shard ini (senarai _ditulis_shard<i>.txt daripada pekerja.py);
       # salinan lapuk daripada checkout tidak lagi dimasukkan ke dalam artifak.
       - name: Sedia fail shard ${{ matrix.shard }}

@@ -68,6 +68,23 @@ class UjiGabung(unittest.TestCase):
         tulis(self.a, H('M05', k=3), mentah=json.dumps(H('M05', k=4)))
         self.assertIsNone(G.baca(os.path.join(self.a, 'M05', 'k03.json')))
 
+    def test_versi_kod_semasa_didahulukan(self):
+        """Pindaan 18 Okt 2026: hasil dengan versi_kod = fail kaedah semasa menang atas hasil lama (kod lain)."""
+        dk = os.path.join(self.t, 'kaedah'); os.makedirs(dk)
+        with open(os.path.join(dk, 'M81.py'), 'w') as fh: fh.write('# dibaiki\n')
+        v = G.versi_kod('M81', dk)
+        tulis(self.keluar, H('M81', diminta=500, mula='2026-10-19T00:00:00Z', skor=1))          # lama, tiada versi_kod
+        tulis(self.a, H('M81', mula='2026-10-18T00:00:00Z', skor=2, versi_kod=v))
+        tulis(self.b, H('M81', mula='2026-10-20T00:00:00Z', skor=3, versi_kod='lain'))
+        G.gabung([self.a, self.b], self.keluar, masa_csv=False, dir_kaedah=dk)
+        self.assertEqual(self.baca('M81', 0)['skor'], 2)
+        sys.path.insert(0, os.path.join(AKAR, 'AUTOTUNE', 'tala'))
+        import pekerja
+        f = os.path.join(self.keluar, 'M81', 'k00.json')
+        self.assertTrue(pekerja._sudah(f, 120))
+        self.assertTrue(pekerja._sudah(f, 120, v))
+        self.assertFalse(pekerja._sudah(f, 120, 'lain'))
+
 
 if __name__ == '__main__':
     unittest.main()

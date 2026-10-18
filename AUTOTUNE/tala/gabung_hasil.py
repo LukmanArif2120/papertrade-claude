@@ -1,6 +1,8 @@
 # Gabung hasil penalaan daripada beberapa direktori (artifak shard dan direktori repo) → satu direktori keluar.
 # Bagi setiap Mxx/kNN.json dipilih versi TERBAIK:
 #   1. hanya JSON yang boleh dihurai (fail rosak, cth. "Extra data", diabaikan);
+#   0. (Pindaan 18 Okt 2026) JSON yang `versi_kod`nya sama dengan cincangan fail kaedah semasa
+#      (AUTOTUNE/kaedah/Mxx.py) didahulukan, supaya hasil tala semula selepas pembetulan kod menang;
 #   2. SIAP lengkap (n_trials ≥ n_sasaran) — antaranya n_trials_diminta terbesar, kemudian `mula` terbaharu;
 #   3. jika tiada, SIAP separa dengan n_trials terbanyak (kemudian terbaharu);
 #   4. jika tiada, apa-apa JSON sah (RALAT) — n_trials terbanyak, kemudian terbaharu.
@@ -8,12 +10,20 @@
 # dan tiada ganti yang sah dibuang. _masa.csv dibina semula daripada JSON terpilih (masa.py).
 # Guna: python3 gabung_hasil.py [--keluar DIR] [--percubaan 120] DIR1 [DIR2 ...]
 #   Direktori keluar sentiasa turut dinilai sebagai calon. Setiap DIR mengandungi Mxx/kNN.json.
-import os, sys, json, glob, shutil, argparse, tempfile
+import os, sys, json, glob, shutil, argparse, tempfile, hashlib
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import masa
 
 KELUAR = masa.KELUAR
+DIR_KAEDAH = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'kaedah'))
+
+
+def versi_kod(mid, dir_kaedah=DIR_KAEDAH):
+    """16 aksara pertama sha256 fail AUTOTUNE/kaedah/Mxx.py (None jika tiada)."""
+    try:
+        with open(os.path.join(dir_kaedah, mid + '.py'), 'rb') as fh: return hashlib.sha256(fh.read()).hexdigest()[:16]
+    except OSError: return None
 
 
 def baca(f):
@@ -42,12 +52,13 @@ def lengkap(H):
     return _n(H.get('n_trials')) >= _n(sas)
 
 
-def taraf(H):
-    """Kunci susunan (lebih besar = lebih baik)."""
+def taraf(H, semasa=None):
+    """Kunci susunan (lebih besar = lebih baik). semasa: versi_kod fail kaedah sekarang (padanan didahulukan)."""
     mula = str(H.get('mula') or '')
-    if lengkap(H): return (3, _n(H.get('n_trials_diminta')), mula)
-    if H.get('status') == 'SIAP': return (2, _n(H.get('n_trials')), mula)
-    return (1, _n(H.get('n_trials')), mula)
+    v = int(semasa is not None and H.get('versi_kod') == semasa)
+    if lengkap(H): return (v, 3, _n(H.get('n_trials_diminta')), mula)
+    if H.get('status') == 'SIAP': return (v, 2, _n(H.get('n_trials')), mula)
+    return (v, 1, _n(H.get('n_trials')), mula)
 
 
 def kelas(H):
@@ -66,7 +77,7 @@ def tulis_atomik(sumber, f):
         raise
 
 
-def gabung(dirs, keluar=KELUAR, percubaan=None, masa_csv=True):
+def gabung(dirs, keluar=KELUAR, percubaan=None, masa_csv=True, dir_kaedah=DIR_KAEDAH):
     """Pulang dict kiraan. dirs: senarai direktori calon (keluar ditambah secara automatik di hadapan)."""
     keluar = os.path.abspath(keluar)
     senarai, lihat = [], set()
@@ -88,9 +99,9 @@ def gabung(dirs, keluar=KELUAR, percubaan=None, masa_csv=True):
             if os.path.exists(sasaran): os.remove(sasaran); C['dibuang'] += 1
             C['perlu_kerja'] += 1
             continue
-        f, H = sah[0]
+        f, H = sah[0]; v = versi_kod(mid, dir_kaedah)
         for g, J in sah[1:]:   # seri: calon terawal (direktori keluar dahulu) dikekalkan
-            if taraf(J) > taraf(H): f, H = g, J
+            if taraf(J, v) > taraf(H, v): f, H = g, J
         C[kelas(H)] += 1
         if not lengkap(H) or (percubaan is not None and _n(H.get('n_trials_diminta')) < percubaan):
             C['perlu_kerja'] += 1

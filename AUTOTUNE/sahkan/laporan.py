@@ -70,11 +70,12 @@ def jana(keluar=None):
          '', '## Kiraan label', '', '| Label | Bilangan |', '|---|---|']
     for l in U.LABEL:
         L.append(f"| {l} | {ring.get('kiraan_label', {}).get(l, int((df.label == l).sum()))} |")
-    L += ['', f"Jumlah {len(df)} kaedah; N percubaan (DSR) = {ring.get('n_cubaan_jumlah', '–')}.", '',
-          '## 20 kaedah teratas (CAGR OOS-A)', '',
+    L += ['', f"Jumlah {len(df)} kaedah; N percubaan (DSR) = {ring.get('n_cubaan_jumlah', '–')}.", '']
+    L += seksyen_hadapan(keluar)
+    L += ['## 20 kaedah teratas (CAGR OOS-A)', '',
           '| # | Kaedah | Label | A CAGR | A MDD | B CAGR | B MDD | SPY OOS | Kunci | SPY kunci | DSR | PBO |',
           '|---|---|---|---|---|---|---|---|---|---|---|---|']
-    top = df[df.label != 'BELUM DITALA'].sort_values('cagr_a', ascending=False).head(20)
+    top = df[~df.label.isin(U.BUKAN_CALON)].sort_values('cagr_a', ascending=False).head(20)
     for i, (_, r) in enumerate(top.iterrows(), 1):
         L.append(f"| {i} | {r.kaedah} {_pendek(r.nama)} | {r.label} | {pc(r.cagr_a)} | {pc(r.mdd_a)} | {pc(r.cagr_b)} | "
                  f"{pc(r.mdd_b)} | {pc(r.spy_a)} | {pc(r.cagr_kunci)} | {pc(r.spy_kunci)} | {nb(r.dsr)} | {nb(r.pbo)} |")
@@ -130,6 +131,23 @@ def jana(keluar=None):
     U.tulis_json(os.path.join(keluar, 'papan.json'), dict(dijana=ring.get('dijana'), tempoh=t,
                  gabungan=gab.get('terpilih', []), kaedah=papan))
     return L, papan
+
+
+def seksyen_hadapan(keluar):
+    """Ringkasan imbasan pandang ke hadapan dan audit M81 (Pindaan 18 Okt 2026)."""
+    ph = U.pandang_hadapan(os.path.join(keluar, 'pandang_hadapan.json'))
+    baiki = sorted((k for k, e in ph.items() if e.get('status') == 'DIBAIKI'), key=lambda s: (len(s), s))
+    kecuali = sorted((k for k, e in ph.items() if e.get('status') == 'PANDANG HADAPAN'), key=lambda s: (len(s), s))
+    L = ['## Imbasan pandang ke hadapan (Pindaan 18 Okt 2026)', '',
+         '- Audit [M81](AUDIT_M81.md): hasil asal ialah ARTIFAK — `_exit_ekor` menanda `exitc[j-1]` daripada rendah hari j, '
+         'jadi enjin keluar pada buka j dengan pengetahuan hari j.',
+         '- Semua 134 salinan diimbas (`kaedah/semak_hadapan.py`, data 431, PARAM asal, potong 2021-06-30, 2023-03-31, '
+         '2025-06-30): `exitc/stop/tgt` mesti sama hingga hari potong; `sig/rank` hingga hari sebelumnya, dan pada hari '
+         'potong hanya boleh bergantung pada buka esok. Butiran: [PANDANG_HADAPAN.md](PANDANG_HADAPAN.md).',
+         f"- Dibaiki dan ditala semula ({len(baiki)}): " + (', '.join(f"{k} ({', '.join(ph[k].get('lajur') or [])})" for k in baiki) or 'tiada') + '.',
+         f"- Dikecualikan, label PANDANG HADAPAN, bukan calon gabungan ({len(kecuali)}): "
+         + (', '.join(f"{k} ({', '.join(ph[k].get('lajur') or [])})" for k in kecuali) or 'tiada') + '.', '']
+    return L
 
 
 def _f(x):

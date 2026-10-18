@@ -1,0 +1,24 @@
+{
+ "M81": {
+  "lajur": [
+   "exitc"
+  ],
+  "baiki": "exitc[j] = True apabila tutup[j] <= paras henti mengekor (keluar buka j+1); dahulu exitc[j-1] ditanda daripada rendah[j] (keluar buka j dengan pengetahuan hari j).",
+  "status": "DIBAIKI",
+  "butiran_sebelum": {
+   "exitc": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "exitc hari c bergantung nilai bar c+1"
+    ],
+    "contoh": [
+     "AEHR"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  }
+ }
+}

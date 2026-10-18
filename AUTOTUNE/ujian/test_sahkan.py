@@ -87,6 +87,35 @@ class TestLabel(unittest.TestCase):
         self.assertEqual(U.label(self.m(hari_a=60.0)), 'TINGGI')
         self.assertEqual(U.label(self.m(hari_a=1.0), belum=True), 'BELUM DITALA')
 
+    def test_pandang_hadapan(self):
+        self.assertEqual(U.label(self.m(), hadapan=True), 'PANDANG HADAPAN')
+        self.assertEqual(U.label(self.m(), belum=True, hadapan=True), 'PANDANG HADAPAN')
+        self.assertIn('PANDANG HADAPAN', U.LABEL)
+
+
+class TestPengesahanHadapan(unittest.TestCase):
+    """Pindaan 18 Okt 2026: pandang_hadapan.json dalam direktori keluar menentukan label/catatan."""
+    def test_label_dan_catatan(self):
+        d = tempfile.mkdtemp()
+        try:
+            tala, kd, out = (os.path.join(d, x) for x in ('tala', 'kaedah', 'hasil'))
+            os.makedirs(out)
+            with open(os.path.join(out, 'pandang_hadapan.json'), 'w') as h:
+                json.dump({'M01': {'lajur': ['exitc'], 'baiki': 'x', 'status': 'DIBAIKI'},
+                           'M02': {'lajur': ['sig'], 'baiki': '', 'status': 'PANDANG HADAPAN'}}, h)
+            for i, k in enumerate(('M01', 'M02'), 1):
+                buat_kaedah(tala, k, 0.0012, 0.0012, 0.0012, sd=0.004, benih=i); buat_modul(kd, k)
+            df, ring = P.jalan(tala, out, spy=spy_palsu(), kaedah_dir=kd, kaedah=['M01', 'M02'])
+            r = df.set_index('kaedah')
+            self.assertEqual(r.loc['M02', 'label'], 'PANDANG HADAPAN')
+            self.assertIn('pandang ke hadapan', r.loc['M02', 'catatan'])
+            self.assertIn(r.loc['M01', 'label'], ('TINGGI', 'SEDERHANA'))
+            self.assertIn('dibaiki: pandang ke hadapan', r.loc['M01', 'catatan'])
+            self.assertEqual(ring['pandang_hadapan'], ['M02']); self.assertEqual(ring['dibaiki_hadapan'], ['M01'])
+            self.assertEqual([t['kaedah'] for t in ring['top20_cagr_a']], ['M01'])
+        finally:
+            shutil.rmtree(d)
+
 
 class TestMetrik(unittest.TestCase):
     def test_sambung(self):

@@ -89,7 +89,12 @@ def semak(mid):
             if beza or tb <= 1.2 * ta or ulang == 3: break
         r.update(masa_asal=round(ta, 2), masa_salin=round(tb, 2), nisbah=round(tb / ta, 3) if ta > 0 else '')
         r['beza'] = len(beza)
-        if beza: r['status'] = 'BEZA'; r['catatan'] = (r['catatan'] + ' ' + ';'.join(beza[:4])).strip()
+        baiki = '# Dibaiki (pandang ke hadapan):' in open(os.path.join(SINI, mid + '.py')).read()
+        if baiki:    # Pindaan 18 Okt 2026: salinan dibaiki sengaja berbeza daripada asal (semak_hadapan.py)
+            r['status'] = 'DIBAIKI'
+            r['catatan'] = (r['catatan'] + f' dibaiki pandang ke hadapan; beza dijangka ({len(beza)} lajur-ticker): '
+                            + ';'.join(beza[:3])).strip()
+        elif beza: r['status'] = 'BEZA'; r['catatan'] = (r['catatan'] + ' ' + ';'.join(beza[:4])).strip()
         else: r['status'] = 'SAMA'
     except Exception as e:
         r['catatan'] = (r['catatan'] + f' {type(e).__name__}: {e}'.replace('\n', ' ')[:200]).strip()
@@ -117,7 +122,9 @@ def tulis(baris):
          f'Dijana oleh `kesetaraan.py` ({time.strftime("%Y-%m-%d %H:%M")}). Data 431 saham (`data_mentah/`); '
          'banding tepat lajur sig, stop, tgt, exitc, rank setiap ticker; nisbah = masa salinan ÷ masa asal (min hingga 4 ulangan bersilih susunan jika > 1.2).', '',
          'Ringkasan: ' + ', '.join(f'{k} {v}' for k, v in sorted(n.items())), '',
-         'BELUM DITALA = salinan pembalut (modul asal dipanggil tanpa parameter; PARAM/JULAT/TALA kosong).', '',
+         'BELUM DITALA = salinan pembalut (modul asal dipanggil tanpa parameter; PARAM/JULAT/TALA kosong).',
+         'DIBAIKI = salinan dibaiki kerana pandang ke hadapan (Pindaan 18 Okt 2026; `semak_hadapan.py`, '
+         '`AUTOTUNE/hasil/PANDANG_HADAPAN.md`); sengaja tidak sama dengan modul asal.', '',
          '| Kaedah | Status | Param | Tala | Asal (s) | Salinan (s) | Nisbah | Catatan |', '|---|---|---|---|---|---|---|---|']
     for r in semua:
         L.append(f"| {r['kaedah']} | {label(r)} | {r['n_param']} | {r['n_tala']} | {r['masa_asal']} | {r['masa_salin']} | "

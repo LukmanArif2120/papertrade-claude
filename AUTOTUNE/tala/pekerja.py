@@ -6,6 +6,7 @@ from multiprocessing import get_context
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import tala
+from gabung_hasil import versi_kod
 
 _G = {}
 
@@ -30,11 +31,13 @@ def _kerja(t):
     return R
 
 
-def _sudah(f, n):
+def _sudah(f, n, versi=None):
+    """SIAP lengkap. versi (bagi kaedah --paksa): hanya hasil yang versi_kod-nya sama dengan fail semasa dikira."""
     try:
         H = json.load(open(f))
         return (H.get('status') == 'SIAP' and H.get('n_trials_diminta', 0) >= n
-                and H.get('n_trials', 0) >= H.get('n_sasaran', n))
+                and H.get('n_trials', 0) >= H.get('n_sasaran', n)
+                and (versi is None or H.get('versi_kod') == versi))
     except Exception: return False
 
 
@@ -56,12 +59,15 @@ def main(argv=None):
     a.add_argument('--had-tugas', type=float, default=tala.HAD_MINIT)
     a.add_argument('--cache', default=os.environ.get('AUTOTUNE_CACHE', 'AUTOTUNE/.cache'))
     a.add_argument('--keluar', default=tala.KELUAR); a.add_argument('--semula', action='store_true')
+    a.add_argument('--paksa', default='', help='senarai koma kaedah: abaikan hasil lama yang versi_kod lain')
     x = a.parse_args(argv)
     t0 = time.time(); tamat = t0 + x.had_minit * 60
     P = json.load(open(x.plan)); n = int(P['percubaan'])
     tugas = sorted(P['shard'][x.shard], key=lambda t: -t['kos'])
+    paksa = {m.strip() for m in x.paksa.split(',') if m.strip()}
     if not x.semula:
-        tugas = [t for t in tugas if not _sudah(os.path.join(x.keluar, t['kaedah'], f"k{t['kajian']:02d}.json"), n)]
+        tugas = [t for t in tugas if not _sudah(os.path.join(x.keluar, t['kaedah'], f"k{t['kajian']:02d}.json"), n,
+                                                versi_kod(t['kaedah']) if t['kaedah'] in paksa else None)]
     import data
     dir_ = str(data.ambil(x.cache))
     panaskan()

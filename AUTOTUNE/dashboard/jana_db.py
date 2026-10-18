@@ -19,7 +19,7 @@ HAD_DB = 262144          # had dokumen db dashboard (BacktestShariah2/standard/d
 HAD_SELAMAT = 240000     # sasaran dokumen ini
 HAD_BATCH = 900_000      # sama seperti BacktestShariah2/standard/jana_db.py
 MAKS_TULIS = 50
-LABEL = ['TINGGI', 'SEDERHANA', 'RENDAH', 'GAGAL', 'BUKAN SWING', 'BELUM DITALA']
+LABEL = ['TINGGI', 'SEDERHANA', 'RENDAH', 'GAGAL', 'BUKAN SWING', 'PANDANG HADAPAN', 'BELUM DITALA']
 KAVEAT = 'Had atas: data tanpa saham delist (yfinance); hasil backtest, bukan jaminan.'
 
 

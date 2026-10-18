@@ -15,6 +15,8 @@ for p in (KOD, TERAS):
     if p not in sys.path: sys.path.insert(0, p)
 import enjin_at as E
 import objektif as O
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from gabung_hasil import versi_kod
 
 DIR_KAEDAH = os.path.join(AKAR, 'AUTOTUNE', 'kaedah')
 DIR_ASAL = os.path.join(KOD, 'kaedah')
@@ -190,7 +192,7 @@ def tala(mid, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=None, ke
     t0 = time.time(); masa = {}
     tamat = min(tamat or math.inf, t0 + had_minit * 60)
     H = dict(kaedah=mid, kajian=k, nama_kajian=NAMA_KAJIAN.get(k, f'WF{k:02d}'), n_trials_diminta=n_trials,
-             ralat=[], status='MULA', mula=pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'))
+             ralat=[], status='MULA', versi_kod=versi_kod(mid), mula=pd.Timestamp.now('UTC').strftime('%Y-%m-%dT%H:%M:%SZ'))
     try:
         m = muat_kaedah(mid)
         H.update(belum_ditala=bool(m.BELUM_DITALA), asal=bool(getattr(m, 'ASAL', False)), tala=list(m.TALA),

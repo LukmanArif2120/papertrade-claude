@@ -227,7 +227,7 @@ def jalan(csv=None, tala=None, keluar=None, data_dir=None, maks=MAKS, penjana=No
     df = pd.read_csv(csv or os.path.join(keluar, 'parameter_sedia.csv'))
     calon_df = df[df.label.isin(['TINGGI', 'SEDERHANA'])].sort_values('cagr_a', ascending=False)
     calon = calon_df.kaedah.tolist()
-    terbaik3 = U.bersih(df[df.label != 'BELUM DITALA'].sort_values('cagr_a', ascending=False).head(3)[
+    terbaik3 = U.bersih(df[~df.label.isin(U.BUKAN_CALON)].sort_values('cagr_a', ascending=False).head(3)[
         ['kaedah', 'label', 'cagr_a', 'mdd_a', 'cagr_b', 'cagr_kunci']].to_dict('records'), 4)
     hasil = dict(dijana=pd.Timestamp.now(tz='UTC').strftime('%Y-%m-%dT%H:%MZ'), calon=calon,
                  had=dict(maks=maks, korelasi=HAD_KOR, mdd=U.HAD_MDD), terbaik3_oos_a=terbaik3)

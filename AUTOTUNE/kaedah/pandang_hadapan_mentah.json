@@ -1,0 +1,1508 @@
+{
+ "M01": {
+  "kaedah": "M01",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 10.6
+ },
+ "M02": {
+  "kaedah": "M02",
+  "langgar": {},
+  "dibenar": {
+   "tgt": {
+    "ticker": 159,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AA",
+     "AAP",
+     "AAPL",
+     "ACM",
+     "ACN"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 18.4
+ },
+ "M03": {
+  "kaedah": "M03",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 24.6
+ },
+ "M04": {
+  "kaedah": "M04",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 12.0
+ },
+ "M05": {
+  "kaedah": "M05",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ATEN"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 30.2
+ },
+ "M06": {
+  "kaedah": "M06",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 10,
+    "hari": 2,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AXON",
+     "BSY",
+     "CALM",
+     "CSCO",
+     "DASH"
+    ],
+    "contoh_hari": [
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   },
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "MGNI"
+    ],
+    "contoh_hari": [
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 25.8
+ },
+ "M07": {
+  "kaedah": "M07",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "BE"
+    ],
+    "contoh_hari": [
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 40.6
+ },
+ "M08": {
+  "kaedah": "M08",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.4
+ },
+ "M09": {
+  "kaedah": "M09",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 27.8
+ },
+ "M10": {
+  "kaedah": "M10",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 20.8
+ },
+ "M11": {
+  "kaedah": "M11",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.3
+ },
+ "M12": {
+  "kaedah": "M12",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.9
+ },
+ "M13": {
+  "kaedah": "M13",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 10,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ADP",
+     "ARQT",
+     "CHD",
+     "COST",
+     "HL"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 84.8
+ },
+ "M14": {
+  "kaedah": "M14",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 13,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAOI",
+     "ALAB",
+     "AMD",
+     "AMKR",
+     "DELL"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 19.4
+ },
+ "M15": {
+  "kaedah": "M15",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ATEN"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 28.5
+ },
+ "M18": {
+  "kaedah": "M18",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 10.0
+ },
+ "M19": {
+  "kaedah": "M19",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.3
+ },
+ "M20": {
+  "kaedah": "M20",
+  "langgar": {},
+  "dibenar": {
+   "tgt": {
+    "ticker": 24,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ABT",
+     "AEP",
+     "ALKS",
+     "ATO",
+     "CNQ"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   },
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "STNG"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 30.6
+ },
+ "M21": {
+  "kaedah": "M21",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.9
+ },
+ "M22": {
+  "kaedah": "M22",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.6
+ },
+ "M23": {
+  "kaedah": "M23",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 2,
+    "hari": 2,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "BSY",
+     "TTMI"
+    ],
+    "contoh_hari": [
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 14.9
+ },
+ "M24": {
+  "kaedah": "M24",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.1
+ },
+ "M25": {
+  "kaedah": "M25",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 20.7
+ },
+ "M26": {
+  "kaedah": "M26",
+  "langgar": {},
+  "dibenar": {
+   "tgt": {
+    "ticker": 26,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "A",
+     "ALGM",
+     "BFAM",
+     "BLFS",
+     "BROS"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 95.0
+ },
+ "M27": {
+  "kaedah": "M27",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ATEN"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 63.5
+ },
+ "M28": {
+  "kaedah": "M28",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.1
+ },
+ "M29": {
+  "kaedah": "M29",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.6
+ },
+ "M30": {
+  "kaedah": "M30",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 19.8
+ },
+ "M31": {
+  "kaedah": "M31",
+  "langgar": {},
+  "dibenar": {
+   "exitc": {
+    "ticker": 6,
+    "hari": 3,
+    "sifat": [
+     "exitc hari c bergantung kewujudan bar c+1 sahaja (pengawal j+1<n)"
+    ],
+    "contoh": [
+     "EMR",
+     "LAUR",
+     "LBRT",
+     "MOS",
+     "SRPT"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 19.6
+ },
+ "M32": {
+  "kaedah": "M32",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.3
+ },
+ "M33": {
+  "kaedah": "M33",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.8
+ },
+ "M34": {
+  "kaedah": "M34",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.9
+ },
+ "M35": {
+  "kaedah": "M35",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.9
+ },
+ "M36": {
+  "kaedah": "M36",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 44,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAON",
+     "AAPL",
+     "ADI",
+     "ALNY",
+     "ANET"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 20.6
+ },
+ "M37": {
+  "kaedah": "M37",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 19.7
+ },
+ "M38": {
+  "kaedah": "M38",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.9
+ },
+ "M39": {
+  "kaedah": "M39",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 10.4
+ },
+ "M40": {
+  "kaedah": "M40",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 18.5
+ },
+ "M41": {
+  "kaedah": "M41",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 2,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "RMBS",
+     "STM"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 33.4
+ },
+ "M44": {
+  "kaedah": "M44",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 3,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "BKNG",
+     "BRZE",
+     "CDNS"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 15.4
+ },
+ "M45": {
+  "kaedah": "M45",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 20,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAON",
+     "ALGM",
+     "ANF",
+     "AU",
+     "AXON"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 34.7
+ },
+ "M46": {
+  "kaedah": "M46",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 13.5
+ },
+ "M47": {
+  "kaedah": "M47",
+  "langgar": {},
+  "dibenar": {
+   "tgt": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "HAYW"
+    ],
+    "contoh_hari": [
+     "2021-06-30"
+    ]
+   }
+  },
+  "masa": 19.4
+ },
+ "M48": {
+  "kaedah": "M48",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.5
+ },
+ "M49": {
+  "kaedah": "M49",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.3
+ },
+ "M50": {
+  "kaedah": "M50",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "MT"
+    ],
+    "contoh_hari": [
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 19.9
+ },
+ "M51": {
+  "kaedah": "M51",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.6
+ },
+ "M52": {
+  "kaedah": "M52",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 44,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAP",
+     "AGI",
+     "ALGM",
+     "AMD",
+     "ANF"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   },
+   "sig": {
+    "ticker": 25,
+    "hari": 2,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAP",
+     "ALGM",
+     "ANF",
+     "BSY",
+     "CAH"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2025-06-30"
+    ]
+   },
+   "rank": {
+    "ticker": 25,
+    "hari": 2,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAP",
+     "ALGM",
+     "ANF",
+     "BSY",
+     "CAH"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 27.7
+ },
+ "M54": {
+  "kaedah": "M54",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.0
+ },
+ "M55": {
+  "kaedah": "M55",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.5
+ },
+ "M56": {
+  "kaedah": "M56",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.0
+ },
+ "M57": {
+  "kaedah": "M57",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.4
+ },
+ "M59": {
+  "kaedah": "M59",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.6
+ },
+ "M64": {
+  "kaedah": "M64",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 20.4
+ },
+ "M66": {
+  "kaedah": "M66",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.3
+ },
+ "M67": {
+  "kaedah": "M67",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 7,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "COP",
+     "DHT",
+     "DVN",
+     "LYFT",
+     "MUR"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 28.7
+ },
+ "M68": {
+  "kaedah": "M68",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 11.1
+ },
+ "M70": {
+  "kaedah": "M70",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 8,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAOI",
+     "AMAT",
+     "ASML",
+     "HLIT",
+     "LRCX"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 21.1
+ },
+ "M73": {
+  "kaedah": "M73",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 20.2
+ },
+ "M74": {
+  "kaedah": "M74",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 2,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "FLEX",
+     "PTC"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 23.3
+ },
+ "M76": {
+  "kaedah": "M76",
+  "langgar": {},
+  "dibenar": {
+   "exitc": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "exitc hari c bergantung kewujudan bar c+1 sahaja (pengawal j+1<n)"
+    ],
+    "contoh": [
+     "MT"
+    ],
+    "contoh_hari": [
+     "2021-06-30"
+    ]
+   }
+  },
+  "masa": 26.1
+ },
+ "M77": {
+  "kaedah": "M77",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "TRMD"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 17.6
+ },
+ "M78": {
+  "kaedah": "M78",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 22,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AGI",
+     "ALGM",
+     "AMD",
+     "ASO",
+     "AU"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 22.5
+ },
+ "M79": {
+  "kaedah": "M79",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 8.6
+ },
+ "M80": {
+  "kaedah": "M80",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 13.6
+ },
+ "M81": {
+  "kaedah": "M81",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.4
+ },
+ "M82": {
+  "kaedah": "M82",
+  "langgar": {},
+  "dibenar": {
+   "exitc": {
+    "ticker": 10,
+    "hari": 2,
+    "sifat": [
+     "exitc hari c bergantung kewujudan bar c+1 sahaja (pengawal j+1<n)"
+    ],
+    "contoh": [
+     "ATEN",
+     "AVGO",
+     "BKNG",
+     "BSY",
+     "COO"
+    ],
+    "contoh_hari": [
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 19.1
+ },
+ "M84": {
+  "kaedah": "M84",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 18.2
+ },
+ "M87": {
+  "kaedah": "M87",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 2,
+    "hari": 2,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ALGM",
+     "RRC"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 30.5
+ },
+ "M88": {
+  "kaedah": "M88",
+  "langgar": {},
+  "dibenar": {
+   "stop": {
+    "ticker": 5,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AMPL",
+     "M",
+     "MU",
+     "NEOG",
+     "ZM"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 40.7
+ },
+ "M89": {
+  "kaedah": "M89",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 13.0
+ },
+ "M90": {
+  "kaedah": "M90",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.2
+ },
+ "M91": {
+  "kaedah": "M91",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 18.9
+ },
+ "M92": {
+  "kaedah": "M92",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 12.0
+ },
+ "M93": {
+  "kaedah": "M93",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.3
+ },
+ "M94": {
+  "kaedah": "M94",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 13.1
+ },
+ "M95": {
+  "kaedah": "M95",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.2
+ },
+ "M96": {
+  "kaedah": "M96",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.0
+ },
+ "M99": {
+  "kaedah": "M99",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 12.5
+ },
+ "M100": {
+  "kaedah": "M100",
+  "langgar": {},
+  "dibenar": {
+   "tgt": {
+    "ticker": 30,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "AAP",
+     "ALKS",
+     "AVGO",
+     "AVT",
+     "BE"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 68.3
+ },
+ "M101": {
+  "kaedah": "M101",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.3
+ },
+ "M102": {
+  "kaedah": "M102",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "DHT"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 15.7
+ },
+ "M104": {
+  "kaedah": "M104",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 20.0
+ },
+ "M105": {
+  "kaedah": "M105",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.2
+ },
+ "M106": {
+  "kaedah": "M106",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.2
+ },
+ "M107": {
+  "kaedah": "M107",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 13.1
+ },
+ "M111": {
+  "kaedah": "M111",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.5
+ },
+ "M115": {
+  "kaedah": "M115",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.7
+ },
+ "M116": {
+  "kaedah": "M116",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 2,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ATEN",
+     "RYAAY"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 21.0
+ },
+ "M117": {
+  "kaedah": "M117",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 18.4
+ },
+ "M118": {
+  "kaedah": "M118",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.2
+ },
+ "M119": {
+  "kaedah": "M119",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.0
+ },
+ "M120": {
+  "kaedah": "M120",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.5
+ },
+ "M121": {
+  "kaedah": "M121",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.8
+ },
+ "M122": {
+  "kaedah": "M122",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.3
+ },
+ "M123": {
+  "kaedah": "M123",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 47.2
+ },
+ "M124": {
+  "kaedah": "M124",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 36.9
+ },
+ "M125": {
+  "kaedah": "M125",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 9,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ADP",
+     "AGCO",
+     "AMD",
+     "ATEN",
+     "BHP"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 19.6
+ },
+ "M126": {
+  "kaedah": "M126",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.7
+ },
+ "M127": {
+  "kaedah": "M127",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.7
+ },
+ "M128": {
+  "kaedah": "M128",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.3
+ },
+ "M129": {
+  "kaedah": "M129",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.7
+ },
+ "M130": {
+  "kaedah": "M130",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.3
+ },
+ "M131": {
+  "kaedah": "M131",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 19.2
+ },
+ "M132": {
+  "kaedah": "M132",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 18.0
+ },
+ "M133": {
+  "kaedah": "M133",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 18.2
+ },
+ "M134": {
+  "kaedah": "M134",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.4
+ },
+ "M135": {
+  "kaedah": "M135",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 18.7
+ },
+ "M136": {
+  "kaedah": "M136",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.2
+ },
+ "M137": {
+  "kaedah": "M137",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 23.1
+ },
+ "M138": {
+  "kaedah": "M138",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.5
+ },
+ "M139": {
+  "kaedah": "M139",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 2,
+    "hari": 2,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "EXLS",
+     "TTAN"
+    ],
+    "contoh_hari": [
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 31.7
+ },
+ "M140": {
+  "kaedah": "M140",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.0
+ },
+ "M141": {
+  "kaedah": "M141",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.4
+ },
+ "M142": {
+  "kaedah": "M142",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.9
+ },
+ "M143": {
+  "kaedah": "M143",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "DXCM"
+    ],
+    "contoh_hari": [
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 21.3
+ },
+ "M144": {
+  "kaedah": "M144",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 19.1
+ },
+ "M145": {
+  "kaedah": "M145",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.9
+ },
+ "M146": {
+  "kaedah": "M146",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 19.6
+ },
+ "M147": {
+  "kaedah": "M147",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.4
+ },
+ "M148": {
+  "kaedah": "M148",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 21.1
+ },
+ "M149": {
+  "kaedah": "M149",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 21.6
+ },
+ "M150": {
+  "kaedah": "M150",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.6
+ },
+ "M151": {
+  "kaedah": "M151",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 15.6
+ },
+ "M152": {
+  "kaedah": "M152",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.9
+ },
+ "M153": {
+  "kaedah": "M153",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 52,
+    "hari": 3,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "ACN",
+     "ADBE",
+     "ADSK",
+     "AG",
+     "AGCO"
+    ],
+    "contoh_hari": [
+     "2021-06-30",
+     "2023-03-31",
+     "2025-06-30"
+    ]
+   }
+  },
+  "masa": 26.4
+ },
+ "M154": {
+  "kaedah": "M154",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 16.5
+ },
+ "M155": {
+  "kaedah": "M155",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.0
+ },
+ "M156": {
+  "kaedah": "M156",
+  "langgar": {},
+  "dibenar": {
+   "sig": {
+    "ticker": 1,
+    "hari": 1,
+    "sifat": [
+     "hari c bergantung buka c+1 sahaja"
+    ],
+    "contoh": [
+     "VIV"
+    ],
+    "contoh_hari": [
+     "2023-03-31"
+    ]
+   }
+  },
+  "masa": 23.0
+ },
+ "M157": {
+  "kaedah": "M157",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 17.5
+ },
+ "M158": {
+  "kaedah": "M158",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 22.4
+ },
+ "M159": {
+  "kaedah": "M159",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 14.6
+ },
+ "M160": {
+  "kaedah": "M160",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 19.4
+ },
+ "M161": {
+  "kaedah": "M161",
+  "langgar": {},
+  "dibenar": {},
+  "masa": 22.4
+ },
+ "_sebelum": {
+  "M81": {
+   "kaedah": "M81",
+   "langgar": {
+    "exitc": {
+     "ticker": 1,
+     "hari": 1,
+     "sifat": [
+      "exitc hari c bergantung nilai bar c+1"
+     ],
+     "contoh": [
+      "AEHR"
+     ],
+     "contoh_hari": [
+      "2023-03-31"
+     ]
+    }
+   },
+   "dibenar": {},
+   "masa": 18.2,
+   "asal": true
+  }
+ }
+}
