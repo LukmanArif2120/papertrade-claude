@@ -15,6 +15,9 @@
 #   - Portfolio bulanan (tidak bertindih, 21 hari): sama berat setiap kumpulan RS, kos diabaikan.
 #   - Pandangan pakar lain diuji: Novy-Marx 12-7, Frog-in-the-Pan (ID), Clenow (cerun x R²), RS / turun naik
 #     (Barroso-Santa-Clara), MAX (Bali et al.), Mansfield & peringkat 2 (Weinstein), momentum mutlak (Antonacci), saiz.
+#   - Tambahan: t Newey-West & CI95, tempoh 2005–2015/2016–2026, ketahanan (nilai >= USD10j, harga >= 15, tarikh
+#     senarai), laluan O'Neil (+20% sebelum -8%), momentum residual (Blitz), RS meningkat & volum naik/turun (IBD),
+#     RS industri (Moskowitz-Grinblatt), kos dagangan portfolio, kalibrasi skema gred lama lawan cadangan.
 #   - Bias: yfinance tiada saham yang sudah delist (bias saham terselamat); senarai = pasaran AS kini (tv_us.csv).
 import sys, os, glob, argparse, json, time
 from datetime import datetime, timezone
@@ -28,6 +31,7 @@ MULA = '2005-01-01'
 HARGA_MIN = 5.0
 NILAI_MIN = 1e6
 LANGKAH = 5
+KOS = 0.002          # kos sehala (komisen + spread + gelinciran) bagi portfolio bulanan
 UFUK = (5, 21, 63)
 BIN_RS = [0, 39, 59, 69, 79, 89, 94, 99]
 LABEL_RS = ['01-39', '40-59', '60-69', '70-79', '80-89', '90-94', '95-99']
@@ -50,7 +54,7 @@ def senarai():
 def tarik(a):
     import yfinance as yf
     tk = senarai() + ['SPY']
-    C, H, V, gagal = [], [], [], []
+    C, H, L, V, gagal = [], [], [], [], []
     for i in range(0, len(tk), 200):
         ks = [t.replace('.', '-') for t in tk[i:i + 200]]
         df = None
@@ -64,27 +68,27 @@ def tarik(a):
                 time.sleep(20 * (n + 1))
         if df is None or df.empty:
             gagal += ks; continue
-        for nm, out in (('Close', C), ('High', H), ('Volume', V)):
+        for nm, out in (('Close', C), ('High', H), ('Low', L), ('Volume', V)):
             x = df[nm].copy(); x.columns = [c.replace('-', '.') for c in x.columns]; out.append(x.astype('float32'))
         print(f'{i + len(ks)}/{len(tk)}', flush=True)
         time.sleep(2)
-    c, h, v = (pd.concat(x, axis=1) for x in (C, H, V))
-    for x in (c, h, v):
+    c, h, l, v = (pd.concat(x, axis=1) for x in (C, H, L, V))
+    for x in (c, h, l, v):
         x.index = pd.to_datetime(x.index).tz_localize(None)
     c = c.loc[:, c.notna().sum() > 0]
-    pd.to_pickle({'c': c, 'h': h[c.columns], 'v': v[c.columns], 'gagal': gagal}, a.cache)
+    pd.to_pickle({'c': c, 'h': h[c.columns], 'l': l[c.columns], 'v': v[c.columns], 'gagal': gagal}, a.cache)
     print(json.dumps({'saham': c.shape[1], 'bar': len(c), 'dari': str(c.index[0].date()), 'hingga': str(c.index[-1].date()),
                       'gagal': len(gagal)}))
 
 
 def muat_dataset(folder):
-    d = pd.concat([pd.read_csv(f, usecols=['ticker', 'date', 'close', 'high', 'volume'])
+    d = pd.concat([pd.read_csv(f, usecols=['ticker', 'date', 'close', 'high', 'low', 'volume'])
                    for f in sorted(glob.glob(os.path.join(folder, 'dataset_S*.csv')))]).drop_duplicates(['ticker', 'date'])
-    ix = pd.read_csv(os.path.join(folder, 'index_benchmark.csv'), usecols=['ticker', 'date', 'close', 'high', 'volume'])
+    ix = pd.read_csv(os.path.join(folder, 'index_benchmark.csv'), usecols=['ticker', 'date', 'close', 'high', 'low', 'volume'])
     d = pd.concat([d, ix[ix.ticker == 'SPY']])
     d['date'] = pd.to_datetime(d.date.astype(str))
     p = lambda k: d.pivot(index='date', columns='ticker', values=k).sort_index().astype('float32')
-    return {'c': p('close'), 'h': p('high'), 'v': p('volume'), 'gagal': []}
+    return {'c': p('close'), 'h': p('high'), 'l': p('low'), 'v': p('volume'), 'gagal': []}
 
 
 def bersih(c):
@@ -145,11 +149,45 @@ def ciri(D):
     F['mutlak12'] = (c / q[3] - 1) * 100                                  # Antonacci (momentum mutlak)
     nilai = (c * v).rolling(50, min_periods=40).mean()
     F['nilai_pct'] = persentil(nilai, harga_ok)                           # proksi saiz/kecairan (Hong-Lim-Stein)
+    F['nilai'] = nilai
+    # Momentum residual (Blitz-Huij-Martens): pulangan 12-1 selepas buang beta x SPY, dibahagi turun naik residual
+    m = spy.pct_change(fill_method=None)
+    kov = r.mul(m, axis=0).rolling(252, min_periods=200).mean() - r.rolling(252, min_periods=200).mean().mul(
+        m.rolling(252, min_periods=200).mean(), axis=0)
+    beta = kov.div(m.rolling(252, min_periods=200).var(ddof=0), axis=0)
+    e = r - beta.shift(1).mul(m, axis=0)
+    F['res_mom'] = persentil((e.rolling(231, min_periods=200).sum() / e.rolling(231, min_periods=200).std()).shift(21), harga_ok)
+    # IBD: RS meningkat; Accumulation/Distribution (proksi: volum hari naik / volum hari turun, 50 hari)
+    F['rs_naik'] = F['rs'] - F['rs'].shift(21)
+    vn = v.where(r > 0, 0).rolling(50, min_periods=40).sum()
+    vtr = v.where(r < 0, 0).rolling(50, min_periods=40).sum()
+    F['ud_vol'] = (vn / vtr.replace(0, np.nan)).where(c.notna())
+    # Kumpulan industri (IBD Industry Group RS; Moskowitz-Grinblatt). Klasifikasi TradingView semasa (tv_us.csv).
+    F['rs_industri'], F['rs_dalam_industri'] = industri(sk.where(harga_ok), c.columns)
     F = {k: x.astype('float32') for k, x in F.items()}
     layak = harga_ok & (nilai >= NILAI_MIN)
     hadapan = {k: c.shift(-k) / c - 1 for k in UFUK}
     rejim = pd.DataFrame({'spy_atas200': spy > spy.rolling(200).mean(), 'spy_12b_negatif': spy / spy.shift(252) < 1}, index=c.index)
-    return c, F, layak, hadapan, rejim, spy
+    l = D['l'][c.columns].astype('float64').where(c.notna()) if 'l' in D else None
+    return c, F, layak, hadapan, rejim, spy, h, l
+
+
+def industri(sk, kolum):
+    """(RS industri 1–99 setiap saham = pangkat median skor RS industrinya antara industri, RS dalam industri 1–99)."""
+    f = os.path.join(BS2, 'data', 'skrin', 'tv_us.csv')
+    kosong = pd.DataFrame(np.nan, index=sk.index, columns=kolum)
+    if not os.path.exists(f):
+        return kosong, kosong.copy()
+    peta = pd.read_csv(f, usecols=['ticker', 'industry']).dropna().drop_duplicates('ticker').set_index('ticker').industry
+    peta = peta[peta.index.isin(kolum)]
+    kump = {i: list(g.index) for i, g in peta.groupby(peta) if len(g) >= 5}
+    skor = pd.DataFrame({i: sk[t].median(axis=1).where(sk[t].notna().sum(axis=1) >= 5) for i, t in kump.items()})
+    pi = (skor.rank(axis=1, pct=True) * 98 + 1).round()
+    rind, rdal = kosong.copy(), kosong.copy()
+    for i, t in kump.items():
+        rind[t] = np.repeat(pi[i].values[:, None], len(t), axis=1)
+        rdal[t] = (sk[t].rank(axis=1, pct=True) * 98 + 1).round().values
+    return rind.where(sk.notna()), rdal.where(sk.notna())
 
 
 def panjang(c, F, layak, hadapan, tarikh):
@@ -175,23 +213,42 @@ def statistik(x):
                       'menang': (x > 0).mean() * 100, 'sisihan': x.std(), 'p5': x.quantile(0.05)})
 
 
+def nw_t(z, lag):
+    """Purata siri lebihan ikut tarikh: (t Newey-West, CI95 bawah, CI95 atas). Sampel bertindih -> lag = ufuk / langkah."""
+    z = z[~np.isnan(z)]
+    n = len(z)
+    if n < 20:
+        return (np.nan, np.nan, np.nan)
+    u = z - z.mean()
+    v = (u @ u) / n
+    for j in range(1, min(lag, n - 1) + 1):
+        v += 2 * (1 - j / (lag + 1)) * (u[j:] @ u[:-j]) / n
+    se = np.sqrt(v / n)
+    return (z.mean() / se if se > 0 else np.nan, z.mean() - 1.96 * se, z.mean() + 1.96 * se)
+
+
 def ikut(d, kol, ufuk=UFUK):
     out = []
     for k in ufuk:
-        s = d.dropna(subset=[f'f{k}'])
+        s = d.dropna(subset=[f'f{k}', kol])
+        if s.empty:
+            continue
         a = s.groupby(kol, observed=True)[f'f{k}'].apply(statistik).unstack()
         b = s.groupby(kol, observed=True)[f'x{k}'].agg(lebihan_purata='mean', lebihan_median='median')
         # purata merentas tarikh dahulu (setiap tarikh sama berat)
         e = s.groupby([kol, 'tarikh'], observed=True)[f'x{k}'].mean().groupby(level=0, observed=True)
         b['lebihan_ikut_tarikh'] = e.mean(); b['tarikh_menang_pct'] = e.apply(lambda z: (z > 0).mean() * 100)
+        b['atasi_pasaran_pct'] = s.groupby(kol, observed=True)[f'x{k}'].apply(lambda z: (z > 0).mean() * 100)
+        nw = e.apply(lambda z: nw_t(z.values, int(np.ceil(k / LANGKAH))))
+        b['t_nw'] = nw.map(lambda z: z[0]); b['ci95_bawah'] = nw.map(lambda z: z[1]); b['ci95_atas'] = nw.map(lambda z: z[2])
         out.append(a.join(b).assign(ufuk=k).reset_index().rename(columns={kol: 'kumpulan'}))
-    return pd.concat(out, ignore_index=True)
+    return pd.concat(out, ignore_index=True) if out else pd.DataFrame(columns=['kumpulan', 'ufuk'])
 
 
 def portfolio(c, F, layak, kumpulan_fn, label):
     """Imbang semula setiap 21 hari dagangan; sama berat setiap kumpulan; pulangan 21 hari tidak bertindih."""
     tarikh = c.index[252::21]
-    rek = []
+    rek, ahli, pusing = [], {}, {}
     for i in range(len(tarikh) - 1):
         t0, t1 = tarikh[i], tarikh[i + 1]
         ok = layak.loc[t0]
@@ -203,6 +260,10 @@ def portfolio(c, F, layak, kumpulan_fn, label):
         for k, x in r.groupby(g, observed=True):
             if len(x) >= 5:
                 row[k] = x.mean()
+                baru = set(x.index)
+                if k in ahli:
+                    pusing.setdefault(k, []).append(1 - len(baru & ahli[k]) / len(baru))
+                ahli[k] = baru
         rek.append(row)
     p = pd.DataFrame(rek).set_index('tarikh')
     hasil = []
@@ -216,8 +277,49 @@ def portfolio(c, F, layak, kumpulan_fn, label):
                       'turun_naik': s.std() * np.sqrt(12) * 100, 'sharpe': s.mean() / s.std() * np.sqrt(12),
                       'mdd': (nilai / nilai.cummax() - 1).min() * 100,
                       'lebihan_bulanan': (s - p['SEMUA'].reindex(s.index)).mean() * 100,
-                      'bulan_atasi_semua': ((s - p['SEMUA'].reindex(s.index)) > 0).mean() * 100})
+                      'bulan_atasi_semua': ((s - p['SEMUA'].reindex(s.index)) > 0).mean() * 100,
+                      'pusing_ganti_pct': np.mean(pusing.get(k, [np.nan])) * 100})
+        pg = np.nanmean(pusing.get(k, [np.nan])) if k != 'SEMUA' else 0.0
+        bersih = s - 2 * KOS * (pg if not np.isnan(pg) else 0)
+        nb = (1 + bersih).cumprod()
+        hasil[-1]['cagr_selepas_kos'] = (nb.iloc[-1] ** (1 / thn) - 1) * 100
     return pd.DataFrame(hasil), p
+
+
+def laluan(c, h, l, layak, tarikh, n=63, naik=0.20, turun=0.08):
+    """Hasil laluan gaya O'Neil dalam n hari selepas tarikh: +20% dahulu atau -8% dahulu (hari sama = -8%), MAE, MFE."""
+    C, H, Lw = c.values, h.values, l.values
+    ix = {t: i for i, t in enumerate(c.index)}
+    out = []
+    for t in tarikh:
+        i = ix[t]
+        if i + n >= len(c):
+            continue
+        ok = layak.loc[t].values & ~np.isnan(C[i])
+        j = np.where(ok)[0]
+        c0 = C[i, j]
+        hh, ll = H[i + 1:i + 1 + n, j], Lw[i + 1:i + 1 + n, j]
+        ada = ~np.isnan(hh).all(axis=0)
+        up, dn = hh >= c0 * (1 + naik), ll <= c0 * (1 - turun)
+        fu = np.where(up.any(axis=0), up.argmax(axis=0), n + 1)
+        fd = np.where(dn.any(axis=0), dn.argmax(axis=0), n + 1)
+        with np.errstate(all='ignore'):
+            mae = (np.nanmin(ll, axis=0) / c0 - 1) * 100
+            mfe = (np.nanmax(hh, axis=0) / c0 - 1) * 100
+        out.append(pd.DataFrame({'tarikh': t, 'ticker': c.columns[j], 'untung20_dulu': (fu < fd).astype(float),
+                                 'kena8': (fd <= n).astype(float), 'kena8_dulu': (fd <= fu) & (fd <= n),
+                                 'mae63': mae, 'mfe63': mfe})[ada])
+    d = pd.concat(out, ignore_index=True)
+    d['kena8_dulu'] = d.kena8_dulu.astype(float)
+    return d
+
+
+def ringkas_laluan(d, kol):
+    g = d.groupby(kol, observed=True)
+    return pd.DataFrame({'n': g.size(), 'untung20_dahulu_pct': g.untung20_dulu.mean() * 100,
+                         'henti8_dahulu_pct': g.kena8_dulu.mean() * 100, 'pernah_turun8_pct': g.kena8.mean() * 100,
+                         'mae_median': g.mae63.median(), 'mfe_median': g.mfe63.median(),
+                         'nisbah_untung_henti': g.untung20_dulu.mean() / g.kena8_dulu.mean()}).reset_index().rename(columns={kol: 'kumpulan'})
 
 
 def md(df, nombor=2):
@@ -235,6 +337,22 @@ def bin_rs(x):
     return pd.cut(x, BIN_RS, labels=LABEL_RS)
 
 
+BIN_HALUS = [0, 39, 59, 69, 74, 79, 84, 89, 92, 94, 97, 99]
+LABEL_HALUS = ['01-39', '40-59', '60-69', '70-74', '75-79', '80-84', '85-89', '90-92', '93-94', '95-97', '98-99']
+
+
+def bin_halus(x):
+    return pd.cut(x, BIN_HALUS, labels=LABEL_HALUS)
+
+
+def gred_cadangan(rs):
+    return pd.cut(rs, [0, 69, 79, 89, 94, 99], labels=['D (<70)', 'C (70-79)', 'B (80-89)', 'A (90-94)', 'A! (95-99)'])
+
+
+def gred_lama(rs):
+    return pd.cut(rs, [0, 39, 59, 79, 89, 99], labels=['E (<40)', 'D (40-59)', 'C (60-79)', 'B (80-89)', 'A (90+)'])
+
+
 def desil(x):
     return pd.cut(x, [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 99], labels=[f'D{i}' for i in range(1, 11)])
 
@@ -242,7 +360,7 @@ def desil(x):
 def uji(a):
     os.makedirs(a.keluar, exist_ok=True)
     D = pd.read_pickle(a.cache) if a.cache else muat_dataset(a.dataset)
-    c, F, layak, hadapan, rejim, spy = ciri(D)
+    c, F, layak, hadapan, rejim, spy, h, l = ciri(D)
     s431 = set_431()
     tarikh = c.index[252:-max(UFUK)][::LANGKAH]
     d = panjang(c, F, layak, hadapan, tarikh)
@@ -321,6 +439,54 @@ def uji(a):
     k80['mutlak'] = np.where((k80.mutlak12 > 0) & rj80.spy_atas200.values, 'saham & SPY positif', 'tidak')
     R['dalam_rs80'] = pd.concat([R['dalam_rs80'], ikut(k80, 'mutlak', (21, 63)).assign(syarat='momentum mutlak (Antonacci)')],
                                 ignore_index=True)
+    # Syarat tambahan dalam RS >= 80 (IBD / Blitz / Moskowitz-Grinblatt)
+    tambah = {
+        'momentum residual (Blitz)': ter(k80.res_mom),
+        'RS berubah 21 hari (IBD: RS meningkat)': pd.cut(k80.rs_naik, [-99, -5, 5, 99], labels=['turun >5', 'stabil', 'naik >5']),
+        'volum naik/turun 50 hari (A/D)': ter(k80.ud_vol),
+        'RS industri (kumpulan IBD)': pd.cut(k80.rs_industri, [0, 33, 66, 99], labels=['industri lemah', 'industri sederhana', 'industri kuat']),
+        'RS dalam industri': pd.cut(k80.rs_dalam_industri, [0, 33, 66, 99], labels=['rendah', 'tengah', 'tinggi']),
+    }
+    R['dalam_rs80'] = pd.concat([R['dalam_rs80']] + [ikut(k80.assign(S=v), 'S', (21, 63)).assign(syarat=s)
+                                                     for s, v in tambah.items() if pd.Series(v).notna().any()], ignore_index=True)
+    R['pakar_desil'] = pd.concat([R['pakar_desil']] + [ikut(d.assign(DS=desil(d[k])), 'DS', (21, 63)).assign(ciri=k)
+                                                       for k in ('res_mom', 'rs_industri') if d[k].notna().any()], ignore_index=True)
+    # Sempadan halus, signifikan statistik, tempoh berasingan, ketahanan
+    d['RSH'] = bin_halus(d.rs)
+    R['rs_halus'] = ikut(d, 'RSH', (21, 63))
+    d['tempoh'] = np.where(d.tarikh < '2016-01-01', '2005-2015', '2016-2026')
+    R['tempoh'] = pd.concat([ikut(d[d.tempoh == t], 'RSH', (63,)).assign(tempoh=t) for t in ('2005-2015', '2016-2026')], ignore_index=True)
+    awal = set(c.columns[c.iloc[:260].notna().any()])
+    hrg = c.loc[tarikh].stack().rename('harga'); hrg.index.names = ['tarikh', 'ticker']
+    d = d.merge(hrg.reset_index(), on=['tarikh', 'ticker'], how='left')
+    uji_k = {'nilai >= USD10 juta': d.nilai >= 1e7, 'harga >= USD15': d.harga >= 15,
+             'tersenarai sejak 2005': d.ticker.isin(awal), 'tersenarai selepas 2005': ~d.ticker.isin(awal)}
+    R['ketahanan'] = pd.concat([ikut(d[m], 'RSH', (63,)).assign(subset=k) for k, m in uji_k.items() if m.any()], ignore_index=True)
+    # Hasil laluan O'Neil (+20% sebelum -8% dalam 63 hari)
+    if l is not None:
+        L = laluan(c, h, l, layak, tarikh)
+        d = d.merge(L, on=['tarikh', 'ticker'], how='left')
+        dl = d.dropna(subset=['untung20_dulu'])
+        R['laluan'] = ringkas_laluan(dl, 'RSH')
+        R['laluan_rejim'] = pd.concat([ringkas_laluan(dl[dl.rejim == r], 'RSH').assign(rejim=r) for r in dl.rejim.unique()],
+                                      ignore_index=True)
+    # Kalibrasi skema gred: cadangan lawan gred.py sekarang
+    rjd = rejim.reindex(d.tarikh)
+    d['sah'] = np.where((d.mutlak12 > 0) & rjd.spy_atas200.values & (d.mansfield > 0), 'disahkan', 'tidak disahkan')
+    d['GC'] = gred_cadangan(d.rs); d['GL'] = gred_lama(d.rs)
+    d['GCS'] = d.GC.astype(str) + ' | ' + d.sah
+    R['skema_lama'] = ikut(d, 'GL', (21, 63))
+    R['skema_cadangan'] = ikut(d, 'GC', (21, 63))
+    R['skema_cadangan_sah'] = ikut(d, 'GCS', (21, 63))
+    R['skema_cadangan_rejim'] = pd.concat([ikut(d[d.rejim == r], 'GC', (63,)).assign(rejim=r) for r in d.rejim.unique()],
+                                          ignore_index=True)
+    R['skema_cadangan_tempoh'] = pd.concat([ikut(d[d.tempoh == t], 'GC', (63,)).assign(tempoh=t) for t in ('2005-2015', '2016-2026')],
+                                           ignore_index=True)
+    R['skema_cadangan_431'] = ikut(d[d.set == '431'], 'GC', (21, 63)) if (d.set == '431').any() else pd.DataFrame()
+    if 'untung20_dulu' in d:
+        dl = d.dropna(subset=['untung20_dulu'])
+        R['skema_laluan'] = pd.concat([ringkas_laluan(dl, 'GC'), ringkas_laluan(dl, 'GCS')], ignore_index=True)
+    R['skema_portfolio'] = portfolio(c, F, layak, lambda t: gred_cadangan(F['rs'].loc[t]), 'cadangan')[0]
     for k, x in R.items():
         x.to_csv(os.path.join(a.keluar, f'{k}.csv'), index=False, float_format='%.4g')
     meta = {'dijana': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), 'saham': int(c.shape[1]),
@@ -359,7 +525,28 @@ def ringkasan(keluar, R, meta):
             md(R['pakar_desil'].pivot_table(index=['ciri', 'ufuk'], columns='kumpulan', values='lebihan_ikut_tarikh', observed=True).reset_index()),
             "\n## 15. Portfolio bulanan 10% teratas setiap ukuran\n", md(R['pakar_portfolio']),
             "\n## 16. Dalam RS >= 80: syarat pakar tambahan (63 hari)\n",
-            md(p(R['dalam_rs80'], 63)[['syarat', 'kumpulan', 'n', 'purata', 'median', 'menang', 'p5', 'lebihan_ikut_tarikh', 'tarikh_menang_pct']])]
+            md(p(R['dalam_rs80'], 63)[['syarat', 'kumpulan', 'n', 'purata', 'median', 'menang', 'p5', 'lebihan_ikut_tarikh', 'tarikh_menang_pct', 't_nw']])]
+    S = ['kumpulan', 'n', 'purata', 'median', 'menang', 'p5', 'lebihan_ikut_tarikh', 'ci95_bawah', 'ci95_atas', 't_nw',
+         'tarikh_menang_pct', 'atasi_pasaran_pct']
+    lap += ["\n## 17. Sempadan halus dengan signifikan statistik (63 hari)\n"
+            "t_nw = statistik t Newey-West bagi purata lebihan ikut tarikh (|t| >= 2 kira-kira signifikan 95%); CI95 = selang keyakinan 95%; "
+            "atasi_pasaran_pct = % pemerhatian dengan pulangan melebihi purata pasaran.\n", md(p(R['rs_halus'], 63).reindex(columns=S)),
+            "\n## 18. Tempoh berasingan (63 hari)\n", md(R['tempoh'].reindex(columns=['tempoh'] + S)),
+            "\n## 19. Ketahanan: subset (63 hari)\n", md(R['ketahanan'].reindex(columns=['subset'] + S))]
+    if 'laluan' in R:
+        lap += ["\n## 20. Hasil laluan gaya O'Neil dalam 63 hari (+20% dahulu lawan henti -8% dahulu)\n", md(R['laluan']),
+                "\n## 21. Hasil laluan ikut rejim\n", md(R['laluan_rejim'])]
+    lap += ["\n## 22. Kalibrasi skema gred: gred.py sekarang (63 hari)\n", md(p(R['skema_lama'], 63).reindex(columns=S)),
+            "\n## 23. Kalibrasi skema gred cadangan (63 hari)\n", md(p(R['skema_cadangan'], 63).reindex(columns=S)),
+            "\n## 24. Skema cadangan x pengesahan (saham 12 bulan > 0, SPY > SMA200, Mansfield > 0; 63 hari)\n",
+            md(p(R['skema_cadangan_sah'], 63).reindex(columns=S)),
+            "\n## 25. Skema cadangan ikut rejim dan tempoh (63 hari)\n",
+            md(R['skema_cadangan_rejim'].reindex(columns=['rejim'] + S)), '', md(R['skema_cadangan_tempoh'].reindex(columns=['tempoh'] + S))]
+    if len(R.get('skema_cadangan_431', [])):
+        lap += ["\n## 26. Skema cadangan dalam set 431 (63 hari)\n", md(p(R['skema_cadangan_431'], 63).reindex(columns=S))]
+    if 'skema_laluan' in R:
+        lap += ["\n## 27. Skema cadangan: hasil laluan O'Neil\n", md(R['skema_laluan'])]
+    lap += ["\n## 28. Skema cadangan: portfolio bulanan (kos 0.2% sehala)\n", md(R['skema_portfolio'])]
     open(os.path.join(keluar, 'RINGKASAN.md'), 'w', encoding='utf-8').write('\n'.join(lap) + '\n')
 
 
