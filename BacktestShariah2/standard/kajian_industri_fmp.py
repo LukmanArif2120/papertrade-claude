@@ -56,7 +56,7 @@ def nilai(lv, V, h):
         mm = M.mean()
         out.append({'ufuk': h, 'varian': k, **{G: mm[G] * 100 for G in 'ABCDE'}, 'A-E': sp.mean() * 100,
                     't': sp.mean() / sp.std() * np.sqrt(len(sp)), 'tahun_positif_pct': ((yr.A - yr.E) > 0).mean() * 100,
-                    'monotonik': pd.Series(mm.values).corr(pd.Series([5, 4, 3, 2, 1]), method='spearman'),
+                    'monotonik': pd.Series(mm.values).rank().corr(pd.Series([5, 4, 3, 2, 1])),
                     'A-E 2016-2019': (sp[:'2019'].mean()) * 100, 'A-E 2020-2022': sp['2020':'2022'].mean() * 100,
                     'A-E 2023-kini': sp['2023':].mean() * 100, 'tarikh': len(sp)})
     return out

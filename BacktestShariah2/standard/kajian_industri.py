@@ -198,7 +198,7 @@ def nilai_varian(d, var, h, label):
     t = sp.mean() / sp.std() * np.sqrt(len(sp) * LANGKAH / h) if len(sp) > 2 else np.nan
     yr = M.groupby(M.index.year).mean()
     mm = M.mean()
-    mono = pd.Series(mm.values).corr(pd.Series([5, 4, 3, 2, 1]), method='spearman')
+    mono = pd.Series(mm.values).rank().corr(pd.Series([5, 4, 3, 2, 1]))   # Spearman tanpa scipy
     menang = s.groupby(g)[f'f{h}'].apply(lambda z: (z > 0).mean() * 100).reindex(GRED)
     med = s.groupby(g)[f'x{h}'].median().reindex(GRED)
     row = {'set': label, 'ufuk': h, 'varian': var}
