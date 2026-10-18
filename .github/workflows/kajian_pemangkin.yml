@@ -1,0 +1,56 @@
+# Sekali jalan (manual): data sejarah untuk kajian gred pemangkin (analisis, kejutan EPS, harga, orang dalam SEC).
+# Skrip: BacktestShariah2/standard/sejarah_pemangkin_actions.py. Output: BacktestShariah2/data/pemangkin/sejarah/.
+# Tiada kesan pada rutin harian. Diluluskan pengguna 18 Okt 2026.
+name: Kajian pemangkin (data sejarah)
+
+on:
+  workflow_dispatch:
+    inputs:
+      dari:
+        description: 'Tarikh mula (YYYY-MM-DD)'
+        required: false
+        default: '2012-01-01'
+      bahagian:
+        description: 'Bahagian (JSON): ["analisis,eps","harga","sec"]'
+        required: false
+        default: '["analisis,eps","harga","sec"]'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kajian-pemangkin-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  tarik:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        bahagian: ${{ fromJSON(github.event.inputs.bahagian || '["analisis,eps","harga","sec"]') }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas requests yfinance
+      - name: Tarik data
+        env:
+          DARI: ${{ github.event.inputs.dari }}
+          BAHAGIAN: ${{ matrix.bahagian }}
+        run: python3 BacktestShariah2/standard/sejarah_pemangkin_actions.py --bahagian "$BAHAGIAN" --dari "${DARI:-2012-01-01}"
+      - name: Commit dan push
+        run: |
+          git config user.name "pemangkin[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/pemangkin/sejarah/
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Kajian pemangkin: data sejarah ${{ matrix.bahagian }} $(date -u +%Y-%m-%d)"
+          for n in 1 2 3 4 5; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 15))
+          done
+          exit 1
