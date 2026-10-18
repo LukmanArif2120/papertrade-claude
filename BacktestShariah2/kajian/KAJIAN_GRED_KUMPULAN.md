@@ -53,3 +53,13 @@ Gred sektor menyusun pulangan indeks sektor (% > SMA200 t 3.2 pada 21 sesi; Wein
 
 ## Sumber
 Moskowitz & Grinblatt (1999) Do Industries Explain Momentum?; Arnott, Clements, Kalesnik & Linnainmaa, Factor Momentum; Weinstein (1988) Secrets for Profiting in Bull and Bear Markets; IBD/O'Neil 197 kumpulan industri; Bulkowski Industry RS; de Kempenaer Relative Rotation Graphs; George & Hwang (2004) 52-Week High; Hong, Jordan & Liu (2015) industri 52 minggu; Novy-Marx (2012); Daniel & Moskowitz (2016) Momentum Crashes; Hou (2007) lead-lag industri; Moskowitz, Ooi & Pedersen (2012) Time Series Momentum; Molchanov & Stangl (2023) The Myth of Business Cycle Sector Rotation; kajian pembalikan dalam industri (NUS; CXO Advisory).
+
+## Pengesahan bebas 2005–2026 (18 Okt 2026, `kajian/industri/RINGKASAN.md`)
+Data berasingan: 3,855 saham AS (yfinance, Jan 2005–16 Okt 2026, tutup ≥ USD5, nilai dagangan 50 hari ≥ USD1 juta; industri Moomoo), sampel setiap 5 hari, pulangan buka esok → tutup hari ke-21 lawan purata semua saham. Varian W1 = definisi gred v2 (Weinstein + median 1 bulan, indeks sama rata). Gred v2 TIDAK diubah.
+- Semua saham: A +0.22, B +0.05, C +0.05, D −0.03, E −0.17 (% lebihan 21 hari); A−E +0.40%, t 1.49, tersusun (monotonik 1.0), positif 67% tahun. Lebih baik daripada v1 (A−E +0.28%, t 1.10).
+- Peringkat industri: A−E +0.46%, t 1.81, tersusun.
+- Ikut saiz: saham kecil A−E +0.87% (t 2.95), saham besar +0.13% (t 0.43) — kesan terutamanya pada saham kecil (selaras Hou 2007).
+- Set 431 (Shariah): A−E +0.15% (t 0.44), tidak tersusun pada 2005–2012 (−0.55%), positif 2020–kini (+0.76%). Untuk set 431, Weinstein sahaja (+0.56%, t 1.58) dan 12−1 bulan (+0.68%, t 1.79) lebih kuat daripada W1.
+- Rejim: SPY > SMA200 → semua saham A−E +0.60% (t 2.34), set 431 +0.58% (t 1.63); SPY < SMA200 → terbalik (set 431 −1.26%, E terbaik). Selaras dengan nota "pasaran beruang hampir sifar" di atas, tetapi bagi set 431 kesannya negatif.
+- Kekekalan: gred A kekal A selepas ~20 hari hanya 34% (12−1 bulan: 78%).
+- Bacaan: v2 menyusun A→E dengan betul untuk pasaran luas dan kekal positif sejak 2020; untuk saham Shariah sederhana–besar kesannya kecil dan bergantung rejim. Cadangan pemantauan: nilai prestasi gred Industri berasingan bagi SPY > / < SMA200.
