@@ -27,3 +27,15 @@ Ditetapkan 18 Okt 2026 sebelum sebarang larian A03, atas permintaan pengguna sel
 ## 5. Kaveat dikunci
 - Tiada saham delist; Yahoo EPS mungkin tidak lengkap bagi tahun awal; EPS Yahoo ialah EPS dilaporkan/dilaras penganalisis, bukan GAAP.
 - Pemangkin, pegangan institusi dan pyramiding tidak dimodelkan.
+
+## 6. Pindaan 18 Okt 2026 (keputusan pengguna: kriteria "menang"), sebelum keputusan A03 dilihat
+- Label utama A03 ditukar kepada **MENANG** (label SPEC_A02 kekal dilaporkan sebagai rujukan):
+  - kadar menang dagangan portfolio ≥ 55% dalam OOS bersih 2013–2018, kumpulan A DAN B;
+  - CAGR > 0 dan faktor untung (jumlah untung ÷ jumlah rugi) ≥ 1.3, kumpulan A dan B;
+  - MDD OOS ≥ −35%;
+  - pengesahan 2019 – hujung data (A+B): kadar menang ≥ 55% dan CAGR > 0;
+  - ≥ 100 dagangan portfolio dalam OOS bersih; imbasan pandang ke hadapan bersih.
+- HAMPIR: memenuhi semua kecuali satu syarat. TIDAK: selain itu.
+- Pemilihan peringkat 2 (tala) ikut skor = min(kadar menang A, kadar menang B) di kalangan sistem dengan CAGR A dan B > 0; objektif tala kekal pulangan berlebihan dengan kekangan SPEC_A02 §2 ditambah kekangan kadar menang latih ≥ 50%.
+- Setiap sistem melaporkan: kadar menang dan kalah, purata untung dan purata rugi setiap dagangan, jangkaan (expectancy), faktor untung, CAGR, MDD, dan lebihan atas SPY.
+- Rujukan: kriteria yang sama dikira semula atas hasil tala A02 (40 kaedah-lorong) dan dilaporkan dalam `hasil_a03/LAPORAN.md`.
