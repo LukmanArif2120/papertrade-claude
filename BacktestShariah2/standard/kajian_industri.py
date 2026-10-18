@@ -260,9 +260,11 @@ def uji(a):
     T = pd.concat(th).pivot(index='tahun', columns='varian', values='A-E').reset_index()
     T.to_csv(os.path.join(a.keluar, 'tahun_A_E_21h.csv'), index=False, float_format='%.4g')
     h2 = harian.loc['2005-01-01':]
-    h2.stack(level=1, future_stack=True).reset_index().rename(columns={'level_0': 'date', 'level_1': 'industri'}) \
-        .dropna(subset=['ew']).assign(date=lambda x: x.date.dt.strftime('%Y%m%d')) \
-        .to_csv(os.path.join(a.keluar, 'industri_harian.csv.gz'), index=False, float_format='%.6g', compression='gzip')
+    h2.index.name = 'date'; h2.columns.names = ['ukuran', 'industri']   # yfinance menamakan indeks 'Date'
+    h2 = h2.stack(level='industri', future_stack=True).reset_index().dropna(subset=['ew'])
+    h2['date'] = pd.to_datetime(h2.date).dt.strftime('%Y%m%d')
+    h2[['date', 'industri', 'ew', 'vw', 'n']].to_csv(os.path.join(a.keluar, 'industri_harian.csv.gz'), index=False,
+                                                    float_format='%.6g', compression='gzip')
     meta = {'dijana': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), 'saham': int(c.shape[1]),
             'bar': int(len(c)), 'dari': str(c.index[0].date()), 'hingga': str(c.index[-1].date()),
             'sampel_tarikh': int(d.tarikh.nunique()), 'baris': int(len(d)),
