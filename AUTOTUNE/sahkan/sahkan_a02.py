@@ -278,7 +278,16 @@ def laporan(D, ring, gab, saring, pilihan, hadapan, skop, keluar=HASIL):
          '- #17: pemanasan = maks(400 hari, 1.6 × (tetingkap terpanjang julat atas + WARM)) hari kalendar.',
          '- #12: reka bentuk bersih 2010–2018 (saringan 2013–2018; walk-forward 2013–2018); 2019–kini = pengesahan sahaja.',
          '- Dua lorong: `had60` (had pegang 60 hari, seperti A01) dan `asal` (tiada had enjin; TMAX asal).', '']
-    if skop: L += ['## Pengurangan skop', ''] + [f'- {s}' for s in skop] + ['']
+    L += ['## Pengurangan skop', ''] + ([f'- {s}' for s in skop] if skop else
+                                        ['- Tiada: 20 kaedah setiap lorong, 120 percubaan setiap kajian, 8 kajian (skop penuh SPEC_A02).']) + ['']
+    pos2 = int(((D.lebihan_a > 0) & (D.lebihan_b > 0)).sum()) if len(D) else 0
+    posp = int((D.lebihan_peng > 0).sum()) if len(D) else 0
+    L += ['## Kesimpulan', '',
+          f'- {pos2}/{len(D)} kaedah-lorong mengatasi SPY atas OOS bersih 2013–2018 pada A dan B; {posp}/{len(D)} mengatasi SPY '
+          'dalam pengesahan 2019 – hujung data (parameter AKHIR, A+B).',
+          f"- LULUS {int((D.label == 'LULUS').sum())}, CALON {int((D.label == 'CALON').sum())}: "
+          + ('tiada kaedah yang boleh dicadangkan; kalau tak beli, cakap tak beli.' if not ((D.label == 'LULUS') | (D.label == 'CALON')).any()
+             else 'lihat portfolio gabungan di bawah.'), '']
     n_s = int((saring.status == 'SIAP').sum()) if len(saring) else 0
     L += ['## Saringan (peringkat 1)', '',
           f"{len(saring)} kaedah-lorong (PARAM asal, 2013–2018, A dan B); SIAP {n_s}. Skor = min(lebihan A, lebihan B)."]
