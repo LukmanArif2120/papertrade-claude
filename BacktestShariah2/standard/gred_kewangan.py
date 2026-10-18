@@ -794,7 +794,9 @@ def kira(k, harga=None, hari_ini=None, med=None, sektor='', industri=''):
         r['nota'].append('suku_tidak_sepadan_tahunan'); tahap -= 1
     yakin = ['rendah', 'sederhana', 'tinggi'][max(0, tahap)]
     bil_semak = sum(len(d) for d in r['semak'].values())
+    sy_teks = {'lulus': 'lulus', 'hampir_had': 'hampir had', 'gagal_sebahagian': 'gagal sebahagian', 'gagal': 'gagal'}.get(sy['status'])
     ring = (f'{g} (K:{r["K"]} U:{r["U"]} T:{r["T"]} S:{r["S"]}) · {r["peringkat"]} · F:{len(r["F"])} · keyakinan {yakin}'
+            + (f' · Syariah {sy_teks}' if sy_teks else '')
             if g != TIADA else f'– ({len(qs)} suku; sub K:{r["K"]} U:{r["U"]} T:{r["T"]} S:{r["S"]})')
     gagal = {x: [n for n, v in r['semak'][x].items() if v is False] for x in 'KUTS'}
     butiran = {'tempoh': qs[-1]['label'], 'tamat': qs[-1]['tamat'], 'gred_mentah': g_mentah, 'urutan': urutan,

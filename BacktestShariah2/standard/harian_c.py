@@ -53,7 +53,7 @@ WATCH_LAJUR = ['Saham', 'Nama', 'Kaedah', 'Sektor', 'Industri', 'Harga', '% hamp
 GRED_LAJUR = ['sektor_us', 'industri_us', 'gred_sektor', 'skor_sektor', 'gred_industri', 'skor_industri', 'rs_rating', 'gred_rs',
               'rs_sah', 'rs_tanda', 'rs_industri', 'rs_sumber', 'gred_pemangkin', 'mata_pemangkin', 'pemangkin', 'pemangkin_url', 'tarikh_earnings', 'hari_ke_earnings',
               'sumber_earnings', 'gred_qr', 'gred_keseluruhan', 'gred_pada',
-              'gred_kewangan', 'kewangan_ringkas', 'kewangan_tempoh', 'kewangan_butiran']
+              'gred_kewangan', 'kewangan_ringkas', 'kewangan_tempoh']   # kewangan_butiran: senarai_beli/watchlist sahaja (gred.py)
 
 
 # ---------------------------------------------------------------- bantu

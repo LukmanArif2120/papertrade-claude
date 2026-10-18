@@ -37,7 +37,7 @@ def baris_db(r, peta=None):
     """Baris CSV -> baris db: medan kosong digugurkan, nilai bertaip (sama dengan pecah_claude.nilai)."""
     out = {}
     for k, v in r.items():
-        if v in ('', None):
+        if v in ('', None) or k == 'kewangan_butiran':   # JSON butiran kekal dalam CSV sahaja (had saiz db)
             continue
         if peta is not None:
             if k in peta and peta[k] is None:
