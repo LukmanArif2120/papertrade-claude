@@ -259,7 +259,9 @@ def tanda_pasca_qr(sumber, sejak):
 
 
 def peta_earnings(path_json, hari_ini):
-    """Fail keputusan SST market_events (daysLookahead 30) -> {ticker: tarikh earnings terdekat >= hari ini}."""
+    """Fail keputusan SST market_events (daysLookahead 30) -> {ticker: tarikh earnings terdekat >= hari ini}.
+    Audit 18 Okt 2026: hanya 146/915 tarikh SST sepadan kalendar Nasdaq (±1 hari) dan 500/1,323 jatuh pada Sabtu/Ahad;
+    tarikh hujung minggu dibuang dan SST hanya sandaran apabila Nasdaq tidak meliputi saham itu."""
     d = json.load(open(path_json, encoding='utf-8'))
     if isinstance(d, list) and d and isinstance(d[0], dict) and 'text' in d[0]:
         d = json.loads(d[0]['text'])
@@ -273,7 +275,7 @@ def peta_earnings(path_json, hari_ini):
         except (KeyError, ValueError):
             continue
         k = r.get('ticker')
-        if k and t >= hari_ini and (k not in out or t < out[k]):
+        if k and t >= hari_ini and t.weekday() < 5 and (k not in out or t < out[k]):
             out[k] = t
     return out
 
@@ -840,6 +842,14 @@ def gred_keseluruhan(gred):
     return 'A' if x >= 3.5 else 'B' if x >= 2.5 else 'C' if x >= 1.5 else 'D' if x >= 0.5 else 'E'
 
 
+def keseluruhan_baris(r, jenis=None):
+    """Gred keseluruhan v2 satu baris: Industri (kecuali kaedah pantulan), Pemangkin, QR. Sektor paparan sahaja
+    (kajian 18 Okt 2026). Dipakai oleh gred.py dan skrip kira semula supaya semua baris memakai peraturan sama."""
+    jenis = peta_jenis_kaedah() if jenis is None else jenis
+    gi = TIADA if jenis.get(id_kaedah(ambil(r, 'kaedah', 'Kaedah'))) == 'pantulan' else r.get('gred_industri')
+    return gred_keseluruhan([gi, r.get('gred_pemangkin'), r.get('gred_qr')])
+
+
 def isi_rs(r, x, spy_atas):
     """Isi lajur RS satu baris daripada satu baris `rs_semua` (atau None)."""
     nil = lambda k: None if x is None or k not in x or pd.isna(x[k]) else float(x[k])
@@ -991,17 +1001,21 @@ def tambah(a):
         r['skor_sektor'] = '' if s1 is None else round(s1, 1); r['gred_sektor'] = g1
         r['skor_industri'] = '' if s2 is None else round(s2, 1); r['gred_industri'] = g2
         isi_rs(r, rsd.loc[t] if t in rsd.index else None, spy_atas)
-        te, sumber = (ear or {}).get(t), 'SST'
-        if te is None and nas is not None:
+        # Nasdaq dahulu (audit 18 Okt 2026: tarikh SST kerap salah); Nasdaq tanpa ralat dan saham itu ada earnings
+        # lalu dalam kalendar -> ketiadaan tarikh hadapan boleh dipercayai, SST tidak dirujuk
+        te, sumber = None, ''
+        if nas is not None:
             d = earnings_nasdaq(nas.get(t), hari_ini)[1]
             if d:
                 te, sumber = d, 'Nasdaq'
-        if te is None and (pem.get(t) or {}).get('earnings_anggaran'):
-            te, sumber = date.fromisoformat(pem[t]['earnings_anggaran']), 'anggaran'
-            if te < hari_ini:
-                te = None
-        # Nasdaq tanpa ralat dan saham itu ada earnings lalu dalam kalendar -> ketiadaan tarikh hadapan boleh dipercayai
         liput_nas = nas is not None and nas_lengkap and bool((nas.get(t) or {}).get('lalu'))
+        if te is None and not liput_nas and (ear or {}).get(t):
+            te, sumber = ear[t], 'SST'
+        if te is None and (pem.get(t) or {}).get('earnings_anggaran'):
+            # anggaran (QR lalu + 91 hari) hanya jika tidak bercanggah dengan kalendar Nasdaq (di luar tetingkap 35 hari)
+            te, sumber = date.fromisoformat(pem[t]['earnings_anggaran']), 'anggaran'
+            if te < hari_ini or (liput_nas and te <= hari_ini + timedelta(days=35)):
+                te = None
         h = None
         if te is None and ear is None and not liput_nas:
             r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = TIADA
@@ -1011,8 +1025,8 @@ def tambah(a):
             sj = sejak_qr(max((d for d in lalu if d and d < hari_ini), default=None), hari_ini)
             r['tarikh_earnings'] = te.isoformat() if te else ''
             r['hari_ke_earnings'] = '' if h is None else h
-            r['sumber_earnings'] = tanda_pasca_qr(sumber if te else 'tiada dalam 30 hari (SST)' if ear is not None
-                                                  else 'tiada dalam 35 hari (Nasdaq)', sj)
+            r['sumber_earnings'] = tanda_pasca_qr(sumber if te else 'tiada dalam 35 hari (Nasdaq)' if liput_nas
+                                                  else 'tiada dalam 30 hari (SST)', sj)
             r['gred_qr'] = gred_qr(h, sj)
         # Pemangkin v3: K1 (earnings seterusnya, sama seperti QR) dan K2 (reaksi earnings lalu daripada stor harga)
         # tidak memerlukan pemangkin.json; berita (veto dan pautan) hanya jika entri segar ada.
@@ -1028,9 +1042,7 @@ def tambah(a):
             r['mata_pemangkin'] = m; r['pemangkin'] = ring; r['gred_pemangkin'] = g
             r['pemangkin_url'] = pautan_berita(p.get('berita'), hari_ini=hari_ini)
         if v2:
-            # v2: Sektor paparan sahaja; Industri tidak terpakai bagi kaedah pantulan (kajian 18 Okt 2026)
-            gi = TIADA if jenis.get(id_kaedah(ambil(r, 'kaedah', 'Kaedah'))) == 'pantulan' else r['gred_industri']
-            r['gred_keseluruhan'] = gred_keseluruhan([gi, r['gred_pemangkin'], r['gred_qr']])
+            r['gred_keseluruhan'] = keseluruhan_baris(r, jenis)
         else:
             r['gred_keseluruhan'] = gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
         if kew:

@@ -43,6 +43,7 @@ def main(argv=None):
     nasd = json.load(open(a.nasdaq, encoding='utf-8'))
     nas, dari, hingga = nasd.get('saham') or {}, date.fromisoformat(nasd['dari']), date.fromisoformat(nasd['hingga'])
     rs_cache, n, kira = {}, 0, {}
+    jenis = G.peta_jenis_kaedah()
     for p in fail_posisi(a.folder):
         with open(p, newline='', encoding='utf-8') as f:
             rd = csv.DictReader(f); lajur = list(rd.fieldnames); rows = list(rd)
@@ -82,7 +83,7 @@ def main(argv=None):
             else:
                 r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = G.TIADA
             r['mata_pemangkin'] = ''; r['pemangkin'] = 'tiada data (isi semula)'; r['gred_pemangkin'] = G.TIADA; r['pemangkin_url'] = ''
-            r['gred_keseluruhan'] = G.gred_keseluruhan([r['gred_sektor'], r['gred_industri'], r['gred_pemangkin'], r['gred_qr']])
+            r['gred_keseluruhan'] = G.keseluruhan_baris(r, jenis)
             r['gred_pada'] = f'isi semula {a.tarikh} (RS & QR pada {ti}; sektor/industri snapshot {snap})'
             ubah += 1
             for k in ('gred_rs', 'gred_qr', 'gred_keseluruhan'):

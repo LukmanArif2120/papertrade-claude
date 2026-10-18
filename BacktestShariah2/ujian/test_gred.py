@@ -35,6 +35,12 @@ class UjiGred(unittest.TestCase):
         self.assertEqual([G.gred_qr(60, s) for s in [0, 1, 2, 3, 4, None]], ['C', 'C', 'B', 'B', 'A', 'A'])
         self.assertEqual([G.gred_qr(None, 1), G.gred_qr(8, 1), G.gred_qr(3, 2), G.gred_qr(13, 3)], ['C', 'D', 'E', 'C'])
 
+    def test_keseluruhan_baris(self):
+        r = {'kaedah': 'M01', 'gred_sektor': 'E', 'gred_industri': 'A', 'gred_pemangkin': 'C', 'gred_qr': 'A'}
+        self.assertEqual(G.keseluruhan_baris(r, {'M01': 'momentum'}), 'B')      # (4+2+4)/3; Sektor tidak dikira
+        self.assertEqual(G.keseluruhan_baris(r, {'M01': 'pantulan'}), 'B')      # (2+4)/2; Industri tidak terpakai
+        self.assertEqual(G.keseluruhan_baris(dict(r, gred_pemangkin='E', gred_qr='E'), {'M01': 'pantulan'}), 'E')
+
     def test_pasca_qr(self):
         self.assertEqual(G.sejak_qr(date(2026, 10, 15), date(2026, 10, 19)), 2)    # Khamis -> Isnin
         self.assertIsNone(G.sejak_qr(date(2026, 10, 19), date(2026, 10, 19)))

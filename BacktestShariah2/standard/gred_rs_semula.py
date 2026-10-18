@@ -27,6 +27,7 @@ def main(argv=None):
     spy = G.muat_spy(a.harga)
     sesi = list(c.index)
     cache, kira, n = {}, Counter(), 0
+    jenis = G.peta_jenis_kaedah()
     fail = fail_posisi(a.folder) + [os.path.join(a.folder, f) for f in ('senarai_beli.csv', 'watchlist.csv')]
     for p in fail:
         if not os.path.exists(p):
@@ -52,8 +53,7 @@ def main(argv=None):
             t = G.ambil(r, 'saham', 'Saham')
             G.isi_rs(r, rsd.loc[t] if t in rsd.index else None, atas)
             if r.get('gred_keseluruhan'):
-                r['gred_keseluruhan'] = G.gred_keseluruhan([r.get('gred_sektor'), r.get('gred_industri'),
-                                                            r.get('gred_pemangkin'), r.get('gred_qr')])
+                r['gred_keseluruhan'] = G.keseluruhan_baris(r, jenis)
             gp = r.get('gred_pada') or ''
             if TANDA not in gp:
                 r['gred_pada'] = (gp + '; ' if gp else '') + f'{TANDA} (dikira semula {a.tarikh}, RS pada {ti})'

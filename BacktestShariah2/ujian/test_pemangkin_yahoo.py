@@ -180,18 +180,23 @@ class UjiGredYahooNasdaq(unittest.TestCase):
             self.assertEqual(pem['AAA']['sumber_pemangkin'], 'yahoo')
             self.assertEqual(pem['AAA']['earnings_lalu_tarikh'], '2026-10-13')
             self.assertEqual(pem['BBB']['orang_dalam'], {'bilangan': 2, 'tarikh': '2026-10-10'})
-            G.main(['tambah', '--csv', p('senarai_beli.csv'), '--harga', d, '--sektor', p('sektor.csv'),
+            # SST: BBB tarikh bercanggah dengan Nasdaq (Nasdaq menang), CCC hari Sabtu (dibuang), DDD tiada dalam Nasdaq (dipakai)
+            json.dump({'data': {'data': [{'eventType': 'EARNINGS', 'ticker': 'BBB', 'eventDate': '2026-10-20'},
+                                         {'eventType': 'EARNINGS', 'ticker': 'CCC', 'eventDate': '2026-10-24'},
+                                         {'eventType': 'EARNINGS', 'ticker': 'DDD', 'eventDate': '2026-10-22'}]}}, open(p('sst.json'), 'w'))
+            G.main(['tambah', '--csv', p('senarai_beli.csv'), '--harga', d, '--sektor', p('sektor.csv'), '--acara', p('sst.json'),
                     '--pemangkin', p('pem.json'), '--nasdaq', p('nas.json'), '--tarikh', '2026-10-16'])
             r = {x['saham']: x for x in csv.DictReader(open(p('senarai_beli.csv'), encoding='utf-8'))}
             self.assertEqual((r['BBB']['tarikh_earnings'], r['BBB']['sumber_earnings'], r['BBB']['gred_qr']), ('2026-10-27', 'Nasdaq', 'D'))
             self.assertEqual((r['AAA']['sumber_earnings'], r['AAA']['gred_qr']), ('anggaran; QR lalu 3 hari', 'B'))   # QR lalu 13 Okt: 3 hari -> B
-            self.assertEqual((r['CCC']['sumber_earnings'], r['CCC']['gred_qr'], r['CCC']['gred_pemangkin']), ('tiada data', '–', '–'))
+            self.assertEqual((r['CCC']['tarikh_earnings'], r['CCC']['sumber_earnings'], r['CCC']['gred_qr']), ('', 'tiada dalam 30 hari (SST)', 'A'))
+            self.assertEqual((r['DDD']['tarikh_earnings'], r['DDD']['sumber_earnings'], r['DDD']['gred_qr']), ('2026-10-22', 'SST', 'E'))
             # pemangkin v3: K2 (reaksi +25%, umur 1 hari dagangan dalam stor) -> A; K1 (earnings 7 hari dagangan lagi) -> B; naik taraf: tiada mata
             self.assertEqual((r['AAA']['gred_pemangkin'], r['AAA']['mata_pemangkin']), ('A', '4'))
             self.assertTrue(r['AAA']['pemangkin'].startswith('🔥 PANAS · reaksi earnings +25.1% lawan pasaran (1 hari lalu) +4'))
             self.assertEqual((r['BBB']['gred_pemangkin'], r['BBB']['mata_pemangkin']), ('B', '2'))
             self.assertIn('earnings 7 hari dagangan lagi', r['BBB']['pemangkin'])
-            self.assertEqual(r['DDD']['gred_pemangkin'], '–')   # tiada data earnings dan berita
+            self.assertEqual(r['DDD']['gred_pemangkin'], 'C')   # tiada berita; K1: earnings SST 4 hari dagangan lagi +1
             # fail Yahoo semalam tidak dipakai
             yahoo['tarikh'] = '2026-10-15'; json.dump(yahoo, open(p('yahoo.json'), 'w'))
             os.remove(p('pem.json'))
