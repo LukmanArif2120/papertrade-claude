@@ -1,0 +1,46 @@
+# Kajian RS rating lawan seluruh pasaran AS (2005–kini) -> BacktestShariah2/kajian/rs/
+# Sesi Claude tidak boleh capai Yahoo; runner GitHub boleh. Manual atau bila skrip/aliran kerja ini berubah.
+name: Kajian RS
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'BacktestShariah2/standard/kajian_rs.py'
+      - '.github/workflows/kajian_rs.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: kajian-rs
+  cancel-in-progress: true
+
+jobs:
+  kajian:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy yfinance
+      - name: Tarik harga (yfinance)
+        run: python3 BacktestShariah2/standard/kajian_rs.py tarik --cache /tmp/rs.pkl
+      - name: Uji gred RS
+        run: python3 BacktestShariah2/standard/kajian_rs.py uji --cache /tmp/rs.pkl --keluar BacktestShariah2/kajian/rs
+      - name: Commit dan push
+        run: |
+          git config user.name "kajian-rs[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/kajian/rs
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Kajian RS: $(date -u +%Y-%m-%d)"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1
