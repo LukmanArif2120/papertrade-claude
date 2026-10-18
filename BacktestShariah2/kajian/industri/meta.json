@@ -1,11 +1,11 @@
 {
- "dijana": "2026-10-18 05:54 UTC",
- "saham": 3418,
+ "dijana": "2026-10-18 06:16 UTC",
+ "saham": 3180,
  "bar": 5482,
  "dari": "2005-01-03",
  "hingga": "2026-10-16",
  "sampel_tarikh": 1040,
- "baris": 1237858,
- "industri_purata_sehari": 107.1,
- "gagal_tarik": 0
+ "baris": 1151913,
+ "industri_purata_sehari": 101.9,
+ "gagal_tarik": 200
 }
