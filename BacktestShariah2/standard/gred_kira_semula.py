@@ -104,8 +104,7 @@ def kira_baris(r, D, hi, ctx, kira):
         if not p.get('berita'):
             kira['pemangkin tanpa berita (veto tidak disemak)'] += 1
     # Gred keseluruhan v2
-    gi = G.TIADA if ctx['jenis'].get(G.id_kaedah(G.ambil(r, 'kaedah', 'Kaedah'))) == 'pantulan' else r.get('gred_industri')
-    r['gred_keseluruhan'] = G.gred_keseluruhan([gi, r.get('gred_pemangkin'), r.get('gred_qr')])
+    r['gred_keseluruhan'] = G.keseluruhan_baris(r, ctx['jenis'])
     gp = re.sub(r'; ' + TANDA + r' [^;]*$', '', r.get('gred_pada') or '')
     # "S/I v2" dalam gred_pada: dashboard Prestasi hanya mengira gred Sektor/Industri baris bertanda ini (konvensyen SKEMA)
     r['gred_pada'] = f'{gp}; {TANDA} {ctx["tarikh"]} ({"S/I v2, " if kum else ""}rujukan {D.date()})'
