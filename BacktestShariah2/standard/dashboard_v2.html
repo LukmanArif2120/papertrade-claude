@@ -920,14 +920,19 @@ const wLengkap=r=>/^tiada \(isyarat sah\)/i.test(String(r.syarat_belum||''));
 const wSentuh=r=>r.jarak_pct!=null?r.jarak_pct<=0:(r.pct_dipenuhi??0)>=100;
 const wPill=r=>wLengkap(r)?'<span class="pill p-buy">Isyarat lengkap</span>':wSentuh(r)?'<span class="pill p-near">Paras disentuh</span>':`<span class="pill p-near">${fx(Math.min(99.9,r.pct_dipenuhi),1)}%</span>`;
 const cIdx=memo(src=>{const m={};src.forEach(x=>{(m[x.saham+'|'+x.kaedah]=m[x.saham+'|'+x.kaedah]||[]).push(x);});return m;});
-function wBeli(r){const m=/tutup (\d{1,2}) (Jan|Feb|Mac|Apr|Mei|Jun|Jul|Ogo|Sep|Okt|Nov|Dis)/.exec(String(r.sebab||''));
-  let t0=r.ditambah||'';if(m){const y=String(S.watch&&S.watch.tarikh_data||'').slice(0,4)||String(new Date().getUTCFullYear());t0=`${y}-${String(BLN.indexOf(m[2])+1).padStart(2,'0')}-${m[1].padStart(2,'0')}`;}
-  const sama=cIdx(prSrc('c'))[r.saham+'|'+r.kaedah]||[];
+/* status belian isyarat lengkap: lengkap pada tutup tarikh data watchlist; kekal dalam watchlist hingga imbasan 8:02 malam (Isnin–Jumaat)
+   memindahkannya ke senarai beli, kemudian dibeli pada buka hari dagangan berikutnya (tugasan_v3 §3; jadual/kemas_kini_0602.md langkah 4) */
+const wStatusPill=b=>`<span class="pill ${({beli:'p-buy',pegang:'p-hold',tunggu:'p-near',tiada:'p-exit'})[b.k]}">${({beli:'Dibeli',pegang:'Dilangkau',tunggu:'Menunggu belian',tiada:'Tidak dibeli'})[b.k]}</span>`;
+const hariDagBerikut=t=>{const d=new Date(t+'T00:00:00Z');if(isNaN(d))return '';do{d.setUTCDate(d.getUTCDate()+1);}while(d.getUTCDay()===0||d.getUTCDay()===6);return d.toISOString().slice(0,10);};
+const belianTerkini=memo(src=>src.reduce((m,x)=>(x.tarikh_beli||'')>m?x.tarikh_beli:m,''));
+function wBeli(r){const t0=String(S.watch&&S.watch.tarikh_data||r.ditambah||'').slice(0,10),tb=hariDagBerikut(t0),src=prSrc('c');
+  const sama=cIdx(src)[r.saham+'|'+r.kaedah]||[];
   const baru=sama.filter(x=>(x.tarikh_beli||'')>t0).sort((a,b)=>a.tarikh_beli<b.tarikh_beli?-1:1)[0];
   if(baru)return {k:'beli',t:`Dibeli maya ${tkO(baru.tarikh_beli)}`};
   const buka=sama.find(x=>!x.keluar&&(x.tarikh_beli||'')<=t0);
-  if(buka)return {k:'pegang',t:`Tidak dibeli semula: posisi ${tkO(buka.tarikh_beli)} masih dipegang`};
-  return {k:'tiada',t:'Tiada belian dalam Papertrade C'};}
+  if(buka)return {k:'pegang',t:`Dilangkau: posisi ${tkO(buka.tarikh_beli)} masih dipegang`};
+  if(tb&&belianTerkini(src)>=tb)return {k:'tiada',t:`Tidak dibeli pada buka ${tkO(tb)}`};
+  return {k:'tunggu',t:`Lengkap pada tutup ${tkO(t0)}; belian dijadualkan pada buka ${tkO(tb)}`};}
 /* lajur ringkas watchlist: gred jadi satu lajur lencana; butiran penuh dalam helaian baris */
 const watchColsR=()=>[
   {k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b> ${esc(r.nama||'')}`,c:()=>'name'},
@@ -950,13 +955,13 @@ function renderWatch(){
   const sekCount={};all.forEach(r=>{sekCount[r.sektor||'–']=(sekCount[r.sektor||'–']||0)+1;});
   const topSek=Object.entries(sekCount).sort((a,b)=>b[1]-a[1]).slice(0,3);
   const n99=all.filter(r=>(r.pct_dipenuhi??0)>=99).length,nSentuh=all.filter(wSentuh).length;
-  const wlk=S.wlk||(S.wlk={shown:AWAL}),lkS=lengkap.map(wBeli),nLB=lkS.filter(x=>x.k==='beli').length,nLP=lkS.filter(x=>x.k==='pegang').length,nLT=lkS.length-nLB-nLP;
-  const lengkapH=lengkap.length?`<div class="panel"><div class="panel-h"><h2 data-tip="isyarat_lengkap">Isyarat lengkap dalam watchlist</h2><span class="sub">${lengkap.length} calon · ${nLB} dibeli · ${nLP} sudah dipegang · ${nLT} tiada belian</span></div>
-    <p class="sub" style="margin:0 0 8px">Calon ini ditanda "Tiada (isyarat sah)", jadi bukan lagi calon hampir. ${nLT?`<b class="neg">${nLT}</b> tiada belian dalam Papertrade C.`:'Semua sudah dibeli atau masih dipegang.'}</p>
+  const wlk=S.wlk||(S.wlk={shown:AWAL}),lkS=lengkap.map(wBeli),nLB=lkS.filter(x=>x.k==='beli').length,nLP=lkS.filter(x=>x.k==='pegang').length,nLW=lkS.filter(x=>x.k==='tunggu').length,nLT=lkS.length-nLB-nLP-nLW,t0W=String(w.tarikh_data||'').slice(0,10),tbW=hariDagBerikut(t0W);
+  const lengkapH=lengkap.length?`<div class="panel"><div class="panel-h"><h2 data-tip="isyarat_lengkap">Isyarat lengkap dalam watchlist</h2><span class="sub">${lengkap.length} calon · ${nLW} menunggu belian · ${nLB} dibeli · ${nLP} dilangkau · ${nLT} tidak dibeli</span></div>
+    <p class="sub" style="margin:0 0 8px">Calon ini lengkap pada tutup ${esc(tkO(t0W))} ("Tiada (isyarat sah)"). Ia kekal dalam watchlist sehingga imbasan 8:02 malam memindahkannya ke senarai beli, kemudian dibeli maya pada buka ${esc(tkO(tbW))}. ${nLT?`<b class="neg">${nLT}</b> tidak dibeli walaupun sesi belian sudah berlalu.`:''}</p>
     ${sortTable({id:'wlengkap',rows:lengkap.map((r,i)=>Object.assign({},r,{_b:lkS[i]})),def:{k:'_bk',dir:1},limit:wlk.shown,attr:r=>`data-wl="${r._w}" tabindex="0"`,rcls:()=>'click',foot:kakiLagi('wlkMore'),cols:[
       {k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b> ${esc(r.nama||'')}`,c:()=>'name'},
       {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`},
-      {k:'_bk',t:'Status belian',tip:'isyarat_lengkap',l:1,v:r=>({tiada:0,pegang:1,beli:2})[r._b.k],f:r=>`<span class="pill ${r._b.k==='beli'?'p-buy':r._b.k==='pegang'?'p-hold':'p-exit'}">${r._b.k==='beli'?'Dibeli':r._b.k==='pegang'?'Sudah dipegang':'Tidak dibeli'}</span>${r._b.k==='tiada'?'':`<span class="vv">${esc(r._b.t)}</span>`}`},
+      {k:'_bk',t:'Status belian',tip:'isyarat_lengkap',l:1,v:r=>({tiada:0,tunggu:1,pegang:2,beli:3})[r._b.k],f:r=>`${wStatusPill(r._b)}<span class="vv">${esc(r._b.t)}</span>`},
       {k:'sebab',t:'Catatan watchlist',l:1,ns:1,f:r=>`<span class="mut">${esc(r.sebab||'–')}</span>`,c:()=>'wrap'}]})}</div>`:'';
   el.innerHTML=`
   <p class="headline">Calon <b>Hampir Signal</b> (90–100%): semua syarat entry selain pencetus sudah dipenuhi pada tutup <b>${esc(w.tarikh_data||'–')}</b>, dan pencetus dalam ≤ 2%. Disemak semula setiap hari selepas pasaran AS tutup; calon yang terkeluar signal dibuang. Jika isyarat lengkap, saham dibeli maya dalam Papertrade C pada buka esok.</p>
@@ -964,7 +969,7 @@ function renderWatch(){
     <div class="kpi"><div class="lbl">Calon</div><div class="v">${all.length}</div><div class="s">${new Set(all.map(r=>r.saham)).size} saham unik · ${kd.length} kaedah</div></div>
     <div class="kpi"><div class="lbl" data-tip="pct_dipenuhi">≥ 99% hampir</div><div class="v" style="color:#c4b5fd">${n99}</div><div class="s">Pencetus tinggal ≤ 1% lagi${nSentuh?` · ${nSentuh} paras sudah disentuh`:''}</div></div>
     <div class="kpi"><div class="lbl">Sektor terbanyak</div><div class="v" style="font-size:1.25rem">${esc(topSek[0]?topSek[0][0]:'–')}</div><div class="s">${topSek.map(([s,n])=>esc(s)+' '+n).join(' · ')}</div></div>
-    ${lengkap.length?`<div class="kpi"><div class="lbl" data-tip="isyarat_lengkap">Isyarat lengkap</div><div class="v">${lengkap.length}</div><div class="s">${nLB} dibeli · ${nLP} sudah dipegang · <span class="${nLT?'neg':''}">${nLT} tiada belian</span></div></div>`:`<div class="kpi"><div class="lbl">Dibina</div><div class="v" style="font-size:1.25rem">${esc(w.dibina||'–')}</div><div class="s">Maks 5 setiap kaedah · dibuang bila terkeluar signal</div></div>`}
+    ${lengkap.length?`<div class="kpi"><div class="lbl" data-tip="isyarat_lengkap">Isyarat lengkap</div><div class="v">${lengkap.length}</div><div class="s">${[nLW?`${nLW} menunggu belian pada buka ${esc(tkO(tbW))}`:'',nLB?`${nLB} dibeli`:'',nLP?`${nLP} dilangkau`:'',nLT?`<span class="neg">${nLT} tidak dibeli</span>`:''].filter(Boolean).join(' · ')}</div></div>`:`<div class="kpi"><div class="lbl">Dibina</div><div class="v" style="font-size:1.25rem">${esc(w.dibina||'–')}</div><div class="s">Maks 5 setiap kaedah · dibuang bila terkeluar signal</div></div>`}
   </div>
   <div class="panel"><div class="panel-h"><h2>Hampir Signal</h2><span class="sub">${rows.length} calon · ketik tajuk lajur untuk susun</span></div>
     <div class="filters" style="margin-bottom:10px">${lajurSeg('watch')}<select id="wK" aria-label="Tapis kaedah"><option value="">Semua kaedah</option>${kdP.map(k=>`<option value="${esc(k)}" ${wf.k===k?'selected':''}>${esc(k)}</option>`).join('')}</select>
@@ -1770,7 +1775,7 @@ function openPos(id){const r=posRows('gab').find(x=>x._p===id);if(!r)return;cons
 function openWatch(i){const r=watchRows()[i];if(!r)return;const lk=wLengkap(r)?wBeli(r):null;
   sheet(`<div class="lbl">Watchlist · Hampir Signal${r.sektor?' · '+esc(r.sektor):''}${r.industri?' · '+esc(r.industri):''}</div>
     <h3 id="shTitle">${esc(r.saham)} · ${esc(r.kaedah)}</h3><p class="sub" style="margin-top:2px">${esc(r.nama||'')}</p>
-    ${lk?`<p class="ln"><span class="pill ${lk.k==='beli'?'p-buy':lk.k==='pegang'?'p-hold':'p-exit'}">${lk.k==='beli'?'Dibeli':lk.k==='pegang'?'Sudah dipegang':'Tidak dibeli'}</span> ${esc(lk.t)}</p>`:''}
+    ${lk?`<p class="ln">${wStatusPill(lk)} ${esc(lk.t)}</p>`:''}
     <div class="mgrid">${mSel(lk?'Status':'% hampir',wPill(r),lk?'isyarat_lengkap':'pct_dipenuhi')}${mSel('Harga',fx(r.harga_terkini,2),'harga_w')}${mSel('Paras pencetus',fx(r.paras,2),'paras')}${mSel('Jarak',sg2(r.jarak_pct),'jarak')}${mSel('Tarikh masuk watchlist',tkP(r.ditambah),'ditambah')}${mSel('Hari dalam watchlist',fx(r.hari,0),'hari_watch')}</div>
     <div class="sec"><h4 data-tip="syarat_belum">Syarat belum cukup</h4><p class="ln"><b>${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}</p>${r.sebab?`<p class="ln">${esc(r.sebab)}</p>`:''}${r.syarat_belum?`<p class="ln mut">${esc(r.syarat_belum)}</p>`:''}</div>
     <div class="sec"><h4 data-tip="gred">Gred</h4>${gredList(r)}</div>
@@ -2024,7 +2029,7 @@ const TIPS={
   keyakinan:{t:'Tahap keyakinan',d:'Ikut bilangan dagangan selesai: rendah (< 30), sederhana (30–99), tinggi (≥ 100). Dengan sampel kecil, kadar menang dan purata boleh jauh daripada nilai sebenar kerana nasib. Label kaedah diberi selepas 20 dagangan selesai.',e:''},
   terlalu_awal:{t:'Terlalu awal',d:'Label sudah diberi, tetapi papertrade kaedah ini belum berjalan selama purata tempoh pegang backtestnya. Dalam tempoh pendek hanya dagangan yang keluar cepat (biasanya kena henti rugi) sudah selesai, jadi keputusan awal belum mewakili kaedah. Peraturan label tidak berubah; ini amaran sahaja. Tarikh adil = hari dagangan ke-N selepas belian pertama kaedah, N = purata hari pegang backtest (dibundar ke atas).',e:'Papertrade 7 hari lawan backtest pegang 15 hari = terlalu awal.'},
   bt_vs_pt:{t:'Sebenar lawan backtest',d:'Sebenar = dagangan papertrade yang sudah selesai (kadar menang dan purata untung). Backtest = varian sama, 2019–2026 (kadar menang, purata setiap dagangan, purata hari pegang). Tempoh = hari dagangan sejak belian pertama kaedah dalam papertrade.',e:'Menang 0% lawan 21% · tempoh 7 lawan 15 hari = belum boleh dibandingkan.'},
-  isyarat_lengkap:{t:'Isyarat lengkap dalam watchlist',d:'Calon yang syarat belum cukupnya "Tiada (isyarat sah)": semua syarat entry sudah dipenuhi, jadi ia bukan lagi calon hampir. Status belian disemak terus dalam Papertrade C: dibeli selepas tarikh isyarat, tidak dibeli semula kerana posisi kaedah dan saham yang sama masih dipegang, atau tiada belian.',e:''},
+  isyarat_lengkap:{t:'Isyarat lengkap dalam watchlist',d:'Calon yang syarat belum cukupnya "Tiada (isyarat sah)": semua syarat entry dipenuhi pada tutup terakhir. Ia kekal dalam watchlist sehingga imbasan 8:02 malam (Isnin–Jumaat) memindahkannya ke senarai beli, kemudian dibeli maya pada buka hari dagangan berikutnya. Status disemak dalam Papertrade C: menunggu belian, dibeli, dilangkau kerana posisi kaedah dan saham yang sama masih dipegang, atau tidak dibeli walaupun sesi belian sudah berlalu.',e:'Lengkap pada tutup Jumaat → imbasan Isnin 8:02 malam → dibeli pada buka Isnin.'},
   gred_ringkas:{t:'Gred keseluruhan',d:'Gred keseluruhan pada hari isyarat, A terbaik hingga E terlemah (purata gred Industri, Pemangkin dan QR). Pecahan setiap gred (industri, laporan suku, pemangkin, RS, sektor) dalam Lajur penuh, atau ketik baris.',e:''}
 };
 const TIPLBL={'kaedah / varian':'kaedah','keputusan':'keputusan','skor':'skor','jumlah untung':'jumlah','cagr':'cagr','kadar menang':'win','jumlah entry':'n','untung/dagangan':'avg','purata menang':'avgwin','purata untung':'avgwin','purata kalah':'avgloss','purata rugi':'avgloss','menang:kalah':'nisbah','hari pegang':'days','purata hari pegang':'days','untung/hari':'harian','mdd':'mdd','mar':'mar','tutup ≥ +10%':'ret10','sentuh +10%':'hit10','bulan ≥ +10%':'bulan10','bulan untung':'bulan_untung','faktor untung':'pf','dagangan setahun':'dagangan_setahun','separuh 1 (2019–22)':'h1','separuh 2 (2023–)':'h2','tahun atasi spy':'thn_kalah_spy','dagangan terburuk':'terburuk','atasi beli semua':'menang_ew','profil pegangan':'pegang','set saham':'set'};
