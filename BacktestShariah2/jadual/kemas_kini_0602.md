@@ -21,7 +21,7 @@ Alat (ToolSearch, satu panggilan setiap kumpulan):
    - Harga yfinance (tugasan_v3 §6): jika `data/harga/status.json` → `terkini.sesi` = sesi semalam, isi jurang dengan `python3 BacktestShariah2/standard/harga_yf.py gabung --stor <folder stor>` SELEPAS `scanner.py harga` (kline Moomoo tidak perlu bagi saham yang sudah diisi). Semak silang dahulu: kline Moomoo (ktype 2, num 10) 5 saham rawak, `harga_yf.py semak --kline T=fail …`; keluar 1 → JANGAN gabung, guna Moomoo seperti biasa dan catat. Saham baharu tanpa sejarah → tulis ticker ke `data/harga/perlu_sejarah.txt` (commit; Actions menarik 3 tahun pada larian seterusnya, gabung dengan `--fail BacktestShariah2/data/harga/sejarah.csv`).
    Nilai semula setiap baris:
    - 90–99% → kekal, kemas kini % hampir, harga, paras pencetus;
-   - 100% → kekal (dipindah oleh imbasan 8:02 malam);
+   - 100% → kekal (dipindah oleh imbasan 8:02 malam berikutnya). Tulis "Syarat belum cukup" = `Tiada (isyarat sah)` (teks tepat; dashboard mengesannya) dan "Keadaan semasa" = `Isyarat lengkap pada tutup <sesi tutup yang baru dinilai, cth. 16 Okt>; akan dipindah ke senarai beli oleh imbasan 8:02 malam berikutnya`. Tarikh = tutup yang melengkapkan isyarat (sesi semalam), bukan tarikh imbasan sebelumnya; jangan tulis "dipindah" seolah-olah sudah berlaku;
    - terkeluar signal → BUANG.
    Tiada calon baharu pada 6:02. Data tidak dapat diambil → kekalkan baris dan catat; jangan reka.
 5. Sektor & industri:
