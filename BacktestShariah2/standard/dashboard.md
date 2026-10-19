@@ -7,7 +7,7 @@
 ## Struktur tab
 | Tab | Sub-tab / kandungan | Dokumen db |
 |---|---|---|
-| Backtest | Ringkasan · Papan Kedudukan · Banding (kandungan v1 kekal; pemilih set 431/S1–S4 hanya di sini) | `registry/<ID>` (119), `meta/info` |
+| Backtest | Dua sub-tab (19 Okt 2026). **Keputusan** (lalai): setiap kaedah M (varian yang lulus paling banyak langkah, kemudian skor enjin, kemudian CAGR) melalui **7 langkah saringan**: 1 cukup dagangan (G2), 2 untung > SPY (G3), 3 jatuh ≤ 45% (G4), 4 rugi setiap dagangan kecil (G1), 5 untung 2019–22 dan 2023–26 (G5) — Ujian 1, set 431; 6 varian sama CAGR > 0 dalam S1–S4; 7 Ujian 2 (`autotune/a02_saringan`, 2000 saham AS 2013–2018, PARAM asal): CAGR > 0 dalam kumpulan A dan B (lorong terbaik). Lulus ketujuh-tujuh → pingat ikut keputusan enjin: 🥇 Emas = GUNA, 🥈 Perak = UJI KERTAS, 🥉 Gangsa = SIMPAN. Kandungan: ayat jawapan, podium 3 teratas (RM10,000 →, jatuh terburuk, menang x/10, pegang, Ujian 2, papertrade), corong saringan (ketik langkah = tapis kaedah yang gugur di situ), jadual semua kaedah (#, Kaedah, Keputusan, 7 bulatan saringan, Untung setahun Ujian 1 dan Ujian 2, Jatuh terburuk, Menang, Pegang, Papertrade M+C). Ketik baris = helaian butiran dengan kad saringan 7 langkah. **Butiran**: pemilih set 431 · S1–S4 · 2000 AS; 431/S1–S4 = Papan penuh (gate), Carta & gaya, Banding varian; 2000 = Semua lorong A/B, A02, A03, A01 (dahulu tab AUTOTUNE). | `registry/<ID>`, `meta/info`, koleksi `autotune`, `papertrade/*` |
 | Sector | MAKLUMAT SAHAJA. Peta haba treemap (1H/1W/1M/3M, Sektor/Industri), ranking boleh-susun (lalai susun ikut 1M; fasa, RS, breadth, volum relatif, aliran institusi), kuadran fasa rotasi, aliran institusi & volum luar biasa, 10 industri 1M terkuat, nota kalibrasi | `sektor/snapshot` |
 | Watchlist | Hampir Signal sahaja (90–100%): saham, kaedah, sektor, industri, harga, % hampir, syarat belum cukup, paras pencetus, tarikh & hari dalam watchlist | `papertrade/watchlist` |
 | Paper Trade M | Posisi akaun simulasi Moomoo + keputusan (satu tab) | `papertrade/moomoo` (sandaran `moomoo_peta`) |
@@ -15,7 +15,7 @@
 | Prestasi | Papertrade M · Papertrade C · Combine: KPI, untung purata/kaedah, untung lawan risiko (scatter, kuadran Untung & Selamat), kadar menang/kaedah + donut, Paling Teruk, kedudukan Skor U×S, semua dagangan | dikira daripada `papertrade/moomoo` + `papertrade/claude`; risiko daripada `prestasi/mae` |
 | Kaedah | Katalog semua kaedah aktif (satu baris setiap `kod/kaedah/Mxx.py`, varian dalam kod): ID, nama, asal (pencipta + sumber), masuk, keluar, pegang (had masa), henti rugi, Backtest set 431 (baris registry `varian == varian_kod`), Papertrade M+C (kiraan sama seperti Prestasi · Combine); carian + susun | `kaedah/katalog` (sumber `standard/katalog_kaedah.json`) + `registry/*` + `papertrade/*` |
 
-Pautan terus: `#ringkasan #papan #banding #sektor #watchlist #ptm #ptc #prestasi #kaedah`.
+Pautan terus: `#keputusan #butiran #sektor #watchlist #ptm #ptc #prestasi #kaedah`.
 
 ## Kalibrasi tab Sector (13 Okt 2026)
 Skor panas, fasa Leading dan kekuatan 1W/1M/3M/6M/12M sektor atau industri diuji lawan pulangan hadapan 1M dan 3M (kumpulan teratas tolak terbawah, IS 2019–22 lawan OOS 2023–26):
