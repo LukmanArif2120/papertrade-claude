@@ -11,6 +11,8 @@ Prompt tugasan berjadual (Routine) hanya perlu: clone repo, kemudian "ikut `Back
 Model: `claude-sonnet-5-5` sahaja.
 
 ## Pengawas (sejak 15 Okt 2026)
+**DIMATIKAN 19 Okt 2026** (keputusan pengguna, jimat ~4 juta token sehari; ~0.66 juta setiap semakan). Rutin tidak lagi ditembak semula secara automatik; jika rutin gagal, tembak manual atau tunggu peralihan ke Actions.
+
 Sesi Sonnet `session_01686xK3etzJNAReGbsM8sAw` ("Pengawas jadual papertrade") menerima tiga tugasan semakan. Setiap semakan memastikan rutin sudah ditembak; jika belum (atau larian gagal tanpa commit dan sesi tidak bekerja selepas 60 minit), rutin itu ditembak semula sekali.
 
 | Pengawas | Masa | Rutin diawasi |
