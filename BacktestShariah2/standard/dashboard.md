@@ -7,7 +7,7 @@
 ## Struktur tab
 | Tab | Sub-tab / kandungan | Dokumen db |
 |---|---|---|
-| Backtest | Ringkasan · Papan Kedudukan · Banding (kandungan v1 kekal; pemilih set 431/S1–S4 hanya di sini) | `registry/<ID>` (119), `meta/info` |
+| Backtest | **Kedudukan 431 · 2000** (lalai, 19 Okt 2026): suis 431 Shariah · 2000 AS · Banding 431 vs 2000; satu jadual standard (Rank, Kaedah, Status ATASI SPY/UNTUNG/RUGI, Skor 0–100, CAGR, Beza SPY, MDD, MAR, Kadar menang, PF, Untung/dagangan, Hari pegang, Dagangan). Skor = purata pangkat persentil CAGR, MAR, kadar menang, PF dalam set sendiri (2000: tiada PF → 3 metrik); satu baris setiap kaedah (varian/lorong Skor tertinggi); 2000 = kumpulan A/B yang lebih lemah. Banding: Kuat dua-dua = Rank ≤ 20 dalam kedua-dua set, susun ikut purata rank. · Ringkasan · Papan Kedudukan · Banding (kandungan v1 kekal; pemilih set 431/S1–S4 hanya pada tiga sub-tab ini) | `registry/<ID>` (119), `meta/info`, `autotune/a02_saringan` |
 | Sector | MAKLUMAT SAHAJA. Peta haba treemap (1H/1W/1M/3M, Sektor/Industri), ranking boleh-susun (lalai susun ikut 1M; fasa, RS, breadth, volum relatif, aliran institusi), kuadran fasa rotasi, aliran institusi & volum luar biasa, 10 industri 1M terkuat, nota kalibrasi | `sektor/snapshot` |
 | Watchlist | Hampir Signal sahaja (90–100%): saham, kaedah, sektor, industri, harga, % hampir, syarat belum cukup, paras pencetus, tarikh & hari dalam watchlist | `papertrade/watchlist` |
 | Paper Trade M | Posisi akaun simulasi Moomoo + keputusan (satu tab) | `papertrade/moomoo` (sandaran `moomoo_peta`) |
@@ -15,7 +15,7 @@
 | Prestasi | Papertrade M · Papertrade C · Combine: KPI, untung purata/kaedah, untung lawan risiko (scatter, kuadran Untung & Selamat), kadar menang/kaedah + donut, Paling Teruk, kedudukan Skor U×S, semua dagangan | dikira daripada `papertrade/moomoo` + `papertrade/claude`; risiko daripada `prestasi/mae` |
 | Kaedah | Katalog semua kaedah aktif (satu baris setiap `kod/kaedah/Mxx.py`, varian dalam kod): ID, nama, asal (pencipta + sumber), masuk, keluar, pegang (had masa), henti rugi, Backtest set 431 (baris registry `varian == varian_kod`), Papertrade M+C (kiraan sama seperti Prestasi · Combine); carian + susun | `kaedah/katalog` (sumber `standard/katalog_kaedah.json`) + `registry/*` + `papertrade/*` |
 
-Pautan terus: `#ringkasan #papan #banding #sektor #watchlist #ptm #ptc #prestasi #kaedah`.
+Pautan terus: `#kedudukan #ringkasan #papan #banding #sektor #watchlist #ptm #ptc #prestasi #kaedah`.
 
 ## Kalibrasi tab Sector (13 Okt 2026)
 Skor panas, fasa Leading dan kekuatan 1W/1M/3M/6M/12M sektor atau industri diuji lawan pulangan hadapan 1M dan 3M (kumpulan teratas tolak terbawah, IS 2019–22 lawan OOS 2023–26):
