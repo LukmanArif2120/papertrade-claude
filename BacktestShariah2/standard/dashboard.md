@@ -1,21 +1,21 @@
 # Dashboard: Papan Backtest Shariah (v2)
 
-**Pautan:** https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (sama dengan https://claude.ai/artifact/3KAW4v9ZCkGbkAmwz2XiJ1). Versi akhir v2 = versi 25 (13 Okt 2026, 16:45 MYT: tab Sector buang skor panas selepas kalibrasi).
-**Sumber HTML:** Project `standard/dashboard_v2.html` (format penerbitan Artifact: tanpa doctype/head; `<title>` + `<style>` di atas). Spesifikasi: `standard/tugasan_v2.md`. Log binaan: `standard/binaan_v2_log.md`.
+**Pautan:** https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (sama dengan https://claude.ai/artifact/3KAW4v9ZCkGbkAmwz2XiJ1). Versi semasa = versi 73 (19 Okt 2026): dashboard lama disusun semula untuk pemula (7 tab), analisis dagangan, sebab label dan tarikh penilaian adil, istilah seragam, panduan & glosari. Pratonton lain sudah dipadam; ini satu-satunya dashboard.
+**Sumber HTML:** `BacktestShariah2/standard/dashboard_v2.html` dalam repo (format penerbitan Artifact: tanpa doctype/head; `<title>` + `<style>` di atas). Halaman yang diterbit mesti sama dengan fail ini. Spesifikasi: `standard/tugasan_v2.md`. Log binaan: `standard/binaan_v2_log.md`.
 **Capabilities:** `assets`, `db` (1 peraturan: baca = view, tulis = admin). Jangan ubah semasa menerbit semula (abaikan medan `capabilities`).
 
-## Struktur tab
-| Tab | Sub-tab / kandungan | Dokumen db |
+## Struktur tab (sejak versi 73, 19 Okt 2026)
+| Tab | Kandungan | Dokumen db |
 |---|---|---|
-| Backtest | Dua sub-tab (19 Okt 2026). **Keputusan** (lalai): setiap kaedah M (varian yang lulus paling banyak langkah, kemudian skor enjin, kemudian CAGR) melalui **7 langkah saringan**: 1 cukup dagangan (G2), 2 untung > SPY (G3), 3 jatuh ≤ 45% (G4), 4 rugi setiap dagangan kecil (G1), 5 untung 2019–22 dan 2023–26 (G5) — Ujian 1, set 431; 6 varian sama CAGR > 0 dalam S1–S4; 7 Ujian 2 (`autotune/a02_saringan`, 2000 saham AS 2013–2018, PARAM asal): CAGR > 0 dalam kumpulan A dan B (lorong terbaik). Lulus ketujuh-tujuh → pingat ikut keputusan enjin: 🥇 Emas = GUNA, 🥈 Perak = UJI KERTAS, 🥉 Gangsa = SIMPAN. Kandungan: ayat jawapan, podium 3 teratas (RM10,000 →, jatuh terburuk, menang x/10, pegang, Ujian 2, papertrade), corong saringan (ketik langkah = tapis kaedah yang gugur di situ), jadual semua kaedah (#, Kaedah, Keputusan, 7 bulatan saringan, Untung setahun Ujian 1 dan Ujian 2, Jatuh terburuk, Menang, Pegang, Papertrade M+C). Ketik baris = helaian butiran dengan kad saringan 7 langkah. **Butiran**: pemilih set 431 · S1–S4 · 2000 AS; 431/S1–S4 = Papan penuh (gate), Carta & gaya, Banding varian; 2000 = Semua lorong A/B, A02, A03, A01 (dahulu tab AUTOTUNE). | `registry/<ID>`, `meta/info`, koleksi `autotune`, `papertrade/*` |
-| Sector | MAKLUMAT SAHAJA. Peta haba treemap (1H/1W/1M/3M, Sektor/Industri), ranking boleh-susun (lalai susun ikut 1M; fasa, RS, breadth, volum relatif, aliran institusi), kuadran fasa rotasi, aliran institusi & volum luar biasa, 10 industri 1M terkuat, nota kalibrasi | `sektor/snapshot` |
-| Watchlist | Hampir Signal sahaja (90–100%): saham, kaedah, sektor, industri, harga, % hampir, syarat belum cukup, paras pencetus, tarikh & hari dalam watchlist | `papertrade/watchlist` |
-| Paper Trade M | Posisi akaun simulasi Moomoo + keputusan (satu tab) | `papertrade/moomoo` (sandaran `moomoo_peta`) |
-| Papertrade C | Posisi maya Claude + panel kiraan slot setiap kaedah + isyarat dibatalkan | `papertrade/claude` (`slot`, `batal`) |
-| Prestasi | Papertrade M · Papertrade C · Combine: KPI, untung purata/kaedah, untung lawan risiko (scatter, kuadran Untung & Selamat), kadar menang/kaedah + donut, Paling Teruk, kedudukan Skor U×S, semua dagangan | dikira daripada `papertrade/moomoo` + `papertrade/claude`; risiko daripada `prestasi/mae` |
-| Kaedah | Katalog semua kaedah aktif (satu baris setiap `kod/kaedah/Mxx.py`, varian dalam kod): ID, nama, asal (pencipta + sumber), masuk, keluar, pegang (had masa), henti rugi, Backtest set 431 (baris registry `varian == varian_kod`), Papertrade M+C (kiraan sama seperti Prestasi · Combine); carian + susun | `kaedah/katalog` (sumber `standard/katalog_kaedah.json`) + `registry/*` + `papertrade/*` |
+| Ringkasan | "3 perkara utama" (ditulis automatik), KPI selesai / dipegang / keseluruhan / aktiviti, Terbaik ikut papertrade (label + sebab label + "Terlalu awal hingga <tarikh>"; senarai "Bila label boleh dipercayai"), untung lawan risiko, Terbaik ikut backtest (podium), Eksperimen (dua lorong, gred) | `papertrade/claude*` + `registry/*` + `autotune/*` + `kaedah/katalog` + `prestasi/mae` |
+| Prestasi | Akaun Papertrade C · Moomoo lama · Gabung. KPI; neraca untung & rugi (jangkaan); sebab keluar; untung terkumpul; kalendar untung harian; taburan untung; untung lawan risiko; untung purata dan kadar menang setiap kaedah (10 teratas + 10 terbawah antara kaedah ≥ 5 dagangan, butang Papar semua); kedudukan kaedah (lajur ringkas/penuh, Keputusan + sebab label, Selesai / 20 + keyakinan, Sebenar lawan backtest + tarikh adil); Paling Teruk; dua lorong (dilipat); prestasi ikut gred (dilipat) | dikira daripada `papertrade/moomoo` + `papertrade/claude*`; risiko `prestasi/mae`; backtest `registry/*` |
+| Posisi | Akaun sama seperti Prestasi. Semua / Dipegang / Sudah keluar, lajur ringkas (gred keseluruhan sahaja) atau penuh, tapis kaedah/sektor/industri/carian; ketik baris untuk helaian saham; Isyarat tidak dibeli (dilipat) | `papertrade/moomoo` (sandaran `moomoo_peta`), `papertrade/claude*` |
+| Watchlist | Hampir Signal (90–100%; "Paras disentuh" bila jarak 0; % hampir dihadkan 99.9). Calon "Tiada (isyarat sah)" dipapar berasingan dalam panel "Isyarat lengkap dalam watchlist" (dilipat) dengan status belian Papertrade C: menunggu belian (buka hari dagangan selepas tarikh data watchlist), dibeli, dilangkau (posisi kaedah+saham sama masih dipegang) atau tidak dibeli | `papertrade/watchlist` (+ bahagian) |
+| Backtest | **Keputusan**: 7 langkah saringan dan pingat bagi varian yang sedang digunakan (`kaedah/katalog` `varian_kod`; kaedah tidak aktif ikut varian terbaik). **Butiran**: papan penuh, carta & gaya, banding varian, set 431/S1–S4/2000 AS (AUTOTUNE) | `registry/*`, `meta/info`, `autotune/*` |
+| Kaedah | Katalog kaedah aktif (lajur ringkas/penuh): nama, asal, masuk/keluar/pegang/henti, Backtest dengan istilah sama seperti tab Backtest (pingat atau langkah gagal, untung setahun, jatuh terburuk), Papertrade C | `kaedah/katalog` + `registry/*` + `papertrade/claude*` |
+| Sektor | MAKLUMAT SAHAJA: peta haba, ranking sektor & industri, fasa rotasi, aliran institusi & volum, 10 industri 1M terkuat | `sektor/snapshot` |
 
-Pautan terus: `#keputusan #butiran #sektor #watchlist #ptm #ptc #prestasi #kaedah`.
+Pautan terus: `#utama #prestasi #posisi #watchlist #keputusan #butiran #sektor #kaedah` (`#ptm`/`#ptc` → Posisi). Butang **?** di kepala membuka Panduan: cara membaca papan (3 langkah), konsep penting dan glosari boleh cari (dijana daripada kamus `TIPS`).
 
 ## Kalibrasi tab Sector (13 Okt 2026)
 Skor panas, fasa Leading dan kekuatan 1W/1M/3M/6M/12M sektor atau industri diuji lawan pulangan hadapan 1M dan 3M (kumpulan teratas tolak terbawah, IS 2019–22 lawan OOS 2023–26):
@@ -27,7 +27,10 @@ Keputusan: skor panas dan fasa TIDAK digunakan sebagai penapis atau keutamaan be
 - Lajur M, C dan jadual dagangan Prestasi sama dan sama susunan (`ptCols()`): Tarikh beli, Saham, Kaedah, Sektor, Industri, Harga beli, Unit, Harga terkini, Untung %, Hari dipegang, Isyarat keluar, Tarikh keluar, Harga keluar, Untung akhir %.
 - Semua jadual boleh disusun (klik tajuk: turun/naik), kecuali Banding (metrik ikut baris).
 - `keluar=true` → baris merah; `harga_terkini` = `harga_keluar` (dibekukan, tidak dikemas kini lagi). Moomoo tidak dijual; slot kekal dikira.
-- Tiada tab Panduan istilah: setiap istilah ada tooltip (hover; tekan lama di telefon). Kamus `TIPS` dalam kod.
+- Setiap istilah ada tooltip (hover; tekan lama di telefon); kamus `TIPS` dalam kod juga menjadi glosari dalam Panduan (butang ?).
+- Kadar menang sentiasa dinamakan asasnya: (semua) = selesai + dipegang, (selesai) = sudah keluar sahaja; "sedang untung" = posisi dipegang. Label kaedah memakai asas (semua) (tugasan_v3 §7).
+- Sebab label (`sebabKep`): syarat yang menentukan label dan jarak ke sempadan terdekat (cth. "Skor 24 < 25; kurang 1 mata daripada PERHATI"). Tarikh adil (`tarikhAdil`) = hari dagangan ke-N selepas belian pertama kaedah, N = purata hari pegang backtest (dibundar ke atas); sebelum itu label bertanda "Terlalu awal hingga <tarikh>".
+- Telefon (≤ 760px semasa dibuka): jadual bermula 10 baris, "Papar lagi" +25; desktop 25 dan +100.
 - Untung % = harga terkini ÷ harga beli − 1. Untung purata Prestasi = untung akhir bagi yang keluar, semasa bagi yang dipegang.
 - Gaya SST Terminal, satu tema gelap. Storan pelayar hanya untuk tab/sub-tab/set/lipatan (dibalut try/catch).
 
@@ -45,6 +48,6 @@ Halaman membaca db secara langsung — **tidak perlu terbit semula halaman** unt
 6. Had saiz dokumen db 256 KiB (262,144 bait, JSON padat). Sejak 16 Okt 2026 halaman membaca `papertrade/claude`, `claude_2`, `claude_3`, … tanpa had: setiap dokumen yang wujud membuka langganan dua nombor seterusnya (`subPtc` dalam `connect()`; `S.ptcN`, `ptcRows()`). Fail `claude*.csv` dipecah dengan `standard/pecah_claude.py --pecah` apabila unjuran saiz (semua posisi terbuka dianggap sudah keluar) > 240 KB; tolak fail yang berubah ke dokumen sama nama. `papertrade/watchlist` dan `papertrade/senarai_beli` pula dibahagi oleh `standard/bahagi_db.py` (asas `bahagian:{id,n}` + `<nama>_2` … `{induk,bahagian,rows}`); halaman (`subBhg`) menggabung bahagian yang induknya sepadan dan mengabaikan bahagian lama.
 
 ## Jika halaman perlu diubah
-`project_read standard/dashboard_v2.html` → simpan tempatan → edit → `Artifact read` URL di atas (wajib sebelum terbit) → `Artifact publish` dengan `url` yang sama → simpan semula `standard/dashboard_v2.html`. Uji dengan db tiruan (Playwright) pada 1400px dan 390px.
+Edit `BacktestShariah2/standard/dashboard_v2.html` → uji dengan db tiruan (Playwright) pada 1400px dan 390px → `Artifact read` URL di atas (wajib sebelum terbit; baca setiap baris) → `Artifact publish` dengan `url` yang sama (jangan hantar `capabilities`) → commit fail sumber supaya repo sama dengan halaman yang diterbit.
 
 Nota: jumlah untung Backtest dikira daripada CAGR × tempoh 1 Nov 2019 – 2 Okt 2026 (6.92 tahun).

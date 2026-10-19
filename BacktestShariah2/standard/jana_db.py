@@ -25,6 +25,7 @@ STOR = os.path.join(BS2, 'data', 'harga', 'stor')
 MIN_TUTUP = 20
 USD_POSISI = 1000
 HAD_BATCH = 900_000
+STATUS_HARGA = os.path.join(BS2, 'data', 'harga', 'status.json')
 
 PETA_WATCH = {'Saham': 'saham', 'Nama': 'nama', 'Kaedah': 'kaedah', 'Sektor': 'sektor', 'Industri': 'industri',
               'Harga': 'harga_terkini', '% hampir': 'pct_dipenuhi', 'Pencetus': 'pencetus', 'Keadaan semasa': 'sebab',
@@ -161,6 +162,16 @@ def pengawas(st, masa):
     return out
 
 
+def sesi_stor(path=STATUS_HARGA):
+    """Sesi terkini stor harga repo (status.json terkini.sesi, YYYYMMDD) sebagai YYYY-MM-DD; '' jika tiada.
+    Sandaran tarikh data apabila status_harian.json tiada dalam folder (mod bayang: Actions menulis ke bayang/ sahaja)."""
+    try:
+        s = str(json.load(open(path, encoding='utf-8')).get('terkini', {}).get('sesi', ''))
+    except (OSError, ValueError, AttributeError):
+        return ''
+    return f'{s[:4]}-{s[4:6]}-{s[6:8]}' if len(s) == 8 and s.isdigit() else ''
+
+
 # ---------------------------------------------------------------- utama
 def main(argv=None):
     ap = argparse.ArgumentParser()
@@ -170,7 +181,7 @@ def main(argv=None):
     masa = (pd.Timestamp(a.masa).tz_localize('Asia/Kuala_Lumpur') if a.masa else pd.Timestamp.now(tz='Asia/Kuala_Lumpur'))
     dibina = masa.strftime('%Y-%m-%d %H:%M') + ' MYT'
     st = json.load(open(os.path.join(a.folder, 'status_harian.json'), encoding='utf-8')) if os.path.exists(os.path.join(a.folder, 'status_harian.json')) else {}
-    malam = st.get('malam', {}); beli = st.get('beli', {}); S = malam.get('sesi', '')
+    malam = st.get('malam', {}); beli = st.get('beli', {}); S = malam.get('sesi', '') or sesi_stor()
     harga_pada = f"{S} tutup (bar harian yfinance muktamad; GitHub Actions)" if S else ''
     nota_pos = (f"Dikemas kini oleh GitHub Actions (standard/harian_c.py) {malam.get('masa', '')}: harga tutup {S}; keluar dinilai dengan "
                 'enjin rasmi; harga beli sementara dibetulkan kepada buka rasmi bar harian; baris keluar dibekukan; "menunggu" = '
