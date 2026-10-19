@@ -79,7 +79,14 @@ class TestTuai(unittest.TestCase):
              'pagination': {'has_more': False, 'next_key': '-1'}}
         self.guna(2, 'quote_financials_statements', {'symbol': 'US.XYZ', 'statement_type': 1, 'financial_type': 10,
                                                      'next_key': '1475164801|2016_4'}, json.dumps(r))
+        # format kedua hasil besar: <persisted-output> (fail = senarai blok teks)
+        simpan = os.path.join(self.d, 'toolu_x.json')
+        with open(simpan, 'w', encoding='utf-8') as f:
+            json.dump([{'type': 'text', 'text': json.dumps(r)}], f)
+        self.guna(3, 'quote_financials_statements', {'symbol': 'US.XYZ', 'statement_type': 3, 'financial_type': 10},
+                  f'<persisted-output>\nOutput too large (57.6KB). Full output saved to: {simpan}\n\nPreview (first 2KB):\n[\n...\n</persisted-output>')
         keluar, st = self.jalan()
+        self.assertTrue(os.path.exists(os.path.join(keluar, 'XYZ_3_9_p1.json')))
         self.assertTrue(os.path.exists(os.path.join(keluar, 'XYZ_1_9_k1475164801.json')))
         self.assertEqual(st['XYZ']['1']['halaman'], ['k1475164801'])
         self.assertFalse(st['XYZ']['1']['has_more'])

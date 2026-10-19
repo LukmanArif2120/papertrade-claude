@@ -5,7 +5,8 @@
 #   python3 BacktestShariah2/standard/tuai_kewangan.py --transkrip ~/.claude/projects/<projek> --keluar <folder mentah>
 #
 # Pasangan tool_use -> tool_result dipadan ikut id; parameter panggilan (symbol, statement_type, financial_type, next_key)
-# menentukan nama fail. Hasil besar yang disimpan alat ke fail ("Output has been saved to <path>") dibaca daripada fail itu.
+# menentukan nama fail. Hasil besar yang disimpan alat ke fail ("Output has been saved to <path>" atau
+# "<persisted-output> … Full output saved to: <path>") dibaca daripada fail itu.
 # financial_type 10 (suku + tahunan) dipecah ikut financial_type setiap laporan: 7 -> <T>_<jenis>_7_<halaman>.json,
 # 1–4 -> <T>_<jenis>_9_<halaman>.json. Snapshot berkelompok dipecah -> <T>_snap.json. Hasil gagal (ret_code lain,
 # cth. -11 had kadar; ralat alat) tidak ditulis. ret_code -10 ("no data") = jawapan muktamad: status 'tiada', tiada fail.
@@ -14,7 +15,7 @@
 #   "eph": true|"tiada", "snap": true}}.
 import argparse, glob, json, os, re
 
-SIMPAN = re.compile(r'Output has been saved to (\S+?\.(?:txt|json))')
+SIMPAN = re.compile(r'(?:Output has been saved to|Full output saved to:) (\S+?\.(?:txt|json))')
 TIADA_DATA = -10   # ret_code Moomoo "no data"
 
 
@@ -29,7 +30,7 @@ def teks(c):
 def kandungan(t):
     """Teks tool_result -> objek JSON (inline atau daripada fail yang disimpan alat); {'tiada': True} bagi
     ret_code -10; None jika ralat."""
-    m = SIMPAN.search(t) if t.startswith('Error: result (') else None
+    m = SIMPAN.search(t[:2000]) if t.startswith(('Error: result (', '<persisted-output>')) else None
     if m:
         if not os.path.exists(m.group(1)):
             return None
