@@ -172,3 +172,4 @@
 - Fail: baris ditambah ke `claude_28.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_29` … `claude_34` (unjuran tertinggi 189,783 B). Dokumen db `papertrade/claude_28` … `claude_34` ditolak dalam dua batch; `harian/status` dikemas kini (beli_pada, beli_ringkas).
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 21: buka ≤ henti — TECH M13, WFRD M13, ATRC M14, AVTR M23, NVS M70; belum didagangkan (data_date 15–16 Okt) — KNF M03, KELYB M04 & M123, LVLU M18 & M148, NCEW M28, CHT M34, MGRT M35, SGU M39 & M119, CAAP M49 & M148, NRP M54, WLYB M80, MNR M106, PHOE M144. Tiada buka_maks/bertindih.
+- Sahkan buka (10:08 NY, `quote_history_kline` ktype 2, 19 Okt): sampel PTC 193.61, AIT 335.63, TALO 17.675, WTS 357.66, KVUE 18.77 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
