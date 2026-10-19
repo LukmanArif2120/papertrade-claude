@@ -1,4 +1,5 @@
 <title>Papan Backtest Shariah</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
@@ -19,14 +20,16 @@
 [hidden]{display:none!important}
 html{font-size:16px}
 body{margin:0;background:radial-gradient(1200px 500px at 80% -10%,rgba(45,212,191,.06),transparent 60%),var(--bg);background-color:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:'cv11','ss01'}
-div.wrap{max-width:1280px;margin:0 auto;padding-inline:16px;padding-block:0 56px}
+div.wrap{max-width:1280px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+/* jalur di atas pengepala melekit (kawasan selamat telefon) */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
 .num{font-variant-numeric:tabular-nums lining-nums}
 a{color:var(--accent)}
 button{font-family:inherit}
 button:focus-visible,select:focus-visible,input:focus-visible,tr:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
 /* pengepala */
-header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-inline:-16px;padding:12px 16px 0}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);margin-left:calc(-1*max(16px,env(safe-area-inset-left,0px)));margin-right:calc(-1*max(16px,env(safe-area-inset-right,0px)));padding:12px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
 .titlerow{display:flex;justify-content:space-between;gap:12px;flex-wrap:nowrap;align-items:flex-start}
 .brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 auto;padding-top:2px}
 .brand .mk{width:26px;height:26px;border-radius:6px;background:linear-gradient(135deg,var(--accent),var(--violet));flex:none}
@@ -169,7 +172,7 @@ a.berita{color:var(--accent);text-decoration:none;margin-top:2px}a.berita:hover{
 
 /* helaian butiran */
 .scrim{position:fixed;inset:0;background:rgba(2,6,15,.6);z-index:40}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:88vh;overflow:auto;background:var(--card);border-radius:16px 16px 0 0;border-top:1px solid var(--line-2);padding:16px 16px calc(24px + env(safe-area-inset-bottom,0px));max-width:780px;margin:0 auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:88vh;overflow:auto;background:var(--card);border-radius:16px 16px 0 0;border-top:1px solid var(--line-2);padding:16px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));max-width:780px;margin:0 auto}
 .sheet .grab{width:40px;height:4px;border-radius:2px;background:var(--line-2);margin:0 auto 12px}
 .sheet h3{font-size:1.25rem;font-weight:700;text-wrap:balance;margin-top:2px}
 .sheet .pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
