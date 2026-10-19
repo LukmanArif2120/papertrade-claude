@@ -8,7 +8,7 @@
 #       tempoh 9 = suku tunggal, 7 = tahunan), <T>_eph.json (quote_financials_earnings_price_history),
 #       <T>_snap.json (quote_market_snapshot, pilihan: issued_shares)
 #   python3 gred_kewangan.py kira --kewangan BacktestShariah2/data/kewangan --harga <stor harga> --tarikh YYYY-MM-DD T [T ...]
-import sys, os, re, json, glob, math, argparse
+import sys, os, re, csv, json, glob, math, argparse
 from datetime import date, datetime, timedelta, timezone
 
 GRED = ['A', 'B', 'C', 'D', 'E']
@@ -857,18 +857,102 @@ def median_industri(folder, industri_saham, hari_ini):
     return out
 
 
+LAJUR_KEW = ['gred_kewangan', 'kewangan_ringkas', 'kewangan_tempoh', 'kewangan_butiran']
+
+
+def isi(folder, kew, harga):
+    """Isi lajur kewangan SAHAJA bagi baris bergred dalam fail posisi, senarai_beli dan watchlist, pada tarikh asal
+    (peraturan sama dengan gred_kira_semula.py): sesi rujukan D = tarikh_isyarat / tarikh_data / sesi sebelum
+    tarikh_beli; hari imbasan = tarikh gred_pada asal (selainnya sesi selepas D). Harga <= D; penyata yang diterbitkan
+    <= hari imbasan. Lajur lain tidak disentuh; fail posisi tidak menerima kewangan_butiran."""
+    import pandas as pd
+    import gred as G
+    from gred_isi_semula import fail_posisi
+    from sektor_pasaran import SEKTOR_INDUSTRI
+    c, _ = G.muat_harga(harga)
+    sesi = list(c.index)
+    peta = os.path.join(folder, 'peta_industri.csv')
+    pind = {r['ticker']: r['industri'] for r in csv.DictReader(open(peta, newline='', encoding='utf-8'))} \
+        if os.path.exists(peta) else {}
+    data, med, kira_n = {}, {}, {}
+
+    def muat(t):
+        if t not in data:
+            p = os.path.join(kew, f'{t}.json')
+            data[t] = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else None
+        return data[t]
+
+    for p in fail_posisi(folder) + [os.path.join(folder, f) for f in ('senarai_beli.csv', 'watchlist.csv')]:
+        if not os.path.exists(p):
+            continue
+        posisi = os.path.basename(p) not in ('senarai_beli.csv', 'watchlist.csv')
+        with open(p, newline='', encoding='utf-8') as f:
+            rd = csv.DictReader(f); lajur = list(rd.fieldnames or []); rows = list(rd)
+        if 'gred_keseluruhan' not in lajur:
+            continue
+        ubah = 0
+        for r in rows:
+            if not r.get('gred_pada'):
+                continue
+            ti = r.get('tarikh_isyarat') or r.get('tarikh_data') or ''
+            if not ti and r.get('tarikh_beli'):
+                sb = [x for x in sesi if x < pd.Timestamp(r['tarikh_beli'])]
+                ti = str(sb[-1].date()) if sb else ''
+            D = max([x for x in sesi if x <= pd.Timestamp(ti)], default=None) if ti else None
+            if D is None:
+                kira_n['tiada tarikh/harga rujukan'] = kira_n.get('tiada tarikh/harga rujukan', 0) + 1
+                continue
+            gp = G._tarikh((r.get('gred_pada') or '')[:10])
+            sl = [x for x in sesi if x > D]
+            hi = gp if gp and gp >= D.date() else sl[0].date() if sl else (D + pd.offsets.BDay(1)).date()
+            t = G.ambil(r, 'saham', 'Saham')
+            k = muat(t)
+            if k is None:
+                rk = hasil_kosong('tiada data kewangan')
+            else:
+                iu = r.get('industri_us') or pind.get(t) or G.ambil(r, 'industri', 'Industri') or ''
+                su = r.get('sektor_us') or SEKTOR_INDUSTRI.get(iu) or G.ambil(r, 'sektor', 'Sektor') or ''
+                if hi not in med:
+                    med[hi] = median_industri(kew, pind, hi)
+                h = c[t][c.index <= D].dropna() if t in c.columns else None
+                try:
+                    rk = kira(k, h, hi, med[hi].get(iu), su, iu)
+                except Exception as ex:   # data rosak tidak boleh menghentikan pengisian fail lain
+                    rk = hasil_kosong(f'ralat {type(ex).__name__}: {ex}'[:120])
+            r['gred_kewangan'] = rk['gred']; r['kewangan_ringkas'] = rk['ringkas']; r['kewangan_tempoh'] = rk['tempoh']
+            if not posisi:
+                r['kewangan_butiran'] = json.dumps(rk['butiran'], ensure_ascii=False, separators=(',', ':'))
+            nama = os.path.basename(p) if not posisi else 'posisi'
+            kira_n[f'{nama} {rk["gred"]}'] = kira_n.get(f'{nama} {rk["gred"]}', 0) + 1
+            ubah += 1
+        if ubah:
+            lajur += [x for x in (LAJUR_KEW[:3] if posisi else LAJUR_KEW) if x not in lajur]
+            with open(p, 'w', newline='', encoding='utf-8') as f:
+                w = csv.DictWriter(f, fieldnames=lajur); w.writeheader()
+                for r in rows:
+                    w.writerow({x: r.get(x, '') for x in lajur})
+    print(json.dumps(dict(sorted(kira_n.items())), ensure_ascii=False))
+    return kira_n
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description='Gred kewangan v7')
     sp = ap.add_subparsers(dest='cmd', required=True)
     s = sp.add_parser('simpan', help='fail mentah alat Moomoo -> data/kewangan/<T>.json')
     s.add_argument('--folder', required=True); s.add_argument('--keluar', required=True)
     s.add_argument('--tarikh', default=date.today().isoformat())
+    i = sp.add_parser('isi', help='isi lajur kewangan sahaja dalam fail posisi, senarai_beli dan watchlist (tarikh asal)')
+    i.add_argument('--folder', required=True, help='folder papertrade'); i.add_argument('--kewangan', required=True)
+    i.add_argument('--harga', required=True, help='folder stor harga (harga_A/B.csv)')
     k = sp.add_parser('kira', help='cetak gred kewangan bagi ticker')
     k.add_argument('--kewangan', required=True); k.add_argument('--harga')
     k.add_argument('--tarikh', default=date.today().isoformat()); k.add_argument('ticker', nargs='+')
     a = ap.parse_args(argv)
     if a.cmd == 'simpan':
         simpan(a.folder, a.keluar, a.tarikh)
+        return
+    if a.cmd == 'isi':
+        isi(a.folder, a.kewangan, a.harga)
         return
     hari_ini = date.fromisoformat(a.tarikh)
     c = None

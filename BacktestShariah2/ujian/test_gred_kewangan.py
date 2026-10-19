@@ -275,5 +275,38 @@ class UjiHujungKeHujung(unittest.TestCase):
             self.assertIsNone(GK.median_industri(d, peta2, date(2026, 10, 18))['Machinery']['margin_op'])
 
 
+class UjiIsi(unittest.TestCase):
+    def test_isi_lajur_kewangan_sahaja(self):
+        import csv
+        with tempfile.TemporaryDirectory() as d:
+            pt, kw, hg = (os.path.join(d, x) for x in ('pt', 'kw', 'hg'))
+            for x in (pt, kw, hg):
+                os.makedirs(x)
+            json.dump(syarikat(n=50, mula=2014), open(os.path.join(kw, 'AAA.json'), 'w'))
+            ix = pd.bdate_range('2025-06-02', '2026-10-16')
+            with open(os.path.join(hg, 'harga_A.csv'), 'w', newline='') as f:
+                w = csv.writer(f); w.writerow(['ticker', 'date', 'close', 'volume'])
+                for t in ('AAA', 'BBB'):
+                    for i, x in enumerate(ix):
+                        w.writerow([t, x.strftime('%Y-%m-%d'), 50 + i * 0.01, 1000])
+            asal = {'saham': 'AAA', 'kaedah': 'M01', 'sektor': 'Industrials', 'industri': 'Machinery',
+                    'tarikh_isyarat': '2026-10-15', 'gred_pada': '2026-10-15', 'gred_keseluruhan': 'B', 'gred_rs': 'C'}
+            for nm, rows in (('claude.csv', [asal, dict(asal, saham='BBB')]), ('senarai_beli.csv', [asal]),
+                             ('watchlist.csv', [{'Saham': 'AAA', 'tarikh_data': '2026-10-15', 'gred_pada': '2026-10-15',
+                                                 'gred_keseluruhan': 'C'}])):
+                with open(os.path.join(pt, nm), 'w', newline='') as f:
+                    w = csv.DictWriter(f, fieldnames=list(rows[0])); w.writeheader(); w.writerows(rows)
+            GK.isi(pt, kw, hg)
+            pos = list(csv.DictReader(open(os.path.join(pt, 'claude.csv'))))
+            self.assertIn(pos[0]['gred_kewangan'], ('A', 'B', 'C', 'D', 'E'))
+            self.assertEqual(pos[1]['gred_kewangan'], '–')                      # tiada data kewangan
+            self.assertNotIn('kewangan_butiran', pos[0])                         # posisi tanpa butiran JSON
+            self.assertEqual((pos[0]['gred_rs'], pos[0]['gred_keseluruhan'], pos[0]['gred_pada']), ('C', 'B', '2026-10-15'))
+            sb = list(csv.DictReader(open(os.path.join(pt, 'senarai_beli.csv'))))
+            self.assertTrue(json.loads(sb[0]['kewangan_butiran'])['tempoh'])
+            wl = list(csv.DictReader(open(os.path.join(pt, 'watchlist.csv'))))
+            self.assertEqual(wl[0]['gred_kewangan'], sb[0]['gred_kewangan'])
+
+
 if __name__ == '__main__':
     unittest.main()
