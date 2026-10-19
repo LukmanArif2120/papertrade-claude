@@ -11,6 +11,7 @@
 #   KAJIAN_LORONG2=<folder> python3 BacktestShariah2/kajian/portfolio/kaji_portfolio.py semak   -> enjin.portfolio = enjin kajian
 #   KAJIAN_LORONG2=<folder> python3 BacktestShariah2/kajian/portfolio/kaji_portfolio.py sim
 #   KAJIAN_LORONG2=<folder> python3 BacktestShariah2/kajian/portfolio/kaji_portfolio.py ringkas
+#   KAJIAN_LORONG2=<folder> python3 BacktestShariah2/kajian/portfolio/kaji_portfolio.py tahan     -> ketahanan bias set 431
 import argparse, glob, os, pickle, sys
 import numpy as np, pandas as pd
 
@@ -81,7 +82,7 @@ def cmd_sedia(a):
 def portfolio(ent_i, ex_i, ret, tk, e_open, susun, Cm, slots=SLOT, w=W):
     """Ikut enjin.portfolio v1.2: keluar direalisasi dahulu; masuk ikut susunan skor; satu posisi bagi setiap saham;
     saiz = min(tunai, ekuiti semalam x w). Nilai pasaran = saiz x tutup / buka masuk."""
-    nd = Cm.shape[0]; cash = eq = 1.0; pos = []; held = set(); curve = np.empty(nd); npos = np.empty(nd); ambil = []
+    nd = Cm.shape[0]; cash = eq = 1.0; pos = []; held = set(); curve = np.empty(nd); npos = np.empty(nd); ambil = []; amaun = []
     for d in range(nd):
         keep = []
         for q, am in pos:
@@ -93,13 +94,14 @@ def portfolio(ent_i, ex_i, ret, tk, e_open, susun, Cm, slots=SLOT, w=W):
             if tk[q] in held: continue
             am = min(cash, eq * w)
             if am <= 1e-12: break
-            cash -= am; pos.append((q, am)); held.add(tk[q]); ambil.append(q)
+            cash -= am; pos.append((q, am)); held.add(tk[q]); ambil.append(q); amaun.append(am)
         keep = []
         for q, am in pos:
             if ex_i[q] == d and ent_i[q] == d: cash += am * (1 + ret[q]); held.discard(tk[q])
             else: keep.append((q, am))
         pos = keep
         eq = cash + sum(am * Cm[d, tk[q]] / e_open[q] for q, am in pos); curve[d] = eq; npos[d] = len(pos)
+    portfolio.amaun = np.array(amaun)
     return curve, npos, np.array(ambil, int)
 
 
@@ -207,6 +209,43 @@ def cmd_sim(a):
     pickle.dump(kurva, open(f'{OUT}/kurva.pkl', 'wb'))
 
 
+def cmd_tahan(a):
+    """Ketahanan bias set 431 (senarai hari ini = pemenang diketahui): buang N saham pulangan tertinggi tempoh kajian
+    (dipilih dengan pandang hadapan) dan ulang; tumpuan untung 5 saham teratas."""
+    T = pd.read_pickle(f'{OUT}/calon.pkl'); fr, _ = muat(); P = Pasar(T, fr)
+    jum = pd.Series({t: g.close.iloc[-1] / g.close[g.index >= MULA].iloc[0] - 1 for t, g in fr.items() if (g.index >= MULA).any()})
+    atas = list(jum.sort_values(ascending=False).index)
+    print('20 saham pulangan tertinggi:', ', '.join(f'{t} {100 * jum[t]:.0f}%' for t in atas[:20]), flush=True)
+    pilih = ['RS pasaran', 'Volatiliti tinggi (ATR%)', 'Momentum 6 bulan', 'Industri v2', 'Kaedah walk-forward 12 bulan',
+             'Gabungan (kaedah WF + RS + industri + konsensus)']
+    rows = []
+    for L in (1, 2):
+        R = {k: v[P.pilih] for k, v in peraturan(T, L).items() if k in pilih}
+        for nb in (0, 20, 40):
+            tp = ~P.T.ticker.isin(atas[:nb]).to_numpy()
+            r = []
+            for b in range(20):
+                cv, npos, ambil = P.jalan(L, np.zeros(len(P.T)), tp, benih=b); r.append(metrik(cv, npos, P, L, ambil))
+            r = pd.DataFrame(r)
+            rows.append(dict(L=L, buang=nb, peraturan='Rawak (median 20 benih)', **r.median().to_dict(), tumpuan5=np.nan,
+                             cagr_pct_rawak=np.nan, h1_pct_rawak=np.nan, h2_pct_rawak=np.nan))
+            for nama, sk in R.items():
+                cv, npos, ambil = P.jalan(L, sk, tp); m = metrik(cv, npos, P, L, ambil)
+                u = pd.Series(portfolio.amaun * P.ret[L][ambil]).groupby(P.T.ticker.to_numpy()[ambil]).sum()
+                rows.append(dict(L=L, buang=nb, peraturan=nama, **m, tumpuan5=u.nlargest(5).sum() / u.sum(),
+                                 **{f'{k}_pct_rawak': 100 * (r[k] < m[k]).mean() for k in ('cagr', 'h1', 'h2')},
+                                 atas5=', '.join(u.nlargest(5).index)))
+            print('L', L, 'buang', nb, 'siap', flush=True)
+    D = pd.DataFrame(rows); D.to_csv(os.path.join(BS2, 'kajian', 'portfolio', 'ketahanan.csv'), index=False, float_format='%.5f')
+    pd.set_option('display.width', 250)
+    for (L, nb), G in D.groupby(['L', 'buang']):
+        Y = G.drop(columns=['L', 'buang']).copy()
+        for c in ('cagr', 'mdd', 'h1', 'h2', 'menang', 'purata', 'lebih_spy', 'tumpuan5'): Y[c] = 100 * Y[c]
+        print(f'\n== L{L}, buang {nb} saham teratas, 10 slot')
+        print(Y[['peraturan', 'cagr', 'mdd', 'mar', 'h1', 'h2', 'lebih_spy', 'tumpuan5', 'cagr_pct_rawak', 'h1_pct_rawak',
+                 'h2_pct_rawak', 'atas5']].set_index('peraturan').round(1).to_string())
+
+
 # ---------------------------------------------------------------- 3. ringkasan
 def cmd_ringkas(a):
     D = pd.read_pickle(f'{OUT}/portfolio.pkl'); kurva = pickle.load(open(f'{OUT}/kurva.pkl', 'rb'))
@@ -246,4 +285,5 @@ if __name__ == '__main__':
     x = s.add_parser('sedia'); x.add_argument('--kumpulan', default=f'{OUT}/kumpulan_harian.csv.gz'); x.set_defaults(f=cmd_sedia)
     x = s.add_parser('semak'); x.add_argument('--kaedah', nargs='+', default=['M03', 'M27', 'M119']); x.set_defaults(f=cmd_semak)
     s.add_parser('sim').set_defaults(f=cmd_sim); s.add_parser('ringkas').set_defaults(f=cmd_ringkas)
+    s.add_parser('tahan').set_defaults(f=cmd_tahan)
     a = ap.parse_args(); a.f(a)
