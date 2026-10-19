@@ -25,6 +25,7 @@ H1_AKHIR = pd.Timestamp('2023-10-31')
 SLOT, W = 10, 0.10
 BENIH = 30
 JAUH = np.datetime64('2100-01-01')
+BERMASALAH = {'ASST', 'FCEL', 'MTDR', 'OVV', 'PR', 'SM', 'VAL', 'XENE'}   # peristiwa korporat tidak terlaras (LAPORAN_UTAMA §10)
 
 
 # ---------------------------------------------------------------- 1. calon + ukuran pada hari isyarat
@@ -111,7 +112,7 @@ class Pasar:
         self.hari = self.hari[self.hari >= mula]
         self.tick = sorted(fr); tid = {t: i for i, t in enumerate(self.tick)}
         self.Cm = pd.concat([fr[t].close.rename(t) for t in self.tick], axis=1).reindex(self.hari).ffill().to_numpy()
-        self.pilih = (T.ent >= mula).to_numpy(); self.T = T[self.pilih].reset_index(drop=True)
+        self.pilih = ((T.ent >= mula) & ~T.ticker.isin(BERMASALAH)).to_numpy(); self.T = T[self.pilih].reset_index(drop=True)
         self.tk = self.T.ticker.map(tid).to_numpy(); self.e_open = self.T.buka.to_numpy()
         self.ent_i = self.hari.get_indexer(self.T.ent)
         cap = lambda d: np.minimum(self.hari.searchsorted(pd.DatetimeIndex(d)), len(self.hari) - 1)
@@ -213,7 +214,7 @@ def cmd_tahan(a):
     """Ketahanan bias set 431 (senarai hari ini = pemenang diketahui): buang N saham pulangan tertinggi tempoh kajian
     (dipilih dengan pandang hadapan) dan ulang; tumpuan untung 5 saham teratas."""
     T = pd.read_pickle(f'{OUT}/calon.pkl'); fr, _ = muat(); P = Pasar(T, fr)
-    jum = pd.Series({t: g.close.iloc[-1] / g.close[g.index >= MULA].iloc[0] - 1 for t, g in fr.items() if (g.index >= MULA).any()})
+    jum = pd.Series({t: g.close.iloc[-1] / g.close[g.index >= MULA].iloc[0] - 1 for t, g in fr.items() if (g.index >= MULA).any() and t not in BERMASALAH})
     atas = list(jum.sort_values(ascending=False).index)
     print('20 saham pulangan tertinggi:', ', '.join(f'{t} {100 * jum[t]:.0f}%' for t in atas[:20]), flush=True)
     pilih = ['RS pasaran', 'Volatiliti tinggi (ATR%)', 'Momentum 6 bulan', 'Industri v2', 'Kaedah walk-forward 12 bulan',
