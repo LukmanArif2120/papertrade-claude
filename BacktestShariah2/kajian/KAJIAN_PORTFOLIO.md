@@ -99,6 +99,15 @@ teratas menyumbang 37–89% untung bersih dalam kebanyakan larian (RS L2 66% tan
   tiada bias kemandirian. Rekod dua portfolio maya 10 slot: RS + Chandelier, dan rawak sebagai kawalan. Nilai selepas
   sekurang-kurangnya 6–12 bulan.
 
+## Jejak hadapan (dilaksanakan 19 Okt 2026, keputusan pengguna)
+`standard/portfolio_slot.py` (ujian `ujian/test_portfolio_slot.py`), dijalankan oleh `lejar.yml` setiap malam selepas Lejar Penuh.
+Ia membina semula dua portfolio maya daripada posisi lejar, iaitu isyarat 100% semua kaedah atas seluruh alam Shariah ≥ USD10:
+- RS_10: slot kosong diisi dengan RS pasaran tertinggi (`data/rs/rs_pasaran.csv`, tarikh isyarat).
+- RAWAK_10: susunan rawak tetap (benih = tarikh beli), sebagai kawalan.
+Peraturan sama dengan kajian: 10% ekuiti, satu posisi setiap saham, keluar lorong 2, kos 0.1%. Mula 16 Okt 2026 (sesi beli
+pertama lejar). Hasil dalam `BacktestShariah2/portfolio_slot/`: `RINGKASAN.md`, `<portfolio>_posisi.csv`, `<portfolio>_ekuiti.csv`
+(lajur `spy` = SPY dinormalkan pada buka hari pertama).
+
 ## Batasan
 - Bias kemandirian set 431: ujian buang pemenang hanya mengurangkannya, tidak menghapuskannya.
 - Kaedah sendiri dibina dan ditapis dengan melihat data 2019–2026 (dalam sampel).

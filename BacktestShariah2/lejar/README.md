@@ -23,3 +23,8 @@ dan tiga rutin Claude berjalan seperti biasa (selari); keputusan peralihan dibua
 
 `untung_pct` = harga keluar / harga beli − 1 (seperti Papertrade C); `pulangan` = pulangan bersih kos enjin (0.1% setiap belah); `hari` = bar dari isyarat hingga keluar (enjin `days`).
 Arahan: `python3 BacktestShariah2/standard/lejar.py stor | jalan | semak | ringkas`.
+
+## Portfolio maya 10 slot (sejak 19 Okt 2026)
+Selepas `ringkas`/`banding`, `lejar.yml` menjalankan `standard/portfolio_slot.py`, yang membina semula dua portfolio maya 10 slot
+daripada posisi lejar (`BacktestShariah2/portfolio_slot/`): RS_10 (slot kosong diisi dengan RS pasaran tertinggi pada tarikh
+isyarat) dan RAWAK_10 (kawalan). Keluar = lorong 2. Rekod sahaja; kajian `kajian/KAJIAN_PORTFOLIO.md`.
