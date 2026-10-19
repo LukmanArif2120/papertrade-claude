@@ -264,7 +264,6 @@ td .vv{white-space:normal}
       <button role="tab" data-tab="ptc" aria-selected="false">Papertrade C</button>
       <button role="tab" data-tab="prestasi" aria-selected="false">Prestasi</button>
       <button role="tab" data-tab="kaedah" aria-selected="false">Kaedah</button>
-      <button role="tab" data-tab="autotune" aria-selected="false">AUTOTUNE</button>
     </nav>
     <div class="subbar" id="subBar">
       <div class="seg" role="tablist" id="subSeg" aria-label="Sub-tab"></div>
@@ -275,7 +274,9 @@ td .vv{white-space:normal}
     </div>
   </header>
 
-  <section class="view" id="v-kedudukan"></section>
+  <section class="view" id="v-cerita"></section>
+  <section class="view" id="v-kedudukan" hidden></section>
+  <section class="view" id="v-kdband" hidden></section>
   <section class="view" id="v-ringkasan" hidden></section>
   <section class="view" id="v-papan" hidden></section>
   <section class="view" id="v-banding" hidden></section>
@@ -302,14 +303,15 @@ const KCLS={'GUNA':'k-GUNA','UJI KERTAS':'k-UJI','SIMPAN':'k-SIMPAN','DITOLAK':'
 const KVAR={'GUNA':'--guna','UJI KERTAS':'--uji','SIMPAN':'--simpan','DITOLAK':'--tolak'};
 const CMPCOL=['--accent','--uji','--violet'];
 const HARI=['5','10','15','20','30','40','60'];
-const MAIN=['backtest','sektor','watch','ptm','ptc','prestasi','kaedah','autotune'];
-const SUBS={backtest:[['kedudukan','Kedudukan 431 · 2000'],['ringkasan','Ringkasan'],['papan','Papan Kedudukan'],['banding','Banding']],prestasi:[['m','Papertrade M'],['c','Papertrade C'],['gab','Combine']]};
-const S={set:'431',tab:'backtest',sub:{backtest:'kedudukan',prestasi:'m'},docs:{},meta:null,live:false,
+const MAIN=['backtest','sektor','watch','ptm','ptc','prestasi','kaedah'];
+const SETSEG=[...SETS,'2000'];
+const SUBS={backtest:[['ringkasan','Ringkasan'],['kedudukan','Kedudukan'],['banding','431 vs 2000'],['butiran','Butiran']],prestasi:[['m','Papertrade M'],['c','Papertrade C'],['gab','Combine']]};
+const S={set:'431',tab:'backtest',sub:{backtest:'ringkasan',prestasi:'m'},docs:{},meta:null,live:false,
   f:{jenis:'semua',kep:new Set(),q:'',best:true,gaya:false,shown:40},cmp:[],cmpTouched:false,
-  ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,beli:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:60},kat:null,kf:{q:''},at:{},af:{lbl:'',q:'',eq:'oos',v:'sar',lane:''},kd:{v:'431',q:'',spy:false}};
-try{const kv=localStorage.getItem('pbs2_kd');if(['431','2000','banding'].includes(kv))S.kd.v=kv;const t=localStorage.getItem('pbs2_tab');if(MAIN.includes(t))S.tab=t;const s=localStorage.getItem('pbs_set');if(SETS.includes(s))S.set=s;
+  ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,beli:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:60},kat:null,kf:{q:''},at:{},af:{lbl:'',q:'',eq:'oos',v:'sar',lane:''},kd:{q:'',spy:false},b4:'papan'};
+try{const t=localStorage.getItem('pbs2_tab');if(MAIN.includes(t))S.tab=t;const s=localStorage.getItem('pbs_set');if(SETSEG.includes(s))S.set=s;const b4=localStorage.getItem('pbs2_b4');if(['papan','ringkasan','banding'].includes(b4))S.b4=b4;
   const sb=JSON.parse(localStorage.getItem('pbs2_sub')||'null');if(sb){if(SUBS.backtest.some(x=>x[0]===sb.backtest))S.sub.backtest=sb.backtest;if(SUBS.prestasi.some(x=>x[0]===sb.prestasi))S.sub.prestasi=sb.prestasi;}}catch(e){}
-{const h=(location.hash||'').slice(1);const map={kedudukan:['backtest','kedudukan'],ringkasan:['backtest','ringkasan'],papan:['backtest','papan'],banding:['backtest','banding'],sektor:['sektor'],watchlist:['watch'],ptm:['ptm'],ptc:['ptc'],prestasi:['prestasi'],kaedah:['kaedah'],autotune:['autotune']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];}}
+{const h=(location.hash||'').slice(1);const map={ringkasan:['backtest','ringkasan'],kedudukan:['backtest','kedudukan'],banding:['backtest','banding'],butiran:['backtest','butiran'],papan:['backtest','butiran'],sektor:['sektor'],watchlist:['watch'],ptm:['ptm'],ptc:['ptc'],prestasi:['prestasi'],kaedah:['kaedah'],autotune:['backtest','butiran']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];if(h==='autotune')S.set='2000';if(h==='papan'&&S.set==='2000')S.set='431';}}
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -357,19 +359,19 @@ document.addEventListener('click',e=>{const th=e.target.closest&&e.target.closes
   if(st.k===k)st.dir*=-1;else{st.k=k;st.dir=th.dataset.d==='asc'?1:-1;}(ST_R[id]||renderAll)();});
 
 /* ================= navigasi ================= */
-function viewId(){if(S.tab==='backtest')return 'v-'+S.sub.backtest;if(S.tab==='prestasi')return 'v-pr-'+S.sub.prestasi;return 'v-'+S.tab;}
+function viewId(){if(S.tab==='backtest'){const b=S.sub.backtest;return b==='ringkasan'?'v-cerita':b==='banding'?'v-kdband':b==='butiran'?(S.set==='2000'?'v-autotune':'v-'+S.b4):'v-kedudukan';}if(S.tab==='prestasi')return 'v-pr-'+S.sub.prestasi;return 'v-'+S.tab;}
 function renderNav(){
   document.querySelectorAll('#mainTabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===S.tab));
   const subs=SUBS[S.tab];const seg=$('#subSeg');
   seg.hidden=!subs;seg.innerHTML=subs?subs.map(([v,t])=>`<button type="button" role="tab" data-sub="${v}" aria-selected="${S.sub[S.tab]===v}">${t}</button>`).join(''):'';
-  const showSet=S.tab==='backtest'&&S.sub.backtest!=='kedudukan';$('#setSeg').hidden=!showSet;$('#setLbl').hidden=!showSet;
-  $('#setSeg').innerHTML=SETS.map(s=>`<button type="button" data-set="${s}" aria-pressed="${s===S.set}">${s}</button>`).join('');
+  const showSet=S.tab==='backtest'&&['kedudukan','butiran'].includes(S.sub.backtest);$('#setSeg').hidden=!showSet;$('#setLbl').hidden=!showSet;
+  $('#setSeg').innerHTML=SETSEG.map(s=>`<button type="button" data-set="${s}" aria-pressed="${s===S.set}"${s==='2000'?' style="margin-left:6px;box-shadow:inset 1px 0 0 var(--line-2)"':''}>${s==='2000'?'2000 AS':s}</button>`).join('');
   const vid=viewId();document.querySelectorAll('section.view').forEach(v=>v.hidden=v.id!==vid);
 }
-function save(){try{localStorage.setItem('pbs2_tab',S.tab);localStorage.setItem('pbs2_sub',JSON.stringify(S.sub));localStorage.setItem('pbs_set',S.set);}catch(e){}}
+function save(){try{localStorage.setItem('pbs2_tab',S.tab);localStorage.setItem('pbs2_sub',JSON.stringify(S.sub));localStorage.setItem('pbs_set',S.set);localStorage.setItem('pbs2_b4',S.b4);}catch(e){}}
 $('#mainTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.tab=b.dataset.tab;save();renderNav();renderAll();window.scrollTo({top:0});};
 $('#subSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.sub[S.tab]=b.dataset.sub;save();renderNav();renderAll();};
-$('#setSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.set=b.dataset.set;S.f.shown=40;save();renderNav();renderAll();};
+$('#setSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.set=b.dataset.set;S.f.shown=40;S.kd.q='';save();renderNav();renderAll();};
 function setLive(on,txt){S.live=on;$('#dot').classList.toggle('on',on);$('#liveTxt').textContent=txt;}
 /* Kemas kini terakhir (harian/status): masa data dashboard terakhir ditolak (dikemaskini; sebelum peralihan:
    kemaskini_pagi rutin 6:02) dan tarikh tutup sesi AS yang dipakai. Tolakan harian Isn–Sab selepas belian 9:35 NY;
@@ -398,8 +400,8 @@ function kdPeringkat(rows){
   const by={};rows.forEach(r=>{const b=by[r.id];if(!b||(r.skor??-1)>(b.skor??-1))by[r.id]=r;});
   const out=Object.values(by).sort((a,b)=>(b.skor??-1)-(a.skor??-1));out.forEach((r,i)=>r.rk=i+1);return out;
 }
-const kd431=memo((docs,meta)=>{const spy=bench('431').spy;
-  return kdPeringkat(rowsForSet('431').map(r=>({id:r.id,nama:r.kaedah,var:r.varian,dk:key(r),cagr:r.cagr,mdd:r.mdd,mar:r.mar??kdMar(r.cagr,r.mdd),
+const kdSetM=memo((docs,meta,set)=>{const spy=bench(set).spy;
+  return kdPeringkat(rowsForSet(set).map(r=>({id:r.id,nama:r.kaedah,var:r.varian,dk:key(r),cagr:r.cagr,mdd:r.mdd,mar:r.mar??kdMar(r.cagr,r.mdd),
     win:r.win,pf:r.pf,avg:r.avg,days:r.days,n:r.n,spy,kep:r.keputusan})));});
 const kd2000=memo((at,docs)=>{const D=at||{},sr=D.a02_saringan;if(!sr)return null;const nm={};rowsForSet('431').forEach(r=>{nm[r.id]=nm[r.id]||r.kaedah;});
   return kdPeringkat((sr.baris||[]).map(r=>{const c=atMin(r.cA,r.cB),m=atMin(r.mA,r.mB);
@@ -434,59 +436,88 @@ function kdCols(set){
     {k:'days',t:'Hari pegang',tip:'days',f:r=>fx(r.days,0)},
     {k:'n',t:'Dagangan',tip:'n',f:r=>fx(r.n,0)}];
 }
+const kdRows=set=>set==='2000'?kd2000(S.at,S.docs):kdSetM(S.docs,S.meta,set);
+const UJI={'431':'Ujian 1 · 431 saham Shariah, 1 Nov 2019 – 2 Okt 2026, enjin v1.2','2000':'Ujian 2 · 2000 saham AS (tanpa penapis Shariah), 2013–2018, parameter asal kaedah'};
+const ujiKet=set=>set==='2000'?UJI['2000']:set==='431'?UJI['431']:`Ujian 1 · subset ${set} (≈108 daripada 431 saham Shariah), 2019–2026`;
+/* padanan kaedah yang ada dalam kedua-dua ujian (431 dan 2000) */
+const kdBandM=memo((r4,r2)=>{if(!r4||!r4.length||!r2)return null;const m2=new Map(r2.map(r=>[r.id,r])),N4=r4.length,N2=r2.length,top=x=>x!=null&&x<=20;
+  return r4.filter(r=>m2.has(r.id)).map(a=>{const b=m2.get(a.id),st=top(a.rk)&&top(b.rk)?'Kuat dua-dua':top(a.rk)?'Kuat 431 sahaja':top(b.rk)?'Kuat 2000 sahaja':'–';
+    return {id:a.id,nama:a.nama||b.nama,dk:a.dk,kep:a.kep,var4:a.var,var2:b.var,r4:a.rk,r2:b.rk,pr:(a.rk/N4+b.rk/N2)/2,s4:a.skor,s2:b.skor,c4:a.cagr,c2:b.cagr,sp4:a.spy,sp2:b.spy,w4:a.win,w2:b.win,m4:a.mdd,m2:b.mdd,st};})
+    .sort((a,b)=>a.pr-b.pr);});
+const kdBand=()=>kdBandM(kdRows('431'),kdRows('2000'));
+const ST2={'Kuat dua-dua':'k-GUNA','Kuat 431 sahaja':'k-UJI','Kuat 2000 sahaja':'k-UJI'};
+const dua=(a,b,f)=>`<span class="nw">${f(a)} <span class="mut">|</span> ${f(b)}</span>`;
+const kdBandCols=()=>[
+  {k:'id',t:'Kaedah',tip:'kaedah',l:1,frz:1,v:r=>+String(r.id).replace(/\D/g,''),f:r=>`<b class="nw">${esc(r.id)}</b> ${esc(r.nama)}<span class="vv">${esc(r.var4)} · lorong ${esc(r.var2)}</span>`,c:()=>'name'},
+  {k:'st',t:'Status',tip:'std_banding',l:1,v:r=>['Kuat dua-dua','Kuat 431 sahaja','Kuat 2000 sahaja','–'].indexOf(r.st),f:r=>(r.st==='–'?'<span class="mut">–</span>':`<span class="pill ${ST2[r.st]}">${esc(r.st)}</span>`)+`<span class="vv">gate 431: ${esc(r.kep||'–')}</span>`},
+  {k:'pr',t:'Purata rank',tip:'std_banding',v:r=>r.pr,f:r=>`<b>${fx(r.pr*100,0)}%</b><span class="vv">teratas</span>`},
+  {k:'r4',t:'Rank 431 | 2000',tip:'std_skor',f:r=>dua(r.r4,r.r2,kdRk)},
+  {k:'s4',t:'Skor 431 | 2000',tip:'std_skor',v:r=>avgOf([r.s4,r.s2]),f:r=>dua(r.s4,r.s2,x=>fx(x,0))},
+  {k:'c4',t:'CAGR 431 | 2000',tip:'cagr',v:r=>atMin(r.c4,r.c2),f:r=>`<span class="nw">${atLbz(r.c4,r.sp4)} <span class="mut">|</span> ${atLbz(r.c2,r.sp2)}</span>`},
+  {k:'w4',t:'Menang 431 | 2000',tip:'win',v:r=>atMin(r.w4,r.w2),f:r=>dua(r.w4,r.w2,x=>pct(x,0))},
+  {k:'m4',t:'MDD 431 | 2000',tip:'mdd',v:r=>atMin(r.m4,r.m2),f:r=>dua(r.m4,r.m2,atMdd)}];
+const kdCara=`<div class="strip"><b class="t">Cara baca</b><span>Rank ikut <b>Skor</b> (0–100) dalam ujian sendiri: purata pangkat CAGR, MAR, kadar menang dan PF. Skor 80 = lebih baik daripada kira-kira 80% kaedah lain dalam ujian itu. Banding rank antara ujian, bukan angka mentah: tempoh, saham dan penapis Shariah berbeza.</span></div>`;
+const kdTunggu=t=>`<div class="panel empty">${S.live?t:'Memuatkan…'}</div>`;
+/* Ringkasan: cerita dua ujian */
+function renderCerita(){
+  const el=$('#v-cerita'),r4=kdRows('431'),r2=kdRows('2000'),bd=kdBand();
+  if(!r4.length&&!r2){el.innerHTML=kdTunggu('Belum ada keputusan backtest dalam pangkalan data.');return;}
+  const kuat=(bd||[]).filter(r=>r.st==='Kuat dua-dua');
+  const kad=(n,set,rows)=>{if(!rows||!rows.length)return `<div class="panel"><div class="panel-h"><h2>${n}</h2></div>${kdTunggu('Belum ada data ujian ini.')}</div>`;
+    const atasi=rows.filter(r=>r.status==='ATASI SPY').length;
+    return `<div class="panel"><div class="panel-h"><h2>${n}</h2><span class="sub">${esc(ujiKet(set))}</span></div>
+      <div class="kpis" style="margin-bottom:12px"><div class="kpi"><div class="lbl">Kaedah diuji</div><div class="v">${rows.length}</div><div class="s">satu baris setiap kaedah</div></div>
+      <div class="kpi"><div class="lbl" data-tip="std_status">Atasi SPY</div><div class="v ${atasi?'pos':'neg'}">${atasi}</div><div class="s">SPY ${pct(rows[0].spy)} setahun</div></div></div>
+      <p class="sub" style="margin:0 0 6px">5 teratas ujian ini</p>
+      ${sortTable({id:'cr_'+set,rows:rows.slice(0,5),attr:set==='431'?r=>`data-dk="${esc(r.dk)}" tabindex="0"`:null,rcls:set==='431'?()=>'click':null,cols:kdCols(set).filter(c=>['rk','id','skor','cagr','mdd','win'].includes(c.k)).map(c=>Object.assign({},c,{ns:1}))})}</div>`;};
+  el.innerHTML=`
+  <p class="headline">Setiap kaedah diuji <b>dua kali</b>. <b>Ujian 1</b>: 431 saham Shariah, 2019–2026. <b>Ujian 2</b>: 2000 saham AS, 2013–2018 (tempoh lain, saham lain). Kaedah yang kuat dalam <b>kedua-dua</b> ujian paling boleh dipercayai, kerana ia bukan bernasib baik dalam satu set data sahaja.</p>
+  <div class="panel"><div class="panel-h"><h2>Calon terbaik · kuat dalam kedua-dua ujian</h2><span class="sub">${bd?`${kuat.length} kaedah dalam 20 teratas Ujian 1 dan Ujian 2 · ketik baris untuk butiran`:'Menunggu data kedua-dua ujian'}</span></div>
+    ${bd?(kuat.length?sortTable({id:'cr_kuat',rows:kuat,def:{k:'pr',dir:1},attr:r=>`data-dk="${esc(r.dk)}" tabindex="0"`,rcls:()=>'click',cols:kdBandCols().filter(c=>c.k!=='s4')}):'<p class="empty">Tiada kaedah dalam 20 teratas kedua-dua ujian.</p>'):kdTunggu('Data Ujian 2 belum ada.')}
+    <p class="sub" style="margin-top:8px">Lencana <b>gate 431</b> ialah keputusan enjin v1.2 (DITOLAK jika gagal mana-mana gate, contohnya MDD lebih teruk daripada −45%). Semak MDD dan gate sebelum memilih.</p>
+  </div>
+  <div class="grid2 eq">${kad('Ujian 1 · 431 Shariah','431',r4)}${kad('Ujian 2 · 2000 AS','2000',r2)}</div>
+  ${kdCara}
+  <div class="strip next"><b class="t">Seterusnya</b><span><b>Kedudukan</b>: senarai penuh setiap ujian (pilih set 431, S1–S4 atau 2000 AS di atas). <b>431 vs 2000</b>: semua kaedah sebelah-menyebelah. <b>Butiran</b>: gate, carta dan banding varian (431) atau parameter ditala (2000).</span></div>
+  <div class="foot"><span>Sumber: registry set 431 · autotune/a02_saringan</span><span>Tiada order · tiada wang sebenar</span></div>`;
+}
+/* Kedudukan: satu jadual standard, set ikut pemilih di atas (431, S1–S4, 2000) */
 function renderKedudukan(){
-  const el=$('#v-kedudukan'),kd=S.kd,r431=kd431(S.docs,S.meta),r2k=kd2000(S.at,S.docs);
-  const seg=`<div class="filters"><span class="lbl">Set</span><div class="seg" id="kdSet" role="group" aria-label="Set kedudukan">${[['431','431 Shariah'],['2000','2000 AS'],['banding','Banding 431 vs 2000']].map(([v,x])=>`<button type="button" data-v="${v}" aria-pressed="${kd.v===v}">${x}</button>`).join('')}</div>
-    ${kd.v==='banding'?'':`<input type="search" id="kdQ" placeholder="Cari ID atau nama kaedah" value="${esc(kd.q)}" aria-label="Cari kaedah"><button type="button" class="chip" id="kdSpy" aria-pressed="${kd.spy}">Atasi SPY sahaja</button>`}</div>`;
-  const ingat=`<div class="strip"><b class="t">Cara baca</b><span>Rank ikut <b>Skor</b> (0–100) dalam set sendiri: purata pangkat CAGR, MAR, kadar menang dan PF. Skor 80 = lebih baik daripada kira-kira 80% kaedah lain dalam set itu. Banding rank antara set, bukan angka mentah: tempoh, universe dan penapis Shariah berbeza.</span></div>`;
-  let body='';
-  if(kd.v==='banding'){
-    if(!r431.length||!r2k){el.innerHTML=seg+`<div class="panel empty">${S.live?'Perlu data set 431 dan saringan 2000.':'Memuatkan…'}</div>`;bindKd();return;}
-    const m2=new Map(r2k.map(r=>[r.id,r])),N4=r431.length,N2=r2k.length,top=x=>x!=null&&x<=20;
-    const rows=r431.filter(r=>m2.has(r.id)).map(a=>{const b=m2.get(a.id),s=top(a.rk)&&top(b.rk)?'Kuat dua-dua':top(a.rk)?'Kuat 431 sahaja':top(b.rk)?'Kuat 2000 sahaja':'–';
-      return {id:a.id,nama:a.nama||b.nama,dk:a.dk,var4:a.var,var2:b.var,r4:a.rk,r2:b.rk,pr:(a.rk/N4+b.rk/N2)/2,s4:a.skor,s2:b.skor,c4:a.cagr,c2:b.cagr,sp4:a.spy,sp2:b.spy,w4:a.win,w2:b.win,m4:a.mdd,m2:b.mdd,st:s};});
-    const kuat=rows.filter(r=>r.st==='Kuat dua-dua').sort((a,b)=>a.pr-b.pr);
-    const ST2={'Kuat dua-dua':'k-GUNA','Kuat 431 sahaja':'k-UJI','Kuat 2000 sahaja':'k-UJI'};
-    const dua=(a,b,f)=>`<span class="nw">${f(a)} <span class="mut">|</span> ${f(b)}</span>`;
-    body=`<p class="headline"><b>${rows.length}</b> kaedah diuji dalam kedua-dua set. <b>${kuat.length}</b> berada dalam 20 teratas di <b>kedua-dua</b> set${kuat.length?': '+kuat.slice(0,5).map(r=>'<b>'+esc(r.id)+'</b>').join(', '):''}. Kaedah yang kuat di dua universe berbeza lebih dipercayai.</p>
-    <div class="kpis">
-      <div class="kpi"><div class="lbl" data-tip="std_banding">Kuat dua-dua</div><div class="v pos">${kuat.length}</div><div class="s">20 teratas dalam 431 dan 2000</div></div>
-      <div class="kpi"><div class="lbl" data-tip="std_banding">Paling konsisten</div><div class="v" style="color:var(--accent)">${rows.length?esc([...rows].sort((a,b)=>a.pr-b.pr)[0].id):'–'}</div><div class="s">${rows.length?(r=>esc(r.nama)+' · #'+r.r4+' (431) · #'+r.r2+' (2000)')([...rows].sort((a,b)=>a.pr-b.pr)[0]):'–'}</div></div>
-      <div class="kpi"><div class="lbl">Atasi SPY dua-dua</div><div class="v">${rows.filter(r=>r.c4>r.sp4&&r.c2>r.sp2).length}</div><div class="s">SPY 431 ${pct(r431[0]&&r431[0].spy)} · SPY 2000 ${pct(r2k[0]&&r2k[0].spy)}</div></div>
-      <div class="kpi"><div class="lbl">Kaedah sepadan</div><div class="v">${rows.length}</div><div class="s">${N4} kaedah dalam 431 · ${N2} dalam 2000</div></div>
-    </div>
-    ${ingat}
-    <div class="panel"><div class="panel-h"><h2>431 lawan 2000 · ikut purata rank</h2><span class="sub">Setiap sel: 431 | 2000 · ketik baris untuk butiran 431</span></div>
-    ${sortTable({id:'kd_banding',rows,def:{k:'pr',dir:1},attr:r=>`data-dk="${esc(r.dk)}" tabindex="0"`,rcls:()=>'click',empty:'Tiada kaedah sepadan.',cols:[
-      {k:'id',t:'Kaedah',tip:'kaedah',l:1,frz:1,v:r=>+String(r.id).replace(/\D/g,''),f:r=>`<b class="nw">${esc(r.id)}</b> ${esc(r.nama)}<span class="vv">${esc(r.var4)} · lorong ${esc(r.var2)}</span>`,c:()=>'name'},
-      {k:'st',t:'Status',tip:'std_banding',l:1,v:r=>['Kuat dua-dua','Kuat 431 sahaja','Kuat 2000 sahaja','–'].indexOf(r.st),f:r=>r.st==='–'?'<span class="mut">–</span>':`<span class="pill ${ST2[r.st]}">${esc(r.st)}</span>`},
-      {k:'pr',t:'Purata rank',tip:'std_banding',v:r=>r.pr,f:r=>`<b>${fx(r.pr*100,0)}%</b><span class="vv">teratas</span>`},
-      {k:'r4',t:'Rank 431 | 2000',tip:'std_skor',f:r=>dua(r.r4,r.r2,kdRk)},
-      {k:'s4',t:'Skor 431 | 2000',tip:'std_skor',v:r=>avgOf([r.s4,r.s2]),f:r=>dua(r.s4,r.s2,x=>fx(x,0))},
-      {k:'c4',t:'CAGR 431 | 2000',tip:'cagr',v:r=>atMin(r.c4,r.c2),f:r=>`<span class="nw">${atLbz(r.c4,r.sp4)} <span class="mut">|</span> ${atLbz(r.c2,r.sp2)}</span>`},
-      {k:'w4',t:'Menang 431 | 2000',tip:'win',v:r=>atMin(r.w4,r.w2),f:r=>dua(r.w4,r.w2,x=>pct(x,0))},
-      {k:'m4',t:'MDD 431 | 2000',tip:'mdd',v:r=>atMin(r.m4,r.m2),f:r=>dua(r.m4,r.m2,atMdd)}]})}
-    </div>`;
-  }else{
-    const is4=kd.v==='431',all=is4?r431:r2k;
-    if(!all||!all.length){el.innerHTML=seg+(is4?emptyState():`<div class="panel empty">${S.live?'Belum ada data saringan 2000 dalam pangkalan data.':'Memuatkan AUTOTUNE…'}</div>`);bindKd();return;}
-    let rows=all;if(kd.spy)rows=rows.filter(r=>r.status==='ATASI SPY');
-    if(kd.q){const q=kd.q.toLowerCase();rows=rows.filter(r=>(r.id+' '+r.nama).toLowerCase().includes(q));}
-    const ket=is4?`Set <b>431 saham Shariah</b>, 1 Nov 2019 – 2 Okt 2026, enjin v1.2. Satu baris setiap kaedah (varian dengan Skor tertinggi). Ketik baris untuk butiran.`
-      :`Universe <b>2000 saham AS</b> (tanpa penapis Shariah), 2013–2018, PARAM asal (saringan AUTOTUNE). Satu baris setiap kaedah (lorong dengan Skor tertinggi). Nilai utama = kumpulan A/B yang lebih lemah; PF dan untung/dagangan tiada dalam saringan.`;
-    body=`<p class="headline">${ket}</p>${kdKpi(all,is4?'431':'2000')}${ingat}
-    <div class="panel"><div class="panel-h"><h2>Kedudukan · ${is4?'431 Shariah':'2000 AS'}</h2><span class="sub">${rows.length} daripada ${all.length} kaedah · ketik tajuk lajur untuk susun</span></div>
-    ${sortTable({id:'kd_'+kd.v,rows,cols:kdCols(kd.v),def:{k:'rk',dir:1},attr:is4?r=>`data-dk="${esc(r.dk)}" tabindex="0"`:null,rcls:is4?()=>'click':null,empty:'Tiada kaedah sepadan.'})}
-    </div>`;
-  }
-  el.innerHTML=seg+body+`<div class="foot"><span>Sumber: registry set 431 · autotune/a02_saringan (${esc((S.at&&S.at.a02_saringan&&S.at.a02_saringan.sumber)||'AUTOTUNE/hasil_a02/saringan.csv')})</span><span>Butiran AUTOTUNE (A01–A03): tab AUTOTUNE</span></div>`;
-  bindKd();
+  const el=$('#v-kedudukan'),kd=S.kd,set=S.set,all=kdRows(set);
+  if(!all||!all.length){el.innerHTML=set==='2000'?kdTunggu('Belum ada data Ujian 2 (2000 saham) dalam pangkalan data.'):emptyState();return;}
+  let rows=all;if(kd.spy)rows=rows.filter(r=>r.status==='ATASI SPY');
+  if(kd.q){const q=kd.q.toLowerCase();rows=rows.filter(r=>(r.id+' '+r.nama).toLowerCase().includes(q));}
+  const is2=set==='2000';
+  el.innerHTML=`<p class="headline"><b>${esc(ujiKet(set))}</b>. Satu baris setiap kaedah (${is2?'lorong':'varian'} dengan Skor tertinggi).${is2?' Nilai utama = kumpulan saham A/B yang lebih lemah; PF dan untung/dagangan tiada dalam ujian ini.':' Ketik baris untuk butiran dan gate.'}</p>
+  ${kdKpi(all,is2?'2000':set)}${kdCara}
+  <div class="panel"><div class="panel-h"><h2>Kedudukan · ${is2?'Ujian 2 · 2000 AS':'Ujian 1 · set '+esc(set)}</h2><span class="sub">${rows.length} daripada ${all.length} kaedah · ketik tajuk lajur untuk susun</span></div>
+    <div class="filters" style="margin-bottom:10px"><input type="search" id="kdQ" placeholder="Cari ID atau nama kaedah" value="${esc(kd.q)}" aria-label="Cari kaedah"><button type="button" class="chip" id="kdSpy" aria-pressed="${kd.spy}">Atasi SPY sahaja</button></div>
+    ${sortTable({id:'kd_'+(is2?'2000':'431'),rows,cols:kdCols(is2?'2000':'431'),def:{k:'rk',dir:1},attr:is2?null:r=>`data-dk="${esc(r.dk)}" tabindex="0"`,rcls:is2?null:()=>'click',empty:'Tiada kaedah sepadan.'})}
+  </div>
+  <div class="foot"><span>Sumber: ${is2?esc((S.at.a02_saringan||{}).sumber||'AUTOTUNE/hasil_a02/saringan.csv'):'registry set '+esc(set)}</span><span>Gate, carta dan parameter ditala: sub-tab Butiran</span></div>`;
+  const q=$('#kdQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{kd.q=q.value.trim();renderAll();const n=$('#kdQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
+  $('#kdSpy').onclick=()=>{kd.spy=!kd.spy;renderAll();};
 }
-function bindKd(){const kd=S.kd;
-  $('#kdSet').onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.v===kd.v)return;kd.v=b.dataset.v;kd.q='';try{localStorage.setItem('pbs2_kd',kd.v);}catch(x){}renderAll();};
-  const q=$('#kdQ');if(q){let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{kd.q=q.value.trim();renderAll();const n=$('#kdQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};}
-  const sp=$('#kdSpy');if(sp)sp.onclick=()=>{kd.spy=!kd.spy;renderAll();};
+/* 431 vs 2000: semua kaedah yang ada dalam kedua-dua ujian */
+function renderKdBand(){
+  const el=$('#v-kdband'),rows=kdBand();
+  if(!rows){el.innerHTML=kdTunggu('Perlu data Ujian 1 (431) dan Ujian 2 (2000).');return;}
+  const kuat=rows.filter(r=>r.st==='Kuat dua-dua'),r4=kdRows('431'),r2=kdRows('2000');
+  el.innerHTML=`<p class="headline"><b>${rows.length}</b> kaedah diuji dalam kedua-dua ujian. <b>${kuat.length}</b> berada dalam 20 teratas di <b>kedua-dua</b>${kuat.length?': '+kuat.slice(0,5).map(r=>'<b>'+esc(r.id)+'</b>').join(', '):''}. Setiap sel menunjukkan Ujian 1 (431) | Ujian 2 (2000).</p>
+  <div class="kpis">
+    <div class="kpi"><div class="lbl" data-tip="std_banding">Kuat dua-dua</div><div class="v pos">${kuat.length}</div><div class="s">20 teratas dalam 431 dan 2000</div></div>
+    <div class="kpi"><div class="lbl" data-tip="std_banding">Paling konsisten</div><div class="v" style="color:var(--accent)">${rows[0]?esc(rows[0].id):'–'}</div><div class="s">${rows[0]?esc(rows[0].nama)+' · #'+rows[0].r4+' (431) · #'+rows[0].r2+' (2000)':'–'}</div></div>
+    <div class="kpi"><div class="lbl">Atasi SPY dua-dua</div><div class="v">${rows.filter(r=>r.c4>r.sp4&&r.c2>r.sp2).length}</div><div class="s">SPY 431 ${pct(r4[0]&&r4[0].spy)} · SPY 2000 ${pct(r2[0]&&r2[0].spy)}</div></div>
+    <div class="kpi"><div class="lbl">Kaedah sepadan</div><div class="v">${rows.length}</div><div class="s">${r4.length} dalam 431 · ${r2.length} dalam 2000</div></div>
+  </div>${kdCara}
+  <div class="panel"><div class="panel-h"><h2>431 lawan 2000 · ikut purata rank</h2><span class="sub">Ketik baris untuk butiran Ujian 1</span></div>
+    ${sortTable({id:'kd_banding',rows,def:{k:'pr',dir:1},attr:r=>`data-dk="${esc(r.dk)}" tabindex="0"`,rcls:()=>'click',empty:'Tiada kaedah sepadan.',cols:kdBandCols()})}</div>`;
 }
+/* Butiran: 431/S1–S4 = papan penuh, carta & gaya, banding varian; 2000 = saringan dan versi tala (dahulu tab AUTOTUNE) */
+const B4=[['papan','Papan penuh (gate)'],['ringkasan','Carta & gaya'],['banding','Banding varian']];
+function butiranSeg(el,opts,cur,id){el.insertAdjacentHTML('afterbegin',`<div class="filters"><span class="lbl">Butiran ${S.set==='2000'?'Ujian 2 · 2000 AS':'Ujian 1 · set '+esc(S.set)}</span><div class="seg bseg" data-id="${id}" style="flex-wrap:wrap" role="group">${opts.map(([v,x])=>`<button type="button" data-v="${v}" aria-pressed="${cur===v}">${x}</button>`).join('')}</div></div>`);}
+const butiran431=fn=>()=>{fn();if(S.sub.backtest!=='butiran')return;const el=document.getElementById(viewId());butiranSeg(el,B4,S.b4,'b4Seg');
+  el.querySelector('.bseg').onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.v===S.b4)return;S.b4=b.dataset.v;save();renderNav();renderAll();};};
 
 /* ================= Backtest · Ringkasan ================= */
 function renderRingkasan(){
@@ -579,7 +610,7 @@ function renderPapan(){
     ...COLS.map(c=>c.k==='cagr'?Object.assign({},c,{c:r=>r.cagr>(b.ew??0)?'pos':''}):c),
     {k:'gate_gagal',t:'Gate gagal',tip:'gate',l:1,f:r=>`<span class="mut">${esc(r.gate_gagal||'–')}</span>`}];
   el.innerHTML=`
-  <div><h3>Papan kedudukan · set ${S.set}</h3><p class="sub">Ketik tajuk lajur untuk susun naik/turun. Ketik baris untuk butiran, gate dan profil pegangan. Rujukan: beli semua ${pct(b.ew)}, SPY ${pct(b.spy)}, QQQ ${pct(b.qqq)}.</p></div>
+  <div><h3>Papan penuh · set ${S.set}</h3><p class="sub">Ketik tajuk lajur untuk susun naik/turun. Ketik baris untuk butiran, gate dan profil pegangan. Rujukan: beli semua ${pct(b.ew)}, SPY ${pct(b.spy)}, QQQ ${pct(b.qqq)}.</p></div>
   <div class="filters">
     <div class="seg" id="jenisSeg">${[['semua','Semua'],['M','Kaedah M'],['I','Indikator I']].map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${f.jenis===v}">${t}</button>`).join('')}</div>
     <button type="button" class="chip" id="bestChip" aria-pressed="${f.best}">Varian terbaik sahaja</button>
@@ -629,7 +660,7 @@ function openDetail(k){
   const close=()=>{sh.hidden=true;$('#scrim').hidden=true;};
   $('#shClose').onclick=close;$('#shClose2').onclick=close;$('#scrim').onclick=close;
   document.onkeydown=e=>{if(e.key==='Escape'&&!sh.hidden)close();};
-  $('#shCmp').onclick=()=>{S.cmpTouched=true;if(inCmp)S.cmp=S.cmp.filter(x=>x!==k);else{if(S.cmp.length>=3)S.cmp.shift();S.cmp.push(k);}toast(inCmp?'Dibuang daripada banding':'Ditambah ke banding ('+S.cmp.length+'/3)');close();if(S.tab==='backtest'&&S.sub.backtest==='banding')renderAll();};
+  $('#shCmp').onclick=()=>{S.cmpTouched=true;if(inCmp)S.cmp=S.cmp.filter(x=>x!==k);else{if(S.cmp.length>=3)S.cmp.shift();S.cmp.push(k);}toast(inCmp?'Dibuang daripada banding':'Ditambah ke banding ('+S.cmp.length+'/3)');close();if(viewId()==='v-banding')renderAll();};
   applyTips(sh);$('#shClose').focus();
 }
 function drawPegang(box,series){
@@ -1372,7 +1403,7 @@ function renderAt01(){
 }
 
 /* Versi A02/A03: dokumen berawalan a02_/a03_ (jana_db.py); A01 kekal di renderAt01. Pemilih versi di atas tab. */
-const AT_V=[['sar','Saringan 134 kaedah'],['a03','A03 · kadar menang'],['a02','A02 · ditala'],['a01','A01']];
+const AT_V=[['sar','Semua lorong (A/B)'],['a02','Parameter ditala (A02)'],['a03','Fokus kadar menang (A03)'],['a01','Walk-forward (A01)']];
 const AT_VL={a02:['LULUS','CALON','TIDAK LULUS','PANDANG HADAPAN'],a03:['MENANG','HAMPIR','TIDAK','PANDANG HADAPAN']};
 const AT_VH={
   a02:n=>`A02 menala <b>${n}</b> kaedah-lorong (20 teratas setiap lorong <b>had60</b>/<b>asal</b> daripada saringan 134 kaedah) atas universe titik masa yang dibaiki. Objektif: pulangan berlebihan atas SPY. OOS bersih 2013–2018 (saham kumpulan A dan B), pengesahan 2019 – kini (A+B).`,
@@ -1456,8 +1487,8 @@ function renderAutotune(){
   const af=S.af;if(!AT_V.some(x=>x[0]===af.v))af.v='sar';
   if(af.v==='a01')renderAt01();else if(af.v==='sar')renderAtSar();else renderAtV(af.v);
   const el=$('#v-autotune');
-  el.insertAdjacentHTML('afterbegin',`<div class="filters"><span class="lbl">Versi</span><div class="seg" id="atVer" style="flex-wrap:wrap" role="group" aria-label="Versi AUTOTUNE">${AT_V.map(([v,x])=>`<button type="button" data-v="${v}" aria-pressed="${af.v===v}">${x}</button>`).join('')}</div></div>`);
-  $('#atVer').onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.v===af.v)return;af.v=b.dataset.v;af.lbl='';af.q='';af.lane='';renderAll();};
+  butiranSeg(el,AT_V,af.v,'atVer');
+  el.querySelector('.bseg').onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.v===af.v)return;af.v=b.dataset.v;af.lbl='';af.q='';af.lane='';renderAll();};
 }
 
 function emptyState(){return `<div class="panel empty">${S.live?'Belum ada keputusan backtest dalam pangkalan data.':'Memuatkan keputusan backtest…'}</div>`;}
@@ -1469,7 +1500,7 @@ function topScrolls(root){
     w.querySelectorAll('tbody tr').forEach(tr=>{let c=0;[...tr.children].forEach(td=>{td.setAttribute('data-label',hs[c]||'');c+=td.colSpan||1;});});
   });
 }
-const R={kedudukan:renderKedudukan,ringkasan:renderRingkasan,papan:renderPapan,banding:renderBanding,sektor:renderSektor,watch:renderWatch,ptm:renderPtm,ptc:renderPtc,'pr-m':()=>renderPrestasi('m'),'pr-c':()=>renderPrestasi('c'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune};
+const R={cerita:renderCerita,kedudukan:renderKedudukan,kdband:renderKdBand,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),sektor:renderSektor,watch:renderWatch,ptm:renderPtm,ptc:renderPtc,'pr-m':()=>renderPrestasi('m'),'pr-c':()=>renderPrestasi('c'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune};
 function renderAll(){const vid=viewId();const el=document.getElementById(vid);
   const sx={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;});
   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
