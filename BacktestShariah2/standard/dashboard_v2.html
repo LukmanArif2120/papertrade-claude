@@ -48,6 +48,8 @@ td.grd{min-width:0}.tablewrap.tw-grd td.wrap{min-width:150px}td.grd .vv{font-siz
 .grc>.gr{flex:none;display:flex;align-items:center;justify-content:center;min-width:2em;height:2.1em;margin:0;padding:0 6px;font-size:1.05rem;border-radius:6px}
 .lrk{flex:none;display:flex;flex-direction:column;align-items:center;gap:2px}.lrb{flex:none;display:flex;align-items:center;justify-content:center;height:1.8em;padding:0 7px;border-radius:6px;font-weight:700;font-size:.72rem;letter-spacing:.02em}.lrp{font-size:1.05rem;line-height:1.2;white-space:nowrap}.lrk b.lrp.pos{color:var(--pos)}.lrk b.lrp.neg{color:var(--neg)}.lrk b.lrp.mut{color:var(--muted)}
 .grt{min-width:0;display:flex;flex-direction:column;justify-content:center}.grt b{color:var(--fg)}.grt .pill{align-self:flex-start}
+/* sub-gred kewangan: label K U T S di atas cip */
+.kskor{display:flex;gap:4px;align-self:flex-start;margin-bottom:3px}.kskor>span{display:flex;flex-direction:column;align-items:center;gap:1px}.kskor small{font-size:.6rem;line-height:1.1;font-weight:600;color:var(--muted)}.kskor .gr{margin:0}
 td.grd{text-align:center;vertical-align:middle}
 @media (min-width:761px){td.kdh{width:1%;max-width:76px;white-space:normal}td.kdh .vv{white-space:normal;overflow-wrap:normal}}
 td.ctr,th[data-tip="hari_watch"],th[data-tip="hari_pt"]{text-align:center}
@@ -1018,9 +1020,9 @@ const SYLBL={'lulus':'p-buy','hampir had':'p-warn','gagal sebahagian':'p-warn','
 function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:(\S+) S:(\S+)\) · ([^·]+?) · F:(\d+) · keyakinan (\S+)(?: · Syariah (.+))?$/.exec(s);
   if(GORD[r.gred_kewangan]==null){const x=/^– \((.*)\)$/.exec(s);return `<span class="mut">${esc(x?x[1]:'Belum dikira')}</span>`;}
   if(!m)return grSel1(r.gred_kewangan,`<span>${esc(s)}</span>`);
-  const sub=[['K',m[1],'Kekukuhan'],['U',m[2],'Keuntungan'],['T',m[3],'Pertumbuhan'],['S',m[4],'Arah suku terkini']].map(([l,g,n])=>grB(g,l,n)).join('');
+  const sub=[['K',m[1],'Kekukuhan'],['U',m[2],'Keuntungan'],['T',m[3],'Pertumbuhan'],['S',m[4],'Arah suku terkini']].map(([l,g,n])=>`<span title="${n}"><small>${l}</small>${grB(g,'',n)}</span>`).join('');
   const f=+m[6],sy=m[8];
-  return grSel1(r.gred_kewangan,`<span class="nw">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:''}${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`);}
+  return grSel1(r.gred_kewangan,`<span class="kskor">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:''}${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`);}
 const grCols=()=>[
   {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??9,f:r=>grKump(r,'Sektor')},
   {k:'gred_industri',t:'Industri',tip:'g_i',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??9,f:r=>grKump(r,'Industri')},

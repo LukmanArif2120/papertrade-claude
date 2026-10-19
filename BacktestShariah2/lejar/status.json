@@ -1,7 +1,16 @@
 {
  "mula": "2026-10-15",
+ "lorong2": "chandelier_tutup_4xATR14",
+ "bina_semula": [
+  {
+   "tarikh": "2026-10-19 11:43 MYT",
+   "dari": "2 tutup turun berturut atau henti",
+   "ke": "chandelier_tutup_4xATR14",
+   "sesi_terakhir_lama": "2026-10-16"
+  }
+ ],
  "sesi_terakhir": "2026-10-16",
- "kemaskini": "2026-10-17 15:38 MYT",
+ "kemaskini": "2026-10-19 11:51 MYT",
  "bil_kaedah": 134,
  "larian": [
   {
@@ -9,26 +18,26 @@
    "beli": 0,
    "tutup": 0,
    "langkau": 0,
-   "isyarat": 3598,
+   "isyarat": 3692,
    "terbuka": 0,
-   "tunggu": 3598,
+   "tunggu": 3692,
    "kaedah_isyarat": 111,
    "ralat": [],
    "nota": [],
-   "masa_s": 233
+   "masa_s": 216
   },
   {
    "sesi": "2026-10-16",
-   "beli": 3486,
-   "tutup": 150,
-   "langkau": 112,
+   "beli": 3575,
+   "tutup": 0,
+   "langkau": 117,
    "isyarat": 2195,
-   "terbuka": 3336,
-   "tunggu": 1302,
+   "terbuka": 3575,
+   "tunggu": 1295,
    "kaedah_isyarat": 98,
    "ralat": [],
    "nota": [],
-   "masa_s": 180
+   "masa_s": 234
   }
  ]
 }
