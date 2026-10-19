@@ -22,7 +22,8 @@ Peraturan setiap sesi S (data dipotong <= S; modul kaedah = kod/kaedah/Mxx.py, l
    Semua isyarat direkod dalam `isyarat/<S>.csv.gz`; yang layak masuk menunggu sesi seterusnya (`tunggu.csv`).
 4. Dua lorong keluar (sejak 17 Okt 2026, DUA_LORONG): lorong 1 = peraturan 1; lorong 2 (pegang selagi naik, dipinda 19 Okt
    2026: tutup < tutup tertinggi sejak beli − 4×ATR14, paras hanya naik, tanpa henti kaedah) dikira oleh standard/keluar_lorong.py.
-   Posisi kekal terbuka (dan menyekat isyarat baharu kaedah+saham sama) sehingga kedua-dua lorong keluar. Apabila peraturan
+   Posisi kekal dalam terbuka.csv sehingga kedua-dua lorong keluar, tetapi sejak 19 Okt 2026 hanya lorong 1 yang menyekat
+   isyarat baharu kaedah+saham sama (lorong 1 lejar = enjin; posisi lorong 2 boleh bertindih). Apabila peraturan
    lorong 2 berubah (keluar_lorong.VERSI lain daripada status.json `lorong2`), `jalan` membina semula lejar dari sesi mula.
 Harga: stor repo `data/harga/stor/` (format kod/stor.py; yfinance, semakan silang Moomoo oleh rutin 6:02).
 Jika harga lama dilaras (split), posisi terbuka dilaras dengan nisbah sama (lajur `laras`).
@@ -47,7 +48,8 @@ TOLERANSI_LARAS = 0.003
 LIPUTAN_MIN = 0.99   # pecahan saham layak (ada bar sesi sebelum) yang mesti ada bar sesi S sebelum diproses
 # Dua lorong keluar (keputusan pengguna 17 Okt 2026; standard/keluar_lorong.py): lorong 1 = peraturan kaedah (enjin, lajur
 # tarikh_keluar …), lorong 2 = pegang selagi naik (Chandelier tutup 4×ATR14 sejak 19 Okt 2026). Posisi kekal dalam terbuka.csv
-# (dan menyekat isyarat baharu kaedah+saham sama) sehingga kedua-dua lorong keluar; kemudian dipindah ke tutup/.
+# sehingga kedua-dua lorong keluar; kemudian dipindah ke tutup/. Isyarat baharu kaedah+saham sama disekat selagi lorong 1
+# terbuka (termasuk hari lorong 1 keluar), seperti enjin.
 # False = tingkah laku enjin asal (posisi tutup apabila lorong 1 keluar); dipakai oleh ujian kesetaraan enjin.
 DUA_LORONG = True
 
@@ -319,7 +321,8 @@ def kerja(arg):
             nota.append(f"{mid} {p['saham']}: bar isyarat {p['tarikh_isyarat']} tiada dalam stor; keluar tidak dinilai")
         p, habis = nilai_posisi(g, p, tmax)
         (tutup if habis else kekal).append(p)
-    pegang = {p['saham'] for p in kekal} | {r['saham'] for r in tutup if tarikh_tutup(r) >= str(St.date())}
+    # isyarat kaedah+saham sama disekat selagi lorong 1 terbuka, termasuk hari ia keluar (seperti enjin); lorong 2 tidak menyekat
+    pegang = {p['saham'] for p in kekal + tutup if not p.get('tarikh_keluar') or p['tarikh_keluar'] >= str(St.date())}
     # 2) masuk (isyarat menunggu)
     tunggu_baru = []
     for s in tunggu:
@@ -386,7 +389,7 @@ def keadaan():
 
 def bina_semula(st):
     """Peraturan lorong 2 dipinda (keluar_lorong.VERSI lain daripada status.json `lorong2`): lorong 2 menentukan bila posisi
-    tutup sepenuhnya dan bila kaedah+saham boleh dibeli semula, jadi lejar dikosongkan dan diproses semula dari sesi mula
+    tutup sepenuhnya (dan sebelum 19 Okt 2026 bila kaedah+saham boleh dibeli semula), jadi lejar dikosongkan dan diproses semula dari sesi mula
     dengan peraturan baharu. Pulang status baharu (sesi mula dikekalkan; ditulis segera supaya keadaan sentiasa konsisten)."""
     for f in [os.path.join(LEJAR, 'terbuka.csv'), os.path.join(LEJAR, 'tunggu.csv')] + \
             [x for d in ('tutup', 'langkau') for x in glob.glob(os.path.join(LEJAR, d, '*.csv'))] + \
@@ -487,7 +490,7 @@ def cmd_semak(a):
     T, O = semua_posisi(); salah = []
     k = pd.concat([T[['id_kaedah', 'saham', 'tarikh_beli']], O[['id_kaedah', 'saham', 'tarikh_beli']]])
     if k.duplicated().any(): salah.append(f'kunci berganda: {int(k.duplicated().sum())}')
-    if O.duplicated(['id_kaedah', 'saham']).any(): salah.append('lebih satu posisi terbuka bagi kaedah+saham sama')
+    if O[O.tarikh_keluar == ''].duplicated(['id_kaedah', 'saham']).any(): salah.append('lebih satu posisi lorong 1 terbuka bagi kaedah+saham sama')
     for nm, d in [('tutup', T), ('terbuka', O)]:
         hb = pd.to_numeric(d.harga_beli, errors='coerce')
         if (~(hb > 0)).any(): salah.append(f'{nm}: harga_beli tidak sah ({int((~(hb > 0)).sum())})')

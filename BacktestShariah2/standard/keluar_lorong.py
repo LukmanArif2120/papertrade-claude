@@ -4,7 +4,7 @@
 #   2. Pegang selagi naik (lajur *_henti; dipinda 19 Okt 2026, kajian kajian/KAJIAN_LORONG2.md) — Chandelier tutup:
 #                          paras keluar = tutup tertinggi sejak beli − GANDA_ATR (4) × ATR14; paras hanya naik, tidak pernah turun.
 #                          Tutup < paras keluar -> jual pada buka esok. Henti kaedah tidak dipakai dalam lorong ini (kekal dalam lorong 1).
-# Belian semula kaedah+saham yang sama hanya selepas kedua-dua lorong keluar (`tutup_semua` = True).
+# `tutup_semua` = kedua-dua lorong keluar. Sejak 19 Okt 2026 belian semula kaedah+saham sama hanya menunggu lorong 1 keluar.
 # Lorong 2 hanya perlukan harga (OHLC, termasuk sejarah sebelum beli untuk ATR) dan harga beli, jadi dikira di sini tanpa modul kaedah.
 #
 # Guna (rutin 6:02 pagi, selepas lorong 1 dinilai; juga untuk isi semula):

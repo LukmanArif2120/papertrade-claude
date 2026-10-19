@@ -63,7 +63,7 @@ def enjin_trades(m, fr, idx):
 
 class UjiLejar(unittest.TestCase):
     # Kesetaraan enjin diuji dengan DUA_LORONG=False (posisi tutup apabila lorong 1 keluar, seperti enjin.trades).
-    # Dengan dua lorong, lorong 1 setiap posisi tetap = enjin, tetapi belian semula disekat sehingga semua lorong keluar.
+    # Dengan dua lorong (UjiDuaLorong), lorong 1 tetap = enjin kerana hanya lorong 1 menyekat belian semula (sejak 19 Okt 2026).
     def setUp(self):
         self._dua = lejar.DUA_LORONG; lejar.DUA_LORONG = False
 
@@ -151,30 +151,33 @@ class UjiDuaLorong(unittest.TestCase):
     def tearDown(self):
         lejar.DUA_LORONG = self._dua
 
-    def test_lorong1_sama_enjin_dan_belian_semula_disekat(self):
+    def test_lorong1_sama_enjin_dan_lorong2_tidak_menyekat(self):
+        # sejak 19 Okt 2026 hanya lorong 1 menyekat isyarat baharu kaedah+saham sama, jadi dagangan lorong 1 lejar = enjin.trades
+        # walaupun posisi kekal terbuka dalam lorong 2
         m = modul('M9004'); fr, idx = data(benih=5)
+        E = enjin_trades(m, fr, idx)
         T, W, tutup, langkau = jalan_lejar('M9004', fr, idx)
         semua = tutup + T
-        self.assertGreater(len(semua), 5); self.assertGreater(len(tutup), 1)
+        self.assertGreater(len(semua), 5)
         # setiap posisi tutup: kedua-dua lorong keluar, tarikh lorong >= tarikh beli
         for r in tutup:
             self.assertTrue(r['tutup_semua'])
             for c in ('tarikh_keluar', 'tarikh_keluar_henti'):
                 self.assertGreaterEqual(r[c], r['tarikh_beli'])
-        # tiada dua posisi kaedah+saham bertindih: belian baharu hanya selepas tarikh tutup sepenuhnya posisi sebelumnya
+        L = sorted((r['saham'], r['tarikh_isyarat'], r['tarikh_beli'], r.get('tarikh_keluar') or '') for r in semua)
+        J = sorted((t, str(s.date()), str(e.date()), '' if w == 'hujung' else str(x.date()))
+                   for t, s, e, x, w in zip(E.ticker, E.sig, E.ent, E.ex, E.why))
+        self.assertEqual(L, J)
+        # lorong 1 tidak bertindih: belian baharu hanya selepas hari lorong 1 posisi sebelumnya keluar
         by = {}
         for r in semua: by.setdefault(r['saham'], []).append(r)
+        bertindih = 0
         for t, a in by.items():
             a.sort(key=lambda r: r['tarikh_beli'])
             for x, y in zip(a, a[1:]):
-                self.assertTrue(lejar.tarikh_tutup(x), f'{t}: posisi terbuka diikuti belian baharu')
-                self.assertGreater(y['tarikh_isyarat'], lejar.tarikh_tutup(x))
-        # lorong 1 setiap posisi = enjin bagi isyarat yang sama (keluar ditentukan oleh bar, bukan oleh lorong lain)
-        f = {t: g.copy() for t, g in fr.items()}; m.sedia(f, idx)
-        for r in [r for r in semua if r.get('tarikh_keluar')]:
-            g = f[r['saham']]; i = g.index.get_loc(pd.Timestamp(r['tarikh_isyarat']))
-            E = enjin.trades({r['saham']: g.iloc[:].assign(sig=[k == i for k in range(len(g))])}, m.TMAX, 0)
-            self.assertEqual(str(E.ex.iloc[0].date()), r['tarikh_keluar'])
+                self.assertTrue(x.get('tarikh_keluar')); self.assertGreater(y['tarikh_isyarat'], x['tarikh_keluar'])
+                bertindih += not lejar.tarikh_tutup(x) or lejar.tarikh_tutup(x) >= y['tarikh_isyarat']
+        self.assertGreater(bertindih, 0)        # posisi lorong 2 lama masih terbuka ketika belian baharu
 
     def test_bina_semula_apabila_peraturan_lorong2_berubah(self):
         # keluar_lorong.VERSI lain daripada status.json `lorong2` -> lejar dikosongkan dan diproses semula dari sesi mula

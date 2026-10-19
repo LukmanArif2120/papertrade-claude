@@ -34,6 +34,9 @@ Pelaksanaan: `standard/keluar_lorong.py` (`VERSI = chandelier_tutup_4xATR14`; ba
 - Semua dagangan: hari dagangan p25/median/p75 = 20 / 34 / 58.
 - Trend besar: 31 / 54 / 85 hari (~6 / 11 / 17 minggu). Semikon 2026: purata 51 hari (~10 minggu).
 
+## Belian semula (keputusan pengguna 19 Okt 2026)
+Dengan peraturan belian semula 17 Okt (kaedah+saham sama hanya selepas kedua-dua lorong keluar), lorong 2 baharu menyekat 39.5% dagangan enjin (peraturan lama 5.5%), jadi lorong 1 Papertrade C dan Lejar tidak lagi mewakili kaedah. Sejak 19 Okt 2026 hanya lorong 1 menyekat belian semula (`kod/scanner.py pegangan_c`, `standard/lejar.py`); dagangan lorong 1 lejar = enjin (diuji), posisi lorong 2 boleh bertindih.
+
 ## Batasan
 - Lebihan tertumpu pada tahun trend kuat: lebihan SPY ikut tahun masuk 2020 +7.1%, 2021 −0.7, 2022 +1.3, 2023 −0.2, 2024 −1.1, 2025 +10.9, 2026 −1.6 (masih terbuka). Tanpa 2020 dan 2025 semua varian Chandelier 3–5×ATR sedikit bawah SPY (pilihan −0.2% sebulan).
 - Median dagangan negatif; untung daripada sebilangan kecil trend besar — perlu ikut semua isyarat.

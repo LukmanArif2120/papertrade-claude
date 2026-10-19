@@ -35,7 +35,7 @@ Susunan lajur rasmi (lajur tambahan dibenarkan di hujung):
 | luar_peraturan | True/kosong | Moomoo sahaja: dibeli sebenar tetapi luar peraturan (kekal dikemas kini harga, tidak dikira) |
 | harga_buka_rujukan, tarikh_beli_dirancang | nombor, tarikh | untuk baris tidak_dibeli |
 | keluar_henti, tarikh_keluar_henti, harga_keluar_henti, untung_henti_pct, status_henti | True/False, tarikh, nombor, nombor 2 tp, teks | Lorong 2 (pegang selagi naik). Lihat bahagian Dua lorong keluar |
-| tutup_semua | True/False | = keluar AND keluar_henti. Belian semula kaedah+saham sama hanya selepas True |
+| tutup_semua | True/False | = keluar AND keluar_henti (rekod). Sejak 19 Okt 2026 belian semula kaedah+saham sama selepas `keluar` (lorong 1) = True; lorong 2 tidak menyekat (17–18 Okt: selepas tutup_semua) |
 
 ## Dua lorong keluar (keputusan pengguna 17 Okt 2026; lorong 10% dibuang hari yang sama)
 Setiap posisi yang dibeli dinilai serentak dengan dua peraturan keluar dari harga beli yang sama. Setiap lorong direkod dalam lajurnya sendiri dan dibekukan sebaik keluar:
