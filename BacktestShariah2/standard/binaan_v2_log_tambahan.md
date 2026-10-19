@@ -173,3 +173,9 @@
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 21: buka ≤ henti — TECH M13, WFRD M13, ATRC M14, AVTR M23, NVS M70; belum didagangkan (data_date 15–16 Okt) — KNF M03, KELYB M04 & M123, LVLU M18 & M148, NCEW M28, CHT M34, MGRT M35, SGU M39 & M119, CAAP M49 & M148, NRP M54, WLYB M80, MNR M106, PHOE M144. Tiada buka_maks/bertindih.
 - Sahkan buka (10:08 NY, `quote_history_kline` ktype 2, 19 Okt): sampel PTC 193.61, AIT 335.63, TALO 17.675, WTS 357.66, KVUE 18.77 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
+
+## 2026-10-19 (16:50 UTC) — GitHub Actions: jadual cron dan penjaga
+- Siasatan (permintaan pengguna): `beli.yml` dan `petang.yml` (dicipta Sab 17 Okt 08:15 UTC) tidak pernah dicetus jadual pada Isn 19 Okt (11:47, 12:17, 13:40, 14:40 UTC); jadual lain pada 17 Okt lewat 1.5–3.5 jam. Semua workflow `active`, repo awam, YAML sah: punca di pihak penjadual GitHub. Tiada sesi tertinggal (17 Okt = Sabtu).
+- `pemangkin.yml` gagal 16 dan 19 Okt: larian beratur checkout commit pencetus lama -> konflik rebase pada `yahoo.json`/`status.json`/`earnings_nasdaq.json`. Kini `ref: main` + `git rebase --abort` sebelum cubaan semula (commit 5c32517). Jadual 8 workflow didaftar semula (baris komen; jadual tidak berubah).
+- Dispatch manual `harga_harian` 16:31 UTC: sesi 16 Okt ditarik semula; CARR gagal (tiada dalam `terkini.csv` hingga tarikan seterusnya).
+- Baharu: `penjaga_jadual.yml` + `standard/penjaga_jadual.py` (+ `ujian/test_penjaga_jadual.py`): 2 cron sejam, setiap push ke main dan selepas workflow berjadual selesai; jika cetusan cron terkini (lewat > 30 min) tiada larian, workflow_dispatch dicetus dalam had masa (data/RS/lejar/harian/skrin < 13:00 UTC; petang < 9:15 NY; beli < 16:45 NY). Tiada fail repo ditulis.

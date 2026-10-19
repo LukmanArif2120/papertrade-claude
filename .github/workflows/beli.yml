@@ -9,7 +9,7 @@ name: Beli 9:35 NY
 on:
   schedule:
     # Didaftar semula 19 Okt 2026: tiada cetusan jadual sejak 17 Okt 14:10 UTC (semua workflow active).
-    # Jika berulang, cetus workflow_dispatch dari luar; jadual GitHub boleh lewat atau hilang.
+    # Jika cetusan hilang/lewat > 30 minit, penjaga_jadual.yml mencetus workflow_dispatch (dalam had masa).
     - cron: '40 13 * * 1-5'
     - cron: '40 14 * * 1-5'
     - cron: '25 16 * * 1-5'
