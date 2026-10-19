@@ -1,11 +1,10 @@
 {
- "dijana": "2026-10-18 06:24 UTC",
- "sesi_terakhir": "2026-10-16",
- "saham_pasaran": 3498,
- "saham_ditulis": 912,
+ "dijana": "2026-10-19 20:35 UTC",
+ "sesi_terakhir": "2026-10-19",
+ "saham_pasaran": 3442,
+ "saham_ditulis": 900,
  "gagal_tarik": 0,
  "spy_atas200": {
-  "2026-09-04": true,
   "2026-09-08": true,
   "2026-09-09": true,
   "2026-09-10": true,
@@ -34,6 +33,7 @@
   "2026-10-13": true,
   "2026-10-14": true,
   "2026-10-15": true,
-  "2026-10-16": true
+  "2026-10-16": true,
+  "2026-10-19": true
  }
 }
