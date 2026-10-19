@@ -1,6 +1,6 @@
 # Dashboard: Papan Backtest Shariah (v2)
 
-**Pautan:** https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (sama dengan https://claude.ai/artifact/3KAW4v9ZCkGbkAmwz2XiJ1). Versi semasa = versi 73 (19 Okt 2026): dashboard lama disusun semula untuk pemula (7 tab), analisis dagangan, sebab label dan tarikh penilaian adil, istilah seragam, panduan & glosari. Pratonton lain sudah dipadam; ini satu-satunya dashboard.
+**Pautan:** https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (sama dengan https://claude.ai/artifact/3KAW4v9ZCkGbkAmwz2XiJ1). Versi semasa = versi 74 (19 Okt 2026): dashboard lama disusun semula untuk pemula (7 tab, versi 73), analisis dagangan, sebab label dan tarikh penilaian adil, istilah seragam, panduan & glosari; versi 74: lajur Syarat belum cukup dan Pemangkin diseimbangkan. Pratonton lain sudah dipadam; ini satu-satunya dashboard.
 **Sumber HTML:** `BacktestShariah2/standard/dashboard_v2.html` dalam repo (format penerbitan Artifact: tanpa doctype/head; `<title>` + `<style>` di atas). Halaman yang diterbit mesti sama dengan fail ini. Spesifikasi: `standard/tugasan_v2.md`. Log binaan: `standard/binaan_v2_log.md`.
 **Capabilities:** `assets`, `db` (1 peraturan: baca = view, tulis = admin). Jangan ubah semasa menerbit semula (abaikan medan `capabilities`).
 
