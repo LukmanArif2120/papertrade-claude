@@ -5,7 +5,7 @@
 #   -> <folder>/<koleksi>/<doc>.json, <folder>/batch_<n>.json (senarai writes ArtifactData; <= 50 tulisan dan < 900 KB
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
-# Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), papertrade/senarai_beli(+_2…),
+# Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
 # papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, harian/status. sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, json, os, re, statistics as stt, sys
@@ -219,23 +219,10 @@ def main(argv=None):
         docs['papertrade/claude'].update(slot=dict(sorted(slot.items(), key=lambda kv: int(kv[0][1:]) if kv[0][1:].isdigit() else 9999)),
                                          batal=batal, nota_slot='claude_terbuka = posisi Papertrade C yang belum tutup kedua-dua lorong; '
                                          'moomoo = posisi Moomoo warisan (sumber harian) yang belum keluar.')
-    # senarai beli dan watchlist (dibahagi bawah had saiz)
+    # senarai beli: tidak ditolak ke db sejak 19 Okt 2026 (halaman tidak membacanya); kiraan untuk harian/status sahaja
     sb = baca_csv(os.path.join(a.folder, 'senarai_beli.csv'))
-    td = sb[0]['tarikh_isyarat'] if sb else ''
-    lihat = set(); rows = []
-    for r in sb:
-        d = baris_db(r); d['dikongsi'] = r['saham'] in lihat; lihat.add(r['saham']); rows.append(d)
-    try:
-        import exchange_calendars as xc
-        untuk = str(xc.get_calendar('XNYS').next_session(pd.Timestamp(td)).date()) if td else ''
-    except Exception:
-        untuk = ''
-    docs['papertrade/senarai_beli'] = dict(
-        definisi=('pct_dipenuhi 100 = semua syarat entry kaedah dipenuhi pada tutup ' + td + ' dan lulus kesahihan (kaedah mingguan '
-                  'M37/M38/M41/M50/M52/M64/M78 hanya pada hari dagangan terakhir minggu). Destinasi Claude sahaja (Papertrade C). '
-                  'Per kaedah: maks 10 isyarat (431 dahulu, kemudian rank) + calon watchlist yang kini lengkap; hanya posisi terbuka '
-                  'kaedah+saham yang sama dilangkau (belian semula dibenarkan). Dijana oleh GitHub Actions (standard/harian_c.py).'),
-        dibina=malam.get('masa', dibina), tarikh_data=td, tarikh_imbasan=sb[0]['tarikh_imbasan'] if sb else '', untuk_beli=untuk, rows=rows)
+    lihat = {r['saham'] for r in sb}
+    # watchlist (dibahagi bawah had saiz)
     wl = baca_csv(os.path.join(a.folder, 'watchlist.csv'))
     docs['papertrade/watchlist'] = dict(
         definisi='Hampir Signal: semua syarat entry selain pencetus dipenuhi; pencetus dalam <=2% (pct_dipenuhi = 100 - jarak_pct, '
