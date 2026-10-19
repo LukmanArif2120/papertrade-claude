@@ -11,6 +11,8 @@ name: Harian Actions
 
 on:
   schedule:
+    # Didaftar semula 19 Okt 2026: tiada cetusan jadual sejak 17 Okt 14:10 UTC (semua workflow active).
+    # Jika berulang, cetus workflow_dispatch dari luar; jadual GitHub boleh lewat atau hilang.
     - cron: '7 5 * * 2-6'
     - cron: '7 7 * * 2-6'
     - cron: '7 9 * * 2-6'

@@ -6,6 +6,8 @@ name: Gred petang
 
 on:
   schedule:
+    # Didaftar semula 19 Okt 2026: tiada cetusan jadual sejak 17 Okt 14:10 UTC (semua workflow active).
+    # Jika berulang, cetus workflow_dispatch dari luar; jadual GitHub boleh lewat atau hilang.
     - cron: '47 11 * * 1-5'
     - cron: '17 12 * * 1-5'
   workflow_dispatch:

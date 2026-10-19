@@ -43,8 +43,12 @@ jobs:
           else
             echo "jalan=ya" >> "$GITHUB_OUTPUT"
           fi
+      # ref main: larian yang beratur (concurrency) bermula daripada data pemangkin terkini, bukan commit pencetus
+      # (19 Okt 2026: larian kedua berasas commit lama -> konflik rebase pada yahoo.json/status.json)
       - uses: actions/checkout@v4
         if: steps.masa.outputs.jalan == 'ya'
+        with:
+          ref: main
       - uses: actions/setup-python@v5
         if: steps.masa.outputs.jalan == 'ya'
         with:
@@ -77,6 +81,7 @@ jobs:
           git commit -q -m "Data pemangkin (Yahoo + Nasdaq): $(date -u +%Y-%m-%d)"
           for n in 1 2 3; do
             git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            git rebase --abort 2>/dev/null || true
             sleep $((n * 10))
           done
           exit 1
