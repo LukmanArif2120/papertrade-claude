@@ -1,26 +1,32 @@
 # Dua lorong keluar (keputusan pengguna 17 Okt 2026; lorong 10% dibuang pada hari yang sama). Setiap posisi dinilai serentak
 # dengan dua peraturan keluar dari harga beli yang sama, direkod dalam lajur berasingan:
 #   1. Kaedah            — peraturan penuh kaedah (henti, sasaran, isyarat keluar, had masa): lajur sedia ada `keluar`, `tarikh_keluar` …
-#   2. Pegang selagi naik (lajur *_henti) — pegang selagi harga terus naik; keluar pada buka esok selepas TURUN_BERTURUT (2)
-#                          tutup berturut lebih rendah daripada tutup semalam. Henti kaedah kekal sebagai perlindungan.
+#   2. Pegang selagi naik (lajur *_henti; dipinda 19 Okt 2026, kajian kajian/KAJIAN_LORONG2.md) — Chandelier tutup:
+#                          paras keluar = tutup tertinggi sejak beli − GANDA_ATR (4) × ATR14; paras hanya naik, tidak pernah turun.
+#                          Tutup < paras keluar -> jual pada buka esok. Henti kaedah tidak dipakai dalam lorong ini (kekal dalam lorong 1).
 # Belian semula kaedah+saham yang sama hanya selepas kedua-dua lorong keluar (`tutup_semua` = True).
-# Lorong 2 hanya perlukan harga (OHLC), harga beli dan henti, jadi dikira di sini tanpa modul kaedah.
+# Lorong 2 hanya perlukan harga (OHLC, termasuk sejarah sebelum beli untuk ATR) dan harga beli, jadi dikira di sini tanpa modul kaedah.
 #
 # Guna (rutin 6:02 pagi, selepas lorong 1 dinilai; juga untuk isi semula):
 #   python3 BacktestShariah2/standard/keluar_lorong.py [--stor <folder harga_A/B/idx.csv>] [--folder <papertrade>]
-#       -> kemas kini lajur lorong 2 serta tutup_semua dalam moomoo.csv dan claude*.csv (lorong yang sudah keluar dibekukan);
+#       -> kemas kini lajur lorong 2 serta tutup_semua dalam moomoo.csv dan claude*.csv (lorong yang sudah keluar dibekukan,
+#          kecuali baris yang keluar dengan peraturan lama — status_henti tanpa PENANDA — yang dikira semula secara automatik);
 #          lajur lorong 10% lama (LAJUR_BUANG) dibuang daripada fail
 #   --semula henti   -> kira semula lorong 2 walaupun sudah keluar (selepas peraturan lorong dipinda)
 import argparse, csv, glob, json, os, re, sys
 
 import numpy as np
+import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BS2 = os.path.dirname(HERE)
 PT = os.path.join(BS2, 'papertrade')
 STOR = os.path.join(BS2, 'data', 'harga', 'stor')
 
-TURUN_BERTURUT = 2       # lorong 2: bilangan tutup berturut < tutup semalam sebelum keluar
+GANDA_ATR = 4.0          # lorong 2: paras keluar = tutup tertinggi sejak beli − GANDA_ATR × ATR
+TEMPOH_ATR = 14          # ATR seperti enjin.atr: purata mudah julat sebenar 14 hari
+VERSI = 'chandelier_tutup_4xATR14'   # peraturan lorong 2 semasa; Lejar Penuh dibina semula apabila nilai ini berubah
+PENANDA = 'paras keluar'             # ada dalam setiap status_henti peraturan semasa; tiada -> dikira dengan peraturan lama
 BEZA_HARGA_MAKS = 0.15   # buka stor pada hari beli lawan harga_beli; lebih -> data tidak sepadan (split/ticker lain), langkau
 
 LAJUR_HENTI = ['keluar_henti', 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct', 'status_henti']
@@ -37,29 +43,31 @@ def hb(t):
     return f'{int(s[8:10])} {BULAN[int(s[5:7]) - 1]}'
 
 
-def ada_henti(sp):
-    return sp is not None and np.isfinite(sp)
+def atr(h, l, c, n=TEMPOH_ATR):
+    """Sama seperti enjin.atr: purata mudah n bar julat sebenar (bar pertama = tinggi − rendah); NaN sebelum bar ke-n."""
+    pc = np.r_[np.nan, c[:-1]]
+    tr = np.fmax(h - l, np.fmax(np.abs(h - pc), np.abs(l - pc)))
+    return pd.Series(tr).rolling(n).mean().to_numpy()
 
 
 # ---------------------------------------------------------------- logik (tatasusunan bar; k = indeks bar hari beli)
-def lorong_henti(o, h, l, c, k, e, sp, n_turun=TURUN_BERTURUT):
-    """Lorong 2 (pegang selagi naik). Pulang dict: keluar (j, harga, sebab) | menunggu (j isyarat) | terbuka (turun = kiraan semasa).
-    Tutup < tutup semalam menambah kiraan; tutup >= tutup semalam mengosongkannya. Kiraan = n_turun -> jual pada buka esok.
-    Henti kaedah: rendah <= henti dari hari beli, buka jurang bawah henti dari hari kedua -> harga buka (seperti enjin)."""
-    n = len(o); turun = 0
+def lorong_henti(o, h, l, c, k, ganda=GANDA_ATR, n_atr=TEMPOH_ATR):
+    """Lorong 2 (pegang selagi naik, Chandelier tutup). Tatasusunan termasuk sejarah sebelum bar beli k (untuk ATR).
+    Setiap bar j >= k: puncak = tutup tertinggi bar k..j; paras = max(paras semalam, puncak − ganda × ATR[j]), jadi paras
+    hanya naik. Tutup[j] < paras -> jual pada buka bar j+1. Selagi ATR belum ada (sejarah < n_atr bar), paras = -inf.
+    Pulang dict: keluar (j, harga, sebab) | menunggu (j, paras, tutup) | terbuka (paras, puncak)."""
+    a = atr(h, l, c, n_atr)
+    n = len(c); puncak = paras = -np.inf
     for j in range(k, n):
-        if ada_henti(sp):
-            if j > k and o[j] <= sp:
-                return dict(jenis='keluar', j=j, harga=float(o[j]), sebab='kena henti (buka bawah henti)')
-            if l[j] <= sp:
-                return dict(jenis='keluar', j=j, harga=float(sp), sebab='kena henti')
-        if j >= 1:
-            turun = turun + 1 if c[j] < c[j - 1] else 0
-        if turun >= n_turun:
+        puncak = max(puncak, c[j])
+        if np.isfinite(a[j]):
+            paras = max(paras, puncak - ganda * a[j])
+        if c[j] < paras:
             if j + 1 < n:
-                return dict(jenis='keluar', j=j + 1, harga=float(o[j + 1]), sebab=f'{n_turun} tutup turun berturut {{t{j}}}')
-            return dict(jenis='menunggu', j=j, sebab=f'{n_turun} tutup turun berturut')
-    return dict(jenis='terbuka', turun=turun)
+                return dict(jenis='keluar', j=j + 1, harga=float(o[j + 1]),
+                            sebab=f'tutup {c[j]:.2f} bawah {PENANDA} {paras:.2f} pada {{t{j}}}')
+            return dict(jenis='menunggu', j=j, paras=float(paras), tutup=float(c[j]))
+    return dict(jenis='terbuka', paras=float(paras), puncak=float(puncak))
 
 
 def _teks(s, ix):
@@ -74,7 +82,7 @@ def r2(x):
     return f'{float(x):.2f}'
 
 
-def nilai_baris(ix, o, h, l, c, tarikh_beli, e, sp):
+def nilai_baris(ix, o, h, l, c, tarikh_beli, e):
     """Kira lorong 2 bagi satu posisi. ix = senarai tarikh 'YYYY-MM-DD'. Pulang (dict lajur CSV lorong 2, None),
     atau (None, sebab) jika tidak boleh dinilai."""
     if tarikh_beli not in ix:
@@ -83,7 +91,7 @@ def nilai_baris(ix, o, h, l, c, tarikh_beli, e, sp):
     if not (o[k] > 0) or abs(o[k] / e - 1) > BEZA_HARGA_MAKS:
         return None, f'buka stor {o[k]:.4g} tidak sepadan harga beli {e:.4g}'
     akhir = len(o) - 1
-    a = lorong_henti(o, h, l, c, k, e, sp)
+    a = lorong_henti(o, h, l, c, k)
     L2 = dict.fromkeys(LAJUR_HENTI, '')
     if a['jenis'] == 'keluar':
         L2.update(keluar_henti='True', tarikh_keluar_henti=ix[a['j']], harga_keluar_henti=r4(a['harga']),
@@ -92,10 +100,12 @@ def nilai_baris(ix, o, h, l, c, tarikh_beli, e, sp):
     else:
         L2['keluar_henti'] = 'False'
         if a['jenis'] == 'menunggu':
-            L2['status_henti'] = f"{a['sebab'].capitalize()} {hb(ix[a['j']])} — jual pada buka esok (menunggu)"
+            L2['status_henti'] = (f"Tutup {a['tutup']:.2f} bawah {PENANDA} {a['paras']:.2f} pada {hb(ix[a['j']])}"
+                                  ' — jual pada buka esok (menunggu)')
+        elif np.isfinite(a['paras']):
+            L2['status_henti'] = f"Pegang ({PENANDA} {a['paras']:.2f}; puncak {a['puncak']:.2f}; {akhir - k} hari)"
         else:
-            hti = f'; henti {sp:.2f}' if ada_henti(sp) else ''
-            L2['status_henti'] = f"Pegang (turun berturut {a['turun']}/{TURUN_BERTURUT}; {akhir - k} hari{hti})"
+            L2['status_henti'] = f"Pegang ({PENANDA} belum ada: sejarah harga < {TEMPOH_ATR} hari; {akhir - k} hari)"
     return L2, None
 
 
@@ -128,7 +138,8 @@ def muat_harga(stor):
 
 
 def kemas_baris(r, H, nota, semula=()):
-    """Ubah baris r di tempat. Lorong 2 yang sudah keluar dibekukan (kecuali --semula henti). Pulang True jika ada perubahan."""
+    """Ubah baris r di tempat. Lorong 2 yang sudah keluar dibekukan, kecuali --semula henti atau keluar dengan peraturan lama
+    (status_henti tanpa PENANDA; dikira semula sekali secara automatik). Pulang True jika ada perubahan."""
     lama = {c: r.get(c, '') for c in LAJUR_LORONG}
     if benar(r.get('tidak_dibeli')) or not r.get('tarikh_beli'):
         for c in LAJUR_LORONG: r[c] = ''
@@ -136,12 +147,13 @@ def kemas_baris(r, H, nota, semula=()):
     e = nombor(r.get('harga_beli'))
     if e is None or e <= 0:
         return False
-    if not benar(r.get('keluar_henti')) or 'henti' in semula:
+    beku = benar(r.get('keluar_henti')) and PENANDA in (r.get('status_henti') or '') and 'henti' not in semula
+    if not beku:
         d = H.get(r.get('saham'))
         if d is None:
             nota.append(f"{r.get('saham')} {r.get('kaedah')} {r.get('tarikh_beli')}: tiada dalam stor harga")
         else:
-            L2, sebab = nilai_baris(*d, r['tarikh_beli'], e, nombor(r.get('henti')))
+            L2, sebab = nilai_baris(*d, r['tarikh_beli'], e)
             if L2 is None:
                 nota.append(f"{r.get('saham')} {r.get('kaedah')} {r.get('tarikh_beli')}: {sebab}")
             else:

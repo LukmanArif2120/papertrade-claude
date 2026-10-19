@@ -176,6 +176,40 @@ class UjiDuaLorong(unittest.TestCase):
             E = enjin.trades({r['saham']: g.iloc[:].assign(sig=[k == i for k in range(len(g))])}, m.TMAX, 0)
             self.assertEqual(str(E.ex.iloc[0].date()), r['tarikh_keluar'])
 
+    def test_bina_semula_apabila_peraturan_lorong2_berubah(self):
+        # keluar_lorong.VERSI lain daripada status.json `lorong2` -> lejar dikosongkan dan diproses semula dari sesi mula
+        modul('M9005'); fr, idx = data(n=300, benih=9)
+        with tempfile.TemporaryDirectory() as d:
+            stor = os.path.join(d, 'stor'); os.makedirs(stor)
+            for nama, x in (('harga_A.csv', fr), ('harga_idx.csv', idx)):
+                pd.concat([g.assign(ticker=t, date=g.index.strftime('%Y%m%d').astype(int)) for t, g in x.items()])[lejar.LAJ] \
+                    .to_csv(os.path.join(stor, nama), index=False)
+            lama = lejar.STOR, lejar.LEJAR
+            lejar.STOR, lejar.LEJAR = stor, os.path.join(d, 'lejar')
+            os.environ['LEJAR_UNIV'] = os.path.join(d, 'tiada.txt')
+            try:
+                a = argparse.Namespace(mula=str(MULA.date()), hingga=None, proses=1, hanya='M9005', paksa=False)
+                lejar.cmd_jalan(a)
+                kunci = lambda: sorted(map(tuple, pd.concat(lejar.semua_posisi())[
+                    ['saham', 'tarikh_beli', 'tarikh_keluar', 'keluar_henti', 'tarikh_keluar_henti']].astype(str).values))
+                asal = kunci(); self.assertGreater(len(asal), 5)
+                p = os.path.join(d, 'lejar', 'status.json'); st = json.load(open(p))
+                self.assertEqual(st['lorong2'], lejar.keluar_lorong.VERSI)
+                # keadaan peraturan lama: versi lain dan satu posisi terbuka hilang (tanpa bina semula, tiada sesi baharu diproses)
+                st['lorong2'] = 'lama'; json.dump(st, open(p, 'w'))
+                f = os.path.join(d, 'lejar', 'terbuka.csv'); O = pd.read_csv(f, dtype=str, keep_default_na=False)
+                O.iloc[1:].to_csv(f, index=False)
+                lejar.cmd_jalan(argparse.Namespace(mula=None, hingga=None, proses=1, hanya='M9005', paksa=False))
+                st = json.load(open(p))
+                self.assertEqual((st['lorong2'], st['bina_semula'][-1]['dari'], st['mula']),
+                                 (lejar.keluar_lorong.VERSI, 'lama', str(MULA.date())))
+                self.assertEqual(kunci(), asal)
+                with self.assertRaises(SystemExit) as cm:
+                    lejar.cmd_semak(argparse.Namespace())
+                self.assertEqual(cm.exception.code, 0)
+            finally:
+                lejar.STOR, lejar.LEJAR = lama; os.environ.pop('LEJAR_UNIV', None)
+
 
 if __name__ == '__main__':
     unittest.main()

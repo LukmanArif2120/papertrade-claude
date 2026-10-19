@@ -14,7 +14,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 PT = os.path.join(os.path.dirname(HERE), 'papertrade')
 HAD_DB = 262144          # had keras dokumen db
 TUMBUH = 140             # bait tambahan bagi setiap posisi terbuka apabila keluar (diukur 113–128; dibundar ke atas)
-TUMBUH_LORONG = 150      # bait tambahan apabila lorong 2 (pegang selagi naik) keluar (keluar_lorong.py; anggaran 125–146)
+TUMBUH_LORONG = 150      # bait tambahan apabila lorong 2 (pegang selagi naik) keluar (keluar_lorong.py; diukur 106–113, peraturan 19 Okt 2026)
 META = {'claude': 12000}  # meta dokumen (slot, batal, nota_slot) dalam papertrade/claude
 META_LAIN = 1000
 

@@ -20,9 +20,10 @@ Peraturan setiap sesi S (data dipotong <= S; modul kaedah = kod/kaedah/Mxx.py, l
 3. Isyarat baharu bar S: saham layak (data/harga/univ.txt, tutup >= USD10), bar >= PERLU_BAR (atau SILANG), indeks
    bar >= WARM. Isyarat semasa kaedah sama memegang saham itu (termasuk hari keluar) diabaikan, seperti enjin.
    Semua isyarat direkod dalam `isyarat/<S>.csv.gz`; yang layak masuk menunggu sesi seterusnya (`tunggu.csv`).
-4. Dua lorong keluar (sejak 17 Okt 2026, DUA_LORONG): lorong 1 = peraturan 1; lorong 2 (pegang selagi naik: 2 tutup turun
-   berturut atau henti) dikira oleh standard/keluar_lorong.py. Posisi kekal terbuka (dan menyekat isyarat baharu kaedah+saham
-   sama) sehingga kedua-dua lorong keluar.
+4. Dua lorong keluar (sejak 17 Okt 2026, DUA_LORONG): lorong 1 = peraturan 1; lorong 2 (pegang selagi naik, dipinda 19 Okt
+   2026: tutup < tutup tertinggi sejak beli − 4×ATR14, paras hanya naik, tanpa henti kaedah) dikira oleh standard/keluar_lorong.py.
+   Posisi kekal terbuka (dan menyekat isyarat baharu kaedah+saham sama) sehingga kedua-dua lorong keluar. Apabila peraturan
+   lorong 2 berubah (keluar_lorong.VERSI lain daripada status.json `lorong2`), `jalan` membina semula lejar dari sesi mula.
 Harga: stor repo `data/harga/stor/` (format kod/stor.py; yfinance, semakan silang Moomoo oleh rutin 6:02).
 Jika harga lama dilaras (split), posisi terbuka dilaras dengan nisbah sama (lajur `laras`).
 """
@@ -45,7 +46,7 @@ TAMAT_TUNGGU = 5      # sesi maksimum isyarat menunggu bar masuk (saham digantun
 TOLERANSI_LARAS = 0.003
 LIPUTAN_MIN = 0.99   # pecahan saham layak (ada bar sesi sebelum) yang mesti ada bar sesi S sebelum diproses
 # Dua lorong keluar (keputusan pengguna 17 Okt 2026; standard/keluar_lorong.py): lorong 1 = peraturan kaedah (enjin, lajur
-# tarikh_keluar …), lorong 2 = pegang selagi naik (2 tutup turun berturut atau henti). Posisi kekal dalam terbuka.csv
+# tarikh_keluar …), lorong 2 = pegang selagi naik (Chandelier tutup 4×ATR14 sejak 19 Okt 2026). Posisi kekal dalam terbuka.csv
 # (dan menyekat isyarat baharu kaedah+saham sama) sehingga kedua-dua lorong keluar; kemudian dipindah ke tutup/.
 # False = tingkah laku enjin asal (posisi tutup apabila lorong 1 keluar); dipakai oleh ujian kesetaraan enjin.
 DUA_LORONG = True
@@ -268,7 +269,7 @@ def nilai_posisi(g, p, tmax):
     if not benar(p.get('keluar_henti')):
         ix = [tkh(x) for x in g.index]
         L2, _ = keluar_lorong.nilai_baris(ix, g.open.values.astype(float), g.high.values.astype(float), g.low.values.astype(float),
-                                          g.close.values.astype(float), p['tarikh_beli'], float(p['harga_beli']), nombor(p['henti']))
+                                          g.close.values.astype(float), p['tarikh_beli'], float(p['harga_beli']))
         if L2 is not None:
             p = dict(p); p.update({c: v for c, v in L2.items() if c in L_K2})
     p['tutup_semua'] = bool(tarikh_tutup(p))
@@ -383,18 +384,39 @@ def keadaan():
     return st, T, W, bil
 
 
+def bina_semula(st):
+    """Peraturan lorong 2 dipinda (keluar_lorong.VERSI lain daripada status.json `lorong2`): lorong 2 menentukan bila posisi
+    tutup sepenuhnya dan bila kaedah+saham boleh dibeli semula, jadi lejar dikosongkan dan diproses semula dari sesi mula
+    dengan peraturan baharu. Pulang status baharu (sesi mula dikekalkan; ditulis segera supaya keadaan sentiasa konsisten)."""
+    for f in [os.path.join(LEJAR, 'terbuka.csv'), os.path.join(LEJAR, 'tunggu.csv')] + \
+            [x for d in ('tutup', 'langkau') for x in glob.glob(os.path.join(LEJAR, d, '*.csv'))] + \
+            glob.glob(os.path.join(LEJAR, 'isyarat', '*.csv.gz')):
+        os.remove(f)
+    rekod = dict(tarikh=pd.Timestamp.now(tz='Asia/Kuala_Lumpur').strftime('%Y-%m-%d %H:%M MYT'),
+                 dari=st.get('lorong2') or '2 tutup turun berturut atau henti', ke=keluar_lorong.VERSI,
+                 sesi_terakhir_lama=st.get('sesi_terakhir'))
+    print(json.dumps(dict(bina_semula=rekod), ensure_ascii=False), flush=True)
+    st = dict(mula=st.get('mula'), lorong2=keluar_lorong.VERSI, bina_semula=st.get('bina_semula', []) + [rekod])
+    json.dump(st, open(os.path.join(LEJAR, 'status.json'), 'w'), ensure_ascii=False, indent=1)
+    return st
+
+
 def cmd_jalan(a):
     global FR, IDX
     os.makedirs(LEJAR, exist_ok=True)
     st, T, W, bil = keadaan()
+    if DUA_LORONG and st.get('sesi_terakhir') and st.get('lorong2') != keluar_lorong.VERSI:
+        st = bina_semula(st); T, W, bil = [], [], {}
+    st['lorong2'] = keluar_lorong.VERSI
     FR, IDX = frames_dict(muat(STOR))
     sesi = [x for x in IDX['SPY'].index]
     akhir = st.get('sesi_terakhir')
     hingga = pd.Timestamp(str(a.hingga)) if a.hingga else sesi[-1]
     if akhir:
         todo = [x for x in sesi if x > pd.Timestamp(akhir) and x <= hingga]
-    else:   # larian pertama: rekod isyarat sesi mula sahaja (tiada posisi lagi)
-        mula = pd.Timestamp(str(a.mula)) if a.mula else hingga
+    else:   # larian pertama (atau bina semula): rekod isyarat sesi mula sahaja (tiada posisi lagi)
+        mula = a.mula or st.get('mula')
+        mula = pd.Timestamp(str(mula)) if mula else hingga
         todo = [x for x in sesi if mula <= x <= hingga]
         st['mula'] = str(todo[0].date()) if todo else None
     if not todo:
@@ -534,7 +556,8 @@ def cmd_ringkas(a):
          'Nota: data awal didominasi posisi yang tutup cepat (kebanyakan kena henti); nilai hanya selepas posisi matang '
          '(lihat `WFO/README.md`, penilaian 15 Jan 2027).', '',
          'Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (peraturan kaedah); Selagi naik = lorong 2 '
-         '(pegang selagi naik: 2 tutup turun berturut atau henti). n = bilangan keluar.', '',
+         '(pegang selagi naik, sejak 19 Okt 2026: tutup < tutup tertinggi sejak beli − 4×ATR14, paras hanya naik, tanpa henti kaedah). '
+         'n = bilangan keluar.', '',
          '| Kaedah | Posisi | Tutup | Terbuka | Menang % | Purata tutup % | Hari | Purata terbuka % | Selagi naik n | Purata selagi naik % '
          '| Menang jangka % | Purata jangka % | Hari jangka |',
          '|---|---|---|---|---|---|---|---|---|---|---|---|---|']
