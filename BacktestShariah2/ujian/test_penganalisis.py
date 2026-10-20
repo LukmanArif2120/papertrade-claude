@@ -126,5 +126,19 @@ class TestPenganalisis(unittest.TestCase):
             self.assertIn('## 3 penemuan utama', open(md, encoding='utf-8').read())
 
 
+class TestKedudukanSebelum(unittest.TestCase):
+    def test_sesi_baharu_dan_larian_semula(self):
+        rows = [dict(id='M01', kedudukan=1), dict(id='M02', kedudukan=2), dict(id='M09', kedudukan=3)]
+        lama = dict(kini='2026-10-19', rows=[dict(id='M01', kedudukan=2, kedudukan_sebelum=5), dict(id='M02', kedudukan=1)])
+        pg.kedudukan_sebelum(rows, '2026-10-20', lama)          # sesi baharu: rujukan = kedudukan lama
+        self.assertEqual([r.get('kedudukan_sebelum') for r in rows], [2, 1, None])
+        rows2 = [dict(id='M01', kedudukan=1)]
+        pg.kedudukan_sebelum(rows2, '2026-10-19', lama)         # larian semula data sama: rujukan lama kekal
+        self.assertEqual(rows2[0]['kedudukan_sebelum'], 5)
+        rows3 = [dict(id='M01', kedudukan=1)]
+        pg.kedudukan_sebelum(rows3, '2026-10-20', None)         # tiada fail lama
+        self.assertNotIn('kedudukan_sebelum', rows3[0])
+
+
 if __name__ == '__main__':
     unittest.main()

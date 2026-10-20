@@ -142,6 +142,61 @@ def penurunan_maks(M, C, stor):
     return out
 
 
+SESI_GARIS = 60
+
+
+def garis_harga(M, C, stor):
+    """prestasi/garis + prestasi/mfe (pratonton dashboard v3).
+    garis: tarikh (<= 60 sesi terakhir stor), tutup setiap saham yang masih ada posisi terbuka atau keluar dalam sesi
+    terakhir (carta kecil, harga sesi sebelum)
+    dan spy [[tarikh, buka, tutup]] sejak belian terawal (banding pasaran). mfe: [[kunci, kenaikan maks %], …] =
+    (tinggi tertinggi sejak hari beli hingga kini, atau hingga sehari sebelum keluar lorong kaedah + harga keluar) ÷ harga beli − 1, minimum 0."""
+    fr = pd.concat([pd.read_csv(os.path.join(stor, f), usecols=['ticker', 'date', 'high', 'close']) for f in ('harga_A.csv', 'harga_B.csv')
+                    if os.path.exists(os.path.join(stor, f))])
+    G = {t: g.set_index('date') for t, g in fr.groupby('ticker')}
+    hari = sorted(int(d) for d in fr.date.unique())[-SESI_GARIS:]
+    mfe, terbuka, mula, mula_t = {}, set(), None, None
+    for ak, R in (('M', M), ('C', C)):
+        for r in R:
+            hbv = SH.nombor(r.get('harga_beli'))
+            if hbv is None or not hbv or SH.benar(r.get('tidak_dibeli')):
+                continue
+            b = int(r['tarikh_beli'].replace('-', '')); mula = b if mula is None else min(mula, b)
+            ts = r.get('tutup_semua')
+            akhir = max(r.get('tarikh_keluar') or '', r.get('tarikh_keluar_henti') or '').replace('-', '')
+            # posisi terbuka, atau keluar dalam sesi terakhir (masih terbuka pada sesi sebelum: perbandingan "sejak semalam")
+            if not SH.benar(ts if ts not in (None, '') else r.get('keluar')) or (akhir.isdigit() and len(hari) > 1 and int(akhir) > hari[-2]):
+                terbuka.add(r['saham']); mula_t = b if mula_t is None else min(mula_t, b)
+            g = G.get(r['saham'])
+            if g is None:
+                continue
+            if SH.benar(r.get('keluar')) and r.get('tarikh_keluar'):
+                e = int(r['tarikh_keluar'].replace('-', '')); w = g.high[(g.index >= b) & (g.index < e)].tolist()
+                if SH.nombor(r.get('harga_keluar')) is not None:
+                    w.append(float(r['harga_keluar']))
+            else:
+                w = g.high[g.index >= b].tolist()
+            if w:
+                k = f"{ak}|{r['saham']}|{r['kaedah']}|{r['tarikh_beli']}"
+                mfe[k] = max(round(max(0.0, (max(w) / hbv - 1) * 100), 2), mfe.get(k, 0.0))
+    hari = [d for d in hari if mula_t is None or d >= mula_t] or hari[-1:]
+    rows = []
+    for t in sorted(terbuka):
+        g = G.get(t)
+        if g is None:
+            continue
+        c = g.close.reindex(hari)
+        if c.notna().any():
+            rows.append(dict(s=t, c=[None if pd.isna(x) else round(float(x), 2) for x in c]))
+    spy = []
+    pi = os.path.join(stor, 'harga_idx.csv')
+    if os.path.exists(pi) and mula:
+        I = pd.read_csv(pi)
+        I = I[(I.ticker == 'SPY') & (I.date >= mula)].sort_values('date')
+        spy = [[int(d), round(float(o), 2), round(float(c), 2)] for d, o, c in zip(I.date, I.open, I.close)]
+    return dict(tarikh=hari, spy=spy, rows=rows), [[k, v] for k, v in sorted(mfe.items())]
+
+
 def pengawas(st, masa):
     """Larian Actions yang sepatutnya sudah siap tetapi belum (untuk sesi tolak db: tembak workflow sekali).
     harian.yml: sesi NYSE terakhir yang tutup >= 9 jam lalu (data Yahoo muktamad); beli.yml: hari ini NY selepas 9:45."""
@@ -259,6 +314,14 @@ def main(argv=None):
                                 definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude).')
     docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
                                       nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
+    garis, mfe = garis_harga(M, C, a.stor)
+    docs['prestasi/garis'] = dict(garis, dibina=dibina, harga_hingga=f'{S} tutup',
+                                  definisi='rows: {s: saham, c: tutup sejajar dengan tarikh (null = tiada bar)} bagi saham yang masih ada '
+                                           'posisi terbuka; spy: [tarikh, buka, tutup] sejak belian terawal.')
+    docs['prestasi/mfe'] = dict(rows=mfe, dibina=dibina, harga_hingga=f'{S} tutup',
+                                definisi='Kenaikan maksimum % (MFE) = (harga tinggi tertinggi sejak hari beli hingga hari ini, atau sehingga '
+                                         'sehari sebelum keluar lorong kaedah, dan harga keluar) ÷ harga beli − 1, minimum 0. '
+                                         'rows: [akaun|saham|kaedah|tarikh_beli, %].')
     ps = portfolio_slot(dibina)
     if ps:
         docs['prestasi/portfolio_slot'] = ps
@@ -287,7 +350,7 @@ def main(argv=None):
     tulis = []
     for nama, d in docs.items():
         kol, doc = nama.split('/')
-        bahagian = bahagi(d, doc, 200000) if doc in ('senarai_beli', 'watchlist') else [(doc, d)]
+        bahagian = bahagi(d, doc, 200000) if doc in ('senarai_beli', 'watchlist', 'garis', 'mfe') else [(doc, d)]
         for doc_id, dd in bahagian:
             sz = bait(dd)
             if sz >= HAD_DB:

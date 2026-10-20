@@ -542,6 +542,18 @@ def jana_md(rows, meta, ruj, pen, dibina):
     return '\n'.join(L) + '\n'
 
 
+def kedudukan_sebelum(rows, kini, lama):
+    """kedudukan_sebelum = kedudukan pada data sesi terdahulu (anak panah perubahan tab Analisis). Larian semula pada data
+    yang sama mengekalkan rujukan lama, jadi anak panah tidak hilang apabila papan dijana dua kali sehari."""
+    if not lama:
+        return
+    L = {r.get('id'): r for r in lama.get('rows', [])}
+    for r in rows:
+        x = L.get(r['id'])
+        if x is not None:
+            r['kedudukan_sebelum'] = x.get('kedudukan_sebelum') if lama.get('kini') == kini else x.get('kedudukan')
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('--kini', help='tarikh data (YYYY-MM-DD); lalai = tarikh harga terkini')
@@ -550,6 +562,11 @@ def main(argv=None):
     rows, meta = analisis(a.kini)
     ruj = rujukan(rows)
     pen = penemuan(rows, meta, ruj)
+    try:
+        lama = json.load(open(a.json, encoding='utf-8'))
+    except (OSError, ValueError):
+        lama = None
+    kedudukan_sebelum(rows, meta.get('kini'), lama)
     dibina = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') + ' MYT'
     os.makedirs(os.path.dirname(a.json), exist_ok=True)
     doc = dict(dibina=dibina, **meta, parameter=dict(n0_maks=N0, asas_kekal=ASAS_KEKAL, tambah_kekal=TAMBAH_KEKAL, swing=list(SWING),
@@ -558,11 +575,10 @@ def main(argv=None):
                nota='Papan Penganalisis (standard/penganalisis.py). Skor = purata pulangan bersih setiap dagangan (%) gabungan backtest '
                     'dipotong dan posisi hadapan matang. Rekod analisis sahaja.')
     try:   # kandungan sama (hanya masa dibina berbeza) -> fail tidak ditulis semula, jadi tiada commit
-        lama = json.load(open(a.json, encoding='utf-8'))
         if {k: v for k, v in lama.items() if k != 'dibina'} == json.loads(json.dumps({k: v for k, v in doc.items() if k != 'dibina'})) \
                 and os.path.exists(a.md):
             print(f"penganalisis: tiada perubahan sejak {lama.get('dibina')}"); return
-    except (OSError, ValueError):
+    except (OSError, ValueError, AttributeError):
         pass
     open(a.json, 'w', encoding='utf-8').write(json.dumps(doc, ensure_ascii=False, separators=(',', ':')))
     open(a.md, 'w', encoding='utf-8').write(jana_md(rows, meta, ruj, pen, dibina))
