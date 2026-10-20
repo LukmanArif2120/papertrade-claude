@@ -395,7 +395,8 @@ td .sbk{max-width:260px}
   .tablewrap.tw-grd tbody tr:not(.buka) td.gks .grc>.gr{height:1.6em;min-width:1.6em;padding:0 3px;font-size:.82rem}
   .tablewrap.tw-grd tbody tr:not(.buka) td.utg{order:6;min-width:68px;text-align:right;font-size:1rem}
   .tablewrap.tw-grd tbody tr::after{content:"›";order:7;flex:none;color:var(--muted);font-size:1.1rem;line-height:1}
-  .tablewrap.tw-grd tbody tr.buka::after{content:"▴ Tutup";grid-column:1/-1;order:3;text-align:center;font-size:.72rem;margin-top:-2px}
+  /* Tutup = butang sekunder neutral (garis luar kelabu) supaya Butiran penuh (hijau) kekal tindakan utama */
+  .tablewrap.tw-grd tbody tr.buka::after{content:"▴ Tutup";grid-column:1/-1;order:3;display:block;text-align:center;font-size:.85rem;font-weight:600;line-height:1.2;color:var(--fg-2);background:var(--sunk);border:1px solid var(--line-2);border-radius:8px;padding:7px 14px;margin-top:-2px}
   .tablewrap.tw-grd tbody tr.buka{border-color:var(--line-2)}
   .tablewrap.tw-grd tbody td.mbtn{grid-column:1/-1;order:2;background:none!important;padding:0}
   .tablewrap.tw-grd tbody td.mbtn::before{display:none}
