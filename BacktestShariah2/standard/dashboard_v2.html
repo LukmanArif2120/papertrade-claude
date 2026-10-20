@@ -402,6 +402,46 @@ td .sbk{max-width:260px}
   .tablewrap.tw-grd tbody td.mbtn .more{width:100%}
 }
 @media (min-width:761px){.tablewrap th.mbtn,.tablewrap td.mbtn{display:none}}
+/* kad telefon 3 zon (20 Okt 2026): 1 posisi (saham, untung), 2 keluar (status + jarak ke paras; oren < 3%, merah < 1%), 3 gred (cip garis luar + nilai).
+   Hijau/merah berisi dikhaskan untuk wang dan risiko; label kecil biasa, nilai separa tebal, untung dan jarak keluar tebal */
+@media (min-width:761px){.tablewrap th.mkad,.tablewrap td.mkad{display:none}}
+@media (max-width:760px){
+  .tablewrap.tw-grd tbody tr.buka>td:not(.mkad):not(.mbtn){display:none}
+  .tablewrap.tw-grd tbody td.mkad{grid-column:1/-1;order:0;padding:0}
+  .tablewrap.tw-grd tbody td.mkad::before{display:none}
+  .tablewrap.tw-grd tbody tr.s-pos{box-shadow:inset 3px 0 0 var(--pos)}
+  .tablewrap.tw-grd tbody tr.s-neg{box-shadow:inset 3px 0 0 var(--neg)}
+  .tablewrap.tw-grd tbody tr.s-hmp{box-shadow:inset 3px 0 0 var(--warn)}
+}
+.mk{display:grid;gap:10px;font-variant-numeric:tabular-nums lining-nums;color:var(--fg-2)}
+.mk1{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.mkt{display:flex;align-items:baseline;gap:4px 7px;flex-wrap:wrap;min-width:0}
+.mkt>b{font-size:1.3rem;font-weight:800;color:var(--fg);letter-spacing:-.01em}
+.mkt .pill{font-size:.62rem;padding:0 5px;vertical-align:2px}
+.mkk{font-size:.84rem;font-weight:500;color:var(--fg-2)}
+.mku{font-size:1.5rem;font-weight:800;white-space:nowrap;letter-spacing:-.01em}
+.mkr{font-size:.82rem;color:var(--muted);margin-top:-6px}
+.mkw{font-size:.8rem;color:var(--muted)}
+.mkz{display:grid;gap:7px;padding:9px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.mkl{display:grid;grid-template-columns:72px auto minmax(0,1fr) auto;gap:8px;align-items:center;font-size:.84rem}
+.mkl .pill{font-size:.68rem;padding:1px 7px}
+.mkln{color:var(--muted)}
+.mkli{min-width:0;color:var(--fg-2)}.mkli b{color:var(--fg);font-weight:600}
+.mkj{font-weight:700;white-space:nowrap;color:var(--fg)}.mkj.wrn{color:var(--warn)}.mkj.mut{color:var(--muted);font-weight:600}
+.mks{font-size:.78rem;color:var(--muted);line-height:1.4}
+.mkg{display:grid;grid-template-columns:repeat(6,minmax(0,1fr)) auto;gap:4px;align-items:start}
+.mkc{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0}
+.mkc small{font-size:.62rem;font-weight:600;letter-spacing:.03em;color:var(--muted)}
+.mkc i{font-style:normal;font-size:.7rem;color:var(--muted);min-height:1.1em;white-space:nowrap}
+.mk .mkc .gr{margin:0;display:flex;align-items:center;justify-content:center;min-width:2em;height:1.9em;font-size:.9rem;border-radius:6px;background:none;box-shadow:inset 0 0 0 1.5px currentColor}
+.mk .mkc .gr.g-x{box-shadow:inset 0 0 0 1px var(--line)}
+.mk .mkx{padding-left:8px;border-left:1px solid var(--line)}
+.mk .mkx .gr{min-width:2.3em;height:2.2em;font-size:1.1rem}
+.mk .mkx .g-A{background:var(--pos-soft)}.mk .mkx .g-B{background:var(--accent-soft)}.mk .mkx .g-C{background:var(--sunk)}.mk .mkx .g-D{background:var(--warn-soft)}.mk .mkx .g-E{background:var(--neg-soft)}
+.mkn{display:grid;gap:4px;font-size:.8rem}
+.mkn>div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px}
+.mkn>div>span:first-child{color:var(--muted)}
+.mkn .pill{font-size:.64rem;padding:0 6px}
 </style>
 
 <div class="wrap">
@@ -1052,7 +1092,7 @@ function renderWatch(){
       {k:'paras',t:'Paras pencetus',tip:'paras',f:r=>`${fx(r.paras,2)}<span class="vv">jarak ${sg2(r.jarak_pct)}</span>`},
       {k:'ditambah',t:'Tarikh masuk watchlist',l:1,tip:'ditambah',f:r=>esc(r.ditambah||'–')},
       {k:'hari',t:'Hari dalam watchlist',tip:'hari_watch',f:r=>fx(r.hari,0),c:()=>'ctr'},
-      ...grCols(),BTN_PENUH],
+      ...grCols(),MKAD(kadWl),BTN_PENUH],
       foot:kakiLagi('wMore')})}
   </div>${lengkapH}`;
   $('#wK').onchange=e=>{wf.k=e.target.value;if(wf.k){if(!all.some(r=>r.kaedah===wf.k&&okS(r,wf)))wf.sk='';if(!all.some(r=>r.kaedah===wf.k&&okS(r,wf)&&okI(r,wf)))wf.ind='';}wf.shown=AWAL;renderAll();};
@@ -1147,7 +1187,7 @@ const grCols=()=>[
   {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??9,f:grPem,c:()=>'grd grp'},
   {k:'gred_kewangan',t:'Kewangan',tip:'g_k',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??9,f:grKew},
   {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m0'}];
-const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.tutup_semua?'exit':'');
+const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.tutup_semua?'exit':'')+' '+jalurPT(r);
 function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>esc(r.tarikh_beli||'–')},
   {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`<b>${esc(r.saham)}</b>${akaun&&r.akaun?` <span class="pill p-mute" title="${r.akaun==='M'?'Moomoo':'Claude'}">${r.akaun}</span>`:''}`,c:()=>'tk m0'},
@@ -1159,7 +1199,7 @@ function ptCols(akaun){return [
   {k:'hari',t:'Hari dipegang',tip:'hari_pt',f:r=>fx(r.hari,0),c:()=>'ctr m0'},
   {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}${selLorong(r,'kaedah')}${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`,c:()=>'wrap lrg lk m0'},
   {k:'untung_henti_pct',t:'Pegang selagi naik',tip:'keluar_henti',l:1,v:r=>hasilL(r,'henti'),f:r=>selLorong(r,'henti'),c:()=>'wrap lrg'},
-  ...grCols(),BTN_PENUH];}
+  ...grCols(),MKAD(r=>kadPos(r,akaun)),BTN_PENUH];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
   const up=rows.filter(r=>r.untung_pct>0).length,ex=rows.filter(r=>r.keluar).length;const a=avgOf(rows.map(r=>r.keluar?r.untung_akhir_pct:r.untung_pct));
   const kd=new Set(rows.map(r=>r.kaedah)).size;
@@ -1790,6 +1830,47 @@ const lajurOf=id=>skrinKecil()?'penuh':S.lajur[id]||'penuh';
 /* kad lipat telefon: kunci baris yang dibuka ('p'+_p posisi, 'w'+_w watchlist); kekal selepas lukis semula */
 const BUKA=new Set();const bukaC=k=>BUKA.has(k)?' buka':'';
 const BTN_PENUH={k:'_penuh',t:'',ns:1,l:1,hc:'mbtn',c:()=>'mbtn',f:()=>'<button type="button" class="more mbtn-b">Butiran penuh ›</button>'};
+/* kad telefon 3 zon (20 Okt 2026): satu sel .mkad dipapar apabila kad dibuka; sel lain kekal untuk desktop dan kad tertutup */
+const MKAD=f=>({k:'_kad',t:'',ns:1,l:1,hc:'mkad',c:()=>'mkad',f});
+/* jarak harga terkini ke paras keluar lorong yang masih Pegang (%; negatif = paras di bawah harga) */
+function parasL(r,l){const [k,,,,st]=LORONG[l];if(r[k]||!r[st]||/menunggu/.test(r[st]))return null;
+  if(l==='kaedah')return nomb(r.henti);const m=/paras keluar ([\d.]+)/.exec(r[st]);return m?+m[1]:null;}
+/* harga terkini dibekukan selepas lorong kaedah keluar (normPT), jadi jarak lorong 2 tidak dikira bagi baris itu */
+const jarakL=(r,l)=>{if(l==='henti'&&r.keluar)return null;const p=parasL(r,l),h=nomb(r.harga_terkini);return p==null||!h?null:(p/h-1)*100;};
+/* jalur kiri kad: oren jika mana-mana lorong Pegang dalam 3% daripada paras keluar (~8% posisi pada 20 Okt 2026), selain itu ikut tanda untung */
+function jalurPT(r){if(r.tidak_dibeli)return '';const j=['kaedah','henti'].map(l=>jarakL(r,l)).filter(v=>v!=null);
+  return j.some(v=>v>-3)?'s-hmp':r.untung_pct>0?'s-pos':r.untung_pct<0?'s-neg':'';}
+function mkLorong(r,l){const [k,t,h,u,st]=LORONG[l];if(r.tidak_dibeli)return '';
+  let pl,isi='',ka='';
+  if(r[k]){const hr=hariAntara(r.tarikh_beli,r[t]),sb=(r[st]||'').replace(/^Keluar:? ?/,'').replace(/ \([^)]*\)\s*$/,'');
+    pl='<span class="pill p-exit">Keluar</span>';isi=`${esc(tkO(r[t]))} @ ${fx(r[h],2)}${hr!=null?' · '+hr+' hari':''}${sb?` · ${esc(sb)}`:''}`;ka=`<b class="mkj ${cls(r[u])}">${sg2(r[u])}</b>`;}
+  else if(!r[st]){pl='<span class="pill p-mute">Belum</span>';isi='belum dinilai';}
+  else if(/menunggu/.test(r[st])){pl='<span class="pill p-warn">Tunggu</span>';isi=esc(r[st].replace(/ \(menunggu\)$/,''));}
+  else{pl='<span class="pill p-hold">Pegang</span>';const p=parasL(r,l),j=jarakL(r,l);
+    if(l==='kaedah'){const s=nomb(r.sasaran);isi=[p!=null?`henti <b>${fx(p,2)}</b>`:'',s!=null?`sasaran ${fx(s,2)}`:''].filter(Boolean).join(' · ')||esc((/\(([^)]*)\)\s*$/.exec(r[st])||[])[1]||'');}
+    else{const pk=/puncak ([\d.]+)/.exec(r[st]);isi=[p!=null?`paras <b>${fx(p,2)}</b>`:'',pk?`puncak ${fx(+pk[1],2)}`:''].filter(Boolean).join(' · ')||esc(r[st]);}
+    if(j!=null)ka=`<b class="mkj ${j>-1?'neg':j>-3?'wrn':'mut'}" title="jarak harga terkini ke paras keluar">${sg2(j)}</b>`;}
+  return `<div class="mkl"><span class="mkln">${l==='kaedah'?'Kaedah':'Selagi naik'}</span>${pl}<span class="mkli">${isi}</span>${ka}</div>`;}
+const MKG=[['gred_sektor','S',r=>fx(grNil(r.skor_sektor),0)],['gred_industri','I',r=>fx(grNil(r.skor_industri),0)],['gred_rs','RS',r=>fx(grNil(r.rs_rating),0)],
+  ['gred_qr','QR',r=>{const h=grNil(r.hari_ke_earnings);return h==null?'–':fx(h,0)+'h';}],['gred_pemangkin','P',r=>{const m=grNil(r.mata_pemangkin);return m==null?'–':(m>0?'+':'')+fx(m,0);}],['gred_kewangan','K',()=>'']];
+const mkGred=r=>`<div class="mkg">${MKG.map(([k,t,v])=>`<span class="mkc"><small>${t}</small>${grB(r[k])}<i>${v(r)}</i></span>`).join('')}<span class="mkc mkx"><small>Gred</small>${grB(r.gred_keseluruhan)}</span></div>`;
+function mkNota(r){const L=[],sk=r.sektor||r.sektor_us,ind=r.industri||r.industri_us;
+  if(sk||ind)L.push(['Kumpulan',esc([sk,ind].filter(Boolean).join(' · '))]);
+  const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];if(h!=null)L.push(['Earnings',`${esc(tkO(r.tarikh_earnings)||'–')} · ${fx(h,0)} hari lagi${q?` <span class="pill ${q[1]}">${q[0]}</span>`:''}`]);
+  const pm=String(r.pemangkin||'');if(GORD[r.gred_pemangkin]!=null&&pm&&pm!=='tiada pemangkin dikesan')L.push(['Pemangkin',esc(pm.replace(/^🔥 PANAS · /,'🔥 '))]);
+  const kw=/\) · ([^·]+?) · F:(\d+) · keyakinan (\S+)/.exec(String(r.kewangan_ringkas||''));
+  if(kw)L.push(['Kewangan',`${esc(kw[1])} · keyakinan ${esc(kw[3])}${+kw[2]?` · <span style="color:var(--warn)">${kw[2]} bendera</span>`:''}`]);
+  if(r.rs_tanda)L.push(['RS',`<span style="color:var(--warn)">${esc(r.rs_tanda)}</span>`]);
+  return L.length?`<div class="mkn">${L.map(([a,b])=>`<div><span>${a}</span><span>${b}</span></div>`).join('')}</div>`:'';}
+function kadPos(r,akaun){const ks=r.kaedah_kongsi&&r.kaedah_kongsi.length?r.kaedah_kongsi.join('+').split(/\s*[+,;]\s*/).filter(Boolean).join(' '):'';
+  return `<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(r.saham)}</b>${akaun&&r.akaun?`<span class="pill p-mute">${r.akaun}</span>`:''}<span class="mkk">${esc(r.kaedah)} · ${fx(r.hari,0)} hari</span></span><b class="mku ${cls(r.untung_pct)}">${sg2(r.untung_pct)}</b></div>
+    <div class="mkr">${fx(r.harga_beli,2)} → <b style="color:var(--fg-2)">${fx(r.harga_terkini,2)}</b> · ${fx(r.unit,0)} unit · beli ${esc(tkO(r.tarikh_beli)||'–')}${ks?` · kongsi ${esc(ks)}`:''}</div>
+    ${r.tidak_sah?`<div class="mkw"><span class="pill p-warn">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> ${esc(r.sebab_tidak_sah||'')}</div>`:''}
+    ${r.tidak_dibeli?'':`<div class="mkz">${mkLorong(r,'kaedah')}${mkLorong(r,'henti')}</div>`}${mkGred(r)}${mkNota(r)}</div>`;}
+function kadWl(r){return `<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(r.saham)}</b><span class="mkk">${esc(r.kaedah)} · ${fx(r.hari,0)} hari dalam senarai</span></span>${wPill(r)}</div>
+    <div class="mkr">${r.nama?esc(r.nama)+' · ':''}harga <b style="color:var(--fg-2)">${fx(r.harga_terkini,2)}</b></div>
+    <div class="mkz"><div class="mkl"><span class="mkln">Pencetus</span><span class="mkli" style="grid-column:span 2"><b>${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` · ${esc(r.syarat_dipenuhi)} dipenuhi`:''}${nomb(r.paras)!=null?` · paras <b>${fx(r.paras,2)}</b>`:''}</span>${nomb(r.jarak_pct)!=null?`<b class="mkj" title="jarak harga ke paras pencetus">${sg2(r.jarak_pct)}</b>`:''}</div>
+    ${r.syarat_belum||r.sebab?`<div class="mks">${esc(r.syarat_belum||r.sebab)}</div>`:''}</div>${mkGred(r)}${mkNota(r)}</div>`;}
 const lajurSeg=id=>`<div class="seg" data-lajur="${id}" role="group" aria-label="Lajur">${[['ringkas','Lajur ringkas'],['penuh','Lajur penuh']].map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${lajurOf(id)===v}"${v==='ringkas'?' data-tip="lajur"':''}>${t}</button>`).join('')}</div>`;
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-lajur] button');if(!b)return;S.lajur[b.closest('[data-lajur]').dataset.lajur]=b.dataset.v;try{localStorage.setItem('pbs3_lajur',JSON.stringify(S.lajur));}catch(x){}renderAll();});
 /* satu lajur lencana gred: I Q P R S + keseluruhan; butiran penuh dalam helaian baris */
@@ -2105,7 +2186,7 @@ const TIPS={
   kat_pt:{t:'Papertrade (M+C)',d:'Prestasi sebenar setakat ini dalam Papertrade C (akaun rasmi sejak 13 Okt 2026; Moomoo lama dalam tab Prestasi atau Posisi): untung purata (akhir bagi yang keluar, semasa bagi yang dipegang), kadar menang, kerugian terbesar dan bilangan dagangan. Label TERUSKAN/PERHATI/HENTIKAN hanya selepas ≥ 20 dagangan tertutup. Susun ikut untung purata.',e:'BELUM CUKUP DATA · +1.8% · menang (semua) 60% · 5 dagangan (2 selesai).'},
   kat_umum:{t:'Peraturan belian',d:'Semua kaedah: isyarat pada harga tutup hari ini, beli 1 unit maya pada harga buka esok dalam Papertrade C. Dibatalkan jika harga buka ≤ henti. Tiada order Moomoo dan tiada wang sebenar.',e:''},
   slot_c:{t:'Slot Claude',d:'Posisi maya Claude bagi kaedah itu: dipegang (belum keluar) dan jumlah semua (termasuk yang sudah keluar). Tiada had.',e:''},
-  lajur:{t:'Lajur ringkas / penuh',d:'Ringkas: lajur utama sahaja; gred jadi satu lajur lencana dan butiran penuh dibuka dengan mengetik baris. Penuh: semua lajur seperti dahulu. Pilihan disimpan dalam pelayar ini. Di telefon pilihan ini tiada: setiap saham satu baris (Saham · Kaedah · hari dipegang (h) · status keluar · Gred · Untung %); ketik baris untuk butiran lain, butang Butiran penuh untuk helaian.',e:''},
+  lajur:{t:'Lajur ringkas / penuh',d:'Ringkas: lajur utama sahaja; gred jadi satu lajur lencana dan butiran penuh dibuka dengan mengetik baris. Penuh: semua lajur seperti dahulu. Pilihan disimpan dalam pelayar ini. Di telefon pilihan ini tiada: setiap saham satu baris (Saham · Kaedah · hari dipegang (h) · status keluar · Gred · Untung %); ketik baris untuk kad tiga zon (posisi; keluar dengan jarak harga ke paras keluar, oren jika dalam 3%, merah jika dalam 1%; gred dengan nilai), butang Butiran penuh untuk helaian. Jalur kiri kad: hijau untung, merah rugi, oren hampir paras keluar.',e:''},
   selesai:{t:'Dagangan selesai',d:'Dagangan yang sudah keluar ikut peraturan kaedah (lorong 1). Purata = untung akhir purata; menang = peratus yang keluar dengan untung. Pada minggu awal angka ini cenderung negatif kerana dagangan rugi kena henti dahulu, manakala yang untung masih dipegang.',e:''},
   dipegang:{t:'Masih dipegang',d:'Posisi yang belum kena peraturan jual kaedah. Purata = untung semasa (belum direalisasi) berbanding harga beli.',e:''},
   jangkaan:{t:'Jangkaan (expectancy)',d:'Kadar menang × purata menang + kadar rugi × purata rugi = purata untung yang dijangka bagi setiap dagangan. Kadar menang rendah masih boleh untung jika untung purata jauh lebih besar daripada rugi purata.',e:'40% × +10% + 60% × −4% = +1.6% setiap dagangan.'},
