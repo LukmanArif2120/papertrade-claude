@@ -92,5 +92,26 @@ class TestTuai(unittest.TestCase):
         self.assertFalse(st['XYZ']['1']['has_more'])
 
 
+class TestPerlu(unittest.TestCase):
+    def test_tiada_fail_dahulu_kemudian_suku_baharu(self):
+        from datetime import date
+        d = tempfile.mkdtemp(); pt = os.path.join(d, 'pt'); kw = os.path.join(d, 'kw')
+        os.makedirs(pt); os.makedirs(kw)
+        def csvf(nama, baris):
+            with open(os.path.join(pt, nama), 'w', encoding='utf-8') as f:
+                f.write('saham,keluar\n' + ''.join(f'{t},{k}\n' for t, k in baris))
+        csvf('claude.csv', [('AAA', 'False'), ('BBB', 'True'), ('CCC', 'False'), ('DDD', 'False')])
+        csvf('watchlist.csv', [('EEE', '')])
+        def kew(t, tamat, dikumpul):
+            json.dump({'suku': [{'label': '2026/Q2', 'tamat': tamat}], 'dikumpul': dikumpul},
+                      open(os.path.join(kw, f'{t}.json'), 'w'))
+        kew('AAA', '2026-06-30', '2026-10-19')   # suku Q3 belum dijangka
+        kew('CCC', '2026-03-31', '2026-10-01')   # suku Q2 dijangka sudah dilapor, fail lama
+        kew('DDD', '2026-03-31', '2026-10-18')   # dijangka, tetapi baru dikumpul
+        out = TK.perlu(pt, kw, date(2026, 10, 20), 40)
+        self.assertEqual([t for t, _ in out], ['EEE', 'BBB', 'CCC'])
+        self.assertEqual(TK.perlu(pt, kw, date(2026, 10, 20), 1), [('EEE', 'tiada fail')])
+
+
 if __name__ == '__main__':
     unittest.main()

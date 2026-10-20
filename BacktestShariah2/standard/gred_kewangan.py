@@ -861,7 +861,7 @@ LAJUR_KEW = ['gred_kewangan', 'kewangan_ringkas', 'kewangan_tempoh', 'kewangan_b
 
 
 def isi(folder, kew, harga):
-    """Isi lajur kewangan SAHAJA bagi baris bergred dalam fail posisi, senarai_beli dan watchlist, pada tarikh asal
+    """Isi lajur kewangan SAHAJA bagi baris bergred dalam fail posisi claude*, senarai_beli dan watchlist, pada tarikh asal
     (peraturan sama dengan gred_kira_semula.py): sesi rujukan D = tarikh_isyarat / tarikh_data / sesi sebelum
     tarikh_beli; hari imbasan = tarikh gred_pada asal (selainnya sesi selepas D). Harga <= D; penyata yang diterbitkan
     <= hari imbasan. Lajur lain tidak disentuh; fail posisi tidak menerima kewangan_butiran."""
@@ -882,7 +882,9 @@ def isi(folder, kew, harga):
             data[t] = json.load(open(p, encoding='utf-8')) if os.path.exists(p) else None
         return data[t]
 
-    for p in fail_posisi(folder) + [os.path.join(folder, f) for f in ('senarai_beli.csv', 'watchlist.csv')]:
+    # moomoo.csv (akaun Moomoo lama) dikecualikan: dokumen db papertrade/moomoo akan melepasi had 256 KiB (20 Okt 2026)
+    for p in [x for x in fail_posisi(folder) if os.path.basename(x) != 'moomoo.csv'] + \
+            [os.path.join(folder, f) for f in ('senarai_beli.csv', 'watchlist.csv')]:
         if not os.path.exists(p):
             continue
         posisi = os.path.basename(p) not in ('senarai_beli.csv', 'watchlist.csv')

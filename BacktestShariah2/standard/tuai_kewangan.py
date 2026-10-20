@@ -3,6 +3,10 @@
 # `gred_kewangan.py simpan`, tanpa menaip semula hasil alat.
 #
 #   python3 BacktestShariah2/standard/tuai_kewangan.py --transkrip ~/.claude/projects/<projek> --keluar <folder mentah>
+#   python3 BacktestShariah2/standard/tuai_kewangan.py perlu [--had 40] [--tarikh YYYY-MM-DD]
+#       -> senarai "T:abcd" saham yang perlu dikumpul (imbasan malam, jadual/imbas_2002.md langkah 5c): saham tanpa fail
+#          data/kewangan dahulu (senarai_beli, watchlist, posisi terbuka, kemudian posisi lain), kemudian saham aktif yang
+#          suku seterusnya sepatutnya sudah dilapor (akhir suku terakhir + 91 + 45 hari < hari ini) dan fail dikumpul > 7 hari lalu.
 #
 # Pasangan tool_use -> tool_result dipadan ikut id; parameter panggilan (symbol, statement_type, financial_type, next_key)
 # menentukan nama fail. Hasil besar yang disimpan alat ke fail ("Output has been saved to <path>" atau
@@ -13,7 +17,8 @@
 # Hasil berulang: yang terkini menang.
 # Status: <keluar>/tuai_status.json {T: {"1"|"2"|"3": {"halaman": [...], "has_more": bool, "next_key": str} atau "tiada",
 #   "eph": true|"tiada", "snap": true}}.
-import argparse, glob, json, os, re
+import argparse, csv, glob, json, os, re, sys
+from datetime import date, timedelta
 
 SIMPAN = re.compile(r'(?:Output has been saved to|Full output saved to:) (\S+?\.(?:txt|json))')
 TIADA_DATA = -10   # ret_code Moomoo "no data"
@@ -146,9 +151,57 @@ def tuai(paths, keluar):
     return status
 
 
+BS2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SUKU_LAPOR = 91 + 45      # akhir suku terakhir + satu suku + tempoh lapor (hari)
+SEGAR = 7                 # jangan ulang kumpul fail yang dikumpul <= 7 hari lalu
+
+
+def perlu(folder, kewangan, hari_ini, had):
+    """[(T, sebab)] saham yang perlu dikumpul: tiada fail dahulu (ikut keutamaan), kemudian suku baharu dijangka."""
+    def tk(p, buka_sahaja=False):
+        if not os.path.exists(p):
+            return []
+        out = []
+        for r in csv.DictReader(open(p, newline='', encoding='utf-8')):
+            t = (r.get('saham') or r.get('Saham') or '').strip()
+            if t and (not buka_sahaja or str(r.get('keluar', '')).strip().lower() not in ('true', '1')):
+                out.append(t)
+        return out
+    posisi = sorted(glob.glob(os.path.join(folder, 'claude*.csv')))
+    aktif = tk(os.path.join(folder, 'senarai_beli.csv')) + tk(os.path.join(folder, 'watchlist.csv')) + \
+        [t for p in posisi for t in tk(p, True)]
+    semua = aktif + [t for p in posisi for t in tk(p)]
+    urutan = list(dict.fromkeys(semua))
+    out = [(t, 'tiada fail') for t in urutan if not os.path.exists(os.path.join(kewangan, f'{t}.json'))]
+    for t in dict.fromkeys(aktif):
+        p = os.path.join(kewangan, f'{t}.json')
+        if not os.path.exists(p):
+            continue
+        k = json.load(open(p, encoding='utf-8'))
+        suku = k.get('suku') or []
+        dk = k.get('dikumpul') or '2000-01-01'
+        if suku and date.fromisoformat(suku[-1]['tamat']) + timedelta(days=SUKU_LAPOR) < hari_ini \
+                and date.fromisoformat(dk) + timedelta(days=SEGAR) < hari_ini:
+            out.append((t, f'suku selepas {suku[-1]["label"]} dijangka sudah dilapor'))
+    return out[:had]
+
+
 def main(argv=None):
+    argv = list(sys.argv[1:] if argv is None else argv)
+    if argv[:1] == ['perlu']:
+        ap = argparse.ArgumentParser(description='Saham yang perlu dikumpul data kewangannya')
+        ap.add_argument('--folder', default=os.path.join(BS2, 'papertrade'))
+        ap.add_argument('--kewangan', default=os.path.join(BS2, 'data', 'kewangan'))
+        ap.add_argument('--tarikh', default=date.today().isoformat()); ap.add_argument('--had', type=int, default=40)
+        a = ap.parse_args(argv[1:])
+        senarai = perlu(a.folder, a.kewangan, date.fromisoformat(a.tarikh), a.had)
+        for t, sebab in senarai:
+            print(f'{t}:abcd  # {sebab}')
+        print(f'{len(senarai)} saham', file=sys.stderr)
+        return
     ap = argparse.ArgumentParser(description='Tuai hasil alat Moomoo daripada transkrip sesi ke folder mentah gred_kewangan')
-    ap.add_argument('--transkrip', required=True, nargs='+', help='fail .jsonl atau folder (dicari secara rekursif)')
+    ap.add_argument('--transkrip', nargs='+', default=[os.path.expanduser('~/.claude/projects')],
+                    help='fail .jsonl atau folder (dicari secara rekursif); lalai ~/.claude/projects')
     ap.add_argument('--keluar', required=True)
     a = ap.parse_args(argv)
     paths = []
