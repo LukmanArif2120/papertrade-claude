@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
-# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/portfolio_slot, harian/status. sektor/snapshot dijana oleh tugasan
+# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/portfolio_slot, analisis/papan, harian/status. sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, json, os, re, statistics as stt, sys
 
@@ -262,6 +262,10 @@ def main(argv=None):
     ps = portfolio_slot(dibina)
     if ps:
         docs['prestasi/portfolio_slot'] = ps
+    # analisis/papan: Papan Penganalisis (standard/penganalisis.py, Actions analisis.yml selepas Lejar Penuh) untuk tab Analisis
+    pa = os.path.join(BS2, 'data', 'analisis', 'papan.json')
+    if os.path.exists(pa):
+        docs['analisis/papan'] = json.load(open(pa, encoding='utf-8'))
     # sektor/snapshot (dijana mingguan; medan posisi dikemas kini jika fail ada)
     snap = os.path.join(BS2, 'data', 'db', 'sektor_snapshot.json')
     if os.path.exists(snap):

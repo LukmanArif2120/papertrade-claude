@@ -1,0 +1,50 @@
+# Papan Penganalisis (BacktestShariah2/standard/penganalisis.py): satu jadual banding semua kaedah, menggabungkan backtest
+# (registry 431, S1–S4, WFO W01, AUTOTUNE 2000 saham AS) dan data hadapan (Lejar Penuh + kohort Papertrade C sebelum Lejar).
+# Dicetus sebaik "Lejar penuh" siap (~06:30 UTC = 14:30 MYT), jadi laporan memakai lejar terkini dan sedia sebelum rutin
+# 6:02 pagi esok menolak db `analisis/papan` ke dashboard. Tanpa LLM. Keputusan pengguna 20 Okt 2026.
+# Tiada cron: penjaga_jadual.yml menjaga lejar.yml; larian lejar (jadual, sandaran atau dispatch) mencetus workflow ini.
+name: Papan penganalisis
+
+on:
+  workflow_run:
+    workflows: ['Lejar penuh']
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: analisis
+  cancel-in-progress: false
+
+jobs:
+  analisis:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion != 'cancelled'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q pandas numpy
+      - name: Jana papan penganalisis
+        run: python3 BacktestShariah2/standard/penganalisis.py
+      - name: Commit dan push
+        run: |
+          git config user.name "analisis[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/laporan/PENGANALISIS.md BacktestShariah2/data/analisis/papan.json
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Papan penganalisis: data $(python3 -c "import json;print(json.load(open('BacktestShariah2/data/analisis/papan.json'))['kini'])")"
+          for n in 1 2 3; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 15))
+          done
+          echo "Push gagal; larian seterusnya menjana semula." >&2
+          exit 1
