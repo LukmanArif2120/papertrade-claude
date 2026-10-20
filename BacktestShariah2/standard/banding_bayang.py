@@ -300,6 +300,13 @@ def main(argv=None):
     kerja = tempfile.mkdtemp(prefix='bayang_')
     try:
         if a.cmd == 'hari':
+            # beli D diulang tayang dengan bar harian D: jika stor belum ada bar itu, jangan tulis laporan (larian
+            # seterusnya mengulang); laporan yang sudah wujud tidak ditulis semula oleh harian.yml
+            import exchange_calendars as xc
+            akhir = int(pd.read_csv(os.path.join(BS2, 'data/harga/stor/harga_idx.csv'), usecols=['date']).date.max())
+            if xc.get_calendar('XNYS').is_session(pd.Timestamp(a.tarikh)) and akhir < int(a.tarikh.replace('-', '')):
+                print(f'stor harga belum ada bar {a.tarikh} (bar terakhir {akhir}); banding ditangguh')
+                return
             cs = cari_commit(a.tarikh)
             seterus = cari_commit(str((pd.Timestamp(a.tarikh) + pd.Timedelta(days=1)).date())).get('kemas')
             tugas = [('kemas', cs.get('kemas')), ('imbas', cs['imbas'] or None), ('beli', cs.get('beli'))]
