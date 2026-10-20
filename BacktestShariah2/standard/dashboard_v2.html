@@ -2736,13 +2736,34 @@ renderNav();renderAll();
   },()=>setLive(false,'Sambungan terputus. Muat semula halaman.'));
   db.doc('meta/info').onSnapshot(s=>{S.meta=s.exists?s.data():null;re('backtest');},()=>{});
   const sub=(path,keyName,tabs)=>db.doc(path).onSnapshot(s=>{S[keyName]=s.exists?s.data():null;S.live=true;re(...tabs);},()=>{});
-  sub('papertrade/moomoo','ptm',['ptm','prestasi']);
-  sub('papertrade/moomoo_peta','ptmPeta',['ptm','prestasi']);
-  sub('papertrade/claude','ptc',['ptc','prestasi']);
-  /* papertrade/claude_2, _3, … tanpa had: dokumen yang wujud membuka langganan dua nombor seterusnya */
-  const ptcDah=new Set();
-  const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
-  subPtc(2);subPtc(3);
+  /* papertrade/ringkas_c, ringkas_m (v90; standard/jana_db.py ringkas_pt): semua baris dalam bentuk padat ikut lajur dengan kamus
+     dikongsi, ~4× lebih kecil daripada papertrade/claude*. Dinyahkod kepada objek baris yang sama; dipapar hanya selepas semua
+     bahagian dan kamus tiba (indeks posisi stabil). Jika dokumen padat belum wujud, baca dokumen lama (claude*, moomoo). */
+  const nyahkod=(asas,ch,km)=>{const B=asas.bahagian||{n:1,nk:0},M={};
+    for(let i=1;i<=B.nk;i++)km[i].kamus.forEach(([c,mula,v])=>{const L=M[c]||(M[c]=[]);for(let j=0;j<v.length;j++)L[mula+j]=v[j];});
+    const rows=[asas.rows||[]];for(let i=2;i<=B.n;i++)rows.push(ch[i].rows||[]);
+    const K=asas.kolum||[],J=asas.jenis||[],out=[];
+    rows.flat().forEach(a=>{const r={};for(let j=0;j<K.length;j++){let v=a[j];const t=J[j];if(v==null)continue;
+      if(t==='k'||t==='j'){if(!v)continue;v=M[K[j]][v-1];if(t==='j')v=JSON.parse(v);}else if(t==='b')v=!!v;r[K[j]]=v;}out.push(r);});
+    const d={};Object.keys(asas).forEach(k=>{if(!['kolum','jenis','rows','bahagian'].includes(k))d[k]=asas[k];});d.rows=out;return d;};
+  const subRingkas=(nama,keyName,lama)=>{let asas=null,dahLama=false;const ch={},km={},dah=new Set();
+    const cuba=()=>{if(!asas)return;const B=asas.bahagian||{n:1,nk:0};
+      for(let i=2;i<=B.n;i++)if(!ch[i]||ch[i].induk!==B.id)return;
+      for(let i=1;i<=B.nk;i++)if(!km[i]||km[i].induk!==B.id)return;
+      S[keyName]=nyahkod(asas,ch,km);S.live=true;re();};
+    const anak=(id,simpan)=>{if(dah.has(id))return;dah.add(id);db.doc('papertrade/'+id).onSnapshot(t=>{simpan(t.exists?t.data():null);cuba();},()=>{});};
+    db.doc('papertrade/'+nama).onSnapshot(s=>{if(!s.exists){if(!dahLama){dahLama=true;lama();}return;}
+      asas=s.data();const B=asas.bahagian||{n:1,nk:0};
+      for(let i=2;i<=B.n;i++)anak(nama+'_'+i,d=>{ch[i]=d;});
+      for(let i=1;i<=B.nk;i++)anak(nama+'_kamus_'+i,d=>{km[i]=d;});
+      cuba();},()=>{});};
+  subRingkas('ringkas_m','ptm',()=>{sub('papertrade/moomoo','ptm',['ptm','prestasi']);sub('papertrade/moomoo_peta','ptmPeta',['ptm','prestasi']);});
+  subRingkas('ringkas_c','ptc',()=>{
+    sub('papertrade/claude','ptc',['ptc','prestasi']);
+    /* papertrade/claude_2, _3, … tanpa had: dokumen yang wujud membuka langganan dua nombor seterusnya */
+    const ptcDah=new Set();
+    const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
+    subPtc(2);subPtc(3);});
   /* dokumen besar dibahagi (standard/bahagi_db.py): asas {bahagian:{id,n}} + <nama>_2… {induk,bahagian,rows}; bahagian lama (induk lain) diabaikan */
   const subBhg=(path,keyName,tabs)=>{let asas=null;const ch={},dah=new Set();
     const gabung=()=>{let d=null;if(asas){const b=asas.bahagian;let rows=asas.rows||[];

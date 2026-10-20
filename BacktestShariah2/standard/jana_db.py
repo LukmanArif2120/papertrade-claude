@@ -8,7 +8,7 @@
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
 # papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/portfolio_slot, analisis/papan, harian/status. sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
-import argparse, csv, glob, json, os, re, statistics as stt, sys
+import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
 
 import numpy as np
 import pandas as pd
@@ -139,6 +139,64 @@ def penurunan_maks(M, C, stor):
                 continue
             v = round(min(0.0, (min(w) / hbv - 1) * 100), 2)
             out[k] = min(v, out.get(k, 0.0))
+    return out
+
+
+HAD_RINGKAS = 200000
+
+
+def kod_lajur(R):
+    """Baris db -> bentuk padat ikut lajur (dashboard v90): (kolum, jenis, kamus, rows). jenis setiap lajur:
+    'b' boolean (0/1), 'k' rentetan berulang (indeks kamus + 1), 'j' senarai/campuran berulang (kamus JSON, indeks + 1),
+    '' nilai asal. Medan yang tiada = 0 bagi 'k'/'j', null bagi yang lain. Kamus dikongsi semua bahagian; halaman menyahkod
+    kepada objek sama seperti baris_db()."""
+    cols = sorted({k for r in R for k in r})
+    jenis, kamus, lajur = [], {}, []
+    for c in cols:
+        v = [r.get(c) for r in R]
+        s = [x for x in v if x is not None]
+        if s and all(isinstance(x, bool) for x in s):
+            jenis.append('b'); lajur.append([None if x is None else int(x) for x in v]); continue
+        if s and all(isinstance(x, (str, list)) for x in s):
+            js = any(isinstance(x, list) for x in s)
+            k = [None if x is None else (json.dumps(x, ensure_ascii=False) if js else x) for x in v]
+            u = sorted({x for x in k if x is not None})
+            if len(u) < 0.6 * len(R):
+                ix = {x: i for i, x in enumerate(u)}; kamus[c] = u
+                jenis.append('j' if js else 'k'); lajur.append([0 if x is None else ix[x] + 1 for x in k]); continue
+        jenis.append(''); lajur.append(v)
+    return cols, jenis, kamus, [list(t) for t in zip(*lajur)]
+
+
+def ringkas_pt(R, nama, meta, had=HAD_RINGKAS):
+    """[(doc_id, dokumen)] padat bagi papertrade/ringkas_c|m (susunan baris dikekalkan):
+    <nama> = meta + kolum + jenis + bahagian {id, n, nk} + rows bahagian 1; <nama>_2.._n = {induk, bahagian, rows};
+    <nama>_kamus_1.._nk = {induk, kamus: [[lajur, mula, [nilai…]], …]} (senarai panjang dipecah ikut segmen)."""
+    cols, jenis, kamus, rows = kod_lajur(R)
+    ident = hashlib.sha1(padat(R).encode('utf-8')).hexdigest()[:12]
+    asas_kosong = bait(dict(meta, kolum=cols, jenis=jenis, bahagian=dict(id=ident, n=999, nk=999), rows=[]))
+    bhg, cur, guna = [], [], asas_kosong
+    for r in rows:
+        sz = bait(r) + 1
+        if cur and guna + sz > had:
+            bhg.append(cur); cur, guna = [], 60
+        cur.append(r); guna += sz
+    bhg.append(cur)
+    seg, cur, guna = [], [], 60
+    for c, u in kamus.items():
+        i = 0
+        while i < len(u):
+            j, sz = i, 0
+            while j < len(u) and (j == i or guna + sz + bait(u[j]) + 1 < had):
+                sz += bait(u[j]) + 1; j += 1
+            if cur and guna + sz > had:
+                seg.append(cur); cur, guna = [], 60
+            cur.append([c, i, u[i:j]]); guna += sz + len(c) + 12; i = j
+    if cur:
+        seg.append(cur)
+    out = [(nama, dict(meta, kolum=cols, jenis=jenis, bahagian=dict(id=ident, n=len(bhg), nk=len(seg)), rows=bhg[0]))]
+    out += [(f'{nama}_{j}', dict(induk=ident, bahagian=j, rows=b)) for j, b in enumerate(bhg[1:], 2)]
+    out += [(f'{nama}_kamus_{j}', dict(induk=ident, kamus=k)) for j, k in enumerate(seg, 1)]
     return out
 
 
@@ -314,6 +372,13 @@ def main(argv=None):
                                 definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude).')
     docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
                                       nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
+    # papertrade/ringkas_c, ringkas_m: semua baris dalam bentuk padat (halaman v90 membaca ini sahaja, bukan claude*)
+    pra = {}
+    dc = docs.get('papertrade/claude', {})
+    for kod, R, meta in (('c', [baris_db(r) for r in C], {k: dc[k] for k in ('dibina', 'harga_pada', 'nota', 'slot', 'batal') if k in dc}),
+                         ('m', [baris_db(r) for r in M], {k: v for k, v in docs['papertrade/moomoo'].items() if k != 'rows'})):
+        for doc_id, d in ringkas_pt(R, f'ringkas_{kod}', meta):
+            pra[f'papertrade/{doc_id}'] = d
     garis, mfe = garis_harga(M, C, a.stor)
     docs['prestasi/garis'] = dict(garis, dibina=dibina, harga_hingga=f'{S} tutup',
                                   definisi='rows: {s: saham, c: tutup sejajar dengan tarikh (null = tiada bar)} bagi saham yang masih ada '
@@ -348,9 +413,10 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     versi = json.load(open(a.versi)) if a.versi else {}
     tulis = []
-    for nama, d in docs.items():
-        kol, doc = nama.split('/')
-        bahagian = bahagi(d, doc, 200000) if doc in ('senarai_beli', 'watchlist', 'garis', 'mfe') else [(doc, d)]
+    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe')
+              else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
+    semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
+    for kol, bahagian in semua:
         for doc_id, dd in bahagian:
             sz = bait(dd)
             if sz >= HAD_DB:
