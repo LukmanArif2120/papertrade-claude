@@ -68,6 +68,17 @@ class TestPenganalisis(unittest.TestCase):
         self.assertEqual(pg.semakan(reg, wfo, at), (True, True, False))
         self.assertEqual(pg.semakan({}, None, None), (None, None, None))
 
+    def test_harga_sandaran_stor(self):
+        with tempfile.TemporaryDirectory() as d:
+            tk, st = os.path.join(d, 'terkini.csv'), os.path.join(d, 'stor')
+            os.makedirs(st)
+            pd.DataFrame([['A', '20261016', 10.0], ['A', '20261019', 11.0]], columns=['ticker', 'date', 'close']).to_csv(tk, index=False)
+            pd.DataFrame([['A', '20261019', 99.0], ['B', '20261016', 5.0], ['B', '20261019', 6.0], ['B', '20261020', 7.0]],
+                         columns=['ticker', 'date', 'close']).to_csv(os.path.join(st, 'harga_A.csv'), index=False)
+            akhir, t = pg.harga_akhir(tk, st)
+            self.assertEqual(t, '2026-10-19')
+            self.assertEqual(akhir, {'A': 11.0, 'B': 6.0})      # terkini didahulukan; stor hanya bagi saham tiada, hingga tarikh sama
+
     def test_larian_penuh(self):
         with tempfile.TemporaryDirectory() as d:
             md, js = os.path.join(d, 'P.md'), os.path.join(d, 'p.json')

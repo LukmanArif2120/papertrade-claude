@@ -33,6 +33,7 @@ AUTOTUNE = os.path.join(REPO, 'AUTOTUNE', 'hasil', 'papan.json')
 LEJAR = os.path.join(BS2, 'lejar')
 PT = os.path.join(BS2, 'papertrade')
 TERKINI = os.path.join(BS2, 'data', 'harga', 'terkini.csv')
+STOR = os.path.join(BS2, 'data', 'harga', 'stor')
 INDEKS = os.path.join(REPO, 'data_mentah', 'index_benchmark.csv')
 SLOT = os.path.join(BS2, 'portfolio_slot')
 OUT_MD = os.path.join(BS2, 'laporan', 'PENGANALISIS.md')
@@ -151,14 +152,27 @@ def semakan(reg, wfo, at):
 
 
 # ---------------------------------------------------------------- hadapan
-def harga_akhir(path=TERKINI):
-    """{ticker: tutup terakhir} dan tarikh data terkini (YYYY-MM-DD) daripada data/harga/terkini.csv."""
-    if not os.path.exists(path):
+def harga_akhir(path=TERKINI, stor=STOR):
+    """{ticker: tutup terakhir} dan tarikh data terkini (YYYY-MM-DD): data/harga/terkini.csv, dan bagi saham yang tiada di
+    situ, stor harga repo (harga_A/B.csv, sumber yang dipakai Lejar Penuh) hingga tarikh sama."""
+    d = [pd.read_csv(path, usecols=['ticker', 'date', 'close'], dtype={'date': str})] if os.path.exists(path) else []
+    t = d[0]['date'].max() if d and len(d[0]) else None
+    ada = set(d[0].ticker) if d else set()
+    for nm in ('harga_A.csv', 'harga_B.csv'):
+        f = os.path.join(stor, nm)
+        if os.path.exists(f):
+            x = pd.read_csv(f, usecols=['ticker', 'date', 'close'], dtype={'date': str})
+            x = x[~x.ticker.isin(ada)]
+            if t:
+                x = x[x.date <= t]
+            d.append(x)
+    if not d:
         return {}, None
-    d = pd.read_csv(path, usecols=['ticker', 'date', 'close'], dtype={'date': str})
-    d = d.sort_values(['ticker', 'date'])
+    d = pd.concat(d, ignore_index=True).sort_values(['ticker', 'date'])
+    if not len(d):
+        return {}, None
+    t = t or d['date'].max()
     akhir = d.groupby('ticker').tail(1)
-    t = d['date'].max()
     return dict(zip(akhir.ticker, akhir.close.astype(float))), f'{t[:4]}-{t[4:6]}-{t[6:8]}'
 
 
