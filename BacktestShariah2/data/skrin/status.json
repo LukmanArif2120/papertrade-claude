@@ -1,9 +1,9 @@
 {
- "dijana": "2026-10-20 00:41 UTC",
+ "dijana": "2026-10-20 22:21 UTC",
  "sumber": "https://scanner.tradingview.com/america/scan",
  "tv": {
-  "baris": 4141,
-  "jumlah_padan": 4141,
+  "baris": 4154,
+  "jumlah_padan": 4154,
   "harga_min": 5.0,
   "medan_tiada_data": [
    "is_shariah_compliant"
@@ -11,12 +11,12 @@
   "is_shariah_compliant": {
    "benar": 0,
    "salah": 0,
-   "tiada": 4141
+   "tiada": 4154
   }
  },
  "etf": {
   "SPUS": {
-   "pegangan": 219
+   "pegangan": 218
   },
   "SPTE": {
    "pegangan": 109
@@ -39,8 +39,8 @@
   "disahkan_etf": 143,
   "tiada_maklumat": 729,
   "sp500_tiada_spus": 51,
-  "univ_moomoo": 917,
-  "papertrade": 563,
+  "univ_moomoo": 916,
+  "papertrade": 595,
   "papertrade_sp500_tiada_spus": [
    "ADP",
    "AEP",
@@ -53,7 +53,6 @@
    "COST",
    "CVS",
    "CVX",
-   "DELL",
    "DVN",
    "EQT",
    "EXE",
@@ -75,7 +74,6 @@
    "OMC",
    "PAYX",
    "PFE",
-   "PH",
    "PSX",
    "SMCI",
    "SRE",
