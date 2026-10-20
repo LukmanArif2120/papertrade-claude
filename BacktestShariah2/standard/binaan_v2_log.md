@@ -355,3 +355,14 @@
 - Gred: S/I v2 (`data/kumpulan/gred_kumpulan.csv`, snapshot 16 Okt), RS, QR (SST market_events 30 hari + Nasdaq), kewangan v7 dan pemangkin v3. Pemangkin: 0 Moomoo, 337 Yahoo, 0 tiada (tiada pengumpulan Moomoo; `pemangkin.json` baharu). Gred kewangan "–" bagi 440/604 senarai beli (tiada fail `data/kewangan`).
 - db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `papertrade/senarai_beli` tidak ditolak (peraturan 19 Okt); `harian/status` v25.
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-20 19:50–20:30 MYT — Imbas malam (rutin sesi repo, Sonnet; data tutup 19 Okt)
+- Kalendar NYSE: 20 Okt 2026 sesi penuh → teruskan. Bukan pendua (tiada commit "Imbas" 20 Okt sebelum larian).
+- Data: skrin Moomoo Shariah AS harga ≥ USD10 — 916 saham (4 halaman; tutup 19 Okt sepadan yfinance pada 910 saham, beza 0). Stor harga = stor repo `data/harga/stor/` (bar hingga 19 Okt); tiada saham jurang atau baharu tanpa sejarah. `univ.txt` ditulis.
+- Imbasan 134 kaedah (scanner.py scan --papertrade; db asal larian 20261013-2030-malam), tiada ralat, 781 s; 1,934 isyarat mentah → `data/isyarat/2026-10-19_malam.csv.gz`.
+- **Senarai beli** 519 baris, 249 saham, 92 kaedah; belian semula (belian_ke ≥ 2): 15. Isyarat mingguan ditolak: 8 (M37/M38/M41/M50/M52/M64/M78; 19 Okt Isnin bukan hari dagangan terakhir minggu, §3a). Ditolak: 228 kerana posisi Claude kaedah+saham yang sama masih terbuka; 1,179 melebihi had 10 setiap kaedah (431 dahulu, kemudian skor) kecuali 68 calon watchlist yang kini lengkap. `nota_henti`/`buka_maks` hanya M06, M08, M19, M20 (+ nota M52); kaedah lain kosong (belum ditakrif dalam `sedia()`).
+- **Watchlist** 283 calon, 176 saham, 66 kaedah. 193 baharu, 90 dibawa, 68 dipindah ke senarai beli, 35 dibuang. % hampir dihadkan 99.9 jika bukan isyarat sah.
+- Jejak kertas M166 V1: `WFO/kaedah_baru/jejak_M166.py` dijalankan (baris 19 Okt); tiada belian.
+- Gred: S/I v2 (snapshot 19 Okt), RS, kewangan v7, QR dan pemangkin v3. SST (`market_events`) tidak tersedia (penyambung SST minta pengesahan semula) → QR hanya daripada Nasdaq (`earnings_nasdaq.json`); gred QR "–" bagi 11 baris senarai beli dan 5 baris watchlist. Pemangkin: 0 Moomoo, 336 Yahoo, 9 baris senarai beli "–" (tiada data). Langkah 5c: `tuai_kewangan.py perlu` = 0 saham → dilangkau.
+- db: `papertrade/watchlist` (+_2 … _4) dibahagi dengan `bahagi_db.py`; `papertrade/senarai_beli` tidak ditolak; `harian/status` v28.
+- Tiada order. Tiada wang sebenar.

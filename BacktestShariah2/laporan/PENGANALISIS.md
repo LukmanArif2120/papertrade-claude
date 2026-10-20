@@ -1,12 +1,12 @@
 # Papan Penganalisis — banding semua kaedah (backtest + papertrade)
 
-Dijana 2026-10-20 15:21 MYT oleh `standard/penganalisis.py` (GitHub Actions `analisis.yml`, selepas Lejar Penuh). Data harga hingga 19 Okt 2026; Lejar sesi terakhir 19 Okt 2026. Rekod analisis sahaja: tiada order, tiada wang sebenar. Dashboard: tab Analisis (db `analisis/papan`).
+Dijana 2026-10-20 19:42 MYT oleh `standard/penganalisis.py` (GitHub Actions `analisis.yml`, selepas Lejar Penuh). Data harga hingga 19 Okt 2026; Lejar sesi terakhir 19 Okt 2026. Rekod analisis sahaja: tiada order, tiada wang sebenar. Dashboard: tab Analisis (db `analisis/papan`).
 
 ## 3 penemuan utama
 
 1. Swing teratas ikut skor gabungan: M21 Marius 3 Persediaan (Pecahan+Jurang+Kesinambungan) — +3.40% sebulan setiap posisi (julat -8.67% hingga +15.46%), 1/3 semakan luar sampel, status BELUM CUKUP; CAGR backtest bersendirian 19.5% (65.6 dagangan setahun). Tiga seterusnya: M140, M144, M32.
 2. Data hadapan belum matang: 0 posisi matang daripada 6227 (Lejar sejak 16 Okt 2026, Papertrade C sejak 8 Okt 2026). Kedudukan kini = backtest dipotong. Kaedah pertama dengan 20 posisi matang dijangka 26 Okt 2026.
-3. Ketahanan backtest lemah: lulus S1–S4 6, WFO 22, 2000 saham AS 0 kaedah; ≥ 2 daripada 3 semakan: tiada. Portfolio 10 slot sejak 16 Okt 2026: RS_10 -6.04%, RAWAK_10 +0.18%, SPY -0.87%.
+3. Ketahanan backtest lemah: lulus S1–S4 6, WFO 22, 2000 saham AS 0 kaedah; ≥ 2 daripada 3 semakan: tiada. Portfolio 10 slot sejak 16 Okt 2026: RS_10 -6.04%, RAWAK_10 +0.15%, SPY -0.87%.
 
 ## Cara skor dikira
 
@@ -21,7 +21,7 @@ Dijana 2026-10-20 15:21 MYT oleh `standard/penganalisis.py` (GitHub Actions `ana
 - Backtest dalam sampel (1 Nov 2019 – 2 Okt 2026): EW 431 21.9%, SPY 15.9% setahun.
 - WFO luar sampel (1 Jan 2023 – 2 Okt 2026): EW 423 32.6%, SPY 22.1% setahun.
 - AUTOTUNE luar sampel (2013 – Sep 2024 (2000 saham AS)): SPY 14.6% setahun.
-- Portfolio maya 10 slot (16 Okt 2026 – 19 Okt 2026, 2 sesi): RS_10 -6.04%, RAWAK_10 +0.18%, SPY -0.87%. Kajian portfolio: memilih ikut RS pasaran mengatasi memilih ikut kaedah (`kajian/KAJIAN_PORTFOLIO.md`).
+- Portfolio maya 10 slot (16 Okt 2026 – 19 Okt 2026, 2 sesi): RS_10 -6.04%, RAWAK_10 +0.15%, SPY -0.87%. Kajian portfolio: memilih ikut RS pasaran mengatasi memilih ikut kaedah (`kajian/KAJIAN_PORTFOLIO.md`).
 
 ## Kaedah swing (3–30 hari), susun ikut skor sebulan (75 kaedah)
 
