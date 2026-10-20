@@ -347,7 +347,7 @@ td .sbk{max-width:260px}
   .tablewrap.tw-grd tbody td{grid-column:span 2;padding:0;text-align:left;vertical-align:top}
   .tablewrap.tw-grd tbody td::before{font-size:.6rem;letter-spacing:.04em;margin-bottom:1px}
   .tablewrap.tw-grd tbody td.tk{grid-column:1/4;order:-2;align-self:center;font-size:1.12rem}
-  .tablewrap.tw-grd tbody td.grd.gks{grid-column:span 1;order:-2;background:none!important;padding:0;align-self:center}
+  .tablewrap.tw-grd tbody td.gks{grid-column:span 1;order:-2;padding:0;align-self:center}
   .tablewrap.tw-grd tbody td.hk,.tablewrap.tw-grd tbody td.grk{grid-column:span 3}
   .tablewrap.tw-grd tbody td.tk .vv{font-size:.76rem}
   .tablewrap.tw-grd tbody td.utg{grid-column:5/7;order:-1;text-align:right;align-self:center;font-size:1.25rem}
@@ -1131,7 +1131,7 @@ const grCols=()=>[
   {k:'hari_ke_earnings',t:'QR',tip:'g_q',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??9,f:grQR},
   {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??9,f:grPem,c:()=>'grd grp'},
   {k:'gred_kewangan',t:'Kewangan',tip:'g_k',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??9,f:grKew},
-  {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'grd gks m1'}];
+  {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m1'}];
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.tutup_semua?'exit':'');
 function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>esc(r.tarikh_beli||'–'),c:()=>'m1'},
