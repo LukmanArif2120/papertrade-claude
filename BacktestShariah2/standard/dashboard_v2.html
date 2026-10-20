@@ -445,6 +445,8 @@ td .sbk{max-width:260px}
 .mkg2 .prog{width:40px;margin:0 0 0 2px}
 .mk1 .mku small{font-size:.62em;font-weight:600}
 .mkn .vv{display:block;color:var(--muted);font-size:.76rem}
+.mkh{font-size:.9rem;color:var(--fg-2)}.mkh b{font-size:1.15rem;color:var(--fg);margin-right:6px}.mkh .rkn{display:none}
+.mkg2>.mkf{grid-column:1/-1}.mkg2>div>b .vv{display:block;font-weight:400}
 @media (max-width:760px){
   .tablewrap.tw-grd tbody tr.buka>td:not(.mkad):not(.mbtn){display:none}
   .tablewrap.tw-grd tbody td.mkad{grid-column:1/-1;order:0;padding:0}
@@ -593,7 +595,7 @@ function sortTable(o){
   let rows=st.k?sortRows(o.rows,o.cols,st):[...o.rows];const total=rows.length;
   if(o.limit)rows=rows.slice(0,o.limit);
   /* kad lipat telefon (o.lp: line, kad, key, btn, cls): baris tertutup satu baris (.mline), dibuka = kad (.mkad) */
-  const lp=o.lp;if(lp)o=Object.assign({},o,{cols:[...o.cols,{k:'_ml',t:'',ns:1,l:1,hc:'mline',c:()=>'mline',f:lp.line},{k:'_mk',t:'',ns:1,l:1,hc:'mkad',c:()=>'mkad',f:lp.kad},...(lp.btn?[BTN_PENUH]:[])]});
+  const lp=o.lp&&Object.assign({},o.lp);if(lp&&!lp.kad)lp.kad=kadUmum(o.cols);if(lp)o=Object.assign({},o,{cols:[...o.cols,{k:'_ml',t:'',ns:1,l:1,hc:'mline',c:()=>'mline',f:lp.line},{k:'_mk',t:'',ns:1,l:1,hc:'mkad',c:()=>'mkad',f:lp.kad},...(lp.btn?[BTN_PENUH]:[])]});
   const lpK=r=>o.id+'|'+lp.key(r);
   const th=o.cols.map(c=>`<th class="${c.l?'l':''} ${c.frz?'frz':''} ${c.hc||''}"${c.ns?'':` data-k="${c.k}" data-d="${c.l?'asc':'desc'}" aria-sort="${st.k===c.k?(st.dir<0?'descending':'ascending'):'none'}"`}${c.tip?` data-tip="${c.tip}"`:''}><span>${c.t}</span></th>`).join('');
   const tb=rows.map((r,i)=>`<tr${o.attr?' '+o.attr(r):''}${lp?` data-lp="${esc(lpK(r))}"`:''} class="${o.rcls?o.rcls(r):''}${lp?(lp.cls?' '+lp.cls(r):'')+bukaC(lpK(r)):''}">${o.cols.map(c=>`<td class="${c.l?'l':''} ${c.frz?'frz':''} ${c.c?c.c(r):''}">${c.f?c.f(r,i):esc(isNil(r[c.k])?'–':r[c.k])}</td>`).join('')}</tr>`).join('');
@@ -861,7 +863,7 @@ function renderPapan(){
   </div>
   <div class="filters" id="kepChips">${KEP.map(k=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${f.kep.has(k)}">${k}</button>`).join('')}
     <input type="search" id="q" placeholder="Cari ID atau nama, cth. M30, MACD" value="${esc(f.q)}" aria-label="Cari kaedah"></div>
-  ${sortTable({id:'papan',rows,cols,def:{k:'skor',dir:-1},limit:f.shown,attr:r=>`data-dk="${esc(key(r))}" tabindex="0"`,rcls:()=>'click',empty:'Tiada varian sepadan dengan penapis ini.',
+  ${sortTable({id:'papan',rows,cols,def:{k:'skor',dir:-1},lp:{key:key,btn:1,line:(r,i)=>`<span class="mut">${i+1}</span><b>${esc(r.id)}</b>${pill(r.keputusan)}<span class="mlx">${esc(r.kaedah)}</span><b class="mlr ${r.cagr>(b.ew??0)?'pos':''}">${pct(r.cagr)}</b>${mlC}`},limit:f.shown,attr:r=>`data-dk="${esc(key(r))}" tabindex="0"`,rcls:()=>'click',empty:'Tiada varian sepadan dengan penapis ini.',
     foot:(n,t)=>`<div class="tablefoot"><span>${n} daripada ${t} ${f.best?'kaedah':'varian'}</span>${t>n?'<button type="button" class="more" id="more">Papar 40 lagi</button>':''}</div>`})}`;
   $('#jenisSeg').onclick=e=>{const x=e.target.closest('button');if(!x)return;f.jenis=x.dataset.v;f.shown=40;renderAll();};
   $('#bestChip').onclick=()=>{f.best=!f.best;f.shown=40;renderAll();};
@@ -1020,7 +1022,7 @@ function renderSektor(){
     <div class="filters" style="margin-bottom:10px">${seg('skJenis',sf.jenis,[['Sektor','Sektor'],['Industri','Industri']])}
       ${sf.jenis==='Industri'?`<select id="skSek" aria-label="Tapis sektor"><option value="">Semua sektor</option>${sek.map(r=>r.nama).sort().map(n=>`<option ${sf.sek===n?'selected':''}>${esc(n)}</option>`).join('')}</select>`:''}
       <input type="search" id="skQ" placeholder="Cari sektor atau industri" value="${esc(sf.q)}" aria-label="Cari sektor"></div>
-    ${sortTable({id:'sk-'+sf.jenis,rows:trows,lp:LP_SK,def:{k:'prestasi_1m',dir:-1},cols:[
+    ${sortTable({id:'sk-'+sf.jenis,rows:trows,lp:LP_SK,limit:TELEFON?sf.shown||AWAL*2:0,foot:TELEFON?kakiLagi('skMore'):null,def:{k:'prestasi_1m',dir:-1},cols:[
       {k:"nama",t:sf.jenis,tip:sf.jenis==="Sektor"?"sektor":"industri",l:1,frz:1,f:(r,i)=>`<span class="rkn">${i+1}</span><b>${esc(r.nama)}</b><span class="vv">${r.jenis==='Industri'?esc(r.sektor)+' · ':''}${r.n} saham${r.sampel_kecil?' · sampel kecil':''}</span>`,c:()=>'name'},
       {k:'fasa',t:'Fasa',tip:'fasa',l:1,v:r=>({Leading:0,Improving:1,Weakening:2,Lagging:3})[r.fasa]??9,f:r=>fasaPill(r.fasa)},
       {k:'prestasi_1d',t:'1H',tip:'prestasi_1d',f:r=>`<span class="${cls(r.prestasi_1d)}">${sg2(r.prestasi_1d)}</span>`},
@@ -1058,7 +1060,7 @@ function renderSektor(){
   drawTreemap($('#skTree'),tmRows,sf.pk);
   drawRotasi($('#skRotC'),sf.rot==='Sektor'?sek:indOk.filter(r=>r.n_harga>=3));
   const bindSeg=(id,f)=>{const s=$('#'+id);if(s)s.onclick=e=>{const b=e.target.closest('button');if(!b)return;f(b.dataset.v);renderAll();};};
-  bindSeg('skTm',v=>sf.tm=v);bindSeg('skPk',v=>sf.pk=v);bindSeg('skJenis',v=>{sf.jenis=v;sf.sek='';});bindSeg('skRot',v=>sf.rot=v);
+  bindLagi('skMore',sf);bindSeg('skTm',v=>sf.tm=v);bindSeg('skPk',v=>sf.pk=v);bindSeg('skJenis',v=>{sf.jenis=v;sf.sek='';sf.shown=0;});bindSeg('skRot',v=>sf.rot=v);
   const ss=$('#skSek');if(ss)ss.onchange=e=>{sf.sek=e.target.value;renderAll();};
   const q=$('#skQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{sf.q=q.value.trim();renderAll();const n=$('#skQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
   $('#skTree').onclick=e=>{const g=e.target.closest('g[data-sek]');if(!g)return;sf.jenis='Industri';sf.sek=g.dataset.sek;sf.q='';renderAll();toast('Jadual ditapis: industri dalam '+g.dataset.sek);};
@@ -1119,7 +1121,7 @@ function renderWatch(){
   const wlk=S.wlk||(S.wlk={shown:AWAL}),lkS=lengkap.map(wBeli),nLB=lkS.filter(x=>x.k==='beli').length,nLP=lkS.filter(x=>x.k==='pegang').length,nLW=lkS.filter(x=>x.k==='tunggu').length,nLT=lkS.length-nLB-nLP-nLW,t0W=String(w.tarikh_data||'').slice(0,10),tbW=hariDagBerikut(t0W);
   const lengkapH=lengkap.length?`<div class="panel"><div class="panel-h"><h2 data-tip="isyarat_lengkap">Isyarat lengkap dalam watchlist</h2><span class="sub">${lengkap.length} calon · ${nLW} menunggu belian · ${nLB} dibeli · ${nLP} dilangkau · ${nLT} tidak dibeli</span></div>
     <p class="sub" style="margin:0 0 8px">Calon ini lengkap pada tutup ${esc(tkO(t0W))} ("Tiada (isyarat sah)"). Ia kekal dalam watchlist sehingga imbasan 8:02 malam memindahkannya ke senarai beli, kemudian dibeli maya pada buka ${esc(tkO(tbW))}. ${nLT?`<b class="neg">${nLT}</b> tidak dibeli walaupun sesi belian sudah berlalu.`:''}</p>
-    ${sortTable({id:'wlengkap',rows:lengkap.map((r,i)=>Object.assign({},r,{_b:lkS[i]})),def:{k:'_bk',dir:1},limit:wlk.shown,attr:r=>`data-wl="${r._w}" tabindex="0"`,rcls:()=>'click',foot:kakiLagi('wlkMore'),cols:[
+    ${sortTable({id:'wlengkap',rows:lengkap.map((r,i)=>Object.assign({},r,{_b:lkS[i]})),def:{k:'_bk',dir:1},lp:{key:r=>r._w,btn:1,line:r=>`<b>${esc(r.saham)}</b><span class="mut">${esc(r.kaedah)}</span><span class="mlx"></span>${wStatusPill(r._b)}${mlC}`},limit:wlk.shown,attr:r=>`data-wl="${r._w}" tabindex="0"`,rcls:()=>'click',foot:kakiLagi('wlkMore'),cols:[
       {k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b> ${esc(r.nama||'')}`,c:()=>'name'},
       {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`},
       {k:'_bk',t:'Status belian',tip:'isyarat_lengkap',l:1,v:r=>({tiada:0,tunggu:1,pegang:2,beli:3})[r._b.k],f:r=>`${wStatusPill(r._b)}<span class="vv">${esc(r._b.t)}</span>`},
@@ -1301,7 +1303,7 @@ function renderPos(){
   const peg=all.filter(r=>!r.keluar),kel=all.filter(r=>r.keluar);
   const base=ps.st==='pegang'?peg:ps.st==='keluar'?kel:all;
   const fb=ptFilterBar('pos'+a,base);const rows=fb.apply(base);const rk=lajurOf('pos')==='ringkas';
-  const tdb=a!=='m'&&ptcRows()?ptcRows().rows.filter(r=>r.tidak_dibeli):[];
+  const tdb=a!=='m'&&ptcRows()?ptcRows().rows.filter(r=>r.tidak_dibeli):[],tdbS=S.tdb||(S.tdb={shown:AWAL});
   const pm=ptmRows(),pc=ptcRows();
   const head=a==='m'?`<p class="headline">Akaun simulasi Moomoo <b>${esc(pm&&pm.d.akaun||'4135388')}</b>: posisi lama, tiada belian baharu sejak 13 Okt 2026 · harga pada <b>${esc(hargaPada(pm&&pm.d))}</b>. 1 unit setiap saham. Saham yang kena isyarat keluar ditanda <b class="neg">merah</b> dan harganya dibekukan; posisi tidak dijual.</p>
     <div class="strip"><b class="t">Sumber</b><span>${all.filter(r=>r.sumber==='harian').length} posisi sistem harian · ${all.filter(r=>r.sumber==='log_v1').length} pegangan warisan v1 · ${all.filter(r=>r.sumber==='luar').length} strategi luar 87 M. Isyarat keluar dinilai ikut peraturan kaedah sehingga tutup terakhir yang lengkap.</span></div>`
@@ -1311,11 +1313,11 @@ function renderPos(){
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>
     <div class="filters" style="margin-bottom:8px">${segH('posSt',ps.st,[['semua',`Semua (${all.length})`],['pegang',`Dipegang (${peg.length})`],['keluar',`Sudah keluar (${kel.length})`]],'Status')}${lajurSeg('pos')}</div>
     ${fb.html}${sortTable({id:'pos'+a,rows,cols:rk?posColsR(a==='gab'):ptCols(a==='gab'),def:{k:'untung_pct',dir:-1},rcls:r=>rclsPT(r)+' click'+bukaC('p'+r._p),limit:fb.st.shown,attr:r=>`data-pos="${esc(r._p)}" tabindex="0"`,foot:kakiLagi('posMore')})}</div>
-  ${tdb.length?`<div class="panel"><div class="panel-h"><h2>Isyarat tidak dibeli</h2><span class="sub">${tdb.length} isyarat · dilangkau ikut peraturan kaedah · tidak dikira dalam Prestasi</span></div>${sortTable({id:'ptctdb',rows:tdb,def:{k:'kaedah',dir:1},cols:[
+  ${tdb.length?`<div class="panel"><div class="panel-h"><h2>Isyarat tidak dibeli</h2><span class="sub">${tdb.length} isyarat · dilangkau ikut peraturan kaedah · tidak dikira dalam Prestasi</span></div>${sortTable({id:'ptctdb',rows:tdb,def:{k:'kaedah',dir:1},limit:TELEFON?tdbS.shown:0,foot:TELEFON?kakiLagi('tdbMore'):null,lp:{key:r=>r.saham+'|'+r.kaedah+'|'+(r.tarikh_beli_dirancang||r.tarikh_beli),line:r=>`<b>${esc(r.saham)}</b><span class="mut">${esc(r.kaedah)}</span><span class="mlx">${esc(r.sebab_tidak_sah||'')}</span><span class="mlr mut">${esc(tkO(r.tarikh_beli_dirancang||r.tarikh_beli))}</span>${mlC}`},cols:[
       {k:'tarikh_beli_dirancang',t:'Tarikh',l:1,f:r=>esc(r.tarikh_beli_dirancang||r.tarikh_beli||'–')},{k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b>`,c:()=>'tk'},{k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1},
       {k:'harga_buka_rujukan',t:'Harga buka',f:r=>fx(r.harga_buka_rujukan,2)},{k:'henti',t:'Henti',f:r=>fx(r.henti,2)},
       {k:'sebab_tidak_sah',t:'Sebab tidak dibeli',l:1,f:r=>esc(r.sebab_tidak_sah||''),c:()=>'wrap'}]})}</div>`:''}`;
-  bindSegH('posSt',v=>{ps.st=v;fb.st.shown=AWAL;});fb.bind();bindLagi('posMore',fb.st);
+  bindSegH('posSt',v=>{ps.st=v;fb.st.shown=AWAL;});fb.bind();bindLagi('posMore',fb.st);bindLagi('tdbMore',tdbS);
 }
 /* ================= Prestasi (P4): cari kaedah paling UNTUNG dan paling SELAMAT ================= */
 const KPT={TERUSKAN:{c:'--pos',cls:'p-buy',ik:'▲',bentuk:'bulat'},PERHATI:{c:'--warn',cls:'p-warn',ik:'●',bentuk:'segi empat'},HENTIKAN:{c:'--neg',cls:'p-exit',ik:'✕',bentuk:'segi tiga'},'BELUM CUKUP DATA':{c:'--muted',cls:'p-mute',ik:'○',bentuk:'bulat kosong'}};
@@ -1487,7 +1489,7 @@ function prGred(rows){const ada=rows.filter(adaGred);
   const out=[];GDIM.forEach(([k,,nama])=>{const asal=(k==='gred_sektor'||k==='gred_industri')?ada.filter(grSahKump):ada;['A','B','C','D','E'].forEach(g=>{const a=asal.filter(r=>r[k]===g);if(!a.length)return;const v=a.map(r=>r.hasil).filter(x=>x!=null);const t=a.filter(r=>r.keluar);const vt=t.map(r=>r.untung_akhir_pct).filter(x=>x!=null);
     out.push({dim:nama,g,n:a.length,tutup:t.length,win:v.length?v.filter(x=>x>0).length/v.length*100:null,avg:avgOf(v),avgT:avgOf(vt),cukup:t.length>=PR_MIN_TUTUP});});});
   return `<div class="panel"><div class="panel-h"><h2 data-tip="gred">Prestasi ikut gred</h2><span class="sub">Setakat ini: ${esc(gredRingkas(rows).map(g=>g.nama+' '+g.v).join(' · '))}</span></div>
-    ${sortTable({id:'prg-'+S.tab+S.akaun,rows:out,cols:[
+    ${sortTable({id:'prg-'+S.tab+S.akaun,rows:out,lp:{key:o=>o.dim+'|'+o.g,line:o=>`<b>${esc(o.dim)}</b>${grB(o.g)}<span class="mlx">${o.n} posisi · ${o.tutup} tutup</span><b class="mlr ${cls(o.avg)}">${sg2(o.avg)}</b>${mlC}`},cols:[
       {k:'dim',t:'Dimensi',l:1,v:o=>GDIM.findIndex(d=>d[2]===o.dim)*10+GORD[o.g],f:o=>`<b>${esc(o.dim)}</b>`},
       {k:'g',t:'Gred',l:1,v:o=>GORD[o.g],f:o=>grB(o.g)},
       {k:'n',t:'Posisi',f:o=>o.n},{k:'tutup',t:'Tertutup',f:o=>`${o.tutup}${o.cukup?'':'<span class="vv">belum cukup</span>'}`},
@@ -1503,7 +1505,7 @@ function prLorong(rows){const by={};rows.forEach(r=>{(by[r.kaedah]=by[r.kaedah]|
   const T=st(rows);const menang={};out.forEach(o=>{menang[o.terbaik]=(menang[o.terbaik]||0)+1;});
   const sel=(v,x)=>`<b class="${cls(v)}">${sg2(v)}</b><span class="vv">${x} keluar</span>`;
   return `<div class="panel"><div class="panel-h"><h2 data-tip="dua_lorong">Banding dua lorong keluar</h2><span class="sub">Semua ${T.n} dagangan: kaedah ${sg2(T.k)} · selagi naik ${sg2(T.h)} · lorong terbaik: kaedah ${menang['Kaedah']||0}, selagi naik ${menang['Selagi naik']||0}, seri ${menang['Seri']||0} kaedah</span></div>
-    ${sortTable({id:'prl-'+S.tab+S.akaun,rows:out,def:{k:'n',dir:-1},limit:60,cols:[
+    ${sortTable({id:'prl-'+S.tab+S.akaun,rows:out,def:{k:'n',dir:-1},limit:TELEFON?(S.prl||(S.prl={shown:AWAL})).shown:60,foot:TELEFON?kakiLagi('prlMore'):null,lp:{key:o=>o.kaedah,line:o=>`<b>${esc(o.kaedah)}</b><span class="mlx">K <b class="${cls(o.k)}">${sg2(o.k)}</b> · S <b class="${cls(o.h)}">${sg2(o.h)}</b></span><span class="pill p-near">${esc(o.terbaik)}</span>${mlC}`},cols:[
       {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,frz:1,f:o=>`<b>${esc(o.kaedah)}</b>`,c:()=>'tk'},
       {k:'n',t:'Dagangan',tip:'jumlah_dag',f:o=>`${o.n}<span class="vv">${o.ts} tutup semua</span>`},
       {k:'k',t:'Lorong kaedah',tip:'isyarat_keluar',f:o=>sel(o.k,o.xk)},
@@ -1639,7 +1641,7 @@ function renderPrestasi(which){
   el.querySelectorAll('[data-bar]').forEach(b=>{b.onclick=()=>{S.barPenuh=b.dataset.bar==='1';renderAll();};});
   {const A=analisis(src);drawKumulatif($('#prKum'+which),A.harian);drawKalendar($('#prKal'+which),A.harian);drawTaburan($('#prTab'+which),tbVals(src));bindSegH('tbSeg'+which,v=>{S.tb=v;});}
   const sg=$('#prMin'+which);sg.onclick=e=>{const b=e.target.closest('button');if(!b)return;pf.minN=+b.dataset.v;renderAll();};
-  bindLagi('prkMore'+which,pk);
+  bindLagi('prkMore'+which,pk);if(S.prl)bindLagi('prlMore',S.prl);
 }
 
 /* ================= Kaedah: katalog semua kaedah aktif (kaedah/katalog, sumber standard/katalog_kaedah.json) ================= */
@@ -1761,7 +1763,7 @@ function renderAt01(){
   ${atGabHtml(gb)}
   <div class="panel"><div class="panel-h"><h2>Semua kaedah</h2><span class="sub">${rows.length} daripada ${all.length} · ketik tajuk lajur untuk susun</span></div>
     <div class="filters" style="margin-bottom:10px"><select id="atLbl" aria-label="Tapis label"><option value="">Semua label</option>${AT_LBL.map(l=>`<option value="${esc(l)}" ${af.lbl===l?'selected':''}>${esc(l)} (${kl[l]??0})</option>`).join('')}</select><input type="search" id="atQ" placeholder="Cari ID atau nama kaedah" value="${esc(af.q)}" aria-label="Cari kaedah AUTOTUNE"></div>
-    ${sortTable({id:'autotune',rows,def:{k:'cagr_a',dir:-1},empty:all.length?'Tiada kaedah sepadan.':'Belum ada rekod kaedah.',cols:[
+    ${sortTable({id:'autotune',rows,def:{k:'cagr_a',dir:-1},limit:TELEFON?af.shown||AWAL:0,foot:TELEFON?kakiLagi('atMore'):null,lp:{key:r=>r.id,line:r=>`<b>${esc(r.id)}</b>${atPill(r.label)}<span class="mlx">${esc(r.nama||'')}</span><b class="mlr ${cls(r.cagr_a!=null&&r.spy_a!=null?r.cagr_a-r.spy_a:null)}">${pct(r.cagr_a)}</b>${mlC}`},empty:all.length?'Tiada kaedah sepadan.':'Belum ada rekod kaedah.',cols:[
       {k:'id',t:'Kaedah',tip:'kaedah',l:1,frz:1,v:r=>+String(r.id).replace(/\D/g,''),f:r=>`<b class="nw">${esc(r.id)}</b>${gab.has(r.id)?' <span class="pill p-buy">gabungan</span>':''}<span class="vv">${esc(r.nama||'')}</span>`,c:()=>'name'},
       {k:'label',t:'Label',tip:'at_label',l:1,v:r=>AT_LBL.indexOf(r.label),f:r=>atPill(r.label)},
       {k:'cagr_a',t:'OOS-A CAGR',tip:'at_oosa',f:r=>`<b class="${cls(r.cagr_a!=null&&r.spy_a!=null?r.cagr_a-r.spy_a:null)}">${pct(r.cagr_a)}</b><span class="vv">SPY ${pct(r.spy_a)}</span>`},
@@ -1775,7 +1777,7 @@ function renderAt01(){
       {k:'param',t:'Param SEMASA',tip:'at_param',l:1,ns:1,f:r=>`${atParam(r.param)}${r.catatan?`<span class="vv">${esc(r.catatan)}</span>`:''}`,c:()=>'wrap'}]})}
   </div>
   <div class="foot"><span>Sumber: AUTOTUNE/hasil (papan.json, gabungan.json, ringkasan.json) · OOS ${atJul(t.oos)} · kunci ${atJul(t.kunci)} · SPY OOS ${pct(rg.spy&&rg.spy.oos)} · N percubaan ${esc(rg.n_cubaan_jumlah??'–')}</span><span>Dijana ${esc(rg.dijana||'–')} · dibina ${esc(rg.dibina||'–')}</span></div>`;
-  const q=$('#atQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{af.q=q.value.trim();renderAll();const n=$('#atQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
+  bindLagi('atMore',af);const q=$('#atQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{af.q=q.value.trim();af.shown=AWAL;renderAll();const n=$('#atQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
   $('#atLbl').onchange=e=>{af.lbl=e.target.value;renderAll();};
   const eq=$('#atEq');if(eq)eq.onclick=e=>{const b=e.target.closest('button');if(!b)return;af.eq=b.dataset.v;renderAll();};
   if(gb&&(gb.terpilih||[]).length)drawAtEq($('#atChart'),atSiri(gb));
@@ -1823,10 +1825,10 @@ function renderAtV(v){
   <div class="strip"><b class="t">Gabungan</b><span>${esc(gb&&(gb.terpilih||[]).length?'Terpilih: '+gb.terpilih.join(', '):(gb&&gb.catatan)||'Tiada portfolio gabungan.')}</span></div>
   <div class="panel"><div class="panel-h"><h2>Semua sistem ${V}</h2><span class="sub">${rows.length} daripada ${all.length} · ketik tajuk lajur untuk susun</span></div>
     <div class="filters" style="margin-bottom:10px"><select id="atLbl" aria-label="Tapis label"><option value="">Semua label</option>${L.map(l=>`<option value="${esc(l)}" ${af.lbl===l?'selected':''}>${esc(l)} (${kl[l]??0})</option>`).join('')}</select><input type="search" id="atQ" placeholder="Cari ID atau nama kaedah" value="${esc(af.q)}" aria-label="Cari kaedah AUTOTUNE"></div>
-    ${sortTable({id:'autotune_'+v,rows,cols,def:{k:a3?'menang_a':'cagr_a',dir:-1},empty:all.length?'Tiada kaedah sepadan.':'Belum ada rekod kaedah.'})}
+    ${sortTable({id:'autotune_'+v,rows,cols,def:{k:a3?'menang_a':'cagr_a',dir:-1},limit:TELEFON?af.shown||AWAL:0,foot:TELEFON?kakiLagi('atMore'):null,lp:{key:r=>r.id,line:r=>`<b>${esc(r.kaedah||r.id)}</b><span class="pill p-mute">${esc(r.lorong||'')}</span>${atPill(r.label)}<span class="mlx">${esc(r.nama||'')}</span><b class="mlr">${a3?pct(atMin(r.menang_a,r.menang_b),0):pct(atMin(r.cagr_a,r.cagr_b))}</b>${mlC}`},empty:all.length?'Tiada kaedah sepadan.':'Belum ada rekod kaedah.'})}
   </div>
   <div class="foot"><span>Sumber: AUTOTUNE/hasil_${v} · OOS ${atJul(t.oos)} · pengesahan ${atJul(t.pengesahan)}</span><span>Dijana ${esc(rg.dijana||'–')} · dibina ${esc(rg.dibina||'–')}</span></div>`;
-  const q=$('#atQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{af.q=q.value.trim();renderAll();const n=$('#atQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
+  bindLagi('atMore',af);const q=$('#atQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{af.q=q.value.trim();af.shown=AWAL;renderAll();const n=$('#atQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
   $('#atLbl').onchange=e=>{af.lbl=e.target.value;renderAll();};
 }
 /* Saringan A02: semua 134 kaedah × 2 lorong, PARAM asal, universe 2000 saham, 2013–2018 (dokumen a02_saringan; nama daripada kaedah_<ID> A01) */
@@ -1856,10 +1858,10 @@ function renderAtSar(){
   </div>
   <div class="panel"><div class="panel-h"><h2>Semua kaedah · saringan 2000 saham</h2><span class="sub">${rows.length} daripada ${base.length} · ketik tajuk lajur untuk susun</span></div>
     <div class="filters" style="margin-bottom:10px"><div class="seg" id="atLane">${[['','Semua'],['had60','had60'],['asal','asal']].map(([v,x])=>`<button type="button" data-v="${v}" aria-pressed="${af.lane===v}">${x}</button>`).join('')}</div><input type="search" id="atQ" placeholder="Cari ID atau nama kaedah" value="${esc(af.q)}" aria-label="Cari kaedah saringan"></div>
-    ${sortTable({id:'autotune_sar',rows,cols,def:{k:'wA',dir:-1},empty:'Tiada kaedah sepadan.'})}
+    ${sortTable({id:'autotune_sar',rows,cols,def:{k:'wA',dir:-1},limit:TELEFON?af.shown||AWAL:0,foot:TELEFON?kakiLagi('atMore'):null,lp:{key:r=>r.k+'|'+r.l,line:r=>`<b>${esc(r.k)}</b><span class="pill p-mute">${esc(r.l)}</span>${r.t?'<span class="pill p-buy">ditala</span>':''}<span class="mlx">${esc(r.nama)}</span><b class="mlr ${cls(r.s)}">${sgn(r.s)}</b>${mlC}`},empty:'Tiada kaedah sepadan.'})}
   </div>
   <div class="foot"><span>Sumber: ${esc(sr.sumber||'AUTOTUNE/hasil_a02/saringan.csv')} · ${atJul(sr.tempoh)}</span><span>Dibina ${esc(sr.dibina||'–')}</span></div>`;
-  const q=$('#atQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{af.q=q.value.trim();renderAll();const n=$('#atQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
+  bindLagi('atMore',af);const q=$('#atQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{af.q=q.value.trim();af.shown=AWAL;renderAll();const n=$('#atQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
   $('#atLane').onclick=e=>{const b=e.target.closest('button');if(!b)return;af.lane=b.dataset.v;renderAll();};
 }
 function renderAutotune(){
@@ -1867,7 +1869,7 @@ function renderAutotune(){
   if(af.v==='a01')renderAt01();else if(af.v==='sar')renderAtSar();else renderAtV(af.v);
   const el=$('#v-autotune');
   butiranSeg(el,AT_V,af.v,'atVer');
-  el.querySelector('.bseg').onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.v===af.v)return;af.v=b.dataset.v;af.lbl='';af.q='';af.lane='';renderAll();};
+  el.querySelector('.bseg').onclick=e=>{const b=e.target.closest('button');if(!b||b.dataset.v===af.v)return;af.v=b.dataset.v;af.lbl='';af.q='';af.lane='';af.shown=AWAL;renderAll();};
 }
 
 /* ================= kawalan dikongsi ================= */
@@ -1936,6 +1938,10 @@ const LP_PRK={key:o=>o.kaedah,btn:1,cls:o=>KPT_JALUR[o.kep]||'',
       ${mkS('Keluar rugi',o.exrugi?`<span class="${o.exrugi>=3?'neg':''}">${o.exrugi}</span> <span class="mut">/ ${o.ex}</span>`:'–','keluar_rugi')}${mkS('Hari purata',fx(o.hari,1),'hari_purata')}</div>
     <div class="mkn"><div><span data-tip="bt_vs_pt">Backtest</span><span>${btVsPt(o)}</span></div></div></div>`};
 const kpLencana=o=>o.pingat?`<span class="pg ${PINGAT[o.pingat][2]}">${PINGAT[o.pingat][0]}</span>`:o.gagal<0?'<span class="pill p-exit">Ditolak</span>':o.c[LANGKAH[o.gagal].k]===null?`<span class="pill p-mute">◌ L${o.gagal+1}</span>`:`<span class="pill p-exit">✗ L${o.gagal+1}</span>`;
+/* kad umum: lajur pertama sebagai tajuk, lajur lain sebagai pasangan label/nilai (lajur teks panjang selebar kad) */
+function kadUmum(cols){return (r,i)=>`<div class="mk"><div class="mkh">${cols[0].f?cols[0].f(r,i):esc(isNil(r[cols[0].k])?'–':r[cols[0].k])}</div><div class="mkz mkg2">${cols.slice(1).map(c=>{
+  const v=c.f?c.f(r,i):esc(isNil(r[c.k])?'–':r[c.k]),pen=c.c&&/\b(wrap|name|sel|syr)\b/.test(c.c(r)||'');
+  return `<div${pen?' class="mkf"':''}><span${c.tip?` data-tip="${c.tip}"`:''}>${c.t}</span><b>${v}</b></div>`;}).join('')}</div></div>`;}
 const LP_KP={key:o=>o.dk,btn:1,
   line:o=>`${o.rk?`<span class="mut">${o.rk}</span>`:''}<b>${esc(o.id)}</b>${kpLencana(o)}<span class="mlx">${esc(o.nama)}</span><b class="mlr ${cls(o.r.cagr!=null&&o.spy!=null?o.r.cagr-o.spy:o.r.cagr)}">${pct(o.r.cagr)}</b>${mlC}`,
   kad:o=>`<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(o.id)}</b><span class="mkk">${esc(o.nama)}</span></span><b class="mku ${cls(o.r.cagr!=null&&o.spy!=null?o.r.cagr-o.spy:o.r.cagr)}">${pct(o.r.cagr)}<small class="mut"> /thn</small></b></div>
