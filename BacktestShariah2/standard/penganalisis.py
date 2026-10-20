@@ -14,6 +14,8 @@
 #      bertindih). Hanya posisi MATANG dikira (dibeli >= maks(14 hari, 1.5 x hari pegang backtest) lalu; tutup = untung akhir,
 #      terbuka = untung semasa) supaya bias "tutup awal kebanyakannya kena henti" tidak masuk (sama seperti WFO/kod/analisis_sebenar.py).
 #      Papertrade C selepas Lejar bermula = isyarat sama dengan Lejar, jadi dipapar sebagai semakan sahaja (tidak dikira dua kali).
+#      Posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang kaedah+saham sama dibuang (enjin mengabaikan isyarat
+#      itu), supaya laluan harga sama tidak dikira dua kali. Harga beli Lejar dilaras jika stor dilaras (split), seperti lejar.py.
 # Skor (purata pulangan bersih setiap dagangan, %) = (n0 x jangkaan backtest dipotong + n x purata matang) / (n0 + n); julat 95%
 # = skor ± 1.96 x SD / sqrt(n0 + n), n0 = 1 / (1/N0 + 1/n backtest) (backtest kecil diberi berat kurang). Skor sebulan = skor / hari pegang backtest x 21. Swing = purata pegang backtest 3–30 hari.
 import argparse, glob, json, math, os, re
@@ -47,6 +49,8 @@ N_MIN = 20              # posisi matang minimum sebelum status dinilai (tugasan_
 N_AMARAN = 10           # posisi matang minimum bagi AMARAN awal
 N_BT_MIN = 100          # dagangan backtest minimum untuk diberi nombor kedudukan (sampel kecil disusun di hujung)
 UMUR_MIN = 14           # hari kalendar minimum sebelum posisi dikira matang
+TOL_LARAS = 0.003       # sama dengan lejar.TOLERANSI_LARAS: buka stor hari beli lain daripada harga beli -> stor dilaras
+TOL_LARAS_C = 0.2       # Papertrade C (harga Moomoo lawan stor yfinance): hanya split jelas dilaras
 SD_MIN = 5.0            # SD minimum setiap dagangan (%)
 KOS = 0.001             # kos enjin v1.2 setiap belah
 HARI_BULAN = 21
@@ -176,51 +180,97 @@ def harga_akhir(path=TERKINI, stor=STOR):
     return dict(zip(akhir.ticker, akhir.close.astype(float))), f'{t[:4]}-{t[4:6]}-{t[6:8]}'
 
 
-def muat_lejar(akhir, lejar=LEJAR):
-    """Posisi Lejar Penuh: id, saham, tarikh_isyarat, tarikh_beli, tutup1, hasil1 (bersih %), hasil2 (lorong 2, kasar %)."""
+LAJUR_POS = ['id', 'saham', 'tarikh_isyarat', 'tarikh_beli', 'tarikh_keluar', 'tutup1', 'hasil1', 'hasil2', 'sumber']
+
+
+def buka_stor(saham, stor=STOR):
+    """{(ticker, 'YYYY-MM-DD'): harga buka} daripada stor harga repo bagi saham diberi (untuk semakan laras split)."""
+    out, saham = {}, set(saham)
+    for nm in ('harga_A.csv', 'harga_B.csv'):
+        f = os.path.join(stor, nm)
+        if not saham or not os.path.exists(f):
+            continue
+        x = pd.read_csv(f, usecols=['ticker', 'date', 'open'], dtype={'date': str})
+        x = x[x.ticker.isin(saham)]
+        out.update({(t, f'{d[:4]}-{d[4:6]}-{d[6:8]}'): float(o) for t, d, o in zip(x.ticker, x.date, x.open)})
+    return out
+
+
+def laras_beli(hb, saham, tarikh_beli, buka, tol):
+    """Harga beli pada skala stor semasa: jika buka stor hari beli berbeza > tol daripada harga beli (stor dilaras selepas
+    split), harga beli didarab nisbah sama seperti lejar.py kerja(); jika tiada bar, harga beli asal."""
+    ob = buka.get((saham, tarikh_beli))
+    return ob if hb and ob and abs(ob / hb - 1) > tol else hb
+
+
+def muat_lejar(akhir, lejar=LEJAR, buka=None):
+    """Posisi Lejar Penuh: id, saham, tarikh_isyarat, tarikh_beli, tarikh_keluar, tutup1, hasil1 (bersih %), hasil2 (lorong 2,
+    bersih %). Posisi terbuka dinilai pada tutup terakhir dengan harga beli dilaras jika stor dilaras (split)."""
     f = sorted(glob.glob(os.path.join(lejar, 'tutup', '*.csv'))) + [os.path.join(lejar, 'terbuka.csv')]
     d = [pd.read_csv(p, dtype=str, keep_default_na=False) for p in f if os.path.exists(p)]
     if not d:
-        return pd.DataFrame(columns=['id', 'saham', 'tarikh_isyarat', 'tarikh_beli', 'tutup1', 'hasil1', 'hasil2', 'sumber'])
+        return pd.DataFrame(columns=LAJUR_POS)
     d = pd.concat(d, ignore_index=True)
+    buka = buka if buka is not None else buka_stor(d.saham.unique())
     rows = []
     for r in d.itertuples(index=False):
-        hb = nombor(r.harga_beli)
+        hb = laras_beli(nombor(r.harga_beli), r.saham, r.tarikh_beli, buka, TOL_LARAS)
         kini = akhir.get(r.saham)
         semasa = (kini / hb - 1) * 100 if hb and kini else None
         t1 = r.tarikh_keluar != ''
         h1 = (nombor(r.pulangan) * 100 if nombor(r.pulangan) is not None else bersih(nombor(r.untung_pct))) if t1 else \
             (bersih(semasa) if semasa is not None else None)
-        h2 = nombor(r.untung_henti_pct) if B(r.keluar_henti) else semasa
-        rows.append(dict(id=r.id_kaedah, saham=r.saham, tarikh_isyarat=r.tarikh_isyarat, tarikh_beli=r.tarikh_beli, tutup1=t1,
-                         hasil1=h1, hasil2=h2, sumber='lejar'))
-    return pd.DataFrame(rows)
+        g2 = nombor(r.untung_henti_pct) if B(r.keluar_henti) else semasa
+        rows.append(dict(id=r.id_kaedah, saham=r.saham, tarikh_isyarat=r.tarikh_isyarat, tarikh_beli=r.tarikh_beli,
+                         tarikh_keluar=r.tarikh_keluar, tutup1=t1, hasil1=h1, hasil2=bersih(g2) if g2 is not None else None,
+                         sumber='lejar'))
+    return pd.DataFrame(rows, columns=LAJUR_POS)
 
 
-def muat_c(pt=PT):
-    """Posisi sah Papertrade C (semua claude*.csv): id, saham, tarikh_isyarat, tarikh_beli, tutup1, hasil1 (bersih %), hasil2."""
+def muat_c(pt=PT, akhir=None, buka=None):
+    """Posisi sah Papertrade C (semua claude*.csv): lajur LAJUR_POS. Lorong 1 = untung C (akhir jika keluar, semasa jika dipegang;
+    harga_terkini C dibekukan selepas lorong 1 keluar). Lorong 2 yang masih dipegang dinilai pada tutup terakhir (akhir)."""
     f = sorted(glob.glob(os.path.join(pt, 'claude*.csv')))
     if not f:
-        return pd.DataFrame(columns=['id', 'saham', 'tarikh_isyarat', 'tarikh_beli', 'tutup1', 'hasil1', 'hasil2', 'sumber'])
+        return pd.DataFrame(columns=LAJUR_POS)
     d = pd.concat([pd.read_csv(p, dtype=str, keep_default_na=False) for p in f], ignore_index=True)
     for k in ('tidak_sah', 'tidak_dibeli', 'keluar_henti'):
         d[k] = d[k].map(B) if k in d else False
     d = d[~d.tidak_sah & ~d.tidak_dibeli & (d.harga_beli != '') & (d.tarikh_beli != '')]
+    akhir = akhir or {}
+    buka = buka if buka is not None else (buka_stor(d.saham.unique()) if akhir else {})
     rows = []
     for r in d.itertuples(index=False):
         t1 = B(r.keluar)
         g = nombor(r.untung_akhir_pct) if t1 else nombor(r.untung_pct)
-        h2 = nombor(getattr(r, 'untung_henti_pct', None)) if r.keluar_henti else nombor(r.untung_pct)
+        if r.keluar_henti:
+            g2 = nombor(getattr(r, 'untung_henti_pct', None))
+        elif not t1:
+            g2 = nombor(r.untung_pct)
+        else:   # lorong 1 sudah keluar (harga_terkini beku), lorong 2 masih dipegang
+            hb = laras_beli(nombor(r.harga_beli), r.saham, r.tarikh_beli, buka, TOL_LARAS_C)
+            kini = akhir.get(r.saham)
+            g2 = (kini / hb - 1) * 100 if hb and kini else None
         rows.append(dict(id=r.id_kaedah or r.kaedah, saham=r.saham, tarikh_isyarat=getattr(r, 'tarikh_isyarat', ''), tarikh_beli=r.tarikh_beli,
-                         tutup1=t1, hasil1=bersih(g) if g is not None else None, hasil2=h2, sumber='C'))
-    return pd.DataFrame(rows)
+                         tarikh_keluar=r.tarikh_keluar if t1 else '', tutup1=t1, hasil1=bersih(g) if g is not None else None,
+                         hasil2=bersih(g2) if g2 is not None else None, sumber='C'))
+    return pd.DataFrame(rows, columns=LAJUR_POS)
 
 
 def gabung_hadapan(L, C):
-    """Bukti hadapan = Lejar Penuh + kohort C sebelum belian pertama Lejar (C selepas itu = isyarat sama; semakan sahaja)."""
+    """Bukti hadapan = Lejar Penuh + kohort C sebelum belian pertama Lejar (C selepas itu = isyarat sama; semakan sahaja).
+    Posisi Lejar yang isyaratnya jatuh semasa posisi C pra-Lejar kaedah+saham sama masih dipegang dalam lorong 1 (termasuk hari
+    lorong 1 keluar) dibuang: enjin mengabaikan isyarat itu, jadi laluan harga sama tidak dikira dua kali.
+    -> (gabungan, tarikh belian pertama Lejar, bilangan posisi Lejar dibuang)"""
     mula = L.tarikh_beli.min() if len(L) else None
     pra = C[C.tarikh_beli < mula] if mula else C
-    return pd.concat([L, pra], ignore_index=True), mula
+    pegang = {}
+    for r in pra.itertuples(index=False):
+        pegang.setdefault((r.id, r.saham), []).append((r.tarikh_beli, r.tarikh_keluar))
+    tindih = [any(tb <= ti and (tk == '' or tk >= ti) for tb, tk in pegang.get((i, s), ()))
+              for i, s, ti in zip(L.id, L.saham, L.tarikh_isyarat)] if len(L) else []
+    L2 = L[[not x for x in tindih]] if len(L) else L
+    return pd.concat([L2, pra], ignore_index=True), mula, int(sum(tindih))
 
 
 def ringkas_hadapan(P, hari_bt, kini):
@@ -253,7 +303,8 @@ def berat_backtest(n_bt):
 
 
 def skor(mu0, sd0, n, xbar, sdf, n0=N0):
-    """Pengecutan normal–normal: (n0 x mu0 + n x xbar) / (n0 + n); SD = SD hadapan jika n >= N_MIN, jika tidak SD backtest."""
+    """Pengecutan normal–normal: (n0 x mu0 + n x xbar) / (n0 + n); SD = SD hadapan jika n >= N_MIN, jika tidak SD backtest;
+    kedua-duanya minimum SD_MIN."""
     s = sdf if (n >= N_MIN and sdf) else sd0
     s = max(SD_MIN, s or SD_MIN)
     mu = mu0 if not n else (n0 * mu0 + n * xbar) / (n0 + n)
@@ -277,8 +328,8 @@ def analisis(kini=None):
     WF, AT = muat_wfo(), muat_autotune()
     akhir, tarikh_harga = harga_akhir()
     kini = kini or tarikh_harga or datetime.now(timezone.utc).strftime('%Y-%m-%d')
-    L, C = muat_lejar(akhir), muat_c()
-    H, mula_lejar = gabung_hadapan(L, C)
+    L, C = muat_lejar(akhir), muat_c(akhir=akhir)
+    H, mula_lejar, tindih = gabung_hadapan(L, C)
     Hg = dict(tuple(H.groupby('id'))) if len(H) else {}
     Cg = dict(tuple(C.groupby('id'))) if len(C) else {}
     rows = []
@@ -329,7 +380,7 @@ def analisis(kini=None):
         r['kedudukan'] = None
     sw += kecil
     meta = dict(kini=kini, harga_pada=tarikh_harga, mula_lejar=mula_lejar,
-                lejar_posisi=int(len(L)), c_posisi=int(len(C)),
+                lejar_posisi=int(len(L)), lejar_tindih=tindih, c_posisi=int(len(C)),
                 c_pra_lejar=int((C.tarikh_beli < mula_lejar).sum()) if mula_lejar and len(C) else int(len(C)),
                 lejar_sesi=_lejar_sesi())
     return sw + lain, meta
@@ -443,7 +494,8 @@ def jana_md(rows, meta, ruj, pen, dibina):
          f'- Jangkaan backtest = purata pulangan bersih setiap dagangan, set 431 dalam sampel (varian aktif), dikekalkan '
          f'{int(ASAS_KEKAL * 100)}% + {int(TAMBAH_KEKAL * 100)}% bagi setiap semakan luar sampel yang lulus: S1–S4 (atasi EW dalam ≥ 3/4 '
          'subset), WFO (CAGR luar sampel 2023–2026 > EW 423 tempoh sama) dan 2000 saham AS (AUTOTUNE A01: CAGR > SPY dalam kumpulan A dan B).',
-         f'- Bukti hadapan = posisi matang Lejar Penuh + kohort Papertrade C sebelum Lejar bermula ({meta["c_pra_lejar"]} posisi). Matang = '
+         f'- Bukti hadapan = posisi matang Lejar Penuh + kohort Papertrade C sebelum Lejar bermula ({meta["c_pra_lejar"]} posisi; '
+         f'{meta["lejar_tindih"]} posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang kaedah+saham sama dibuang). Matang = '
          f'dibeli ≥ maks({UMUR_MIN} hari, 1.5 × hari pegang backtest) lalu; tutup = untung akhir, terbuka = untung semasa (bersih kos 0.1% '
          'setiap belah). Papertrade C selepas Lejar bermula = isyarat sama dengan Lejar: lajur semakan sahaja.',
          f'- Skor = (n0 × jangkaan + n × purata matang) ÷ (n0 + n), n0 = berat backtest (maks {N0}; kurang jika dagangan backtest sedikit). '

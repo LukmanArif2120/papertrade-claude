@@ -101,6 +101,7 @@ Gred keseluruhan (paparan) sejak 19 Okt 2026 = purata mata Industri (kecuali kae
 - Skor (purata pulangan bersih setiap dagangan) = (n0 × jangkaan backtest + n × purata posisi hadapan matang) ÷ (n0 + n). Jangkaan =
   purata set 431 varian aktif × (25% + 25% bagi setiap semakan luar sampel lulus: S1–S4 ≥ 3/4 atasi EW; WFO W01 CAGR > EW 423;
   AUTOTUNE A01 CAGR > SPY dalam kumpulan A dan B). n0 = 1 ÷ (1/30 + 1/dagangan backtest). Bukti hadapan = Lejar Penuh + kohort
-  Papertrade C sebelum Lejar (tiada kiraan berganda); matang = dibeli ≥ maks(14 hari, 1.5 × hari pegang backtest) lalu.
+  Papertrade C sebelum Lejar (tiada kiraan berganda: posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang
+  kaedah+saham sama dibuang, seperti enjin); harga beli Lejar dilaras jika stor dilaras (split); matang = dibeli ≥ maks(14 hari, 1.5 × hari pegang backtest) lalu.
 - Status: BELUM CUKUP (< 20 matang), AMARAN (≥ 10 matang, t < −2 lawan jangkaan), KUAT / LEMAH (julat 95% skor di atas / di bawah 0),
   PERHATI. Swing = pegang backtest 3–30 hari; kedudukan ikut skor sebulan (skor ÷ hari pegang × 21); < 100 dagangan backtest = sampel kecil.
