@@ -1,51 +1,73 @@
 {
  "malam": {
-  "sesi": "2026-10-16",
-  "masa": "2026-10-17 16:44 MYT",
+  "sesi": "2026-10-19",
+  "masa": "2026-10-20 13:50 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 192,
+  "masa_kaedah_s": 151,
   "keluar_baru": {
-   "M": {},
-   "C": {}
+   "M": {
+    "isyarat": 1,
+    "henti": 2
+   },
+   "C": {
+    "isyarat": 59,
+    "henti": 65,
+    "sasaran": 7
+   }
   },
   "keluar_baru_jumlah": {
-   "M": 0,
-   "C": 0
+   "M": 3,
+   "C": 131
   },
-  "menunggu": 60,
-  "harga_beli_dibetulkan": 0,
-  "harga_beli_beza_besar": 0,
+  "menunggu": 39,
+  "harga_beli_dibetulkan": 106,
+  "harga_beli_beza_besar": 8,
   "tidak_dibeli": [],
   "nota": [
-   "M BB M31: bar isyarat 2026-09-30 tiada dalam stor"
+   "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
+   "C ATKR M11: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M66: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ADI M18: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M36: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M54: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M95: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M100: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M101: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ADI M08: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ADI M09: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M57: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M127: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ADI M156: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ATKR M102: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+   "C ADI M14: tiada bar 2026-10-19 (harga terkini 2026-10-16)"
   ],
-  "senarai_beli": 603,
-  "saham_unik": 251,
-  "kaedah": 98,
-  "belian_semula": 22,
-  "dari_watchlist": 61,
-  "isyarat": 2195,
+  "senarai_beli": 513,
+  "saham_unik": 245,
+  "kaedah": 92,
+  "belian_semula": 15,
+  "dari_watchlist": 68,
+  "isyarat": 1905,
   "ditolak": {
-   "dipegang": 202,
-   "had": 1390
+   "dipegang": 229,
+   "had": 1155,
+   "mingguan": 8
   },
-  "watchlist": 270,
-  "watchlist_baharu": 173,
-  "watchlist_dibuang": 0,
-  "watchlist_ke_senarai": 61,
-  "minggu_akhir": true,
-  "fail_isyarat": "bayang/isyarat/2026-10-16_malam.csv.gz"
+  "watchlist": 283,
+  "watchlist_baharu": 161,
+  "watchlist_dibuang": 80,
+  "watchlist_ke_senarai": 68,
+  "minggu_akhir": false,
+  "fail_isyarat": "bayang/isyarat/2026-10-19_malam.csv.gz"
  },
  "gred": {
-  "tarikh": "2026-10-17",
-  "masa": "2026-10-17 16:48 MYT",
+  "tarikh": "2026-10-20",
+  "masa": "2026-10-20 13:53 MYT",
   "pemangkin": {
-   "D": 183,
-   "B": 86,
-   "C": 237,
-   "E": 60,
-   "A": 37
+   "D": 76,
+   "B": 376,
+   "C": 52,
+   "–": 9
   }
  },
  "beli": {

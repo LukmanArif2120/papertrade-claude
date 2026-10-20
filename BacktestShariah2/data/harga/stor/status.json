@@ -1,21 +1,22 @@
 {
- "dikemaskini": "2026-10-17 12:56 UTC",
- "bar_terakhir": 20261016,
+ "dikemaskini": "2026-10-20 05:50 UTC",
+ "bar_terakhir": 20261019,
  "laras": {},
  "perlu_sejarah": [
+  "HLN",
   "REF"
  ],
  "harga_A.csv": {
-  "ticker_dikemaskini": 431,
-  "bar_terakhir": 20261016
+  "ticker_dikemaskini": 430,
+  "bar_terakhir": 20261019
  },
  "harga_B.csv": {
-  "ticker_dikemaskini": 505,
-  "bar_terakhir": 20261016
+  "ticker_dikemaskini": 499,
+  "bar_terakhir": 20261019
  },
  "harga_idx.csv": {
   "ticker_dikemaskini": 2,
-  "bar_terakhir": 20261016
+  "bar_terakhir": 20261019
  },
  "moomoo": 0
 }
