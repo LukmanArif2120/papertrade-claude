@@ -7,7 +7,7 @@ Tempoh: 2026-10-16 hingga 2026-10-19 (2 sesi). SPY dalam tempoh sama: -0.87%.
 | Portfolio | Pulangan % | MDD % | Posisi dipegang | Dagangan keluar | Kadar menang % | Purata untung keluar % |
 |---|---|---|---|---|---|---|
 | RS_10 — RS pasaran tertinggi | -6.04 | -6.04 | 10 | 0 | – | – |
-| RAWAK_10 — Rawak (kawalan) | +0.18 | -1.46 | 10 | 0 | – | – |
+| RAWAK_10 — Rawak (kawalan) | +0.15 | -1.46 | 10 | 0 | – | – |
 
 ## RS_10 — posisi dipegang
 
@@ -28,7 +28,7 @@ Tempoh: 2026-10-16 hingga 2026-10-19 (2 sesi). SPY dalam tempoh sama: -0.87%.
 
 | Saham | Kaedah | RS | Beli | Harga beli | Terkini | Untung % |
 |---|---|---|---|---|---|---|
-| ADI | M14 | 85 | 2026-10-16 | 400.17 | 395.44 | -1.18 |
+| ADI | M14 | 85 | 2026-10-16 | 400.17 | 394.35 | -1.45 |
 | ARQT | M125 | 75 | 2026-10-16 | 29.18 | 31.89 | +9.29 |
 | AVY | M10 | 60 | 2026-10-16 | 176.98 | 175.56 | -0.80 |
 | CTSH | M100 | 85 | 2026-10-16 | 66.89 | 66.79 | -0.15 |

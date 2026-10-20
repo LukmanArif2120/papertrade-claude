@@ -44,13 +44,13 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) | 34 | 10 | 24 | 0 | -1.59 | 1 | -0.01 | 0 |  | 23 | 3.99 | 34 |
 | M123 CCI Correction (Lambert, ChartSchool) | 33 | 24 | 9 | 4 | -1.67 | 1 | -1.50 | 0 |  | 28 | 0.92 | 10 |
 | M12 Parabolic SAR | 32 | 4 | 28 | 0 | -3.28 | 2 | -1.11 | 0 |  | 29 | 2.04 | 23 |
-| M156 Single Penetration (DiNapoli) | 32 | 0 | 32 |  |  |  | -1.48 | 0 |  | 52 | 0.69 | 9 |
+| M156 Single Penetration (DiNapoli) | 32 | 0 | 32 |  |  |  | -1.49 | 0 |  | 52 | 0.69 | 9 |
 | M78 Alvarez Pecahan Mingguan DTAYS | 31 | 0 | 31 |  |  |  | 0.85 | 0 |  | 32 | 3.17 | 40 |
 | M28 VWAP Separator + Kiss Pivot | 30 | 10 | 20 | 0 | -5.03 | 1 | -1.69 | 0 |  | 43 | 0.22 | 5 |
 | M66 IBD Undur Pertama ke Purata 50 Hari | 29 | 6 | 23 | 0 | -3.15 | 2 | -1.13 | 0 |  | 28 | 1.71 | 19 |
 | M95 Nisbah Kebaharuan High 52 Minggu (Bhootra & Hur) | 29 | 0 | 29 |  |  |  | -0.14 | 0 |  | 32 | 2.68 | 29 |
 | M147 Improved Three-Bar Pullback | 29 | 0 | 29 |  |  |  | -1.67 | 0 |  | 31 | 91.01 | 442 |
-| M18 EMA9/21 Pullback | 28 | 15 | 13 | 13 | -4.72 | 2 | -0.73 | 0 |  | 26 | 0.40 | 7 |
+| M18 EMA9/21 Pullback | 28 | 15 | 13 | 13 | -4.72 | 2 | -0.75 | 0 |  | 26 | 0.40 | 7 |
 | M131 Ross Hook (Joe Ross) | 27 | 1 | 26 | 0 | -6.36 | 1 | -0.88 | 0 |  | 30 | 2.35 | 30 |
 | M55 Guppy GMMA | 26 | 3 | 23 | 0 | -3.51 | 2 | -0.55 | 0 |  | 26 | 2.71 | 28 |
 | M70 Pecahan Hari Dalam | 26 | 12 | 14 | 0 | -0.96 | 1 | 1.98 | 0 |  | 11 | 0.84 | 10 |
@@ -60,7 +60,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M137 Livermore System | 24 | 0 | 24 |  |  |  | -0.41 | 0 |  | 35 | 4.22 | 37 |
 | M148 Natural Number Method | 23 | 2 | 21 | 0 | -5.73 | 1 | -0.52 | 0 |  | 35 | 0.50 | 10 |
 | M99 Three Line Break | 22 | 3 | 19 | 0 | -3.27 | 1 | -1.03 | 0 |  | 40 | 1.17 | 16 |
-| M08 SMA20 + SMA200 | 21 | 6 | 15 | 33 | -5.04 | 2 | -1.36 | 0 |  | 32 | 1.07 | 12 |
+| M08 SMA20 + SMA200 | 21 | 6 | 15 | 33 | -5.04 | 2 | -1.38 | 0 |  | 32 | 1.07 | 12 |
 | M10 EMA3 + CCI + MACD | 21 | 0 | 21 |  |  |  | -0.79 | 0 |  | 33 | 4.70 | 54 |
 | M106 DMI Wilder | 21 | 1 | 20 | 0 | -8.12 | 2 | -1.00 | 0 |  | 32 | 1.01 | 12 |
 | M02 MACD + SMA200 | 20 | 2 | 18 | 0 | -3.50 | 2 | -1.03 | 0 |  | 44 | 0.66 | 14 |
@@ -92,7 +92,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M134 First Kiss After Daylight (Landry) | 8 | 0 | 8 |  |  |  | -0.13 | 0 |  | 34 | 5.41 | 35 |
 | M149 3-Step Pullback | 8 | 0 | 8 |  |  |  | -0.10 | 0 |  | 19 | 59.37 | 273 |
 | M05 MACD Divergence + Pengesahan | 7 | 0 | 7 |  |  |  | -2.19 | 0 |  | 35 | 10.85 | 108 |
-| M09 Volumatic VIDYA Pivot Retest | 7 | 2 | 5 | 50 | -3.87 | 2 | -2.96 | 0 |  | 23 | 1.85 | 30 |
+| M09 Volumatic VIDYA Pivot Retest | 7 | 2 | 5 | 50 | -3.87 | 2 | -3.01 | 0 |  | 23 | 1.85 | 30 |
 | M151 Outside Bar Failure | 7 | 0 | 7 |  |  |  | -0.63 | 0 |  | 27 | 1.93 | 26 |
 | M117 Landry Pullback (high 2 bulan) | 6 | 0 | 6 |  |  |  | -2.03 | 0 |  | 21 | 45.52 | 287 |
 | M118 Expansion Pivot (Cooper) | 6 | 0 | 6 |  |  |  | -0.22 | 0 |  | 33 | 1.56 | 27 |
