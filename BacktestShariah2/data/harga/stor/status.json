@@ -1,5 +1,5 @@
 {
- "dikemaskini": "2026-10-20 14:18 UTC",
+ "dikemaskini": "2026-10-20 15:39 UTC",
  "bar_terakhir": 20261020,
  "laras": {},
  "perlu_sejarah": [
@@ -10,7 +10,7 @@
   "bar_terakhir": 20261019
  },
  "harga_B.csv": {
-  "ticker_dikemaskini": 499,
+  "ticker_dikemaskini": 498,
   "bar_terakhir": 20261020
  },
  "harga_idx.csv": {
