@@ -8,6 +8,8 @@ name: Lejar penuh
 
 on:
   schedule:
+    # Didaftar semula 19 Okt 2026: tiada cetusan jadual sejak 17 Okt 14:10 UTC (semua workflow active).
+    # Jika cetusan hilang/lewat > 30 minit, penjaga_jadual.yml mencetus workflow_dispatch (dalam had masa).
     - cron: '17 6 * * 2-6'
     - cron: '17 10 * * 2-6'
   workflow_dispatch:
@@ -40,11 +42,15 @@ jobs:
         run: |
           python3 BacktestShariah2/standard/lejar.py ringkas
           python3 BacktestShariah2/standard/lejar.py banding
+      - name: Portfolio maya 10 slot (RS_10, RAWAK_10; jejak hadapan kajian/KAJIAN_PORTFOLIO.md)
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/portfolio_slot.py
       - name: Commit dan push
         run: |
           git config user.name "lejar[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add BacktestShariah2/lejar BacktestShariah2/data/harga/stor
+          [ -d BacktestShariah2/portfolio_slot ] && git add BacktestShariah2/portfolio_slot
           [ -f BacktestShariah2/data/harga/perlu_sejarah.txt ] && git add BacktestShariah2/data/harga/perlu_sejarah.txt
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           SESI=$(python3 -c "import json;print(json.load(open('BacktestShariah2/lejar/status.json')).get('sesi_terakhir'))")

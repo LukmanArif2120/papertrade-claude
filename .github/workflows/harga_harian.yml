@@ -7,6 +7,8 @@ name: Harga harian
 
 on:
   schedule:
+    # Didaftar semula 19 Okt 2026: tiada cetusan jadual sejak 17 Okt 14:10 UTC (semua workflow active).
+    # Jika cetusan hilang/lewat > 30 minit, penjaga_jadual.yml mencetus workflow_dispatch (dalam had masa).
     - cron: '37 21 * * 1-5'
     - cron: '23 0 * * 2-6'
   workflow_dispatch:

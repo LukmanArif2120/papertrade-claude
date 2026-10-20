@@ -5,6 +5,8 @@ name: Saringan TradingView
 
 on:
   schedule:
+    # Didaftar semula 19 Okt 2026: tiada cetusan jadual sejak 17 Okt 14:10 UTC (semua workflow active).
+    # Jika cetusan hilang/lewat > 30 minit, penjaga_jadual.yml mencetus workflow_dispatch (dalam had masa).
     - cron: '47 21 * * 1-5'
   workflow_dispatch:
 
@@ -16,7 +18,23 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  masa:
+    runs-on: ubuntu-latest
+    outputs:
+      jalan: ${{ steps.m.outputs.jalan }}
+    steps:
+      # Jadual GitHub boleh lewat ~6 jam (19 Okt 2026): jangan tarik data semasa pasaran AS dibuka (bar harian separa)
+      - id: m
+        run: |
+          J=$((10#$(TZ=America/New_York date +%H%M))); H=$(TZ=America/New_York date +%u)
+          if [ "$H" -le 5 ] && [ $J -ge 925 ] && [ $J -lt 1620 ]; then
+            echo "jalan=tidak" >> "$GITHUB_OUTPUT"; echo "pasaran AS dibuka (NY $J): dilangkau"
+          else
+            echo "jalan=ya" >> "$GITHUB_OUTPUT"
+          fi
   skrin:
+    needs: masa
+    if: needs.masa.outputs.jalan == 'ya'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

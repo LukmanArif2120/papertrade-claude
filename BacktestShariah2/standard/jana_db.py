@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
-# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, harian/status. sektor/snapshot dijana oleh tugasan
+# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/portfolio_slot, harian/status. sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, json, os, re, statistics as stt, sys
 
@@ -162,6 +162,30 @@ def pengawas(st, masa):
     return out
 
 
+def portfolio_slot(dibina, folder=os.path.join(BS2, 'portfolio_slot')):
+    """prestasi/portfolio_slot: dua portfolio maya 10 slot (standard/portfolio_slot.py, daripada Lejar Penuh) untuk kad
+    Eksperimen dalam tab Ringkasan. None jika fail belum dijana."""
+    import portfolio_slot as PS
+    out, spy, hari = {}, None, []
+    for k, nama in PS.PORTFOLIO.items():
+        pe, pp = os.path.join(folder, f'{k}_ekuiti.csv'), os.path.join(folder, f'{k}_posisi.csv')
+        if not (os.path.exists(pe) and os.path.exists(pp)):
+            return None
+        E, R = pd.read_csv(pe), pd.read_csv(pp)
+        if E.empty:
+            return None
+        kel = R[R.status == 'Keluar']
+        out[k] = dict(nama=f'{k}: {nama}', pulangan_pct=round(100 * (E.ekuiti.iloc[-1] - 1), 2), mdd_pct=round(100 * PS.mdd(E.ekuiti), 2),
+                      dipegang=int((R.status == 'Pegang').sum()), keluar=int(len(kel)),
+                      menang_pct=round(100 * float((kel.untung_pct > 0).mean()), 1) if len(kel) else None,
+                      ekuiti=[[t, round(float(e), 5)] for t, e in zip(E.tarikh, E.ekuiti)],
+                      posisi=json.loads(R.round(4).to_json(orient='records')))
+        spy, hari = round(100 * (float(E.spy.iloc[-1]) - 1), 2), list(E.tarikh)
+    return dict(dibina=dibina, mula=hari[0], sesi_terakhir=hari[-1], sesi=len(hari), spy_pct=spy, portfolio=out,
+                nota='Rekod sahaja (kajian/KAJIAN_PORTFOLIO.md). 10 slot x 10% ekuiti, satu posisi setiap saham, keluar lorong 2; '
+                     'RS_10 = RS pasaran tertinggi, RAWAK_10 = kawalan rawak. Dibina semula setiap malam oleh lejar.yml.')
+
+
 def sesi_stor(path=STATUS_HARGA):
     """Sesi terkini stor harga repo (status.json terkini.sesi, YYYYMMDD) sebagai YYYY-MM-DD; '' jika tiada.
     Sandaran tarikh data apabila status_harian.json tiada dalam folder (mod bayang: Actions menulis ke bayang/ sahaja)."""
@@ -235,6 +259,9 @@ def main(argv=None):
                                 definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude).')
     docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
                                       nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
+    ps = portfolio_slot(dibina)
+    if ps:
+        docs['prestasi/portfolio_slot'] = ps
     # sektor/snapshot (dijana mingguan; medan posisi dikemas kini jika fail ada)
     snap = os.path.join(BS2, 'data', 'db', 'sektor_snapshot.json')
     if os.path.exists(snap):

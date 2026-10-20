@@ -1730,6 +1730,16 @@ const grSatu=r=>GORD[r.gred_keseluruhan]!=null?grB(r.gred_keseluruhan,'','Gred k
 function gredList(r){const L=[['g_i','Industri',grKump(r,'Industri')],['g_q','Laporan suku (QR)',grQR(r)],['g_p','Pemangkin',grPem(r)],['g_r','RS',grRS(r)],['g_s','Sektor',grKump(r,'Sektor')],['g_k','Kewangan',grKew(r)],['gred','Gred keseluruhan',grSel1(r.gred_keseluruhan,'')]];
   return `<div class="gl">${L.map(([t,n,h])=>`<div class="glr"><span class="mut" data-tip="${t}">${n}</span><div>${h}</div></div>`).join('')}</div>`;}
 /* adakah gred A lebih untung? purata untung akhir dagangan tertutup, A lawan gred terendah yang cukup data (Sektor paparan sahaja, tidak dinilai) */
+/* Portfolio maya 10 slot (prestasi/portfolio_slot; standard/portfolio_slot.py daripada Lejar Penuh): RS tertinggi lawan rawak */
+function pslotKad(){const d=S.pslot,h='<div class="ekh" data-tip="portfolio_slot">Portfolio maya 10 slot: pilih RS tertinggi atau rawak?</div>';
+  if(!d||!d.portfolio)return `<div class="ek">${h}<div class="mut">${S.live?'Belum ada data portfolio maya.':'Memuatkan…'}</div></div>`;
+  const P=d.portfolio,ks=Object.keys(P),spy=d.spy_pct;
+  const bar=k=>{const p=P[k];return `<div class="ekr"><span>${esc(p.nama||k)}</span><span><b class="${cls(p.pulangan_pct)}">${sg2(p.pulangan_pct)}</b><span class="mut">MDD ${fx(p.mdd_pct,1)}% · ${nf(p.dipegang)} dipegang · ${nf(p.keluar)} keluar${p.keluar?` · menang ${fx(p.menang_pct,0)}%`:''}</span></span></div>`;};
+  const rs=P.RS_10&&P.RS_10.posisi?P.RS_10.posisi.filter(x=>x.status==='Pegang'):[];
+  return `<div class="ek">${h}${ks.map(bar).join('')}
+    <div class="ekr"><span>SPY (penanda aras)</span><span><b class="${cls(spy)}">${spy==null?'–':sg2(spy)}</b></span></div>
+    ${rs.length?`<div class="mut">Dipegang RS_10: ${rs.map(x=>`<b>${esc(x.saham)}</b> <span class="${cls(x.untung_semasa_pct)}">${x.untung_semasa_pct==null?'':sg2(x.untung_semasa_pct)}</span>`).join(' · ')}</div>`:''}
+    <div class="mut">Sejak ${esc(tkO(d.mula||''))} (${nf(d.sesi||0)} sesi, hingga ${esc(tkO(d.sesi_terakhir||''))}). Rekod sahaja; penilaian adil selepas 6–12 bulan.</div></div>`;}
 function gredRingkas(src){const ada=src.filter(adaGred);
   return GDIM.filter(([k])=>k!=='gred_sektor').map(([k,,nama])=>{const asal=k==='gred_industri'?ada.filter(grSahKump):ada;
     const by={};asal.forEach(r=>{const g=r[k];if(GORD[g]==null||!r.keluar||r.untung_akhir_pct==null)return;(by[g]=by[g]||[]).push(r.untung_akhir_pct);});
@@ -1872,6 +1882,7 @@ function renderUtama(){
       <div class="ek"><div class="ekh" data-tip="gred">Gred saham: adakah gred A lebih untung?</div>
         ${gredRingkas(src).map(g=>`<div class="ekr"><span>${esc(g.nama)}</span><span>${g.txt}</span></div>`).join('')}
         <div class="mut">Setakat ini: purata untung akhir dagangan tertutup (bilangan dalam kurungan). Gred direkod sahaja; tidak menapis belian.</div></div>
+      ${pslotKad()}
     </div></div>
   <div class="strip next"><b class="t">Cara baca</b><span><b>Backtest</b> = ujian atas data lama (2019–2026). <b>Papertrade</b> = ujian sekarang dengan harga sebenar tanpa wang. Kaedah yang baik perlu baik dalam kedua-duanya. Ketik mana-mana kaedah untuk cara ia beli dan jual. <button type="button" class="lnk" data-panduan>Buka panduan & glosari</button></span></div>
   <div class="foot"><span>Papertrade C sahaja. Moomoo lama (${nf(prSrc('m').length)} posisi, tiada belian baharu sejak 13 Okt 2026): pilih akaun dalam tab Prestasi atau Posisi.</span><span>Tiada order · tiada wang sebenar</span></div>`;
@@ -1965,6 +1976,7 @@ const TIPS={
   hari_pt:{t:'Hari dipegang',d:'Bilangan hari dagangan sejak tarikh beli (hingga tarikh keluar jika sudah keluar).',e:''},
   isyarat_keluar:{t:'Keluar kaedah (lorong 1)',d:'Status mengikut peraturan keluar penuh kaedah itu: Pegang, atau Keluar (henti rugi, sasaran, isyarat jual, had masa). Keputusan rasmi papertrade. Baris ditanda merah hanya apabila kedua-dua lorong sudah keluar. Susun ikut untung lorong ini (akhir jika keluar, semasa jika dipegang).',e:'Keluar 15 Okt · @ 20.50 · +4.91% · capai sasaran.'},
   keluar_henti:{t:'Pegang selagi naik (lorong 2)',d:'Pegang selagi trend naik (sejak 19 Okt 2026). Paras keluar = tutup tertinggi sejak beli tolak 4 × ATR14 (purata julat harian 14 hari); paras hanya naik, tidak pernah turun. Jual pada buka esok apabila harga tutup di bawah paras keluar. Saham yang lebih bergoyang diberi ruang lebih luas, jadi satu dua hari turun tidak menjual. Henti kaedah tidak dipakai dalam lorong ini (kekal dalam lorong Kaedah). Untuk melihat berapa lama trend naik dan berapa hari dipegang. Susun ikut untung lorong ini.',e:'Pegang · paras keluar 102.00; puncak 110.00; 12 hari = jual pada buka esok jika tutup bawah 102.00; paras naik apabila puncak naik.'},
+  portfolio_slot:{t:'Portfolio maya 10 slot',d:'Eksperimen (sejak 16 Okt 2026): daripada semua posisi Lejar Penuh, dua portfolio maya 10 slot (10% ekuiti setiap satu, satu posisi setiap saham, keluar ikut lorong 2 Chandelier) dibina semula setiap malam. RS_10 mengisi slot kosong dengan RS pasaran tertinggi; RAWAK_10 memilih secara rawak sebagai kawalan. Kajian backtest (KAJIAN_PORTFOLIO.md) mendapati RS + Chandelier satu-satunya peraturan yang kekal di atas rawak selepas bias set 431 dikurangkan. Rekod sahaja; tiada wang sebenar.'},
   dua_lorong:{t:'Dua lorong keluar',d:'Setiap posisi dinilai serentak dengan dua peraturan keluar dari harga beli yang sama: Kaedah (peraturan penuh kaedah) dan Pegang selagi naik (tutup bawah paras keluar = tutup tertinggi sejak beli − 4×ATR14). Kaedah+saham sama boleh dibeli semula selepas lorong Kaedah keluar (lorong 2 tidak menyekat). Purata = untung akhir bagi lorong yang keluar, semasa bagi yang dipegang.',e:'Kaedah +1.2% · Selagi naik +2.5%: memegang selagi naik lebih untung setakat ini.'},
   tarikh_keluar:{t:'Tarikh keluar',d:'Hari peraturan keluar dicetuskan.',e:''},
   harga_keluar:{t:'Harga keluar',d:'Harga yang dipakai peraturan keluar (contohnya paras henti atau harga buka esok).',e:''},
@@ -2108,6 +2120,7 @@ renderNav();renderAll();
   sub('sektor/snapshot','sektor',['sektor']);
   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
   sub('prestasi/mae','mae',['prestasi']);
+  sub('prestasi/portfolio_slot','pslot',['utama']);
   sub('kaedah/katalog','kat',['kaedah']);
   /* AUTOTUNE: semua dokumen koleksi autotune (status, ringkasan, gabungan, kaedah_<ID>) */
   db.collection('autotune').limit(1000).onSnapshot(snap=>{const d={};snap.docs.forEach(x=>{if(x.exists)d[x.id]=x.data();});S.at=d;S.live=true;re('autotune','backtest');},()=>{});

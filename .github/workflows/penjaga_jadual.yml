@@ -1,0 +1,51 @@
+# Penjaga jadual (BacktestShariah2/standard/penjaga_jadual.py): jadual cron GitHub boleh lewat 2–4 jam atau digugurkan
+# (17–19 Okt 2026: beli.yml dan petang.yml tidak pernah dicetus). Setiap larian menyemak cetusan cron terkini 8 workflow
+# berjadual; jika tiada larian sejak cetusan itu (> 30 minit) dan masih dalam had masa, workflow_dispatch dicetus.
+# Pencetus berlapis supaya penjaga sendiri tidak bergantung pada jadual sahaja: 2 cron sejam, setiap push ke main
+# (rutin Claude), dan selepas workflow berjadual selesai. Tanpa LLM; tiada fail repo ditulis. Repo awam: minit percuma.
+name: Penjaga jadual
+
+on:
+  schedule:
+    - cron: '23 * * * *'
+    - cron: '53 * * * *'
+  push:
+    branches: [main]
+  workflow_run:
+    workflows: [Harga harian, Saringan TradingView, RS pasaran, Gred kumpulan, Lejar penuh, Harian Actions, Gred petang, 'Beli 9:35 NY']
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      cuba:
+        description: 'Cetak keputusan sahaja, tiada dispatch (ya/tidak)'
+        required: false
+        default: 'tidak'
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: penjaga-jadual
+  cancel-in-progress: false
+
+jobs:
+  jaga:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          sparse-checkout: |
+            .github/workflows
+            BacktestShariah2/standard
+      - name: Semak cetusan dan dispatch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUBA: ${{ github.event.inputs.cuba }}
+        run: |
+          set -o pipefail
+          F=""; [ "$CUBA" = "ya" ] && F="--cuba"
+          python3 BacktestShariah2/standard/penjaga_jadual.py $F | tee -a "$GITHUB_STEP_SUMMARY"

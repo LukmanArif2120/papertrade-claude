@@ -344,3 +344,14 @@
 - Peralihan Actions belum boleh: hanya 2 laporan BANDING separa (16–17 Okt). Semakan dijadualkan 22 Okt 2026 09:30 UTC (`trig_011dxs6z7c8Nf66GcgAh2tao`, send_later sesi ini).
 - M167 V2 (OVN252): tidak dijejak (proksi RS12, sama dengan M114 V4).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-19 19:50–20:35 MYT — Imbas malam (rutin sesi repo, Sonnet; data tutup 16 Okt)
+- Kalendar NYSE: 19 Okt 2026 sesi penuh → teruskan. Bukan pendua (tiada commit "Imbas" 19 Okt sebelum larian).
+- Data: skrin Moomoo Shariah AS harga ≥ USD10 — 917 saham (4 halaman; tutup 16 Okt sepadan yfinance pada 914 saham, beza 0). Stor harga = stor repo `data/harga/stor/` (bar hingga 16 Okt); `univ.txt` ditulis. 2 saham jurang data + 1 saham baharu tanpa sejarah tidak diimbas (kline tidak ditarik).
+- Imbasan 134 kaedah (scanner.py scan --papertrade; db asal larian 20261013-2030-malam), tiada ralat, 1,012 s; 2,196 isyarat mentah → `data/isyarat/2026-10-16_malam.csv.gz`.
+- **Senarai beli** 604 baris, 253 saham, 99 kaedah (belian semula belian_ke ≥ 2: dikira dalam CSV). Isyarat mingguan ditolak: 0 (16 Okt Jumaat = hari dagangan terakhir minggu, §3a). Ditolak: 199 kerana posisi Claude kaedah+saham yang sama masih terbuka; 1,393 melebihi had 10 setiap kaedah (431 dahulu, kemudian skor) kecuali 61 calon watchlist yang kini lengkap. `nota_henti`/`buka_maks` hanya M06, M08, M19, M20 (+ nota M52); kaedah lain kosong (belum ditakrif dalam `sedia()`).
+- **Watchlist** 269 calon, 168 saham, 65 kaedah. 195 baharu, 74 dibawa, 61 dipindah ke senarai beli, 23 dibuang. % hampir dihadkan 99.9 jika bukan isyarat sah.
+- Jejak kertas M166 V1: `WFO/kaedah_baru/jejak_M166.py` dijalankan (baris 16 Okt ditambah ke `uji_kertas/jejak_M166.csv`); tiada belian.
+- Gred: S/I v2 (`data/kumpulan/gred_kumpulan.csv`, snapshot 16 Okt), RS, QR (SST market_events 30 hari + Nasdaq), kewangan v7 dan pemangkin v3. Pemangkin: 0 Moomoo, 337 Yahoo, 0 tiada (tiada pengumpulan Moomoo; `pemangkin.json` baharu). Gred kewangan "–" bagi 440/604 senarai beli (tiada fail `data/kewangan`).
+- db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `papertrade/senarai_beli` tidak ditolak (peraturan 19 Okt); `harian/status` v25.
+- Tiada order. Tiada wang sebenar.
