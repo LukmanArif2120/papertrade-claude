@@ -815,3 +815,152 @@ tarikh,jenis,nama,sektor,n,n_harga,prestasi_1d,prestasi_1w,prestasi_1m,prestasi_
 2026-10-19,Industri,Utilities - Regulated Water,Utilities,12,12,,-2.87,-3.76,-0.11,,8.3,,,,,,1.91,-1.85,Weakening,33.6,0,6,-1.76,SBS(+18.6%) WTRG(-1.6%) CWCO(-1.6%),2026-10-20 06:25 MYT
 2026-10-19,Industri,Utilities - Renewable,Utilities,12,12,,-4.28,-9.58,-16.95,,16.7,,,,,,-14.93,-7.67,Lagging,13.9,0,0,,RNW(+0.6%) CWEN(-4.1%) BEPC(-5.0%),2026-10-20 06:25 MYT
 2026-10-19,Industri,Waste Management,Industrials,9,9,,4.22,0.26,-2.47,,55.6,,,,,,-0.46,2.17,Improving,68.7,0,1,-9.46,WM(+7.2%) WCN(+6.7%) RSG(+5.4%),2026-10-20 06:25 MYT
+2026-10-20,Sektor,Basic Materials,Basic Materials,198,198,,-0.9,-5.99,-2.04,,27.8,,,,,,-1.12,-4.99,Lagging,25.9,5,162,0.35,WS(+23.7%) SSL(+17.5%) CLF(+13.1%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Communication Services,Communication Services,160,160,,0.6,-2.93,-2.64,56.1,40.0,0.87,0,0,0,0,-1.72,-1.93,Lagging,46.8,6,120,1.52,BMBL(+108.8%) IDT(+22.8%) GTN.A(+22.1%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Consumer Cyclical,Consumer Cyclical,362,362,,2.22,1.52,-5.01,,55.8,,,,,,-4.09,2.52,Improving,71.8,9,243,1.69,FIGS(+51.3%) CBRL(+49.2%) SG(+42.6%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Consumer Defensive,Consumer Defensive,168,168,,1.88,2.82,-0.78,,61.9,,,,,,0.14,3.82,Leading,88.2,5,74,0.55,DAO(+30.2%) ODD(+28.6%) SUJA(+27.9%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Energy,Energy,194,194,,-0.57,0.63,3.46,67.13,52.1,0.84,0,2,-2,0,4.38,1.63,Leading,74.1,19,663,0.98,HPK(+38.2%) PBR(+24.6%) PBR.A(+23.3%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Financial Services,Financial Services,1015,1015,,0.09,-0.42,0.46,55.41,38.9,0.85,0,0,0,0,1.37,0.57,Leading,56.4,0,5,4.85,CD(+117.7%) XP(+50.8%) XRPN(+40.5%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Healthcare,Healthcare,565,565,,2.89,-2.93,1.36,57.59,41.2,0.86,2,2,0,4,2.27,-1.93,Weakening,67.7,16,435,2.32,KOD(+186.8%) YDES(+122.0%) RGC(+76.5%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Industrials,Industrials,489,489,,-1.46,-3.74,-7.76,,36.0,,,,,,-6.84,-2.74,Lagging,21.4,12,255,0.72,RXO(+45.4%) FBYD(+23.4%) CXT(+22.1%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Real Estate,Real Estate,89,89,,-0.23,-4.22,-6.65,41.58,22.5,1.11,0,0,0,0,-5.73,-3.22,Lagging,21.8,0,7,1.74,TCI(+21.4%) CSGP(+13.8%) DRH(+13.4%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Technology,Technology,509,509,,-2.73,-2.68,0.59,61.15,43.4,0.86,11,6,5,1,1.51,-1.68,Weakening,57.3,27,755,2.98,BRZE(+79.4%) PICS(+45.6%) PTC(+42.9%),2026-10-21 06:25 MYT
+2026-10-20,Sektor,Utilities,Utilities,91,91,,0.45,2.08,-6.84,52.66,59.3,0.83,0,1,-1,0,-5.93,3.08,Improving,68.6,0,30,-0.4,SBS(+17.6%) TLN(+16.5%) ELPC(+10.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Advertising Agencies,Communication Services,17,17,,0.33,-3.71,3.23,,41.2,,,,,,4.15,-2.71,Weakening,49.9,2,32,0.41,OMC(+7.3%) STGW(+7.1%) WPP(+5.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Aerospace & Defense,Industrials,67,67,,0.05,-6.31,-12.78,49.97,20.9,,0,0,0,0,-11.86,-5.31,Lagging,25.1,0,3,0.1,RGR(+17.4%) SWBI(+7.0%) IA(+6.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Agricultural Inputs,Basic Materials,8,8,,-2.19,-7.56,-13.12,,12.5,,,,,,-12.2,-6.56,Lagging,15.7,0,11,-1.54,SMG(+8.6%) UAN(-1.7%) CF(-4.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Airlines,Industrials,14,14,,-3.25,-9.01,-12.19,63.9,0.0,1.49,0,0,0,0,-11.27,-8.01,Lagging,12.7,0,0,,RYAAY(-0.6%) CPA(-1.4%) AZUL(-3.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Airports & Air Services,Industrials,4,4,,5.72,2.59,-4.7,,75.0,,,,,,-3.79,3.59,Improving,73.5,0,1,0.84,PAC(+4.5%) CAAP(+4.0%) ASR(+1.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Aluminum,Basic Materials,4,4,,-0.86,-3.8,-11.83,28.26,50.0,1.01,0,0,0,0,-10.91,-2.8,Lagging,35.9,0,2,-4.46,KALU(+1.1%) CSTM(+1.0%) AA(-8.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Apparel Manufacturing,Consumer Cyclical,17,17,,3.86,9.05,-3.25,,82.4,,,,,,-2.33,10.05,Improving,82.9,0,11,0.19,FIGS(+51.3%) VFC(+33.8%) PVH(+17.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Apparel Retail,Consumer Cyclical,22,22,,2.05,6.56,-4.23,,68.2,,,,,,-3.31,7.56,Improving,72.2,1,65,2.83,ANF(+18.3%) URBN(+17.7%) AEO(+16.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Asset Management,Financial Services,106,106,,-0.86,-5.62,-1.72,,18.9,,,,,,-0.81,-4.62,Lagging,33.2,0,4,8.02,VINP(+18.7%) PAX(+15.9%) RPC(+8.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Auto & Truck Dealerships,Consumer Cyclical,14,14,,4.32,-3.0,-12.9,,42.9,,,,,,-11.99,-2.0,Lagging,43.0,0,6,0.45,VVV(+18.3%) OPLN(+8.5%) RUSHB(+8.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Auto Manufacturers,Consumer Cyclical,10,10,,0.97,-4.58,-3.75,,30.0,,,,,,-2.84,-3.58,Lagging,40.8,0,1,-3.12,HMC(+5.3%) LI(+3.6%) TM(+2.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Auto Parts,Consumer Cyclical,37,37,,0.22,-3.29,-13.07,,27.0,,,,,,-12.15,-2.29,Lagging,31.9,1,10,0.22,AZO(+12.7%) MNRO(+11.2%) ORLY(+8.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Banks - Diversified,Financial Services,20,20,,-1.4,-6.88,-4.85,,5.0,,,,,,-3.94,-5.88,Lagging,23.4,0,0,,NTB(+0.3%) TD(-0.8%) CM(-2.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Banks - Regional,Financial Services,343,343,,1.45,-1.43,-0.6,,26.8,,,,,,0.31,-0.43,Weakening,48.6,0,0,,INTR(+30.3%) AGBK(+22.7%) ITUB(+14.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Beverages - Brewers,Consumer Defensive,7,7,,4.36,7.03,0.09,,71.4,,,,,,1.0,8.03,Leading,83.4,0,0,,STZ(+12.1%) FMX(+9.3%) SAM(+7.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Beverages - Non-Alcoholic,Consumer Defensive,15,15,,5.82,7.31,7.11,,80.0,,,,,,8.03,8.31,Leading,91.7,0,0,,SUJA(+27.9%) KDP(+13.9%) CCEP(+12.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Beverages - Wineries & Distilleries,Consumer Defensive,5,5,,3.56,8.98,7.3,,100.0,,,,,,8.22,9.98,Leading,92.1,0,0,,AGCC(+15.2%) MGPI(+13.0%) DEO(+9.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Biotechnology,Healthcare,276,276,,3.35,-10.46,-10.03,63.08,23.6,0.93,0,0,0,0,-9.12,-9.47,Lagging,28.2,5,82,3.64,KOD(+186.8%) YDES(+122.0%) SLN(+60.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Broadcasting,Communication Services,7,7,,3.7,-4.04,-2.72,,42.9,,,,,,-1.8,-3.05,Lagging,49.7,0,0,,GTN.A(+22.1%) NXST(+1.7%) SBGI(+0.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Building Materials,Basic Materials,15,15,,4.51,-0.75,-15.16,,46.7,,,,,,-14.24,0.25,Improving,45.8,0,3,0.85,VMC(+6.4%) TGLS(+5.2%) CX(+2.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Building Products & Equipment,Industrials,27,27,,2.94,0.41,-3.87,,51.9,,,,,,-2.96,1.41,Improving,57.4,2,24,2.97,APOG(+17.4%) TREX(+13.7%) LPX(+11.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Capital Markets,Financial Services,55,55,,-4.7,-11.08,-6.0,,16.4,,,,,,-5.08,-10.08,Lagging,17.6,0,1,-7.83,CD(+117.7%) XP(+50.8%) XRPN(+40.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Chemicals,Basic Materials,12,12,,0.18,-3.45,-13.18,,25.0,,,,,,-12.27,-2.45,Lagging,30.1,0,0,,DOW(+8.6%) MEOH(+7.8%) CE(+7.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Coking Coal,Basic Materials,4,4,,-12.04,-7.2,4.95,,25.0,,,,,,5.87,-6.21,Weakening,34.9,0,1,-5.36,SXC(+3.3%) HCC(-4.9%) AMR(-9.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Communication Equipment,Technology,32,32,,-7.89,-6.98,-8.03,,21.9,,,,,,-7.12,-5.98,Lagging,21.7,3,9,-7.58,ZBRA(+9.5%) ERIC(+5.6%) NTGR(+3.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Computer Hardware,Technology,23,23,,-8.76,-21.19,-15.22,,13.0,,,,,,-14.31,-20.19,Lagging,7.0,0,6,-8.3,CRCT(+14.7%) P(+11.3%) LOGI(+5.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Confectioners,Consumer Defensive,3,3,,4.0,1.0,-0.82,,66.7,,,,,,0.1,2.0,Leading,70.4,0,0,,MDLZ(+7.3%) HSY(+1.0%) TR(-0.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Conglomerates,Industrials,19,19,,-1.33,-1.82,-8.17,,36.8,,,,,,-7.25,-0.82,Lagging,37.0,0,2,3.53,FBYD(+23.4%) GHC(+7.1%) MMM(+3.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Consulting Services,Industrials,14,14,,2.59,6.91,5.49,,64.3,,,,,,6.4,7.91,Leading,80.2,1,6,1.16,HURN(+13.6%) EFX(+11.3%) CRAI(+11.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Consumer Electronics,Technology,7,7,,-0.52,3.3,18.48,,71.4,,,,,,19.4,4.3,Leading,77.6,0,20,1.57,SONY(+6.9%) SONO(+6.2%) AAPL(+0.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Copper,Basic Materials,7,7,,-4.7,-5.19,5.33,,14.3,,,,,,6.25,-4.19,Weakening,34.3,0,3,-1.95,SCCO(+2.2%) TECK(-3.6%) FCX(-4.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Credit Services,Financial Services,41,41,,-1.43,-2.64,-3.24,,36.6,,,,,,-2.32,-1.64,Lagging,40.9,0,0,,SEZL(+11.7%) OPRT(+10.0%) V(+9.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Department Stores,Consumer Cyclical,5,5,,2.95,5.45,-2.57,48.89,60.0,0.97,0,1,-1,0,-1.65,6.45,Improving,71.3,1,10,-2.07,KSS(+24.7%) M(+5.5%) DDS(+5.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Diagnostics & Research,Healthcare,35,35,,2.06,-0.28,18.63,,48.6,,,,,,19.55,0.72,Leading,65.9,2,43,0.34,GRAL(+54.4%) MYGN(+38.1%) CDNA(+27.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Discount Stores,Consumer Defensive,9,9,,4.19,10.62,11.37,62.24,88.9,0.81,0,0,0,0,12.29,11.62,Leading,95.3,2,23,1.02,OLLI(+16.3%) DLTR(+11.2%) BJ(+10.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Drug Manufacturers - General,Healthcare,17,17,,6.01,0.58,1.96,,58.8,,,,,,2.88,1.58,Leading,70.8,1,25,3.24,AMGN(+11.6%) BIIB(+11.0%) LLY(+10.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Drug Manufacturers - Specialty & Generic,Healthcare,45,45,,1.77,0.11,12.44,,51.1,,,,,,13.36,1.11,Leading,66.5,1,23,1.96,RGC(+76.5%) PCRX(+50.9%) XERS(+26.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Education & Training Services,Consumer Defensive,23,23,,-1.16,2.52,7.98,,65.2,,,,,,8.9,3.52,Leading,69.9,2,21,-0.7,DAO(+30.2%) APEI(+11.8%) AFYA(+11.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Electrical Equipment & Parts,Industrials,26,26,,-9.43,-13.88,-15.08,,19.2,,,,,,-14.16,-12.89,Lagging,10.4,0,12,0.08,ENR(+2.8%) KE(+2.0%) AYI(+1.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Electronic Components,Technology,31,31,,-8.62,-8.72,-12.9,72.46,19.4,0.84,0,0,0,0,-11.98,-7.72,Lagging,16.1,2,10,-3.8,DAKT(+7.1%) MEI(+6.0%) ROG(+5.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Electronic Gaming & Multimedia,Communication Services,9,9,,0.08,1.03,5.46,,55.6,,,,,,6.38,2.03,Leading,64.1,0,0,,NTES(+6.5%) DDI(+5.7%) RBLX(+2.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Electronics & Computer Distribution,Technology,7,7,,-7.41,0.79,7.39,,57.1,,,,,,8.3,1.79,Leading,60.4,2,12,-3.64,CLMB(+9.4%) SCSC(+5.1%) NSIT(+4.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Engineering & Construction,Industrials,37,37,,-6.44,-9.35,-19.33,46.86,16.2,0.89,0,0,0,0,-18.41,-8.35,Lagging,11.0,0,18,-0.26,EXPO(+8.1%) APG(+6.8%) KBR(+3.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Entertainment,Communication Services,33,33,,2.02,-0.64,0.02,,48.5,,,,,,0.94,0.36,Leading,56.9,1,30,1.98,WMG(+13.1%) CNK(+10.8%) DIS(+7.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Farm & Heavy Construction Machinery,Industrials,20,20,,-2.82,-7.38,-9.55,,10.0,,,,,,-8.63,-6.38,Lagging,17.7,0,3,0.1,WNC(+8.6%) FSS(-0.4%) BLBD(-2.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Farm Products,Consumer Defensive,18,18,,-2.22,-4.9,-6.44,,16.7,,,,,,-5.52,-3.9,Lagging,25.8,0,1,-5.04,TSN(+6.5%) AFRI(+4.7%) DOLE(+1.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Financial Conglomerates,Financial Services,7,7,,-0.73,-7.81,-7.68,,0.0,,,,,,-6.76,-6.82,Lagging,19.1,0,0,,FRHC(-1.0%) VOYA(-4.9%) HTH(-5.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Financial Data & Stock Exchanges,Financial Services,13,13,,3.62,7.18,4.64,,92.3,,,,,,5.56,8.18,Leading,89.2,0,0,,CBOE(+16.1%) FDS(+9.9%) TRU(+9.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Food Distribution,Consumer Defensive,9,9,,2.87,0.54,-6.24,,66.7,,,,,,-5.33,1.54,Improving,60.5,0,0,,USFD(+9.3%) SYY(+6.4%) PFGC(+5.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Footwear & Accessories,Consumer Cyclical,13,13,,1.05,5.21,4.09,,76.9,,,,,,5.01,6.2,Leading,80.3,0,14,-0.14,ONON(+29.6%) FOSL(+16.2%) WEYS(+16.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,"Furnishings, Fixtures & Appliances",Consumer Cyclical,22,22,,-0.2,-1.35,-1.63,,40.9,,,,,,-0.71,-0.35,Lagging,47.9,0,11,2.77,SN(+18.6%) HBB(+8.6%) MLKN(+4.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Gambling,Consumer Cyclical,9,9,,-0.27,-8.95,-10.29,,22.2,,,,,,-9.38,-7.95,Lagging,23.8,0,0,,CHDN(+1.4%) CDRO(+0.9%) ACEL(-2.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Gold,Basic Materials,37,37,,-1.12,-10.6,11.46,,0.0,,,,,,12.38,-9.6,Weakening,31.1,0,46,-1.11,DRD(-1.8%) BTG(-3.0%) OR(-3.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Grocery Stores,Consumer Defensive,9,9,,1.76,2.83,-3.18,,66.7,,,,,,-2.26,3.83,Improving,68.1,0,0,,GO(+15.9%) YSWY(+13.2%) ACI(+11.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Health Information Services,Healthcare,25,25,,2.25,2.2,20.36,,60.0,,,,,,21.28,3.2,Leading,76.7,3,39,3.37,DOCS(+24.2%) VEEV(+21.9%) PHR(+20.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Healthcare Plans,Healthcare,10,10,,3.92,8.56,3.28,,100.0,,,,,,4.2,9.56,Leading,90.1,1,7,3.41,HUM(+12.9%) CI(+11.7%) MOH(+11.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Home Improvement Retail,Consumer Cyclical,6,6,,3.61,3.19,-3.7,,66.7,,,,,,-2.78,4.19,Improving,70.1,0,1,0.07,HD(+6.0%) LOW(+4.0%) HVT.A(+3.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Household & Personal Products,Consumer Defensive,21,21,,3.55,4.21,3.76,,71.4,,,,,,4.68,5.21,Leading,79.7,1,16,3.92,ODD(+28.6%) ELF(+17.3%) CHD(+11.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Industrial Distribution,Industrials,23,23,,0.07,0.49,-1.17,,52.2,,,,,,-0.25,1.49,Improving,56.4,0,44,-0.55,GIC(+8.1%) MSM(+6.5%) SITE(+5.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Information Technology Services,Technology,49,49,,2.93,2.57,16.85,66.74,57.1,0.82,0,2,-2,0,17.77,3.57,Leading,76.3,4,183,5.36,DXC(+34.3%) ACN(+29.5%) IT(+19.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Insurance - Diversified,Financial Services,12,12,,3.43,1.78,0.23,,50.0,,,,,,1.14,2.78,Leading,64.5,0,0,,AIG(+9.8%) BRK.A(+7.6%) BRK.B(+7.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Insurance - Life,Financial Services,20,20,,0.72,-1.98,-7.12,,25.0,,,,,,-6.2,-0.99,Lagging,38.4,0,0,,MET(+4.7%) AFL(+4.4%) ABX(+4.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Insurance - Property & Casualty,Financial Services,46,46,,3.89,4.64,5.5,,82.6,,,,,,6.42,5.64,Leading,86.4,0,0,,HIPO(+18.4%) TRUP(+15.0%) HGTY(+13.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Insurance - Reinsurance,Financial Services,7,7,,3.96,6.43,5.97,,71.4,,,,,,6.88,7.43,Leading,85.1,0,0,,RGA(+9.1%) RNR(+8.6%) HG(+7.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Insurance - Specialty,Financial Services,12,12,,3.55,-1.22,-3.81,,33.3,,,,,,-2.9,-0.22,Lagging,49.7,0,0,,EIG(+6.7%) AMSF(+3.2%) AXS(+3.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Insurance Brokers,Financial Services,18,18,,5.94,2.51,9.71,,72.2,,,,,,10.63,3.51,Leading,84.5,0,0,,CRVL(+13.2%) LIFE(+12.6%) MRSH(+11.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Integrated Freight & Logistics,Industrials,16,16,,0.59,0.39,-12.27,,50.0,,,,,,-11.35,1.39,Improving,45.6,1,14,0.6,GXO(+6.0%) PBI(+5.0%) FWRD(+4.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Internet Content & Information,Communication Services,41,41,,0.0,-0.48,-2.39,,46.3,,,,,,-1.47,0.52,Improving,50.0,0,11,1.61,BMBL(+108.8%) BZ(+18.9%) PINS(+18.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Internet Retail,Consumer Cyclical,20,20,,0.4,2.28,-1.15,52.41,60.0,0.97,0,0,0,0,-0.23,3.28,Improving,63.9,0,8,0.06,ETSY(+19.0%) EBAY(+11.9%) CART(+11.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Leisure,Consumer Cyclical,18,18,,3.6,4.67,-6.62,,61.1,,,,,,-5.7,5.67,Improving,66.4,0,13,1.09,MAT(+29.9%) FNKO(+26.5%) HAS(+24.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Lodging,Consumer Cyclical,10,10,,5.85,11.4,5.68,,80.0,,,,,,6.6,12.4,Leading,92.8,0,1,2.87,HLT(+17.0%) MAR(+15.9%) WH(+15.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Lumber & Wood Production,Basic Materials,4,4,,4.2,0.14,-2.34,,50.0,,,,,,-1.43,1.13,Improving,60.8,0,1,1.59,SSD(+4.1%) BCC(+0.8%) UFPI(-0.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Luxury Goods,Consumer Cyclical,7,7,,2.01,3.96,-3.6,,57.1,,,,,,-2.69,4.96,Improving,65.2,1,21,0.41,SIG(+17.3%) CPRI(+15.4%) REAL(+13.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Marine Shipping,Industrials,25,25,,-7.35,-9.59,7.88,83.14,24.0,0.91,0,0,0,0,8.79,-8.59,Weakening,35.1,2,15,-2.81,ECO(+6.7%) HAFN(+4.7%) DAC(+2.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Medical Care Facilities,Healthcare,37,37,,2.09,2.31,5.28,,59.5,,,,,,6.2,3.31,Leading,71.2,1,30,3.43,OPCH(+30.9%) AMN(+21.6%) ASTH(+15.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Medical Devices,Healthcare,80,80,,0.79,1.52,3.67,,55.0,,,,,,4.59,2.51,Leading,64.5,0,69,0.06,QDEL(+30.9%) RCEL(+27.3%) ENOV(+14.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Medical Distribution,Healthcare,4,4,,5.54,11.41,15.74,,75.0,,,,,,16.66,12.4,Leading,94.9,1,29,3.79,MCK(+16.2%) CAH(+14.3%) COR(+8.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Medical Instruments & Supplies,Healthcare,36,36,,3.44,4.01,7.82,,66.7,,,,,,8.74,5.01,Leading,79.9,1,88,2.16,EMBC(+21.1%) KMTS(+14.2%) MDLN(+10.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Metal Fabrication,Industrials,14,14,,-2.26,0.55,-5.39,49.23,57.1,0.97,0,0,0,0,-4.47,1.55,Improving,49.6,0,9,1.15,RYZ(+16.2%) WOR(+9.9%) GPGI(+2.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Mortgage Finance,Financial Services,6,6,,2.76,-9.24,-28.68,,0.0,,,,,,-27.76,-8.24,Lagging,16.8,0,0,,VEL(-8.3%) RKT(-9.0%) PFSI(-9.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Oil & Gas Drilling,Energy,8,8,,0.24,2.16,7.85,,62.5,,,,,,8.77,3.16,Leading,70.9,1,43,-0.9,PDS(+8.7%) VAL(+8.0%) RIG(+6.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Oil & Gas E&P,Energy,56,56,,1.9,6.69,10.59,,82.1,,,,,,11.51,7.69,Leading,88.0,7,337,1.92,HPK(+38.2%) GRNT(+22.0%) REPX(+20.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Oil & Gas Equipment & Services,Energy,39,39,,-2.53,-5.81,-8.63,,15.4,,,,,,-7.71,-4.81,Lagging,21.5,3,38,-1.49,RES(+10.2%) EFXT(+7.7%) TS(+4.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Oil & Gas Integrated,Energy,17,17,,1.64,7.7,15.41,,88.2,,,,,,16.33,8.69,Leading,90.7,4,165,1.39,PBR(+24.6%) PBR.A(+23.3%) SU(+16.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Oil & Gas Midstream,Energy,47,47,,-3.22,-2.06,1.63,,34.0,,,,,,2.55,-1.06,Weakening,44.8,1,29,-2.79,VNOM(+9.9%) PBA(+8.0%) KMI(+5.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Oil & Gas Refining & Marketing,Energy,16,16,,-1.55,4.09,12.46,,75.0,,,,,,13.38,5.09,Leading,77.6,3,44,-0.8,MPC(+18.1%) CVI(+16.4%) DINO(+14.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Other Industrial Metals & Mining,Basic Materials,24,24,,-5.32,-18.11,-12.0,,0.0,,,,,,-11.08,-17.11,Lagging,8.6,0,0,,SKE(-1.3%) NEXA(-4.3%) BHP(-4.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Other Precious Metals & Mining,Basic Materials,13,13,,-3.26,-16.37,-10.44,,0.0,,,,,,-9.52,-15.37,Lagging,9.7,0,0,,SLSR(-6.2%) TFPM(-6.3%) BVN(-10.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Packaged Foods,Consumer Defensive,42,42,,1.52,0.66,-4.95,,54.8,,,,,,-4.03,1.66,Improving,55.7,0,13,-2.11,WEST(+20.3%) HLF(+15.5%) LW(+13.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Packaging & Containers,Consumer Cyclical,17,17,,3.98,3.5,-0.6,,70.6,,,,,,0.31,4.49,Leading,76.3,2,7,0.36,SLGN(+7.6%) BALL(+7.5%) KRT(+6.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Paper & Paper Products,Basic Materials,3,3,,-2.08,-10.5,0.0,,0.0,,,,,,0.92,-9.5,Weakening,23.2,0,0,,SUZ(-8.7%) SLVM(-10.5%) CLW(-10.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Personal Services,Consumer Cyclical,9,9,,3.7,6.06,6.74,,88.9,,,,,,7.66,7.05,Leading,88.3,1,4,-1.04,CSV(+17.6%) ANDG(+11.0%) BFAM(+9.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Pollution & Treatment Controls,Industrials,6,6,,-2.74,-5.51,-15.24,,33.3,,,,,,-14.32,-4.52,Lagging,23.9,0,0,,VLTO(+6.6%) ZWS(+3.3%) ERII(-5.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Publishing,Communication Services,7,7,,-0.57,10.88,-4.36,,71.4,,,,,,-3.44,11.88,Improving,70.4,2,18,1.82,PSO(+14.7%) WLYB(+13.3%) WLY(+11.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,REIT - Diversified,Real Estate,5,5,,0.06,-9.52,-12.2,,0.0,,,,,,-11.28,-8.53,Lagging,16.2,0,0,,FVR(-0.3%) GOODN(-9.5%) GOODO(-11.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,REIT - Healthcare Facilities,Real Estate,6,6,,-1.76,-8.12,-7.4,,33.3,,,,,,-6.48,-7.12,Lagging,27.5,0,0,,AHR(+4.4%) WELL(+2.3%) NHP(-7.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,REIT - Mortgage,Real Estate,14,14,,-0.65,-2.94,-2.21,,7.1,,,,,,-1.29,-1.94,Lagging,33.8,0,0,,AGNCN(+0.0%) AGNCO(-0.3%) AGNCP(-0.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,REIT - Office,Real Estate,6,6,,-0.57,-6.2,-12.99,,16.7,,,,,,-12.07,-5.2,Lagging,22.0,0,0,,PDM(-0.9%) DEA(-5.0%) OPI(-21.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,REIT - Residential,Real Estate,4,4,,1.3,-2.05,-6.42,,25.0,,,,,,-5.51,-1.06,Lagging,40.1,0,0,,VMRK(+2.1%) JAN(-2.8%) MRP(-15.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,REIT - Retail,Real Estate,6,6,,0.17,-2.95,-6.42,,33.3,,,,,,-5.5,-1.96,Lagging,38.6,0,0,,PECO(+3.4%) CURB(-4.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,REIT - Specialty,Real Estate,6,6,,-1.07,-4.52,-17.9,,0.0,,,,,,-16.98,-3.52,Lagging,16.6,0,0,,BXDC(-15.8%) UNIT(-41.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Railroads,Industrials,9,9,,0.67,1.05,-3.94,64.51,66.7,0.75,0,0,0,0,-3.02,2.05,Improving,61.8,0,5,0.96,UNP(+6.7%) NSC(+5.3%) CSX(+4.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Real Estate - Development,Real Estate,7,7,,-1.37,-10.04,-13.65,,28.6,,,,,,-12.73,-9.04,Lagging,20.4,0,0,,HHH(+5.3%) SDHC(+1.1%) FOR(-3.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Real Estate Services,Real Estate,30,30,,0.06,-4.92,-5.64,,23.3,,,,,,-4.73,-3.93,Lagging,33.0,0,5,2.04,TCI(+21.4%) CSGP(+13.8%) BEKE(+9.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Recreational Vehicles,Consumer Cyclical,12,12,,3.92,-4.0,-21.02,,8.3,,,,,,-20.1,-3.0,Lagging,26.6,0,2,0.45,HOG(+3.7%) BC(-0.3%) MCFT(-0.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Rental & Leasing Services,Industrials,17,17,,-1.58,-10.22,-13.58,,35.3,,,,,,-12.66,-9.22,Lagging,21.4,0,0,,SUNB(+5.7%) VSTS(+1.8%) URI(+1.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Residential Construction,Consumer Cyclical,19,19,,0.59,-6.4,-9.44,,26.3,,,,,,-8.53,-5.4,Lagging,30.8,0,4,1.87,LEN.B(+2.3%) LEN(+1.4%) DHI(+0.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Resorts & Casinos,Consumer Cyclical,13,13,,-0.51,-1.32,-15.11,,38.5,,,,,,-14.19,-0.32,Lagging,35.3,0,0,,BALY(+29.6%) VAC(+10.0%) MTN(+9.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Restaurants,Consumer Cyclical,39,39,,2.68,6.88,-0.49,23.26,74.4,0.95,1,0,1,0,0.43,7.88,Leading,79.9,0,6,3.59,CBRL(+49.2%) SG(+42.6%) BH(+28.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Scientific & Technical Instruments,Technology,20,20,,-1.79,-2.21,-4.34,,40.0,,,,,,-3.42,-1.21,Lagging,39.9,0,11,1.38,VNT(+8.8%) TRMB(+7.6%) FTV(+5.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Security & Protection Services,Industrials,12,12,,0.49,-0.21,1.07,,50.0,,,,,,1.99,0.79,Leading,57.4,0,5,0.89,ALLE(+3.8%) MG(+2.9%) MSA(+2.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Semiconductor Equipment & Materials,Technology,28,28,,-11.41,-11.94,-19.43,,7.1,,,,,,-18.52,-10.94,Lagging,5.6,1,5,-10.22,VECO(+0.8%) ENTG(-0.2%) ACLS(-0.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Semiconductors,Technology,55,55,,-7.85,-9.88,-15.31,62.35,12.7,0.87,2,1,1,1,-14.39,-8.88,Lagging,9.9,1,36,-0.7,SYNA(+23.2%) ON(+5.4%) ADI(+3.7%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Shell Companies,Financial Services,309,309,,0.0,0.1,0.79,,56.6,,,,,,1.71,1.1,Leading,58.2,0,0,,ACIC(+22.0%) VYLR(+7.1%) DMAAU(+4.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Silver,Basic Materials,6,6,,-0.09,-13.33,4.05,,16.7,,,,,,4.97,-12.33,Weakening,31.8,0,0,,NEWP(+1.9%) AYA(-8.4%) HSLV(-9.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Software - Application,Technology,140,140,,3.66,6.26,18.95,,67.9,,,,,,19.87,7.26,Leading,86.9,6,341,4.47,BRZE(+79.4%) PTC(+42.9%) TTAN(+42.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Software - Infrastructure,Technology,109,109,,-0.63,0.13,8.81,,51.4,,,,,,9.73,1.13,Leading,61.1,8,122,0.41,PICS(+45.6%) STNE(+24.3%) BOX(+24.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Solar,Technology,8,8,,-6.16,-10.92,-29.62,,0.0,,,,,,-28.71,-9.92,Lagging,4.7,0,0,,SHLS(-4.7%) NXT(-5.0%) ENPH(-7.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Specialty Business Services,Industrials,33,33,,1.72,-0.55,2.43,,45.5,,,,,,3.35,0.45,Leading,57.1,0,40,3.46,TRI(+18.2%) RELX(+17.9%) ULS(+10.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Specialty Chemicals,Basic Materials,48,48,,0.74,2.1,-2.69,,56.2,,,,,,-1.77,3.1,Improving,60.2,4,62,1.47,SSL(+17.5%) LIN(+9.7%) SOLS(+9.3%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Specialty Industrial Machinery,Industrials,57,57,,-1.48,-0.25,-6.52,,47.4,,,,,,-5.61,0.75,Improving,42.6,5,28,0.27,KRNT(+14.9%) IR(+8.7%) OTIS(+8.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Specialty Retail,Consumer Cyclical,28,28,,5.12,6.19,0.75,,71.4,,,,,,1.67,7.19,Leading,82.1,2,41,3.35,BNED(+26.3%) ASO(+23.0%) ARHS(+22.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Staffing & Employment Services,Industrials,14,14,,-0.44,-2.6,-5.84,,21.4,,,,,,-4.92,-1.6,Lagging,34.6,0,6,0.26,TNET(+6.8%) KELYB(+0.1%) NSP(-0.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Steel,Basic Materials,13,13,,1.19,6.51,9.22,65.79,76.9,0.77,0,0,0,0,10.14,7.5,Leading,85.3,1,33,1.35,WS(+23.7%) CLF(+13.1%) MTUS(+10.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Telecom Services,Communication Services,46,46,,0.46,-6.84,-7.91,,19.6,,,,,,-6.99,-5.84,Lagging,28.4,1,29,2.07,IDT(+22.8%) VEON(+15.4%) PHI(+15.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Thermal Coal,Energy,5,5,,-4.62,-3.79,-0.1,,20.0,,,,,,0.82,-2.79,Weakening,35.4,0,7,-1.08,NRP(+5.8%) ARLP(-0.7%) CNR(-3.8%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Tobacco,Consumer Defensive,7,7,,0.31,5.09,-3.23,,57.1,,,,,,-2.32,6.09,Improving,64.6,0,0,,MO(+8.9%) BTI(+7.7%) PM(+7.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Tools & Accessories,Industrials,10,10,,-0.07,0.77,-5.45,,60.0,,,,,,-4.53,1.77,Improving,55.0,1,8,0.6,TTC(+10.3%) SWK(+6.1%) KMT(+5.9%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Travel Services,Consumer Cyclical,13,13,,4.0,7.02,-5.35,,76.9,,,,,,-4.44,8.02,Improving,78.2,0,7,4.26,LIND(+25.3%) CCL(+21.3%) RCL(+15.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Trucking,Industrials,14,14,,-0.94,-5.18,-20.43,50.48,28.6,0.86,1,0,1,0,-19.51,-4.18,Lagging,24.2,0,11,-0.15,RXO(+45.4%) ODFL(+7.4%) XPO(+7.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Uranium,Energy,6,6,,-5.76,-20.71,-18.59,,0.0,,,,,,-17.68,-19.71,Lagging,4.4,0,0,,NXE(-13.5%) CCJ(-13.6%) ISOU(-19.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Utilities - Diversified,Utilities,6,6,,0.86,2.51,-8.76,,100.0,,,,,,-7.84,3.51,Improving,66.0,0,2,0.22,UTL(+3.6%) SRE(+2.8%) BIP(+2.6%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Utilities - Independent Power Producers,Utilities,8,8,,-8.64,-2.84,-9.05,,37.5,,,,,,-8.13,-1.84,Lagging,31.4,0,2,-11.99,TLN(+16.5%) VST(+6.8%) TAC(+5.4%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Utilities - Regulated Electric,Utilities,38,38,,1.01,4.02,-6.7,,73.7,,,,,,-5.78,5.02,Improving,66.3,0,17,0.22,ELPC(+10.6%) PNW(+10.3%) NWE(+8.0%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Utilities - Regulated Gas,Utilities,15,15,,1.09,2.91,-4.24,,80.0,,,,,,-3.32,3.91,Improving,70.5,0,5,1.51,BKH(+7.7%) ATO(+5.6%) NI(+5.5%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Utilities - Regulated Water,Utilities,12,12,,-0.86,-2.12,-0.78,,25.0,,,,,,0.14,-1.12,Weakening,41.8,0,4,0.09,SBS(+17.6%) AWK(+1.4%) WTRG(+1.2%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Utilities - Renewable,Utilities,12,12,,-4.63,-8.69,-18.3,,16.7,,,,,,-17.38,-7.69,Lagging,13.8,0,0,,ELLO(+5.6%) RNW(+0.4%) CWEN(-2.1%),2026-10-21 06:25 MYT
+2026-10-20,Industri,Waste Management,Industrials,10,10,,4.86,2.8,-0.19,,60.0,,,,,,0.73,3.8,Leading,73.2,0,1,-7.06,WM(+11.9%) RSG(+9.3%) WCN(+9.0%),2026-10-21 06:25 MYT
