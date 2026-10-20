@@ -206,3 +206,4 @@
 - Fail: baris ditambah ke `claude_34.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_35` … `claude_40` (unjuran tertinggi 221,267 B < 240,000). Dokumen db `papertrade/claude_34` … `claude_40` ditolak dalam satu batch; `harian/status` dikemas kini (beli_pada, beli_ringkas).
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 28: buka ≤ henti — QCOM M13, AXGN M13, ADI M14, CRM M18, NUE M35, STLD M35, JCI M49, AUGO M70, KARO M123; buka > buka_maks — DNOW M19; belum didagangkan (data_date 19 Okt) — DBD M03, HBB M13, NPKI M19 & M136, NCEW M28, NRP M31, M54, M111, M146 & M152, SAIH M93, M99, M122, M124, M128 & M154, GHC M105, RGS M158. Tiada bertindih.
+- Sahkan buka (10:12 NY, `quote_history_kline` ktype 2, 20 Okt): sampel ZBRA 374.02, SBLK 27.91, RMD 241.655, TCMD 22.84, SSNC 85.02 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
