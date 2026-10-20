@@ -1,9 +1,9 @@
 {
  "terkini": {
-  "dijana": "2026-10-20 11:43 UTC",
+  "dijana": "2026-10-20 12:41 UTC",
   "sesi": 20261019,
-  "bil_ticker": 933,
-  "bil_universe": 933,
+  "bil_ticker": 932,
+  "bil_universe": 932,
   "tiada_data": [],
   "tiada_bar_sesi": [
    "ATKR",
@@ -13,7 +13,7 @@
   "bil_tiada_bar_sesi": 3
  },
  "sejarah": {
-  "dijana": "2026-10-20 11:43 UTC",
+  "dijana": "2026-10-20 12:41 UTC",
   "bil_ticker": 1,
   "diminta": [
    "REF"
