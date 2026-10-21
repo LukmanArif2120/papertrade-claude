@@ -2,8 +2,8 @@
 
 Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-10-20. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
 
-- Posisi C (isyarat >= 2026-10-15): 1874; ada dalam lejar: 1767; tiada: 107 {'isyarat ada, dipegang lejar': 104, 'tiada isyarat dalam lejar': 3}
-- Posisi lejar: 5789 (C hanya 1874; lejar 3.1×)
+- Posisi C (isyarat >= 2026-10-15): 2577; ada dalam lejar: 1767; tiada: 810 {'isyarat ada, dipegang lejar': 184, 'tiada isyarat dalam lejar': 9, 'isyarat ada, belum diproses': 617}
+- Posisi lejar: 5789 (C hanya 2577; lejar 2.2×)
 - Harga beli berbeza > 0.5%: 52 daripada 1767
 - Status keluar sama: 1764 daripada 1767; berbeza: 3
 
