@@ -227,3 +227,4 @@
 - Fail: baris ditambah ke `claude_40.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_41` … `claude_51` (unjuran tertinggi 189,900 B). Dokumen db `papertrade/claude_40` … `claude_51` ditolak dalam dua batch (baris db sedia ada claude_40 dikekalkan); `harian/status` dikemas kini (beli_pada, beli_ringkas).
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 27: buka ≤ henti — DHR M14, EXPO M35, ISRG M54, M68 & M119, SAIH M70, RGEN M74, LNTH M74; belum didagangkan (data_date 19–20 Okt) — POLE M02, ESCA M02 & M122, PDS M04, M30, M79, M89, M146 & M148, WLKP M19, NCEW M28, NRP M34, M70 & M152, JOE M59 & M115, FRD M70, GHC M99, FTW M139. Tiada buka_maks/bertindih.
+- Sahkan buka (10:12 NY, `quote_history_kline` ktype 2, 21 Okt): sampel DNOW 15.785, PVH 86.5, JKHY 153.05, SONY 25.3, FOX 59.36 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
