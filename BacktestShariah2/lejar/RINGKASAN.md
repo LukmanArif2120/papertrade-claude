@@ -60,7 +60,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M137 Livermore System | 29 | 0 | 29 |  |  |  | 1.29 | 0 |  | 35 | 4.22 | 37 |
 | M148 Natural Number Method | 29 | 3 | 26 | 0 | -4.16 | 1 | 1.61 | 0 |  | 35 | 0.50 | 10 |
 | M57 Landry Trend Knockout (TKO) | 27 | 6 | 21 | 0 | -5.82 | 2 | 1.32 | 0 |  | 21 | 1.55 | 18 |
-| M79 Radge: 20% Flipper | 26 | 0 | 26 |  |  |  | 0.10 | 0 |  | 40 | 6.25 | 60 |
+| M79 Radge: 20% Flipper | 26 | 0 | 26 |  |  |  | 0.11 | 0 |  | 40 | 6.25 | 60 |
 | M34 Carter TTM Squeeze | 25 | 0 | 25 |  |  |  | 1.25 | 0 |  | 34 | 2.38 | 30 |
 | M99 Three Line Break | 25 | 3 | 22 | 0 | -3.27 | 1 | 2.76 | 0 |  | 40 | 1.17 | 16 |
 | M128 Inventory Retracement Bar (IRB, Rob Hoffman) | 24 | 2 | 22 | 0 | -3.10 | 2 | 0.47 | 0 |  | 34 | 0.55 | 12 |
