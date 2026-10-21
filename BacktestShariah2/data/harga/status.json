@@ -1,12 +1,10 @@
 {
  "terkini": {
-  "dijana": "2026-10-21 00:08 UTC",
+  "dijana": "2026-10-21 01:01 UTC",
   "sesi": 20261020,
-  "bil_ticker": 931,
+  "bil_ticker": 932,
   "bil_universe": 932,
-  "tiada_data": [
-   "ASND"
-  ],
+  "tiada_data": [],
   "tiada_bar_sesi": [
    "A",
    "AA",
@@ -102,6 +100,7 @@
    "ASH",
    "ASIX",
    "ASML",
+   "ASND",
    "ASO",
    "ASST",
    "ASTE",
@@ -206,10 +205,9 @@
    "CHRN",
    "CHRW",
    "CHT",
-   "CHWY",
-   "CIEN"
+   "CHWY"
   ],
-  "bil_tiada_bar_sesi": 929
+  "bil_tiada_bar_sesi": 925
  },
  "sejarah": {
   "dijana": "2026-10-20 22:06 UTC",
