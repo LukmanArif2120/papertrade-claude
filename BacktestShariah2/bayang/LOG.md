@@ -40,3 +40,8 @@
 - Watchlist 285 (baharu 177, dibuang 76, ke senarai beli 99). Isyarat direkod: 2978 (bayang/isyarat/2026-10-20_malam.csv.gz).
 - Ralat kaedah: tiada. Nota: M BB M31: bar isyarat 2026-09-30 tiada dalam stor; C BIRK M18: tiada bar 2026-10-20 (harga terkini 2026-10-19); C ATKR M11: tiada bar 2026-10-20 (harga terkini 2026-10-16); C ATKR M66: tiada bar 2026-10-20 (harga terkini 2026-10-16); C BIRK M79: tiada bar 2026-10-20 (harga terkini 2026-10-19); C ATKR M36: tiada bar 2026-10-20 (harga terkini 2026-10-16); C ATKR M54: tiada bar 2026-10-20 (harga terkini 2026-10-16); C ATKR M95: tiada bar 2026-10-20 (harga terkini 2026-10-16).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-21 22:14 MYT — GitHub Actions: beli maya 2026-10-21 (isyarat 2026-10-20)
+- Direkod 717 (312 saham; belian semula 34; fail claude_33.csv); dilangkau 12. Harga: buka sementara yfinance 10:14 NY.
+- Dilangkau: POLE M02: belum didagangkan / tiada harga buka; DHR M14: buka 217.56 <= henti 222.65; NCEW M28: belum didagangkan / tiada harga buka; ISRG M54: buka 402.49 <= henti 416.57; RGEN M74: buka 174.37 <= henti 176.35; LNTH M74: buka 100.28 <= henti 100.34; BIO M76: buka 350.21 <= henti 350.49; PDEX M76: belum didagangkan / tiada harga buka; ISRG M116: isyarat batal pada buka (peraturan kaedah); ISRG M119: buka 402.49 <= henti 426.70; WST M126: isyarat batal pada buka (peraturan kaedah); WK M153: isyarat batal pada buka (peraturan kaedah).
+- Tiada order. Tiada wang sebenar.
