@@ -1,73 +1,69 @@
 {
  "malam": {
-  "sesi": "2026-10-19",
-  "masa": "2026-10-20 13:50 MYT",
+  "sesi": "2026-10-20",
+  "masa": "2026-10-21 14:05 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 151,
+  "masa_kaedah_s": 138,
   "keluar_baru": {
    "M": {
-    "isyarat": 1,
-    "henti": 2
+    "sasaran": 1
    },
    "C": {
-    "isyarat": 59,
-    "henti": 65,
-    "sasaran": 7
+    "sasaran": 12,
+    "isyarat": 41,
+    "henti": 55
    }
   },
   "keluar_baru_jumlah": {
-   "M": 3,
-   "C": 131
+   "M": 1,
+   "C": 108
   },
-  "menunggu": 39,
-  "harga_beli_dibetulkan": 106,
-  "harga_beli_beza_besar": 8,
+  "menunggu": 35,
+  "harga_beli_dibetulkan": 111,
+  "harga_beli_beza_besar": 64,
   "tidak_dibeli": [],
   "nota": [
    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
-   "C ATKR M11: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M66: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ADI M18: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M36: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M54: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M95: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M100: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M101: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ADI M08: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ADI M09: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M57: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M127: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ADI M156: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ATKR M102: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
-   "C ADI M14: tiada bar 2026-10-19 (harga terkini 2026-10-16)"
+   "C BIRK M18: tiada bar 2026-10-20 (harga terkini 2026-10-19)",
+   "C ATKR M11: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M66: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C BIRK M79: tiada bar 2026-10-20 (harga terkini 2026-10-19)",
+   "C ATKR M36: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M54: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M95: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M100: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M101: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M57: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M127: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+   "C ATKR M102: tiada bar 2026-10-20 (harga terkini 2026-10-16)"
   ],
-  "senarai_beli": 513,
-  "saham_unik": 245,
-  "kaedah": 92,
-  "belian_semula": 15,
-  "dari_watchlist": 68,
-  "isyarat": 1905,
+  "senarai_beli": 729,
+  "saham_unik": 316,
+  "kaedah": 102,
+  "belian_semula": 34,
+  "dari_watchlist": 99,
+  "isyarat": 2978,
   "ditolak": {
-   "dipegang": 229,
-   "had": 1155,
-   "mingguan": 8
+   "dipegang": 348,
+   "had": 1783,
+   "mingguan": 118
   },
-  "watchlist": 283,
-  "watchlist_baharu": 161,
-  "watchlist_dibuang": 80,
-  "watchlist_ke_senarai": 68,
+  "watchlist": 285,
+  "watchlist_baharu": 177,
+  "watchlist_dibuang": 76,
+  "watchlist_ke_senarai": 99,
   "minggu_akhir": false,
-  "fail_isyarat": "bayang/isyarat/2026-10-19_malam.csv.gz"
+  "fail_isyarat": "bayang/isyarat/2026-10-20_malam.csv.gz"
  },
  "gred": {
-  "tarikh": "2026-10-20",
-  "masa": "2026-10-20 20:18 MYT",
+  "tarikh": "2026-10-21",
+  "masa": "2026-10-21 14:08 MYT",
   "pemangkin": {
-   "D": 76,
-   "B": 376,
-   "C": 52,
-   "–": 9
+   "C": 146,
+   "B": 453,
+   "–": 7,
+   "D": 123
   }
  },
  "beli": {

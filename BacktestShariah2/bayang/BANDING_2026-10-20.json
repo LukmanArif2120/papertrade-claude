@@ -1,0 +1,340 @@
+[
+ {
+  "peringkat": "kemas",
+  "commit": "2b0d6b2",
+  "sesi": "2026-10-19",
+  "ringkas": {
+   "sesi": "2026-10-19",
+   "masa": "2026-10-20 06:09 MYT",
+   "ralat_kaedah": [],
+   "kaedah_tanpa_modul": [],
+   "masa_kaedah_s": 129,
+   "keluar_baru": {
+    "M": {
+     "isyarat": 1,
+     "henti": 2
+    },
+    "C": {
+     "isyarat": 60,
+     "henti": 62,
+     "sasaran": 7
+    }
+   },
+   "keluar_baru_jumlah": {
+    "M": 3,
+    "C": 129
+   },
+   "menunggu": 34,
+   "harga_beli_dibetulkan": 456,
+   "harga_beli_beza_besar": 57,
+   "tidak_dibeli": [
+    "USNA M25",
+    "ABM M35",
+    "CTAS M41",
+    "SSL M125",
+    "PFE M125",
+    "SSL M128",
+    "BKNG M139",
+    "ZETA M153",
+    "FSM M153",
+    "WPM M153",
+    "IAG M153",
+    "EQNR M153"
+   ],
+   "nota": [
+    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
+    "C ATKR M11: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M66: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M36: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M54: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M95: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M100: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M101: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M57: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M127: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M102: tiada bar 2026-10-19 (harga terkini 2026-10-16)"
+   ]
+  },
+  "stat": {
+   "diubah_claude": 2604,
+   "dibanding": 3267,
+   "harga_beli_sama": 3267,
+   "keluar_sama": 3266,
+   "harga_terkini_sama": 2473,
+   "teks_sama": 3265,
+   "harga_keluar_sama": 793,
+   "tidak_dibeli_sama": 36,
+   "baris": 3303,
+   "hanya_kami": 0,
+   "hanya_claude": 0
+  },
+  "beza": {
+   "harga_beli": [],
+   "tidak_dibeli": [],
+   "keluar": [
+    "('C', 'M13', 'SBH', '2026-10-15', '2026-10-16'): kami Pegang (henti 16.41) / Claude Keluar: kena henti (19 Okt @ 16.41)"
+   ],
+   "harga_keluar": [],
+   "harga_terkini": []
+  },
+  "hanya_kami": [],
+  "hanya_claude": []
+ },
+ {
+  "peringkat": "imbas",
+  "commit": "bb1f414..bcc47ca",
+  "sesi": "2026-10-19",
+  "ringkas": {
+   "sesi": "2026-10-19",
+   "masa": "2026-10-20 20:04 MYT",
+   "ralat_kaedah": [],
+   "kaedah_tanpa_modul": [],
+   "masa_kaedah_s": 136,
+   "keluar_baru": {
+    "M": {},
+    "C": {}
+   },
+   "keluar_baru_jumlah": {
+    "M": 0,
+    "C": 0
+   },
+   "menunggu": 34,
+   "harga_beli_dibetulkan": 0,
+   "harga_beli_beza_besar": 0,
+   "tidak_dibeli": [],
+   "nota": [
+    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
+    "C ATKR M11: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M66: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M36: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M54: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M95: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M100: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M101: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M57: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M127: tiada bar 2026-10-19 (harga terkini 2026-10-16)",
+    "C ATKR M102: tiada bar 2026-10-19 (harga terkini 2026-10-16)"
+   ],
+   "senarai_beli": 518,
+   "saham_unik": 247,
+   "kaedah": 92,
+   "belian_semula": 15,
+   "dari_watchlist": 67,
+   "isyarat": 1929,
+   "ditolak": {
+    "dipegang": 228,
+    "had": 1175,
+    "mingguan": 8
+   },
+   "watchlist": 283,
+   "watchlist_baharu": 163,
+   "watchlist_dibuang": 6,
+   "watchlist_ke_senarai": 67,
+   "minggu_akhir": false,
+   "fail_isyarat": "../../../../../../tmp/bayang_2wqcabf4/imbas/isyarat/2026-10-19_malam.csv.gz"
+  },
+  "stat": {
+   "senarai_kami": 518,
+   "senarai_claude": 519,
+   "senarai_sama": 517,
+   "henti_sama": 517,
+   "sasaran_sama": 517,
+   "belian_ke_sama": 517,
+   "gred_sektor_sama": 517,
+   "gred_industri_sama": 517,
+   "gred_rs_sama": 516,
+   "gred_qr_sama": 517,
+   "gred_pemangkin_sama": 516,
+   "watch_kami": 283,
+   "watch_claude": 283,
+   "watch_sama": 247
+  },
+  "beza": {
+   "hanya_kami": [
+    "('DAKT', 'M25', '2026-10-19') asal=isyarat rank? sumber=lain"
+   ],
+   "hanya_claude": [
+    "('APOG', 'M25', '2026-10-19') asal=isyarat sumber=lain",
+    "('SGU', 'M12', '2026-10-19') asal=watchlist sumber=lain"
+   ],
+   "henti": [],
+   "sasaran": [],
+   "gred": [
+    "('ARHS', 'M139', '2026-10-19') gred_rs: kami C / Claude D",
+    "('SBLK', 'M81', '2026-10-19') gred_pemangkin: kami B / Claude C"
+   ],
+   "belian_ke": []
+  },
+  "watch_hanya_kami": [
+   "('AAP', 'M79')",
+   "('AAP', 'M92')",
+   "('AAPL', 'M37')",
+   "('ADP', 'M23')",
+   "('APG', 'M50')",
+   "('ATRC', 'M20')",
+   "('CAH', 'M37')",
+   "('CHD', 'M23')",
+   "('CHD', 'M36')",
+   "('COST', 'M46')",
+   "('CSGP', 'M66')",
+   "('DOV', 'M30')",
+   "('DV', 'M34')",
+   "('ELAN', 'M111')",
+   "('ET', 'M03')",
+   "('ET', 'M20')",
+   "('EYE', 'M31')",
+   "('FANG', 'M66')",
+   "('MEDP', 'M78')",
+   "('MMSI', 'M78')",
+   "('MZTI', 'M15')",
+   "('NCNO', 'M77')",
+   "('ODFL', 'M31')",
+   "('PDEX', 'M76')",
+   "('PODD', 'M04')",
+   "('RAMP', 'M46')",
+   "('SGU', 'M12')",
+   "('SHEL', 'M06')",
+   "('SNY', 'M03')",
+   "('TEL', 'M66')"
+  ],
+  "watch_hanya_claude": [
+   "('ATKR', 'M46')",
+   "('ATKR', 'M64')",
+   "('BLLN', 'M12')",
+   "('COR', 'M50')",
+   "('CRM', 'M15')",
+   "('CTAS', 'M46')",
+   "('CVX', 'M04')",
+   "('EW', 'M15')",
+   "('FET', 'M10')",
+   "('FOXA', 'M30')",
+   "('FOXA', 'M66')",
+   "('FRPT', 'M77')",
+   "('GGG', 'M31')",
+   "('GSAT', 'M38')",
+   "('IFF', 'M31')",
+   "('IMAX', 'M20')",
+   "('LPX', 'M111')",
+   "('NBIX', 'M03')",
+   "('NWS', 'M92')",
+   "('OVV', 'M06')",
+   "('PTEN', 'M66')",
+   "('QCOM', 'M77')",
+   "('RAMP', 'M23')",
+   "('RGEN', 'M20')",
+   "('SIG', 'M78')",
+   "('SRAD', 'M03')",
+   "('SSNC', 'M36')",
+   "('SSNC', 'M37')",
+   "('SWKS', 'M20')",
+   "('TRMB', 'M34')"
+  ]
+ },
+ {
+  "peringkat": "beli",
+  "commit": "70dfa10",
+  "tarikh": "2026-10-20",
+  "ringkas": {
+   "tarikh": "2026-10-20",
+   "masa": "2026-10-20 21:40 MYT",
+   "isyarat": "2026-10-19",
+   "calon": 519,
+   "direkod": 503,
+   "dilangkau": 16,
+   "langkau": [
+    "SGU M12: buka 13.11 <= henti 13.19",
+    "QCOM M13: buka 171.51 <= henti 175.32",
+    "AXGN M13: buka 35.71 <= henti 35.99",
+    "CRM M18: buka 235.75 <= henti 236.90",
+    "DNOW M19: buka 16.26 > buka_maks 16.21",
+    "APOG M25: isyarat batal pada buka (peraturan kaedah)",
+    "NUE M35: buka 256.01 <= henti 257.01",
+    "STLD M35: buka 232.65 <= henti 240.44",
+    "JCI M49: buka 146.35 <= henti 147.91",
+    "AUGO M70: buka 84.48 <= henti 85.88",
+    "MXL M117: isyarat batal pada buka (peraturan kaedah)",
+    "KARO M123: buka 59.23 <= henti 61.06",
+    "CRM M125: isyarat batal pada buka (peraturan kaedah)",
+    "MRVL M153: isyarat batal pada buka (peraturan kaedah)",
+    "WTTR M153: isyarat batal pada buka (peraturan kaedah)",
+    "INGM M153: isyarat batal pada buka (peraturan kaedah)"
+   ],
+   "saham_unik": 239,
+   "sumber_buka": "buka bar harian (ulang tayang)",
+   "fail": "claude_34.csv",
+   "belian_semula": 14
+  },
+  "stat": {
+   "direkod_kami": 503,
+   "direkod_claude": 491,
+   "sama": 484,
+   "harga_banding_betul": 484,
+   "harga_sama_betul": 430,
+   "harga_sama_sementara": 280
+  },
+  "beza": {
+   "hanya_kami": [
+    "('M03', 'DBD')",
+    "('M105', 'GHC')",
+    "('M111', 'NRP')",
+    "('M122', 'SAIH')",
+    "('M124', 'SAIH')",
+    "('M128', 'SAIH')",
+    "('M13', 'HBB')",
+    "('M136', 'NPKI')",
+    "('M14', 'ADI')",
+    "('M146', 'NRP')",
+    "('M152', 'NRP')",
+    "('M154', 'SAIH')",
+    "('M158', 'RGS')",
+    "('M19', 'NPKI')",
+    "('M28', 'NCEW')",
+    "('M31', 'NRP')",
+    "('M54', 'NRP')",
+    "('M93', 'SAIH')",
+    "('M99', 'SAIH')"
+   ],
+   "hanya_claude": [
+    "('M117', 'MXL')",
+    "('M12', 'SGU')",
+    "('M125', 'CRM')",
+    "('M153', 'INGM')",
+    "('M153', 'MRVL')",
+    "('M153', 'WTTR')",
+    "('M25', 'APOG')"
+   ],
+   "harga_lawan_betul": [
+    "('M33', 'RS'): kami 409.46 / Claude (dibetulkan 6:02) 412.31",
+    "('M19', 'FET'): kami 84.81 / Claude (dibetulkan 6:02) 85.39",
+    "('M137', 'MUR'): kami 42.86 / Claude (dibetulkan 6:02) 43.1",
+    "('M151', 'TDC'): kami 31.645 / Claude (dibetulkan 6:02) 31.46",
+    "('M131', 'RS'): kami 409.46 / Claude (dibetulkan 6:02) 412.31",
+    "('M99', 'OII'): kami 43.89 / Claude (dibetulkan 6:02) 44.73",
+    "('M80', 'AS'): kami 30.73 / Claude (dibetulkan 6:02) 30.5",
+    "('M116', 'MUR'): kami 42.86 / Claude (dibetulkan 6:02) 43.1",
+    "('M11', 'KN'): kami 34.1 / Claude (dibetulkan 6:02) 35.04",
+    "('M133', 'DLB'): kami 61.58 / Claude (dibetulkan 6:02) 61.06",
+    "('M82', 'RYZ'): kami 27.14 / Claude (dibetulkan 6:02) 27.66",
+    "('M33', 'VAL'): kami 90.91 / Claude (dibetulkan 6:02) 90.035",
+    "('M73', 'BDX'): kami 191.5 / Claude (dibetulkan 6:02) 192.78",
+    "('M124', 'VAL'): kami 90.91 / Claude (dibetulkan 6:02) 90.035",
+    "('M33', 'LPX'): kami 71.72 / Claude (dibetulkan 6:02) 71.18",
+    "('M15', 'CVSA'): kami 130.68 / Claude (dibetulkan 6:02) 129.43",
+    "('M14', 'BDX'): kami 191.5 / Claude (dibetulkan 6:02) 192.78",
+    "('M151', 'VAL'): kami 90.91 / Claude (dibetulkan 6:02) 90.035",
+    "('M29', 'FET'): kami 84.81 / Claude (dibetulkan 6:02) 85.39",
+    "('M105', 'RS'): kami 409.46 / Claude (dibetulkan 6:02) 412.31",
+    "('M154', 'FET'): kami 84.81 / Claude (dibetulkan 6:02) 85.39",
+    "('M111', 'HXL'): kami 91.79 / Claude (dibetulkan 6:02) 91.23",
+    "('M77', 'FET'): kami 84.81 / Claude (dibetulkan 6:02) 85.39",
+    "('M35', 'FET'): kami 84.81 / Claude (dibetulkan 6:02) 85.39",
+    "('M128', 'SDRL'): kami 49.03 / Claude (dibetulkan 6:02) 48.24",
+    "('M79', 'AS'): kami 30.73 / Claude (dibetulkan 6:02) 30.5",
+    "('M02', 'NEM'): kami 115.42 / Claude (dibetulkan 6:02) 116.04",
+    "('M92', 'FET'): kami 84.81 / Claude (dibetulkan 6:02) 85.39",
+    "('M20', 'CVSA'): kami 130.68 / Claude (dibetulkan 6:02) 129.43",
+    "('M92', 'CVSA'): kami 130.68 / Claude (dibetulkan 6:02) 129.43"
+   ]
+  }
+ }
+]

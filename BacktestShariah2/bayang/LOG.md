@@ -32,3 +32,11 @@
 - Direkod 492 (235 saham; belian semula 14; fail claude_29.csv); dilangkau 21. Harga: buka sementara yfinance 10:13 NY.
 - Dilangkau: QCOM M13: buka 171.51 <= henti 175.32; AXGN M13: buka 35.71 <= henti 35.99; CRM M18: buka 235.75 <= henti 236.90; DNOW M19: buka 16.26 > buka_maks 16.21; NCEW M28: belum didagangkan / tiada harga buka; NUE M35: buka 256.01 <= henti 257.01; STLD M35: buka 232.00 <= henti 240.44; JCI M49: buka 146.35 <= henti 147.91; AUGO M70: buka 84.22 <= henti 85.88; SAIH M93: belum didagangkan / tiada harga buka; SAIH M99: belum didagangkan / tiada harga buka; MXL M117: isyarat batal pada buka (peraturan kaedah); SAIH M122: belum didagangkan / tiada harga buka; KARO M123: buka 59.23 <= henti 61.06; SAIH M124: belum didagangkan / tiada harga buka; CRM M125: isyarat batal pada buka (peraturan kaedah); SAIH M128: belum didagangkan / tiada harga buka; MRVL M153: isyarat batal pada buka (peraturan kaedah); WTTR M153: isyarat batal pada buka (peraturan kaedah); INGM M153: isyarat batal pada buka (peraturan kaedah); SAIH M154: belum didagangkan / tiada harga buka.
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-21 14:05 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-10-20)
+- Keluar baharu 109 (C {'sasaran': 12, 'isyarat': 41, 'henti': 55}, M {'sasaran': 1}); menunggu buka sesi seterusnya: 35.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 111 (beza > 0.5%: 64). Tidak dibeli baharu: tiada.
+- Senarai beli 729 baris (316 saham, 102 kaedah; 99 daripada watchlist; belian semula 34). Ditolak: {'dipegang': 348, 'had': 1783, 'mingguan': 118}.
+- Watchlist 285 (baharu 177, dibuang 76, ke senarai beli 99). Isyarat direkod: 2978 (bayang/isyarat/2026-10-20_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: M BB M31: bar isyarat 2026-09-30 tiada dalam stor; C BIRK M18: tiada bar 2026-10-20 (harga terkini 2026-10-19); C ATKR M11: tiada bar 2026-10-20 (harga terkini 2026-10-16); C ATKR M66: tiada bar 2026-10-20 (harga terkini 2026-10-16); C BIRK M79: tiada bar 2026-10-20 (harga terkini 2026-10-19); C ATKR M36: tiada bar 2026-10-20 (harga terkini 2026-10-16); C ATKR M54: tiada bar 2026-10-20 (harga terkini 2026-10-16); C ATKR M95: tiada bar 2026-10-20 (harga terkini 2026-10-16).
+- Tiada order. Tiada wang sebenar.
