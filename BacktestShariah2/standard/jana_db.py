@@ -255,14 +255,21 @@ def garis_harga(M, C, stor):
     return dict(tarikh=hari, spy=spy, rows=rows), [[k, v] for k, v in sorted(mfe.items())]
 
 
-def harian_kaedah(M, C, stor):
+TERKINI = os.path.join(BS2, 'data', 'harga', 'terkini.csv')
+
+
+def harian_kaedah(M, C, stor, terkini=None):
     """prestasi/harian_kaedah (grid prestasi harian setiap kaedah, tab Prestasi): untung harian % setiap kaedah setiap sesi =
     Σ perubahan nilai ÷ Σ nilai awal hari bagi posisi USD_POSISI yang dipegang hari itu (hari beli: tutup lawan harga beli; hari
     keluar lorong kaedah: harga keluar lawan tutup semalam; tiada bar = harga semalam). j = untung purata % (untung akhir bagi
-    yang keluar, semasa bagi yang dipegang; sama dengan Prestasi). Akaun M, C dan G (gabung)."""
-    fr = pd.concat([pd.read_csv(os.path.join(stor, f), usecols=['ticker', 'date', 'close']) for f in ('harga_A.csv', 'harga_B.csv')
-                    if os.path.exists(os.path.join(stor, f))])
-    P = {t: dict(zip(g.date.astype(int), g.close.astype(float))) for t, g in fr.groupby('ticker')}
+    yang keluar, semasa bagi yang dipegang; sama dengan Prestasi). ev = [[indeks hari, beli, keluar untung, keluar rugi]].
+    Akaun M, C dan G (gabung); k 'Semua' = semua kaedah akaun itu. spy = untung harian % SPY. Harga: stor + terkini.csv
+    (bar harian terbaharu; stor repo boleh ketinggalan satu sesi)."""
+    fail = [os.path.join(stor, f) for f in ('harga_A.csv', 'harga_B.csv', 'harga_idx.csv')] + ([terkini] if terkini else [])
+    fr = pd.concat([pd.read_csv(f, usecols=['ticker', 'date', 'close']) for f in fail if os.path.exists(f)])
+    fr['date'] = fr.date.astype(int)
+    fr = fr.drop_duplicates(['ticker', 'date'], keep='last')
+    P = {t: dict(zip(g.date, g.close.astype(float))) for t, g in fr.groupby('ticker')}
     pos = []
     for ak, R in (('M', M), ('C', C)):
         for r in R:
@@ -275,17 +282,27 @@ def harian_kaedah(M, C, stor):
             u = SH.nombor(r.get('untung_akhir_pct') if kel else r.get('untung_pct'))
             pos.append((ak, r['kaedah'], r['saham'], int(r['tarikh_beli'].replace('-', '')), e, hb, hk, u or 0.0))
     if not pos:
-        return dict(tarikh=[], rows=[])
+        return dict(tarikh=[], spy=[], rows=[])
     mula = min(p[3] for p in pos)
-    bil = fr.date.astype(int).value_counts()
+    bil = fr[fr.ticker != 'SPY'].date.value_counts()
     hari = sorted(d for d, n in bil.items() if d >= mula and n >= 0.5 * bil.max())   # sesi separa (stor belum lengkap) diabaikan
     ix = {d: i for i, d in enumerate(hari)}
+    sp = sorted(P.get('SPY', {}).items())
+    spy = []
+    for d in hari:
+        lalu = [c for t, c in sp if t < d]
+        spy.append(round(100 * (P['SPY'][d] / lalu[-1] - 1), 2) if lalu and d in P.get('SPY', {}) else None)
     agg = {}
     for ak, k, s, b, e, hb, hk, u in pos:
         harga = P.get(s, {})
-        for kk in ((ak, k), ('G', k)):
-            x = agg.setdefault(kk, dict(pnl=[0.0] * len(hari), asas=[0.0] * len(hari), n=[0] * len(hari), u=[]))
+        kunci = ((ak, k), ('G', k), (ak, 'Semua'), ('G', 'Semua'))
+        for kk in kunci:
+            x = agg.setdefault(kk, dict(pnl=[0.0] * len(hari), asas=[0.0] * len(hari), n=[0] * len(hari), u=[], ev={}))
             x['u'].append(u)
+            if b in ix:
+                x['ev'].setdefault(ix[b], [0, 0, 0])[0] += 1
+            if e in ix:
+                x['ev'].setdefault(ix[e], [0, 0, 0])[1 if hk > hb else 2] += 1
         lalu = hb
         for d in hari:
             if d < b:
@@ -294,16 +311,17 @@ def harian_kaedah(M, C, stor):
                 break
             kini = hk if e is not None and d == e else harga.get(d, lalu)
             i = ix[d]
-            for kk in ((ak, k), ('G', k)):
+            for kk in kunci:
                 x = agg[kk]
                 x['pnl'][i] += USD_POSISI * (kini - lalu) / hb; x['asas'][i] += USD_POSISI * lalu / hb; x['n'][i] += 1
             lalu = kini
-    no = lambda k: (int(k[1:]) if k[1:].isdigit() else 9999, k)
+    no = lambda k: (-1 if k == 'Semua' else int(k[1:]) if k[1:].isdigit() else 9999, k)
     rows = []
     for (ak, k), x in sorted(agg.items(), key=lambda kv: ('MCG'.index(kv[0][0]), no(kv[0][1]))):
         rows.append(dict(a=ak, k=k, np=len(x['u']), j=round(stt.mean(x['u']), 2),
-                         d=[round(100 * p / a, 2) if a > 0 else None for p, a in zip(x['pnl'], x['asas'])], n=x['n']))
-    return dict(tarikh=hari, rows=rows)
+                         d=[round(100 * p / a, 2) if a > 0 else None for p, a in zip(x['pnl'], x['asas'])], n=x['n'],
+                         ev=[[i] + v for i, v in sorted(x['ev'].items())]))
+    return dict(tarikh=hari, spy=spy, rows=rows)
 
 
 def pengawas(st, masa):
@@ -438,9 +456,10 @@ def main(argv=None):
                                 definisi='Kenaikan maksimum % (MFE) = (harga tinggi tertinggi sejak hari beli hingga hari ini, atau sehingga '
                                          'sehari sebelum keluar lorong kaedah, dan harga keluar) ÷ harga beli − 1, minimum 0. '
                                          'rows: [akaun|saham|kaedah|tarikh_beli, %].')
-    docs['prestasi/harian_kaedah'] = dict(harian_kaedah(M, C, a.stor), dibina=dibina, harga_hingga=f'{S} tutup',
+    docs['prestasi/harian_kaedah'] = dict(harian_kaedah(M, C, a.stor, TERKINI if a.stor == STOR else None), dibina=dibina, harga_hingga=f'{S} tutup',
                                           definisi='rows: {a: akaun M|C|G, k: kaedah, np: jumlah posisi, j: untung purata %, d: untung '
-                                                   'harian % sejajar tarikh (null = tiada posisi), n: posisi dipegang}. Untung harian = '
+                                                   'harian % sejajar tarikh (null = tiada posisi), n: posisi dipegang, ev: [[indeks hari, beli, keluar untung, '
+                                                   'keluar rugi]]}; k Semua = semua kaedah; spy: untung harian % SPY. Untung harian = '
                                                    'Σ perubahan nilai ÷ Σ nilai awal hari (posisi USD sama; keluar ikut lorong kaedah).')
     ps = portfolio_slot(dibina)
     if ps:
