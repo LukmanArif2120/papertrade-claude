@@ -1,5 +1,5 @@
 {
- "dijana": "2026-10-21 00:09 UTC",
+ "dijana": "2026-10-21 22:21 UTC",
  "sumber": "https://scanner.tradingview.com/america/scan",
  "tv": {
   "baris": 4154,
@@ -31,28 +31,28 @@
    "daripada": 50
   },
   "malaysia": {
-   "berisi": 39,
+   "berisi": 38,
    "daripada": 50
   }
  },
  "semak_shariah": {
   "disahkan_etf": 143,
-  "tiada_maklumat": 729,
+  "tiada_maklumat": 727,
   "sp500_tiada_spus": 51,
-  "univ_moomoo": 916,
-  "papertrade": 595,
+  "univ_moomoo": 915,
+  "papertrade": 636,
   "papertrade_sp500_tiada_spus": [
    "ADP",
    "AEP",
    "APA",
    "APP",
    "ATO",
-   "BG",
    "BKR",
    "CAT",
    "COST",
    "CVS",
    "CVX",
+   "DELL",
    "DVN",
    "EQT",
    "EXE",
@@ -80,6 +80,7 @@
    "SWK",
    "UHS",
    "VLO",
+   "WDC",
    "WEC",
    "ZBH"
   ]
