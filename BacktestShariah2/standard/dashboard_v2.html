@@ -41,8 +41,8 @@ h1{font-size:1.2rem;font-weight:800;letter-spacing:-.01em;margin:0;text-wrap:bal
 .gr{display:inline-block;min-width:1.45em;text-align:center;border-radius:4px;font-weight:700;font-size:.7rem;line-height:1.5;padding:0 3px;margin:0 2px 2px 0}
 .gr small{font-weight:500;opacity:.75;margin-right:1px}
 .nw{white-space:nowrap}
-/* jadual bergred: angka dan perkataan tidak dipecah; skrol mendatar dalam jadual jika terlalu lebar */
-.tablewrap.tw-grd{overflow-x:auto}.tablewrap.tw-grd td,.tablewrap.tw-grd th{overflow-wrap:break-word;padding-inline:4px}
+/* jadual bergred: angka dan perkataan tidak dipecah; tiada skrol mendatar (lajur kurang penting disembunyi oleh muatLajur) */
+.tablewrap.tw-grd{overflow-x:visible}.tablewrap.tw-grd td,.tablewrap.tw-grd th{overflow-wrap:break-word;padding-inline:4px}
 /* Syarat belum cukup (watchlist penuh, .syr) 250px. Pemangkin (.grp) dan Kewangan (.grk) sama lebar 230px di desktop:
    teks pemangkin maksimum 3 baris, pautan berita 1 baris (teks penuh dalam title) */
 td.grd{min-width:0}.tablewrap.tw-grd td.wrap{min-width:150px}.tablewrap.tw-grd td.syr{min-width:250px}td.grd .vv{font-size:.72rem}.tablewrap td .nw{white-space:nowrap}
@@ -203,7 +203,7 @@ th.frz{z-index:3;background:var(--sunk)}
 /* Prestasi */
 .grid2.eq{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 @media (max-width:860px){.grid2.eq{grid-template-columns:1fr}}
-.chartbox.scrolly{max-height:520px;overflow-y:auto}
+.chartbox.scrolly{}
 svg .hit{cursor:pointer}
 svg .hit:hover path,svg .hit:hover circle,svg .hit:hover rect:not([fill=transparent]){filter:brightness(1.25)}
 .panel.danger{border-color:color-mix(in srgb,var(--neg) 35%,var(--line));background:linear-gradient(180deg,rgba(239,68,68,.05),transparent 120px),var(--card)}
@@ -486,6 +486,14 @@ td .sbk{max-width:260px}
 .mkn>div{display:grid;grid-template-columns:72px minmax(0,1fr);gap:8px}
 .mkn>div>span:first-child{color:var(--muted)}
 .mkn .pill{font-size:.64rem;padding:0 6px}
+.kli{list-style:none;margin:0;padding:0;display:grid;gap:5px}.kli li{position:relative;padding-left:18px;line-height:1.35;color:var(--fg-2)}.kli li::before{position:absolute;left:0;top:0;width:14px;text-align:center;font-weight:800;font-size:.85em;line-height:1.6}/* penanda baris ikut warna pil: masuk ✓ hijau, keluar → ungu, pegang • kuning, henti ▪ merah; baris nota kelabu */.k-masuk li::before{content:"✓";color:var(--pos)}.k-keluar li::before{content:"→";color:#c4b5fd}.k-pegang li::before{content:"•";color:var(--warn);font-size:1.1em;line-height:1.25}.k-henti li::before{content:"▪";color:var(--neg-tx);font-size:1.15em;line-height:1.3}.kli li.mut::before{content:"–";color:var(--muted)}.kli li.hd{padding-left:0;font-weight:600;color:var(--fg)}.kli li.hd::before{content:none}
+.kli li.mut{color:var(--muted)}.kli b{font-weight:700;color:var(--fg)}.kli.k-henti b{color:var(--neg-tx)}.kli.k-pegang b{color:var(--warn)}
+.kbk{min-width:0}@media (min-width:761px){td.knm{min-width:230px}}.mkn .kpl{margin-bottom:3px}
+.kasal{margin-top:10px;font-size:.84rem;color:var(--muted)}.kasal summary{cursor:pointer;color:var(--fg-2);font-weight:600}.kasal .dl{margin-top:8px;font-size:.84rem}.kasal dd{color:var(--muted)}
+/* tab Kaedah mod penuh: lebar lajur tetap supaya semua baris sejajar; isi sel bermula di atas */
+@media (min-width:761px){.katpenuh table{table-layout:fixed}.katpenuh th:nth-child(1){width:58px}.katpenuh th:nth-child(2){width:20%}.katpenuh th:nth-child(3){width:12%}.katpenuh th:nth-child(4){width:22%}.katpenuh th:nth-child(5){width:17%}.katpenuh th:nth-child(6){width:13%}.katpenuh th:nth-child(7){width:16%}.katpenuh tbody td{vertical-align:top;padding:12px 10px;overflow-wrap:break-word}.katpenuh th{padding:8px 10px;text-align:left}.katpenuh td.knm,.katpenuh td.wrap{min-width:0;max-width:none}}
+.kpl{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 5px}.kpl .pill{font-size:.66rem;letter-spacing:.04em;text-transform:uppercase;padding:1px 7px}
+.kring{display:block;margin-top:5px;padding:3px 0 3px 8px;border-left:2px solid var(--accent);color:var(--fg-2);font-size:.8rem;line-height:1.38;white-space:normal}.klg{display:flex;flex-wrap:wrap;align-items:center;gap:5px 6px;font-size:.78rem;color:var(--muted);margin:0 0 10px}.klg .pill{font-size:.62rem;letter-spacing:.04em;padding:1px 6px}.klg span.sp{margin-right:6px}
 
 /* v3 (20 Okt 2026): elemen bacaan pantas — satu simbol satu maksud (Panduan › Petunjuk simbol) */
 .tt{display:inline-block;width:1.05em;text-align:center;margin-right:4px;font-size:.78rem;line-height:1}.tt.pos{color:var(--pos)}.tt.wrn{color:var(--warn)}.tt.neg{color:var(--neg)}.tt.mut{color:var(--muted)}
@@ -536,12 +544,12 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
 .rk-c{height:200px;border-radius:8px;margin-top:10px;background:var(--sunk)}
 @media (prefers-reduced-motion:no-preference){.rk-b{animation:rkS 1.3s linear infinite}@keyframes rkS{from{background-position:200% 0}to{background-position:0 0}}}
 @media (min-width:761px){
-  .tablewrap.tw-grd{max-height:78vh;overflow:auto}
-  .tablewrap.tw-grd thead th{position:sticky;top:0;z-index:2}
-  .tablewrap.tw-grd .frz{position:sticky;left:0;z-index:1;box-shadow:1px 0 0 var(--line)}
-  .tablewrap.tw-grd td.frz{background:var(--surface)}
-  .tablewrap.tw-grd th.frz{z-index:3;background:var(--sunk)}
+  /* satu skrol sahaja (halaman): tajuk jadual melekit di bawah pengepala (--hdr = tinggi pengepala, diset oleh JS) */
+  .view .tablewrap thead th{position:sticky;top:var(--hdr,0px);z-index:2;background:var(--sunk)}
 }
+/* lajur yang tidak muat lebar skrin disembunyi (muatLajur); nota menamakannya */
+.tablewrap .sbn{display:none!important}
+.sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted)}
 </style>
 
 <div class="wrap">
@@ -1727,6 +1735,33 @@ function renderPrestasi(which){
 
 /* ================= Kaedah: katalog semua kaedah aktif (kaedah/katalog, sumber standard/katalog_kaedah.json) ================= */
 /* backtest = baris registry set 431 bagi varian aktif (varian_kod = VARIAN kod); papertrade = prStats M+C (dagangan sah sahaja) */
+/* teks katalog → senarai bertitik berikon; teks asal hanya dipecah pada ';' / '. ' di luar kurungan, tidak diubah */
+function katPecah(s){const o=[];let d=0,b='';s=String(s||'').trim().replace(/\.$/,'');
+  for(let i=0;i<s.length;i++){const c=s[i];if(c==='('||c==='[')d++;else if((c===')'||c===']')&&d)d--;
+    if(!d&&(c===';'||(c==='.'&&/\s/.test(s[i+1]||'')&&/[A-ZÀ-Ý]/.test((s.slice(i+1).trim()[0])||'')))&&/\s/.test(s[i+1]||'')){o.push(b);b='';continue;}b+=c;}
+  o.push(b);return o.map(x=>x.trim()).filter(Boolean).map(x=>x[0].toUpperCase()+x.slice(1));}
+/* pil jenis peraturan (warna tema) + butiran kelabu dengan nombor ditebalkan; henti merah, had masa kuning */
+const KAT_PIL={beli:'p-buy',sasaran:'p-hold',isyarat:'p-near',had:'p-warn',tiada:'p-mute',henti:'p-exit'};
+const katPil=(c,t)=>`<span class="pill ${KAT_PIL[c]}">${esc(t)}</span>`;
+function katPilOf(k,it){const P=[],j=it.join(' ');let r=it;
+  if(k==='masuk'){const a=it.find(x=>/^(beli|masuk)\b/i.test(x));P.push(katPil('beli',/lusa/i.test(a||'')?'● Beli buka lusa':'● Beli buka esok'));
+    if(/hujung bulan|akhir bulan/i.test(j))P.push(katPil('isyarat','Hujung bulan'));else if(/setiap minggu|mingguan.*semak|\(rabu\)/i.test(j))P.push(katPil('isyarat','Mingguan'));else if(/suku tahun/i.test(j))P.push(katPil('isyarat','Suku tahun'));
+    r=it.filter(x=>!/^beli (pada )?(harga )?buka (esok|lusa)$/i.test(x));}
+  else if(k==='keluar'){if(/^tiada$/i.test(it[0]||'')){P.push(katPil('tiada','– Tiada isyarat jual'));r=it.slice(1);}
+    else{const sa=it.some(x=>/sasaran|\b\d+R\b|mencecah|dicapai|\bATH\b/i.test(x)),is=it.some(x=>!/^sasaran/i.test(x)&&!/^jual apabila (harga )?mencecah/i.test(x));
+      if(sa)P.push(katPil('sasaran','◎ Sasaran'));if(is||!sa)P.push(katPil('isyarat','▼ Isyarat jual'));}}
+  else if(k==='pegang'){const m=/maks(?:imum)?\s+([\d.,–-]+)\s+(hari|minggu|bulan)/i.exec(j);
+    if(m)P.push(katPil('had',`⏱ Maks ${m[1]} ${m[2]}`));else if(/tiada had/i.test(j)){P.push(katPil('tiada','∞ Tiada had'));r=it.filter(x=>!/^tiada had masa$/i.test(x));}else if(/akhir bulan|hujung bulan|setiap minggu|suku tahun/i.test(j))P.push(katPil('tiada','↻ Berkala'));}
+  else{if(/^tiada henti/i.test(it[0]||''))P.push(katPil('henti','⚠ Tiada henti'));
+    else{const m=/(\d+(?:[.,]\d+)?\s*%)|(\d+(?:[.,]\d+)?\s*×\s*ATR\d*)/.exec(j);P.push(katPil('henti','■ '+(m?m[0].replace(/\s+/g,''):'Paras harga')));}}
+  return [P,r];}
+const katNombor=t=>t.replace(/(^|[^A-Za-z0-9\/])(\d+(?:[.,]\d+)?(?:\s*(?:%|×|R\b))?)/g,'$1<b>$2</b>');
+/* baris = r.baris[k] (baris pendek disusun semula; pil tetap dari teks asal); tiada → teks asal dipecah */
+function katSenarai(k,s,baris){const it=katPecah(s);if(!it.length)return '<span class="mut">–</span>';let[P,r]=katPilOf(k,it);if(Array.isArray(baris))r=baris;
+  return `<div class="kbk"><div class="kpl">${P.join('')}</div>${r.length?`<ul class="kli k-${k}">${r.map(x=>`<li class="${/:$/.test(x)?'hd':/^(langkau|batal|tiada|hanya|sumber tidak|keluar hanya|keluar melalui|disemak)/i.test(x)?'mut':''}">${katNombor(esc(x))}</li>`).join('')}</ul>`:''}</div>`;}
+const KAT_LBL={masuk:'Masuk',keluar:'Keluar',pegang:'Pegang',henti:'Henti rugi'};
+const KAT_LEGENDA=`<div class="klg">${katPil('beli','● Beli')}<span class="sp">bila beli</span>${katPil('sasaran','◎ Sasaran')}<span class="sp">jual pada paras untung</span>${katPil('isyarat','▼ Isyarat jual')}<span class="sp">jual bila syarat kena</span>${katPil('had','⏱ Maks')}<span class="sp">had masa</span>${katPil('tiada','∞ Tiada had')}${katPil('henti','■ Henti')}<span class="sp">paras potong rugi</span></div>`;
+const katRing=r=>r.ringkas?`<span class="kring">${esc(r.ringkas)}</span>`:'';
 const katGabungM=memo((rows,docs,src)=>{const bt={};for(const d of Object.values(docs))for(const x of (d.rows||[]))if(x.set==='431')bt[x.id+'|'+x.varian]=x;
   let pt={};if(src.length){let st=prStatsC.get(src);if(!st){st=prStats(src);prStatsC.set(src,st);}st.forEach(o=>{pt[o.kaedah]=o;});
     src.forEach(r=>{const o=pt[r.kaedah];if(o){o.nM=(o.nM||0)+(r.akaun==='M');o.nC=(o.nC||0)+(r.akaun==='C');}});}
@@ -1742,20 +1777,20 @@ function renderKaedah(){
   if(!k||!Array.isArray(k.rows)||!k.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Belum ada katalog kaedah dalam pangkalan data.':'Memuatkan katalog kaedah…'}</div>`;return;}
   const kf=S.kf;const all=katGabung(k.rows);let rows=all;
   const nBt=all.filter(r=>r.bt).length,nPt=all.filter(r=>r.pt).length,ptN=all.reduce((t,r)=>t+(r.pt?r.pt.n:0),0);
-  if(kf.q){const q=kf.q.toLowerCase();rows=rows.filter(r=>[r.id,r.nama,r.varian,r.pencipta,r.sumber,r.masuk,r.keluar,r.pegang,r.henti].join(' ').toLowerCase().includes(q));}
+  if(kf.q){const q=kf.q.toLowerCase();rows=rows.filter(r=>[r.id,r.nama,r.varian,r.ringkas,r.pencipta,r.sumber,r.masuk,r.keluar,r.pegang,r.henti,JSON.stringify(r.baris||'')].join(' ').toLowerCase().includes(q));}
   const tiada=all.filter(r=>/^tidak dinyatakan/i.test(r.pencipta||'')).length;
   const tmax=all.filter(r=>/maks/i.test(r.pegang||'')).length;
   const wrap=r=>'wrap',ptT='Papertrade C';
   const idCol={k:'id',t:'ID',tip:'kaedah',l:1,v:r=>+String(r.id).replace(/\D/g,''),f:r=>`<b class="nw">${esc(r.id)}</b>`,c:()=>'tk'},
-    namaCol={k:'nama',t:'Kaedah',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.nama)}</b><span class="vv">${esc(r.varian||'')}</span>`,c:()=>'wrap lrg'},
+    namaCol={k:'nama',t:'Kaedah',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.nama)}</b><span class="vv">${esc(r.varian||'')}</span>${katRing(r)}`,c:()=>'wrap knm'},
     asalCol={k:'pencipta',t:'Asal',tip:'kat_asal',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.pencipta||'–')}</b><span class="vv">${esc(r.sumber||'')}</span>`,c:()=>'wrap lrg'},
     btCol={k:'bt',t:'Backtest (set 431)',tip:'kat_bt',v:r=>r.bt?r.bt.cagr:null,f:selBt,c:()=>'wrap lrg'},
     ptCol={k:'pt',t:ptT,tip:'kat_pt',v:r=>r.pt?r.pt.avg:null,f:selPt,c:()=>'wrap lrg'};
-  const cols=lajurOf('kat')==='ringkas'?[{k:'id',t:'Kaedah',tip:'kaedah',l:1,v:r=>+String(r.id).replace(/\D/g,''),f:r=>`<b>${esc(r.id)}</b>${esc(r.nama)}<span class="vv">${esc(r.varian||'')}</span>`,c:()=>'name'},Object.assign({},btCol,{c:()=>'sel'}),Object.assign({},ptCol,{c:()=>'sel'}),asalCol]:[idCol,namaCol,asalCol,
-      {k:'masuk',t:'Masuk (entry)',tip:'kat_masuk',l:1,ns:1,c:wrap},
-      {k:'keluar',t:'Keluar (exit)',tip:'kat_keluar',l:1,ns:1,c:wrap},
-      {k:'pegang',t:'Pegang (hold)',tip:'kat_pegang',l:1,c:()=>'wrap lrg'},
-      {k:'henti',t:'Henti rugi',tip:'kat_henti',l:1,ns:1,c:wrap},btCol,ptCol];
+  const cols=lajurOf('kat')==='ringkas'?[{k:'id',t:'Kaedah',tip:'kaedah',l:1,v:r=>+String(r.id).replace(/\D/g,''),f:r=>`<b>${esc(r.id)}</b>${esc(r.nama)}<span class="vv">${esc(r.varian||'')}</span>${katRing(r)}`,c:()=>'name'},Object.assign({},btCol,{c:()=>'sel'}),Object.assign({},ptCol,{c:()=>'sel'}),asalCol]:[idCol,namaCol,asalCol,
+      {k:'masuk',t:KAT_LBL.masuk,tip:'kat_masuk',l:1,ns:1,f:r=>katSenarai('masuk',r.masuk,r.baris&&r.baris.masuk),c:wrap},
+      {k:'keluar',t:KAT_LBL.keluar,tip:'kat_keluar',l:1,ns:1,f:r=>katSenarai('keluar',r.keluar,r.baris&&r.baris.keluar),c:wrap},
+      {k:'pegang',t:KAT_LBL.pegang,tip:'kat_pegang',l:1,f:r=>katSenarai('pegang',r.pegang,r.baris&&r.baris.pegang),c:()=>'wrap lrg'},
+      {k:'henti',t:KAT_LBL.henti,tip:'kat_henti',l:1,ns:1,f:r=>katSenarai('henti',r.henti,r.baris&&r.baris.henti),c:wrap}];
   el.innerHTML=`
   <p class="headline">Katalog <b>${all.length}</b> kaedah aktif yang diimbas setiap malam dan dibeli maya dalam Papertrade C. Setiap baris ialah varian yang <b>sedang digunakan</b> dalam kod: dari mana asalnya, bila beli, bila jual, berapa lama pegang dan di mana henti rugi. Ketik baris untuk butiran penuh.</p>
   <div class="kpis">
@@ -1765,8 +1800,9 @@ function renderKaedah(){
     <div class="kpi"><div class="lbl" data-tip="kat_umum">Beli</div><div class="v" style="font-size:1.25rem">Buka esok</div><div class="s">Isyarat pada harga tutup hari ini · 1 unit maya</div></div>
     <div class="kpi"><div class="lbl" data-tip="dua_lorong">Dua lorong keluar</div><div class="v" style="font-size:1.25rem">Kaedah + selagi naik</div><div class="s">Lorong 2 sama untuk semua kaedah</div></div>
   </div>
-  <div class="panel"><div class="panel-h"><h2>Semua kaedah</h2><span class="sub">${rows.length} daripada ${all.length} · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>
+  <div class="panel${lajurOf('kat')==='ringkas'?'':' katpenuh'}"><div class="panel-h"><h2>Semua kaedah</h2><span class="sub">${rows.length} daripada ${all.length} · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>
     <div class="filters" style="margin-bottom:10px">${lajurSeg('kat')}<input type="search" id="katQ" placeholder="Cari ID, nama, pencipta atau teknik, cth. M18, Minervini, EMA" value="${esc(kf.q)}" aria-label="Cari kaedah"></div>
+    ${KAT_LEGENDA}
     ${sortTable({id:'katalog',rows,lp:LP_KAT,def:{k:'id',dir:1},limit:kf.shown,attr:r=>`data-kd="${esc(r.id)}" tabindex="0"`,rcls:()=>'click',empty:'Tiada kaedah sepadan dengan carian ini.',foot:kakiLagi('katMore'),cols})}
   </div>
   <div class="strip"><b class="t">Sama untuk semua</b><span>Isyarat dikira pada harga tutup; beli pada harga buka hari dagangan berikutnya, dibatalkan jika buka ≤ henti. Urutan keluar setiap hari: henti rugi dahulu, kemudian sasaran, isyarat keluar (jual pada buka esok) dan akhir sekali had masa (jual pada tutup). Setiap posisi juga dinilai dalam lorong 2 <b>Pegang selagi naik</b>: jual pada buka esok apabila tutup jatuh bawah paras keluar (tutup tertinggi sejak beli − 4×ATR14; paras hanya naik); henti kaedah tidak dipakai dalam lorong 2.</span></div>
@@ -2031,11 +2067,11 @@ const LP_KP={key:o=>o.dk,btn:1,
       ${mkS('Jatuh terburuk',`<span class="${o.r.mdd!=null&&o.r.mdd<-0.45?'neg':''}">${pct(o.r.mdd,0)}</span>`,'kp_jatuh')}${mkS('Menang',o.r.win==null?'–':`${Math.round(o.r.win*10)}/10 <span class="mut">${pct(o.r.win,0)}</span>`,'kp_menang')}
       ${mkS('Pegang',`${fx(o.r.days,0)} hari <span class="mut">${fx(o.r.dagangan_setahun,0)} dag/thn</span>`,'kp_pegang')}${mkS('Papertrade C',o.pt?`<span class="${cls(o.pt.avg)}">${sg2(o.pt.avg)}</span> <span class="mut">${o.pt.n} dag · ${o.pt.ex} keluar</span>`:'<span class="mut">belum</span>','kp_pt')}</div></div>`};
 const LP_KAT={key:r=>r.id,btn:1,
-  line:r=>{const o=btOf(r.id);return `<b>${esc(r.id)}</b>${o&&r.bt&&o.r.varian===r.bt.varian?kpLencana(o):''}<span class="mlx">${esc(r.nama)}</span><b class="mlr ${cls(r.pt&&r.pt.avg)}">${r.pt?sg2(r.pt.avg):'–'}</b>${mlC}`;},
-  kad:r=>`<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(r.id)}</b><span class="mkk">${esc(r.nama)}</span></span><b class="mku ${cls(r.pt&&r.pt.avg)}">${r.pt?sg2(r.pt.avg):'–'}</b></div>
-    <div class="mkr">${esc(r.varian||'')}${r.pencipta?` · ${esc(r.pencipta)}`:''}</div>
-    <div class="mkz mkn">${[['Beli',r.masuk],['Jual',r.keluar],['Pegang',r.pegang],['Henti',r.henti]].map(([a,b])=>`<div><span>${a}</span><span>${esc(b||'–')}</span></div>`).join('')}</div>
-    <div class="mkn"><div><span data-tip="kat_bt">Backtest</span><span>${selBt(r)}</span></div><div><span data-tip="kat_pt">Papertrade</span><span>${selPt(r)}</span></div></div></div>`};
+  line:r=>{const o=btOf(r.id);return `<b>${esc(r.id)}</b>${o&&r.bt&&o.r.varian===r.bt.varian?kpLencana(o):''}<span class="mlx">${esc(r.nama)}</span>${mlC}`;},
+  kad:r=>`<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(r.id)}</b><span class="mkk">${esc(r.nama)}</span></span></div>
+    <div class="mkr">${esc(r.varian||'')}${r.pencipta?` · ${esc(r.pencipta)}`:''}${katRing(r)}</div>
+    <div class="mkz mkn">${['masuk','keluar','pegang','henti'].map(k=>`<div><span>${KAT_LBL[k]}</span>${katSenarai(k,r[k],r.baris&&r.baris[k])}</div>`).join('')}</div>
+</div>`};
 const LP_SK={key:r=>r.jenis+'|'+r.nama,
   line:(r,i)=>`<span class="mut">${i+1}</span><b class="mlx" style="color:var(--fg);font-size:.9rem">${esc(r.nama)}</b>${fasaPill(r.fasa)}<b class="mlr ${cls(r.prestasi_1m)}">${sg2(r.prestasi_1m)}</b>${mlC}`,
   kad:r=>`<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(r.nama)}</b>${fasaPill(r.fasa)}</span><b class="mku ${cls(r.prestasi_1m)}">${sg2(r.prestasi_1m)}<small class="mut"> 1M</small></b></div>
@@ -2098,7 +2134,7 @@ function openKaedah(id){const k=(S.kat&&S.kat.rows||[]).find(x=>x.id===id)||null
     <p class="ln">RM10,000 → <b>${rm(kpRm(b))}</b> dalam 6.9 tahun (<b class="${cls(b.r.cagr)}">${pct(b.r.cagr)}</b> setahun) · jatuh terburuk <b class="neg">${pct(b.r.mdd,0)}</b> · menang <b>${b.r.win==null?'–':Math.round(b.r.win*10)}/10</b> · pegang <b>${fx(b.r.days,0)}</b> hari</p>${kadSaringan(b.dk)}`:'<p class="ln mut">Tiada keputusan backtest set 431.</p>';
   sheet(`<div class="lbl">${esc(id)}${k&&k.varian?' · '+esc(k.varian):''}</div><h3 id="shTitle">${esc(k?k.nama:b?b.nama:id)}</h3>
     <div class="pills">${p?kptPill(p.kep)+awalPill(p):'<span class="pill p-mute">Tiada dagangan</span>'}${pg}</div>
-    ${k?`<div class="sec"><h4>Cara kaedah ini berfungsi</h4><dl class="dl"><dt>Beli</dt><dd>${esc(k.masuk||'–')}</dd><dt>Jual</dt><dd>${esc(k.keluar||'–')}</dd><dt>Henti rugi</dt><dd>${esc(k.henti||'–')}</dd><dt>Tempoh pegang</dt><dd>${esc(k.pegang||'–')}</dd><dt>Asal</dt><dd>${esc(k.pencipta||'–')}${k.sumber?` <span class="mut">· ${esc(k.sumber)}</span>`:''}</dd></dl></div>`:''}
+    ${k?`<div class="sec"><h4>Cara kaedah ini berfungsi</h4>${k.ringkas?`<p class="ln kring" style="font-size:.92rem">${esc(k.ringkas)}</p>`:''}<dl class="dl">${['masuk','keluar','henti','pegang'].map(x=>`<dt>${KAT_LBL[x]}</dt><dd>${katSenarai(x,k[x],k.baris&&k.baris[x])}</dd>`).join('')}<dt>Asal</dt><dd>${esc(k.pencipta||'–')}${k.sumber?` <span class="mut">· ${esc(k.sumber)}</span>`:''}</dd></dl>${k.baris?`<details class="kasal"><summary>Teks spesifikasi asal</summary><dl class="dl">${['masuk','keluar','henti','pegang'].map(x=>`<dt>${KAT_LBL[x]}</dt><dd>${esc(k[x]||'–')}</dd>`).join('')}</dl></details>`:''}</div>`:''}
     <div class="sec"><h4>Papertrade · ${esc(AKN[ak])}</h4>${ptH}</div>
     ${bvH}
     <div class="sec"><h4>Backtest (ujian data lama)</h4>${btH}</div>
@@ -2701,7 +2737,7 @@ function renderUtama(){
 
 function emptyState(){return `<div class="panel empty">${S.live?'Belum ada keputusan backtest dalam pangkalan data.':'Memuatkan keputusan backtest…'}</div>`;}
 function toast(t){const el=$('#toast');el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800);}
-function topScrolls(root){
+function topScrolls(root){muatLajur();
   root.querySelectorAll('.tablewrap').forEach(w=>{
     const prev=w.previousElementSibling;if(prev&&prev.classList.contains('topscroll'))prev.remove();
     const hs=[...w.querySelectorAll('thead th')].map(h=>(h.textContent||'').replace(/[↕↓↑]/g,'').trim());
@@ -2803,6 +2839,31 @@ function renderAll(){const vid=viewId();const el=document.getElementById(vid);
   {const e1=el.firstElementChild;if(el.children.length===1&&e1.classList.contains('empty')&&/Memuatkan/.test(e1.textContent))el.innerHTML=rangka();}
   applyFold(el);applyTips(el);renderData();renderSal();
   requestAnimationFrame(()=>{topScrolls(el);el.querySelectorAll('table[data-st]').forEach(t=>{if(sx[t.dataset.st])t.parentElement.scrollLeft=sx[t.dataset.st];if(sy[t.dataset.st])t.parentElement.scrollTop=sy[t.dataset.st];});});}
+/* tiada skrol mendatar: jika jadual lebih lebar daripada bekasnya, sembunyi lajur dari kanan ke kiri (untung bulanan: bulan
+   terlama dahulu), kecuali lajur utama: lajur pertama, Saham/Kaedah, lajur ringkas telefon m0, Untung %; nota di bawah jadual
+   menamakannya. Kad telefon (tw-lp, tw-grd ≤ 760px) tidak disentuh. Dipanggil selepas setiap lukisan (topScrolls) dan ubah saiz. */
+function muatLajur(){
+  document.querySelectorAll('.tablewrap').forEach(w=>{
+    const t=w.querySelector(':scope>table');if(!t)return;
+    w.querySelectorAll('.sbn').forEach(x=>x.classList.remove('sbn'));
+    const nt=w.nextElementSibling;if(nt&&nt.classList.contains('sbn-nota'))nt.remove();
+    if(!w.offsetParent||(skrinKecil()&&/\btw-(lp|grd)\b/.test(w.className)))return;
+    const hr=t.tHead&&t.tHead.rows.length===1?t.tHead.rows[0]:null;if(!hr)return;
+    const ths=[...hr.cells];if(ths.some(h=>h.colSpan>1))return;
+    const lebih=()=>t.offsetWidth>w.clientWidth+1;if(!lebih())return;
+    const r1=t.tBodies[0]&&t.tBodies[0].rows[0],td1=r1?[...r1.cells]:[];
+    const utama=i=>i===0||ths[i].classList.contains('frz')||ths[i].offsetWidth===0||/\b(m0|tk|utg|name|mline|mkad|mbtn)\b/.test((td1[i]&&td1[i].className)||ths[i].className);
+    const rows=[...t.querySelectorAll('tbody tr')].filter(tr=>tr.cells.length===ths.length),sor=[];
+    const urut=ths.map((_,i)=>i).slice(1);if(!t.classList.contains('hmt'))urut.reverse();
+    for(const i of urut){if(!lebih())break;if(utama(i))continue;
+      ths[i].classList.add('sbn');rows.forEach(tr=>tr.cells[i].classList.add('sbn'));sor.push((ths[i].textContent||'').replace(/[↕↓↑]/g,'').trim());}
+    if(!t.classList.contains('hmt'))sor.reverse();
+    if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'}</p>`);
+  });
+}
+{const hd=document.querySelector('header.top');const set=()=>document.documentElement.style.setProperty('--hdr',(hd?hd.offsetHeight:0)+'px');set();
+  try{new ResizeObserver(set).observe(hd);}catch(e){}}
+let rzm;window.addEventListener('resize',()=>{clearTimeout(rzm);rzm=setTimeout(muatLajur,150);});
 let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(window.innerWidth-lw)<40)return;lw=window.innerWidth;clearTimeout(rz);rz=setTimeout(renderAll,200);});
 
 /* ================= tooltip istilah (ganti tab Panduan istilah) ================= */
