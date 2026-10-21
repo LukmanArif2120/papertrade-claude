@@ -107,6 +107,31 @@ h3{font-size:1rem;margin:0}
 .panel.lipat>:not(.panel-h){display:none!important}
 .panel.lipat>.panel-h{margin-bottom:-14px;border-bottom:0}
 .panel.lipat>.panel-h::after{content:"▸"}
+/* tab sisi panel (v93, 21 Okt 2026): tab dengan >= 3 panel = rel kiri (telefon: jalur cip melekit); satu bahagian dipapar */
+section.view.pnav .grid2,section.view.pnav .grid2.eq{grid-template-columns:minmax(0,1fr)}
+section.view.pnav .pn-x{display:none!important}section.view.pnav .pn-j{display:block!important}section.view.pnav .pn-j>*+*{margin-top:16px}
+section.view.pnav .panel.pn-a>.panel-h{cursor:default}section.view.pnav .panel-h.foldable::after{display:none}
+.pnav-in{display:flex;flex-direction:column;gap:2px}
+.pnav-in button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;border:1px solid transparent;background:none;color:var(--fg-2);font-size:.84rem;line-height:1.3;padding:8px 10px;border-radius:7px;cursor:pointer}
+.pnav-in button:hover{background:var(--card);color:var(--fg)}
+.pnav-in button[aria-current="true"]{background:var(--card);border-color:var(--line-2);color:var(--fg);font-weight:600;box-shadow:inset 3px 0 0 var(--accent)}
+.pnav-in button.pn-dg{color:var(--neg-tx,#f87171)}
+.pnav-in .pill{font-size:.66rem;padding:1px 6px;margin-left:auto;flex:none}
+.pnav-in .pn-n{margin-left:auto;font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.pnav-in hr{border:0;border-top:1px solid var(--line);margin:6px 4px}
+.pnav-in .pn-k{font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px}
+@media (min-width:761px){
+  section.view.pnav{padding-left:232px;position:relative}
+  .pnav-rail{position:absolute;left:0;top:18px;bottom:0;width:216px}
+  .pnav-in{position:sticky;top:calc(var(--hdr,0px) + 12px);max-height:calc(100vh - var(--hdr,0px) - 24px);overflow-y:auto;padding:2px 4px 2px 0;scrollbar-width:thin}
+}
+@media (max-width:760px){
+  .pnav-rail{position:sticky;top:var(--hdr,0px);z-index:6;margin:-6px calc(-1*max(16px,env(safe-area-inset-left,0px))) 0;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .pnav-in{flex-direction:row;overflow-x:auto;gap:6px;padding:8px 16px;scrollbar-width:none}.pnav-in::-webkit-scrollbar{display:none}
+  .pnav-in button{width:auto;flex:none;white-space:nowrap;border-color:var(--line);padding:6px 11px;border-radius:999px;font-size:.8rem}
+  .pnav-in button[aria-current="true"]{box-shadow:none;border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--card))}
+  .pnav-in .pn-n,.pnav-in hr,.pnav-in .pn-k{display:none}
+}
 .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
 .kpi{background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;min-width:0;display:grid;gap:3px;position:relative;overflow:hidden}
 .kpi::before{content:"";position:absolute;inset:0 0 auto 0;height:2px;background:linear-gradient(90deg,var(--accent),var(--violet));opacity:.55}
@@ -576,7 +601,7 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
       <span class="lbl" id="setLbl">Set saham</span>
       <div class="seg" id="setSeg" role="group" aria-label="Set saham"></div>
       <span class="spacer"></span>
-      <button type="button" class="fold-btn" id="foldAll">Lipat semua</button><button type="button" class="fold-btn" id="openAll">Buka semua</button>
+      <button type="button" class="fold-btn" id="pnavTog" hidden></button><button type="button" class="fold-btn" id="foldAll">Lipat semua</button><button type="button" class="fold-btn" id="openAll">Buka semua</button>
     </div>
   </header>
 
@@ -816,7 +841,7 @@ function renderKeputusan(){
   const lh=$('#kpLihat');if(lh)lh.onclick=e=>{const b=e.target.closest('button');if(!b)return;kp.lihat=b.dataset.v;kpSemula();renderAll();};
   const bg=$('#kpBuang');if(bg)bg.onclick=()=>{kp.langkah=null;kpSemula();renderAll();};
   el.querySelector('.corong').onclick=e=>{const b=e.target.closest('button.crg');if(!b)return;const i=+b.dataset.l;kp.langkah=kp.langkah===i?null:i;kpSemula();renderAll();
-    if(kp.langkah!=null)requestAnimationFrame(()=>{const t=$('#v-keputusan table[data-st="keputusan"]');if(t)t.closest('.panel').scrollIntoView({behavior:'smooth',block:'start'});});};
+    if(kp.langkah!=null)requestAnimationFrame(()=>{const t=$('#v-keputusan table[data-st="keputusan"]');if(t&&!pnavKe(t))t.closest('.panel').scrollIntoView({behavior:'smooth',block:'start'});});};
 }
 /* kad saringan dalam helaian butiran (varian yang dipapar dalam Keputusan) */
 function kadSaringan(k){const o=kpM(S.docs,S.at,S.meta,S.kat).semua[k];if(!o)return '';const r=o.r;
@@ -1131,7 +1156,7 @@ function renderSektor(){
   bindLagi('skMore',sf);bindSeg('skTm',v=>sf.tm=v);bindSeg('skPk',v=>sf.pk=v);bindSeg('skJenis',v=>{sf.jenis=v;sf.sek='';sf.shown=0;});bindSeg('skRot',v=>sf.rot=v);
   const ss=$('#skSek');if(ss)ss.onchange=e=>{sf.sek=e.target.value;renderAll();};
   const q=$('#skQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{sf.q=q.value.trim();renderAll();const n=$('#skQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
-  $('#skTree').onclick=e=>{const g=e.target.closest('g[data-sek]');if(!g)return;sf.jenis='Industri';sf.sek=g.dataset.sek;sf.q='';renderAll();toast('Jadual ditapis: industri dalam '+g.dataset.sek);};
+  $('#skTree').onclick=e=>{const g=e.target.closest('g[data-sek]');if(!g)return;sf.jenis='Industri';sf.sek=g.dataset.sek;sf.q='';renderAll();pnavKe($('#v-sektor table[data-st]'));toast('Jadual ditapis: industri dalam '+g.dataset.sek);};
 }
 
 /* ================= Watchlist (Hampir Signal) ================= */
@@ -2606,7 +2631,7 @@ function panelPeta(peg,st){if(!peg.length)return '';const sk=new Set(peg.map(r=>
     <div class="legend"><span><i style="background:${heatCol(-10,10)}"></i>Rugi</span><span><i style="background:${heatCol(0.001,10)}"></i>Hampir rata</span><span><i style="background:${heatCol(10,10)}"></i>Untung (penuh pada ±10%)</span></div></div>`;}
 const pilihPeta=g=>{if(g.dataset.pmk==='Tiada sektor'){toast('Posisi tanpa sektor tidak boleh ditapis');return;}const a=S.akaun,st=S['pf_pos'+a]||(S['pf_pos'+a]={k:'',sk:'',ind:'',q:'',shown:AWAL});const sk=g.dataset.pmk||'',ind=g.dataset.pmi||'';
   const sama=st.sk===sk&&st.ind===ind;Object.assign(st,{k:'',q:'',sk:sama?'':sk,ind:sama?'':ind,shown:AWAL});if(st.sk)S.pos.st='pegang';renderAll();
-  toast(st.sk?`Jadual ditapis: ${st.ind||st.sk}`:'Tapisan dibuang');if(st.sk){const t=$('#v-pos table[data-st]');if(t)t.closest('.panel').scrollIntoView({behavior:'smooth',block:'start'});}};
+  toast(st.sk?`Jadual ditapis: ${st.ind||st.sk}`:'Tapisan dibuang');if(st.sk){const t=$('#v-pos table[data-st]');if(t&&!pnavKe(t))t.closest('.panel').scrollIntoView({behavior:'smooth',block:'start'});}};
 document.addEventListener('click',e=>{const g=e.target.closest&&e.target.closest('#v-pos [data-pmk]');if(!g)return;e.stopPropagation();pilihPeta(g);},true);
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('#v-pos g[data-pmk]')){e.preventDefault();pilihPeta(e.target);}});
 
@@ -2833,11 +2858,11 @@ function openAnl(id){const r=((S.anl||{}).rows||[]).find(x=>x.id===id);if(!r)ret
 document.addEventListener('click',e=>{const t=e.target.closest&&e.target.closest('tr[data-anl]');if(!t||e.target.closest('th,a')||ketikLp(e))return;openAnl(t.dataset.anl);});
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('tr[data-anl]')){e.preventDefault();openAnl(e.target.dataset.anl);}});
 const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),sektor:renderSektor,watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-c':()=>renderPrestasi('c'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis};
-function renderAll(){const vid=viewId();const el=document.getElementById(vid);
+function renderAll(){const vid=viewId();const el=document.getElementById(vid);el.classList.toggle('pnav',pnavBoleh(vid));
   const sx={},sy={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;sy[t.dataset.st]=t.parentElement.scrollTop;});
   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
   {const e1=el.firstElementChild;if(el.children.length===1&&e1.classList.contains('empty')&&/Memuatkan/.test(e1.textContent))el.innerHTML=rangka();}
-  applyFold(el);applyTips(el);renderData();renderSal();
+  applyFold(el);applyNav(el,vid);applyTips(el);renderData();renderSal();
   requestAnimationFrame(()=>{topScrolls(el);el.querySelectorAll('table[data-st]').forEach(t=>{if(sx[t.dataset.st])t.parentElement.scrollLeft=sx[t.dataset.st];if(sy[t.dataset.st])t.parentElement.scrollTop=sy[t.dataset.st];});});}
 /* tiada skrol mendatar: jika jadual lebih lebar daripada bekasnya, sembunyi lajur dari kanan ke kiri (untung bulanan: bulan
    terlama dahulu), kecuali lajur utama: lajur pertama, Saham/Kaedah, lajur ringkas telefon m0, Untung %; nota di bawah jadual
@@ -3061,10 +3086,63 @@ function applyFold(root){root.querySelectorAll('.panel').forEach(p=>{const h=p.q
   h.classList.add('foldable');const sas=h.querySelector('button,a,input,select')?h.querySelector('h2'):h;if(!sas)return;if(sas!==h)sas.classList.add('fold-t');
   sas.setAttribute('role','button');sas.setAttribute('tabindex','0');const k=foldKey(p);const shut=k in foldState?!!foldState[k]:LIPAT_LALAI.some(t=>k.endsWith('|'+t));p.classList.toggle('lipat',shut);sas.setAttribute('aria-expanded',String(!shut));});}
 function toggleFold(p){const k=foldKey(p);const shut=!p.classList.contains('lipat');foldState[k]=shut;saveFold();p.classList.toggle('lipat',shut);{const h=p.querySelector(':scope>.panel-h'),t=h.querySelector('.fold-t')||h;t.setAttribute('aria-expanded',String(!shut));}if(!shut)requestAnimationFrame(()=>topScrolls(p));}
-document.addEventListener('click',e=>{const h=e.target.closest&&e.target.closest('.panel-h.foldable');if(!h)return;if(e.target.closest('button,a,input,select'))return;toggleFold(h.parentElement);});
-document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList&&(e.target.classList.contains('foldable')||e.target.classList.contains('fold-t'))){e.preventDefault();toggleFold(e.target.closest('.panel'));}});
+document.addEventListener('click',e=>{const h=e.target.closest&&e.target.closest('.panel-h.foldable');if(!h||h.closest('.view.pnav'))return;if(e.target.closest('button,a,input,select'))return;toggleFold(h.parentElement);});
+document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList&&(e.target.classList.contains('foldable')||e.target.classList.contains('fold-t'))&&!e.target.closest('.view.pnav')){e.preventDefault();toggleFold(e.target.closest('.panel'));}});
 function foldAllNow(shut){const v=document.getElementById(viewId());v.querySelectorAll('.panel').forEach(p=>{if(!p.querySelector(':scope>.panel-h'))return;foldState[foldKey(p)]=shut;p.classList.toggle('lipat',shut);});saveFold();if(!shut)requestAnimationFrame(()=>topScrolls(v));}
 $('#foldAll').onclick=()=>foldAllNow(true);$('#openAll').onclick=()=>foldAllNow(false);
+
+/* ================= tab sisi panel (v93, 21 Okt 2026) =================
+   Tab dengan >= 3 panel peringkat atas: rel kiri (telefon: jalur cip melekit di bawah pengepala) menyenaraikan Gambaran (tajuk
+   ringkas, KPI, strip) dan setiap panel; satu bahagian dipapar, tapisan (.filters) dan kaki kekal. Kelas .pnav diset sebelum
+   lukis supaya carta dilukis pada lebar sebenar (grid2 jadi satu lajur); pilihan disimpan setiap paparan. Butang "Papar senarai"
+   kembali ke susunan lama (lipat/buka). Ringkasan dikecualikan (dibaca sekali imbas). */
+const PNAV_MIN=3,PNAV_KECUALI=['v-utama'],PNAV_ADA={};
+/* tajuk kumpulan rel (desktop): [tajuk, kunci panel pertama kumpulan] ('' = panel pertama); kunci tiada = tajuk tidak dipapar */
+/* bahagian lalai jika belum dipilih (selainnya item pertama) */
+const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah'};
+const PNAV_KUMP={'v-pr-':[['Semua dagangan',''],['Setiap kaedah','untung lawan risiko'],['Eksperimen','banding dua lorong keluar']]};
+let pnavPilih={};try{pnavPilih=JSON.parse(localStorage.getItem('pbs2_pnav_pilih')||'{}');}catch(e){}
+S.pnav=true;try{S.pnav=localStorage.getItem('pbs2_pnav')!=='0';}catch(e){}
+const pnavBoleh=vid=>S.pnav&&!PNAV_KECUALI.includes(vid)&&PNAV_ADA[vid]!==false;
+const pnavPanel=el=>[...el.querySelectorAll('.panel')].filter(p=>p.querySelector(':scope>.panel-h h2')&&!p.parentElement.closest('.panel')&&!p.closest('.pnav-rail'));
+function applyNav(el,vid){
+  const ps=pnavPanel(el),dulu=el.classList.contains('pnav');
+  if(ps.length)PNAV_ADA[vid]=ps.length>=PNAV_MIN;
+  const kini=pnavBoleh(vid)&&ps.length>=PNAV_MIN;el.classList.toggle('pnav',kini);
+  {const t=$('#pnavTog'),ada=!PNAV_KECUALI.includes(vid)&&PNAV_ADA[vid]===true;t.hidden=!ada;t.textContent=S.pnav?'Papar senarai':'Papar tab sisi';
+    $('#foldAll').hidden=$('#openAll').hidden=kini;}
+  if(dulu!==kini&&ps.length){renderSoon();return;}
+  if(!kini)return;
+  const kunci=[],n={};ps.forEach(p=>{const t=p.querySelector(':scope>.panel-h h2').textContent.trim();n[t]=(n[t]||0)+1;const k=t.toLowerCase()+(n[t]>1?' #'+n[t]:'');p.dataset.pn=k;kunci.push(k);});
+  const anak=[...el.children],tetap=c=>c.matches('.filters,.foot'),bekas=c=>c.matches('.panel')||!!c.querySelector('.panel[data-pn]');
+  const adaG=anak.some(c=>!bekas(c)&&!tetap(c)&&(c.textContent.trim()||c.querySelector('svg,canvas')));
+  const item=(adaG?[{k:'__g',t:'Gambaran',p:null}]:[]).concat(ps.map((p,i)=>({k:kunci[i],t:p.querySelector(':scope>.panel-h h2').textContent.trim(),p})));
+  let pilih=pnavPilih[vid];if(!item.some(x=>x.k===pilih))pilih=item.some(x=>x.k===PNAV_LALAI[vid])?PNAV_LALAI[vid]:item[0].k;
+  const rel=document.createElement('nav');rel.className='pnav-rail';rel.setAttribute('aria-label','Bahagian tab');
+  const kp=Object.entries(PNAV_KUMP).find(([a])=>vid.startsWith(a)),kj={};
+  if(kp)kp[1].forEach(([t,k])=>{const x=k?item.find(y=>y.k===k):item.find(y=>y.p);if(x)kj[x.k]=t;});
+  rel.innerHTML=`<div class="pnav-in">${item.map((x,i)=>{const pl=x.p&&x.p.querySelector(':scope>.panel-h .pill'),pn=pl&&(pl.textContent.trim().match(/^⚠?\s*\d+/)||[])[0];
+    return `${kj[x.k]?`<div class="pn-k">${esc(kj[x.k])}</div>`:i===1&&adaG?'<hr>':''}<button type="button" data-pnk="${esc(x.k)}"${x.p&&x.p.classList.contains('danger')?' class="pn-dg"':''}><span>${esc(x.t)}</span>${pn?`<span class="pill ${esc([...pl.classList].filter(c=>c!=='pill').join(' '))}" title="${esc(pl.textContent.trim())}">${esc(pn)}</span>`:''}</button>`;}).join('')}</div>`;
+  el.prepend(rel);
+  rel.onclick=e=>{const b=e.target.closest('button[data-pnk]');if(!b)return;pnavPilih[vid]=b.dataset.pnk;try{localStorage.setItem('pbs2_pnav_pilih',JSON.stringify(pnavPilih));}catch(e){}
+    pnavTanda(el,b.dataset.pnk);const y=el.getBoundingClientRect().top+window.scrollY-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr'))||0);
+    if(window.scrollY>y)window.scrollTo({top:Math.max(0,y)});requestAnimationFrame(()=>topScrolls(el));};
+  pnavTanda(el,pilih);}
+function pnavTanda(el,k){
+  el.querySelectorAll('.pn-x,.pn-j,.pn-a').forEach(x=>x.classList.remove('pn-x','pn-j','pn-a'));
+  el.querySelectorAll('.pnav-in button').forEach(b=>b.setAttribute('aria-current',String(b.dataset.pnk===k)));
+  const a=k==='__g'?null:el.querySelector(`.panel[data-pn="${CSS.escape(k)}"]`);
+  el.querySelectorAll('.pnav-in button').forEach(b=>{if(b.dataset.pnk!==k)return;const j=b.parentElement;if(j.scrollWidth>j.clientWidth)j.scrollLeft=b.offsetLeft-(j.clientWidth-b.offsetWidth)/2;});
+  [...el.children].forEach(c=>{if(c.classList.contains('pnav-rail')||c.matches('.foot'))return;
+    if(c.matches('.filters')){if(!a||!(c.compareDocumentPosition(a)&Node.DOCUMENT_POSITION_FOLLOWING))c.classList.add('pn-x');return;}
+    const bk=c.matches('.panel')||!!c.querySelector('.panel[data-pn]');if(bk?!(a&&(c===a||c.contains(a))):!!a)c.classList.add('pn-x');});
+  if(!a)return;a.classList.add('pn-a');a.classList.remove('lipat');
+  for(let n=a;n.parentElement&&n.parentElement!==el;n=n.parentElement){const par=n.parentElement;par.classList.add('pn-j');
+    [...par.children].forEach(s=>{if(s!==n&&(s.matches('.panel')||s.querySelector('.panel')))s.classList.add('pn-x');});}}
+/* bawa ke panel yang mengandungi x (cth. jadual selepas ketik peta) bila mod tab sisi aktif */
+function pnavKe(x){const v=x&&x.closest('.view.pnav');if(!v)return false;let p=x.closest('.panel');while(p&&p.parentElement.closest('.panel'))p=p.parentElement.closest('.panel');
+  const b=p&&v.querySelector(`.pnav-in button[data-pnk="${CSS.escape(p.dataset.pn||'')}"]`);if(!b)return false;b.click();return true;}
+$('#pnavTog').onclick=()=>{S.pnav=!S.pnav;try{localStorage.setItem('pbs2_pnav',S.pnav?'1':'0');}catch(e){}renderAll();};
 
 renderNav();renderAll();
 
