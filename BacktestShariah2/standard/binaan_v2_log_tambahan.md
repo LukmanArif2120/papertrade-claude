@@ -241,3 +241,12 @@
 - Delist: tiada bar ≥ 5 sesi → posisi terbuka ditutup pada tutup bar terakhir (C: `tidak_layak.py posisi`, menggantikan `ambil_alih.py posisi` dalam langkah 2c rutin 6:02; Lejar: sebab_keluar `delist`). Semasa: tiada posisi C/Lejar terbuka tersangkut.
 - Lejar: lajur isyarat `ambil_alih` → `tidak_layak` (sebab); status.json `tidak_layak` = kunci bina semula (sekali pada larian lejar.yml seterusnya).
 - Semakan automatik dijadualkan 22 Okt 13:00 UTC (trig_018KSLjjNHSp9AR4FRCJeau3).
+
+## 22 Okt 2026 (6:02 MYT) — sesi AS 21 Okt
+- Harga: skrin Moomoo 4 halaman (911 saham) + kline AGPU, BB, BKHA, EFOR, LITE, LUXE, TANH, VIAV, SPY, QQQ (tiada bar skrin); CERT tanpa sejarah (ditarik Actions, `perlu_sejarah.txt` dikendalikan). yfinance sesi 20261021 tersedia selepas tembakan `harga_harian.yml`; gabungan yfinance dilangkau (semua jurang diisi Moomoo). SST tidak tersedia (perlu kebenaran semula): `sektor.csv` tidak ditambah.
+- Posisi: 115 keluar lorong 1 baharu (C 112, M 3, purata −1.22%), 46 menunggu buka, 6 belian 21 Okt tidak sah (sig=False §5.4: ISRG M116, CRAI M117, WST M126, WK M153, EQNR M156, BIO M76), 380 harga beli sementara dibetulkan kepada buka rasmi. Lorong 2: tutup_semua = 63 (1 `tidak_dinilai`: BB M31 2026-10-01 tiada bar hari beli).
+- Langkah 2c `tidak_layak.py posisi`: {"ambil_alih": ditutup 89 (ATKR, BRZE, DV, PEN, PTC, RAMP, SLAB, TECH), "delist": 0}.
+- Moomoo sim (acc 4135388): harga dikemas kini sahaja; tiada order.
+- Watchlist: 285 → 212 (73 dibuang; 212 kekal 100%/isyarat sah).
+- Sektor pasaran: 21 halaman, 6106 saham → 3839 digred; `sektor/snapshot` v14. peta_industri (14 Okt) belum > 30 hari.
+- db: 11 batch (watchlist_3/4 dipadam), harian/status dikemas kini. `sahkan.py --betulkan` keluar 0 (0 ralat, 0 amaran, 4448 posisi).
