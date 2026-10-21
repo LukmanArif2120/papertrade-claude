@@ -512,6 +512,8 @@ td .sbk{max-width:260px}
 .deret{display:inline-flex;gap:1px;font-size:.72rem}.deret i{font-style:normal;width:.85em;text-align:center}.dw{color:var(--pos)}.dlz{color:var(--neg)}.d0{color:var(--muted)}
 .pudar{opacity:.8;font-style:italic;white-space:nowrap}.pudar .hc{background:none!important}
 .peluru{display:block;position:relative;width:110px;height:10px;margin:5px 0 3px}.peluru .pz{position:absolute;top:0;bottom:0}.peluru i{position:absolute;left:0;top:3px;height:4px;background:var(--fg-2);border-radius:1px}.peluru b{position:absolute;top:-2px;width:2px;height:14px;margin-left:-1px;background:var(--accent)}
+/* grid prestasi harian setiap kaedah (v92): kotak = untung harian, lajur Kaedah dan Jumlah melekit */
+.hkw{max-height:72vh;overflow:auto;border:1px solid var(--line);border-radius:8px}table.hkt{width:auto;min-width:0;border-collapse:separate;border-spacing:0}.hkt th,.hkt td{padding:2px;border-bottom:0;text-align:center}.hkt thead th{position:sticky;top:0;z-index:2;font-size:.62rem;letter-spacing:0;padding:4px 2px}.hkt .l{position:sticky;left:0;z-index:1;background:var(--surface);text-align:left;padding:2px 10px 2px 8px;white-space:nowrap;box-shadow:1px 0 0 var(--line)}.hkt .j{position:sticky;right:0;z-index:1;background:var(--surface);text-align:right;padding:2px 8px 2px 10px;white-space:nowrap;box-shadow:-1px 0 0 var(--line)}.hkt thead .l,.hkt thead .j{z-index:3;background:var(--sunk)}.hkt i.hb{display:block;width:20px;height:20px;border-radius:4px;margin:auto}.hkt i.h0{background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line)}.hkt i.hz{background:var(--line-2)}.hkg{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:.78rem;color:var(--muted);margin-top:8px}.hkg i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-2px;margin-right:4px}
 table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-space:nowrap;min-width:92px}.hmt td.hm small{display:block;color:var(--muted);font-size:.68rem;font-weight:500}.hmt td.hm0{color:var(--muted)}.hmt tr.hmall td{border-bottom:2px solid var(--line-2)}
 .mksp{margin:8px 0 2px}.ecn{font-size:.78rem;margin-right:2px}.dl.simbol dt{font-size:1rem}
 @media (max-width:760px){.bbr{grid-template-columns:1fr;gap:2px}.salstrip .sal-ok{display:none}tr:not(.buka)>td .hbar,tr:not(.buka)>td.ctr .vv,tr:not(.buka)>td.tk .cl,tr:not(.buka)>td.tk .ern,tr:not(.buka)>td.tk .p-baru,tr:not(.buka)>td.utg .vv{display:none}}
@@ -1703,6 +1705,7 @@ function renderPrestasi(which){
   </div>
   ${prBergerak(src)}
   ${prBulanan(src)}
+  ${prHarian(which)}
   <div class="panel danger"><div class="panel-h"><h2>Paling Teruk · pantau kegagalan</h2><span class="sub">${nAm?`<span class="pill p-exit">⚠ ${nAm} kaedah beramaran</span>`:'Tiada amaran'} · kadar gagal & kerugian purata perlukan ≥ 3 dagangan</span></div>
     <div class="worstgrid">
       ${teruk(W1,'Kadar gagal tertinggi','kadar_gagal',o=>o.gagal,v=>fx(v,0)+'%',o=>o.gagal>=60,o=>o.n+' dag')}
@@ -1717,6 +1720,7 @@ function renderPrestasi(which){
   drawPrBars($('#prBar'+which),st);drawPrScatter($('#prSc'+which),st);drawPrWin($('#prWin'+which),st);
   el.querySelectorAll('[data-bar]').forEach(b=>{b.onclick=()=>{S.barPenuh=b.dataset.bar==='1';renderAll();};});
   {const A=analisis(src);drawKumulatif($('#prKum'+which),A.harian,spyKum(src,A.harian));drawDD($('#prDD'+which),A.harian);drawMFE($('#prMfe'+which),mfePts(src));const bt=$('#blnTogol');if(bt)bt.onclick=()=>{S.blnPenuh=!S.blnPenuh;renderAll();};if(S.bgk)bindLagi('bgkMore',S.bgk);drawKalendar($('#prKal'+which),A.harian);drawTaburan($('#prTab'+which),tbVals(src));drawR($('#prR'+which),src.filter(r=>r.keluar).map(rOf));drawKotak($('#prKotak'+which),src);drawAir($('#prAir'+which),src);{const pc=ptcRows();if(pc&&which!=='m')drawAliran($('#prAliran'+which),pc.rows);}bindSegH('tbSeg'+which,v=>{S.tb=v;});}
+  {const hs=$('#hkSeg'+which);if(hs)hs.onclick=e=>{const b=e.target.closest('button');if(!b)return;S.hkSusun=b.dataset.v;renderAll();};}
   const sg=$('#prMin'+which);sg.onclick=e=>{const b=e.target.closest('button');if(!b)return;pf.minN=+b.dataset.v;renderAll();};
   bindLagi('prkMore'+which,pk);if(S.prl)bindLagi('prlMore',S.prl);
 }
@@ -2342,6 +2346,28 @@ function prBulanan(src){const ex=src.filter(r=>r.keluar&&r.untung_akhir_pct!=nul
     ${tunjuk.map(x=>`<tr><td class="l"><button type="button" class="lnk" data-kd="${esc(x.k)}">${esc(x.k)}</button> <span class="mut">${x.n}</span></td>${bl.map(m=>sel(by[x.k][m])).join('')}</tr>`).join('')}</tbody></table></div>
     ${ks.length>15?`<div class="tablefoot"><span>${tunjuk.length} daripada ${ks.length} kaedah</span><button type="button" class="more" id="blnTogol">${pen?'Papar 15 teratas':'Papar semua'}</button></div>`:''}
     <p class="sub" style="margin-top:8px">Hijau untung, merah rugi; lebih pekat = lebih besar (penuh pada ±5%). Nombor kecil = bilangan dagangan. Bermakna selepas beberapa bulan data.</p></div>`;}
+/* v92: grid prestasi harian setiap kaedah (prestasi/harian_kaedah; jana_db.harian_kaedah): baris = kaedah, lajur = Hari 1, 2, …
+   (sesi dagangan sejak posisi pertama akaun), kotak hijau/merah = untung harian posisi yang dipegang, kanan = untung purata % */
+const HK_AK={c:'C',m:'M',gab:'G'},HK_LIM=3;
+const hkWarna=v=>v==null?'h0':!v?'hz':'';
+const hkBg=v=>v==null||!v?'':`background:color-mix(in srgb,var(${v<0?'--neg':'--pos'}) ${Math.round(28+Math.min(1,Math.abs(v)/HK_LIM)*62)}%,var(--card))`;
+const hkData=memo((d,ak)=>{if(!d||!Array.isArray(d.rows))return null;const T=(d.tarikh||[]).map(isoD),R=d.rows.filter(r=>r.a===ak);
+  let i0=T.length;R.forEach(r=>{const i=(r.n||[]).findIndex(x=>x>0);if(i>=0&&i<i0)i0=i;});
+  return {T:T.slice(i0),R:R.map(r=>({k:r.k,np:r.np,j:r.j,d:(r.d||[]).slice(i0),n:(r.n||[]).slice(i0)}))};});
+function prHarian(which){const ak=HK_AK[which];if(!ak)return '';const H=hkData(S.hk,ak);
+  const kepala=`<div class="panel-h"><h2 data-tip="harian_kaedah">Prestasi harian setiap kaedah</h2><span class="sub">Kotak = untung hari itu bagi posisi yang dipegang · kanan = untung purata %</span></div>`;
+  if(!H||!H.R.length)return `<div class="panel">${kepala}<p class="empty">${S.hk?'Belum ada posisi bagi akaun ini.':'Menunggu data harian (prestasi/harian_kaedah).'}</p></div>`;
+  const su=S.hkSusun||'j',R=[...H.R].sort(su==='j'?(a,b)=>b.j-a.j:(a,b)=>(parseInt(a.k.slice(1))||9999)-(parseInt(b.k.slice(1))||9999)||a.k.localeCompare(b.k));
+  const kotak=(r,i)=>{const v=r.d[i],n=r.n[i];const t=`${r.k} · Hari ${i+1} (${tkO(H.T[i])}): ${v==null?'tiada posisi':sg2(v)+' · '+n+' posisi dipegang'}`;
+    return `<td><i class="hb ${hkWarna(v)}" style="${hkBg(v)}" title="${esc(t)}" aria-label="${esc(t)}"></i></td>`;};
+  return `<div class="panel">${kepala}
+    <div class="filters" style="margin-bottom:8px"><span class="lbl">Susun</span><div class="seg" id="hkSeg${which}">${[['j','Untung purata'],['k','Kaedah']].map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${su===v}">${t}</button>`).join('')}</div>
+      <span class="mut" style="font-size:.82rem">${R.length} kaedah · ${H.T.length} hari dagangan (${esc(tkO(H.T[0]))} – ${esc(tkO(H.T[H.T.length-1]))})</span></div>
+    <div class="hkw"><table class="hkt"><thead><tr><th class="l">Kaedah</th>${H.T.map((t,i)=>`<th title="${esc(tkO(t))}">${i+1}</th>`).join('')}<th class="j">Untung %</th></tr></thead><tbody>
+    ${R.map(r=>`<tr><td class="l"><button type="button" class="lnk" data-kd="${esc(r.k)}">${esc(r.k)}</button></td>${H.T.map((_,i)=>kotak(r,i)).join('')}<td class="j" title="${r.np} posisi (untung akhir bagi yang keluar, semasa bagi yang dipegang)"><b class="${cls(r.j)}">${sg2(r.j)}</b> <span class="mut">${r.np}</span></td></tr>`).join('')}
+    </tbody></table></div>
+    <div class="hkg"><span><i style="background:color-mix(in srgb,var(--pos) 90%,var(--card))"></i>Untung</span><span><i style="background:color-mix(in srgb,var(--neg) 90%,var(--card))"></i>Rugi</span><span><i style="background:var(--line-2)"></i>Tiada perubahan</span><span><i style="background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line)"></i>Tiada posisi</span><span>Lebih pekat = lebih besar (penuh pada ±${HK_LIM}%)</span></div>
+    <p class="sub" style="margin-top:6px">Hari 1 = sesi pertama akaun ada posisi; hover/tekan lama kotak untuk tarikh, untung dan bilangan posisi. Untung harian = jumlah perubahan nilai ÷ nilai awal hari (USD1,000 setiap posisi; hari beli lawan harga beli, hari keluar lawan harga keluar lorong kaedah). Nombor kecil kanan = jumlah posisi. ${esc(S.hk.harga_hingga||'')}</p></div>`;}
 const deretM=memo(src=>{const by={};src.filter(r=>r.keluar&&r.untung_akhir_pct!=null).sort((a,b)=>(a.tarikh_keluar||'').localeCompare(b.tarikh_keluar||'')).forEach(r=>{(by[r.kaedah]=by[r.kaedah]||[]).push(r.untung_akhir_pct);});
   Object.keys(by).forEach(k=>{by[k]=by[k].slice(-10);});return by;});
 let DERET={};
@@ -2754,6 +2780,7 @@ const TIPS={
   mfe:{t:'Kenaikan maksimum (MFE)',d:'Untung tertinggi yang pernah dicapai sejak beli: harga tinggi tertinggi hingga sehari sebelum keluar (dan harga keluar) ÷ harga beli − 1. Jarak antara kenaikan maksimum dan untung akhir = untung yang terlepas sebelum keluar.',e:'Naik maks +6%, keluar +1%: 5 mata terlepas.'},
   untung_bergerak:{t:'Untung bergerak lawan backtest',d:'Untung purata 20 dagangan selesai terakhir setiap kaedah berbanding julat 95% purata backtest bagi bilangan dagangan yang sama. Di bawah julat = amaran awal kaedah melemah.'},
   kejatuhan:{t:'Kejatuhan dari puncak',d:'Berapa jauh untung terkumpul (USD1,000 setiap posisi) berada di bawah paras tertingginya. Menunjukkan dalam dan lamanya tempoh rugi, yang tersembunyi dalam carta untung terkumpul.'},
+  harian_kaedah:{t:'Prestasi harian setiap kaedah',d:'Satu baris setiap kaedah, satu kotak setiap hari dagangan. Hijau = posisi kaedah itu untung pada hari tersebut, merah = rugi, kelabu = tiada posisi. Lajur kanan = untung purata % semua posisi kaedah (untung akhir bagi yang keluar, semasa bagi yang dipegang).',e:'Baris yang kebanyakannya hijau dengan untung purata positif = kaedah yang menjadi apabila diikut (masuk dan keluar ikut peraturan).'},
   peta_bulanan:{t:'Untung bulanan setiap kaedah',d:'Untung purata dagangan selesai setiap kaedah ikut bulan keluar. Kaedah yang hanya untung dalam satu bulan, atau mula lemah, kelihatan serta-merta.'},
   deret:{t:'10 dagangan terakhir',d:'Keputusan 10 dagangan selesai terakhir kaedah, lama ke baharu: ● hijau menang, ✕ merah rugi, · rata.'},
   carta_kecil:{t:'Carta harga sejak beli',d:'Harga tutup setiap hari sejak beli. Garis putus kelabu = harga beli; titik-titik kuning = paras keluar lorong selagi naik. Hijau jika harga terkini di atas harga beli.'},
@@ -3001,7 +3028,7 @@ renderNav();renderAll();
   sub('sektor/snapshot','sektor',['sektor']);
   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
   sub('prestasi/mae','mae',['prestasi']);
-  subBhg('prestasi/garis','garis',['utama','ptc','prestasi']);subBhg('prestasi/mfe','mfe',['prestasi']);
+  subBhg('prestasi/garis','garis',['utama','ptc','prestasi']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['prestasi']);
   sub('prestasi/portfolio_slot','pslot',['utama']);
   sub('analisis/papan','anl',['analisis']);
   sub('kaedah/katalog','kat',['kaedah']);

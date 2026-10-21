@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
-# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/portfolio_slot, analisis/papan, harian/status. sektor/snapshot dijana oleh tugasan
+# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, harian/status. sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
 
@@ -255,6 +255,57 @@ def garis_harga(M, C, stor):
     return dict(tarikh=hari, spy=spy, rows=rows), [[k, v] for k, v in sorted(mfe.items())]
 
 
+def harian_kaedah(M, C, stor):
+    """prestasi/harian_kaedah (grid prestasi harian setiap kaedah, tab Prestasi): untung harian % setiap kaedah setiap sesi =
+    Σ perubahan nilai ÷ Σ nilai awal hari bagi posisi USD_POSISI yang dipegang hari itu (hari beli: tutup lawan harga beli; hari
+    keluar lorong kaedah: harga keluar lawan tutup semalam; tiada bar = harga semalam). j = untung purata % (untung akhir bagi
+    yang keluar, semasa bagi yang dipegang; sama dengan Prestasi). Akaun M, C dan G (gabung)."""
+    fr = pd.concat([pd.read_csv(os.path.join(stor, f), usecols=['ticker', 'date', 'close']) for f in ('harga_A.csv', 'harga_B.csv')
+                    if os.path.exists(os.path.join(stor, f))])
+    P = {t: dict(zip(g.date.astype(int), g.close.astype(float))) for t, g in fr.groupby('ticker')}
+    pos = []
+    for ak, R in (('M', M), ('C', C)):
+        for r in R:
+            hb = SH.nombor(r.get('harga_beli'))
+            if not sah(r) or not hb or not r.get('tarikh_beli'):
+                continue
+            kel = SH.benar(r.get('keluar'))
+            hk = SH.nombor(r.get('harga_keluar')) if kel else None
+            e = int(r['tarikh_keluar'].replace('-', '')) if kel and hk is not None and r.get('tarikh_keluar') else None
+            u = SH.nombor(r.get('untung_akhir_pct') if kel else r.get('untung_pct'))
+            pos.append((ak, r['kaedah'], r['saham'], int(r['tarikh_beli'].replace('-', '')), e, hb, hk, u or 0.0))
+    if not pos:
+        return dict(tarikh=[], rows=[])
+    mula = min(p[3] for p in pos)
+    bil = fr.date.astype(int).value_counts()
+    hari = sorted(d for d, n in bil.items() if d >= mula and n >= 0.5 * bil.max())   # sesi separa (stor belum lengkap) diabaikan
+    ix = {d: i for i, d in enumerate(hari)}
+    agg = {}
+    for ak, k, s, b, e, hb, hk, u in pos:
+        harga = P.get(s, {})
+        for kk in ((ak, k), ('G', k)):
+            x = agg.setdefault(kk, dict(pnl=[0.0] * len(hari), asas=[0.0] * len(hari), n=[0] * len(hari), u=[]))
+            x['u'].append(u)
+        lalu = hb
+        for d in hari:
+            if d < b:
+                continue
+            if e is not None and d > e:
+                break
+            kini = hk if e is not None and d == e else harga.get(d, lalu)
+            i = ix[d]
+            for kk in ((ak, k), ('G', k)):
+                x = agg[kk]
+                x['pnl'][i] += USD_POSISI * (kini - lalu) / hb; x['asas'][i] += USD_POSISI * lalu / hb; x['n'][i] += 1
+            lalu = kini
+    no = lambda k: (int(k[1:]) if k[1:].isdigit() else 9999, k)
+    rows = []
+    for (ak, k), x in sorted(agg.items(), key=lambda kv: ('MCG'.index(kv[0][0]), no(kv[0][1]))):
+        rows.append(dict(a=ak, k=k, np=len(x['u']), j=round(stt.mean(x['u']), 2),
+                         d=[round(100 * p / a, 2) if a > 0 else None for p, a in zip(x['pnl'], x['asas'])], n=x['n']))
+    return dict(tarikh=hari, rows=rows)
+
+
 def pengawas(st, masa):
     """Larian Actions yang sepatutnya sudah siap tetapi belum (untuk sesi tolak db: tembak workflow sekali).
     harian.yml: sesi NYSE terakhir yang tutup >= 9 jam lalu (data Yahoo muktamad); beli.yml: hari ini NY selepas 9:45."""
@@ -387,6 +438,10 @@ def main(argv=None):
                                 definisi='Kenaikan maksimum % (MFE) = (harga tinggi tertinggi sejak hari beli hingga hari ini, atau sehingga '
                                          'sehari sebelum keluar lorong kaedah, dan harga keluar) ÷ harga beli − 1, minimum 0. '
                                          'rows: [akaun|saham|kaedah|tarikh_beli, %].')
+    docs['prestasi/harian_kaedah'] = dict(harian_kaedah(M, C, a.stor), dibina=dibina, harga_hingga=f'{S} tutup',
+                                          definisi='rows: {a: akaun M|C|G, k: kaedah, np: jumlah posisi, j: untung purata %, d: untung '
+                                                   'harian % sejajar tarikh (null = tiada posisi), n: posisi dipegang}. Untung harian = '
+                                                   'Σ perubahan nilai ÷ Σ nilai awal hari (posisi USD sama; keluar ikut lorong kaedah).')
     ps = portfolio_slot(dibina)
     if ps:
         docs['prestasi/portfolio_slot'] = ps
@@ -413,7 +468,7 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     versi = json.load(open(a.versi)) if a.versi else {}
     tulis = []
-    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe')
+    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'harian_kaedah')
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
     semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
     for kol, bahagian in semua:
