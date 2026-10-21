@@ -5,6 +5,7 @@ Mulai 14 Okt 2026 **repo ini sumber kebenaran**. Aset dalam dashboard hanya sali
 
 - `enjin.py` — enjin backtest v1.2 (BEKU, jangan ubah logik).
 - `stor.py` — stor harga harian (harga_A/B/idx.csv).
+- `tidak_layak.py` — satu pintu saham tidak layak (diambil alih, tidak cair, delist; sejak 21 Okt 2026): `tapis()` dipakai scanner.py, standard/harian_c.py dan standard/lejar.py; `posisi` menutup posisi C palsu/delist.
 - `ambil_alih.py` — penapis saham sedang diambil alih (isyarat palsu; sejak 21 Okt 2026): `tapis()` dipakai scanner.py, standard/harian_c.py dan standard/lejar.py; senarai sah `data/ambil_alih.csv`.
 - `scanner.py`, `pasang.py`, `parse_screen.py`, `beli_alat.py`, `tambahan.py` — imbasan harian dan alat larian.
 - `uji_kaedah.py` — semak modul kaedah lawan registry.

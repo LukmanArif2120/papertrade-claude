@@ -42,13 +42,13 @@ def data(n=320, saham=('AAA', 'BBB', 'CCC', 'DDD'), benih=7):
     return fr, {'SPY': spy, 'QQQ': spy.copy()}
 
 
-def jalan_lejar(mid, fr, idx, langkau_sesi=(), aa=set()):
+def jalan_lejar(mid, fr, idx, langkau_sesi=(), aa=None):
     lejar.FR, lejar.IDX = fr, idx
     T, W, tutup, langkau = [], [], [], []
     bil = {}
     for S in [x for x in idx['SPY'].index if x >= MULA]:
         if S in langkau_sesi: continue          # larian kaedah gagal / terlepas pada sesi ini
-        h = lejar.kerja((mid, S, T, W, None, set(), bil, aa))
+        h = lejar.kerja((mid, S, T, W, None, set(), bil, aa or {}))
         assert h['ralat'] is None, h['ralat']
         T, W = h['terbuka'], h['tunggu']; tutup += h['tutup']; langkau += h['langkau']
         for p in h['beli']: bil[p['saham']] = p['belian_ke']
@@ -75,9 +75,22 @@ class UjiLejar(unittest.TestCase):
         modul('M9006'); fr, idx = data()
         T0, _, tutup0, _ = jalan_lejar('M9006', fr, idx)
         self.assertTrue(any(p['saham'] == 'AAA' for p in T0 + tutup0))
-        T, W, tutup, langkau = jalan_lejar('M9006', fr, idx, aa={'AAA'})
+        T, W, tutup, langkau = jalan_lejar('M9006', fr, idx, aa={'AAA': 'ambil alih'})
         self.assertFalse(any(p['saham'] == 'AAA' for p in T + W + tutup))
         self.assertEqual(sorted({p['saham'] for p in T + tutup}), sorted({p['saham'] for p in T0 + tutup0} - {'AAA'}))
+
+    def test_posisi_saham_delist_ditutup(self):
+        # saham tanpa bar >= DELIST_SESI sesi: posisi terbuka ditutup pada tutup bar terakhir (lorong 1 'delist' + lorong 2)
+        modul('M9007'); fr, idx = data()
+        akhir = fr['AAA'].index[-30]; fr['AAA'] = fr['AAA'][fr['AAA'].index <= akhir]
+        lejar.DUA_LORONG = True
+        T, W, tutup, langkau = jalan_lejar('M9007', fr, idx)
+        self.assertFalse(any(p['saham'] == 'AAA' for p in T))
+        dl = [p for p in tutup if p.get('sebab_keluar') == 'delist']
+        self.assertTrue(dl)
+        for p in dl:
+            self.assertEqual((p['tarikh_keluar'], p['tarikh_keluar_henti'], p['tutup_semua']), (lejar.tkh(akhir), lejar.tkh(akhir), True))
+            self.assertAlmostEqual(float(p['harga_keluar']), float(fr['AAA'].close.iloc[-1]), places=3)
 
     def test_sama_dengan_enjin(self):
         m = modul('M9001'); fr, idx = data()

@@ -10,7 +10,7 @@ import sys, os, json, argparse, importlib, glob, time, traceback, copy
 import pandas as pd, numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
 from stor import *
-import ambil_alih  # noqa: E402
+import tidak_layak  # noqa: E402
 
 MAKS_SLOT = 10          # had saham setiap kaedah (arahan pengguna)
 MAKS_WATCH = 5          # had saham 'hampir' setiap kaedah
@@ -252,7 +252,7 @@ def cmd_scan(a):
     fr0, idx = frames_dict(muat(DATA))
     univ = pd.read_csv(os.path.join(DATA, 'univ.csv')) if os.path.exists(os.path.join(DATA, 'univ.csv')) else None
     layak = set(univ[(univ.close >= HARGA_MIN) & (univ.floatcap > FLOAT_MIN)].ticker) if univ is not None else set(fr0)
-    aa = ambil_alih.tapis(fr0)   # saham sedang diambil alih: isyarat palsu, tidak dibeli dan tiada watchlist (21 Okt 2026)
+    aa = tidak_layak.tapis(fr0)   # diambil alih / tidak cair (kod/tidak_layak.py): tidak dibeli, tiada watchlist (21 Okt 2026)
     A = s431()
     db = baca_db(a.db) if a.db else {}
     jk = jangkaan()
@@ -378,7 +378,8 @@ def cmd_scan(a):
     st['beli_dirancang'] = len(queue)
     tulis(a.out, 'status', bersih(st))
     print(json.dumps(dict(tarikh_data=tdata, beli_dirancang=len(queue), saham_unik=len({q['saham'] for q in queue}),
-                          ambil_alih=sorted(aa),
+                          ambil_alih=sorted(t for t, x in aa.items() if x['sebab'] == 'ambil alih'),
+                          tidak_cair=sorted(t for t, x in aa.items() if x['sebab'] == 'tidak cair'),
                           dikongsi=sum(q['dikongsi'] for q in queue), ralat=ralat, masa_s=round(time.time() - t0),
                           kaedah=[dict(id=x[0], isyarat=x[1], posisi=x[2], penuh=x[3], watch=x[4], s=x[5]) for x in ringkas]),
                      ensure_ascii=False))

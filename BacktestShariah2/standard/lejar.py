@@ -25,9 +25,11 @@ Peraturan setiap sesi S (data dipotong <= S; modul kaedah = kod/kaedah/Mxx.py, l
    Posisi kekal dalam terbuka.csv sehingga kedua-dua lorong keluar, tetapi sejak 19 Okt 2026 hanya lorong 1 yang menyekat
    isyarat baharu kaedah+saham sama (lorong 1 lejar = enjin; posisi lorong 2 boleh bertindih). Apabila peraturan
    lorong 2 berubah (keluar_lorong.VERSI lain daripada status.json `lorong2`), `jalan` membina semula lejar dari sesi mula.
-5. Saham sedang diambil alih (sejak 21 Okt 2026, kod/ambil_alih.py; corak harga terkunci atau data/ambil_alih.csv) pada
-   sesi S: isyarat direkod (`ambil_alih` = True) tetapi tidak masuk menunggu; isyarat menunggu dilangkau ('saham diambil
-   alih'). Penapis atau senarai berubah (status.json `ambil_alih`) -> bina semula seperti peraturan 4.
+5. Saham tidak layak pada sesi S (sejak 21 Okt 2026, kod/tidak_layak.py: diambil alih — corak harga terkunci atau
+   data/ambil_alih.csv — atau tidak cair): isyarat direkod (`tidak_layak` = sebab) tetapi tidak masuk menunggu; isyarat
+   menunggu dilangkau ('saham <sebab>'). Posisi saham tanpa bar >= tidak_layak.DELIST_SESI sesi (delist) ditutup pada tutup
+   bar terakhir (sebab_keluar / lorong 2 'delist'). Peraturan atau senarai berubah (status.json `tidak_layak`) -> bina
+   semula seperti peraturan 4.
 Harga: stor repo `data/harga/stor/` (format kod/stor.py; yfinance, semakan silang Moomoo oleh rutin 6:02).
 Jika harga lama dilaras (split), posisi terbuka dilaras dengan nisbah sama (lajur `laras`).
 """
@@ -41,7 +43,7 @@ KOD = os.path.join(BS2, 'kod'); sys.path.insert(0, KOD); sys.path.insert(0, HERE
 import enjin  # noqa: E402
 from stor import muat, frames_dict, LAJ  # noqa: E402
 import keluar_lorong  # noqa: E402
-import ambil_alih  # noqa: E402
+import tidak_layak  # noqa: E402
 
 HARGA = os.path.join(BS2, 'data', 'harga')
 STOR = os.environ.get('LEJAR_STOR', os.path.join(HARGA, 'stor'))
@@ -65,7 +67,7 @@ L_POS = L_ASAS + L_K1 + L_K2      # terbuka.csv: lorong 1 boleh sudah keluar sem
 L_TUTUP = L_POS
 L_TUNGGU = ['id_kaedah', 'saham', 'sumber', 'tarikh_isyarat', 'rank', 'henti', 'sasaran', 'tutup']
 L_LANGKAU = ['id_kaedah', 'saham', 'tarikh_isyarat', 'sesi', 'sebab', 'buka', 'henti']
-L_ISYARAT = ['sesi', 'kaedah', 'saham', 'rank', 'henti', 'sasaran', 'tutup', 'sumber', 'dipegang', 'pemanasan', 'ambil_alih']
+L_ISYARAT = ['sesi', 'kaedah', 'saham', 'rank', 'henti', 'sasaran', 'tutup', 'sumber', 'dipegang', 'pemanasan', 'tidak_layak']
 
 
 # ---------------------------------------------------------------- bantu
@@ -252,6 +254,19 @@ def tutup_posisi(g, p, k):
     return r
 
 
+def tutup_delist(g, p):
+    """Saham tanpa bar >= tidak_layak.DELIST_SESI sesi (delist selepas ambil alih / tiada data): lorong yang masih terbuka
+    ditutup pada tutup bar terakhir (anggaran nilai tunai)."""
+    ix = g.index; c = float(g.close.iloc[-1]); e = float(p['harga_beli'])
+    if not p.get('tarikh_keluar'):
+        p = tutup_posisi(g, p, dict(tarikh_keluar=tkh(ix[-1]), harga_keluar=c, sebab_keluar='delist', j=len(g) - 1))
+    if DUA_LORONG and not benar(p.get('keluar_henti')):
+        p = dict(p); p.update(keluar_henti=True, tarikh_keluar_henti=tkh(ix[-1]), harga_keluar_henti=r4(c),
+                              untung_henti_pct=round((c / e - 1) * 100, 2))
+    p['tutup_semua'] = True
+    return p
+
+
 def benar(v):
     return str(v).strip().lower() == 'true'
 
@@ -324,6 +339,8 @@ def kerja(arg):
         if pd.Timestamp(p['tarikh_isyarat']) not in g.index:
             nota.append(f"{mid} {p['saham']}: bar isyarat {p['tarikh_isyarat']} tiada dalam stor; keluar tidak dinilai")
         p, habis = nilai_posisi(g, p, tmax)
+        if not habis and tidak_layak.sesi_tanpa_bar(g, IDX['SPY'].index if 'SPY' in IDX else [], St) >= tidak_layak.DELIST_SESI:
+            p = tutup_delist(g, p); habis = True
         (tutup if habis else kekal).append(p)
     # isyarat kaedah+saham sama disekat selagi lorong 1 terbuka, termasuk hari ia keluar (seperti enjin); lorong 2 tidak menyekat
     pegang = {p['saham'] for p in kekal + tutup if not p.get('tarikh_keluar') or p['tarikh_keluar'] >= str(St.date())}
@@ -338,7 +355,7 @@ def kerja(arg):
         if t in pegang:
             lk('dipegang'); continue
         if t in aa:
-            lk('saham diambil alih'); continue
+            lk(f'saham {aa[t]}'); continue
         if g is None or ti not in g.index:
             if jauh >= TAMAT_TUNGGU: lk('tiada data')
             else: tunggu_baru.append(s)
@@ -367,9 +384,9 @@ def kerja(arg):
         if float(g.close.iloc[-1]) < HARGA_MIN: continue
         rw = dict(sesi=str(St.date()), kaedah=mid, saham=t, rank=r4(nombor(g['rank'].iloc[-1])), henti=r4(nombor(g['stop'].iloc[-1])),
                   sasaran=r4(nombor(g['tgt'].iloc[-1])), tutup=r4(float(g.close.iloc[-1])), sumber='431' if t in a431 else 'lain',
-                  dipegang=t in pegang, pemanasan=len(g) - 1 < warm, ambil_alih=t in aa)
+                  dipegang=t in pegang, pemanasan=len(g) - 1 < warm, tidak_layak=aa.get(t, ''))
         isy.append(rw)
-        if not rw['dipegang'] and not rw['pemanasan'] and not rw['ambil_alih']:
+        if not rw['dipegang'] and not rw['pemanasan'] and not rw['tidak_layak']:
             tunggu_baru.append(dict(id_kaedah=mid, saham=t, sumber=rw['sumber'], tarikh_isyarat=rw['sesi'], rank=rw['rank'],
                                     henti=rw['henti'], sasaran=rw['sasaran'], tutup=rw['tutup']))
     return dict(mid=mid, ralat=None, terbuka=kekal, tunggu=tunggu_baru, tutup=tutup, beli=beli, langkau=langkau, isyarat=isy,
@@ -396,8 +413,8 @@ def keadaan():
 def bina_semula(st):
     """Peraturan lorong 2 dipinda (keluar_lorong.VERSI lain daripada status.json `lorong2`): lorong 2 menentukan bila posisi
     tutup sepenuhnya (dan sebelum 19 Okt 2026 bila kaedah+saham boleh dibeli semula), jadi lejar dikosongkan dan diproses semula dari sesi mula
-    dengan peraturan baharu. Sama apabila penapis ambil alih berubah (ambil_alih.versi() lain daripada `ambil_alih`, sejak
-    21 Okt 2026: peraturan atau senarai data/ambil_alih.csv). Pulang status baharu (sesi mula dikekalkan; ditulis segera
+    dengan peraturan baharu. Sama apabila penapis saham tidak layak berubah (tidak_layak.versi() lain daripada `tidak_layak`,
+    sejak 21 Okt 2026: peraturan atau senarai data/ambil_alih.csv). Pulang status baharu (sesi mula dikekalkan; ditulis segera
     supaya keadaan sentiasa konsisten)."""
     for f in [os.path.join(LEJAR, 'terbuka.csv'), os.path.join(LEJAR, 'tunggu.csv')] + \
             [x for d in ('tutup', 'langkau') for x in glob.glob(os.path.join(LEJAR, d, '*.csv'))] + \
@@ -406,11 +423,11 @@ def bina_semula(st):
     if st.get('lorong2') != keluar_lorong.VERSI:
         dari, ke = st.get('lorong2') or '2 tutup turun berturut atau henti', keluar_lorong.VERSI
     else:
-        dari, ke = st.get('ambil_alih') or 'tiada penapis ambil alih', ambil_alih.versi()
+        dari, ke = st.get('tidak_layak') or 'tiada penapis tidak layak', tidak_layak.versi()
     rekod = dict(tarikh=pd.Timestamp.now(tz='Asia/Kuala_Lumpur').strftime('%Y-%m-%d %H:%M MYT'),
                  dari=dari, ke=ke, sesi_terakhir_lama=st.get('sesi_terakhir'))
     print(json.dumps(dict(bina_semula=rekod), ensure_ascii=False), flush=True)
-    st = dict(mula=st.get('mula'), lorong2=keluar_lorong.VERSI, ambil_alih=ambil_alih.versi(),
+    st = dict(mula=st.get('mula'), lorong2=keluar_lorong.VERSI, tidak_layak=tidak_layak.versi(),
               bina_semula=st.get('bina_semula', []) + [rekod])
     json.dump(st, open(os.path.join(LEJAR, 'status.json'), 'w'), ensure_ascii=False, indent=1)
     return st
@@ -421,9 +438,9 @@ def cmd_jalan(a):
     os.makedirs(LEJAR, exist_ok=True)
     st, T, W, bil = keadaan()
     if DUA_LORONG and st.get('sesi_terakhir') and (st.get('lorong2') != keluar_lorong.VERSI
-                                                   or st.get('ambil_alih') != ambil_alih.versi()):
+                                                   or st.get('tidak_layak') != tidak_layak.versi()):
         st = bina_semula(st); T, W, bil = [], [], {}
-    st['lorong2'] = keluar_lorong.VERSI; st['ambil_alih'] = ambil_alih.versi()
+    st['lorong2'] = keluar_lorong.VERSI; st['tidak_layak'] = tidak_layak.versi()
     FR, IDX = frames_dict(muat(STOR))
     sesi = [x for x in IDX['SPY'].index]
     akhir = st.get('sesi_terakhir')
@@ -461,7 +478,7 @@ def cmd_jalan(a):
             Tm = {}; Wm = {}
             for p in T: Tm.setdefault(p['id_kaedah'], []).append(p)
             for w in W: Wm.setdefault(w['id_kaedah'], []).append(w)
-            aa = set(ambil_alih.tapis(FR, S))   # saham sedang diambil alih pada sesi S (tiada pandang depan)
+            aa = {t: x['sebab'] for t, x in tidak_layak.tapis(FR, S).items()}   # diambil alih / tidak cair pada S
             args = [(mid, S, Tm.pop(mid, []), Wm.pop(mid, []), layak, a431, bil.get(mid, {}), aa) for mid in kaedah]
             hasil = pool.map(kerja, args, chunksize=1)
             T = [p for v in Tm.values() for p in v]; W = [w for v in Wm.values() for w in v]   # kaedah di luar senarai: kekal

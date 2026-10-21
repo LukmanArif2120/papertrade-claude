@@ -235,3 +235,9 @@
 - Dipakai: `scanner.py` (rutin 8:02), `harian_c.py` imbas (tolak `ambil_alih`), `lejar.py` (isyarat `ambil_alih` = True tidak dibeli; status `ambil_alih` berubah → bina semula lejar dari sesi mula pada larian seterusnya).
 - Posisi C: 89 posisi dibeli pada/selepas pengumuman ditanda `tidak_sah` (isyarat palsu); 68 ditutup pada tutup 20 Okt (ATKR: tutup akhir 16 Okt, delist selepas Prysmian siap); 21 belian 21 Okt ditutup pada larian 6:02 esok (langkah 2c baharu).
 - Ujian: `ujian/test_ambil_alih.py` (8) + lejar (1). `sahkan.py --betulkan` keluar 0.
+
+## 21 Okt 2026 — saham tidak cair + delist (keputusan pengguna, susulan penapis ambil alih)
+- `kod/tidak_layak.py` baharu = satu pintu (scanner.py, harian_c.py, lejar.py): diambil alih (ambil_alih.py) + tidak cair (20 bar: ≥ 3 tanpa julat, ≥ 2 tanpa volum, atau median nilai < USD100 ribu). Stor semasa: 9 ambil alih, 18 tidak cair (cth. BIO.B, KELYB, SENEB, MAYS, NCEW, WLYB, POLE, FEDU).
+- Delist: tiada bar ≥ 5 sesi → posisi terbuka ditutup pada tutup bar terakhir (C: `tidak_layak.py posisi`, menggantikan `ambil_alih.py posisi` dalam langkah 2c rutin 6:02; Lejar: sebab_keluar `delist`). Semasa: tiada posisi C/Lejar terbuka tersangkut.
+- Lejar: lajur isyarat `ambil_alih` → `tidak_layak` (sebab); status.json `tidak_layak` = kunci bina semula (sekali pada larian lejar.yml seterusnya).
+- Semakan automatik dijadualkan 22 Okt 13:00 UTC (trig_018KSLjjNHSp9AR4FRCJeau3).
