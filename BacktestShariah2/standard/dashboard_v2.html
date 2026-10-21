@@ -1720,7 +1720,7 @@ function renderPrestasi(which){
   drawPrBars($('#prBar'+which),st);drawPrScatter($('#prSc'+which),st);drawPrWin($('#prWin'+which),st);
   el.querySelectorAll('[data-bar]').forEach(b=>{b.onclick=()=>{S.barPenuh=b.dataset.bar==='1';renderAll();};});
   {const A=analisis(src);drawKumulatif($('#prKum'+which),A.harian,spyKum(src,A.harian));drawDD($('#prDD'+which),A.harian);drawMFE($('#prMfe'+which),mfePts(src));const bt=$('#blnTogol');if(bt)bt.onclick=()=>{S.blnPenuh=!S.blnPenuh;renderAll();};if(S.bgk)bindLagi('bgkMore',S.bgk);drawKalendar($('#prKal'+which),A.harian);drawTaburan($('#prTab'+which),tbVals(src));drawR($('#prR'+which),src.filter(r=>r.keluar).map(rOf));drawKotak($('#prKotak'+which),src);drawAir($('#prAir'+which),src);{const pc=ptcRows();if(pc&&which!=='m')drawAliran($('#prAliran'+which),pc.rows);}bindSegH('tbSeg'+which,v=>{S.tb=v;});}
-  [['hkSeg','hkSusun'],['hkMod','hkMod'],['hkBand','hkBand']].forEach(([id,k])=>{const hs=$('#'+id+which);if(hs)hs.onclick=e=>{const b=e.target.closest('button');if(!b)return;S[k]=b.dataset.v;renderAll();};});
+  [['hkSeg','hkSusun'],['hkMod','hkMod'],['hkBand','hkBand'],['hkMin','hkMin']].forEach(([id,k])=>{const hs=$('#'+id+which);if(hs)hs.onclick=e=>{const b=e.target.closest('button');if(!b)return;S[k]=k==='hkMin'?+b.dataset.v:b.dataset.v;renderAll();};});
   const sg=$('#prMin'+which);sg.onclick=e=>{const b=e.target.closest('button');if(!b)return;pf.minN=+b.dataset.v;renderAll();};
   bindLagi('prkMore'+which,pk);if(S.prl)bindLagi('prlMore',S.prl);
 }
@@ -2365,37 +2365,45 @@ function hkNilai(d,spy,mod,band){const out=[];let c=null,cs=null;
     out.push(c==null?null:band==='s'?(c-cs)*100:(c-1)*100);}
   return out;}
 function prHarian(which){const ak=HK_AK[which];if(!ak)return '';const H=hkData(S.hk,ak);
-  const kepala=`<div class="panel-h"><h2 data-tip="harian_kaedah">Prestasi harian setiap kaedah</h2><span class="sub">Kotak = untung posisi yang dipegang hari itu · • beli · ✓ keluar untung · ✕ keluar rugi · kanan = untung purata %</span></div>`;
+  const kepala=`<div class="panel-h"><h2 data-tip="harian_kaedah">Prestasi harian setiap kaedah</h2><span class="sub">Hijau = kaedah atasi SPY sejak mula · ✓ / ✕ = keluar untung / rugi · kanan = untung purata %</span></div>`;
   if(!H||!H.R.length)return `<div class="panel">${kepala}<p class="empty">${S.hk?'Belum ada posisi bagi akaun ini.':'Menunggu data harian (prestasi/harian_kaedah).'}</p></div>`;
-  const mod=S.hkMod||'h',band=S.hkBand||'a',su=S.hkSusun||'j',lim=HK_LIM[mod],T=H.T;
+  /* asal (penilaian 21 Okt 2026): Terkumpul lawan SPY, kaedah ≥ PR_MIN_N posisi, tanda keluar sahaja, dua lajur kanan */
+  const mod=S.hkMod||'k',band=S.hkBand||'s',su=S.hkSusun||'j',min=S.hkMin||PR_MIN_N,lim=HK_LIM[mod],T=H.T;
   let st=prStatsC.get(prSrc(which));if(!st){st=prStats(prSrc(which));prStatsC.set(prSrc(which),st);}const SO={};st.forEach(o=>{SO[o.kaedah]=o;});
-  const R=[...H.R].sort(su==='j'?(a,b)=>b.j-a.j:(a,b)=>(parseInt(a.k.slice(1))||9999)-(parseInt(b.k.slice(1))||9999)||a.k.localeCompare(b.k));
+  const semuaR=H.R.filter(r=>r.np>=min),R=[...semuaR].sort(su==='j'?(a,b)=>b.j-a.j:(a,b)=>(parseInt(a.k.slice(1))||9999)-(parseInt(b.k.slice(1))||9999)||a.k.localeCompare(b.k));
   const lbM=mod==='h'?'hari itu':'terkumpul',lbB=band==='s'?' lawan SPY':'';
   const kotak=(r,v,i,nama,tanpa)=>{const n=r.n?r.n[i]:null,e=r.ev&&r.ev[i],raw=r.d[i];
-    const tnd=!e||tanpa?'':e.w||e.l?(e.w>e.l?'✓':e.l>e.w?'✕':'±'):e.b?'•':'';
-    const t=`${nama} · Hari ${i+1} (${tkO(T[i])}): ${v==null?'tiada posisi':sg2(v)+' '+lbM+lbB}${n?` · ${n} posisi dipegang`:''}${mod==='k'&&raw!=null?` · hari itu ${sg2(raw)}`:''}${e?` · ${[e.b?e.b+' beli':'',e.w?e.w+' keluar untung':'',e.l?e.l+' keluar rugi':''].filter(Boolean).join(', ')}`:''}`;
+    const tnd=!e||tanpa||!(e.w||e.l)?'':e.w>e.l?'✓':e.l>e.w?'✕':'±';
+    const t=`${nama} · Hari ${i+1} (${tkO(T[i])}): ${v==null?'tiada posisi':sg2(v)+' '+lbM+lbB}${n?` · ${n} posisi dipegang`:''}${(mod==='k'||band==='s')&&raw!=null?` · hari itu ${sg2(raw)}`:''}${e?` · ${[e.b?e.b+' beli':'',e.w?e.w+' keluar untung':'',e.l?e.l+' keluar rugi':''].filter(Boolean).join(', ')}`:''}`;
     return `<td><i class="hb ${v==null?'h0':!v?'hz':''}" style="${hkBg(v,lim)}" title="${esc(t)}" aria-label="${esc(t)}">${tnd}</i></td>`;};
-  const kanan=(o,bt,j,np)=>`<td class="jx">${o&&o.win!=null?fx(o.win,0)+'%':'–'}</td><td class="jx"><span class="${o&&o.ex>=PR_MIN_TUTUP?'pos':''}">${o?o.ex:'–'}</span><span class="mut">/${PR_MIN_TUTUP}</span></td><td class="jx">${bt}</td><td class="j" title="${np!=null?np+' posisi (untung akhir bagi yang keluar, semasa bagi yang dipegang)':''}"><b class="${cls(j)}">${sg2(j)}</b> <span class="mut">${np??''}</span></td>`;
-  const btTx=k=>{const b=btOf(k);return b&&b.r&&b.r.avg!=null?`<span title="Backtest: untung purata ${sg2(b.r.avg*100)}${b.r.win!=null?', menang '+fx(b.r.win*100,0)+'%':''}">${sg2(b.r.avg*100)}</span>`:'<span class="mut">–</span>';};
+  const btTx=k=>{const b=btOf(k);return b&&b.r&&b.r.avg!=null?`; jangkaan backtest ${sg2(b.r.avg*100)}`:'';};
+  const kanan=(o,j,np,tip)=>`<td class="jx"><span class="${o&&o.ex>=PR_MIN_TUTUP?'pos':''}">${o?o.ex:'–'}</span><span class="mut">/${PR_MIN_TUTUP}</span></td><td class="j" title="${esc(tip)}"><b class="${cls(j)}">${sg2(j)}</b> <span class="mut">${np??''}</span></td>`;
+  const tipJ=(o,np,bt)=>`${np} posisi (untung akhir bagi yang keluar, semasa bagi yang dipegang)${o&&o.win!=null?`; menang (semua) ${fx(o.win,0)}%`:''}${bt}`;
   const spyV=hkNilai(H.spy,H.spy,mod,'a'),spyJ=(H.spy.reduce((c,x)=>c*(1+(x||0)/100),1)-1)*100;
-  const semua=H.semua,srcAll=prSrc(which),exAll=srcAll.filter(r=>r.keluar).length,hs=srcAll.map(r=>r.hasil).filter(x=>x!=null);
-  const oAll={win:hs.length?hs.filter(x=>x>0).length/hs.length*100:null,ex:exAll};
+  const semua=H.semua,srcAll=prSrc(which),hs=srcAll.map(r=>r.hasil).filter(x=>x!=null);
+  const oAll={win:hs.length?hs.filter(x=>x>0).length/hs.length*100:null,ex:srcAll.filter(r=>r.keluar).length};
   const baris=(r,x={})=>{const o=x.o||SO[r.k],kecil=!x.lbl&&r.np<PR_MIN_N,v=hkNilai(r.d,H.spy,mod,band);
-    const lbl=x.lbl||`<button type="button" class="lnk" data-kd="${esc(r.k)}">${esc(r.k)}</button>${kecil?' <span class="mut" title="Sampel kecil: kurang '+PR_MIN_N+' posisi">·</span>':''}`;
-    return `<tr class="${x.lbl?'hkr':kecil?'hkp':''}"><td class="l">${lbl}</td>${T.map((_,i)=>kotak(r,v[i],i,x.nama||r.k,!!x.lbl)).join('')}${kanan(o,x.bt??btTx(r.k),r.j,r.np)}</tr>`;};
-  const seg=(id,cur,opts)=>`<div class="seg" id="${id}${which}">${opts.map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${cur===v}">${t}</button>`).join('')}</div>`;
+    const lbl=x.lbl||`<button type="button" class="lnk" data-kd="${esc(r.k)}">${esc(r.k)}</button>`;
+    return `<tr class="${x.lbl?'hkr':kecil?'hkp':''}"><td class="l">${lbl}</td>${T.map((_,i)=>kotak(r,v[i],i,x.nama||r.k,!!x.lbl)).join('')}${kanan(o,r.j,r.np,tipJ(o,r.np,x.lbl?'':btTx(r.k)))}</tr>`;};
+  /* ringkasan: atasi SPY sejak mula (terkumpul lawan SPY hari terakhir > 0) dan rugi ≥ 3 hari berturut-turut hingga hari terakhir */
+  const akhir=a=>{for(let i=a.length-1;i>=0;i--)if(a[i]!=null)return a[i];return null;};
+  const atasi=semuaR.filter(r=>(akhir(hkNilai(r.d,H.spy,'k','s'))??0)>0).length;
+  const merah=semuaR.filter(r=>{const d=r.d;let n=0;for(let i=d.length-1;i>=0&&d[i]!=null&&d[i]<0;i--)n++;return d[d.length-1]!=null&&n>=3;});
+  const seg=(id,cur,opts)=>`<div class="seg" id="${id}${which}">${opts.map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${String(cur)===String(v)}">${t}</button>`).join('')}</div>`;
   return `<div class="panel">${kepala}
-    <div class="filters" style="margin-bottom:8px"><span class="lbl">Nilai</span>${seg('hkMod',mod,[['h','Harian'],['k','Terkumpul']])}
-      <span class="lbl">Banding</span>${seg('hkBand',band,[['a','Mutlak'],['s','Lawan SPY']])}
-      <span class="lbl">Susun</span>${seg('hkSeg',su,[['j','Untung purata'],['k','Kaedah']])}
-      <span class="mut" style="font-size:.82rem">${R.length} kaedah · ${T.length} hari dagangan (${esc(tkO(T[0]))} – ${esc(tkO(T[T.length-1]))})</span></div>
-    <div class="hkw"><table class="hkt"><thead><tr><th class="l">Kaedah</th>${T.map((t,i)=>`<th title="${esc(tkO(t))}">${i+1}</th>`).join('')}<th class="jx" title="Kadar menang (semua): selesai + dipegang">Menang</th><th class="jx" title="Dagangan selesai / ${PR_MIN_TUTUP} (label dipercayai selepas ${PR_MIN_TUTUP})">Selesai</th><th class="jx" title="Untung purata setiap dagangan dalam backtest">Jangkaan</th><th class="j">Untung %</th></tr></thead><tbody>
-    ${band==='a'?`<tr class="hkr"><td class="l"><b>SPY</b></td>${T.map((_,i)=>kotak({d:H.spy},spyV[i],i,'SPY')).join('')}<td class="jx"></td><td class="jx"></td><td class="jx"></td><td class="j" title="SPY dalam tempoh grid"><b class="${cls(spyJ)}">${sg2(spyJ)}</b></td></tr>`:''}
-    ${semua?baris(semua,{lbl:'<b>Semua kaedah</b>',nama:'Semua kaedah',o:oAll,bt:'<span class="mut">–</span>'}):''}
-    ${R.map(r=>baris(r)).join('')}
+    <p class="headline" style="margin:0 0 10px"><b class="${atasi*2>=semuaR.length?'pos':'neg'}">${atasi}</b> daripada <b>${semuaR.length}</b> kaedah atasi SPY sejak mula${merah.length?` · <b class="neg">${merah.length}</b> rugi ≥ 3 hari berturut-turut: ${merah.slice(0,5).map(r=>`<button type="button" class="lnk" data-kd="${esc(r.k)}">${esc(r.k)}</button>`).join(', ')}${merah.length>5?' …':''}`:' · tiada kaedah rugi 3 hari berturut-turut'}.</p>
+    <div class="filters" style="margin-bottom:8px"><span class="lbl">Nilai</span>${seg('hkMod',mod,[['k','Terkumpul'],['h','Harian']])}
+      <span class="lbl">Banding</span>${seg('hkBand',band,[['s','Lawan SPY'],['a','Mutlak']])}
+      <span class="lbl">Kaedah</span>${seg('hkMin',min,[[PR_MIN_N,'≥ '+PR_MIN_N+' posisi'],[1,'Semua ('+H.R.length+')']])}
+      <span class="lbl">Susun</span>${seg('hkSeg',su,[['j','Untung'],['k','Nombor']])}
+      <span class="mut" style="font-size:.82rem">${T.length} hari dagangan (${esc(tkO(T[0]))} – ${esc(tkO(T[T.length-1]))})</span></div>
+    <div class="hkw"><table class="hkt"><thead><tr><th class="l">Kaedah</th>${T.map((t,i)=>`<th title="${esc(tkO(t))}">${i+1}</th>`).join('')}<th class="jx" title="Dagangan selesai / ${PR_MIN_TUTUP} (label dipercayai selepas ${PR_MIN_TUTUP})">Selesai</th><th class="j">Untung %</th></tr></thead><tbody>
+    ${band==='a'?`<tr class="hkr"><td class="l"><b>SPY</b></td>${T.map((_,i)=>kotak({d:H.spy},spyV[i],i,'SPY')).join('')}<td class="jx"></td><td class="j" title="SPY dalam tempoh grid"><b class="${cls(spyJ)}">${sg2(spyJ)}</b></td></tr>`:''}
+    ${semua?baris(semua,{lbl:'<b>Semua kaedah</b>',nama:'Semua kaedah',o:oAll}):''}
+    ${R.length?R.map(r=>baris(r)).join(''):`<tr><td class="l mut" colspan="${T.length+3}">Belum ada kaedah dengan ≥ ${min} posisi.</td></tr>`}
     </tbody></table></div>
-    <div class="hkg"><span><i style="background:color-mix(in srgb,var(--pos) 90%,var(--card))"></i>Untung</span><span><i style="background:color-mix(in srgb,var(--neg) 90%,var(--card))"></i>Rugi</span><span><i style="background:var(--line-2)"></i>Tiada perubahan</span><span><i style="background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line)"></i>Tiada posisi</span><span>• beli · ✓ / ✕ kebanyakan keluar hari itu untung / rugi (± seri)</span><span>Lebih pekat = lebih besar (penuh pada ±${lim}%)</span><span>Baris pudar = kurang ${PR_MIN_N} posisi</span></div>
-    <p class="sub" style="margin-top:6px">Hari 1 = sesi pertama akaun ada posisi; hover/tekan lama kotak untuk tarikh, nilai, posisi dipegang, beli dan keluar. Harian = jumlah perubahan nilai ÷ nilai awal hari (USD1,000 setiap posisi; hari beli lawan harga beli, hari keluar lawan harga keluar lorong kaedah). Terkumpul = untung harian dirantai sejak hari pertama kaedah ada posisi. Lawan SPY = tolak SPY hari (atau tempoh) sama. Menang (semua) dan Selesai sama seperti jadual kedudukan; Jangkaan = untung purata backtest. ${esc(S.hk.harga_hingga||'')}</p></div>`;}
+    <div class="hkg"><span><i style="background:color-mix(in srgb,var(--pos) 90%,var(--card))"></i>${band==='s'?'Atasi SPY':'Untung'}</span><span><i style="background:color-mix(in srgb,var(--neg) 90%,var(--card))"></i>${band==='s'?'Kalah kepada SPY':'Rugi'}</span><span><i style="background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line)"></i>Tiada posisi</span><span>✓ / ✕ kebanyakan keluar hari itu untung / rugi (± seri)</span><span>Lebih pekat = lebih besar (penuh pada ±${lim}%)</span></div>
+    <p class="sub" style="margin-top:6px">Terkumpul = untung harian dirantai sejak hari pertama kaedah ada posisi; Lawan SPY = tolak SPY dalam tempoh sama. Harian = jumlah perubahan nilai hari itu ÷ nilai awal hari (USD1,000 setiap posisi; hari beli lawan harga beli, hari keluar lawan harga keluar lorong kaedah). Hover/tekan lama kotak untuk tarikh, nilai, posisi dipegang, beli dan keluar; hover Untung % untuk kadar menang dan jangkaan backtest. ${esc(S.hk.harga_hingga||'')}</p></div>`;}
 const deretM=memo(src=>{const by={};src.filter(r=>r.keluar&&r.untung_akhir_pct!=null).sort((a,b)=>(a.tarikh_keluar||'').localeCompare(b.tarikh_keluar||'')).forEach(r=>{(by[r.kaedah]=by[r.kaedah]||[]).push(r.untung_akhir_pct);});
   Object.keys(by).forEach(k=>{by[k]=by[k].slice(-10);});return by;});
 let DERET={};
@@ -2808,7 +2816,7 @@ const TIPS={
   mfe:{t:'Kenaikan maksimum (MFE)',d:'Untung tertinggi yang pernah dicapai sejak beli: harga tinggi tertinggi hingga sehari sebelum keluar (dan harga keluar) ÷ harga beli − 1. Jarak antara kenaikan maksimum dan untung akhir = untung yang terlepas sebelum keluar.',e:'Naik maks +6%, keluar +1%: 5 mata terlepas.'},
   untung_bergerak:{t:'Untung bergerak lawan backtest',d:'Untung purata 20 dagangan selesai terakhir setiap kaedah berbanding julat 95% purata backtest bagi bilangan dagangan yang sama. Di bawah julat = amaran awal kaedah melemah.'},
   kejatuhan:{t:'Kejatuhan dari puncak',d:'Berapa jauh untung terkumpul (USD1,000 setiap posisi) berada di bawah paras tertingginya. Menunjukkan dalam dan lamanya tempoh rugi, yang tersembunyi dalam carta untung terkumpul.'},
-  harian_kaedah:{t:'Prestasi harian setiap kaedah',d:'Satu baris setiap kaedah, satu kotak setiap hari dagangan. Hijau = posisi kaedah itu untung pada hari tersebut, merah = rugi, kelabu = tiada posisi. Lajur kanan = untung purata % semua posisi kaedah (untung akhir bagi yang keluar, semasa bagi yang dipegang).',e:'Baris yang kebanyakannya hijau dengan untung purata positif = kaedah yang menjadi apabila diikut (masuk dan keluar ikut peraturan).'},
+  harian_kaedah:{t:'Prestasi harian setiap kaedah',d:'Satu baris setiap kaedah, satu kotak setiap hari dagangan. Asal: untung terkumpul lawan SPY — hijau = kaedah mengatasi SPY sejak mula sehingga hari itu, merah = kalah; kelabu gelap = tiada posisi. ✓ / ✕ = keluar untung / rugi. Lajur kanan = untung purata % semua posisi kaedah (untung akhir bagi yang keluar, semasa bagi yang dipegang).',e:'Baris yang kebanyakannya hijau dengan untung purata positif = kaedah yang menjadi apabila diikut (masuk dan keluar ikut peraturan).'},
   peta_bulanan:{t:'Untung bulanan setiap kaedah',d:'Untung purata dagangan selesai setiap kaedah ikut bulan keluar. Kaedah yang hanya untung dalam satu bulan, atau mula lemah, kelihatan serta-merta.'},
   deret:{t:'10 dagangan terakhir',d:'Keputusan 10 dagangan selesai terakhir kaedah, lama ke baharu: ● hijau menang, ✕ merah rugi, · rata.'},
   carta_kecil:{t:'Carta harga sejak beli',d:'Harga tutup setiap hari sejak beli. Garis putus kelabu = harga beli; titik-titik kuning = paras keluar lorong selagi naik. Hijau jika harga terkini di atas harga beli.'},
