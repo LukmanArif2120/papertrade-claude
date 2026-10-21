@@ -23,6 +23,7 @@ Laluan lama dalam dokumen (`standard/x`, `papertrade/x`, `spec/`) = `BacktestSha
 - Papertrade C (Claude, maya) sahaja untuk belian baharu sejak 13 Okt 2026. Tiada order Moomoo, tiada wang sebenar.
 - "Kalau tak beli, cakap tak beli." Data mesti betul; jangan reka.
 - Dua lorong keluar (17 Okt 2026): kaedah, dan pegang selagi naik (sejak 19 Okt 2026: Chandelier tutup — tutup < tutup tertinggi sejak beli − 4×ATR14 → jual buka esok, paras hanya naik, tanpa henti kaedah; lajur `*_henti`; kajian `BacktestShariah2/kajian/KAJIAN_LORONG2.md`) — direkod berasingan (`standard/keluar_lorong.py`, `papertrade/SKEMA.md`). Lorong 10% dibuang. Belian semula kaedah+saham sama selepas lorong kaedah keluar (sejak 19 Okt 2026; lorong 2 tidak menyekat dan boleh bertindih; `tutup_semua` = kedua-dua keluar).
+- Saham diambil alih (21 Okt 2026) = isyarat palsu: `kod/ambil_alih.py` (corak harga terkunci + senarai sah `BacktestShariah2/data/ambil_alih.csv`) menapis senarai beli, watchlist dan Lejar Penuh; posisi C dibeli selepas pengumuman → `tidak_sah` dan ditutup (`ambil_alih.py posisi --tulis`, rutin 6:02 langkah 2c dan `harian_c.py malam`). Perjanjian baharu bayaran saham/campuran: tambah ke senarai.
 - Penerangan teknikal dalam Bahasa Melayu baku.
 - Setiap larian berjadual: `git pull --rebase` dahulu, tulis fail di repo ini, kemudian commit dan push ke `main`. Jangan tulis lagi ke Project claude.ai (salinan di sana dibekukan pada 14 Okt 2026).
 - Sebelum push data: `python3 BacktestShariah2/standard/sahkan.py --betulkan` mesti keluar 0.

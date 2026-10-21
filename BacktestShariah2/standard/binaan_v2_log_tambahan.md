@@ -228,3 +228,10 @@
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 27: buka ≤ henti — DHR M14, EXPO M35, ISRG M54, M68 & M119, SAIH M70, RGEN M74, LNTH M74; belum didagangkan (data_date 19–20 Okt) — POLE M02, ESCA M02 & M122, PDS M04, M30, M79, M89, M146 & M148, WLKP M19, NCEW M28, NRP M34, M70 & M152, JOE M59 & M115, FRD M70, GHC M99, FTW M139. Tiada buka_maks/bertindih.
 - Sahkan buka (10:12 NY, `quote_history_kline` ktype 2, 21 Okt): sampel DNOW 15.785, PVH 86.5, JKHY 153.05, SONY 25.3, FOX 59.36 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
+
+## 21 Okt 2026 — penapis saham diambil alih (keputusan pengguna)
+- Punca: 13 kaedah membeli BRZE 21 Okt @ 45.48 selepas Salesforce mengumumkan belian tunai Braze (20 Okt: +52%, volum 30×, julat 0.8%). Harga terkunci = isyarat palsu.
+- `kod/ambil_alih.py` baharu: corak harga (jurang ≥ +10%, volum ≥ 4×, julat ≤ 3% hari pengumuman; kekal selagi terkunci) + senarai sah `data/ambil_alih.csv` (9 perjanjian disahkan web: PEN, SLAB, RAMP, SLP, TECH, ATKR, DV, PTC, BRZE). Stor semasa: corak mengesan 9/9 tanpa saham lain; semakan sejarah setiap 5 sesi (250 sesi) tiada pengesanan salah.
+- Dipakai: `scanner.py` (rutin 8:02), `harian_c.py` imbas (tolak `ambil_alih`), `lejar.py` (isyarat `ambil_alih` = True tidak dibeli; status `ambil_alih` berubah → bina semula lejar dari sesi mula pada larian seterusnya).
+- Posisi C: 89 posisi dibeli pada/selepas pengumuman ditanda `tidak_sah` (isyarat palsu); 68 ditutup pada tutup 20 Okt (ATKR: tutup akhir 16 Okt, delist selepas Prysmian siap); 21 belian 21 Okt ditutup pada larian 6:02 esok (langkah 2c baharu).
+- Ujian: `ujian/test_ambil_alih.py` (8) + lejar (1). `sahkan.py --betulkan` keluar 0.

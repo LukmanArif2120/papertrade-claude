@@ -29,6 +29,7 @@ import enjin  # noqa: E402
 from stor import muat, frames_dict, LAJ  # noqa: E402
 import keluar_lorong as KL  # noqa: E402
 import sahkan as SH  # noqa: E402
+import ambil_alih as AA  # noqa: E402
 
 PT = os.path.join(BS2, 'papertrade')
 STOR = os.path.join(BS2, 'data', 'harga', 'stor')
@@ -546,6 +547,7 @@ def imbas(folder, S, hasil, masa, ringkas, isyarat_dir):
     w_lajur, w_lama = SH.baca(p_watch) if os.path.exists(p_watch) else ([], [])
     lama = {(r['Saham'], r['Kaedah']): r for r in w_lama}
     minggu_akhir = akhir_minggu(St)
+    aa = AA.tapis(FR, St)   # saham sedang diambil alih (kod/ambil_alih.py): isyarat palsu, tidak dibeli, tiada watchlist
     senarai, watch, rekod = [], [], []
     tolak = Counter()
     for mid in senarai_kaedah():
@@ -564,6 +566,8 @@ def imbas(folder, S, hasil, masa, ringkas, isyarat_dir):
         for x in sig_ok:
             if (mid, x['saham']) in buka_c:
                 tolak['dipegang'] += 1; continue
+            if x['saham'] in aa:
+                tolak['ambil_alih'] += 1; continue
             calon.append(x)
         atas = calon[:MAKS_KAEDAH]
         luar = [x for x in calon[MAKS_KAEDAH:] if (x['saham'], mid) in lama]
@@ -585,7 +589,7 @@ def imbas(folder, S, hasil, masa, ringkas, isyarat_dir):
         # % hampir = 100 - jarak pencetus, jadi calon tanpa jarak boleh diukur (pencetus corak, jarak_pct None) tidak
         # dimasukkan — sama seperti watchlist rutin Claude (tiada baris tanpa jarak sejak 14 Okt 2026)
         cand = [c for c in h.get('hampir', []) if (mid, c['saham']) not in buka_c and c['saham'] not in sig_t
-                and c['jarak_pct'] is not None]
+                and c['jarak_pct'] is not None and c['saham'] not in aa]
         cand.sort(key=lambda c: ((c['saham'], mid) not in lama, c['sumber'] != '431', -(c['skor'] or 0), c['saham']))
         for c in cand[:MAKS_WATCH]:
             t = c['saham']; w0 = lama.get((t, mid))
@@ -609,7 +613,7 @@ def imbas(folder, S, hasil, masa, ringkas, isyarat_dir):
     ringkas.update(senarai_beli=len(senarai), saham_unik=len({r['saham'] for r in senarai}),
                    kaedah=len({r['kaedah'] for r in senarai}), belian_semula=sum(r['belian_ke'] >= 2 for r in senarai),
                    dari_watchlist=sum(r['asal'] == 'watchlist' for r in senarai), isyarat=len(rekod),
-                   ditolak=dict(tolak), watchlist=len(watch), watchlist_baharu=len(wk - set(lama)),
+                   ditolak=dict(tolak), ambil_alih=sorted(aa), watchlist=len(watch), watchlist_baharu=len(wk - set(lama)),
                    watchlist_dibuang=len(set(lama) - wk - {(r['saham'], r['kaedah']) for r in senarai}),
                    watchlist_ke_senarai=sum(r['asal'] == 'watchlist' for r in senarai), minggu_akhir=minggu_akhir,
                    fail_isyarat=os.path.relpath(fail_isy, BS2) if fail_isy else None)
@@ -669,6 +673,10 @@ def cmd_malam(a):
         rk = dict(sesi=Ss, masa=teks_masa(masa), ralat_kaedah=ralat, kaedah_tanpa_modul=tanpa_modul,
                   masa_kaedah_s=round(time.time() - t0))
         kemas(folder, stor_dir, S, hasil, masa, rk)
+        # posisi dibeli selepas pengumuman ambil alih = isyarat palsu: tidak_sah, tutup kedua-dua lorong
+        palsu = AA.tanda_posisi(folder, FR)
+        rk['ambil_alih_posisi'] = dict(ditutup=sum(x[4] != 'menunggu' for x in palsu),
+                                       menunggu=sum(x[4] == 'menunggu' for x in palsu), saham=sorted({x[1] for x in palsu}))
         if not a.tanpa_imbas:
             imbas(folder, S, hasil, masa, rk, a.isyarat)
         st['malam'] = rk

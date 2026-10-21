@@ -29,7 +29,7 @@ Susunan lajur rasmi (lajur tambahan dibenarkan di hujung):
 | kaedah_kongsi | teks | kaedah lain yang berkongsi unit yang sama |
 | tarikh_isyarat | YYYY-MM-DD | sesi isyarat entry |
 | nota, dikesan | teks | nota bebas; masa larian yang mengesan keluar |
-| tidak_sah | True/kosong | tidak dikira dalam prestasi/pendedahan |
+| tidak_sah | True/kosong | tidak dikira dalam prestasi/pendedahan. Sejak 21 Okt 2026 juga posisi yang dibeli pada/selepas pengumuman ambil alih (`sebab_tidak_sah` = `isyarat palsu: saham diambil alih (…)`; kedua-dua lorong ditutup pada tutup bar terakhir oleh `kod/ambil_alih.py posisi`) |
 | sebab_tidak_sah | teks | wajib jika tidak_sah |
 | tidak_dibeli | True/kosong | belian tidak berlaku (langkau kaedah kena pada buka rasmi). harga_beli kosong, isyarat_keluar = "TIDAK DIBELI", keluar = False, tidak dikemas kini lagi |
 | luar_peraturan | True/kosong | Moomoo sahaja: dibeli sebenar tetapi luar peraturan (kekal dikemas kini harga, tidak dikira) |

@@ -42,13 +42,13 @@ def data(n=320, saham=('AAA', 'BBB', 'CCC', 'DDD'), benih=7):
     return fr, {'SPY': spy, 'QQQ': spy.copy()}
 
 
-def jalan_lejar(mid, fr, idx, langkau_sesi=()):
+def jalan_lejar(mid, fr, idx, langkau_sesi=(), aa=set()):
     lejar.FR, lejar.IDX = fr, idx
     T, W, tutup, langkau = [], [], [], []
     bil = {}
     for S in [x for x in idx['SPY'].index if x >= MULA]:
         if S in langkau_sesi: continue          # larian kaedah gagal / terlepas pada sesi ini
-        h = lejar.kerja((mid, S, T, W, None, set(), bil))
+        h = lejar.kerja((mid, S, T, W, None, set(), bil, aa))
         assert h['ralat'] is None, h['ralat']
         T, W = h['terbuka'], h['tunggu']; tutup += h['tutup']; langkau += h['langkau']
         for p in h['beli']: bil[p['saham']] = p['belian_ke']
@@ -69,6 +69,15 @@ class UjiLejar(unittest.TestCase):
 
     def tearDown(self):
         lejar.DUA_LORONG = self._dua
+
+    def test_saham_diambil_alih_tidak_dibeli(self):
+        # sejak 21 Okt 2026: saham dalam set ambil alih sesi S tidak masuk menunggu dan tidak dibeli
+        modul('M9006'); fr, idx = data()
+        T0, _, tutup0, _ = jalan_lejar('M9006', fr, idx)
+        self.assertTrue(any(p['saham'] == 'AAA' for p in T0 + tutup0))
+        T, W, tutup, langkau = jalan_lejar('M9006', fr, idx, aa={'AAA'})
+        self.assertFalse(any(p['saham'] == 'AAA' for p in T + W + tutup))
+        self.assertEqual(sorted({p['saham'] for p in T + tutup}), sorted({p['saham'] for p in T0 + tutup0} - {'AAA'}))
 
     def test_sama_dengan_enjin(self):
         m = modul('M9001'); fr, idx = data()
