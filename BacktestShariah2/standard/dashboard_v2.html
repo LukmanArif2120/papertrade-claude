@@ -3095,25 +3095,27 @@ $('#foldAll').onclick=()=>foldAllNow(true);$('#openAll').onclick=()=>foldAllNow(
    Tab dengan >= 3 panel peringkat atas: rel kiri (telefon: jalur cip melekit di bawah pengepala) menyenaraikan Gambaran (tajuk
    ringkas, KPI, strip) dan setiap panel; satu bahagian dipapar, tapisan (.filters) dan kaki kekal. Kelas .pnav diset sebelum
    lukis supaya carta dilukis pada lebar sebenar (grid2 jadi satu lajur); pilihan disimpan setiap paparan. Butang "Papar senarai"
-   kembali ke susunan lama (lipat/buka). Ringkasan dikecualikan (dibaca sekali imbas). */
-const PNAV_MIN=3,PNAV_KECUALI=['v-utama'],PNAV_ADA={};
+   kembali ke susunan lama (lipat/buka). Ringkasan: telefon sahaja (v94; desktop dibaca sekali imbas). */
+/* Ringkasan: telefon sahaja (desktop dibaca sekali imbas) */
+const PNAV_MIN=3,PNAV_TELEFON=['v-utama'],PNAV_ADA={};
 /* tajuk kumpulan rel (desktop): [tajuk, kunci panel pertama kumpulan] ('' = panel pertama); kunci tiada = tajuk tidak dipapar */
 /* bahagian lalai jika belum dipilih (selainnya item pertama) */
-const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah'};
+const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah','v-utama':'3 perkara utama'};
 const PNAV_KUMP={'v-pr-':[['Semua dagangan',''],['Setiap kaedah','untung lawan risiko'],['Eksperimen','banding dua lorong keluar']]};
 let pnavPilih={};try{pnavPilih=JSON.parse(localStorage.getItem('pbs2_pnav_pilih')||'{}');}catch(e){}
 S.pnav=true;try{S.pnav=localStorage.getItem('pbs2_pnav')!=='0';}catch(e){}
-const pnavBoleh=vid=>S.pnav&&!PNAV_KECUALI.includes(vid)&&PNAV_ADA[vid]!==false;
+const pnavLayak=vid=>!PNAV_TELEFON.includes(vid)||skrinKecil();
+const pnavBoleh=vid=>S.pnav&&pnavLayak(vid)&&PNAV_ADA[vid]!==false;
 const pnavPanel=el=>[...el.querySelectorAll('.panel')].filter(p=>p.querySelector(':scope>.panel-h h2')&&!p.parentElement.closest('.panel')&&!p.closest('.pnav-rail'));
 function applyNav(el,vid){
   const ps=pnavPanel(el),dulu=el.classList.contains('pnav');
   if(ps.length)PNAV_ADA[vid]=ps.length>=PNAV_MIN;
   const kini=pnavBoleh(vid)&&ps.length>=PNAV_MIN;el.classList.toggle('pnav',kini);
-  {const t=$('#pnavTog'),ada=!PNAV_KECUALI.includes(vid)&&PNAV_ADA[vid]===true;t.hidden=!ada;t.textContent=S.pnav?'Papar senarai':'Papar tab sisi';
+  {const t=$('#pnavTog'),ada=pnavLayak(vid)&&PNAV_ADA[vid]===true;t.hidden=!ada;t.textContent=S.pnav?'Papar senarai':'Papar tab sisi';
     $('#foldAll').hidden=$('#openAll').hidden=kini;}
   if(dulu!==kini&&ps.length){renderSoon();return;}
   if(!kini)return;
-  const kunci=[],n={};ps.forEach(p=>{const t=p.querySelector(':scope>.panel-h h2').textContent.trim();n[t]=(n[t]||0)+1;const k=t.toLowerCase()+(n[t]>1?' #'+n[t]:'');p.dataset.pn=k;kunci.push(k);});
+  const kunci=[],n={};ps.forEach(p=>{const t=p.querySelector(':scope>.panel-h h2').textContent.trim().split(' · ')[0];n[t]=(n[t]||0)+1;const k=t.toLowerCase()+(n[t]>1?' #'+n[t]:'');p.dataset.pn=k;kunci.push(k);});
   const anak=[...el.children],tetap=c=>c.matches('.filters,.foot'),bekas=c=>c.matches('.panel')||!!c.querySelector('.panel[data-pn]');
   const adaG=anak.some(c=>!bekas(c)&&!tetap(c)&&(c.textContent.trim()||c.querySelector('svg,canvas')));
   const item=(adaG?[{k:'__g',t:'Gambaran',p:null}]:[]).concat(ps.map((p,i)=>({k:kunci[i],t:p.querySelector(':scope>.panel-h h2').textContent.trim(),p})));
