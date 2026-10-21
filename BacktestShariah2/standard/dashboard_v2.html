@@ -2690,7 +2690,7 @@ document.addEventListener('click',e=>{
   if(e.target.closest('th')||e.target.closest('a'))return;
   const g=e.target.closest('[data-pergi]');if(g){S.tab=g.dataset.pergi;save();renderNav();renderAll();window.scrollTo({top:0});return;}
   const l=e.target.closest('[data-lihat]');
-  if(l){const id=l.dataset.lihat;if(l.dataset.akaun)S.akaun=l.dataset.akaun;const a=S.akaun,st=S['pf_pos'+a]||(S['pf_pos'+a]={k:'',sk:'',ind:'',q:'',shown:AWAL});Object.assign(st,{k:id,sk:'',ind:'',q:'',shown:AWAL});S.pos.st='semua';tutupSheet();S.tab='posisi';save();renderNav();renderAll();window.scrollTo({top:0});return;}
+  if(l){const id=l.dataset.lihat;if(l.dataset.akaun)S.akaun=l.dataset.akaun;const a=S.akaun,st=S['pf_pos'+a]||(S['pf_pos'+a]={k:'',sk:'',ind:'',q:'',shown:AWAL});Object.assign(st,{k:id,sk:'',ind:'',q:'',shown:AWAL});S.pos.st='semua';tutupSheet();S.tab='posisi';save();renderNav();renderAll();pnavKe($('#v-pos table[data-st]'));window.scrollTo({top:0});return;}
   if(ketikLp(e))return;
   const t=e.target.closest('[data-kd],[data-hk],[data-pos],[data-wl]');if(!t)return;
   if(skrinKecil()&&t.matches('.tw-grd tr')&&!e.target.closest('.mbtn-b')){const k=t.dataset.pos!=null?'p'+t.dataset.pos:'w'+t.dataset.wl;
@@ -3134,7 +3134,9 @@ function pnavTanda(el,k){
   const a=k==='__g'?null:el.querySelector(`.panel[data-pn="${CSS.escape(k)}"]`);
   el.querySelectorAll('.pnav-in button').forEach(b=>{if(b.dataset.pnk!==k)return;const j=b.parentElement;if(j.scrollWidth>j.clientWidth)j.scrollLeft=b.offsetLeft-(j.clientWidth-b.offsetWidth)/2;});
   [...el.children].forEach(c=>{if(c.classList.contains('pnav-rail')||c.matches('.foot'))return;
-    if(c.matches('.filters')){if(!a||!(c.compareDocumentPosition(a)&Node.DOCUMENT_POSITION_FOLLOWING))c.classList.add('pn-x');return;}
+    /* tapisan di atas sekali (cth. pemilih Butiran Backtest) kekal; tapisan lain hanya bagi panel selepasnya */
+    if(c.matches('.filters')){let s=c.previousElementSibling;while(s&&s.matches('.pnav-rail,.filters'))s=s.previousElementSibling;
+      if(s&&(!a||!(c.compareDocumentPosition(a)&Node.DOCUMENT_POSITION_FOLLOWING)))c.classList.add('pn-x');return;}
     const bk=c.matches('.panel')||!!c.querySelector('.panel[data-pn]');if(bk?!(a&&(c===a||c.contains(a))):!!a)c.classList.add('pn-x');});
   if(!a)return;a.classList.add('pn-a');a.classList.remove('lipat');
   for(let n=a;n.parentElement&&n.parentElement!==el;n=n.parentElement){const par=n.parentElement;par.classList.add('pn-j');
