@@ -42,7 +42,7 @@ jobs:
         run: |
           python3 BacktestShariah2/standard/lejar.py ringkas
           python3 BacktestShariah2/standard/lejar.py banding
-      - name: Portfolio maya 10 slot (RS_10, RAWAK_10; jejak hadapan kajian/KAJIAN_PORTFOLIO.md)
+      - name: Portfolio maya 10 slot (RS_10, RAWAK_10; gabungan beku GABUNGAN_10, TOP1_10, RAWAK_KAEDAH_10; jejak hadapan)
         continue-on-error: true
         run: python3 BacktestShariah2/standard/portfolio_slot.py
       - name: Commit dan push

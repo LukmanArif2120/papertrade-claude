@@ -1,6 +1,6 @@
 {
  "versi": "v2-2026-10-22",
- "dibina": "2026-10-22 03:11 UTC",
+ "dibina": "2026-10-22 05:17 UTC",
  "set": "431",
  "mula": "2019-11-01",
  "persentil": [
@@ -11,6 +11,12 @@
   3,
   30
  ],
+ "pantau": {
+  "k": 0.5,
+  "arl_tahun": 2.0,
+  "bootstrap_x": 30,
+  "biji": 20261022
+ },
  "n_kaedah": 75,
  "n_semua": 134,
  "tiang": {
@@ -57,6 +63,23 @@
    "r1": -29.9387,
    "r2": -3.0629,
    "varian": "V0 Video tulen",
+   "pantau": {
+    "kohort": 651,
+    "kohort_setahun": 94.1,
+    "mu_kohort": 1.9654,
+    "sd_kohort": 12.4698,
+    "winsor": [
+     -18.7365,
+     17.1863
+    ],
+    "mu_winsor": 1.922,
+    "sd_winsor": 9.0823,
+    "dd_maks": 653.82,
+    "dd_tempoh": 563,
+    "h": 3.62,
+    "arl": 188.2,
+    "arl_bootstrap": 194.7
+   },
    "u3": 0.4802
   },
   "M02": {
@@ -71,6 +94,23 @@
    "r1": -14.8924,
    "r2": -1.66,
    "varian": "V5 V1+sasaran 3R",
+   "pantau": {
+    "kohort": 1257,
+    "kohort_setahun": 181.7,
+    "mu_kohort": 0.6852,
+    "sd_kohort": 7.8992,
+    "winsor": [
+     -9.295,
+     14.5326
+    ],
+    "mu_winsor": 0.624,
+    "sd_winsor": 6.3901,
+    "dd_maks": 421.58,
+    "dd_tempoh": 847,
+    "h": 3.66,
+    "arl": 363.4,
+    "arl_bootstrap": 389.3
+   },
    "u3": -1.5683
   },
   "M03": {
@@ -85,6 +125,23 @@
    "r1": -12.4352,
    "r2": -1.1505,
    "varian": "V1 Spesifikasi dikunci",
+   "pantau": {
+    "kohort": 1396,
+    "kohort_setahun": 201.8,
+    "mu_kohort": 0.7142,
+    "sd_kohort": 5.6753,
+    "winsor": [
+     -6.9243,
+     8.8899
+    ],
+    "mu_winsor": 0.5292,
+    "sd_winsor": 4.1803,
+    "dd_maks": 199.7,
+    "dd_tempoh": 356,
+    "h": 4.35,
+    "arl": 403.6,
+    "arl_bootstrap": 432.4
+   },
    "u3": -2.3549
   },
   "M04": {
@@ -99,6 +156,23 @@
    "r1": -16.1784,
    "r2": -1.9364,
    "varian": "U2 asas V2 + E1 volume>=1.5xSMA20",
+   "pantau": {
+    "kohort": 1147,
+    "kohort_setahun": 165.8,
+    "mu_kohort": 5.5731,
+    "sd_kohort": 59.9551,
+    "winsor": [
+     -13.4183,
+     33.9404
+    ],
+    "mu_winsor": 1.4882,
+    "sd_winsor": 11.9907,
+    "dd_maks": 542.8,
+    "dd_tempoh": 465,
+    "h": 2.25,
+    "arl": 331.6,
+    "arl_bootstrap": 355.2
+   },
    "u3": 2.4793
   },
   "M05": {
@@ -113,6 +187,23 @@
    "r1": -21.1762,
    "r2": -2.7831,
    "varian": "V3 V1+close>SMA200",
+   "pantau": {
+    "kohort": 452,
+    "kohort_setahun": 65.4,
+    "mu_kohort": 10.1282,
+    "sd_kohort": 61.1816,
+    "winsor": [
+     -19.0708,
+     64.0795
+    ],
+    "mu_winsor": 3.4429,
+    "sd_winsor": 22.7277,
+    "dd_maks": 347.44,
+    "dd_tempoh": 261,
+    "h": 1.26,
+    "arl": 130.9,
+    "arl_bootstrap": 135.4
+   },
    "u3": 8.4471
   },
   "M06": {
@@ -127,6 +218,23 @@
    "r1": -9.7476,
    "r2": -1.7706,
    "varian": "V5 V1 tanpa VCP",
+   "pantau": {
+    "kohort": 1004,
+    "kohort_setahun": 149.3,
+    "mu_kohort": 2.7954,
+    "sd_kohort": 23.3882,
+    "winsor": [
+     -8.3147,
+     27.6676
+    ],
+    "mu_winsor": 0.6794,
+    "sd_winsor": 10.4918,
+    "dd_maks": 546.24,
+    "dd_tempoh": 510,
+    "h": 1.91,
+    "arl": 298.6,
+    "arl_bootstrap": 358.3
+   },
    "u3": 0.277
   },
   "M07": {
@@ -141,6 +249,23 @@
    "r1": -7.5512,
    "r2": -0.6419,
    "varian": "V11 V7 keluar close<SMA20",
+   "pantau": {
+    "kohort": 534,
+    "kohort_setahun": 77.3,
+    "mu_kohort": 1.151,
+    "sd_kohort": 13.8854,
+    "winsor": [
+     -6.1653,
+     20.5352
+    ],
+    "mu_winsor": -0.0896,
+    "sd_winsor": 6.8107,
+    "dd_maks": 213.41,
+    "dd_tempoh": 803,
+    "h": 0.96,
+    "arl": 154.6,
+    "arl_bootstrap": 165.6
+   },
    "u3": -2.8383
   },
   "M08": {
@@ -155,6 +280,23 @@
    "r1": -8.4912,
    "r2": -0.93,
    "varian": "V1 Spesifikasi dikunci",
+   "pantau": {
+    "kohort": 1419,
+    "kohort_setahun": 206.2,
+    "mu_kohort": 1.0329,
+    "sd_kohort": 10.9082,
+    "winsor": [
+     -6.1494,
+     14.0393
+    ],
+    "mu_winsor": 0.1277,
+    "sd_winsor": 5.3183,
+    "dd_maks": 213.05,
+    "dd_tempoh": 496,
+    "h": 2.37,
+    "arl": 412.5,
+    "arl_bootstrap": 475.9
+   },
    "u3": -1.7556
   },
   "M09": {
@@ -169,6 +311,23 @@
    "r1": -11.4947,
    "r2": -1.3195,
    "varian": "V2 V1 tanpa sasaran",
+   "pantau": {
+    "kohort": 689,
+    "kohort_setahun": 99.7,
+    "mu_kohort": 2.2942,
+    "sd_kohort": 17.7652,
+    "winsor": [
+     -10.0088,
+     34.1221
+    ],
+    "mu_winsor": 0.8488,
+    "sd_winsor": 10.9184,
+    "dd_maks": 358.89,
+    "dd_tempoh": 1118,
+    "h": 1.15,
+    "arl": 199.3,
+    "arl_bootstrap": 213.5
+   },
    "u3": 0.0485
   },
   "M10": {
@@ -183,6 +342,23 @@
    "r1": -16.4387,
    "r2": -1.9911,
    "varian": "V4 V1 pencetus CCI>+100",
+   "pantau": {
+    "kohort": 976,
+    "kohort_setahun": 145.5,
+    "mu_kohort": 4.9155,
+    "sd_kohort": 33.6724,
+    "winsor": [
+     -13.1685,
+     42.3994
+    ],
+    "mu_winsor": 2.3272,
+    "sd_winsor": 14.2339,
+    "dd_maks": 285.48,
+    "dd_tempoh": 273,
+    "h": 1.79,
+    "arl": 291.0,
+    "arl_bootstrap": 301.0
+   },
    "u3": 2.0309
   },
   "M100": {
@@ -197,6 +373,23 @@
    "r1": -16.1643,
    "r2": -2.4634,
    "varian": "V0 Sumber tulen (proksi): sasaran T+tinggi, tiada exitc",
+   "pantau": {
+    "kohort": 910,
+    "kohort_setahun": 132.1,
+    "mu_kohort": 1.4064,
+    "sd_kohort": 11.472,
+    "winsor": [
+     -14.1205,
+     21.5001
+    ],
+    "mu_winsor": 1.1648,
+    "sd_winsor": 9.9602,
+    "dd_maks": 201.14,
+    "dd_tempoh": 244,
+    "h": 3.17,
+    "arl": 264.2,
+    "arl_bootstrap": 273.3
+   },
    "u3": -0.5539
   },
   "M101": {
@@ -211,6 +404,23 @@
    "r1": -16.5221,
    "r2": -2.4033,
    "varian": "V3 V1 + corak sambungan (tutup_a>tutup_a-63)",
+   "pantau": {
+    "kohort": 718,
+    "kohort_setahun": 107.0,
+    "mu_kohort": 2.6663,
+    "sd_kohort": 39.3427,
+    "winsor": [
+     -13.0479,
+     33.7798
+    ],
+    "mu_winsor": 0.3096,
+    "sd_winsor": 11.7138,
+    "dd_maks": 607.17,
+    "dd_tempoh": 1200,
+    "h": 1.87,
+    "arl": 213.9,
+    "arl_bootstrap": 229.2
+   },
    "u3": 1.6141
   },
   "M102": {
@@ -225,6 +435,23 @@
    "r1": -8.7034,
    "r2": -0.8334,
    "varian": "V5 V1 + volum hari ini > semalam",
+   "pantau": {
+    "kohort": 1590,
+    "kohort_setahun": 229.8,
+    "mu_kohort": 1.2799,
+    "sd_kohort": 11.2794,
+    "winsor": [
+     -4.9803,
+     15.2826
+    ],
+    "mu_winsor": 0.3313,
+    "sd_winsor": 5.1986,
+    "dd_maks": 310.84,
+    "dd_tempoh": 866,
+    "h": 1.72,
+    "arl": 459.6,
+    "arl_bootstrap": 530.3
+   },
    "u3": -1.2529
   },
   "M104": {
@@ -239,6 +466,23 @@
    "r1": -14.4558,
    "r2": -1.8296,
    "varian": "V2 V1 + tiang >=50%",
+   "pantau": {
+    "kohort": 136,
+    "kohort_setahun": 20.1,
+    "mu_kohort": 6.3583,
+    "sd_kohort": 35.7179,
+    "winsor": [
+     -13.6035,
+     61.6031
+    ],
+    "mu_winsor": 2.6908,
+    "sd_winsor": 19.664,
+    "dd_maks": 159.47,
+    "dd_tempoh": 670,
+    "h": 0.84,
+    "arl": 40.2,
+    "arl_bootstrap": 50.0
+   },
    "u3": 2.1277
   },
   "M105": {
@@ -253,6 +497,23 @@
    "r1": -14.0761,
    "r2": -1.9308,
    "varian": "V1 Dikunci (V0 + had henti 12%)",
+   "pantau": {
+    "kohort": 1537,
+    "kohort_setahun": 222.2,
+    "mu_kohort": 1.7456,
+    "sd_kohort": 13.0533,
+    "winsor": [
+     -10.9774,
+     21.9502
+    ],
+    "mu_winsor": 0.9316,
+    "sd_winsor": 8.645,
+    "dd_maks": 694.47,
+    "dd_tempoh": 617,
+    "h": 3.2,
+    "arl": 444.3,
+    "arl_bootstrap": 476.0
+   },
    "u3": -0.6581
   },
   "M106": {
@@ -267,6 +528,23 @@
    "r1": -10.1644,
    "r2": -1.0605,
    "varian": "V5 V1 dengan henti tutup-2xATR14",
+   "pantau": {
+    "kohort": 1163,
+    "kohort_setahun": 168.1,
+    "mu_kohort": 1.4297,
+    "sd_kohort": 22.69,
+    "winsor": [
+     -7.2097,
+     14.8292
+    ],
+    "mu_winsor": -0.1595,
+    "sd_winsor": 5.3267,
+    "dd_maks": 363.24,
+    "dd_tempoh": 529,
+    "h": 2.37,
+    "arl": 336.2,
+    "arl_bootstrap": 403.4
+   },
    "u3": -3.2097
   },
   "M107": {
@@ -281,6 +559,23 @@
    "r1": -17.7693,
    "r2": -2.5021,
    "varian": "V5 V1 + SPY>SMA200",
+   "pantau": {
+    "kohort": 947,
+    "kohort_setahun": 137.0,
+    "mu_kohort": 12.1957,
+    "sd_kohort": 51.4558,
+    "winsor": [
+     -15.5123,
+     85.2485
+    ],
+    "mu_winsor": 8.2541,
+    "sd_winsor": 28.1601,
+    "dd_maks": 667.89,
+    "dd_tempoh": 607,
+    "h": 1.26,
+    "arl": 274.1,
+    "arl_bootstrap": 293.6
+   },
    "u3": 12.8644
   },
   "M11": {
@@ -295,6 +590,23 @@
    "r1": -12.8148,
    "r2": -1.3359,
    "varian": "V3 V1+NR7 hari dalam (NR7-ID)",
+   "pantau": {
+    "kohort": 1157,
+    "kohort_setahun": 167.2,
+    "mu_kohort": 2.5377,
+    "sd_kohort": 41.3141,
+    "winsor": [
+     -9.3976,
+     19.814
+    ],
+    "mu_winsor": 0.5678,
+    "sd_winsor": 7.2184,
+    "dd_maks": 264.63,
+    "dd_tempoh": 579,
+    "h": 2.29,
+    "arl": 334.5,
+    "arl_bootstrap": 346.0
+   },
    "u3": -0.0656
   },
   "M111": {
@@ -309,6 +621,23 @@
    "r1": -13.5073,
    "r2": -1.8608,
    "varian": "V5 V1 henti maks(tutup-3xATR7; 0.88xtutup)",
+   "pantau": {
+    "kohort": 1477,
+    "kohort_setahun": 213.5,
+    "mu_kohort": 1.7588,
+    "sd_kohort": 13.9991,
+    "winsor": [
+     -10.7174,
+     22.8337
+    ],
+    "mu_winsor": 0.7662,
+    "sd_winsor": 8.8522,
+    "dd_maks": 616.97,
+    "dd_tempoh": 592,
+    "h": 2.82,
+    "arl": 427.0,
+    "arl_bootstrap": 474.4
+   },
    "u3": -0.3559
   },
   "M115": {
@@ -323,6 +652,23 @@
    "r1": -10.7559,
    "r2": -1.17,
    "varian": "V1 WFO beku: henti ASAL, keluar ASAL, tmax 42",
+   "pantau": {
+    "kohort": 342,
+    "kohort_setahun": 49.5,
+    "mu_kohort": 1.2911,
+    "sd_kohort": 11.452,
+    "winsor": [
+     -8.9467,
+     23.296
+    ],
+    "mu_winsor": 0.7415,
+    "sd_winsor": 8.5331,
+    "dd_maks": 97.04,
+    "dd_tempoh": 303,
+    "h": 1.26,
+    "arl": 99.0,
+    "arl_bootstrap": 106.0
+   },
    "u3": -1.3967
   },
   "M116": {
@@ -337,6 +683,23 @@
    "r1": -11.583,
    "r2": -1.5544,
    "varian": "V1 WFO beku: henti PCT10, keluar TIADA, tmax 10",
+   "pantau": {
+    "kohort": 1625,
+    "kohort_setahun": 234.9,
+    "mu_kohort": 0.3264,
+    "sd_kohort": 4.7772,
+    "winsor": [
+     -6.9629,
+     7.4718
+    ],
+    "mu_winsor": 0.1984,
+    "sd_winsor": 3.8415,
+    "dd_maks": 228.22,
+    "dd_tempoh": 993,
+    "h": 4.19,
+    "arl": 469.8,
+    "arl_bootstrap": 485.9
+   },
    "u3": -2.2035
   },
   "M117": {
@@ -351,6 +714,23 @@
    "r1": -18.5252,
    "r2": -2.7676,
    "varian": "V1 WFO beku: henti ATR3, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 702,
+    "kohort_setahun": 101.5,
+    "mu_kohort": 29.5395,
+    "sd_kohort": 147.6514,
+    "winsor": [
+     -16.2267,
+     184.1649
+    ],
+    "mu_winsor": 15.7564,
+    "sd_winsor": 55.2112,
+    "dd_maks": 598.66,
+    "dd_tempoh": 162,
+    "h": 0.54,
+    "arl": 203.1,
+    "arl_bootstrap": null
+   },
    "u3": 41.5337
   },
   "M118": {
@@ -365,6 +745,23 @@
    "r1": -14.0813,
    "r2": -1.6698,
    "varian": "V1 WFO beku: henti LOW5, keluar SMA50, tmax tiada",
+   "pantau": {
+    "kohort": 1012,
+    "kohort_setahun": 146.4,
+    "mu_kohort": 2.1455,
+    "sd_kohort": 22.7815,
+    "winsor": [
+     -11.5997,
+     27.26
+    ],
+    "mu_winsor": 0.3998,
+    "sd_winsor": 9.7869,
+    "dd_maks": 302.45,
+    "dd_tempoh": 613,
+    "h": 1.99,
+    "arl": 292.8,
+    "arl_bootstrap": 302.9
+   },
    "u3": -0.5384
   },
   "M119": {
@@ -379,6 +776,23 @@
    "r1": -11.7471,
    "r2": -1.3152,
    "varian": "V1 WFO beku: henti ASAL, keluar CHAN4, tmax 42",
+   "pantau": {
+    "kohort": 1243,
+    "kohort_setahun": 179.7,
+    "mu_kohort": 1.1963,
+    "sd_kohort": 11.2193,
+    "winsor": [
+     -8.8748,
+     22.0423
+    ],
+    "mu_winsor": 0.5421,
+    "sd_winsor": 7.7735,
+    "dd_maks": 406.18,
+    "dd_tempoh": 1185,
+    "h": 2.25,
+    "arl": 359.3,
+    "arl_bootstrap": 385.0
+   },
    "u3": -1.2618
   },
   "M12": {
@@ -393,6 +807,23 @@
    "r1": -12.103,
    "r2": -1.4163,
    "varian": "V5 V1 keluar close<SMA50",
+   "pantau": {
+    "kohort": 1604,
+    "kohort_setahun": 231.8,
+    "mu_kohort": 1.7532,
+    "sd_kohort": 12.5534,
+    "winsor": [
+     -7.3923,
+     18.2333
+    ],
+    "mu_winsor": 0.7285,
+    "sd_winsor": 6.6727,
+    "dd_maks": 477.3,
+    "dd_tempoh": 606,
+    "h": 2.44,
+    "arl": 463.7,
+    "arl_bootstrap": 479.7
+   },
    "u3": -0.3588
   },
   "M120": {
@@ -407,6 +838,23 @@
    "r1": -11.9103,
    "r2": -1.7044,
    "varian": "V1 WFO beku: henti ASAL, keluar SMA50, tmax tiada",
+   "pantau": {
+    "kohort": 353,
+    "kohort_setahun": 51.2,
+    "mu_kohort": 1.1846,
+    "sd_kohort": 16.9029,
+    "winsor": [
+     -10.0273,
+     27.747
+    ],
+    "mu_winsor": 0.0554,
+    "sd_winsor": 9.7216,
+    "dd_maks": 155.96,
+    "dd_tempoh": 892,
+    "h": 1.07,
+    "arl": 102.3,
+    "arl_bootstrap": 113.7
+   },
    "u3": -0.897
   },
   "M121": {
@@ -421,6 +869,23 @@
    "r1": -17.8462,
    "r2": -3.2801,
    "varian": "V1 WFO beku: henti PCT15, keluar ASAL, tmax 63",
+   "pantau": {
+    "kohort": 395,
+    "kohort_setahun": 57.3,
+    "mu_kohort": 2.3487,
+    "sd_kohort": 18.5554,
+    "winsor": [
+     -16.5333,
+     31.2099
+    ],
+    "mu_winsor": 1.23,
+    "sd_winsor": 15.0463,
+    "dd_maks": 351.1,
+    "dd_tempoh": 555,
+    "h": 2.52,
+    "arl": 114.7,
+    "arl_bootstrap": 118.6
+   },
    "u3": 0.5817
   },
   "M122": {
@@ -435,6 +900,23 @@
    "r1": -14.4504,
    "r2": -1.7372,
    "varian": "V1 WFO beku: henti LOW5, keluar TIADA, tmax 42",
+   "pantau": {
+    "kohort": 1313,
+    "kohort_setahun": 189.8,
+    "mu_kohort": 1.7788,
+    "sd_kohort": 13.6349,
+    "winsor": [
+     -10.6311,
+     23.1336
+    ],
+    "mu_winsor": 0.9368,
+    "sd_winsor": 9.0061,
+    "dd_maks": 398.17,
+    "dd_tempoh": 451,
+    "h": 2.59,
+    "arl": 379.6,
+    "arl_bootstrap": 406.6
+   },
    "u3": -0.2696
   },
   "M123": {
@@ -449,6 +931,23 @@
    "r1": -6.9801,
    "r2": -0.6154,
    "varian": "V1 WFO beku: henti LOW1, keluar SMA50, tmax tiada",
+   "pantau": {
+    "kohort": 1448,
+    "kohort_setahun": 209.3,
+    "mu_kohort": 0.8876,
+    "sd_kohort": 15.1632,
+    "winsor": [
+     -4.6987,
+     11.2075
+    ],
+    "mu_winsor": 0.0255,
+    "sd_winsor": 3.7299,
+    "dd_maks": 163.94,
+    "dd_tempoh": 314,
+    "h": 2.18,
+    "arl": 418.6,
+    "arl_bootstrap": 502.3
+   },
    "u3": -1.1328
   },
   "M124": {
@@ -463,6 +962,23 @@
    "r1": -12.1669,
    "r2": -1.4118,
    "varian": "V1 WFO beku: henti ATR2, keluar CHAN3, tmax 63",
+   "pantau": {
+    "kohort": 1583,
+    "kohort_setahun": 228.8,
+    "mu_kohort": 1.4696,
+    "sd_kohort": 10.5431,
+    "winsor": [
+     -8.2871,
+     15.6572
+    ],
+    "mu_winsor": 0.8124,
+    "sd_winsor": 6.5273,
+    "dd_maks": 339.85,
+    "dd_tempoh": 335,
+    "h": 3.09,
+    "arl": 457.6,
+    "arl_bootstrap": 490.3
+   },
    "u3": -1.2188
   },
   "M125": {
@@ -477,6 +993,23 @@
    "r1": -21.1286,
    "r2": -1.7076,
    "varian": "V1 WFO beku: henti ATR2.5, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 459,
+    "kohort_setahun": 66.4,
+    "mu_kohort": 101.3727,
+    "sd_kohort": 560.3484,
+    "winsor": [
+     -17.7776,
+     555.5676
+    ],
+    "mu_winsor": 47.7231,
+    "sd_winsor": 145.2353,
+    "dd_maks": 720.69,
+    "dd_tempoh": 246,
+    "h": 0.54,
+    "arl": 132.8,
+    "arl_bootstrap": null
+   },
    "u3": 148.9193
   },
   "M126": {
@@ -491,6 +1024,23 @@
    "r1": -14.7035,
    "r2": -2.0918,
    "varian": "V1 WFO beku: henti ATR3, keluar SMA50, tmax tiada",
+   "pantau": {
+    "kohort": 566,
+    "kohort_setahun": 81.9,
+    "mu_kohort": 6.8729,
+    "sd_kohort": 104.0635,
+    "winsor": [
+     -12.4545,
+     33.8913
+    ],
+    "mu_winsor": 0.834,
+    "sd_winsor": 11.8751,
+    "dd_maks": 438.46,
+    "dd_tempoh": 1052,
+    "h": 1.76,
+    "arl": 163.8,
+    "arl_bootstrap": 175.5
+   },
    "u3": 3.1466
   },
   "M127": {
@@ -505,6 +1055,23 @@
    "r1": -8.6271,
    "r2": -0.863,
    "varian": "V1 WFO beku: henti LOW1, keluar CHAN4, tmax tiada",
+   "pantau": {
+    "kohort": 978,
+    "kohort_setahun": 141.5,
+    "mu_kohort": 2.5521,
+    "sd_kohort": 40.6177,
+    "winsor": [
+     -6.3845,
+     17.6667
+    ],
+    "mu_winsor": -0.2344,
+    "sd_winsor": 5.5628,
+    "dd_maks": 426.74,
+    "dd_tempoh": 1161,
+    "h": 1.41,
+    "arl": 283.1,
+    "arl_bootstrap": 292.8
+   },
    "u3": 0.4392
   },
   "M128": {
@@ -519,6 +1086,23 @@
    "r1": -10.4008,
    "r2": -1.2676,
    "varian": "V1 WFO beku: henti PCT10, keluar SMA20, tmax 42",
+   "pantau": {
+    "kohort": 1432,
+    "kohort_setahun": 207.2,
+    "mu_kohort": 0.7244,
+    "sd_kohort": 9.8551,
+    "winsor": [
+     -6.9783,
+     12.4963
+    ],
+    "mu_winsor": 0.1856,
+    "sd_winsor": 5.0203,
+    "dd_maks": 256.92,
+    "dd_tempoh": 468,
+    "h": 2.9,
+    "arl": 414.5,
+    "arl_bootstrap": 428.7
+   },
    "u3": -1.622
   },
   "M129": {
@@ -533,6 +1117,23 @@
    "r1": -16.6663,
    "r2": -2.434,
    "varian": "V1 WFO beku: henti LOW10, keluar TIADA, tmax 63",
+   "pantau": {
+    "kohort": 713,
+    "kohort_setahun": 103.3,
+    "mu_kohort": 2.3496,
+    "sd_kohort": 20.6348,
+    "winsor": [
+     -14.8721,
+     30.5732
+    ],
+    "mu_winsor": 0.972,
+    "sd_winsor": 12.8183,
+    "dd_maks": 406.8,
+    "dd_tempoh": 808,
+    "h": 2.37,
+    "arl": 206.5,
+    "arl_bootstrap": 221.2
+   },
    "u3": 0.5251
   },
   "M13": {
@@ -547,6 +1148,23 @@
    "r1": -11.2266,
    "r2": -1.0556,
    "varian": "V1 Spesifikasi dikunci",
+   "pantau": {
+    "kohort": 1714,
+    "kohort_setahun": 247.7,
+    "mu_kohort": 1.346,
+    "sd_kohort": 18.3574,
+    "winsor": [
+     -5.5764,
+     10.2463
+    ],
+    "mu_winsor": 0.5008,
+    "sd_winsor": 4.1402,
+    "dd_maks": 291.25,
+    "dd_tempoh": 273,
+    "h": 3.24,
+    "arl": 495.5,
+    "arl_bootstrap": 512.6
+   },
    "u3": -2.1759
   },
   "M130": {
@@ -561,6 +1179,23 @@
    "r1": -17.2976,
    "r2": -3.0206,
    "varian": "V1 WFO beku: henti ATR3.5, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 248,
+    "kohort_setahun": 35.9,
+    "mu_kohort": 104.015,
+    "sd_kohort": 561.5879,
+    "winsor": [
+     -16.4438,
+     371.2442
+    ],
+    "mu_winsor": 31.9116,
+    "sd_winsor": 98.6608,
+    "dd_maks": 303.68,
+    "dd_tempoh": 316,
+    "h": 0.54,
+    "arl": 71.8,
+    "arl_bootstrap": null
+   },
    "u3": 90.381
   },
   "M131": {
@@ -575,6 +1210,23 @@
    "r1": -13.7982,
    "r2": -1.7735,
    "varian": "V1 WFO beku: henti ATR2, keluar TIADA, tmax 63",
+   "pantau": {
+    "kohort": 1442,
+    "kohort_setahun": 208.4,
+    "mu_kohort": 2.3087,
+    "sd_kohort": 15.0123,
+    "winsor": [
+     -10.0758,
+     27.6308
+    ],
+    "mu_winsor": 1.3217,
+    "sd_winsor": 10.1719,
+    "dd_maks": 711.33,
+    "dd_tempoh": 765,
+    "h": 2.25,
+    "arl": 416.9,
+    "arl_bootstrap": 431.2
+   },
    "u3": -0.3799
   },
   "M132": {
@@ -589,6 +1241,23 @@
    "r1": -15.6095,
    "r2": -2.2892,
    "varian": "V1 WFO beku: henti ATR4, keluar CHAN4, tmax 42",
+   "pantau": {
+    "kohort": 980,
+    "kohort_setahun": 141.8,
+    "mu_kohort": 1.0365,
+    "sd_kohort": 12.6161,
+    "winsor": [
+     -14.0156,
+     22.3464
+    ],
+    "mu_winsor": 0.3966,
+    "sd_winsor": 10.0636,
+    "dd_maks": 403.84,
+    "dd_tempoh": 534,
+    "h": 3.05,
+    "arl": 283.6,
+    "arl_bootstrap": 303.9
+   },
    "u3": -1.1117
   },
   "M133": {
@@ -603,6 +1272,23 @@
    "r1": -10.9756,
    "r2": -1.1367,
    "varian": "V1 WFO beku: henti ATR2, keluar SMA50, tmax 21",
+   "pantau": {
+    "kohort": 769,
+    "kohort_setahun": 111.2,
+    "mu_kohort": 1.0948,
+    "sd_kohort": 9.8487,
+    "winsor": [
+     -8.7962,
+     15.9704
+    ],
+    "mu_winsor": 0.4951,
+    "sd_winsor": 6.3719,
+    "dd_maks": 128.84,
+    "dd_tempoh": 485,
+    "h": 2.67,
+    "arl": 222.3,
+    "arl_bootstrap": 230.0
+   },
    "u3": -1.8118
   },
   "M134": {
@@ -617,6 +1303,23 @@
    "r1": -12.9319,
    "r2": -1.5395,
    "varian": "V1 WFO beku: henti ATR2, keluar CHAN4, tmax tiada",
+   "pantau": {
+    "kohort": 729,
+    "kohort_setahun": 105.4,
+    "mu_kohort": 3.7613,
+    "sd_kohort": 24.185,
+    "winsor": [
+     -10.4999,
+     35.3099
+    ],
+    "mu_winsor": 1.5822,
+    "sd_winsor": 12.0902,
+    "dd_maks": 383.21,
+    "dd_tempoh": 649,
+    "h": 1.6,
+    "arl": 210.7,
+    "arl_bootstrap": 218.0
+   },
    "u3": 1.2126
   },
   "M135": {
@@ -631,6 +1334,23 @@
    "r1": -14.6597,
    "r2": -2.1475,
    "varian": "V1 WFO beku: henti LOW10, keluar SMA50, tmax 63",
+   "pantau": {
+    "kohort": 437,
+    "kohort_setahun": 63.7,
+    "mu_kohort": 1.7302,
+    "sd_kohort": 14.755,
+    "winsor": [
+     -13.7954,
+     29.5487
+    ],
+    "mu_winsor": 1.0601,
+    "sd_winsor": 12.2039,
+    "dd_maks": 186.4,
+    "dd_tempoh": 455,
+    "h": 1.87,
+    "arl": 127.4,
+    "arl_bootstrap": 131.8
+   },
    "u3": -0.1998
   },
   "M136": {
@@ -645,6 +1365,23 @@
    "r1": -16.8091,
    "r2": -1.5478,
    "varian": "V1 WFO beku: henti PCT10, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 625,
+    "kohort_setahun": 90.5,
+    "mu_kohort": 62.8901,
+    "sd_kohort": 339.7407,
+    "winsor": [
+     -13.8441,
+     353.9955
+    ],
+    "mu_winsor": 32.1203,
+    "sd_winsor": 97.8079,
+    "dd_maks": 693.23,
+    "dd_tempoh": 399,
+    "h": 0.54,
+    "arl": 181.0,
+    "arl_bootstrap": null
+   },
    "u3": 99.7181
   },
   "M137": {
@@ -659,6 +1396,23 @@
    "r1": -14.04,
    "r2": -1.8485,
    "varian": "V1 WFO beku: henti ATR2.5, keluar CHAN4, tmax tiada",
+   "pantau": {
+    "kohort": 1356,
+    "kohort_setahun": 196.2,
+    "mu_kohort": 3.5997,
+    "sd_kohort": 25.6144,
+    "winsor": [
+     -10.6889,
+     29.9464
+    ],
+    "mu_winsor": 1.4991,
+    "sd_winsor": 10.7597,
+    "dd_maks": 446.8,
+    "dd_tempoh": 434,
+    "h": 2.29,
+    "arl": 392.5,
+    "arl_bootstrap": 452.8
+   },
    "u3": 1.5996
   },
   "M138": {
@@ -673,6 +1427,23 @@
    "r1": -17.2045,
    "r2": -2.6055,
    "varian": "V1 WFO beku: henti ATR4, keluar TIADA, tmax 63",
+   "pantau": {
+    "kohort": 130,
+    "kohort_setahun": 18.9,
+    "mu_kohort": 5.5424,
+    "sd_kohort": 35.6166,
+    "winsor": [
+     -16.9603,
+     43.0053
+    ],
+    "mu_winsor": 1.4534,
+    "sd_winsor": 17.1636,
+    "dd_maks": 261.91,
+    "dd_tempoh": 805,
+    "h": 1.41,
+    "arl": 37.8,
+    "arl_bootstrap": 38.5
+   },
    "u3": 1.6062
   },
   "M139": {
@@ -687,6 +1458,23 @@
    "r1": -16.6425,
    "r2": -2.2467,
    "varian": "V1 WFO beku: henti PCT15, keluar TIADA, tmax 21",
+   "pantau": {
+    "kohort": 1325,
+    "kohort_setahun": 191.7,
+    "mu_kohort": 1.2761,
+    "sd_kohort": 11.2547,
+    "winsor": [
+     -14.6423,
+     19.9606
+    ],
+    "mu_winsor": 0.7301,
+    "sd_winsor": 9.0369,
+    "dd_maks": 476.35,
+    "dd_tempoh": 492,
+    "h": 3.66,
+    "arl": 383.5,
+    "arl_bootstrap": 396.7
+   },
    "u3": -1.7711
   },
   "M14": {
@@ -701,6 +1489,23 @@
    "r1": -8.3116,
    "r2": -0.8176,
    "varian": "V3 V1 pegang ikut SMA50",
+   "pantau": {
+    "kohort": 1721,
+    "kohort_setahun": 248.8,
+    "mu_kohort": 1.2395,
+    "sd_kohort": 10.6373,
+    "winsor": [
+     -4.3728,
+     11.6697
+    ],
+    "mu_winsor": 0.4601,
+    "sd_winsor": 4.1952,
+    "dd_maks": 328.45,
+    "dd_tempoh": 546,
+    "h": 2.33,
+    "arl": 497.5,
+    "arl_bootstrap": 552.8
+   },
    "u3": -1.154
   },
   "M140": {
@@ -715,6 +1520,23 @@
    "r1": -15.6964,
    "r2": -1.4799,
    "varian": "V1 WFO beku: henti ATR3, keluar SMA50, tmax 63",
+   "pantau": {
+    "kohort": 540,
+    "kohort_setahun": 78.1,
+    "mu_kohort": 4.5174,
+    "sd_kohort": 30.975,
+    "winsor": [
+     -13.1143,
+     38.1846
+    ],
+    "mu_winsor": 1.8979,
+    "sd_winsor": 13.6039,
+    "dd_maks": 359.2,
+    "dd_tempoh": 636,
+    "h": 1.53,
+    "arl": 156.1,
+    "arl_bootstrap": 167.2
+   },
    "u3": 0.5654
   },
   "M141": {
@@ -729,6 +1551,23 @@
    "r1": -16.3943,
    "r2": -1.9872,
    "varian": "V1 WFO beku: henti ATR2.5, keluar ASAL, tmax 63",
+   "pantau": {
+    "kohort": 274,
+    "kohort_setahun": 39.8,
+    "mu_kohort": 2.8001,
+    "sd_kohort": 22.7307,
+    "winsor": [
+     -14.5503,
+     31.7893
+    ],
+    "mu_winsor": 1.2051,
+    "sd_winsor": 13.8119,
+    "dd_maks": 241.61,
+    "dd_tempoh": 780,
+    "h": 1.64,
+    "arl": 79.6,
+    "arl_bootstrap": 85.2
+   },
    "u3": 1.3828
   },
   "M142": {
@@ -743,6 +1582,23 @@
    "r1": -16.0695,
    "r2": -2.0108,
    "varian": "V1 WFO beku: henti ATR3.5, keluar CHAN4, tmax tiada",
+   "pantau": {
+    "kohort": 679,
+    "kohort_setahun": 101.8,
+    "mu_kohort": 6.3949,
+    "sd_kohort": 31.8785,
+    "winsor": [
+     -15.0237,
+     49.1297
+    ],
+    "mu_winsor": 3.253,
+    "sd_winsor": 16.8255,
+    "dd_maks": 235.44,
+    "dd_tempoh": 323,
+    "h": 1.79,
+    "arl": 203.5,
+    "arl_bootstrap": 210.5
+   },
    "u3": 4.289
   },
   "M143": {
@@ -757,6 +1613,23 @@
    "r1": -13.3062,
    "r2": -1.643,
    "varian": "V1 WFO beku: henti ATR3.5, keluar CHAN4, tmax 21",
+   "pantau": {
+    "kohort": 451,
+    "kohort_setahun": 65.4,
+    "mu_kohort": 0.5731,
+    "sd_kohort": 9.2444,
+    "winsor": [
+     -12.4487,
+     15.8642
+    ],
+    "mu_winsor": 0.1781,
+    "sd_winsor": 7.5272,
+    "dd_maks": 172.91,
+    "dd_tempoh": 1103,
+    "h": 3.2,
+    "arl": 130.7,
+    "arl_bootstrap": 140.1
+   },
    "u3": -1.3035
   },
   "M144": {
@@ -771,6 +1644,23 @@
    "r1": -14.4666,
    "r2": -0.9923,
    "varian": "V1 WFO beku: henti ATR4, keluar SMA50, tmax tiada",
+   "pantau": {
+    "kohort": 155,
+    "kohort_setahun": 22.5,
+    "mu_kohort": 8.3232,
+    "sd_kohort": 45.8676,
+    "winsor": [
+     -13.4859,
+     45.4193
+    ],
+    "mu_winsor": 3.2353,
+    "sd_winsor": 14.9418,
+    "dd_maks": 69.14,
+    "dd_tempoh": 544,
+    "h": 1.07,
+    "arl": 45.1,
+    "arl_bootstrap": 46.5
+   },
    "u3": -0.0186
   },
   "M145": {
@@ -785,6 +1675,23 @@
    "r1": -20.9783,
    "r2": -3.078,
    "varian": "V1 WFO beku: henti LOW10, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 667,
+    "kohort_setahun": 97.6,
+    "mu_kohort": 65.4132,
+    "sd_kohort": 255.2971,
+    "winsor": [
+     -17.644,
+     351.6481
+    ],
+    "mu_winsor": 38.6363,
+    "sd_winsor": 102.181,
+    "dd_maks": 444.14,
+    "dd_tempoh": 175,
+    "h": 0.54,
+    "arl": 195.3,
+    "arl_bootstrap": null
+   },
    "u3": 75.601
   },
   "M146": {
@@ -799,6 +1706,23 @@
    "r1": -10.0631,
    "r2": -1.6023,
    "varian": "V1 WFO beku: henti PCT6, keluar SMA50, tmax tiada",
+   "pantau": {
+    "kohort": 925,
+    "kohort_setahun": 133.7,
+    "mu_kohort": 2.0542,
+    "sd_kohort": 34.9275,
+    "winsor": [
+     -8.0207,
+     21.4312
+    ],
+    "mu_winsor": -0.2586,
+    "sd_winsor": 8.098,
+    "dd_maks": 449.15,
+    "dd_tempoh": 1136,
+    "h": 1.68,
+    "arl": 267.4,
+    "arl_bootstrap": 297.1
+   },
    "u3": 0.2801
   },
   "M147": {
@@ -813,6 +1737,23 @@
    "r1": -20.5133,
    "r2": -3.4029,
    "varian": "V1 WFO beku: henti PCT15, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 461,
+    "kohort_setahun": 66.7,
+    "mu_kohort": 67.3867,
+    "sd_kohort": 279.4673,
+    "winsor": [
+     -17.5027,
+     328.9926
+    ],
+    "mu_winsor": 39.4183,
+    "sd_winsor": 96.2944,
+    "dd_maks": 517.83,
+    "dd_tempoh": 95,
+    "h": 0.54,
+    "arl": 133.5,
+    "arl_bootstrap": 154.0
+   },
    "u3": 83.5626
   },
   "M148": {
@@ -827,6 +1768,23 @@
    "r1": -8.2394,
    "r2": -1.0545,
    "varian": "V1 WFO beku: henti PCT6, keluar EMA10, tmax 42",
+   "pantau": {
+    "kohort": 1354,
+    "kohort_setahun": 195.7,
+    "mu_kohort": 0.6556,
+    "sd_kohort": 7.0536,
+    "winsor": [
+     -5.9227,
+     11.4666
+    ],
+    "mu_winsor": 0.2427,
+    "sd_winsor": 4.5752,
+    "dd_maks": 171.12,
+    "dd_tempoh": 546,
+    "h": 2.9,
+    "arl": 391.4,
+    "arl_bootstrap": 434.9
+   },
    "u3": -2.2245
   },
   "M149": {
@@ -841,6 +1799,23 @@
    "r1": -17.7165,
    "r2": -2.307,
    "varian": "V1 WFO beku: henti ASAL, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 768,
+    "kohort_setahun": 111.3,
+    "mu_kohort": 47.1822,
+    "sd_kohort": 284.7816,
+    "winsor": [
+     -15.3113,
+     256.2382
+    ],
+    "mu_winsor": 22.3387,
+    "sd_winsor": 71.6844,
+    "dd_maks": 506.23,
+    "dd_tempoh": 151,
+    "h": 0.54,
+    "arl": 222.6,
+    "arl_bootstrap": null
+   },
    "u3": 55.1901
   },
   "M15": {
@@ -855,6 +1830,23 @@
    "r1": -10.5001,
    "r2": -1.1422,
    "varian": "V2 Ekori SMA20 tanpa sasaran",
+   "pantau": {
+    "kohort": 1564,
+    "kohort_setahun": 226.1,
+    "mu_kohort": 1.009,
+    "sd_kohort": 9.5467,
+    "winsor": [
+     -6.3829,
+     13.7594
+    ],
+    "mu_winsor": 0.4269,
+    "sd_winsor": 5.2002,
+    "dd_maks": 295.41,
+    "dd_tempoh": 917,
+    "h": 2.75,
+    "arl": 452.1,
+    "arl_bootstrap": 467.7
+   },
    "u3": -2.1966
   },
   "M150": {
@@ -869,6 +1861,23 @@
    "r1": -11.5295,
    "r2": -1.4158,
    "varian": "V1 WFO beku: henti PCT12, keluar SMA20, tmax 21",
+   "pantau": {
+    "kohort": 1080,
+    "kohort_setahun": 156.1,
+    "mu_kohort": 0.7063,
+    "sd_kohort": 8.307,
+    "winsor": [
+     -8.7237,
+     14.8973
+    ],
+    "mu_winsor": 0.3119,
+    "sd_winsor": 6.1248,
+    "dd_maks": 214.81,
+    "dd_tempoh": 617,
+    "h": 2.86,
+    "arl": 312.2,
+    "arl_bootstrap": 334.5
+   },
    "u3": -2.2135
   },
   "M151": {
@@ -883,6 +1892,23 @@
    "r1": -10.9644,
    "r2": -1.3176,
    "varian": "V1 WFO beku: henti ATR1.5, keluar CHAN4, tmax tiada",
+   "pantau": {
+    "kohort": 1215,
+    "kohort_setahun": 175.8,
+    "mu_kohort": 1.8683,
+    "sd_kohort": 16.3383,
+    "winsor": [
+     -8.3697,
+     24.1221
+    ],
+    "mu_winsor": 0.4639,
+    "sd_winsor": 8.3433,
+    "dd_maks": 289.57,
+    "dd_tempoh": 668,
+    "h": 1.76,
+    "arl": 351.6,
+    "arl_bootstrap": 363.8
+   },
    "u3": -0.514
   },
   "M152": {
@@ -897,6 +1923,23 @@
    "r1": -17.218,
    "r2": -2.9836,
    "varian": "V1 WFO beku: henti PCT15, keluar ASAL, tmax 42",
+   "pantau": {
+    "kohort": 992,
+    "kohort_setahun": 143.4,
+    "mu_kohort": 2.5519,
+    "sd_kohort": 15.4215,
+    "winsor": [
+     -15.8772,
+     28.2102
+    ],
+    "mu_winsor": 1.73,
+    "sd_winsor": 12.3009,
+    "dd_maks": 420.24,
+    "dd_tempoh": 472,
+    "h": 3.2,
+    "arl": 286.8,
+    "arl_bootstrap": 296.6
+   },
    "u3": 1.1169
   },
   "M153": {
@@ -911,6 +1954,23 @@
    "r1": -9.3871,
    "r2": -0.9595,
    "varian": "V1 WFO beku: henti PCT12, keluar CHAN2, tmax 10",
+   "pantau": {
+    "kohort": 1708,
+    "kohort_setahun": 246.9,
+    "mu_kohort": 0.21,
+    "sd_kohort": 3.6787,
+    "winsor": [
+     -4.1443,
+     5.3758
+    ],
+    "mu_winsor": 0.1092,
+    "sd_winsor": 2.5338,
+    "dd_maks": 150.71,
+    "dd_tempoh": 619,
+    "h": 3.7,
+    "arl": 493.7,
+    "arl_bootstrap": 510.8
+   },
    "u3": -2.6485
   },
   "M154": {
@@ -925,6 +1985,23 @@
    "r1": -15.2425,
    "r2": -1.9528,
    "varian": "V1 WFO beku: henti ATR2.5, keluar ASAL, tmax 42",
+   "pantau": {
+    "kohort": 1129,
+    "kohort_setahun": 163.2,
+    "mu_kohort": 1.8588,
+    "sd_kohort": 14.3069,
+    "winsor": [
+     -12.6475,
+     26.9683
+    ],
+    "mu_winsor": 1.0973,
+    "sd_winsor": 10.9216,
+    "dd_maks": 388.08,
+    "dd_tempoh": 662,
+    "h": 2.79,
+    "arl": 326.4,
+    "arl_bootstrap": 362.6
+   },
    "u3": 0.056
   },
   "M155": {
@@ -939,6 +2016,23 @@
    "r1": -15.9013,
    "r2": -1.8118,
    "varian": "V1 WFO beku: henti ATR3, keluar TIADA, tmax 21",
+   "pantau": {
+    "kohort": 1699,
+    "kohort_setahun": 245.6,
+    "mu_kohort": 1.2744,
+    "sd_kohort": 8.4915,
+    "winsor": [
+     -10.2458,
+     14.7034
+    ],
+    "mu_winsor": 0.9238,
+    "sd_winsor": 6.6693,
+    "dd_maks": 477.56,
+    "dd_tempoh": 439,
+    "h": 3.93,
+    "arl": 491.1,
+    "arl_bootstrap": 589.4
+   },
    "u3": -1.8837
   },
   "M156": {
@@ -953,6 +2047,23 @@
    "r1": -13.2534,
    "r2": -1.4731,
    "varian": "V1 WFO beku: henti ATR3, keluar TIADA, tmax 10",
+   "pantau": {
+    "kohort": 1535,
+    "kohort_setahun": 221.9,
+    "mu_kohort": 0.4874,
+    "sd_kohort": 5.9282,
+    "winsor": [
+     -8.4945,
+     9.6102
+    ],
+    "mu_winsor": 0.3293,
+    "sd_winsor": 4.915,
+    "dd_maks": 257.97,
+    "dd_tempoh": 588,
+    "h": 4.0,
+    "arl": 443.7,
+    "arl_bootstrap": 475.4
+   },
    "u3": -1.2042
   },
   "M157": {
@@ -967,6 +2078,23 @@
    "r1": -11.6267,
    "r2": -2.3413,
    "varian": "V1 WFO beku: henti PCT6, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 384,
+    "kohort_setahun": 55.6,
+    "mu_kohort": 27.9777,
+    "sd_kohort": 125.191,
+    "winsor": [
+     -8.9796,
+     194.6998
+    ],
+    "mu_winsor": 13.3974,
+    "sd_winsor": 52.475,
+    "dd_maks": 262.44,
+    "dd_tempoh": 420,
+    "h": 0.54,
+    "arl": 111.1,
+    "arl_bootstrap": null
+   },
    "u3": 28.8022
   },
   "M158": {
@@ -981,6 +2109,23 @@
    "r1": -13.651,
    "r2": -1.7718,
    "varian": "V1 WFO beku: henti PCT12, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 1414,
+    "kohort_setahun": 204.4,
+    "mu_kohort": 2.8706,
+    "sd_kohort": 40.185,
+    "winsor": [
+     -10.2883,
+     21.6436
+    ],
+    "mu_winsor": 0.8493,
+    "sd_winsor": 8.273,
+    "dd_maks": 468.78,
+    "dd_tempoh": 483,
+    "h": 2.71,
+    "arl": 408.8,
+    "arl_bootstrap": 422.8
+   },
    "u3": 0.0072
   },
   "M159": {
@@ -995,6 +2140,23 @@
    "r1": -9.518,
    "r2": -1.0007,
    "varian": "V1 WFO beku: henti PCT15, keluar SMA20, tmax 10",
+   "pantau": {
+    "kohort": 1724,
+    "kohort_setahun": 249.2,
+    "mu_kohort": 0.2439,
+    "sd_kohort": 3.2835,
+    "winsor": [
+     -4.3643,
+     5.4233
+    ],
+    "mu_winsor": 0.1657,
+    "sd_winsor": 2.5624,
+    "dd_maks": 167.6,
+    "dd_tempoh": 554,
+    "h": 3.85,
+    "arl": 498.4,
+    "arl_bootstrap": 515.6
+   },
    "u3": -2.608
   },
   "M160": {
@@ -1009,6 +2171,23 @@
    "r1": -8.6487,
    "r2": -0.8472,
    "varian": "V1 WFO beku: henti LOW10, keluar EMA21, tmax 42",
+   "pantau": {
+    "kohort": 1332,
+    "kohort_setahun": 192.5,
+    "mu_kohort": 0.8326,
+    "sd_kohort": 11.6064,
+    "winsor": [
+     -6.0559,
+     11.7213
+    ],
+    "mu_winsor": 0.0879,
+    "sd_winsor": 4.3215,
+    "dd_maks": 304.12,
+    "dd_tempoh": 777,
+    "h": 2.67,
+    "arl": 385.1,
+    "arl_bootstrap": 427.8
+   },
    "u3": -2.0442
   },
   "M161": {
@@ -1023,6 +2202,23 @@
    "r1": -12.6299,
    "r2": -1.5253,
    "varian": "V1 WFO beku: henti PCT15, keluar ASAL, tmax tiada",
+   "pantau": {
+    "kohort": 1648,
+    "kohort_setahun": 238.2,
+    "mu_kohort": 1.1462,
+    "sd_kohort": 9.7247,
+    "winsor": [
+     -7.6275,
+     15.5111
+    ],
+    "mu_winsor": 0.5801,
+    "sd_winsor": 5.9029,
+    "dd_maks": 323.79,
+    "dd_tempoh": 502,
+    "h": 2.86,
+    "arl": 476.4,
+    "arl_bootstrap": 492.8
+   },
    "u3": -1.2412
   },
   "M18": {
@@ -1037,6 +2233,23 @@
    "r1": -7.0755,
    "r2": -0.6889,
    "varian": "V2 V1 Model A sahaja",
+   "pantau": {
+    "kohort": 1587,
+    "kohort_setahun": 229.4,
+    "mu_kohort": 0.4023,
+    "sd_kohort": 6.6199,
+    "winsor": [
+     -3.8615,
+     7.2195
+    ],
+    "mu_winsor": -0.0087,
+    "sd_winsor": 2.9286,
+    "dd_maks": 193.3,
+    "dd_tempoh": 525,
+    "h": 2.71,
+    "arl": 458.8,
+    "arl_bootstrap": 474.6
+   },
    "u3": -2.068
   },
   "M19": {
@@ -1051,6 +2264,23 @@
    "r1": -13.4067,
    "r2": -1.3423,
    "varian": "V1 Spesifikasi dikunci",
+   "pantau": {
+    "kohort": 1322,
+    "kohort_setahun": 191.1,
+    "mu_kohort": 0.7454,
+    "sd_kohort": 9.7516,
+    "winsor": [
+     -8.2888,
+     12.5431
+    ],
+    "mu_winsor": 0.3959,
+    "sd_winsor": 5.7425,
+    "dd_maks": 315.3,
+    "dd_tempoh": 808,
+    "h": 3.55,
+    "arl": 382.2,
+    "arl_bootstrap": 409.4
+   },
    "u3": -1.8284
   },
   "M20": {
@@ -1065,6 +2295,23 @@
    "r1": -8.6814,
    "r2": -0.9428,
    "varian": "V3 V1 tanpa syarat sudut",
+   "pantau": {
+    "kohort": 1654,
+    "kohort_setahun": 239.1,
+    "mu_kohort": 0.1214,
+    "sd_kohort": 3.5473,
+    "winsor": [
+     -5.1803,
+     5.9767
+    ],
+    "mu_winsor": 0.0828,
+    "sd_winsor": 3.0269,
+    "dd_maks": 186.31,
+    "dd_tempoh": 1367,
+    "h": 4.04,
+    "arl": 478.1,
+    "arl_bootstrap": 512.3
+   },
    "u3": -1.9197
   },
   "M21": {
@@ -1079,6 +2326,23 @@
    "r1": -12.1537,
    "r2": -0.8453,
    "varian": "V5 V1 keluar close<SMA20",
+   "pantau": {
+    "kohort": 331,
+    "kohort_setahun": 49.4,
+    "mu_kohort": 2.0529,
+    "sd_kohort": 16.9034,
+    "winsor": [
+     -10.4755,
+     32.4178
+    ],
+    "mu_winsor": 0.7727,
+    "sd_winsor": 10.656,
+    "dd_maks": 213.56,
+    "dd_tempoh": 972,
+    "h": 1.15,
+    "arl": 98.8,
+    "arl_bootstrap": 128.8
+   },
    "u3": -0.9007
   },
   "M22": {
@@ -1093,6 +2357,23 @@
    "r1": -12.5575,
    "r2": -0.5357,
    "varian": "V0 Sumber tulen (QQQ EMA, jurang>=10%, vol>=3x, henti low hari jurang, keluar<SMA10)",
+   "pantau": {
+    "kohort": 40,
+    "kohort_setahun": 6.1,
+    "mu_kohort": 3.4344,
+    "sd_kohort": 13.0197,
+    "winsor": [
+     -10.342,
+     29.7955
+    ],
+    "mu_winsor": 3.5583,
+    "sd_winsor": 11.7932,
+    "dd_maks": 24.96,
+    "dd_tempoh": 279,
+    "h": 0.69,
+    "arl": 12.1,
+    "arl_bootstrap": 14.5
+   },
    "u3": 1.291
   },
   "M23": {
@@ -1107,6 +2388,23 @@
    "r1": -8.9834,
    "r2": -0.8443,
    "varian": "V5 V4 keluar close<SMA20",
+   "pantau": {
+    "kohort": 1184,
+    "kohort_setahun": 171.3,
+    "mu_kohort": 0.4603,
+    "sd_kohort": 8.911,
+    "winsor": [
+     -6.2975,
+     14.4198
+    ],
+    "mu_winsor": -0.1129,
+    "sd_winsor": 4.987,
+    "dd_maks": 267.12,
+    "dd_tempoh": 977,
+    "h": 2.14,
+    "arl": 342.7,
+    "arl_bootstrap": 380.7
+   },
    "u3": -1.8021
   },
   "M24": {
@@ -1121,6 +2419,23 @@
    "r1": -45.7248,
    "r2": -2.8165,
    "varian": "V0 Sumber tulen (K=2, tiada henti)",
+   "pantau": {
+    "kohort": 46,
+    "kohort_setahun": 7.6,
+    "mu_kohort": 33.6009,
+    "sd_kohort": 119.3333,
+    "winsor": [
+     -46.9249,
+     161.5354
+    ],
+    "mu_winsor": 18.99,
+    "sd_winsor": 54.3475,
+    "dd_maks": 113.43,
+    "dd_tempoh": 653,
+    "h": 0.73,
+    "arl": 15.1,
+    "arl_bootstrap": 17.1
+   },
    "u3": 25.0546
   },
   "M25": {
@@ -1135,6 +2450,23 @@
    "r1": -9.2497,
    "r2": -1.0212,
    "varian": "V2 V1 tanpa sasaran",
+   "pantau": {
+    "kohort": 1366,
+    "kohort_setahun": 197.4,
+    "mu_kohort": 0.3762,
+    "sd_kohort": 6.1039,
+    "winsor": [
+     -5.8034,
+     10.753
+    ],
+    "mu_winsor": 0.1491,
+    "sd_winsor": 4.5565,
+    "dd_maks": 199.42,
+    "dd_tempoh": 669,
+    "h": 2.63,
+    "arl": 394.9,
+    "arl_bootstrap": 408.5
+   },
    "u3": -1.87
   },
   "M26": {
@@ -1149,6 +2481,23 @@
    "r1": -14.2349,
    "r2": -1.3023,
    "varian": "V0 Sumber tulen (henti 0.99x low kotak, sasaran swing high kiri)",
+   "pantau": {
+    "kohort": 1005,
+    "kohort_setahun": 145.3,
+    "mu_kohort": 5.0763,
+    "sd_kohort": 50.8206,
+    "winsor": [
+     -10.8495,
+     13.6216
+    ],
+    "mu_winsor": -0.7047,
+    "sd_winsor": 6.0812,
+    "dd_maks": 279.67,
+    "dd_tempoh": 390,
+    "h": 3.36,
+    "arl": 290.6,
+    "arl_bootstrap": 300.7
+   },
    "u3": 2.7657
   },
   "M27": {
@@ -1163,6 +2512,23 @@
    "r1": -7.2869,
    "r2": -0.7694,
    "varian": "V2 Persediaan A sahaja (flip & hold)",
+   "pantau": {
+    "kohort": 1231,
+    "kohort_setahun": 177.9,
+    "mu_kohort": 0.3251,
+    "sd_kohort": 3.0774,
+    "winsor": [
+     -2.8701,
+     5.0042
+    ],
+    "mu_winsor": 0.1849,
+    "sd_winsor": 2.1,
+    "dd_maks": 145.2,
+    "dd_tempoh": 1031,
+    "h": 2.98,
+    "arl": 355.9,
+    "arl_bootstrap": 381.2
+   },
    "u3": -1.9749
   },
   "M28": {
@@ -1177,6 +2543,23 @@
    "r1": -10.6937,
    "r2": -0.831,
    "varian": "V2 Pemisahan ≥3 ATR",
+   "pantau": {
+    "kohort": 794,
+    "kohort_setahun": 114.8,
+    "mu_kohort": 0.1119,
+    "sd_kohort": 4.8192,
+    "winsor": [
+     -6.4058,
+     8.2294
+    ],
+    "mu_winsor": -0.0069,
+    "sd_winsor": 4.0249,
+    "dd_maks": 157.26,
+    "dd_tempoh": 663,
+    "h": 2.94,
+    "arl": 229.5,
+    "arl_bootstrap": 237.4
+   },
    "u3": -2.2668
   },
   "M29": {
@@ -1191,6 +2574,23 @@
    "r1": -9.7928,
    "r2": -1.0648,
    "varian": "V4 V1 EMA 50/110/250",
+   "pantau": {
+    "kohort": 757,
+    "kohort_setahun": 118.2,
+    "mu_kohort": 3.3501,
+    "sd_kohort": 25.688,
+    "winsor": [
+     -7.5658,
+     32.809
+    ],
+    "mu_winsor": 0.8228,
+    "sd_winsor": 9.8968,
+    "dd_maks": 318.72,
+    "dd_tempoh": 718,
+    "h": 0.8,
+    "arl": 236.3,
+    "arl_bootstrap": 262.6
+   },
    "u3": 0.9424
   },
   "M30": {
@@ -1205,6 +2605,23 @@
    "r1": -16.4168,
    "r2": -2.1287,
    "varian": "V3 V1 tetapi BB20/2",
+   "pantau": {
+    "kohort": 1154,
+    "kohort_setahun": 166.8,
+    "mu_kohort": 4.8197,
+    "sd_kohort": 42.5961,
+    "winsor": [
+     -13.8597,
+     30.5554
+    ],
+    "mu_winsor": 1.0676,
+    "sd_winsor": 11.1894,
+    "dd_maks": 445.31,
+    "dd_tempoh": 474,
+    "h": 2.48,
+    "arl": 333.6,
+    "arl_bootstrap": 357.4
+   },
    "u3": 1.647
   },
   "M31": {
@@ -1219,6 +2636,23 @@
    "r1": -17.8204,
    "r2": -2.3318,
    "varian": "V0 Peraturan pengguna (henti tutup<LOWER isyarat, keluar MID turun)",
+   "pantau": {
+    "kohort": 1439,
+    "kohort_setahun": 208.0,
+    "mu_kohort": 2.8475,
+    "sd_kohort": 17.4934,
+    "winsor": [
+     -13.115,
+     25.1706
+    ],
+    "mu_winsor": 1.5282,
+    "sd_winsor": 9.7743,
+    "dd_maks": 639.98,
+    "dd_tempoh": 514,
+    "h": 3.13,
+    "arl": 416.0,
+    "arl_bootstrap": 445.7
+   },
    "u3": 0.6229
   },
   "M32": {
@@ -1233,6 +2667,23 @@
    "r1": -11.3377,
    "r2": -1.1965,
    "varian": "V2 V1 keluar close<SMA50",
+   "pantau": {
+    "kohort": 903,
+    "kohort_setahun": 130.5,
+    "mu_kohort": 5.8712,
+    "sd_kohort": 94.126,
+    "winsor": [
+     -8.7271,
+     30.423
+    ],
+    "mu_winsor": 0.6467,
+    "sd_winsor": 10.3923,
+    "dd_maks": 433.8,
+    "dd_tempoh": 1008,
+    "h": 1.19,
+    "arl": 261.0,
+    "arl_bootstrap": 290.0
+   },
    "u3": 0.8607
   },
   "M33": {
@@ -1247,6 +2698,23 @@
    "r1": -15.0014,
    "r2": -2.048,
    "varian": "V5 V1 + volum>VOL20",
+   "pantau": {
+    "kohort": 1352,
+    "kohort_setahun": 195.4,
+    "mu_kohort": 1.5613,
+    "sd_kohort": 14.8464,
+    "winsor": [
+     -11.9411,
+     21.2075
+    ],
+    "mu_winsor": 0.5591,
+    "sd_winsor": 8.9243,
+    "dd_maks": 599.71,
+    "dd_tempoh": 979,
+    "h": 3.13,
+    "arl": 390.8,
+    "arl_bootstrap": 404.3
+   },
    "u3": -0.7601
   },
   "M34": {
@@ -1261,6 +2729,23 @@
    "r1": -14.1558,
    "r2": -1.8391,
    "varian": "V2 V1 keluar close<SMA50",
+   "pantau": {
+    "kohort": 1244,
+    "kohort_setahun": 179.9,
+    "mu_kohort": 2.4738,
+    "sd_kohort": 24.1201,
+    "winsor": [
+     -10.8244,
+     24.7785
+    ],
+    "mu_winsor": 0.7101,
+    "sd_winsor": 9.1623,
+    "dd_maks": 436.15,
+    "dd_tempoh": 888,
+    "h": 2.44,
+    "arl": 359.8,
+    "arl_bootstrap": 385.4
+   },
    "u3": 0.132
   },
   "M35": {
@@ -1275,6 +2760,23 @@
    "r1": -8.0547,
    "r2": -0.8846,
    "varian": "V3 V1 DEKAT10 sahaja",
+   "pantau": {
+    "kohort": 1591,
+    "kohort_setahun": 230.0,
+    "mu_kohort": 0.2372,
+    "sd_kohort": 5.1413,
+    "winsor": [
+     -4.8462,
+     7.5784
+    ],
+    "mu_winsor": -0.0509,
+    "sd_winsor": 3.3036,
+    "dd_maks": 222.63,
+    "dd_tempoh": 999,
+    "h": 3.2,
+    "arl": 459.9,
+    "arl_bootstrap": 492.8
+   },
    "u3": -1.6744
   },
   "M36": {
@@ -1289,6 +2791,23 @@
    "r1": -12.3798,
    "r2": -1.6137,
    "varian": "V2 V1 keluar tutup<SMA50 + sig tutup>SMA50",
+   "pantau": {
+    "kohort": 1464,
+    "kohort_setahun": 211.6,
+    "mu_kohort": 2.2169,
+    "sd_kohort": 16.5561,
+    "winsor": [
+     -8.8901,
+     24.6314
+    ],
+    "mu_winsor": 0.8619,
+    "sd_winsor": 8.8398,
+    "dd_maks": 597.39,
+    "dd_tempoh": 497,
+    "h": 2.29,
+    "arl": 423.2,
+    "arl_bootstrap": 453.4
+   },
    "u3": 0.0554
   },
   "M37": {
@@ -1303,6 +2822,23 @@
    "r1": -19.9134,
    "r2": -2.1747,
    "varian": "V2 V1 keluar tutup harian<SMA50 + tutup>SMA50",
+   "pantau": {
+    "kohort": 198,
+    "kohort_setahun": 32.3,
+    "mu_kohort": 5.6035,
+    "sd_kohort": 28.4119,
+    "winsor": [
+     -17.3183,
+     54.1815
+    ],
+    "mu_winsor": 3.3664,
+    "sd_winsor": 16.9438,
+    "dd_maks": 107.13,
+    "dd_tempoh": 564,
+    "h": 1.45,
+    "arl": 64.6,
+    "arl_bootstrap": 74.1
+   },
    "u3": 2.8157
   },
   "M38": {
@@ -1317,6 +2853,23 @@
    "r1": -33.4298,
    "r2": -4.1617,
    "varian": "V4 V1 atas bar mingguan",
+   "pantau": {
+    "kohort": 256,
+    "kohort_setahun": 39.8,
+    "mu_kohort": 18.761,
+    "sd_kohort": 60.2584,
+    "winsor": [
+     -26.2339,
+     130.5313
+    ],
+    "mu_winsor": 15.4677,
+    "sd_winsor": 39.7539,
+    "dd_maks": 205.79,
+    "dd_tempoh": 150,
+    "h": 1.15,
+    "arl": 79.5,
+    "arl_bootstrap": 82.2
+   },
    "u3": 14.922
   },
   "M39": {
@@ -1331,6 +2884,23 @@
    "r1": -18.2398,
    "r2": -3.1618,
    "varian": "V4 V1 jalur atas 2 SD",
+   "pantau": {
+    "kohort": 1170,
+    "kohort_setahun": 169.1,
+    "mu_kohort": 9.1886,
+    "sd_kohort": 38.8744,
+    "winsor": [
+     -15.9317,
+     75.607
+    ],
+    "mu_winsor": 6.1544,
+    "sd_winsor": 25.0103,
+    "dd_maks": 889.74,
+    "dd_tempoh": 403,
+    "h": 1.6,
+    "arl": 338.2,
+    "arl_bootstrap": 390.2
+   },
    "u3": 6.6944
   },
   "M40": {
@@ -1345,6 +2915,23 @@
    "r1": -18.3201,
    "r2": -2.0151,
    "varian": "V4 V1 tanpa penapis pasaran",
+   "pantau": {
+    "kohort": 214,
+    "kohort_setahun": 31.0,
+    "mu_kohort": 4.5936,
+    "sd_kohort": 26.2762,
+    "winsor": [
+     -16.9008,
+     42.7098
+    ],
+    "mu_winsor": 2.4729,
+    "sd_winsor": 16.7311,
+    "dd_maks": 218.2,
+    "dd_tempoh": 775,
+    "h": 1.49,
+    "arl": 62.0,
+    "arl_bootstrap": 62.5
+   },
    "u3": 1.6508
   },
   "M41": {
@@ -1359,6 +2946,23 @@
    "r1": -18.0361,
    "r2": -2.7484,
    "varian": "V0 Sumber sahaja (tanpa had julat 25%)",
+   "pantau": {
+    "kohort": 284,
+    "kohort_setahun": 44.1,
+    "mu_kohort": 12.1729,
+    "sd_kohort": 38.5692,
+    "winsor": [
+     -13.6958,
+     66.6437
+    ],
+    "mu_winsor": 8.5702,
+    "sd_winsor": 21.6634,
+    "dd_maks": 144.72,
+    "dd_tempoh": 325,
+    "h": 1.49,
+    "arl": 88.2,
+    "arl_bootstrap": 91.2
+   },
    "u3": 12.21
   },
   "M44": {
@@ -1373,6 +2977,23 @@
    "r1": -9.2416,
    "r2": -1.9598,
    "varian": "V3 V1 tanpa syarat volum",
+   "pantau": {
+    "kohort": 345,
+    "kohort_setahun": 50.0,
+    "mu_kohort": 0.0106,
+    "sd_kohort": 12.4545,
+    "winsor": [
+     -8.286,
+     24.1234
+    ],
+    "mu_winsor": -0.6679,
+    "sd_winsor": 9.0971,
+    "dd_maks": 148.96,
+    "dd_tempoh": 962,
+    "h": 1.38,
+    "arl": 100.0,
+    "arl_bootstrap": 111.1
+   },
    "u3": -1.8237
   },
   "M45": {
@@ -1387,6 +3008,23 @@
    "r1": -22.2873,
    "r2": -2.3844,
    "varian": "V4 V1 + high 52 minggu dicapai dalam 21 hari",
+   "pantau": {
+    "kohort": 61,
+    "kohort_setahun": 9.3,
+    "mu_kohort": 17.8811,
+    "sd_kohort": 81.2817,
+    "winsor": [
+     -17.5339,
+     63.0369
+    ],
+    "mu_winsor": 6.372,
+    "sd_winsor": 23.8985,
+    "dd_maks": 132.97,
+    "dd_tempoh": 566,
+    "h": 0.88,
+    "arl": 18.6,
+    "arl_bootstrap": 18.9
+   },
    "u3": 9.0585
   },
   "M46": {
@@ -1401,6 +3039,23 @@
    "r1": -10.4638,
    "r2": -1.0327,
    "varian": "V2 V1 dengan jurang ketat (low>high semalam+0.75xATR40)",
+   "pantau": {
+    "kohort": 590,
+    "kohort_setahun": 86.7,
+    "mu_kohort": 3.0927,
+    "sd_kohort": 24.8974,
+    "winsor": [
+     -9.0815,
+     29.2312
+    ],
+    "mu_winsor": 0.6286,
+    "sd_winsor": 9.228,
+    "dd_maks": 153.43,
+    "dd_tempoh": 387,
+    "h": 1.11,
+    "arl": 173.4,
+    "arl_bootstrap": 192.7
+   },
    "u3": 0.4215
   },
   "M47": {
@@ -1415,6 +3070,23 @@
    "r1": -9.3335,
    "r2": -0.87,
    "varian": "V3 V1 tanpa syarat ADX naik",
+   "pantau": {
+    "kohort": 694,
+    "kohort_setahun": 100.4,
+    "mu_kohort": 0.191,
+    "sd_kohort": 5.4781,
+    "winsor": [
+     -7.3966,
+     8.7309
+    ],
+    "mu_winsor": 0.1052,
+    "sd_winsor": 4.2553,
+    "dd_maks": 96.92,
+    "dd_tempoh": 703,
+    "h": 3.55,
+    "arl": 200.9,
+    "arl_bootstrap": 207.8
+   },
    "u3": -2.0231
   },
   "M48": {
@@ -1429,6 +3101,23 @@
    "r1": -14.0945,
    "r2": -1.7127,
    "varian": "V3 V1 henti low hari 3 - 1xATR14",
+   "pantau": {
+    "kohort": 754,
+    "kohort_setahun": 109.4,
+    "mu_kohort": 2.387,
+    "sd_kohort": 21.7903,
+    "winsor": [
+     -11.7946,
+     30.1944
+    ],
+    "mu_winsor": 0.6136,
+    "sd_winsor": 10.5193,
+    "dd_maks": 360.77,
+    "dd_tempoh": 1131,
+    "h": 1.6,
+    "arl": 218.8,
+    "arl_bootstrap": 252.5
+   },
    "u3": 0.562
   },
   "M49": {
@@ -1443,6 +3132,23 @@
    "r1": -12.6384,
    "r2": -1.2924,
    "varian": "V4 V1 + awan hadapan hijau (RA>RB)",
+   "pantau": {
+    "kohort": 1562,
+    "kohort_setahun": 225.8,
+    "mu_kohort": 3.1767,
+    "sd_kohort": 20.7128,
+    "winsor": [
+     -7.9021,
+     28.0477
+    ],
+    "mu_winsor": 1.5008,
+    "sd_winsor": 9.29,
+    "dd_maks": 640.23,
+    "dd_tempoh": 617,
+    "h": 1.6,
+    "arl": 451.5,
+    "arl_bootstrap": 467.1
+   },
    "u3": 1.0909
   },
   "M50": {
@@ -1457,6 +3163,23 @@
    "r1": -9.2438,
    "r2": -0.9498,
    "varian": "V2 V1 keluar tutup<SMA50 + tutup>SMA50",
+   "pantau": {
+    "kohort": 1591,
+    "kohort_setahun": 230.0,
+    "mu_kohort": 1.1038,
+    "sd_kohort": 10.9157,
+    "winsor": [
+     -5.3854,
+     14.4102
+    ],
+    "mu_winsor": 0.3617,
+    "sd_winsor": 5.1395,
+    "dd_maks": 402.64,
+    "dd_tempoh": 887,
+    "h": 2.14,
+    "arl": 459.9,
+    "arl_bootstrap": 475.8
+   },
    "u3": -1.2969
   },
   "M51": {
@@ -1471,6 +3194,23 @@
    "r1": -9.3347,
    "r2": -1.8385,
    "varian": "V3 V1 kedalaman cawan 12-50%",
+   "pantau": {
+    "kohort": 210,
+    "kohort_setahun": 36.4,
+    "mu_kohort": 2.8421,
+    "sd_kohort": 17.8094,
+    "winsor": [
+     -8.304,
+     34.0884
+    ],
+    "mu_winsor": 1.5736,
+    "sd_winsor": 11.6144,
+    "dd_maks": 166.55,
+    "dd_tempoh": 761,
+    "h": 1.3,
+    "arl": 72.8,
+    "arl_bootstrap": 78.0
+   },
    "u3": 1.6119
   },
   "M52": {
@@ -1485,6 +3225,23 @@
    "r1": -18.057,
    "r2": -2.1992,
    "varian": "V3 V1 keluar tutup<SMA50 harian",
+   "pantau": {
+    "kohort": 258,
+    "kohort_setahun": 37.4,
+    "mu_kohort": 3.7389,
+    "sd_kohort": 13.9844,
+    "winsor": [
+     -10.6109,
+     28.6031
+    ],
+    "mu_winsor": 2.9445,
+    "sd_winsor": 10.1163,
+    "dd_maks": 100.49,
+    "dd_tempoh": 570,
+    "h": 1.76,
+    "arl": 74.8,
+    "arl_bootstrap": 77.3
+   },
    "u3": 1.7159
   },
   "M54": {
@@ -1499,6 +3256,23 @@
    "r1": -12.9907,
    "r2": -1.717,
    "varian": "V4 V1 sig=PT benar & tutup>high 20 hari",
+   "pantau": {
+    "kohort": 1317,
+    "kohort_setahun": 190.4,
+    "mu_kohort": 3.7965,
+    "sd_kohort": 34.9327,
+    "winsor": [
+     -9.387,
+     33.2251
+    ],
+    "mu_winsor": 1.2472,
+    "sd_winsor": 10.7352,
+    "dd_maks": 388.76,
+    "dd_tempoh": 484,
+    "h": 1.57,
+    "arl": 380.7,
+    "arl_bootstrap": 393.8
+   },
    "u3": 0.867
   },
   "M55": {
@@ -1513,6 +3287,23 @@
    "r1": -11.6926,
    "r2": -1.3628,
    "varian": "V4 Undur ke kumpulan panjang lalu lantun (Persediaan 2)",
+   "pantau": {
+    "kohort": 1439,
+    "kohort_setahun": 208.0,
+    "mu_kohort": 2.7984,
+    "sd_kohort": 30.8284,
+    "winsor": [
+     -7.6539,
+     23.4482
+    ],
+    "mu_winsor": 0.6729,
+    "sd_winsor": 8.0806,
+    "dd_maks": 355.96,
+    "dd_tempoh": 512,
+    "h": 1.64,
+    "arl": 416.0,
+    "arl_bootstrap": 445.7
+   },
    "u3": 0.5135
   },
   "M56": {
@@ -1527,6 +3318,7 @@
    "r1": -22.6242,
    "r2": -2.6541,
    "varian": "V4 V1 tanpa FIP (8 MOM tertinggi)",
+   "pantau": null,
    "u3": 17.9725
   },
   "M57": {
@@ -1541,6 +3333,23 @@
    "r1": -10.1557,
    "r2": -0.968,
    "varian": "V1 Dikunci (keluar tutup<SMA50)",
+   "pantau": {
+    "kohort": 1286,
+    "kohort_setahun": 186.0,
+    "mu_kohort": 1.9957,
+    "sd_kohort": 40.3015,
+    "winsor": [
+     -6.9806,
+     17.0918
+    ],
+    "mu_winsor": -0.0982,
+    "sd_winsor": 5.9828,
+    "dd_maks": 543.89,
+    "dd_tempoh": 1194,
+    "h": 1.91,
+    "arl": 371.9,
+    "arl_bootstrap": 413.2
+   },
    "u3": -0.8914
   },
   "M59": {
@@ -1555,6 +3364,23 @@
    "r1": -15.8202,
    "r2": -1.9349,
    "varian": "V3 V1 LB65 ambang 39/69 (imbasan Hill 2019)",
+   "pantau": {
+    "kohort": 822,
+    "kohort_setahun": 119.0,
+    "mu_kohort": 2.8418,
+    "sd_kohort": 22.4843,
+    "winsor": [
+     -12.6766,
+     32.9283
+    ],
+    "mu_winsor": 0.772,
+    "sd_winsor": 11.5611,
+    "dd_maks": 466.77,
+    "dd_tempoh": 1020,
+    "h": 1.79,
+    "arl": 237.9,
+    "arl_bootstrap": 264.3
+   },
    "u3": 0.9644
   },
   "M64": {
@@ -1569,6 +3395,23 @@
    "r1": -13.1964,
    "r2": -2.2429,
    "varian": "V5 V1 henti 0.92xPIVOT",
+   "pantau": {
+    "kohort": 316,
+    "kohort_setahun": 45.8,
+    "mu_kohort": 0.8281,
+    "sd_kohort": 22.3299,
+    "winsor": [
+     -11.6127,
+     24.2103
+    ],
+    "mu_winsor": -0.9382,
+    "sd_winsor": 9.6336,
+    "dd_maks": 211.79,
+    "dd_tempoh": 1396,
+    "h": 1.68,
+    "arl": 91.6,
+    "arl_bootstrap": 101.8
+   },
    "u3": -0.1849
   },
   "M66": {
@@ -1583,6 +3426,23 @@
    "r1": -10.3434,
    "r2": -1.1501,
    "varian": "V0 Sumber tulen (UNDUR+NAIK50+PUSING+BARU; tanpa PERTAMA/HIGHBARU/NIPIS)",
+   "pantau": {
+    "kohort": 1476,
+    "kohort_setahun": 224.3,
+    "mu_kohort": 1.7095,
+    "sd_kohort": 16.8647,
+    "winsor": [
+     -6.5585,
+     18.1715
+    ],
+    "mu_winsor": 0.7228,
+    "sd_winsor": 6.252,
+    "dd_maks": 333.03,
+    "dd_tempoh": 603,
+    "h": 2.14,
+    "arl": 448.5,
+    "arl_bootstrap": 480.5
+   },
    "u3": -0.4191
   },
   "M67": {
@@ -1597,6 +3457,23 @@
    "r1": -11.0609,
    "r2": -1.4485,
    "varian": "V6 Versi Financial Wisdom: zon EMA20-EMA50, henti 2xATR",
+   "pantau": {
+    "kohort": 776,
+    "kohort_setahun": 112.5,
+    "mu_kohort": 1.6738,
+    "sd_kohort": 20.1179,
+    "winsor": [
+     -9.3009,
+     22.5236
+    ],
+    "mu_winsor": -0.156,
+    "sd_winsor": 8.1446,
+    "dd_maks": 241.45,
+    "dd_tempoh": 1109,
+    "h": 1.68,
+    "arl": 224.9,
+    "arl_bootstrap": 241.0
+   },
    "u3": -0.295
   },
   "M68": {
@@ -1611,6 +3488,23 @@
    "r1": -12.7394,
    "r2": -2.2376,
    "varian": "V3 V1 keluar close<SMA50 (+tutup>SMA50)",
+   "pantau": {
+    "kohort": 899,
+    "kohort_setahun": 130.1,
+    "mu_kohort": 1.1383,
+    "sd_kohort": 15.7203,
+    "winsor": [
+     -11.017,
+     22.2876
+    ],
+    "mu_winsor": -0.228,
+    "sd_winsor": 9.0878,
+    "dd_maks": 689.27,
+    "dd_tempoh": 982,
+    "h": 2.33,
+    "arl": 260.2,
+    "arl_bootstrap": 269.1
+   },
    "u3": -0.5415
   },
   "M70": {
@@ -1625,6 +3519,23 @@
    "r1": -5.6476,
    "r2": -0.5162,
    "varian": "V5 V1 masuk awal tanpa pengesahan",
+   "pantau": {
+    "kohort": 1627,
+    "kohort_setahun": 235.2,
+    "mu_kohort": 0.7935,
+    "sd_kohort": 10.2005,
+    "winsor": [
+     -3.3192,
+     9.252
+    ],
+    "mu_winsor": -0.0665,
+    "sd_winsor": 3.1417,
+    "dd_maks": 275.84,
+    "dd_tempoh": 901,
+    "h": 1.64,
+    "arl": 470.3,
+    "arl_bootstrap": 503.9
+   },
    "u3": -1.5468
   },
   "M73": {
@@ -1639,6 +3550,23 @@
    "r1": -11.1961,
    "r2": -1.1133,
    "varian": "V0 Sumber tulen (ADX5>40 + NR6; tiada henti; keluar tutup>high semalam)",
+   "pantau": {
+    "kohort": 1718,
+    "kohort_setahun": 248.3,
+    "mu_kohort": 0.28,
+    "sd_kohort": 2.8933,
+    "winsor": [
+     -3.9561,
+     3.7834
+    ],
+    "mu_winsor": 0.3419,
+    "sd_winsor": 1.975,
+    "dd_maks": 193.28,
+    "dd_tempoh": 468,
+    "h": 4.77,
+    "arl": 496.6,
+    "arl_bootstrap": 532.1
+   },
    "u3": -2.605
   },
   "M74": {
@@ -1653,6 +3581,23 @@
    "r1": -9.2899,
    "r2": -1.0123,
    "varian": "V2 V1 tanpa S8 (7 syarat harga)",
+   "pantau": {
+    "kohort": 1169,
+    "kohort_setahun": 175.7,
+    "mu_kohort": 2.7494,
+    "sd_kohort": 19.4216,
+    "winsor": [
+     -7.2332,
+     26.8756
+    ],
+    "mu_winsor": 0.8557,
+    "sd_winsor": 8.3883,
+    "dd_maks": 213.19,
+    "dd_tempoh": 277,
+    "h": 1.26,
+    "arl": 351.4,
+    "arl_bootstrap": 363.5
+   },
    "u3": 0.0961
   },
   "M76": {
@@ -1667,6 +3612,23 @@
    "r1": -9.2766,
    "r2": -0.8121,
    "varian": "V1 Dikunci (UR + CLV>0.60 + tutup>SMA200)",
+   "pantau": {
+    "kohort": 714,
+    "kohort_setahun": 103.3,
+    "mu_kohort": 0.4583,
+    "sd_kohort": 7.3864,
+    "winsor": [
+     -6.1336,
+     11.3525
+    ],
+    "mu_winsor": -0.1037,
+    "sd_winsor": 4.5596,
+    "dd_maks": 142.2,
+    "dd_tempoh": 1420,
+    "h": 2.33,
+    "arl": 206.6,
+    "arl_bootstrap": 221.4
+   },
    "u3": -1.2836
   },
   "M77": {
@@ -1681,6 +3643,23 @@
    "r1": -8.6238,
    "r2": -0.8873,
    "varian": "V2 V1 henti=low hari isyarat",
+   "pantau": {
+    "kohort": 929,
+    "kohort_setahun": 134.3,
+    "mu_kohort": 1.6707,
+    "sd_kohort": 41.0591,
+    "winsor": [
+     -6.9212,
+     15.418
+    ],
+    "mu_winsor": -0.395,
+    "sd_winsor": 5.2972,
+    "dd_maks": 167.78,
+    "dd_tempoh": 520,
+    "h": 2.02,
+    "arl": 268.6,
+    "arl_bootstrap": 287.7
+   },
    "u3": 0.5823
   },
   "M78": {
@@ -1695,6 +3674,23 @@
    "r1": -11.0644,
    "r2": -1.845,
    "varian": "V2 V1 henti mengekor 5xATR100",
+   "pantau": {
+    "kohort": 273,
+    "kohort_setahun": 39.6,
+    "mu_kohort": 2.6464,
+    "sd_kohort": 12.4891,
+    "winsor": [
+     -8.3333,
+     23.5841
+    ],
+    "mu_winsor": 1.8844,
+    "sd_winsor": 9.2497,
+    "dd_maks": 143.32,
+    "dd_tempoh": 591,
+    "h": 1.79,
+    "arl": 79.1,
+    "arl_bootstrap": 81.9
+   },
    "u3": 0.0548
   },
   "M79": {
@@ -1709,6 +3705,23 @@
    "r1": -17.6561,
    "r2": -2.1875,
    "varian": "V3 V1 dengan A=0.15 (masuk/keluar/henti 15%)",
+   "pantau": {
+    "kohort": 1427,
+    "kohort_setahun": 206.3,
+    "mu_kohort": 4.057,
+    "sd_kohort": 19.8918,
+    "winsor": [
+     -15.3167,
+     41.734
+    ],
+    "mu_winsor": 3.0726,
+    "sd_winsor": 15.8557,
+    "dd_maks": 847.46,
+    "dd_tempoh": 420,
+    "h": 2.67,
+    "arl": 412.5,
+    "arl_bootstrap": 495.0
+   },
    "u3": 0.6868
   },
   "M80": {
@@ -1723,6 +3736,23 @@
    "r1": -17.7967,
    "r2": -2.3169,
    "varian": "V2 V1 dengan henti tutup-3xATR14",
+   "pantau": {
+    "kohort": 1239,
+    "kohort_setahun": 179.1,
+    "mu_kohort": 6.0325,
+    "sd_kohort": 39.2545,
+    "winsor": [
+     -13.428,
+     48.9988
+    ],
+    "mu_winsor": 2.9068,
+    "sd_winsor": 16.2819,
+    "dd_maks": 769.11,
+    "dd_tempoh": 409,
+    "h": 1.76,
+    "arl": 358.2,
+    "arl_bootstrap": 370.5
+   },
    "u3": 5.628
   },
   "M81": {
@@ -1737,6 +3767,23 @@
    "r1": -19.8251,
    "r2": -2.2484,
    "varian": "V4 V1 henti awal 3xATR20",
+   "pantau": {
+    "kohort": 1032,
+    "kohort_setahun": 149.2,
+    "mu_kohort": 7.136,
+    "sd_kohort": 34.5685,
+    "winsor": [
+     -16.3255,
+     56.3348
+    ],
+    "mu_winsor": 4.2658,
+    "sd_winsor": 20.2805,
+    "dd_maks": 419.21,
+    "dd_tempoh": 234,
+    "h": 1.76,
+    "arl": 298.3,
+    "arl_bootstrap": 319.6
+   },
    "u3": 7.0196
   },
   "M82": {
@@ -1751,6 +3798,23 @@
    "r1": -25.7829,
    "r2": -3.4234,
    "varian": "V0 Sumber tulen (sasaran 10% tutup / EMA25<EMA125, tiada henti)",
+   "pantau": {
+    "kohort": 1335,
+    "kohort_setahun": 197.7,
+    "mu_kohort": 1.9464,
+    "sd_kohort": 8.8751,
+    "winsor": [
+     -13.2007,
+     12.9255
+    ],
+    "mu_winsor": 2.2166,
+    "sd_winsor": 7.5303,
+    "dd_maks": 616.06,
+    "dd_tempoh": 535,
+    "h": 4.54,
+    "arl": 395.3,
+    "arl_bootstrap": 423.5
+   },
    "u3": -0.0185
   },
   "M84": {
@@ -1765,6 +3829,23 @@
    "r1": -15.5606,
    "r2": -1.6654,
    "varian": "V5 V1 + SMA50",
+   "pantau": {
+    "kohort": 84,
+    "kohort_setahun": 12.1,
+    "mu_kohort": 3.8709,
+    "sd_kohort": 12.1899,
+    "winsor": [
+     -9.7197,
+     19.2692
+    ],
+    "mu_winsor": 2.7232,
+    "sd_winsor": 8.2912,
+    "dd_maks": 32.14,
+    "dd_tempoh": 349,
+    "h": 1.38,
+    "arl": 24.3,
+    "arl_bootstrap": 24.7
+   },
    "u3": 0.2574
   },
   "M87": {
@@ -1779,6 +3860,23 @@
    "r1": -10.4976,
    "r2": -1.6813,
    "varian": "V4 V1 tanpa DAHULU",
+   "pantau": {
+    "kohort": 324,
+    "kohort_setahun": 47.0,
+    "mu_kohort": 3.2802,
+    "sd_kohort": 22.1654,
+    "winsor": [
+     -9.2734,
+     45.1226
+    ],
+    "mu_winsor": 1.7353,
+    "sd_winsor": 15.1333,
+    "dd_maks": 322.0,
+    "dd_tempoh": 1119,
+    "h": 0.88,
+    "arl": 94.1,
+    "arl_bootstrap": 117.6
+   },
    "u3": 0.8706
   },
   "M88": {
@@ -1793,6 +3891,23 @@
    "r1": -10.1515,
    "r2": -1.415,
    "varian": "V1 Dikunci (BELI 1.10xL1; vol>VOL50; henti max(L2;0.92x masuk); keluar tutup<low20)",
+   "pantau": {
+    "kohort": 763,
+    "kohort_setahun": 110.3,
+    "mu_kohort": 5.7333,
+    "sd_kohort": 51.2076,
+    "winsor": [
+     -8.8296,
+     42.9091
+    ],
+    "mu_winsor": 1.895,
+    "sd_winsor": 14.4506,
+    "dd_maks": 320.62,
+    "dd_tempoh": 323,
+    "h": 1.34,
+    "arl": 220.6,
+    "arl_bootstrap": 245.0
+   },
    "u3": 1.0292
   },
   "M89": {
@@ -1807,6 +3922,23 @@
    "r1": -12.7436,
    "r2": -1.4885,
    "varian": "V5 V1+SMA65 naik (>SMA65 10h lalu)",
+   "pantau": {
+    "kohort": 1271,
+    "kohort_setahun": 183.8,
+    "mu_kohort": 2.0338,
+    "sd_kohort": 16.5928,
+    "winsor": [
+     -9.372,
+     22.1066
+    ],
+    "mu_winsor": 0.7843,
+    "sd_winsor": 8.3824,
+    "dd_maks": 387.97,
+    "dd_tempoh": 477,
+    "h": 2.52,
+    "arl": 367.6,
+    "arl_bootstrap": 408.4
+   },
    "u3": -0.4713
   },
   "M90": {
@@ -1821,6 +3953,23 @@
    "r1": -12.6404,
    "r2": -1.5544,
    "varian": "V3 V1 + tutup>SMA50, keluar tutup<SMA50",
+   "pantau": {
+    "kohort": 1382,
+    "kohort_setahun": 199.8,
+    "mu_kohort": 1.1573,
+    "sd_kohort": 14.7042,
+    "winsor": [
+     -9.1724,
+     21.5998
+    ],
+    "mu_winsor": 0.1454,
+    "sd_winsor": 8.0074,
+    "dd_maks": 656.88,
+    "dd_tempoh": 1059,
+    "h": 2.33,
+    "arl": 399.5,
+    "arl_bootstrap": 428.0
+   },
    "u3": -0.7318
   },
   "M91": {
@@ -1835,6 +3984,23 @@
    "r1": -12.8455,
    "r2": -1.6139,
    "varian": "V2 V1 + tutup>HH20 (pecah keluar)",
+   "pantau": {
+    "kohort": 822,
+    "kohort_setahun": 122.4,
+    "mu_kohort": 1.372,
+    "sd_kohort": 12.3338,
+    "winsor": [
+     -9.9753,
+     20.7465
+    ],
+    "mu_winsor": 0.6538,
+    "sd_winsor": 7.9029,
+    "dd_maks": 195.26,
+    "dd_tempoh": 516,
+    "h": 2.44,
+    "arl": 244.9,
+    "arl_bootstrap": 272.1
+   },
    "u3": -1.0225
   },
   "M92": {
@@ -1849,6 +4015,23 @@
    "r1": -12.5314,
    "r2": -1.3081,
    "varian": "V2 V1 isyarat silang atas sifar (NAIK0)",
+   "pantau": {
+    "kohort": 1653,
+    "kohort_setahun": 238.9,
+    "mu_kohort": 1.0294,
+    "sd_kohort": 6.6404,
+    "winsor": [
+     -7.102,
+     12.3764
+    ],
+    "mu_winsor": 0.7993,
+    "sd_winsor": 5.15,
+    "dd_maks": 334.32,
+    "dd_tempoh": 431,
+    "h": 3.51,
+    "arl": 477.8,
+    "arl_bootstrap": 494.3
+   },
    "u3": -1.6379
   },
   "M93": {
@@ -1863,6 +4046,23 @@
    "r1": -19.4649,
    "r2": -2.3698,
    "varian": "V2 V1, keluar LEMAH (%b<0.20 & MFI10<20)",
+   "pantau": {
+    "kohort": 1308,
+    "kohort_setahun": 189.1,
+    "mu_kohort": 7.5132,
+    "sd_kohort": 46.9804,
+    "winsor": [
+     -14.7185,
+     49.2062
+    ],
+    "mu_winsor": 3.6693,
+    "sd_winsor": 16.6886,
+    "dd_maks": 684.08,
+    "dd_tempoh": 513,
+    "h": 2.06,
+    "arl": 378.1,
+    "arl_bootstrap": 472.6
+   },
    "u3": 5.1655
   },
   "M94": {
@@ -1877,6 +4077,23 @@
    "r1": -41.7181,
    "r2": -4.5548,
    "varian": "V0 Rotasi sumber (bulanan, langkau 21h, pegang 126h)",
+   "pantau": {
+    "kohort": 80,
+    "kohort_setahun": 12.2,
+    "mu_kohort": 27.0257,
+    "sd_kohort": 57.868,
+    "winsor": [
+     -15.6564,
+     78.632
+    ],
+    "mu_winsor": 20.981,
+    "sd_winsor": 25.2771,
+    "dd_maks": 49.81,
+    "dd_tempoh": 217,
+    "h": 1.22,
+    "arl": 24.3,
+    "arl_bootstrap": 25.0
+   },
    "u3": 21.0761
   },
   "M95": {
@@ -1891,6 +4108,23 @@
    "r1": -11.974,
    "r2": -1.6237,
    "varian": "V1 Dikunci: PECAH20+PTH>=0.85+HSHP<=21+tutup>SMA50",
+   "pantau": {
+    "kohort": 1193,
+    "kohort_setahun": 178.0,
+    "mu_kohort": 4.2307,
+    "sd_kohort": 71.4054,
+    "winsor": [
+     -9.0063,
+     25.037
+    ],
+    "mu_winsor": 0.9458,
+    "sd_winsor": 9.1106,
+    "dd_maks": 586.3,
+    "dd_tempoh": 656,
+    "h": 2.21,
+    "arl": 356.0,
+    "arl_bootstrap": 427.2
+   },
    "u3": 0.4911
   },
   "M96": {
@@ -1905,6 +4139,23 @@
    "r1": -22.2465,
    "r2": -2.1301,
    "varian": "V1 Dikunci (+henti tutup-3xATR14)",
+   "pantau": {
+    "kohort": 80,
+    "kohort_setahun": 12.0,
+    "mu_kohort": 14.0961,
+    "sd_kohort": 48.2071,
+    "winsor": [
+     -17.9323,
+     62.5042
+    ],
+    "mu_winsor": 9.0749,
+    "sd_winsor": 23.5747,
+    "dd_maks": 82.4,
+    "dd_tempoh": 455,
+    "h": 1.03,
+    "arl": 24.0,
+    "arl_bootstrap": 25.0
+   },
    "u3": 8.5187
   },
   "M99": {
@@ -1919,6 +4170,23 @@
    "r1": -12.9345,
    "r2": -1.3468,
    "varian": "V4 V1 + close>SMA200",
+   "pantau": {
+    "kohort": 1433,
+    "kohort_setahun": 207.1,
+    "mu_kohort": 1.4571,
+    "sd_kohort": 10.1427,
+    "winsor": [
+     -8.2125,
+     18.3184
+    ],
+    "mu_winsor": 0.8768,
+    "sd_winsor": 6.597,
+    "dd_maks": 333.1,
+    "dd_tempoh": 536,
+    "h": 2.75,
+    "arl": 414.2,
+    "arl_bootstrap": 460.3
+   },
    "u3": -0.9991
   }
  }

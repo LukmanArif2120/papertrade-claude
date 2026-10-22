@@ -107,6 +107,24 @@ class TestPenganalisis(unittest.TestCase):
         self.assertEqual(pg.status_kaedah(25, 1.0, 9.0, 1.0, 0.2, 2.0, hari=9), 'BELUM CUKUP')
         self.assertEqual(pg.status_kaedah(25, 1.0, 9.0, 1.0, 0.2, 2.0, hari=10), 'KUAT')
 
+    def test_pantau(self):
+        # 22 Okt 2026 (Fasa 4 item 15): kohort matang harian -> CUSUM bawah, kejatuhan/tempoh lawan backtest, P(purata <= 0)
+        import numpy as np
+        kal = dict(winsor=[-3.0, 9.0], mu_winsor=0.0, mu_kohort=0.8, sd_winsor=3.0, h=1.6, dd_maks=100.0, dd_tempoh=400)
+        hari = list(pd.bdate_range('2026-01-01', periods=60).strftime('%Y-%m-%d'))
+        rugi = pd.DataFrame(dict(tarikh_beli=hari, hasil1=[-2.5] * 60))
+        x = pg.pantau_kaedah(rugi, 14, '2026-12-31', kal, 0.25, -1.0, -2.0, 0.0, 60)
+        self.assertEqual(x['pantau'], 'BERSARA'); self.assertGreaterEqual(x['p_amaran'], 2); self.assertGreater(x['p_rugi'], 0.9)
+        self.assertAlmostEqual(x['p_dd'], 150.0)
+        baik = pd.DataFrame(dict(tarikh_beli=hari, hasil1=np.random.default_rng(1).normal(1.0, 3, 60)))
+        self.assertEqual(pg.pantau_kaedah(baik, 14, '2026-12-31', kal, 0.25, 1.0, 0.2, 1.8, 60)['pantau'], 'OK')
+        jatuh = pd.DataFrame(dict(tarikh_beli=hari, hasil1=[3.0] * 20 + [-4.0] * 40))      # kejatuhan 160 > 1.5 x 100
+        y = pg.pantau_kaedah(jatuh, 14, '2026-12-31', dict(kal, h=1e9), 0.25, 0.5, -1.0, 2.0, 60)
+        self.assertEqual(y['pantau'], 'GANTUNG'); self.assertIn('kejatuhan', y['p_sebab'])
+        muda = pd.DataFrame(dict(tarikh_beli=['2026-12-30'], hasil1=[-9.0]))                # belum matang
+        self.assertEqual(pg.pantau_kaedah(muda, 14, '2026-12-31', kal, 0.25, 0.5, -1.0, 2.0, 1)['pantau'], 'BELUM CUKUP')
+        self.assertEqual(pg.pantau_kaedah(baik, 14, '2026-12-31', None, 0.25, 1.0, 0.2, 1.8, 60)['p_dd'], None)
+
     def test_lintas_earnings(self):
         P = pos([dict(id='M01', saham='A', tarikh_isyarat='2026-10-14', tarikh_beli='2026-10-15', tarikh_keluar='2026-10-20', tutup1=True,
                       hasil1=1.0, hasil2=1.0, sumber='lejar'),

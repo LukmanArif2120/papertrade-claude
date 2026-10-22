@@ -57,6 +57,46 @@ class TestPortfolioSlot(unittest.TestCase):
         R, _ = ps.bina(calon(rows), 'RS_10', HARI[:1], lambda s, d: 10.0)
         self.assertEqual(sum(R.saham.str.startswith('T')), 8)
 
+    def test_beku_kuota_lorong_dan_gantung(self):
+        # 22 Okt 2026 (Fasa 4 item 13): kuota setiap kaedah, slot tidak terpakai dikongsi, lorong kaedah, mula_jejak, gantung
+        def b2(s, kaedah, beli='2026-10-16', k1=None, h1=np.nan):
+            r = baris(s, 50, beli=beli, kaedah=kaedah) + [k1 or '', h1, k1 is not None]
+            return r
+        kol = ['saham', 'id_kaedah', 'tarikh_isyarat', 'rs', 'tarikh_beli', 'harga_beli', 'keluar', 'tarikh_keluar_henti',
+               'harga_keluar_henti', 'tarikh_keluar', 'harga_keluar1', 'keluar1']
+        rows = [b2(f'A{i}', 'M70') for i in range(8)] + [b2(f'B{i}', 'M03') for i in range(2)] + [b2('LAMA', 'M70', beli='2026-10-15')]
+        P = pd.DataFrame(rows, columns=kol)
+        cfg = dict(mula='2026-10-16', kuota={'M70': 4, 'M03': 3, 'M18': 3}, lorong={'M70': 'kaedah', 'M03': 'henti', 'M18': 'henti'})
+        R, E = ps.bina(P, 'GABUNGAN_10', ['2026-10-15'] + HARI[:1], lambda s, d: 10.0, cfg)
+        self.assertNotIn('LAMA', set(R.saham)); self.assertEqual(E.tarikh.iloc[0], '2026-10-16')     # hanya >= mula_jejak
+        self.assertEqual(len(R), 10)                                   # M70 4 kuota + M03 2 + 4 slot M03/M18 kosong dikongsi ke M70
+        self.assertEqual((R.id_kaedah == 'M70').sum(), 8)
+        self.assertEqual(set(R.lorong), {'kaedah', 'henti'})
+        # lorong kaedah: keluar pada hari d direalisasi selepas belian hari itu (slot bebas esok)
+        rows = [b2(f'A{i}', 'M70', k1='2026-10-19' if i == 0 else None, h1=11.0 if i == 0 else np.nan) for i in range(10)]
+        rows += [b2('BARU1', 'M70', beli='2026-10-19'), b2('BARU2', 'M70', beli='2026-10-20')]
+        cfg1 = dict(mula='2026-10-16', kuota={'M70': 10}, lorong={'M70': 'kaedah'})
+        R, E = ps.bina(pd.DataFrame(rows, columns=kol), 'TOP1_10', HARI[:3], lambda s, d: 10.0, cfg1)
+        self.assertNotIn('BARU1', set(R.saham)); self.assertIn('BARU2', set(R.saham))
+        k = R[R.status == 'Keluar'].iloc[0]
+        self.assertEqual((k.saham, k.tarikh_keluar), ('A0', '2026-10-19'))
+        self.assertAlmostEqual(k.untung_pct, 100 * (1.1 * 0.999 / 1.001 - 1), places=6)
+        # gantung: tiada belian baharu kaedah itu mulai tarikh log
+        R, _ = ps.bina(pd.DataFrame(rows, columns=kol), 'TOP1_10', HARI[:3], lambda s, d: 10.0, cfg1, {'M70': '2026-10-19'})
+        self.assertEqual(set(R.tarikh_beli), {'2026-10-16'})
+
+    def test_log_gantung(self):
+        import json, tempfile
+        with tempfile.TemporaryDirectory() as d:
+            pp, lg = os.path.join(d, 'papan.json'), os.path.join(d, 'gantung.csv')
+            with open(pp, 'w') as f:
+                json.dump(dict(rows=[dict(id='M70', pantau='GANTUNG', p_sebab='x'), dict(id='M99', pantau='BERSARA'), dict(id='M03', pantau='OK')]), f)
+            cfg = {'GABUNGAN_10': dict(kuota={'M70': 4, 'M03': 3})}
+            self.assertEqual(ps.log_gantung(cfg, '2026-11-20', pp, lg), {'M70': '2026-11-23'})   # Jumaat -> Isnin
+            with open(pp, 'w') as f:
+                json.dump(dict(rows=[dict(id='M70', pantau='OK')]), f)
+            self.assertEqual(ps.log_gantung(cfg, '2026-11-30', pp, lg), {'M70': '2026-11-23'})   # log kekal (tambah sahaja)
+
     def test_mdd_dari_ekuiti_mula(self):
         self.assertAlmostEqual(ps.mdd([0.94]), -0.06)
 

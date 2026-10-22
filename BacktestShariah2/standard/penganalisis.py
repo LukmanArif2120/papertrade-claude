@@ -16,12 +16,20 @@
 #      Papertrade C selepas Lejar bermula = isyarat sama dengan Lejar, jadi dipapar sebagai semakan sahaja (tidak dikira dua kali).
 #      Posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang kaedah+saham sama dibuang (enjin mengabaikan isyarat
 #      itu), supaya laluan harga sama tidak dikira dua kali. Harga beli Lejar dilaras jika stor dilaras (split), seperti lejar.py.
-# Skor (purata pulangan bersih setiap dagangan, %) = (n0 x jangkaan backtest dipotong + nb x purata matang dipangkas) / (n0 + nb);
+# Skor (purata pulangan bersih setiap dagangan, %) = (n0 x jangkaan backtest dipotong + nb x purata matang) / (n0 + nb);
 # julat 95% = skor ± 1.96 x SD / sqrt(n0 + nb), n0 = 1 / (1/N0 + 1/n backtest) (backtest kecil diberi berat kurang). Skor sebulan =
 # skor / hari pegang backtest x 21. Swing = purata pegang backtest 3–30 hari.
-# Kukuh (22 Okt 2026, kajian/KAJIAN_DATA_TERCEMAR.md R5–R7): purata dipangkas 5% setiap hujung (satu squeeze tidak menguasai);
-# nb = n berkesan = n / kesan reka bentuk berkelompok ikut hari beli (posisi hari sama bergerak bersama pasaran; < 5 hari beli
+# Kukuh (22 Okt 2026, kajian/KAJIAN_DATA_TERCEMAR.md R5–R7): nb = n berkesan = n / kesan reka bentuk berkelompok ikut hari beli (posisi hari sama bergerak bersama pasaran; < 5 hari beli
 # berbeza -> nb = bilangan hari); BELUM CUKUP sehingga >= 10 hari beli berbeza; posisi melintas earnings dilapor berasingan.
+# Purata penuh (22 Okt 2026, keputusan pengguna; Fasa 4 skor swing): skor dan status guna purata matang PENUH. Purata dipangkas
+# 5% (R6) kekal dilapor (h_pangkas) sebagai semakan sahaja: kalibrasi_skor.py menunjukkan pangkas 5% menukar purata backtest 60
+# daripada 75 kaedah swing menjadi negatif (untung swing datang daripada ekor kanan), dan jangkaan backtest pula tidak dipangkas.
+# Pantau (22 Okt 2026, Fasa 4 item 15 laporan reports/Skor KPI pemilihan kaedah swing.md; lajur pantau, p_*): kohort = purata
+# pulangan bersih lorong 1 posisi matang yang dibeli hari sama. BERSARA = P(mu <= 0) > 0.9 dengan >= 20 hari beli, atau >= 2 amaran
+# CUSUM; GANTUNG = kejatuhan ekuiti kohort > 1.5 x maks backtest atau tempoh di bawah puncak > maks backtest (hari dagangan; kekal
+# hingga semakan semula); AMARAN = 1 amaran CUSUM bawah (k 0.5, h bootstrap ARL0 ~ 2 tahun; kohort diwinsor p5–p95 backtest,
+# sasaran = purata winsor - (1 - kekal) x purata kohort backtest, dibahagi sd winsor); OK; BELUM CUKUP < 5 kohort matang.
+# Parameter backtest: data/analisis/kalibrasi_skor.json 'pantau' (standard/kalibrasi_skor.py). Label sahaja: tiada order.
 import argparse, glob, json, math, os, re
 from datetime import datetime, timedelta, timezone
 
@@ -56,7 +64,13 @@ UMUR_MIN = 14           # hari kalendar minimum sebelum posisi dikira matang
 TOL_LARAS = 0.003       # sama dengan lejar.TOLERANSI_LARAS: buka stor hari beli lain daripada harga beli -> stor dilaras
 TOL_LARAS_C = 0.2       # Papertrade C (harga Moomoo lawan stor yfinance): hanya split jelas dilaras
 SD_MIN = 5.0            # SD minimum setiap dagangan (%)
-PANGKAS = 0.05          # pecahan dipangkas setiap hujung bagi purata matang (R6)
+PANGKAS = 0.05          # pecahan dipangkas setiap hujung (purata dipangkas: semakan sahaja sejak 22 Okt 2026)
+KALIBRASI = os.path.join(BS2, 'data', 'analisis', 'kalibrasi_skor.json')
+PANTAU_DD = 1.5         # GANTUNG: kejatuhan ekuiti kohort > 1.5 x maks backtest (Davey 1.2–1.5x)
+PANTAU_P = 0.9          # BERSARA: P(mu <= 0) > 0.9 ...
+PANTAU_G = 20           # ... dengan >= 20 hari beli matang
+PANTAU_KOHORT = 5       # kohort matang minimum sebelum pantau dinilai
+PANTAU_STATUS = ['BERSARA', 'GANTUNG', 'AMARAN', 'OK', 'BELUM CUKUP']
 N_HARI_MIN = 10         # hari beli berbeza minimum sebelum status dinilai (R5)
 HARI_KLUSTER_MIN = 5    # < 5 hari beli berbeza: n berkesan = bilangan hari (anggaran kesan reka bentuk tidak stabil)
 TV = os.path.join(BS2, 'data', 'skrin', 'tv_us.csv')
@@ -357,6 +371,78 @@ def ringkas_hadapan(P, hari_bt, kini, earnings=None):
     return out
 
 
+# ---------------------------------------------------------------- pantau
+def muat_kalibrasi(path=KALIBRASI):
+    """({id: parameter pantau backtest}, k CUSUM); tiada fail -> ({}, 0.5)."""
+    try:
+        d = json.load(open(path, encoding='utf-8'))
+    except (OSError, ValueError):
+        return {}, 0.5
+    return {m: r['pantau'] for m, r in d.get('kaedah', {}).items() if r.get('pantau')}, (d.get('pantau') or {}).get('k', 0.5)
+
+
+def phi(z):
+    return 0.5 * (1 + math.erf(z / math.sqrt(2)))
+
+
+def pantau_kaedah(P, umur, kini, kal, kekal, mu, lo, hi, hari_beli, k=0.5):
+    """Status pantau satu kaedah daripada posisi hadapan P (lorong 1, hasil1 bersih) dan parameter backtest kal (atau None)."""
+    se = (hi - mu) / 1.96 if hi is not None and mu is not None else None
+    p_rugi = phi(-mu / se) if se and se > 0 else None
+    out = dict(pantau='BELUM CUKUP', p_rugi=bulat(p_rugi, 3), p_kohort=0, p_dd=None, p_dd_had=None, p_dd_tempoh=None,
+               p_dd_tempoh_had=None, p_cusum=None, p_h=None, p_amaran=0, p_sebab='')
+    if len(P):
+        tb = pd.to_datetime(P.tarikh_beli)
+        M = P[(tb <= pd.Timestamp(kini) - pd.Timedelta(days=umur)).values & P.hasil1.notna().values]
+    else:
+        M = P
+    c = M.groupby('tarikh_beli').hasil1.mean().astype(float).sort_index() if len(M) else pd.Series(dtype=float)
+    out['p_kohort'] = int(len(c))
+    sebab = []
+    if len(c) and kal:
+        eq = c.cumsum().values; pk = np.maximum.accumulate(np.maximum(eq, 0.0))
+        out['p_dd'] = bulat(float((pk - eq).max()), 2); out['p_dd_had'] = bulat(PANTAU_DD * kal['dd_maks'], 2)
+        hari = np.array(c.index, dtype='datetime64[D]'); t_pk = hari[0]; tinggi = 0.0; lama = 0
+        for t, v in zip(hari, eq):
+            if v >= tinggi:
+                tinggi, t_pk = v, t
+            lama = max(lama, int(np.busday_count(t_pk, t)))
+        if eq[-1] < tinggi:
+            lama = max(lama, int(np.busday_count(t_pk, np.datetime64(str(kini)[:10], 'D'))))
+        out['p_dd_tempoh'] = lama; out['p_dd_tempoh_had'] = int(kal['dd_tempoh'])
+        # CUSUM hanya jika bootstrap backtest boleh beramaran (taburan kohort sangat condong ke kanan: z bawah tidak melepasi k)
+        sasaran = kal['mu_winsor'] - (1 - kekal) * kal['mu_kohort']
+        z = (np.clip(c.values, *kal['winsor']) - sasaran) / max(kal['sd_winsor'], 1e-6)
+        if kal.get('arl_bootstrap', 1) is not None:
+            S = 0.0; n = 0
+            for v in z:
+                S = max(0.0, S - v - k)
+                if S > kal['h']:
+                    n += 1; S = 0.0
+            out.update(p_cusum=bulat(S, 2), p_h=kal['h'], p_amaran=n)
+        if out['p_dd'] > out['p_dd_had']:
+            sebab.append(f"kejatuhan {out['p_dd']:.1f} > {out['p_dd_had']:.1f}")
+        if lama > kal['dd_tempoh']:
+            sebab.append(f"tempoh di bawah puncak {lama} > {int(kal['dd_tempoh'])} hari")
+    bersara = (p_rugi is not None and p_rugi > PANTAU_P and hari_beli >= PANTAU_G) or out['p_amaran'] >= 2
+    if p_rugi is not None and p_rugi > PANTAU_P and hari_beli >= PANTAU_G:
+        sebab.insert(0, f"P(purata ≤ 0) {p_rugi:.2f} > {PANTAU_P}")
+    if out['p_amaran']:
+        sebab.insert(0, f"{out['p_amaran']} amaran CUSUM")
+    if bersara:
+        out['pantau'] = 'BERSARA'
+    elif len(c) < PANTAU_KOHORT:
+        out['pantau'] = 'BELUM CUKUP'
+    elif any(x.startswith(('kejatuhan', 'tempoh')) for x in sebab):
+        out['pantau'] = 'GANTUNG'
+    elif out['p_amaran']:
+        out['pantau'] = 'AMARAN'
+    else:
+        out['pantau'] = 'OK'
+    out['p_sebab'] = '; '.join(sebab)
+    return out
+
+
 # ---------------------------------------------------------------- skor
 def berat_backtest(n_bt):
     """n0 = 1 / (1/N0 + 1/n backtest): varians jangkaan = ketidakpastian model (N0) + ralat sampel backtest (n backtest)."""
@@ -394,6 +480,7 @@ def analisis(kini=None):
     L, C = muat_lejar(akhir), muat_c(akhir=akhir)
     H, mula_lejar, tindih = gabung_hadapan(L, C)
     ERN = muat_earnings()
+    KAL, K_CUSUM = muat_kalibrasi()
     Hg = dict(tuple(H.groupby('id'))) if len(H) else {}
     Cg = dict(tuple(C.groupby('id'))) if len(C) else {}
     rows = []
@@ -409,10 +496,11 @@ def analisis(kini=None):
         sd0 = sd_backtest(r)
         hd = ringkas_hadapan(Hg.get(mid, H.iloc[:0]), hari, kini, ERN)
         n0 = berat_backtest(r.get('n'))
-        # skor atas purata dipangkas dan n berkesan (R5, R6); SD hadapan dipakai jika >= N_MIN matang
-        mu, lo, hi = skor(mu0, sd0, hd['n_berkesan'], hd['pangkas'] or 0.0, hd['sd'] if hd['matang'] >= N_MIN else None, n0)
-        st = status_kaedah(hd['matang'], hd['pangkas'] or 0.0, hd['sd'], mu0, lo, hi, hd['hari_beli'], hd['n_berkesan'])
+        # skor atas purata matang penuh dan n berkesan (R5); SD hadapan dipakai jika >= N_MIN matang
+        mu, lo, hi = skor(mu0, sd0, hd['n_berkesan'], hd['purata'] or 0.0, hd['sd'] if hd['matang'] >= N_MIN else None, n0)
+        st = status_kaedah(hd['matang'], hd['purata'] or 0.0, hd['sd'], mu0, lo, hi, hd['hari_beli'], hd['n_berkesan'])
         c = Cg.get(mid)
+        pt = pantau_kaedah(Hg.get(mid, H.iloc[:0]), hd['umur_hari'], kini, KAL.get(mid), kekal, mu, lo, hi, hd['hari_beli'], K_CUSUM)
         sebulan = (lambda v: v / hari * HARI_BULAN) if hari else (lambda v: None)
         rows.append(dict(
             id=mid, nama=nama, varian=var, swing=bool(hari is not None and SWING[0] <= hari <= SWING[1]),
@@ -434,7 +522,7 @@ def analisis(kini=None):
             c_purata=bulat(c.hasil1.dropna().mean(), 2) if c is not None and c.hasil1.notna().any() else None,
             skor=bulat(mu, 2), skor_bawah=bulat(lo, 2), skor_atas=bulat(hi, 2),
             skor_bulan=bulat(sebulan(mu), 2), skor_bulan_bawah=bulat(sebulan(lo), 2), skor_bulan_atas=bulat(sebulan(hi), 2),
-            status=st))
+            status=st, **pt))
     # kedudukan: swing dengan >= N_BT_MIN dagangan backtest (ikut skor sebulan), swing sampel kecil, kemudian bukan swing
     k = lambda r: (-(r['skor_bulan'] if r['skor_bulan'] is not None else -1e9))
     for r in rows:
@@ -534,6 +622,9 @@ def penemuan(rows, meta, ruj):
         out.append(f"Data hadapan belum matang: {mt} posisi matang daripada {sum(r['h_posisi'] for r in rows)} "
                    f"(Lejar sejak {tarikh_ms(meta['mula_lejar'])}, Papertrade C sejak 8 Okt 2026). Kedudukan kini = backtest dipotong. "
                    f"Kaedah pertama dengan {N_MIN} posisi matang dijangka {tarikh_ms(m20[0]) if m20 else '–'}.")
+    pt = {k: [r['id'] for r in rows if r.get('pantau') == k] for k in ('BERSARA', 'GANTUNG', 'AMARAN')}
+    if any(pt.values()) and out:   # kekal 3 penemuan: pantau ditambah pada penemuan data hadapan
+        out[-1] += ' Pantau: ' + '; '.join(f'{k} ({len(v)}): {senarai(v)}' for k, v in pt.items() if v) + '.'
     n = {k: sum(1 for r in rows if r[f'lulus_{k}']) for k in ('subset', 'wfo', 'at')}
     dua = [r['id'] for r in rows if r['lulus'] >= 2]
     s = ruj.get('slot') or {}
@@ -566,13 +657,17 @@ def jana_md(rows, meta, ruj, pen, dibina):
          f'{meta["lejar_tindih"]} posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang kaedah+saham sama dibuang). Matang = '
          f'dibeli ≥ maks({UMUR_MIN} hari, 1.5 × hari pegang backtest) lalu; tutup = untung akhir, terbuka = untung semasa (bersih kos 0.1% '
          'setiap belah). Papertrade C selepas Lejar bermula = isyarat sama dengan Lejar: lajur semakan sahaja.',
-         f'- Skor = (n0 × jangkaan + nb × purata matang dipangkas) ÷ (n0 + nb), n0 = berat backtest (maks {N0}; kurang jika dagangan '
-         f'backtest sedikit). Purata dipangkas {int(PANGKAS * 100)}% setiap hujung (satu squeeze tidak menguasai). nb = n berkesan: posisi '
+         f'- Skor = (n0 × jangkaan + nb × purata matang) ÷ (n0 + nb), n0 = berat backtest (maks {N0}; kurang jika dagangan '
+         f'backtest sedikit). Purata penuh, tidak dipangkas (sejak 22 Okt 2026: untung swing datang daripada ekor kanan; purata '
+         f'dipangkas {int(PANGKAS * 100)}% setiap hujung dipapar sebagai semakan). nb = n berkesan: posisi '
          'yang dibeli pada hari sama bergerak bersama pasaran, jadi n dibahagi kesan reka bentuk berkelompok ikut hari beli '
          f'(< {HARI_KLUSTER_MIN} hari beli berbeza: nb = bilangan hari). Julat 95% = skor ± 1.96 × SD ÷ √(n0 + nb). Skor sebulan = skor ÷ '
          f'hari pegang backtest × {HARI_BULAN}, iaitu untung setiap posisi jika modal dipusing semula sebaik keluar.',
-         f'- Status: AMARAN = ≥ {N_AMARAN} matang dan purata dipangkas jauh di bawah jangkaan (t < −2 atas nb); BELUM CUKUP = < {N_MIN} '
+         f'- Status: AMARAN = ≥ {N_AMARAN} matang dan purata matang jauh di bawah jangkaan (t < −2 atas nb); BELUM CUKUP = < {N_MIN} '
          f'matang atau < {N_HARI_MIN} hari beli berbeza; KUAT = julat 95% di atas 0; LEMAH = julat 95% di bawah 0; selainnya PERHATI.',
+         f'- Pantau (label sahaja): BERSARA = P(purata ≤ 0) > {PANTAU_P} dengan ≥ {PANTAU_G} hari beli, atau ≥ 2 amaran CUSUM; GANTUNG = '
+         f'kejatuhan ekuiti kohort harian > {PANTAU_DD} × maks backtest atau tempoh di bawah puncak > maks backtest; AMARAN = 1 amaran '
+         f'CUSUM bawah (h dikalibrasi bootstrap supaya amaran palsu ~ sekali dalam 2 tahun); BELUM CUKUP = < {PANTAU_KOHORT} kohort matang.',
          '- Lintas earnings = posisi matang yang dipegang melalui tarikh earnings (TradingView + sejarah Nasdaq/SST); purata tanpa '
          'posisi itu dipapar berasingan (tidak mengubah skor).',
          f'- Swing = purata pegang backtest {SWING[0]}–{SWING[1]} hari dagangan. Kaedah swing dengan < {N_BT_MIN} dagangan backtest '
@@ -588,8 +683,8 @@ def jana_md(rows, meta, ruj, pen, dibina):
                  '(`kajian/KAJIAN_PORTFOLIO.md`).')
     hd = ('| # | Kaedah | Hari | Dagangan/tahun | Backtest 431: CAGR · MDD · menang · purata | S1–S4 · WFO · 2000 AS | Jangkaan % | '
           'Hadapan: posisi · matang · purata · dipangkas · median · menang | nb · hari beli | Lintas earnings · purata tanpa | '
-          'Lorong 2 % | C: posisi · purata | Skor % [julat 95%] | Skor sebulan % | Status | 20 matang |')
-    sep = '|' + '---|' * 16
+          'Lorong 2 % | C: posisi · purata | Skor % [julat 95%] | Skor sebulan % | Status | 20 matang | Pantau |')
+    sep = '|' + '---|' * 17
 
     def baris(r):
         return (f"| {r['kedudukan'] or '–'} | {r['id']} {r['nama']} | {r['hari'] if r['hari'] is not None else '–'} | "
@@ -600,7 +695,7 @@ def jana_md(rows, meta, ruj, pen, dibina):
                 f"{sg(r['h_pangkas'])} · {sg(r['h_median'])} · {p(r['h_menang'], 0)} | {r['h_n_berkesan']} · {r['h_hari_beli']} | "
                 f"{r['h_lintas_earnings']} · {sg(r['h_purata_tanpa_earnings'])} | {sg(r['h_purata_l2'])} | {r['c_posisi']} · {sg(r['c_purata'])} | "
                 f"{sg(r['skor'])} [{sg(r['skor_bawah'])}, {sg(r['skor_atas'])}] | {sg(r['skor_bulan'])} | {r['status']} | "
-                f"{tarikh_ms(r['matang_20'])} |")
+                f"{tarikh_ms(r['matang_20'])} | {r['pantau']}{' (' + r['p_sebab'] + ')' if r['p_sebab'] else ''} |")
     sw = [r for r in rows if r['swing']]
     lain = [r for r in rows if not r['swing']]
     L += ['', f'## Kaedah swing ({SWING[0]}–{SWING[1]} hari), susun ikut skor sebulan ({len(sw)} kaedah)', '', hd, sep] + [baris(r) for r in sw]
@@ -645,7 +740,8 @@ def main(argv=None):
     os.makedirs(os.path.dirname(a.json), exist_ok=True)
     doc = dict(dibina=dibina, **meta, parameter=dict(n0_maks=N0, asas_kekal=ASAS_KEKAL, tambah_kekal=TAMBAH_KEKAL, swing=list(SWING),
                                                     n_min=N_MIN, n_amaran=N_AMARAN, umur_min=UMUR_MIN, hari_bulan=HARI_BULAN,
-                                                    pangkas=PANGKAS, n_hari_min=N_HARI_MIN, hari_kluster_min=HARI_KLUSTER_MIN),
+                                                    pangkas=PANGKAS, n_hari_min=N_HARI_MIN, hari_kluster_min=HARI_KLUSTER_MIN,
+                                                    pantau=dict(dd=PANTAU_DD, p=PANTAU_P, g=PANTAU_G, kohort=PANTAU_KOHORT)),
                penemuan=pen, rujukan=ruj, rows=rows,
                nota='Papan Penganalisis (standard/penganalisis.py). Skor = purata pulangan bersih setiap dagangan (%) gabungan backtest '
                     'dipotong dan posisi hadapan matang. Rekod analisis sahaja.')

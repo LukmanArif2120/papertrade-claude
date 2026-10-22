@@ -1,0 +1,39 @@
+{
+ "versi": "beku-2026-10-22-sementara",
+ "status": "sementara",
+ "tarikh_beku": "2026-10-22",
+ "mula_jejak": "2026-10-22",
+ "nota": "Pembekuan SEMENTARA (keputusan pengguna 22 Okt 2026; Fasa 4 item 13, reports/Skor KPI pemilihan kaedah swing.md). Rekod sahaja: tiada order, tiada wang sebenar. Jangan ubah tanpa keputusan pengguna; set baharu = fail baharu bertarikh (commit), bukan suntingan senyap. Jejak hadapan bermula pada posisi Lejar Penuh yang dibeli >= mula_jejak (tiada data yang digunakan untuk memilih).",
+ "formula": {
+  "skor": "Skor kaedah swing v2 (dashboard v101; TIANG v2-2026-10-22; geometrik U40 K20 R25 B15)",
+  "akaun": "Papertrade C",
+  "data_hingga": "2026-10-21",
+  "gabungan": "skor tertinggi >= 55% dalam kaedah stabil (P(4 teratas) >= 50%, Monte Carlo 1,000 berbiji); setiap pasangan pertindihan <= 20% dan korelasi lebihan <= 0.7 (belum cukup data); pemberat sama"
+ },
+ "kaedah": [
+  {"id": "M70", "nama": "Pecahan Hari Dalam", "lorong": "kaedah", "slot": 4, "skor": 84, "p_teratas": 0.95},
+  {"id": "M03", "nama": "BB Break + Divergence RSI", "lorong": "henti", "slot": 3, "skor": 76, "p_teratas": 0.88},
+  {"id": "M18", "nama": "EMA9/21 Pullback", "lorong": "kaedah", "slot": 3, "skor": 74, "p_teratas": 0.81}
+ ],
+ "tidak_dipilih": {
+  "M35": "skor 72%, stabil 67%, tetapi pertindihan dengan M70 24% > 20%",
+  "M13": "skor 69%, P(4 teratas) 49% < 50% (tidak stabil)"
+ },
+ "rujukan": {
+  "TOP1_10": {"id": "M70", "lorong": "kaedah", "nota": "kaedah #1 sahaja, 10 slot"},
+  "RAWAK_KAEDAH_10": {"id": ["M11", "M111", "M148"], "lorong": "henti", "slot": [4, 3, 3], "biji": 20261022,
+                      "nota": "3 kaedah rawak (bilangan sama dengan gabungan) daripada 75 kaedah swing Papan Penganalisis; numpy default_rng(biji).choice(senarai id swing tersusun, 3, tanpa ganti); lorong 2"},
+  "SPY": "spy dalam fail ekuiti (tempoh sama)"
+ },
+ "peraturan": {
+  "slot": 10,
+  "saiz": "min(tunai, ekuiti semalam x 10%)",
+  "kuota": "slot setiap kaedah ikut 'slot'; slot tidak terpakai dikongsi (isi selepas kuota, susunan rawak tetap benih = tarikh beli)",
+  "susunan": "rawak tetap (benih = tarikh beli) dalam kaedah; satu posisi setiap saham",
+  "keluar": "lorong setiap kaedah: kaedah = tarikh_keluar/harga_keluar Lejar (tunai tersedia sesi berikutnya); henti = Chandelier lorong 2 (jual buka, tunai tersedia hari sama)",
+  "kos": "0.1% setiap belah",
+  "gantung": "pantau Papan Penganalisis GANTUNG atau BERSARA -> tiada belian baharu kaedah itu mulai sesi selepas status dilihat (log portfolio_slot/gantung.csv); posisi sedia ada kekal hingga keluar",
+  "semakan": "beku semula secara rasmi apabila kaedah teratas ada >= 20 hari beli matang (anggaran akhir Nov 2026); selepas itu suku tahunan dengan histeresis: ganti hanya jika kaedah sedia ada GANTUNG/BERSARA dan pengganti lebih tinggi dengan margin besar",
+  "nilai": "muktamad hanya selepas inkubasi ~6 bulan dengan 40–60 hari beli tanpa peraturan gantung"
+ }
+}

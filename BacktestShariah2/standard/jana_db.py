@@ -367,27 +367,40 @@ def pengawas(st, masa):
 
 
 def portfolio_slot(dibina, folder=os.path.join(BS2, 'portfolio_slot')):
-    """prestasi/portfolio_slot: dua portfolio maya 10 slot (standard/portfolio_slot.py, daripada Lejar Penuh) untuk kad
-    Eksperimen dalam tab Ringkasan. None jika fail belum dijana."""
+    """prestasi/portfolio_slot: portfolio maya 10 slot (standard/portfolio_slot.py, daripada Lejar Penuh) untuk kad Eksperimen
+    dalam tab Ringkasan dan panel Skor kaedah swing (gabungan beku). Portfolio tanpa fail dilangkau; None jika RS_10 belum dijana.
+    Setiap portfolio: mula, sesi dan spy_pct tempoh sama (portfolio beku bermula pada mula_jejak)."""
     import portfolio_slot as PS
-    out, spy, hari = {}, None, []
+    out = {}
     for k, nama in PS.PORTFOLIO.items():
         pe, pp = os.path.join(folder, f'{k}_ekuiti.csv'), os.path.join(folder, f'{k}_posisi.csv')
         if not (os.path.exists(pe) and os.path.exists(pp)):
-            return None
+            continue
         E, R = pd.read_csv(pe), pd.read_csv(pp)
-        if E.empty:
-            return None
+        if E.empty and k not in PS.BEKU_JENIS:
+            continue
         kel = R[R.status == 'Keluar']
-        out[k] = dict(nama=f'{k}: {nama}', pulangan_pct=round(100 * (E.ekuiti.iloc[-1] - 1), 2), mdd_pct=round(100 * PS.mdd(E.ekuiti), 2),
+        out[k] = dict(nama=f'{k}: {nama}', pulangan_pct=round(100 * (E.ekuiti.iloc[-1] - 1), 2) if len(E) else None,
+                      mdd_pct=round(100 * PS.mdd(E.ekuiti), 2) if len(E) else None,
                       dipegang=int((R.status == 'Pegang').sum()), keluar=int(len(kel)),
                       menang_pct=round(100 * float((kel.untung_pct > 0).mean()), 1) if len(kel) else None,
+                      mula=E.tarikh.iloc[0] if len(E) else None, sesi=int(len(E)),
+                      spy_pct=round(100 * (float(E.spy.iloc[-1]) - 1), 2) if len(E) and pd.notna(E.spy.iloc[-1]) else None,
                       ekuiti=[[t, round(float(e), 5)] for t, e in zip(E.tarikh, E.ekuiti)],
                       posisi=json.loads(R.round(4).to_json(orient='records')))
-        spy, hari = round(100 * (float(E.spy.iloc[-1]) - 1), 2), list(E.tarikh)
-    return dict(dibina=dibina, mula=hari[0], sesi_terakhir=hari[-1], sesi=len(hari), spy_pct=spy, portfolio=out,
-                nota='Rekod sahaja (kajian/KAJIAN_PORTFOLIO.md). 10 slot x 10% ekuiti, satu posisi setiap saham, keluar lorong 2; '
-                     'RS_10 = RS pasaran tertinggi, RAWAK_10 = kawalan rawak. Dibina semula setiap malam oleh lejar.yml.')
+    rs = out.get('RS_10')
+    if not rs or not rs['sesi']:
+        return None
+    beku = None
+    try:
+        beku = json.load(open(os.path.join(BS2, 'data', 'analisis', 'gabungan_beku.json'), encoding='utf-8'))
+    except (OSError, ValueError):
+        pass
+    return dict(dibina=dibina, mula=rs['mula'], sesi_terakhir=rs['ekuiti'][-1][0], sesi=rs['sesi'], spy_pct=rs['spy_pct'], portfolio=out,
+                beku=beku,
+                nota='Rekod sahaja (kajian/KAJIAN_PORTFOLIO.md). 10 slot x 10% ekuiti, satu posisi setiap saham. RS_10 = RS pasaran '
+                     'tertinggi, RAWAK_10 = kawalan rawak (lorong 2). GABUNGAN_10 / TOP1_10 / RAWAK_KAEDAH_10 = gabungan kaedah beku '
+                     '(data/analisis/gabungan_beku.json) lawan #1 sahaja lawan kaedah rawak, sejak mula_jejak. Dibina semula setiap malam oleh lejar.yml.')
 
 
 def sesi_stor(path=STATUS_HARGA):

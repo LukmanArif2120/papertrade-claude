@@ -9,6 +9,12 @@
 # penanda aras dalaman (purata semua dagangan semua kaedah yang dibeli pada hari sama); k1 = faktor untung (had 3); k2 = had bawah
 # Wilson pecahan hari beli berpurata positif; r1 = CVaR 10% (purata 10% dagangan terburuk, minimum 3); r2 = purata MAE ÷ ATR14
 # (MAE: rendah terendah dari hari beli hingga sehari sebelum keluar dan harga keluar; ATR14 % pada hari isyarat).
+# Pantau (Fasa 4 item 15, 22 Okt 2026; ditulis di bawah 'pantau' setiap kaedah, dibaca penganalisis.py): siri kohort harian =
+# purata pulangan bersih dagangan yang dibeli pada hari sama; ekuiti = jumlah terkumpul kohort ikut tarikh beli -> dd_maks
+# (mata %, puncak ke lembah) dan dd_tempoh (hari dagangan dari puncak hingga pulih, atau hingga akhir data); h CUSUM bawah
+# (k = 0.5) atas kohort terpiawai z = (kohort diwinsor p5–p95 - jangkaan) / sd winsor (kohort swing sangat condong: sd mentah
+# dikuasai beberapa squeeze, manakala pusat pada median sentiasa di bawah purata), dikalibrasi bootstrap supaya purata panjang larian sebelum amaran palsu
+# (ARL0) ~ bilangan kohort dalam 2 tahun.
 import argparse, importlib, json, math, os, sys, time
 
 import numpy as np
@@ -27,6 +33,7 @@ VERSI = 'v2-2026-10-22'
 N_MIN = 30               # dagangan backtest minimum untuk masuk kalibrasi
 PANGKAS = 0.05
 P_BAWAH, P_ATAS = 5, 95
+CUSUM_K, ARL_TAHUN, BOOT_X, BIJI = 0.5, 2.0, 30, 20261022
 SWING = (3, 30)          # purata hari pegang backtest (enjin: bar isyarat hingga keluar), sama dengan registry 'days'
 
 
@@ -81,6 +88,55 @@ def metrik(T):
                 k2=wilson_bawah(int((hp > 0).sum()), int(len(hp))), r1=cvar(x))
 
 
+def cusum_bawah(z, k, h):
+    """Bilangan amaran CUSUM bawah S = maks(0, S - z - k) > h (S ditetapkan semula selepas amaran)."""
+    S = 0.0; n = 0
+    for v in z:
+        S = S - v - k
+        if S < 0:
+            S = 0.0
+        elif S > h:
+            n += 1; S = 0.0
+    return n
+
+
+def kalibrasi_h(c, arl, k=CUSUM_K, x=BOOT_X, biji=BIJI):
+    """h terkecil (bisection, 0.05) dengan ARL0 bootstrap >= arl: kohort winsor c dipiawai (min 0, sd 1), disampel semula x × arl."""
+    z = (c - c.mean()) / c.std(ddof=1)
+    zb = np.random.default_rng(biji).choice(z, size=int(max(2000, x * arl))).tolist()
+    lo, hi = 0.5, 20.0
+    while hi - lo > 0.05:
+        h = (lo + hi) / 2
+        n = cusum_bawah(zb, k, h)
+        if n and len(zb) / n < arl:
+            lo = h
+        else:
+            hi = h
+    n = cusum_bawah(zb, k, hi)
+    return round(hi, 2), round(len(zb) / n, 1) if n else None
+
+
+def pantau(T):
+    """Kohort harian backtest: bilangan, kohort setahun, purata, sd, dd_maks, dd_tempoh (hari dagangan), h CUSUM, ARL0."""
+    c = T.assign(x=T.ret * 100).groupby('ent').x.mean().sort_index()
+    if len(c) < 30:
+        return None
+    eq = c.cumsum(); pk = eq.cummax(); dd = float((pk - eq).max())
+    tk = c.index.values.astype('datetime64[D]'); t_pk = tk[0]; lama = 0; puncak = -np.inf
+    for t, v in zip(tk, eq.values):
+        if v >= puncak:
+            puncak = v; t_pk = t
+        else:
+            lama = max(lama, int(np.busday_count(t_pk, t)))
+    tahun = max(0.5, (tk[-1] - tk[0]).astype(int) / 365.25)
+    arl = ARL_TAHUN * len(c) / tahun
+    w_lo, w_hi = (float(v) for v in np.percentile(c.values, [5, 95])); cw = np.clip(c.values, w_lo, w_hi)
+    h, arl_b = kalibrasi_h(cw, arl)
+    return dict(kohort=int(len(c)), kohort_setahun=round(len(c) / tahun, 1), mu_kohort=round(float(c.mean()), 4),
+                sd_kohort=round(float(c.std(ddof=1)), 4), winsor=[round(w_lo, 4), round(w_hi, 4)],
+                mu_winsor=round(float(cw.mean()), 4), sd_winsor=round(float(cw.std(ddof=1)), 4), dd_maks=round(dd, 2), dd_tempoh=lama, h=h, arl=round(arl, 1), arl_bootstrap=arl_b)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(); ap.add_argument('--hanya'); ap.add_argument('--keluar', default=OUT); a = ap.parse_args(argv)
     kat = json.load(open(KATALOG, encoding='utf-8')); kat = kat['rows'] if isinstance(kat, dict) else kat
@@ -96,7 +152,7 @@ def main(argv=None):
             gagal[mid] = f'{type(e).__name__}: {e}'[:200]; continue
         if len(T) < N_MIN:
             gagal[mid] = f'{len(T)} dagangan < {N_MIN}'; continue
-        r = metrik(T); r['r2'] = mae_atr(T, fr0); r['varian'] = getattr(m, 'VARIAN', ''); M[mid] = r
+        r = metrik(T); r['r2'] = mae_atr(T, fr0); r['varian'] = getattr(m, 'VARIAN', ''); r['pantau'] = pantau(T); M[mid] = r
         semua.append(T.assign(kaedah=mid, x=T.ret * 100)[['kaedah', 'ent', 'x']])
         print(f'{mid} n={r["n"]} u1={r["u1"]:.2f} hari={r["hari"]:.1f} r2={r["r2"]} ({time.time() - t0:.1f}s)', flush=True)
     A = pd.concat(semua); A['tanda'] = A.groupby('ent').x.transform('mean')
@@ -107,8 +163,10 @@ def main(argv=None):
         v = np.array([M[m][k] for m in sw if M[m].get(k) is not None], float)
         tiang[k] = [round(float(np.percentile(v, P_BAWAH)), 3), round(float(np.percentile(v, P_ATAS)), 3)]
     out = dict(versi=VERSI, dibina=time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime()), set='431', mula=START,
-               persentil=[P_BAWAH, P_ATAS], swing=list(SWING), n_kaedah=len(sw), n_semua=len(M), tiang=tiang, gagal=gagal,
+               persentil=[P_BAWAH, P_ATAS], swing=list(SWING), pantau=dict(k=CUSUM_K, arl_tahun=ARL_TAHUN, bootstrap_x=BOOT_X, biji=BIJI), n_kaedah=len(sw), n_semua=len(M), tiang=tiang, gagal=gagal,
                kaedah={m: {k: (round(v, 4) if isinstance(v, float) else v) for k, v in r.items()} for m, r in sorted(M.items())})
+    if a.hanya and os.path.exists(a.keluar):   # larian separa: kekalkan kaedah lain dan julat sedia ada
+        lama = json.load(open(a.keluar, encoding='utf-8')); lama['kaedah'].update(out['kaedah']); lama['pantau'] = out['pantau']; out = lama
     os.makedirs(os.path.dirname(a.keluar), exist_ok=True)
     json.dump(out, open(a.keluar, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     print(json.dumps(dict(n_kaedah=len(sw), n_semua=len(M), gagal=len(gagal), tiang=tiang), ensure_ascii=False))
