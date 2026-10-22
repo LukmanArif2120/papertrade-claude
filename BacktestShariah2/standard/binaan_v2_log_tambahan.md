@@ -273,3 +273,11 @@
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 21: buka ≤ henti — IAG M13, AUGO M14 & M49, AEM M20, B M20 & M123, CGAU M20, EMR M35, GGG M35, M117, M119 & M149, OKTA M49, DHT M49, JCI M49, ARM M76, ASX M102, AMD M102, DGII M123, MSM M151; buka > buka_maks — APPN M06. Tiada bertindih.
 - Sahkan buka (10:15 NY, `quote_history_kline` ktype 2 autype 0, 22 Okt): sampel CTSH 70.05, HAFN 10.28, ALLE 168.99, ETN 380.5 SAMA dengan harga_beli sementara. SITE M93 BERBEZA: buka rasmi kline 97.94, quote sementara 97.455 (tersalah) → harga_beli, untung_pct dan nota dibetulkan dalam `claude_56.csv` dan db `papertrade/claude_56` (henti 84.22 tidak bergantung buka). Satu daripada lima sampel salah menunjukkan `open_price` quote 9:35 tidak selalu buka rasmi; baki baris disahkan semula oleh larian 6:02 pagi MYT.
+
+## 23 Okt 2026 (6:02 MYT) — sesi AS 22 Okt (SPY −1.18%, QQQ −2.86%)
+- Harga: skrin Moomoo 4 halaman + kline (autype 0) AGPU, BB, BKHA, CLB, EFOR, FSM, LITE, LUXE, VIAV, SPY, QQQ. yfinance sesi 20261022 siap (tembakan `harga_harian.yml`); gabungan dilangkau (jurang diisi Moomoo). SST tidak tersedia: `sektor.csv` tidak ditambah.
+- Posisi: 326 keluar lorong 1 baharu (C 325, M 1, purata −3.60%), 68 menunggu buka, 14 belian 22 Okt tidak sah (sig=False §5.4: HPE M117, MSM M117/M128/M152, CGAU M125, B & IR M139, TSM M148, GGG M150, ASST & ZETA M153, AMD M154, FTV M35, APA M70), 395 harga beli sementara dibetulkan. Lorong 2: tutup_semua = 155 (1 `tidak_dinilai`: BB M31).
+- Langkah 2c baharu `dagangan.py betul`: 13 posisi kaedah replika dinilai semula (dibuka semula). `tidak_layak.py posisi`: tiada ambil alih/delist/tidak cair/kelas berganda/faktor. Langkah 2d `peristiwa.py calon`: tiada calon.
+- Watchlist 276 → 166 (110 dibuang). Sektor pasaran 21 halaman (6119 saham → 3830 digred), `sektor/snapshot` v15.
+- jana_db: `prestasi/mae` (rows + atr) = 301 KB > had 262144; atr digugurkan sementara (halaman jatuh balik ÷ √hari). PERLU: pembahagian dokumen mae + pembaca halaman (subBhg) supaya atr kembali.
+- db: konflik versi (claude_51–60, watchlist, status ditulis oleh larian malam) ditangani dengan senarai semula versi; watchlist_3 dipadam. `sahkan.py --betulkan` keluar 0 (5095 posisi).

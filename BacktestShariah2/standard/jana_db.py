@@ -474,6 +474,8 @@ def main(argv=None):
     mae = penurunan_maks(M, C, a.stor)
     docs['prestasi/mae'] = dict(rows=mae, atr=atr_isyarat(M, C, a.stor), dibina=dibina, harga_hingga=f'{S} tutup',
                                 definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude). atr: ATR14 % pada hari isyarat (kunci sama).')
+    if bait(docs['prestasi/mae']) >= HAD_DB - 2000:   # 23 Okt 2026: mae + atr melebihi had satu dokumen; halaman jatuh balik ÷ √hari tanpa atr
+        docs['prestasi/mae'].pop('atr'); print('amaran: prestasi/mae melebihi had db — atr digugurkan (perlu pembahagian dokumen + halaman)', file=sys.stderr)
     docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
                                       nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
     # papertrade/ringkas_c, ringkas_m: semua baris dalam bentuk padat (halaman v90 membaca ini sahaja, bukan claude*)
