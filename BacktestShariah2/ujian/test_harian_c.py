@@ -121,6 +121,32 @@ class TestBeli(unittest.TestCase):
         H.main(['beli', '--folder', d, '--stor', stor, '--tarikh', '2026-10-16', '--buka', buka])
         self.assertEqual(len(SH.baca(os.path.join(d, 'claude.csv'))[1]), 1)
 
+    def test_belum_didagangkan_direkod_sementara(self):
+        # 22 Okt 2026: saham tiada harga buka pada masa belian TIDAK dilangkau (sama seperti Lejar): harga sementara = tutup
+        # isyarat, nota 'buka sementara … buka_lewat' supaya kemas kini malam menggantikannya dengan buka rasmi
+        d = tempfile.mkdtemp(); stor = os.path.join(d, 'stor'); os.makedirs(stor)
+        ix = pd.bdate_range('2026-08-03', '2026-10-15')
+        rows = [(t, int(x.strftime('%Y%m%d')), 10, 10.5, 9.5, 10, 1e6) for t in ('AAA', 'DDD') for x in ix]
+        pd.DataFrame(rows, columns=['ticker', 'date', 'open', 'high', 'low', 'close', 'volume']).to_csv(os.path.join(stor, 'harga_B.csv'), index=False)
+        pd.DataFrame([('SPY',) + r[1:] for r in rows if r[0] == 'AAA'], columns=['ticker', 'date', 'open', 'high', 'low', 'close', 'volume']).to_csv(
+            os.path.join(stor, 'harga_idx.csv'), index=False)
+        with open(os.path.join(d, 'senarai_beli.csv'), 'w', newline='') as f:
+            w = csv.DictWriter(f, fieldnames=H.SENARAI_LAJUR); w.writeheader()
+            for t in ('AAA', 'DDD'):
+                w.writerow(dict(saham=t, kaedah='M99X', sektor='S', industri='I', pct_dipenuhi=100, harga_rujukan=10.2, henti=9.0,
+                                sasaran='', tarikh_isyarat='2026-10-15', tarikh_imbasan='2026-10-16', belian_ke=1))
+        with open(os.path.join(d, 'claude.csv'), 'w', newline='') as f:
+            csv.writer(f).writerow(SH.POSISI)
+        buka = os.path.join(d, 'buka.csv')
+        pd.DataFrame(dict(ticker=['AAA'], open=[10.4], volume=[1e5])).to_csv(buka, index=False)      # DDD belum didagangkan
+        H.main(['beli', '--folder', d, '--stor', stor, '--tarikh', '2026-10-16', '--buka', buka, '--masa', '2026-10-16 21:40'])
+        _, r = SH.baca(os.path.join(d, 'claude.csv'))
+        x = {y['saham']: y for y in r}
+        self.assertEqual(sorted(x), ['AAA', 'DDD'])
+        self.assertEqual(x['DDD']['harga_beli'], '10.2')
+        self.assertTrue(H.sementara(x['DDD'])); self.assertIn('buka_lewat', x['DDD']['nota'])
+        self.assertEqual(H.status_baca(d)['beli']['buka_lewat'], ['DDD M99X'])
+
 
 if __name__ == '__main__':
     unittest.main()

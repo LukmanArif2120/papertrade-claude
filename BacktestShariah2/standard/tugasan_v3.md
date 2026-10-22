@@ -38,7 +38,8 @@ Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade
 
 ## 4. Belian maya (9:35 NY)
 - Calon = semua baris senarai_beli (tiada had slot). 1 unit setiap saham; kaedah kedua untuk saham sama = baris dengan `kaedah_kongsi`.
-- Langkau jika: buka ≤ henti; buka > buka_maks; buka ≥ sasaran (jika kaedah melangkau); isyarat batal; buka = 0 atau saham belum didagangkan (high/low = 0); kunci kaedah+saham+tarikh_isyarat sudah wujud dalam claude*.csv.
+- Langkau jika: buka ≤ henti; buka > buka_maks; buka ≥ sasaran (jika kaedah melangkau); isyarat batal; kunci kaedah+saham+tarikh_isyarat sudah wujud dalam claude*.csv.
+- Belum didagangkan pada masa belian (buka = 0, high/low = 0; sejak 22 Okt 2026): TIDAK dilangkau — direkod dengan harga sementara = tutup isyarat dan nota `buka sementara … buka_lewat`; buka rasmi dan kesahihan (§5.4) disahkan dengan bar harian keesokannya, sama seperti Lejar yang membeli pada buka rasmi. Melangkaunya hanya dalam C mencipta bias (hentian berita dan pembukaan lewat bukan rawak).
 - Harga beli = harga buka sebenar. Buka sementara disahkan dengan kline harian; larian 6:02 membetulkan baki.
 
 ## 5. Kualiti data (wajib)

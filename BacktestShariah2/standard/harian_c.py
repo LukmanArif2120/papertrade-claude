@@ -845,10 +845,16 @@ def cmd_beli(a):
             langkau.append(f'{t} {mid}: {sebab}')
         if (mid, t, r['tarikh_isyarat']) in ada or (mid, t, 'beli:' + D) in ada:
             lk('sudah direkod'); continue
-        if o is None:
-            lk('belum didagangkan / tiada harga buka'); continue
-        o = o[0]
         henti, bmax, tgt = nombor(r.get('henti')), nombor(r.get('buka_maks')), nombor(r.get('sasaran'))
+        if o is None:
+            # belum didagangkan pada masa belian (hentian berita / pembukaan lewat): direkod seperti Lejar (beli pada buka
+            # rasmi), harga sementara = tutup isyarat; buka rasmi + kesahihan (§5.4) disahkan dengan bar harian esok
+            # (22 Okt 2026; dahulu dilangkau -> set C != Lejar, bias saham berita)
+            hr = nombor(r.get('harga_rujukan'))
+            if not hr:
+                lk('belum didagangkan / tiada harga rujukan'); continue
+            rekod.append((r, hr, henti, True)); continue
+        o = o[0]
         sig2, stop2 = semula.get((mid, t), (None, None))
         if stop2 is not None:
             henti = stop2
@@ -858,7 +864,7 @@ def cmd_beli(a):
             lk(f'buka {o:.2f} > buka_maks {bmax:.2f}'); continue
         if sig2 is False:
             lk('isyarat batal pada buka (peraturan kaedah)'); continue
-        rekod.append((r, o, henti))
+        rekod.append((r, o, henti, False))
     if a.cuba:   # percubaan: tiada fail ditulis; banding harga buka dengan bar harian stor (jika ada)
         fr0, _ = frames_dict(muat(a.stor)); Dt = pd.Timestamp(D); beza = []
         for t, (o, v) in opens.items():
@@ -871,14 +877,14 @@ def cmd_beli(a):
         return 0
     # kaedah_kongsi: kaedah lain yang membeli saham sama hari ini
     ikut_saham = {}
-    for r, o, h in rekod:
+    for r, o, h, _ in rekod:
         ikut_saham.setdefault(r['saham'], []).append(r['kaedah'])
     sasaran_fail = max((p for p in fail_posisi(folder) if os.path.basename(p).startswith('claude')), key=KL_nombor)
     lajur, rows = SH.baca(sasaran_fail)
     for c_ in GRED_LAJUR + ['tarikh_isyarat', 'kaedah_kongsi']:
         if c_ not in lajur:
             lajur.append(c_)
-    for r, o, henti in rekod:
+    for r, o, henti, lewat in rekod:
         lain = sorted((k for k in ikut_saham[r['saham']] if k != r['kaedah']), key=nombor_kaedah)
         n = int(nombor(r.get('belian_ke')) or 1)
         baru = {k: '' for k in lajur}
@@ -886,7 +892,10 @@ def cmd_beli(a):
                     industri=r['industri'], harga_beli=s(r4(o)), unit='1', harga_terkini=s(r4(o)), untung_pct='0.0', hari='0',
                     henti=s(henti), sasaran=r.get('sasaran', ''), keluar='False', sumber='harian_c',
                     kaedah_kongsi=','.join(lain), tarikh_isyarat=r['tarikh_isyarat'],
-                    nota=(f'belian ke-{n}; ' if n >= 2 else '') + f'{sumber_buka} (disahkan dengan bar harian selepas tutup)')
+                    nota=(f'belian ke-{n}; ' if n >= 2 else '') + (
+                        'buka sementara = tutup isyarat; buka_lewat: belum didagangkan pada masa belian '
+                        '(buka rasmi dan kesahihan disahkan dengan bar harian selepas tutup)' if lewat else
+                        f'{sumber_buka} (disahkan dengan bar harian selepas tutup)'))
         baru['isyarat_keluar'] = status_pegang(baru)
         for k in GRED_LAJUR:
             baru[k] = r.get(k, '')
@@ -894,7 +903,8 @@ def cmd_beli(a):
     SH.tulis(sasaran_fail, lajur, rows)
     rk = dict(tarikh=D, masa=teks_masa(masa), isyarat=S, calon=len(calon), direkod=len(rekod), dilangkau=len(langkau),
               langkau=langkau[:60], saham_unik=len(ikut_saham), sumber_buka=sumber_buka, fail=os.path.basename(sasaran_fail),
-              belian_semula=sum(1 for r, _, _ in rekod if int(nombor(r.get('belian_ke')) or 1) >= 2))
+              belian_semula=sum(1 for r, _, _, _ in rekod if int(nombor(r.get('belian_ke')) or 1) >= 2),
+              buka_lewat=[f"{r['saham']} {r['kaedah']}" for r, _, _, lw in rekod if lw][:60])
     st['beli'] = rk; status_tulis(folder, st)
     print(json.dumps(rk, ensure_ascii=False, indent=1))
     return 0
