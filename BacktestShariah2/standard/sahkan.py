@@ -110,6 +110,8 @@ def semak_posisi(nama, lajur, rows, ralat, amaran, kunci):
         tdb = benar(r.get('tidak_dibeli'))
         if kosong(r['sektor']) or kosong(r['industri']):
             ralat.append(f'{t}: sektor/industri kosong')
+        if benar(r.get('tidak_sah')) and kosong(r.get('sebab_tidak_sah')):
+            ralat.append(f'{t}: tidak_sah tanpa sebab_tidak_sah (SKEMA: wajib)')
         if not TARIKH.match(r['tarikh_beli'] or '') and not tdb:
             ralat.append(f'{t}: tarikh_beli bukan YYYY-MM-DD ({r["tarikh_beli"]!r})')
         if tdb:

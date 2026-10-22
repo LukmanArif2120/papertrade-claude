@@ -71,6 +71,10 @@ class UjiSahkan(unittest.TestCase):
         tulis(self.d, 'claude.csv', [dict(ASAS, sektor='-')])
         self.assertIn('sektor/industri kosong', self.jalan()[1])
 
+    def test_tidak_sah_tanpa_sebab(self):
+        tulis(self.d, 'claude.csv', [dict(ASAS, tidak_sah='True')])
+        self.assertIn('tidak_sah tanpa sebab_tidak_sah', self.jalan()[1])
+
     def test_bertindih_merentas_fail_claude(self):
         tulis(self.d, 'claude_2.csv', [dict(ASAS)])
         kod, out = self.jalan()
@@ -99,7 +103,7 @@ class UjiSahkan(unittest.TestCase):
 
     def test_tidak_dibeli(self):
         ok = dict(ASAS, harga_beli='', harga_terkini='', untung_pct='', hari='', isyarat_keluar='TIDAK DIBELI',
-                  tidak_dibeli='True', tidak_sah='True')
+                  tidak_dibeli='True', tidak_sah='True', sebab_tidak_sah='langkau kaedah')
         tulis(self.d, 'claude.csv', [ok])
         self.assertEqual(self.jalan()[0], 0)
         tulis(self.d, 'claude.csv', [dict(ok, harga_beli='100')])
