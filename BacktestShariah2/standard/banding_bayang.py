@@ -19,8 +19,22 @@ sys.path.insert(0, HERE)
 import sahkan as SH  # noqa: E402
 
 REL_PT = 'BacktestShariah2/papertrade'
-CORAK = {'kemas': r'^Kemas kini 6:02 pagi (\d{4}-\d{2}-\d{2})', 'imbas': r'^Imbas (?:malam|8:02 malam|7:47 malam) (\d{4}-\d{2}-\d{2})',
-         'beli': r'^Beli 9:35 NY (\d{4}-\d{2}-\d{2})'}
+TARIKH = r'(\d{4}-\d{2}-\d{2}|\d{1,2} [A-Z][a-z]{2} \d{4})'   # 2026-10-22 atau "22 Okt 2026" (rutin 6:02 sejak 22 Okt)
+CORAK = {'kemas': r'^Kemas kini 6:02 pagi ' + TARIKH, 'imbas': r'^Imbas (?:malam|8:02 malam|7:47 malam) ' + TARIKH,
+         'beli': r'^Beli 9:35 NY ' + TARIKH}
+BULAN = dict(Jan=1, Feb=2, Mac=3, Apr=4, Mei=5, Jun=6, Jul=7, Ogo=8, Sep=9, Okt=10, Nov=11, Dis=12)
+
+
+def padan(k, msg):
+    """Tarikh ISO dalam mesej commit rutin Claude jenis k, atau None."""
+    m = re.match(CORAK[k], msg)
+    if not m:
+        return None
+    t = m.group(1)
+    if '-' in t:
+        return t
+    h, b, y = t.split()
+    return f'{y}-{BULAN[b]:02d}-{int(h):02d}' if b in BULAN else None
 
 
 def git(*a):
@@ -44,9 +58,8 @@ def cari_commit(D):
     out = {'imbas': []}
     for ln in git('log', '--format=%H %s', '--since', f'{D} 00:00 +0800', '--until', f'{D} 23:59 +0800').splitlines()[::-1]:
         h, msg = ln.split(' ', 1)
-        for k, pat in CORAK.items():
-            m = re.match(pat, msg)
-            if m and m.group(1) == D:
+        for k in CORAK:
+            if padan(k, msg) == D:
                 if k == 'imbas':
                     out['imbas'].append(h)
                 else:
@@ -56,8 +69,7 @@ def cari_commit(D):
         if k not in out:
             for ln in git('log', '--format=%H %s', '-200').splitlines():
                 h, msg = ln.split(' ', 1)
-                m = re.match(CORAK[k], msg)
-                if m and m.group(1) == D:
+                if padan(k, msg) == D:
                     out[k] = h; break
     return out
 
@@ -204,7 +216,7 @@ def peringkat_kemas(c, kerja, masa=None):
     kami = ekstrak(c + '^', REL_PT, os.path.join(kerja, 'kami'))
     claude = ekstrak(c, REL_PT, os.path.join(kerja, 'claude'))
     ekstrak(c + '^', 'BacktestShariah2/data/harga/univ.txt', os.path.join(kerja, 'kami_u'))
-    D = re.match(CORAK['kemas'], git('show', '-s', '--format=%s', c)).group(1)
+    D = padan('kemas', git('show', '-s', '--format=%s', c))
     S = sesi_sebelum_tarikh(D)
     out = jalan(['malam', '--folder', kami, '--sesi', S, '--masa', masa or masa_commit(c), '--tanpa-imbas', '--isyarat', '',
                  '--univ', os.path.join(kerja, 'kami_u', 'BacktestShariah2/data/harga/univ.txt'), '--paksa'])
@@ -217,7 +229,7 @@ def peringkat_imbas(cs, kerja, masa=None):
     claude = ekstrak(c1, REL_PT, os.path.join(kerja, 'claude'))
     u = ekstrak(c0, 'BacktestShariah2/data/harga/univ.txt', os.path.join(kerja, 'u'))
     pem = ekstrak(c1, 'BacktestShariah2/data/pemangkin', os.path.join(kerja, 'p'))
-    D = re.match(CORAK['imbas'], git('show', '-s', '--format=%s', c0)).group(1)
+    D = padan('imbas', git('show', '-s', '--format=%s', c0))
     S = sesi_sebelum_tarikh(D)
     isy = os.path.join(kerja, 'isyarat')
     m = masa or masa_commit(c0)
@@ -234,7 +246,7 @@ def peringkat_beli(c, kerja, betul=None, masa=None):
     kami = ekstrak(c + '^', REL_PT, os.path.join(kerja, 'kami'))
     claude = ekstrak(c, REL_PT, os.path.join(kerja, 'claude'))
     cb = ekstrak(betul, REL_PT, os.path.join(kerja, 'betul')) if betul else None
-    D = re.match(CORAK['beli'], git('show', '-s', '--format=%s', c)).group(1)
+    D = padan('beli', git('show', '-s', '--format=%s', c))
     # harga buka = bar harian muktamad hari D daripada stor (Actions sebenar: yfinance semasa 9:35–10:00 NY)
     fr = [pd.read_csv(os.path.join(BS2, 'data/harga/stor', f)) for f in ('harga_A.csv', 'harga_B.csv')]
     d = pd.concat(fr); d = d[d.date == int(D.replace('-', ''))]
