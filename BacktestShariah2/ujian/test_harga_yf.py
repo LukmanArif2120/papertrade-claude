@@ -67,6 +67,14 @@ class UjiHargaYf(unittest.TestCase):
         self.assertEqual(len(r), 1)
         self.assertAlmostEqual(r.close.iloc[0], 0.01)
 
+    def test_liputan_sesi(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as dd:
+            p = os.path.join(dd, 'terkini.csv')
+            self.assertEqual(H.liputan_sesi(p, 20261021), 0)
+            pd.DataFrame(dict(ticker=['A', 'A', 'B', 'C'], date=[20261020, 20261021, 20261021, 20261020])).to_csv(p, index=False)
+            self.assertEqual(H.liputan_sesi(p, 20261021), 2)
+
     def test_universe(self):
         s, idx = H.universe()
         self.assertEqual(idx, ['SPY', 'QQQ'])

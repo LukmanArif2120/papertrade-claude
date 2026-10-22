@@ -130,6 +130,17 @@ def tulis_status(nama, **kv):
     json.dump(st, open(p, 'w'), ensure_ascii=False, indent=1)
 
 
+def liputan_sesi(path, sesi):
+    """Bilangan ticker dalam fail terkini `path` yang ada bar sesi `sesi` (YYYYMMDD); 0 jika tiada fail."""
+    if not os.path.exists(path):
+        return 0
+    try:
+        d = pd.read_csv(path, usecols=['ticker', 'date'])
+    except Exception:
+        return 0
+    return int(d.loc[d.date == sesi, 'ticker'].nunique())
+
+
 def cmd_terkini(a):
     os.makedirs(HARGA, exist_ok=True)
     saham, idx = universe()
@@ -146,7 +157,14 @@ def cmd_terkini(a):
     lewat = sorted(akhir[akhir < sesi].index)
     if d.ticker.nunique() < 0.5 * (len(saham) + len(idx)):
         print(f'GAGAL: hanya {d.ticker.nunique()} ticker; fail lama dikekalkan', file=sys.stderr); sys.exit(1)
-    d.to_csv(os.path.join(HARGA, 'terkini.csv'), index=False, float_format='%.6g')
+    lama = os.path.join(HARGA, 'terkini.csv')
+    n_lama, n_baru = liputan_sesi(lama, sesi), int((akhir == sesi).sum())
+    if n_baru < 0.5 * n_lama:
+        # Yahoo kerap membuang bar sesi terakhir ~00:00–01:00 UTC (lengkap semula ~05:00): jangan timpa tarikan yang jauh
+        # lebih lengkap (status tidak dikemas kini, jadi gerbang data awal lejar.py kekal)
+        print(json.dumps(dict(sesi=sesi, dikekalkan=f'terkini.csv lama ada bar sesi bagi {n_lama} ticker; tarikan ini {n_baru}')))
+        return
+    d.to_csv(lama, index=False, float_format='%.6g')
     tulis_status('terkini', sesi=sesi, bil_ticker=int(d.ticker.nunique()), bil_universe=len(saham) + len(idx),
                  tiada_data=gagal, tiada_bar_sesi=lewat[:200], bil_tiada_bar_sesi=len(lewat), dividen_baharu=n_div)
     print(json.dumps(dict(sesi=sesi, ticker=int(d.ticker.nunique()), gagal=len(gagal), lewat=len(lewat))))
