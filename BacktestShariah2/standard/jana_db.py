@@ -142,6 +142,28 @@ def penurunan_maks(M, C, stor):
     return out
 
 
+def atr_isyarat(M, C, stor, n=14):
+    """ATR14 % pada bar terakhir sebelum hari beli (hari isyarat) bagi setiap posisi: purata julat benar 14 hari ÷ tutup × 100
+    (formula enjin.atr). Dipakai skor kaedah swing v2 untuk MAE ÷ ATR. Kunci sama dengan prestasi/mae."""
+    fr = pd.concat([pd.read_csv(os.path.join(stor, f), usecols=['ticker', 'date', 'high', 'low', 'close']) for f in ('harga_A.csv', 'harga_B.csv')
+                    if os.path.exists(os.path.join(stor, f))])
+    A = {}
+    for t, g in fr.groupby('ticker'):
+        g = g.drop_duplicates('date', keep='last').sort_values('date').set_index('date'); c = g.close
+        tr = pd.concat([g.high - g.low, (g.high - c.shift()).abs(), (g.low - c.shift()).abs()], axis=1).max(axis=1)
+        A[t] = (tr.rolling(n).mean() / c * 100).dropna()
+    out = {}
+    for ak, R in (('M', M), ('C', C)):
+        for r in R:
+            a = A.get(r.get('saham'))
+            if a is None or not r.get('tarikh_beli') or SH.benar(r.get('tidak_dibeli')):
+                continue
+            s = a[a.index < int(r['tarikh_beli'].replace('-', ''))]
+            if len(s):
+                out[f"{ak}|{r['saham']}|{r['kaedah']}|{r['tarikh_beli']}"] = round(float(s.iloc[-1]), 3)
+    return out
+
+
 HAD_RINGKAS = 200000
 
 
@@ -437,8 +459,8 @@ def main(argv=None):
         tarikh_data=wl[0]['tarikh_data'] if wl else S, rows=[baris_db(r, PETA_WATCH) for r in wl])
     # prestasi
     mae = penurunan_maks(M, C, a.stor)
-    docs['prestasi/mae'] = dict(rows=mae, dibina=dibina, harga_hingga=f'{S} tutup',
-                                definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude).')
+    docs['prestasi/mae'] = dict(rows=mae, atr=atr_isyarat(M, C, a.stor), dibina=dibina, harga_hingga=f'{S} tutup',
+                                definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude). atr: ATR14 % pada hari isyarat (kunci sama).')
     docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
                                       nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
     # papertrade/ringkas_c, ringkas_m: semua baris dalam bentuk padat (halaman v90 membaca ini sahaja, bukan claude*)
