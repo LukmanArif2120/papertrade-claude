@@ -1,69 +1,165 @@
 {
  "malam": {
-  "sesi": "2026-10-20",
-  "masa": "2026-10-21 14:05 MYT",
+  "sesi": "2026-10-21",
+  "masa": "2026-10-22 14:23 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 138,
+  "masa_kaedah_s": 326,
   "keluar_baru": {
    "M": {
-    "sasaran": 1
+    "henti": 1,
+    "isyarat": 2
    },
    "C": {
-    "sasaran": 12,
-    "isyarat": 41,
-    "henti": 55
+    "sasaran": 17,
+    "henti": 62,
+    "isyarat": 39
    }
   },
   "keluar_baru_jumlah": {
-   "M": 1,
-   "C": 108
+   "M": 3,
+   "C": 118
   },
-  "menunggu": 35,
+  "menunggu": 51,
   "harga_beli_dibetulkan": 111,
-  "harga_beli_beza_besar": 64,
-  "tidak_dibeli": [],
+  "harga_beli_beza_besar": 22,
+  "tidak_dibeli": [
+   "EXPO M35",
+   "CRAI M117"
+  ],
   "nota": [
    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
-   "C BIRK M18: tiada bar 2026-10-20 (harga terkini 2026-10-19)",
-   "C ATKR M11: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M66: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C BIRK M79: tiada bar 2026-10-20 (harga terkini 2026-10-19)",
-   "C ATKR M36: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M54: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M95: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M100: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M101: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M57: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M127: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
-   "C ATKR M102: tiada bar 2026-10-20 (harga terkini 2026-10-16)"
+   "C WLYB M30: tiada bar 2026-10-21 (harga terkini 2026-10-20)",
+   "C ATKR M11: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M66: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C WLYB M74: tiada bar 2026-10-21 (harga terkini 2026-10-20)",
+   "C ATKR M36: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M54: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M95: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M100: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M101: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M57: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M127: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C ATKR M102: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
+   "C WLYB M80: tiada bar 2026-10-21 (harga terkini 2026-10-20)"
   ],
-  "senarai_beli": 729,
-  "saham_unik": 316,
-  "kaedah": 102,
-  "belian_semula": 34,
-  "dari_watchlist": 99,
-  "isyarat": 2978,
-  "ditolak": {
-   "dipegang": 348,
-   "had": 1783,
-   "mingguan": 118
+  "tidak_layak_posisi": {
+   "ambil_alih": {
+    "ditutup": 89,
+    "menunggu": 0,
+    "saham": [
+     "ATKR",
+     "BRZE",
+     "DV",
+     "PEN",
+     "PTC",
+     "RAMP",
+     "SLAB",
+     "TECH"
+    ]
+   },
+   "delist": {
+    "ditutup": 0,
+    "saham": []
+   },
+   "tidak_cair": {
+    "tidak_sah": 23,
+    "saham": [
+     "AKA",
+     "BKHA",
+     "FEDU",
+     "KELYB",
+     "MAYS",
+     "MGRT",
+     "PHOE",
+     "SENEB",
+     "WLYB"
+    ]
+   },
+   "kelas_berganda": {
+    "tidak_sah": 15,
+    "saham": [
+     "FOX",
+     "NWS"
+    ]
+   },
+   "faktor": {
+    "dilaras": 0,
+    "semak": [
+     [
+      "claude_2.csv",
+      "RMR",
+      "M99",
+      "2026-10-13",
+      "2026-10-19"
+     ]
+    ]
+   }
   },
-  "watchlist": 285,
-  "watchlist_baharu": 177,
-  "watchlist_dibuang": 76,
-  "watchlist_ke_senarai": 99,
+  "dagangan_betul": 10,
+  "senarai_beli": 681,
+  "saham_unik": 304,
+  "kaedah": 102,
+  "belian_semula": 30,
+  "dari_watchlist": 74,
+  "isyarat": 2839,
+  "ditolak": {
+   "dipegang": 317,
+   "had": 1657,
+   "tidak_cair": 45,
+   "ambil_alih": 47,
+   "kelas_berganda": 11,
+   "mingguan": 81
+  },
+  "tidak_layak": {
+   "AKA": "tidak cair",
+   "ATKR": "ambil alih",
+   "BELFA": "kelas berganda",
+   "BIO.B": "tidak cair",
+   "BKHA": "tidak cair",
+   "BRZE": "ambil alih",
+   "DV": "ambil alih",
+   "FEDU": "tidak cair",
+   "FOX": "kelas berganda",
+   "ICCC": "tidak cair",
+   "KELYB": "tidak cair",
+   "KEQU": "tidak cair",
+   "MAYS": "tidak cair",
+   "MGRT": "tidak cair",
+   "NCEW": "tidak cair",
+   "NIPG": "tidak cair",
+   "NSYS": "tidak cair",
+   "NWS": "kelas berganda",
+   "PEN": "ambil alih",
+   "PHOE": "tidak cair",
+   "POLE": "tidak cair",
+   "PTC": "ambil alih",
+   "RAMP": "ambil alih",
+   "RGS": "tidak cair",
+   "RUSHB": "kelas berganda",
+   "SENEB": "tidak cair",
+   "SLAB": "ambil alih",
+   "SLP": "ambil alih",
+   "STRR": "tidak cair",
+   "TECH": "ambil alih",
+   "VSECU": "tidak cair",
+   "WLYB": "tidak cair"
+  },
+  "watchlist": 278,
+  "watchlist_baharu": 189,
+  "watchlist_dibuang": 122,
+  "watchlist_ke_senarai": 74,
   "minggu_akhir": false,
-  "fail_isyarat": "bayang/isyarat/2026-10-20_malam.csv.gz"
+  "fail_isyarat": "bayang/isyarat/2026-10-21_malam.csv.gz"
  },
  "gred": {
-  "tarikh": "2026-10-21",
-  "masa": "2026-10-21 20:23 MYT",
+  "tarikh": "2026-10-22",
+  "masa": "2026-10-22 14:28 MYT",
   "pemangkin": {
-   "C": 146,
-   "B": 453,
-   "–": 7,
-   "D": 123
+   "–": 9,
+   "D": 190,
+   "C": 176,
+   "B": 306
   }
  },
  "beli": {

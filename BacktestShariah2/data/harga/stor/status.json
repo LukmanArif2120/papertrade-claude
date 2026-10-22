@@ -1,5 +1,5 @@
 {
- "dikemaskini": "2026-10-21 15:57 UTC",
+ "dikemaskini": "2026-10-22 06:23 UTC",
  "bar_terakhir": 20261021,
  "laras": {},
  "perlu_sejarah": [
@@ -7,7 +7,7 @@
  ],
  "harga_A.csv": {
   "ticker_dikemaskini": 431,
-  "bar_terakhir": 20261020
+  "bar_terakhir": 20261021
  },
  "harga_B.csv": {
   "ticker_dikemaskini": 498,
@@ -15,7 +15,13 @@
  },
  "harga_idx.csv": {
   "ticker_dikemaskini": 2,
-  "bar_terakhir": 20261020
+  "bar_terakhir": 20261021
  },
- "moomoo": 22
+ "log_laras": 2,
+ "faktor_dividen": [
+  "HMY 2026-10-09 D=0.461 P=16.84 (2.7%)",
+  "RMR 2026-10-19 D=0.45 P=18.32 (2.5%)"
+ ],
+ "faktor_calon": [],
+ "moomoo": 0
 }

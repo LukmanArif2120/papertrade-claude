@@ -1,0 +1,578 @@
+[
+ {
+  "peringkat": "kemas",
+  "commit": "c283c68",
+  "sesi": "2026-10-20",
+  "ringkas": {
+   "sesi": "2026-10-20",
+   "masa": "2026-10-21 06:10 MYT",
+   "ralat_kaedah": [],
+   "kaedah_tanpa_modul": [],
+   "masa_kaedah_s": 306,
+   "keluar_baru": {
+    "M": {
+     "sasaran": 1
+    },
+    "C": {
+     "sasaran": 15,
+     "isyarat": 36,
+     "henti": 53
+    }
+   },
+   "keluar_baru_jumlah": {
+    "M": 1,
+    "C": 104
+   },
+   "menunggu": 40,
+   "harga_beli_dibetulkan": 301,
+   "harga_beli_beza_besar": 54,
+   "tidak_dibeli": [
+    "SGU M12",
+    "APOG M25",
+    "MXL M117",
+    "HMY M122",
+    "CRM M125",
+    "MRVL M153",
+    "WTTR M153",
+    "INGM M153"
+   ],
+   "nota": [
+    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
+    "C ATKR M11: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M66: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M36: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M54: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M95: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M100: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M101: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M57: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M127: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M102: tiada bar 2026-10-20 (harga terkini 2026-10-16)"
+   ],
+   "tidak_layak_posisi": {
+    "ambil_alih": {
+     "ditutup": 68,
+     "menunggu": 0,
+     "saham": [
+      "ATKR",
+      "BRZE",
+      "DV",
+      "PEN",
+      "PTC",
+      "RAMP",
+      "SLAB",
+      "TECH"
+     ]
+    },
+    "delist": {
+     "ditutup": 0,
+     "saham": []
+    },
+    "tidak_cair": {
+     "tidak_sah": 17,
+     "saham": [
+      "AKA",
+      "BKHA",
+      "FEDU",
+      "MAYS",
+      "MGRT",
+      "SENEB",
+      "WLYB"
+     ]
+    },
+    "kelas_berganda": {
+     "tidak_sah": 8,
+     "saham": [
+      "FOX",
+      "NWS"
+     ]
+    },
+    "faktor": {
+     "dilaras": 0,
+     "semak": [
+      [
+       "claude_2.csv",
+       "RMR",
+       "M99",
+       "2026-10-13",
+       "2026-10-19"
+      ]
+     ]
+    }
+   },
+   "dagangan_betul": 7
+  },
+  "stat": {
+   "diubah_claude": 2917,
+   "dibanding": 3750,
+   "harga_beli_sama": 3749,
+   "keluar_sama": 3676,
+   "harga_terkini_sama": 2788,
+   "teks_sama": 3671,
+   "harga_keluar_sama": 888,
+   "tidak_dibeli_sama": 43,
+   "baris": 3794,
+   "hanya_kami": 0,
+   "hanya_claude": 0
+  },
+  "beza": {
+   "harga_beli": [
+    "('C', 'M99', 'RMR', '2026-10-12', '2026-10-13'): kami 17.8798 / Claude 18.33"
+   ],
+   "tidak_dibeli": [
+    "('C', 'M122', 'HMY', '2026-10-19', '2026-10-20'): kami True (sedia() sig=False pada 2026-10-19 (disemak dengan bar hingga 2026-10-20)) / Claude -"
+   ],
+   "keluar": [
+    "('C', 'M02', 'RAMP', '2026-10-13', '2026-10-14'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 32.24)",
+    "('C', 'M03', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.06, sasaran 37.93)",
+    "('C', 'M04', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.06)",
+    "('C', 'M06', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.06)",
+    "('C', 'M100', 'ATKR', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 94.62, sasaran 96.48)",
+    "('C', 'M101', 'ATKR', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 92.38)",
+    "('C', 'M102', 'ATKR', '2026-10-07', '2026-10-08'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 94.76)",
+    "('C', 'M105', 'PEN', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-01-15, Boston Scientific, tawaran $374.00; senarai) — tutup 2026-10-20 @ 324.34 / Claude Pegang (henti 316.04)",
+    "('C', 'M105', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.22)",
+    "('C', 'M11', 'ATKR', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 93.67)",
+    "('C', 'M12', 'DV', '2026-10-08', '2026-10-09'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.36)",
+    "('C', 'M12', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.43)",
+    "('C', 'M122', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.43)",
+    "('C', 'M124', 'PEN', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-01-15, Boston Scientific, tawaran $374.00; senarai) — tutup 2026-10-20 @ 324.34 / Claude Pegang (henti 318.94)",
+    "('C', 'M127', 'ATKR', '2026-10-15', '2026-10-16'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 94.88)",
+    "('C', 'M133', 'BRZE', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-10-20, Salesforce; senarai) — tutup 2026-10-20 @ 45.57 / Claude Pegang (henti 27.01)",
+    "('C', 'M14', 'DV', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.48)",
+    "('C', 'M14', 'PTC', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-10-05, Schneider Electric, tawaran $205.00; senarai) — tutup 2026-10-20 @ 193.35 / Claude Pegang (henti 192.76)",
+    "('C', 'M14', 'TECH', '2026-10-08', '2026-10-09'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-06-25, Merck KGaA, tawaran $73.00; senarai) — tutup 2026-10-20 @ 72.58 / Claude Pegang (henti 72.41)",
+    "('C', 'M15', 'PEN', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-01-15, Boston Scientific, tawaran $374.00; senarai) — tutup 2026-10-20 @ 324.34 / Claude Pegang (henti 318.23)",
+    "('C', 'M153', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 33.62)",
+    "('C', 'M155', 'DV', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.38)",
+    "('C', 'M156', 'DV', '2026-10-16', '2026-10-19'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.36)",
+    "('C', 'M158', 'PTC', '2026-10-16', '2026-10-19'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-10-05, Schneider Electric, tawaran $205.00; senarai) — tutup 2026-10-20 @ 193.35 / Claude Pegang (henti 169.82)",
+    "('C', 'M161', 'DV', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 11.48)",
+    "('C', 'M19', 'BSX', '2026-10-12', '2026-10-13'): kami Keluar: capai sasaran (20 Okt @ 45.74) / Claude Pegang (henti 40.97, sasaran 45.74)",
+    "('C', 'M20', 'GGG', '2026-10-08', '2026-10-09'): kami Keluar: capai sasaran (16 Okt @ 82.79) / Claude Keluar: capai sasaran (buka atas sasaran) (15 Okt @ 81.40)",
+    "('C', 'M20', 'MUR', '2026-10-08', '2026-10-09'): kami Keluar: capai sasaran (16 Okt @ 40.62) / Claude Keluar: capai sasaran (12 Okt @ 39.72)",
+    "('C', 'M20', 'NUE', '2026-10-09', '2026-10-12'): kami Keluar: capai sasaran (16 Okt @ 261.12) / Claude Pegang (henti 244.94)",
+    "('C', 'M20', 'PTEN', '2026-10-16', '2026-10-19'): kami Keluar: capai sasaran (buka atas sasaran) (20 Okt @ 12.25) / Claude Pegang (henti 11.25, sasaran 12.01)",
+    "('C', 'M20', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.07, sasaran 40.50)",
+    "('C', 'M20', 'SU', '2026-10-08', '2026-10-09'): kami Keluar: capai sasaran (13 Okt @ 75.52) / Claude Keluar: capai sasaran (12 Okt @ 73.58)",
+    "('C', 'M20', 'TECH', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-06-25, Merck KGaA, tawaran $73.00; senarai) — tutup 2026-10-20 @ 72.58 / Claude Pegang (henti 71.76, sasaran 73.99)",
+    "('C', 'M20', 'TRMB', '2026-10-15', '2026-10-16'): kami Pegang (henti 58.78, sasaran 65.36) / Claude Keluar: capai sasaran (20 Okt @ 62.16)",
+    "('C', 'M29', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.16)",
+    "('C', 'M30', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.06)",
+    "('C', 'M31', 'DV', '2026-10-13', '2026-10-14'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang",
+    "('C', 'M33', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.22)",
+    "('C', 'M35', 'DV', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.48)",
+    "('C', 'M35', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.44)",
+    "('C', 'M36', 'ATKR', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 93.98)",
+    "('C', 'M36', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.77)",
+    "('C', 'M39', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.53)",
+    "('C', 'M39', 'SLAB', '2026-10-09', '2026-10-12'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-02-04, Texas Instruments, tawaran $231.00; senarai) — tutup 2026-10-20 @ 221.10 / Claude Pegang (henti 217.53)",
+    "('C', 'M49', 'DV', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.51)",
+    "('C', 'M50', 'PTC', '2026-10-16', '2026-10-19'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-10-05, Schneider Electric, tawaran $205.00; senarai) — tutup 2026-10-20 @ 193.35 / Claude Pegang (henti 192.76)",
+    "('C', 'M52', 'DV', '2026-10-09', '2026-10-12'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 8.11)",
+    "('C', 'M54', 'ATKR', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 94.43)",
+    "('C', 'M54', 'DV', '2026-10-13', '2026-10-14'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.43)",
+    "('C', 'M55', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.43)",
+    "('C', 'M57', 'ATKR', '2026-10-15', '2026-10-16'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 94.84)",
+    "('C', 'M57', 'PTC', '2026-10-16', '2026-10-19'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-10-05, Schneider Electric, tawaran $205.00; senarai) — tutup 2026-10-20 @ 193.35 / Claude Pegang (henti 192.76)",
+    "('C', 'M66', 'ATKR', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 94.84)",
+    "('C', 'M66', 'TECH', '2026-10-12', '2026-10-13'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-06-25, Merck KGaA, tawaran $73.00; senarai) — tutup 2026-10-20 @ 72.58 / Claude Pegang (henti 72.43)",
+    "('C', 'M73', 'PTC', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-10-05, Schneider Electric, tawaran $205.00; senarai) — tutup 2026-10-20 @ 193.35 / Claude Pegang",
+    "('C', 'M73', 'TECH', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-06-25, Merck KGaA, tawaran $73.00; senarai) — tutup 2026-10-20 @ 72.58 / Claude Isyarat keluar 20 Okt — jual pada buka esok (menunggu)",
+    "('C', 'M74', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.86)",
+    "('C', 'M74', 'TECH', '2026-10-12', '2026-10-13'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-06-25, Merck KGaA, tawaran $73.00; senarai) — tutup 2026-10-20 @ 72.58 / Claude Pegang (henti 72.32)",
+    "('C', 'M78', 'DV', '2026-10-16', '2026-10-19'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 12.42)",
+    "('C', 'M80', 'DV', '2026-10-12', '2026-10-13'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.33)",
+    "('C', 'M81', 'ARM', '2026-10-08', '2026-10-09'): kami Keluar: kena henti (20 Okt @ 220.42) / Claude Keluar: isyarat keluar kaedah 12 Okt (13 Okt @ 245.32)",
+    "('C', 'M81', 'DELL', '2026-10-15', '2026-10-16'): kami Pegang (henti 378.05) / Claude Keluar: isyarat keluar kaedah 19 Okt (20 Okt @ 444.50)",
+    "('C', 'M81', 'UMC', '2026-10-16', '2026-10-19'): kami Pegang (henti 16.82) / Claude Keluar: isyarat keluar kaedah 19 Okt (20 Okt @ 19.50)",
+    "('C', 'M82', 'ANF', '2026-10-12', '2026-10-13'): kami Keluar: isyarat keluar kaedah 19 Okt (20 Okt @ 162.00) / Claude Pegang",
+    "('C', 'M82', 'DHT', '2026-10-09', '2026-10-12'): kami Pegang / Claude Keluar: isyarat keluar kaedah 12 Okt (13 Okt @ 26.14)",
+    "('C', 'M82', 'DT', '2026-10-08', '2026-10-09'): kami Pegang / Claude Keluar: isyarat keluar kaedah 9 Okt (12 Okt @ 64.50)",
+    "('C', 'M82', 'DV', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang",
+    "('C', 'M82', 'PSX', '2026-10-09', '2026-10-12'): kami Pegang / Claude Keluar: isyarat keluar kaedah 13 Okt (14 Okt @ 294.00)",
+    "('C', 'M82', 'PTC', '2026-10-12', '2026-10-13'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-10-05, Schneider Electric, tawaran $205.00; senarai) — tutup 2026-10-20 @ 193.35 / Claude Pegang",
+    "('C', 'M82', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang",
+    "('C', 'M92', 'RAMP', '2026-10-19', '2026-10-20'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-05-18, Publicis Groupe, tawaran $38.50; senarai) — tutup 2026-10-20 @ 38.20 / Claude Pegang (henti 37.75)",
+    "('C', 'M93', 'DV', '2026-10-12', '2026-10-13'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.37)",
+    "('C', 'M95', 'ATKR', '2026-10-14', '2026-10-15'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-03, Prysmian, tawaran $95.00; senarai) — tutup 2026-10-16 @ 94.96 / Claude Pegang (henti 94.43)",
+    "('C', 'M95', 'DV', '2026-10-13', '2026-10-14'): kami Keluar: isyarat palsu, saham diambil alih (umum 2026-08-07, Nielsen, tawaran $13.60; senarai) — tutup 2026-10-20 @ 13.53 / Claude Pegang (henti 13.43)"
+   ],
+   "harga_keluar": [],
+   "harga_terkini": []
+  },
+  "hanya_kami": [],
+  "hanya_claude": []
+ },
+ {
+  "peringkat": "imbas",
+  "commit": "0eb52ad..ae1673e",
+  "sesi": "2026-10-20",
+  "ringkas": {
+   "sesi": "2026-10-20",
+   "masa": "2026-10-21 20:15 MYT",
+   "ralat_kaedah": [],
+   "kaedah_tanpa_modul": [],
+   "masa_kaedah_s": 326,
+   "keluar_baru": {
+    "M": {},
+    "C": {
+     "sasaran": 3,
+     "isyarat": 1
+    }
+   },
+   "keluar_baru_jumlah": {
+    "M": 0,
+    "C": 4
+   },
+   "menunggu": 40,
+   "harga_beli_dibetulkan": 0,
+   "harga_beli_beza_besar": 0,
+   "tidak_dibeli": [],
+   "nota": [
+    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
+    "C ATKR M11: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M66: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M36: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M54: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M95: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M100: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M101: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M57: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M127: tiada bar 2026-10-20 (harga terkini 2026-10-16)",
+    "C ATKR M102: tiada bar 2026-10-20 (harga terkini 2026-10-16)"
+   ],
+   "tidak_layak_posisi": {
+    "ambil_alih": {
+     "ditutup": 68,
+     "menunggu": 0,
+     "saham": [
+      "ATKR",
+      "BRZE",
+      "DV",
+      "PEN",
+      "PTC",
+      "RAMP",
+      "SLAB",
+      "TECH"
+     ]
+    },
+    "delist": {
+     "ditutup": 0,
+     "saham": []
+    },
+    "tidak_cair": {
+     "tidak_sah": 17,
+     "saham": [
+      "AKA",
+      "BKHA",
+      "FEDU",
+      "MAYS",
+      "MGRT",
+      "SENEB",
+      "WLYB"
+     ]
+    },
+    "kelas_berganda": {
+     "tidak_sah": 8,
+     "saham": [
+      "FOX",
+      "NWS"
+     ]
+    },
+    "faktor": {
+     "dilaras": 0,
+     "semak": [
+      [
+       "claude_2.csv",
+       "RMR",
+       "M99",
+       "2026-10-13",
+       "2026-10-19"
+      ]
+     ]
+    }
+   },
+   "dagangan_betul": 10,
+   "senarai_beli": 717,
+   "saham_unik": 309,
+   "kaedah": 99,
+   "belian_semula": 33,
+   "dari_watchlist": 99,
+   "isyarat": 2980,
+   "ditolak": {
+    "dipegang": 342,
+    "had": 1727,
+    "tidak_cair": 15,
+    "ambil_alih": 42,
+    "kelas_berganda": 19,
+    "mingguan": 118
+   },
+   "tidak_layak": {
+    "AKA": "tidak cair",
+    "ATKR": "ambil alih",
+    "BELFA": "kelas berganda",
+    "BIO.B": "tidak cair",
+    "BKHA": "tidak cair",
+    "BRZE": "ambil alih",
+    "DV": "ambil alih",
+    "FEDU": "tidak cair",
+    "FOX": "kelas berganda",
+    "ICCC": "tidak cair",
+    "KELYB": "tidak cair",
+    "KEQU": "tidak cair",
+    "MAYS": "tidak cair",
+    "MGRT": "tidak cair",
+    "NCEW": "tidak cair",
+    "NIPG": "tidak cair",
+    "NSYS": "tidak cair",
+    "NWS": "kelas berganda",
+    "PEN": "ambil alih",
+    "PHOE": "tidak cair",
+    "POLE": "tidak cair",
+    "PTC": "ambil alih",
+    "RAMP": "ambil alih",
+    "RUSHB": "kelas berganda",
+    "SENEB": "tidak cair",
+    "SLAB": "ambil alih",
+    "SLP": "ambil alih",
+    "STRR": "tidak cair",
+    "TECH": "ambil alih",
+    "VSECU": "tidak cair",
+    "WLYB": "tidak cair"
+   },
+   "watchlist": 276,
+   "watchlist_baharu": 213,
+   "watchlist_dibuang": 49,
+   "watchlist_ke_senarai": 99,
+   "minggu_akhir": false,
+   "fail_isyarat": "../../../../../../tmp/bayang_0hzn945r/imbas/isyarat/2026-10-20_malam.csv.gz"
+  },
+  "stat": {
+   "senarai_kami": 717,
+   "senarai_claude": 730,
+   "senarai_sama": 693,
+   "henti_sama": 693,
+   "sasaran_sama": 693,
+   "belian_ke_sama": 693,
+   "gred_sektor_sama": 693,
+   "gred_industri_sama": 693,
+   "gred_rs_sama": 693,
+   "gred_qr_sama": 693,
+   "gred_pemangkin_sama": 691,
+   "watch_kami": 276,
+   "watch_claude": 285,
+   "watch_sama": 224
+  },
+  "beza": {
+   "hanya_kami": [
+    "('ADBE', 'M31', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('ANF', 'M82', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('ASAN', 'M137', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('BSY', 'M159', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('CECO', 'M28', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('DLB', 'M111', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('EXPD', 'M73', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('EYE', 'M92', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('FOXA', 'M119', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('HQY', 'M30', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('HSTM', 'M149', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('LSPD', 'M39', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('LYFT', 'M145', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('NKE', 'M150', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('QGEN', 'M36', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('REGN', 'M124', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('RMD', 'M116', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('SHEL', 'M81', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('SITE', 'M105', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('TEAM', 'M81', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('TTE', 'M155', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('VMC', 'M124', '2026-10-20') asal=isyarat rank? sumber=431",
+    "('ZBRA', 'M66', '2026-10-20') asal=isyarat rank? sumber=lain",
+    "('ZM', 'M161', '2026-10-20') asal=isyarat rank? sumber=431"
+   ],
+   "hanya_claude": [
+    "('BRZE', 'M04', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M116', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M137', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M145', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M155', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M159', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M161', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M21', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M23', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M31', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M36', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M39', '2026-10-20') asal=isyarat sumber=431",
+    "('BRZE', 'M73', '2026-10-20') asal=isyarat sumber=431",
+    "('DELL', 'M81', '2026-10-20') asal=isyarat sumber=431",
+    "('DV', 'M119', '2026-10-20') asal=isyarat sumber=431",
+    "('DV', 'M149', '2026-10-20') asal=isyarat sumber=431",
+    "('DV', 'M90', '2026-10-20') asal=isyarat sumber=431",
+    "('EQNR', 'M156', '2026-10-20') asal=isyarat sumber=431",
+    "('FOX', 'M105', '2026-10-20') asal=isyarat sumber=431",
+    "('FOX', 'M111', '2026-10-20') asal=isyarat sumber=431",
+    "('FOX', 'M124', '2026-10-20') asal=isyarat sumber=431",
+    "('FOX', 'M150', '2026-10-20') asal=isyarat sumber=431",
+    "('FOX', 'M30', '2026-10-20') asal=watchlist sumber=431",
+    "('FOX', 'M66', '2026-10-20') asal=watchlist sumber=431",
+    "('FOX', 'M92', '2026-10-20') asal=isyarat sumber=431",
+    "('MGRT', 'M47', '2026-10-20') asal=isyarat sumber=lain",
+    "('NCEW', 'M28', '2026-10-20') asal=isyarat sumber=lain",
+    "('NWS', 'M111', '2026-10-20') asal=isyarat sumber=431",
+    "('NWS', 'M92', '2026-10-20') asal=watchlist sumber=431",
+    "('POLE', 'M02', '2026-10-20') asal=isyarat sumber=lain",
+    "('RAMP', 'M124', '2026-10-20') asal=isyarat sumber=431",
+    "('RAMP', 'M70', '2026-10-20') asal=isyarat sumber=431",
+    "('RUSHB', 'M67', '2026-10-20') asal=watchlist sumber=lain",
+    "('SLAB', 'M99', '2026-10-20') asal=watchlist sumber=lain",
+    "('TECH', 'M67', '2026-10-20') asal=watchlist sumber=431",
+    "('TECH', 'M82', '2026-10-20') asal=isyarat sumber=431",
+    "('UMC', 'M81', '2026-10-20') asal=isyarat sumber=431"
+   ],
+   "henti": [],
+   "sasaran": [],
+   "gred": [
+    "('ELVR', 'M28', '2026-10-20') gred_pemangkin: kami – / Claude D",
+    "('GFI', 'M155', '2026-10-20') gred_pemangkin: kami – / Claude D"
+   ],
+   "belian_ke": []
+  },
+  "watch_hanya_kami": [
+   "('ACA', 'M100')",
+   "('ACM', 'M03')",
+   "('ADNT', 'M11')",
+   "('AMD', 'M77')",
+   "('APA', 'M78')",
+   "('APD', 'M46')",
+   "('ATRC', 'M52')",
+   "('AVPT', 'M54')",
+   "('AZN', 'M14')",
+   "('BDX', 'M102')",
+   "('BDX', 'M37')",
+   "('BSY', 'M23')",
+   "('CHD', 'M46')",
+   "('CMI', 'M04')",
+   "('COR', 'M13')",
+   "('COR', 'M23')",
+   "('CTAS', 'M37')",
+   "('CVE', 'M111')",
+   "('DOV', 'M30')",
+   "('EW', 'M04')",
+   "('EXE', 'M25')",
+   "('FTI', 'M13')",
+   "('GLOB', 'M36')",
+   "('GRDN', 'M12')",
+   "('HVT', 'M100')",
+   "('IFF', 'M31')",
+   "('INFY', 'M36')",
+   "('JOE', 'M34')",
+   "('KE', 'M29')",
+   "('KFY', 'M05')"
+  ],
+  "watch_hanya_claude": [
+   "('AAP', 'M88')",
+   "('AVPT', 'M78')",
+   "('BIO.B', 'M01')",
+   "('BIO.B', 'M46')",
+   "('DT', 'M39')",
+   "('DV', 'M04')",
+   "('DV', 'M06')",
+   "('DV', 'M100')",
+   "('DV', 'M13')",
+   "('DV', 'M23')",
+   "('DV', 'M30')",
+   "('DV', 'M34')",
+   "('DV', 'M36')",
+   "('DV', 'M37')",
+   "('DV', 'M46')",
+   "('DV', 'M64')",
+   "('DVN', 'M102')",
+   "('FOX', 'M34')",
+   "('FOX', 'M44')",
+   "('HSIC', 'M03')",
+   "('INGM', 'M92')",
+   "('MRVL', 'M77')",
+   "('MSA', 'M05')",
+   "('PODD', 'M105')",
+   "('PODD', 'M33')",
+   "('PTC', 'M104')",
+   "('PTC', 'M23')",
+   "('PTC', 'M48')",
+   "('PTC', 'M52')",
+   "('PTC', 'M54')"
+  ]
+ },
+ {
+  "peringkat": "beli",
+  "commit": "91eac1f",
+  "tarikh": "2026-10-21",
+  "ringkas": {
+   "tarikh": "2026-10-21",
+   "masa": "2026-10-21 21:38 MYT",
+   "isyarat": "2026-10-20",
+   "calon": 730,
+   "direkod": 718,
+   "dilangkau": 12,
+   "langkau": [
+    "DHR M14: buka 217.56 <= henti 222.65",
+    "EXPO M35: buka 72.15 <= henti 72.15",
+    "ISRG M54: buka 402.50 <= henti 416.57",
+    "RGEN M74: buka 174.37 <= henti 176.35",
+    "LNTH M74: buka 100.28 <= henti 100.34",
+    "BIO M76: buka 350.21 <= henti 350.49",
+    "ISRG M116: isyarat batal pada buka (peraturan kaedah)",
+    "CRAI M117: isyarat batal pada buka (peraturan kaedah)",
+    "ISRG M119: buka 402.50 <= henti 426.70",
+    "WST M126: isyarat batal pada buka (peraturan kaedah)",
+    "WK M153: isyarat batal pada buka (peraturan kaedah)",
+    "EQNR M156: isyarat batal pada buka (peraturan kaedah)"
+   ],
+   "saham_unik": 313,
+   "sumber_buka": "buka bar harian (ulang tayang)",
+   "fail": "claude_40.csv",
+   "belian_semula": 34,
+   "buka_lewat": []
+  },
+  "stat": {
+   "direkod_kami": 718,
+   "direkod_claude": 703,
+   "sama": 697,
+   "harga_sama_sementara": 377
+  },
+  "beza": {
+   "hanya_kami": [
+    "('M02', 'ESCA')",
+    "('M02', 'POLE')",
+    "('M04', 'PDS')",
+    "('M115', 'JOE')",
+    "('M122', 'ESCA')",
+    "('M139', 'FTW')",
+    "('M146', 'PDS')",
+    "('M148', 'PDS')",
+    "('M152', 'NRP')",
+    "('M19', 'WLKP')",
+    "('M28', 'NCEW')",
+    "('M30', 'PDS')",
+    "('M34', 'NRP')",
+    "('M59', 'JOE')",
+    "('M68', 'ISRG')",
+    "('M70', 'FRD')",
+    "('M70', 'NRP')",
+    "('M70', 'SAIH')",
+    "('M79', 'PDS')",
+    "('M89', 'PDS')",
+    "('M99', 'GHC')"
+   ],
+   "hanya_claude": [
+    "('M116', 'ISRG')",
+    "('M117', 'CRAI')",
+    "('M126', 'WST')",
+    "('M153', 'WK')",
+    "('M156', 'EQNR')",
+    "('M76', 'BIO')"
+   ],
+   "harga_lawan_betul": []
+  }
+ }
+]
