@@ -57,6 +57,31 @@ class TestDelist(unittest.TestCase):
             self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi), [])
 
 
+class TestKelasBerganda(unittest.TestCase):
+    def test_tapis_dan_tanda(self):
+        # 22 Okt 2026: hanya kelas paling cair diimbas; kaedah sama membeli dua kelas hari sama -> kelas kurang cair tidak_sah
+        a = saham(umum=None, n=180); b = saham(umum=None, n=180, benih=2); b['volume'] = 3e5   # B kurang cair (tetapi > USD100k)
+        kump = {'A': 'Syk', 'B': 'Syk'}
+        x = TL.kelas_berganda({'A': a, 'B': b}, None, kump)
+        self.assertEqual(list(x), ['B'])
+        tb, ti = str(IX[170].date()), str(IX[169].date())
+        rows = [dict(tarikh_beli=tb, tarikh_isyarat=ti, saham=s, kaedah=k, harga_beli='50', keluar='False')
+                for s, k in (('A', 'M01'), ('B', 'M01'), ('B', 'M02'))]
+        lajur = TestPosisi.LAJUR + ['tarikh_isyarat']
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'claude_6.csv')
+            with open(p, 'w', newline='') as f:
+                w = csv.DictWriter(f, lajur); w.writeheader()
+                for r in rows:
+                    w.writerow({k: r.get(k, '') for k in lajur})
+            y = TL.tanda_kelas_berganda(d, {'A': a, 'B': b}, kump=kump)
+            self.assertEqual([(z[1], z[2]) for z in y], [('B', 'M01')])          # M02 hanya membeli B: bukan berganda
+            with open(p) as f:
+                out = list(csv.DictReader(f))
+            self.assertEqual([r['tidak_sah'] for r in out], ['', 'True', ''])
+            self.assertEqual(TL.tanda_kelas_berganda(d, {'A': a, 'B': b}, kump=kump), [])
+
+
 class TestTidakCairPosisi(unittest.TestCase):
     def test_tidak_sah_ikut_sesi_isyarat(self):
         # 22 Okt 2026: posisi C tidak cair pada sesi isyarat -> tidak_sah (tidak ditutup); cair pada isyarat -> kekal

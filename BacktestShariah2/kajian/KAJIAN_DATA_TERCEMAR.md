@@ -79,6 +79,9 @@ pencemaran di bawah terus masuk ke kedudukan.
   earnings). Simulasi `--kini 2026-11-10`: 31 kaedah ada posisi matang; cth. M159 410 matang tetapi hanya 3 hari beli → n berkesan 3;
   ~45% posisi matang melintas earnings.
 - #6 R9: 18 posisi C tidak cair → `tidak_sah` (`tidak_layak.py posisi`, nightly). #7 R8: `data/harga/univ_arkib/<sesi>.txt`.
+- R10 (susulan): `kod/dagangan.py` — keluar/sasaran dagangan sendiri bagi 13 modul replika (Lejar, harian_c, rutin 6:02 langkah 2c);
+  14 posisi C dibetulkan. A6: kelas berganda (`data/kelas_berganda.csv`): FOX, NWS, BELFA, RUSHB ditapis (kelas lain sudah tidak
+  cair); 15 posisi C berganda (FOX/FOXA 14, NWS/NWSA 1) → `tidak_sah`.
 
 ## A. Isyarat palsu daripada tindakan korporat / jenis instrumen
 | ID | Punca | Mekanisme | Ukuran (C / Lejar) | Kawalan |

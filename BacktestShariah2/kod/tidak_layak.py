@@ -4,6 +4,10 @@
 # 2. Tidak cair: 20 bar terakhir (<= sesi S) ada >= 3 bar tanpa julat (tinggi = rendah), >= 2 bar tanpa volum, atau median
 #    nilai dagangan harian (tutup x volum) < USD100 ribu. Bar sebegitu (cth. BIO.B, KELYB, SENEB) mencetus breakout/jurang
 #    palsu dan harga buka tidak boleh diisi. Isyarat ditolak; posisi sedia ada tidak diubah.
+# 2b. Kelas berganda (22 Okt 2026): syarikat sama dengan lebih daripada satu kelas saham (senarai disemak
+#    `data/kelas_berganda.csv`; pengesanan ikut nama tidak boleh dipercayai, cth. GHC/GHM dua syarikat Graham). Hanya kelas
+#    paling cair (median nilai 20 bar <= S) diimbas; kelas lain ditolak supaya satu isyarat tidak dikira dua kali (FOX/FOXA).
+#    Posisi C kaedah+hari beli sama yang membeli dua kelas: kelas kurang cair -> tidak_sah.
 # 3. Delist / tiada data: tiada bar bagi >= 5 sesi pasaran berturut (saham ditarik selepas ambil alih siap, cth. ATKR
 #    16 Okt 2026, SLP, QRVO). Saham ini tidak lagi beri isyarat; posisi terbuka tersangkut -> kedua-dua lorong ditutup pada
 #    tutup bar terakhir (anggaran nilai tunai; posisi kekal sah). Liputan data pasaran disemak dahulu oleh pemanggil.
@@ -22,7 +26,8 @@ BS2 = os.path.dirname(HERE)
 sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(BS2, 'standard'))
 import ambil_alih as AA  # noqa: E402
 
-VERSI = 'tidak_layak v1 (21 Okt 2026): tidak cair 3/2/100k, delist 5 sesi'
+VERSI = 'tidak_layak v2 (22 Okt 2026): tidak cair 3/2/100k, delist 5 sesi, kelas berganda'
+KELAS = os.path.join(BS2, 'data', 'kelas_berganda.csv')
 BAR_CAIR = 20
 JULAT0_MAKS = 3        # bar tanpa julat dalam 20 bar -> tidak cair
 VOL0_MAKS = 2          # bar tanpa volum dalam 20 bar -> tidak cair
@@ -31,8 +36,48 @@ DELIST_SESI = 5
 
 
 def versi():
-    """Kunci peraturan (termasuk senarai ambil alih): lejar.py membina semula lejar apabila berubah."""
-    return f'{VERSI}; {AA.versi()}'
+    """Kunci peraturan (termasuk senarai ambil alih dan kelas berganda): lejar.py membina semula lejar apabila berubah."""
+    import hashlib
+    h = hashlib.sha1(open(KELAS, 'rb').read()).hexdigest()[:8] if os.path.exists(KELAS) else '-'
+    return f'{VERSI}; {AA.versi()}; kelas {h}'
+
+
+def kumpulan_kelas(path=KELAS):
+    """{saham: kumpulan} daripada senarai kelas berganda."""
+    if not os.path.exists(path):
+        return {}
+    d = pd.read_csv(path, dtype=str)
+    return dict(zip(d.saham, d.kumpulan))
+
+
+def nilai_dagangan(g):
+    """Median tutup x volum 20 bar terakhir (USD), 0 jika tiada."""
+    if g is None or not len(g):
+        return 0.0
+    w = g.iloc[-BAR_CAIR:]
+    return float((w.close * w.volume).median())
+
+
+def kelas_berganda(frames, S=None, kump=None):
+    """{saham: teks} kelas yang BUKAN paling cair dalam kumpulan (bar <= S)."""
+    kump = kumpulan_kelas() if kump is None else kump
+    ahli = {}
+    for t, k in kump.items():
+        g = frames.get(t)
+        if g is None or not len(g):
+            continue
+        if S is not None and g.index[-1] > S:
+            g = g[g.index <= S]
+        if len(g):
+            ahli.setdefault(k, []).append((nilai_dagangan(g), t))
+    out = {}
+    for k, v in ahli.items():
+        if len(v) < 2:
+            continue
+        v.sort(reverse=True)
+        for _, t in v[1:]:
+            out[t] = f'kelas berganda {k} (kelas paling cair: {v[0][1]})'
+    return out
 
 
 def tidak_cair(g):
@@ -68,6 +113,8 @@ def tapis(frames, S=None, senarai=None):
         x = tidak_cair(g)
         if x:
             out[t] = dict(saham=t, sebab='tidak cair', teks=x)
+    for t, x in kelas_berganda(frames, S).items():
+        out.setdefault(t, dict(saham=t, sebab='kelas berganda', teks=x))
     return out
 
 
@@ -136,15 +183,52 @@ def tanda_tidak_cair(folder, frames, tulis=True):
     return out
 
 
+def tanda_kelas_berganda(folder, frames, tulis=True, kump=None):
+    """Posisi Papertrade C: kaedah yang sama membeli dua kelas syarikat sama pada hari beli sama -> kelas kurang cair (pada sesi
+    isyarat) tidak_sah, supaya satu isyarat tidak dikira dua kali. Pulang senarai perubahan."""
+    import sahkan as SH
+    kump = kumpulan_kelas() if kump is None else kump
+    fail = sorted(os.path.join(folder, f) for f in os.listdir(folder) if f.startswith('claude') and f.endswith('.csv'))
+    data = {p: SH.baca(p) for p in fail}
+    kumpul = {}
+    for p, (lajur, rows) in data.items():
+        for n, r in enumerate(rows):
+            k = kump.get(r.get('saham'))
+            if not k or SH.benar(r.get('tidak_dibeli')) or SH.benar(r.get('tidak_sah')) or not r.get('harga_beli'):
+                continue
+            kumpul.setdefault((r.get('kaedah'), r.get('tarikh_beli'), k), []).append((p, n))
+    out, ubah = [], set()
+    for (mid, tb, k), v in kumpul.items():
+        if len({data[p][1][n]['saham'] for p, n in v}) < 2:
+            continue
+        def cair(pn):
+            r = data[pn[0]][1][pn[1]]; g = frames.get(r['saham']); ti = r.get('tarikh_isyarat') or tb
+            return nilai_dagangan(g[g.index <= pd.Timestamp(ti)] if g is not None else None)
+        v = sorted(v, key=cair, reverse=True)
+        utama = data[v[0][0]][1][v[0][1]]['saham']
+        for p, n in v[1:]:
+            r = data[p][1][n]
+            if r['saham'] == utama:
+                continue
+            r['tidak_sah'] = 'True'; r['sebab_tidak_sah'] = f'isyarat berganda: kelas berganda {k} (kaedah sama membeli {utama} hari sama)'
+            ubah.add(p); out.append((os.path.basename(p), r['saham'], mid, tb))
+    if tulis:
+        for p in ubah:
+            SH.tulis(p, *data[p])
+    return out
+
+
 def posisi(folder, frames, sesi, tulis=True):
     """Langkah pagi/malam: isyarat palsu ambil alih (tidak_sah, tutup) kemudian posisi delist (tutup). Pulang ringkasan."""
     aa = AA.tanda_posisi(folder, frames, tulis)
     dl = tutup_delist(folder, frames, sesi, tulis)
     tc = tanda_tidak_cair(folder, frames, tulis)
+    kb = tanda_kelas_berganda(folder, frames, tulis)
     return dict(ambil_alih=dict(ditutup=sum(x[4] != 'menunggu' for x in aa), menunggu=sum(x[4] == 'menunggu' for x in aa),
                                 saham=sorted({x[1] for x in aa})),
                 delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl})),
-                tidak_cair=dict(tidak_sah=len(tc), saham=sorted({x[1] for x in tc})), _baris=aa + dl + tc)
+                tidak_cair=dict(tidak_sah=len(tc), saham=sorted({x[1] for x in tc})),
+                kelas_berganda=dict(tidak_sah=len(kb), saham=sorted({x[1] for x in kb})), _baris=aa + dl + tc + kb)
 
 
 # ---------------------------------------------------------------- CLI
@@ -159,7 +243,7 @@ def cmd_senarai(a):
     x = tapis(fr, a.sesi)
     for t in sorted(x, key=lambda t: (x[t]['sebab'], t)):
         print(t, x[t]['teks'], sep='\t')
-    print(json.dumps({k: sum(v['sebab'] == k for v in x.values()) for k in ('ambil alih', 'tidak cair')}, ensure_ascii=False),
+    print(json.dumps({k: sum(v['sebab'] == k for v in x.values()) for k in ('ambil alih', 'tidak cair', 'kelas berganda')}, ensure_ascii=False),
           file=sys.stderr)
 
 

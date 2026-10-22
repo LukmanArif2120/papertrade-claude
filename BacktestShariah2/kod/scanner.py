@@ -380,6 +380,7 @@ def cmd_scan(a):
     print(json.dumps(dict(tarikh_data=tdata, beli_dirancang=len(queue), saham_unik=len({q['saham'] for q in queue}),
                           ambil_alih=sorted(t for t, x in aa.items() if x['sebab'] == 'ambil alih'),
                           tidak_cair=sorted(t for t, x in aa.items() if x['sebab'] == 'tidak cair'),
+                          kelas_berganda=sorted(t for t, x in aa.items() if x['sebab'] == 'kelas berganda'),
                           dikongsi=sum(q['dikongsi'] for q in queue), ralat=ralat, masa_s=round(time.time() - t0),
                           kaedah=[dict(id=x[0], isyarat=x[1], posisi=x[2], penuh=x[3], watch=x[4], s=x[5]) for x in ringkas]),
                      ensure_ascii=False))
