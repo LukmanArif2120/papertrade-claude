@@ -167,6 +167,10 @@ def jalan(a):
     os.makedirs(EDGAR, exist_ok=True)
     stp = os.path.join(EDGAR, 'status.json')
     st = json.load(open(stp)) if os.path.exists(stp) else {}
+    if not os.environ.get('SEC_USER_AGENT'):
+        # SEC menolak (HTTP 403) User-Agent tanpa e-mel hubungan (ujian 22 Okt 2026): tunggu rahsia repo SEC_USER_AGENT
+        print(json.dumps(dict(langkau='rahsia SEC_USER_AGENT belum ditetapkan (nama + e-mel hubungan; SEC wajibkan)'), ensure_ascii=False))
+        return 0
     hingga = date.fromisoformat(a.hingga) if a.hingga else datetime.now(timezone.utc).date()
     mula = date.fromisoformat(a.mula) if a.mula else (date.fromisoformat(st['hari_terakhir']) + timedelta(days=1)
                                                        if st.get('hari_terakhir') else hingga - timedelta(days=3))
