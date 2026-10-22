@@ -57,6 +57,26 @@ class TestDelist(unittest.TestCase):
             self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi), [])
 
 
+class TestTapisFail(unittest.TestCase):
+    def test_senarai_beli_dan_watchlist(self):
+        # 22 Okt 2026: baris watchlist dibawa (sebelum penapis kelas berganda) masuk senarai beli -> pintu akhir
+        fr = {'X': saham(), 'Z': saham(umum=None)}
+        with tempfile.TemporaryDirectory() as d:
+            for nama, k, km, sh in (('senarai_beli.csv', 'saham', 'kaedah', ['X', 'Z']), ('watchlist.csv', 'Saham', 'Kaedah', ['X'])):
+                with open(os.path.join(d, nama), 'w', newline='') as f:
+                    w = csv.DictWriter(f, [k, km]); w.writeheader()
+                    for t in sh:
+                        w.writerow({k: t, km: 'M01'})
+            x = TL.tapis_fail(d, fr)
+            self.assertEqual(x, [('senarai_beli.csv', 'X', 'M01', 'ambil alih'), ('watchlist.csv', 'X', 'M01', 'ambil alih')])
+            with open(os.path.join(d, 'senarai_beli.csv')) as f:
+                self.assertEqual(len(list(csv.DictReader(f))), 2)                 # tanpa --tulis: tidak diubah
+            TL.tapis_fail(d, fr, tulis=True)
+            with open(os.path.join(d, 'senarai_beli.csv')) as f:
+                self.assertEqual([r['saham'] for r in csv.DictReader(f)], ['Z'])
+            self.assertEqual(TL.tapis_fail(d, fr, tulis=True), [])
+
+
 class TestKelasBerganda(unittest.TestCase):
     def test_tapis_dan_tanda(self):
         # 22 Okt 2026: hanya kelas paling cair diimbas; kaedah sama membeli dua kelas hari sama -> kelas kurang cair tidak_sah

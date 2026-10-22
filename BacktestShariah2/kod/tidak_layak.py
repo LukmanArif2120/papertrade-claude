@@ -255,6 +255,32 @@ def cmd_senarai(a):
           file=sys.stderr)
 
 
+def tapis_fail(folder, frames, tulis=False):
+    """Pintu akhir senarai_beli.csv dan watchlist.csv: buang baris saham tidak layak (termasuk baris watchlist yang dibawa
+    dari malam sebelum penapis berubah). Pulang [(fail, saham, kaedah, sebab)]."""
+    import sahkan as SH
+    tl = tapis(frames)
+    out = []
+    for nama, k, km in (('senarai_beli.csv', 'saham', 'kaedah'), ('watchlist.csv', 'Saham', 'Kaedah')):
+        p = os.path.join(folder, nama)
+        if not os.path.exists(p):
+            continue
+        lajur, data = SH.baca(p)
+        kekal = [r for r in data if r.get(k) not in tl]
+        out += [(nama, r.get(k), r.get(km), tl[r.get(k)]['sebab']) for r in data if r.get(k) in tl]
+        if tulis and len(kekal) != len(data):
+            SH.tulis(p, lajur, kekal)
+    return out
+
+
+def cmd_fail(a):
+    fr, _ = _muat(a.stor)
+    x = tapis_fail(a.folder, fr, a.tulis)
+    for y in x:
+        print(*y, sep='\t')
+    print(json.dumps(dict(dibuang=len(x), ditulis=bool(a.tulis)), ensure_ascii=False), file=sys.stderr)
+
+
 def cmd_posisi(a):
     fr, sesi = _muat(a.stor)
     rk = posisi(a.folder, fr, sesi, a.tulis)
@@ -271,8 +297,10 @@ def main(argv=None):
     s = sp.add_parser('senarai'); s.add_argument('--stor', default=stor); s.add_argument('--sesi')
     p = sp.add_parser('posisi'); p.add_argument('--folder', default=os.path.join(BS2, 'papertrade'))
     p.add_argument('--stor', default=stor); p.add_argument('--tulis', action='store_true')
+    f = sp.add_parser('fail'); f.add_argument('--folder', default=os.path.join(BS2, 'papertrade'))
+    f.add_argument('--stor', default=stor); f.add_argument('--tulis', action='store_true')
     a = ap.parse_args(argv)
-    return {'senarai': cmd_senarai, 'posisi': cmd_posisi}[a.cmd](a)
+    return {'senarai': cmd_senarai, 'posisi': cmd_posisi, 'fail': cmd_fail}[a.cmd](a)
 
 
 if __name__ == '__main__':
