@@ -1,7 +1,9 @@
 {
- "dikemaskini": "2026-10-22 06:23 UTC",
+ "dikemaskini": "2026-10-22 09:52 UTC",
  "bar_terakhir": 20261021,
- "laras": {},
+ "laras": {
+  "RMR": 1.025181
+ },
  "perlu_sejarah": [
   "REF"
  ],
@@ -17,11 +19,8 @@
   "ticker_dikemaskini": 2,
   "bar_terakhir": 20261021
  },
- "log_laras": 2,
- "faktor_dividen": [
-  "HMY 2026-10-09 D=0.461 P=16.84 (2.7%)",
-  "RMR 2026-10-19 D=0.45 P=18.32 (2.5%)"
- ],
+ "log_laras": 0,
+ "faktor_dividen": [],
  "faktor_calon": [],
  "moomoo": 0
 }
