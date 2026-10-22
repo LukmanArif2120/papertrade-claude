@@ -27,7 +27,8 @@
 # Pantau (22 Okt 2026, Fasa 4 item 15 laporan reports/Skor KPI pemilihan kaedah swing.md; lajur pantau, p_*): kohort = purata
 # pulangan bersih lorong 1 posisi matang yang dibeli hari sama. BERSARA = P(mu <= 0) > 0.9 dengan >= 20 hari beli, atau >= 2 amaran
 # CUSUM; GANTUNG = kejatuhan ekuiti kohort > 1.5 x maks backtest atau tempoh di bawah puncak > maks backtest (hari dagangan; kekal
-# hingga semakan semula); AMARAN = 1 amaran CUSUM bawah (k 0.5, h bootstrap ARL0 ~ 2 tahun; kohort diwinsor p5–p95 backtest,
+# hingga semakan semula), atau (22 Okt 2026, brek ikut data hadapan) purata 20 kohort matang terakhir < persentil ke-5 purata bergulir
+# 20 kohort backtest - (1 - kekal) x purata kohort backtest (bawah 5% jika kaedah berprestasi pada jangkaan); AMARAN = 1 amaran CUSUM bawah (k 0.5, h bootstrap ARL0 ~ 2 tahun; kohort diwinsor p5–p95 backtest,
 # sasaran = purata winsor - (1 - kekal) x purata kohort backtest, dibahagi sd winsor); OK; BELUM CUKUP < 5 kohort matang.
 # Parameter backtest: data/analisis/kalibrasi_skor.json 'pantau' (standard/kalibrasi_skor.py). Label sahaja: tiada order.
 import argparse, glob, json, math, os, re
@@ -70,6 +71,7 @@ PANTAU_DD = 1.5         # GANTUNG: kejatuhan ekuiti kohort > 1.5 x maks backtest
 PANTAU_P = 0.9          # BERSARA: P(mu <= 0) > 0.9 ...
 PANTAU_G = 20           # ... dengan >= 20 hari beli matang
 PANTAU_KOHORT = 5       # kohort matang minimum sebelum pantau dinilai
+PANTAU_BERGULIR = 20    # GANTUNG hadapan: purata N kohort matang terakhir lawan p5 purata bergulir N kohort backtest
 PANTAU_STATUS = ['BERSARA', 'GANTUNG', 'AMARAN', 'OK', 'BELUM CUKUP']
 N_HARI_MIN = 10         # hari beli berbeza minimum sebelum status dinilai (R5)
 HARI_KLUSTER_MIN = 5    # < 5 hari beli berbeza: n berkesan = bilangan hari (anggaran kesan reka bentuk tidak stabil)
@@ -390,7 +392,7 @@ def pantau_kaedah(P, umur, kini, kal, kekal, mu, lo, hi, hari_beli, k=0.5):
     se = (hi - mu) / 1.96 if hi is not None and mu is not None else None
     p_rugi = phi(-mu / se) if se and se > 0 else None
     out = dict(pantau='BELUM CUKUP', p_rugi=bulat(p_rugi, 3), p_kohort=0, p_dd=None, p_dd_had=None, p_dd_tempoh=None,
-               p_dd_tempoh_had=None, p_cusum=None, p_h=None, p_amaran=0, p_sebab='')
+               p_dd_tempoh_had=None, p_bergulir=None, p_bergulir_had=None, p_cusum=None, p_h=None, p_amaran=0, p_sebab='')
     if len(P):
         tb = pd.to_datetime(P.tarikh_beli)
         M = P[(tb <= pd.Timestamp(kini) - pd.Timedelta(days=umur)).values & P.hasil1.notna().values]
@@ -424,6 +426,12 @@ def pantau_kaedah(P, umur, kini, kal, kekal, mu, lo, hi, hari_beli, k=0.5):
             sebab.append(f"kejatuhan {out['p_dd']:.1f} > {out['p_dd_had']:.1f}")
         if lama > kal['dd_tempoh']:
             sebab.append(f"tempoh di bawah puncak {lama} > {int(kal['dd_tempoh'])} hari")
+        n = int(kal.get('n_bergulir', PANTAU_BERGULIR))
+        if kal.get('p5_bergulir') is not None and len(c) >= n:
+            out['p_bergulir'] = bulat(float(c.values[-n:].mean()), 2)
+            out['p_bergulir_had'] = bulat(kal['p5_bergulir'] - (1 - kekal) * kal['mu_kohort'], 2)
+            if out['p_bergulir'] < out['p_bergulir_had']:
+                sebab.append(f"purata {n} hari beli {out['p_bergulir']:+.2f}% < p5 backtest {out['p_bergulir_had']:+.2f}%")
     bersara = (p_rugi is not None and p_rugi > PANTAU_P and hari_beli >= PANTAU_G) or out['p_amaran'] >= 2
     if p_rugi is not None and p_rugi > PANTAU_P and hari_beli >= PANTAU_G:
         sebab.insert(0, f"P(purata ≤ 0) {p_rugi:.2f} > {PANTAU_P}")
@@ -433,7 +441,7 @@ def pantau_kaedah(P, umur, kini, kal, kekal, mu, lo, hi, hari_beli, k=0.5):
         out['pantau'] = 'BERSARA'
     elif len(c) < PANTAU_KOHORT:
         out['pantau'] = 'BELUM CUKUP'
-    elif any(x.startswith(('kejatuhan', 'tempoh')) for x in sebab):
+    elif any(x.startswith(('kejatuhan', 'tempoh', 'purata ')) for x in sebab):
         out['pantau'] = 'GANTUNG'
     elif out['p_amaran']:
         out['pantau'] = 'AMARAN'
@@ -666,7 +674,9 @@ def jana_md(rows, meta, ruj, pen, dibina):
          f'- Status: AMARAN = ≥ {N_AMARAN} matang dan purata matang jauh di bawah jangkaan (t < −2 atas nb); BELUM CUKUP = < {N_MIN} '
          f'matang atau < {N_HARI_MIN} hari beli berbeza; KUAT = julat 95% di atas 0; LEMAH = julat 95% di bawah 0; selainnya PERHATI.',
          f'- Pantau (label sahaja): BERSARA = P(purata ≤ 0) > {PANTAU_P} dengan ≥ {PANTAU_G} hari beli, atau ≥ 2 amaran CUSUM; GANTUNG = '
-         f'kejatuhan ekuiti kohort harian > {PANTAU_DD} × maks backtest atau tempoh di bawah puncak > maks backtest; AMARAN = 1 amaran '
+         f'kejatuhan ekuiti kohort harian > {PANTAU_DD} × maks backtest, tempoh di bawah puncak > maks backtest, atau purata '
+         f'{PANTAU_BERGULIR} hari beli matang terakhir < persentil ke-5 purata bergulir {PANTAU_BERGULIR} hari beli backtest (dilaras ke '
+         f'jangkaan); AMARAN = 1 amaran '
          f'CUSUM bawah (h dikalibrasi bootstrap supaya amaran palsu ~ sekali dalam 2 tahun); BELUM CUKUP = < {PANTAU_KOHORT} kohort matang.',
          '- Lintas earnings = posisi matang yang dipegang melalui tarikh earnings (TradingView + sejarah Nasdaq/SST); purata tanpa '
          'posisi itu dipapar berasingan (tidak mengubah skor).',
@@ -741,7 +751,8 @@ def main(argv=None):
     doc = dict(dibina=dibina, **meta, parameter=dict(n0_maks=N0, asas_kekal=ASAS_KEKAL, tambah_kekal=TAMBAH_KEKAL, swing=list(SWING),
                                                     n_min=N_MIN, n_amaran=N_AMARAN, umur_min=UMUR_MIN, hari_bulan=HARI_BULAN,
                                                     pangkas=PANGKAS, n_hari_min=N_HARI_MIN, hari_kluster_min=HARI_KLUSTER_MIN,
-                                                    pantau=dict(dd=PANTAU_DD, p=PANTAU_P, g=PANTAU_G, kohort=PANTAU_KOHORT)),
+                                                    pantau=dict(dd=PANTAU_DD, p=PANTAU_P, g=PANTAU_G, kohort=PANTAU_KOHORT,
+                                                                bergulir=PANTAU_BERGULIR)),
                penemuan=pen, rujukan=ruj, rows=rows,
                nota='Papan Penganalisis (standard/penganalisis.py). Skor = purata pulangan bersih setiap dagangan (%) gabungan backtest '
                     'dipotong dan posisi hadapan matang. Rekod analisis sahaja.')

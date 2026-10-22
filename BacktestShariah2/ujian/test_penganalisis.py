@@ -121,6 +121,14 @@ class TestPenganalisis(unittest.TestCase):
         jatuh = pd.DataFrame(dict(tarikh_beli=hari, hasil1=[3.0] * 20 + [-4.0] * 40))      # kejatuhan 160 > 1.5 x 100
         y = pg.pantau_kaedah(jatuh, 14, '2026-12-31', dict(kal, h=1e9), 0.25, 0.5, -1.0, 2.0, 60)
         self.assertEqual(y['pantau'], 'GANTUNG'); self.assertIn('kejatuhan', y['p_sebab'])
+        # brek hadapan: purata 20 hari beli terakhir < p5 bergulir backtest - (1 - kekal) x purata kohort (-1.5 - 0.75 x 0.8 = -2.1)
+        kb = dict(kal, h=1e9, dd_maks=1e6, dd_tempoh=10 ** 6, p5_bergulir=-1.5, n_bergulir=20)
+        lemah = pd.DataFrame(dict(tarikh_beli=hari, hasil1=[1.0] * 40 + [-2.3] * 20))
+        z = pg.pantau_kaedah(lemah, 14, '2026-12-31', kb, 0.25, 0.5, -1.0, 2.0, 60)
+        self.assertEqual(z['pantau'], 'GANTUNG'); self.assertAlmostEqual(z['p_bergulir_had'], -2.1); self.assertIn('purata 20 hari beli', z['p_sebab'])
+        sedang = pd.DataFrame(dict(tarikh_beli=hari, hasil1=[1.0] * 40 + [-1.9] * 20))
+        self.assertEqual(pg.pantau_kaedah(sedang, 14, '2026-12-31', kb, 0.25, 0.5, -1.0, 2.0, 60)['pantau'], 'OK')
+        self.assertIsNone(pg.pantau_kaedah(lemah.iloc[-19:], 14, '2026-12-31', kb, 0.25, 0.5, -1.0, 2.0, 19)['p_bergulir'])   # < 20 hari beli
         muda = pd.DataFrame(dict(tarikh_beli=['2026-12-30'], hasil1=[-9.0]))                # belum matang
         self.assertEqual(pg.pantau_kaedah(muda, 14, '2026-12-31', kal, 0.25, 0.5, -1.0, 2.0, 1)['pantau'], 'BELUM CUKUP')
         self.assertEqual(pg.pantau_kaedah(baik, 14, '2026-12-31', None, 0.25, 1.0, 0.2, 1.8, 60)['p_dd'], None)

@@ -14,7 +14,8 @@
 # (mata %, puncak ke lembah) dan dd_tempoh (hari dagangan dari puncak hingga pulih, atau hingga akhir data); h CUSUM bawah
 # (k = 0.5) atas kohort terpiawai z = (kohort diwinsor p5–p95 - jangkaan) / sd winsor (kohort swing sangat condong: sd mentah
 # dikuasai beberapa squeeze, manakala pusat pada median sentiasa di bawah purata), dikalibrasi bootstrap supaya purata panjang larian sebelum amaran palsu
-# (ARL0) ~ bilangan kohort dalam 2 tahun.
+# (ARL0) ~ bilangan kohort dalam 2 tahun. p5_bergulir = persentil ke-5 purata bergulir N_BERGULIR kohort berturut-turut dalam
+# sejarah backtest (tetingkap bertindih: rejim dan kelompok kekal; 22 Okt 2026, peraturan GANTUNG ikut data hadapan).
 import argparse, importlib, json, math, os, sys, time
 
 import numpy as np
@@ -34,6 +35,7 @@ N_MIN = 30               # dagangan backtest minimum untuk masuk kalibrasi
 PANGKAS = 0.05
 P_BAWAH, P_ATAS = 5, 95
 CUSUM_K, ARL_TAHUN, BOOT_X, BIJI = 0.5, 2.0, 30, 20261022
+N_BERGULIR = 20          # kohort (hari beli) dalam purata bergulir peraturan GANTUNG hadapan
 SWING = (3, 30)          # purata hari pegang backtest (enjin: bar isyarat hingga keluar), sama dengan registry 'days'
 
 
@@ -117,7 +119,8 @@ def kalibrasi_h(c, arl, k=CUSUM_K, x=BOOT_X, biji=BIJI):
 
 
 def pantau(T):
-    """Kohort harian backtest: bilangan, kohort setahun, purata, sd, dd_maks, dd_tempoh (hari dagangan), h CUSUM, ARL0."""
+    """Kohort harian backtest: bilangan, kohort setahun, purata, sd, dd_maks, dd_tempoh (hari dagangan), h CUSUM, ARL0,
+    persentil ke-5 purata bergulir N_BERGULIR kohort."""
     c = T.assign(x=T.ret * 100).groupby('ent').x.mean().sort_index()
     if len(c) < 30:
         return None
@@ -134,7 +137,8 @@ def pantau(T):
     h, arl_b = kalibrasi_h(cw, arl)
     return dict(kohort=int(len(c)), kohort_setahun=round(len(c) / tahun, 1), mu_kohort=round(float(c.mean()), 4),
                 sd_kohort=round(float(c.std(ddof=1)), 4), winsor=[round(w_lo, 4), round(w_hi, 4)],
-                mu_winsor=round(float(cw.mean()), 4), sd_winsor=round(float(cw.std(ddof=1)), 4), dd_maks=round(dd, 2), dd_tempoh=lama, h=h, arl=round(arl, 1), arl_bootstrap=arl_b)
+                mu_winsor=round(float(cw.mean()), 4), sd_winsor=round(float(cw.std(ddof=1)), 4), dd_maks=round(dd, 2), dd_tempoh=lama, h=h, arl=round(arl, 1), arl_bootstrap=arl_b,
+                n_bergulir=N_BERGULIR, p5_bergulir=round(float(np.percentile(c.rolling(N_BERGULIR).mean().dropna(), 5)), 4))
 
 
 def main(argv=None):
@@ -163,7 +167,7 @@ def main(argv=None):
         v = np.array([M[m][k] for m in sw if M[m].get(k) is not None], float)
         tiang[k] = [round(float(np.percentile(v, P_BAWAH)), 3), round(float(np.percentile(v, P_ATAS)), 3)]
     out = dict(versi=VERSI, dibina=time.strftime('%Y-%m-%d %H:%M UTC', time.gmtime()), set='431', mula=START,
-               persentil=[P_BAWAH, P_ATAS], swing=list(SWING), pantau=dict(k=CUSUM_K, arl_tahun=ARL_TAHUN, bootstrap_x=BOOT_X, biji=BIJI), n_kaedah=len(sw), n_semua=len(M), tiang=tiang, gagal=gagal,
+               persentil=[P_BAWAH, P_ATAS], swing=list(SWING), pantau=dict(k=CUSUM_K, arl_tahun=ARL_TAHUN, bootstrap_x=BOOT_X, biji=BIJI, n_bergulir=N_BERGULIR), n_kaedah=len(sw), n_semua=len(M), tiang=tiang, gagal=gagal,
                kaedah={m: {k: (round(v, 4) if isinstance(v, float) else v) for k, v in r.items()} for m, r in sorted(M.items())})
     if a.hanya and os.path.exists(a.keluar):   # larian separa: kekalkan kaedah lain dan julat sedia ada
         lama = json.load(open(a.keluar, encoding='utf-8')); lama['kaedah'].update(out['kaedah']); lama['pantau'] = out['pantau']; out = lama
