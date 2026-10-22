@@ -54,7 +54,7 @@ pencemaran di bawah terus masuk ke kedudukan.
 | R8 (C7) | 49 posisi Lejar berubah apabila dibina semula | Bina semula memakai `univ.txt` dan stor semasa, bukan ikut tarikh | Kecil (0.8%); tidak boleh dihasilkan semula tepat |
 | R9 (A3) | 18 posisi C tidak cair masih dikira | Penapis 21 Okt hanya untuk isyarat baharu | Sebahagian dalam kohort C pra-Lejar yang matang dahulu |
 
-## Pelan tindakan (menunggu kelulusan pengguna)
+## Pelan tindakan (diluluskan pengguna 22 Okt 2026; semua dilaksana hari sama — lihat Status pelaksanaan)
 | # | Tindakan | Menutup | Bila |
 |---|---|---|---|
 | 1 | `tampal_moomoo`: hanya nota `buka rasmi … (kline …)`; nilai disahkan terkini menang; buang entri salah 20–21 Okt daripada `buka_moomoo.csv` (atau matikan tampal — yfinance muktamad sudah sama). `harian.yml`: langkau `harga_yf terkini`/`lejar.py stor` antara 13:30–21:00 UTC (sesi AS) | R1 | Sebelum lejar.yml 06:17 UTC 22 Okt (atau bina semula selepas itu) |
@@ -64,6 +64,20 @@ pencemaran di bawah terus masuk ke kedudukan.
 | 5 | Papan Penganalisis: (a) purata dipangkas 5% + median, (b) julat keyakinan berkelompok ikut hari masuk, (c) n berkesan = hari masuk unik, (d) tanda/asingkan posisi lintas earnings, (e) status "BELUM CUKUP" sehingga ≥ 10 hari masuk berbeza | R5–R7 | Sebelum 26 Okt |
 | 6 | 18 posisi C tidak cair → `tidak_sah` (konsisten dengan Lejar) | R9 | Bila-bila |
 | 7 | Simpan `univ.txt` ikut tarikh (arkib harian) supaya bina semula tepat | R8 | Kemudian |
+
+## Status pelaksanaan (22 Okt 2026)
+- #1 R1: `lejar.tampal_moomoo` hanya nota `buka rasmi`, nilai disahkan terkini menang; `buka_moomoo.csv` dijana semula daripada buka
+  rasmi C (295 nilai dibetulkan, 8 dibuang); `harga_yf.py sejarah` tanpa bar sesi belum tutup (`terkini` sudah dipotong 16:15 NY).
+  Ujian atas salinan stor: 0/1,862 bar 19–21 Okt berbeza > 0.5% daripada yfinance muktamad (KN 20 Okt = 35.04). Stor repo dipulihkan
+  oleh `lejar.py stor` dalam larian workflow seterusnya (tidak di-commit manual).
+- #2 R2: `lejar.langkah_keluar` menilai laluan penuh dari bar isyarat setiap sesi; ujian kesetaraan enjin dengan exitc "perlu bar esok"
+  (gagal pada kod lama). #3 R3/R4: `semak` terima `delist`; `keluar_lorong` membekukan keluar paksa (89 baris palsu ditutup semula).
+- #4: Lejar dibina semula automatik pada larian `lejar.yml` seterusnya (status.json tiada kunci `tidak_layak`) dengan stor dipulihkan
+  dan logik keluar baharu; disahkan oleh semakan berjadual 22 Okt 13:00 UTC.
+- #5 R5–R7: Papan Penganalisis kukuh (purata dipangkas, n berkesan berkelompok ikut hari beli, BELUM CUKUP < 10 hari beli, lintas
+  earnings). Simulasi `--kini 2026-11-10`: 31 kaedah ada posisi matang; cth. M159 410 matang tetapi hanya 3 hari beli → n berkesan 3;
+  ~45% posisi matang melintas earnings.
+- #6 R9: 18 posisi C tidak cair → `tidak_sah` (`tidak_layak.py posisi`, nightly). #7 R8: `data/harga/univ_arkib/<sesi>.txt`.
 
 ## A. Isyarat palsu daripada tindakan korporat / jenis instrumen
 | ID | Punca | Mekanisme | Ukuran (C / Lejar) | Kawalan |

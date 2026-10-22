@@ -92,6 +92,37 @@ class TestPenganalisis(unittest.TestCase):
         self.assertEqual(pg.status_kaedah(25, 0.5, 9.0, 0.5, -3.0, -0.1), 'LEMAH')
         self.assertEqual(pg.status_kaedah(25, 0.5, 9.0, 0.5, -1.0, 2.0), 'PERHATI')
 
+    def test_kukuh_pangkas_kluster_hari(self):
+        # 22 Okt 2026 (R5–R7): satu squeeze tidak menguasai; posisi hari sama = sedikit maklumat bebas; < 10 hari beli -> BELUM CUKUP
+        import numpy as np
+        x = [1.0] * 39 + [300.0]
+        self.assertAlmostEqual(pg.purata_pangkas(x), 1.0)
+        self.assertGreater(sum(x) / len(x), 8)
+        self.assertEqual(pg.n_berkesan(np.arange(40.0), ['2026-10-16'] * 40), 1.0)          # satu hari beli
+        r = np.random.default_rng(3)
+        hari = np.repeat(np.arange(10), 20); kesan = r.normal(0, 5, 10)[hari]               # 10 hari, kesan pasaran kuat setiap hari
+        nb = pg.n_berkesan(kesan + r.normal(0, 1, 200), hari.astype(str))
+        self.assertLess(nb, 40)
+        self.assertGreater(pg.n_berkesan(r.normal(0, 1, 200), hari.astype(str)), 100)    # tiada kesan hari: hampir n
+        self.assertEqual(pg.status_kaedah(25, 1.0, 9.0, 1.0, 0.2, 2.0, hari=9), 'BELUM CUKUP')
+        self.assertEqual(pg.status_kaedah(25, 1.0, 9.0, 1.0, 0.2, 2.0, hari=10), 'KUAT')
+
+    def test_lintas_earnings(self):
+        P = pos([dict(id='M01', saham='A', tarikh_isyarat='2026-10-14', tarikh_beli='2026-10-15', tarikh_keluar='2026-10-20', tutup1=True,
+                      hasil1=1.0, hasil2=1.0, sumber='lejar'),
+                 dict(id='M01', saham='A', tarikh_isyarat='2026-10-21', tarikh_beli='2026-10-22', tarikh_keluar='', tutup1=False,
+                      hasil1=1.0, hasil2=1.0, sumber='lejar'),
+                 dict(id='M01', saham='B', tarikh_isyarat='2026-10-14', tarikh_beli='2026-10-15', tarikh_keluar='', tutup1=False,
+                      hasil1=1.0, hasil2=1.0, sumber='lejar')])
+        E = {'A': ['2026-10-16'], 'B': ['2026-10-15']}     # B: kesan pada hari beli (jurang sebelum buka) -> bukan lintas
+        self.assertEqual(list(pg.lintas_earnings(P, E, '2026-10-30')), [True, False, False])
+        with tempfile.TemporaryDirectory() as d:
+            f = os.path.join(d, 'tv.csv')
+            pd.DataFrame(dict(ticker=['A', 'B'], earnings_release_date=['1792526400', ''],          # 2026-10-20 16:00 NY -> 21 Okt
+                              earnings_release_next_date=['1793109600', '1792497600'])).to_csv(f, index=False)  # 27 Okt 10:00; 20 Okt 08:00
+            e = pg.muat_earnings(f, os.path.join(d, 'tiada.csv'))
+            self.assertEqual(e, {'A': ['2026-10-21', '2026-10-27'], 'B': ['2026-10-20']})
+
     def test_semakan(self):
         reg = dict(subset_menang=3, subset_n=4)
         wfo = dict(cagr=0.40, ew=0.326)

@@ -16,8 +16,12 @@
 #      Papertrade C selepas Lejar bermula = isyarat sama dengan Lejar, jadi dipapar sebagai semakan sahaja (tidak dikira dua kali).
 #      Posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang kaedah+saham sama dibuang (enjin mengabaikan isyarat
 #      itu), supaya laluan harga sama tidak dikira dua kali. Harga beli Lejar dilaras jika stor dilaras (split), seperti lejar.py.
-# Skor (purata pulangan bersih setiap dagangan, %) = (n0 x jangkaan backtest dipotong + n x purata matang) / (n0 + n); julat 95%
-# = skor ± 1.96 x SD / sqrt(n0 + n), n0 = 1 / (1/N0 + 1/n backtest) (backtest kecil diberi berat kurang). Skor sebulan = skor / hari pegang backtest x 21. Swing = purata pegang backtest 3–30 hari.
+# Skor (purata pulangan bersih setiap dagangan, %) = (n0 x jangkaan backtest dipotong + nb x purata matang dipangkas) / (n0 + nb);
+# julat 95% = skor ± 1.96 x SD / sqrt(n0 + nb), n0 = 1 / (1/N0 + 1/n backtest) (backtest kecil diberi berat kurang). Skor sebulan =
+# skor / hari pegang backtest x 21. Swing = purata pegang backtest 3–30 hari.
+# Kukuh (22 Okt 2026, kajian/KAJIAN_DATA_TERCEMAR.md R5–R7): purata dipangkas 5% setiap hujung (satu squeeze tidak menguasai);
+# nb = n berkesan = n / kesan reka bentuk berkelompok ikut hari beli (posisi hari sama bergerak bersama pasaran; < 5 hari beli
+# berbeza -> nb = bilangan hari); BELUM CUKUP sehingga >= 10 hari beli berbeza; posisi melintas earnings dilapor berasingan.
 import argparse, glob, json, math, os, re
 from datetime import datetime, timedelta, timezone
 
@@ -52,6 +56,11 @@ UMUR_MIN = 14           # hari kalendar minimum sebelum posisi dikira matang
 TOL_LARAS = 0.003       # sama dengan lejar.TOLERANSI_LARAS: buka stor hari beli lain daripada harga beli -> stor dilaras
 TOL_LARAS_C = 0.2       # Papertrade C (harga Moomoo lawan stor yfinance): hanya split jelas dilaras
 SD_MIN = 5.0            # SD minimum setiap dagangan (%)
+PANGKAS = 0.05          # pecahan dipangkas setiap hujung bagi purata matang (R6)
+N_HARI_MIN = 10         # hari beli berbeza minimum sebelum status dinilai (R5)
+HARI_KLUSTER_MIN = 5    # < 5 hari beli berbeza: n berkesan = bilangan hari (anggaran kesan reka bentuk tidak stabil)
+TV = os.path.join(BS2, 'data', 'skrin', 'tv_us.csv')
+PENDAPATAN = os.path.join(BS2, 'data', 'pemangkin', 'tarikh_pendapatan.csv')
 KOS = 0.001             # kos enjin v1.2 setiap belah
 HARI_BULAN = 21
 TEMPOH_IS = ('2019-11-01', '2026-10-02')
@@ -273,11 +282,60 @@ def gabung_hadapan(L, C):
     return pd.concat([L2, pra], ignore_index=True), mula, int(sum(tindih))
 
 
-def ringkas_hadapan(P, hari_bt, kini):
-    """Statistik hadapan satu kaedah: semua posisi, posisi matang (bukti), lorong 2 matang dan tarikh 20 posisi matang."""
+def purata_pangkas(x, p=PANGKAS):
+    """Purata selepas membuang pecahan p terendah dan tertinggi (tiada pangkas jika n < 1/p)."""
+    s = np.sort(np.asarray(x, float)); k = int(len(s) * p)
+    return float(s[k:len(s) - k].mean()) if len(s) > 2 * k else float(s.mean())
+
+
+def n_berkesan(x, kump):
+    """n berkesan = n / kesan reka bentuk (varians berkelompok ikut kump ÷ varians bebas), maks n. Kurang daripada
+    HARI_KLUSTER_MIN kelompok: bilangan kelompok (konservatif)."""
+    x = np.asarray(x, float); n = len(x); g = pd.Series(x - x.mean()).groupby(np.asarray(kump)).sum()
+    G = len(g)
+    if n < 2 or G < HARI_KLUSTER_MIN:
+        return float(min(n, G))
+    v_bebas = x.var(ddof=1) / n
+    v_klus = G / (G - 1) * float((g ** 2).sum()) / n ** 2
+    if v_bebas <= 0:
+        return float(G)
+    return float(min(n, n / max(v_klus / v_bebas, 1.0)))
+
+
+def muat_earnings(tv=TV, sejarah=PENDAPATAN):
+    """{ticker: [tarikh sesi kesan earnings]}: TradingView (laporan terakhir dan seterusnya, cap masa UTC) + sejarah Nasdaq/SST.
+    Laporan selepas 16:00 NY -> kesan pada sesi berikutnya (hari kalendar berikutnya; hujung minggu ditangani oleh perbandingan julat)."""
+    out = {}
+    if os.path.exists(tv):
+        t = pd.read_csv(tv, usecols=['ticker', 'earnings_release_date', 'earnings_release_next_date'], dtype=str)
+        for c in ('earnings_release_date', 'earnings_release_next_date'):
+            ts = pd.to_datetime(pd.to_numeric(t[c], errors='coerce'), unit='s', utc=True).dt.tz_convert('America/New_York')
+            d = ts.dt.normalize() + pd.to_timedelta((ts.dt.hour >= 16).astype(int), unit='D')
+            for k, v in zip(t.ticker, d):
+                if pd.notna(v):
+                    out.setdefault(k, set()).add(str(v.date()))
+    if os.path.exists(sejarah):
+        s = pd.read_csv(sejarah, dtype=str)
+        for k, v in zip(s.ticker, s.d0):
+            out.setdefault(k, set()).add(v)
+    return {k: sorted(v) for k, v in out.items()}
+
+
+def lintas_earnings(P, earnings, kini):
+    """Siri boolean: posisi memegang saham melalui tarikh kesan earnings (tarikh_beli < kesan <= tarikh keluar atau kini)."""
+    if not earnings or not len(P):
+        return pd.Series(False, index=P.index)
+    akhir = P.tarikh_keluar.where(P.tarikh_keluar != '', str(kini))
+    return pd.Series([any(b < e <= a for e in earnings.get(t, ())) for t, b, a in zip(P.saham, P.tarikh_beli, akhir)], index=P.index)
+
+
+def ringkas_hadapan(P, hari_bt, kini, earnings=None):
+    """Statistik hadapan satu kaedah: semua posisi, posisi matang (bukti: purata, purata dipangkas, median, n berkesan ikut hari
+    beli, hari beli berbeza, lintas earnings), lorong 2 matang dan tarikh 20 posisi matang."""
     umur = umur_matang(hari_bt)
     out = dict(posisi=int(len(P)), tutup=int(P.tutup1.sum()) if len(P) else 0, umur_hari=umur,
-               matang=0, purata=None, menang=None, sd=None, purata_l2=None, matang_mula=None, matang_20=None)
+               matang=0, purata=None, menang=None, sd=None, purata_l2=None, matang_mula=None, matang_20=None,
+               pangkas=None, median=None, n_berkesan=0.0, hari_beli=0, lintas_earnings=0, purata_tanpa_earnings=None)
     if not len(P):
         return out
     tb = pd.to_datetime(P.tarikh_beli)
@@ -289,8 +347,11 @@ def ringkas_hadapan(P, hari_bt, kini):
         out['matang_20'] = str((s[N_MIN - 1] + pd.Timedelta(days=umur)).date())
     if len(M):
         x = M.hasil1.astype(float)
+        le = lintas_earnings(M, earnings, kini)
         out.update(matang=int(len(M)), purata=float(x.mean()), menang=float((x > 0).mean()),
-                   sd=float(x.std(ddof=1)) if len(M) > 1 else None)
+                   sd=float(x.std(ddof=1)) if len(M) > 1 else None, pangkas=purata_pangkas(x), median=float(x.median()),
+                   n_berkesan=n_berkesan(x.values, M.tarikh_beli.values), hari_beli=int(M.tarikh_beli.nunique()),
+                   lintas_earnings=int(le.sum()), purata_tanpa_earnings=float(x[~le.values].mean()) if (~le).any() else None)
         y = M.hasil2.dropna().astype(float)
         out['purata_l2'] = float(y.mean()) if len(y) else None
     return out
@@ -312,12 +373,14 @@ def skor(mu0, sd0, n, xbar, sdf, n0=N0):
     return mu, mu - 1.96 * se, mu + 1.96 * se
 
 
-def status_kaedah(n, xbar, sdf, mu0, lo, hi):
-    """AMARAN: >= 10 matang dan purata matang di bawah jangkaan (t < -2). BELUM CUKUP: < 20 matang.
-    KUAT: julat 95% skor > 0. LEMAH: julat 95% skor < 0. Selainnya PERHATI."""
-    if n >= N_AMARAN and sdf and sdf > 0 and (xbar - mu0) / (sdf / math.sqrt(n)) < -2:
+def status_kaedah(n, xbar, sdf, mu0, lo, hi, hari=None, nb=None):
+    """AMARAN: >= 10 matang dan purata matang di bawah jangkaan (t < -2, ralat piawai ikut n berkesan nb jika diberi).
+    BELUM CUKUP: < 20 matang atau < 10 hari beli berbeza (hari). KUAT: julat 95% skor > 0. LEMAH: julat 95% skor < 0.
+    Selainnya PERHATI."""
+    nb = n if nb is None else nb
+    if n >= N_AMARAN and nb >= 2 and sdf and sdf > 0 and (xbar - mu0) / (sdf / math.sqrt(nb)) < -2:
         return 'AMARAN'
-    if n < N_MIN:
+    if n < N_MIN or (hari is not None and hari < N_HARI_MIN):
         return 'BELUM CUKUP'
     return 'KUAT' if lo > 0 else 'LEMAH' if hi < 0 else 'PERHATI'
 
@@ -330,6 +393,7 @@ def analisis(kini=None):
     kini = kini or tarikh_harga or datetime.now(timezone.utc).strftime('%Y-%m-%d')
     L, C = muat_lejar(akhir), muat_c(akhir=akhir)
     H, mula_lejar, tindih = gabung_hadapan(L, C)
+    ERN = muat_earnings()
     Hg = dict(tuple(H.groupby('id'))) if len(H) else {}
     Cg = dict(tuple(C.groupby('id'))) if len(C) else {}
     rows = []
@@ -343,10 +407,11 @@ def analisis(kini=None):
         avg_bt = r['avg'] * 100 if r.get('avg') is not None else None
         mu0 = avg_bt * kekal if avg_bt is not None else 0.0
         sd0 = sd_backtest(r)
-        hd = ringkas_hadapan(Hg.get(mid, H.iloc[:0]), hari, kini)
+        hd = ringkas_hadapan(Hg.get(mid, H.iloc[:0]), hari, kini, ERN)
         n0 = berat_backtest(r.get('n'))
-        mu, lo, hi = skor(mu0, sd0, hd['matang'], hd['purata'] or 0.0, hd['sd'], n0)
-        st = status_kaedah(hd['matang'], hd['purata'] or 0.0, hd['sd'], mu0, lo, hi)
+        # skor atas purata dipangkas dan n berkesan (R5, R6); SD hadapan dipakai jika >= N_MIN matang
+        mu, lo, hi = skor(mu0, sd0, hd['n_berkesan'], hd['pangkas'] or 0.0, hd['sd'] if hd['matang'] >= N_MIN else None, n0)
+        st = status_kaedah(hd['matang'], hd['pangkas'] or 0.0, hd['sd'], mu0, lo, hi, hd['hari_beli'], hd['n_berkesan'])
         c = Cg.get(mid)
         sebulan = (lambda v: v / hari * HARI_BULAN) if hari else (lambda v: None)
         rows.append(dict(
@@ -361,6 +426,9 @@ def analisis(kini=None):
             at_spy=bulat(a and a.get('spy_a'), 4), lulus_at=s_at, lulus=lulus, kekal=kekal, jangkaan=bulat(mu0, 2),
             h_posisi=hd['posisi'], h_tutup=hd['tutup'], h_matang=hd['matang'], h_purata=bulat(hd['purata'], 2),
             h_menang=bulat(hd['menang'], 4), h_purata_l2=bulat(hd['purata_l2'], 2), h_umur=hd['umur_hari'],
+            h_pangkas=bulat(hd['pangkas'], 2), h_median=bulat(hd['median'], 2), h_n_berkesan=bulat(hd['n_berkesan'], 1),
+            h_hari_beli=hd['hari_beli'], h_lintas_earnings=hd['lintas_earnings'],
+            h_purata_tanpa_earnings=bulat(hd['purata_tanpa_earnings'], 2),
             matang_mula=hd['matang_mula'], matang_20=hd['matang_20'],
             c_posisi=int(len(c)) if c is not None else 0,
             c_purata=bulat(c.hasil1.dropna().mean(), 2) if c is not None and c.hasil1.notna().any() else None,
@@ -498,11 +566,15 @@ def jana_md(rows, meta, ruj, pen, dibina):
          f'{meta["lejar_tindih"]} posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang kaedah+saham sama dibuang). Matang = '
          f'dibeli ≥ maks({UMUR_MIN} hari, 1.5 × hari pegang backtest) lalu; tutup = untung akhir, terbuka = untung semasa (bersih kos 0.1% '
          'setiap belah). Papertrade C selepas Lejar bermula = isyarat sama dengan Lejar: lajur semakan sahaja.',
-         f'- Skor = (n0 × jangkaan + n × purata matang) ÷ (n0 + n), n0 = berat backtest (maks {N0}; kurang jika dagangan backtest sedikit). '
-         f'Julat 95% = skor ± 1.96 × SD ÷ √(n0 + n). Skor sebulan = skor ÷ hari pegang backtest × {HARI_BULAN}, iaitu untung setiap '
-         'posisi jika modal dipusing semula sebaik keluar. Makin banyak posisi matang, makin data sebenar menguasai skor.',
-         f'- Status: AMARAN = ≥ {N_AMARAN} matang dan purata matang jauh di bawah jangkaan (t < −2); BELUM CUKUP = < {N_MIN} matang; '
-         'KUAT = julat 95% di atas 0; LEMAH = julat 95% di bawah 0; selainnya PERHATI.',
+         f'- Skor = (n0 × jangkaan + nb × purata matang dipangkas) ÷ (n0 + nb), n0 = berat backtest (maks {N0}; kurang jika dagangan '
+         f'backtest sedikit). Purata dipangkas {int(PANGKAS * 100)}% setiap hujung (satu squeeze tidak menguasai). nb = n berkesan: posisi '
+         'yang dibeli pada hari sama bergerak bersama pasaran, jadi n dibahagi kesan reka bentuk berkelompok ikut hari beli '
+         f'(< {HARI_KLUSTER_MIN} hari beli berbeza: nb = bilangan hari). Julat 95% = skor ± 1.96 × SD ÷ √(n0 + nb). Skor sebulan = skor ÷ '
+         f'hari pegang backtest × {HARI_BULAN}, iaitu untung setiap posisi jika modal dipusing semula sebaik keluar.',
+         f'- Status: AMARAN = ≥ {N_AMARAN} matang dan purata dipangkas jauh di bawah jangkaan (t < −2 atas nb); BELUM CUKUP = < {N_MIN} '
+         f'matang atau < {N_HARI_MIN} hari beli berbeza; KUAT = julat 95% di atas 0; LEMAH = julat 95% di bawah 0; selainnya PERHATI.',
+         '- Lintas earnings = posisi matang yang dipegang melalui tarikh earnings (TradingView + sejarah Nasdaq/SST); purata tanpa '
+         'posisi itu dipapar berasingan (tidak mengubah skor).',
          f'- Swing = purata pegang backtest {SWING[0]}–{SWING[1]} hari dagangan. Kaedah swing dengan < {N_BT_MIN} dagangan backtest '
          '(sampel kecil) tiada nombor kedudukan dan disusun di hujung jadual swing. Kaedah lain disenarai berasingan.', '',
          '## Rujukan', '',
@@ -515,8 +587,9 @@ def jana_md(rows, meta, ruj, pen, dibina):
                  f"RAWAK_10 {sg(s['RAWAK_10'])}, SPY {sg(s['spy'])}. Kajian portfolio: memilih ikut RS pasaran mengatasi memilih ikut kaedah "
                  '(`kajian/KAJIAN_PORTFOLIO.md`).')
     hd = ('| # | Kaedah | Hari | Dagangan/tahun | Backtest 431: CAGR · MDD · menang · purata | S1–S4 · WFO · 2000 AS | Jangkaan % | '
-          'Hadapan: posisi · matang · purata · menang | Lorong 2 % | C: posisi · purata | Skor % [julat 95%] | Skor sebulan % | Status | 20 matang |')
-    sep = '|' + '---|' * 14
+          'Hadapan: posisi · matang · purata · dipangkas · median · menang | nb · hari beli | Lintas earnings · purata tanpa | '
+          'Lorong 2 % | C: posisi · purata | Skor % [julat 95%] | Skor sebulan % | Status | 20 matang |')
+    sep = '|' + '---|' * 16
 
     def baris(r):
         return (f"| {r['kedudukan'] or '–'} | {r['id']} {r['nama']} | {r['hari'] if r['hari'] is not None else '–'} | "
@@ -524,7 +597,8 @@ def jana_md(rows, meta, ruj, pen, dibina):
                 f"{p(r['bt_cagr'])} · {p(r['bt_mdd'])} · {p(r['bt_menang'], 0)} · {sg(r['bt_purata'])} | "
                 f"{tanda(r['lulus_subset'])} {r['subset'] or ''} · {tanda(r['lulus_wfo'])} {p(r['wfo_cagr'])} · {tanda(r['lulus_at'])} "
                 f"{p(r['at_cagr_a'])}/{p(r['at_cagr_b'])} | {sg(r['jangkaan'])} | {r['h_posisi']} · {r['h_matang']} · {sg(r['h_purata'])} · "
-                f"{p(r['h_menang'], 0)} | {sg(r['h_purata_l2'])} | {r['c_posisi']} · {sg(r['c_purata'])} | "
+                f"{sg(r['h_pangkas'])} · {sg(r['h_median'])} · {p(r['h_menang'], 0)} | {r['h_n_berkesan']} · {r['h_hari_beli']} | "
+                f"{r['h_lintas_earnings']} · {sg(r['h_purata_tanpa_earnings'])} | {sg(r['h_purata_l2'])} | {r['c_posisi']} · {sg(r['c_purata'])} | "
                 f"{sg(r['skor'])} [{sg(r['skor_bawah'])}, {sg(r['skor_atas'])}] | {sg(r['skor_bulan'])} | {r['status']} | "
                 f"{tarikh_ms(r['matang_20'])} |")
     sw = [r for r in rows if r['swing']]
@@ -570,7 +644,8 @@ def main(argv=None):
     dibina = (datetime.now(timezone.utc) + timedelta(hours=8)).strftime('%Y-%m-%d %H:%M') + ' MYT'
     os.makedirs(os.path.dirname(a.json), exist_ok=True)
     doc = dict(dibina=dibina, **meta, parameter=dict(n0_maks=N0, asas_kekal=ASAS_KEKAL, tambah_kekal=TAMBAH_KEKAL, swing=list(SWING),
-                                                    n_min=N_MIN, n_amaran=N_AMARAN, umur_min=UMUR_MIN, hari_bulan=HARI_BULAN),
+                                                    n_min=N_MIN, n_amaran=N_AMARAN, umur_min=UMUR_MIN, hari_bulan=HARI_BULAN,
+                                                    pangkas=PANGKAS, n_hari_min=N_HARI_MIN, hari_kluster_min=HARI_KLUSTER_MIN),
                penemuan=pen, rujukan=ruj, rows=rows,
                nota='Papan Penganalisis (standard/penganalisis.py). Skor = purata pulangan bersih setiap dagangan (%) gabungan backtest '
                     'dipotong dan posisi hadapan matang. Rekod analisis sahaja.')

@@ -106,5 +106,8 @@ Gred keseluruhan (paparan) sejak 19 Okt 2026 = purata mata Industri (kecuali kae
   AUTOTUNE A01 CAGR > SPY dalam kumpulan A dan B). n0 = 1 ÷ (1/30 + 1/dagangan backtest). Bukti hadapan = Lejar Penuh + kohort
   Papertrade C sebelum Lejar (tiada kiraan berganda: posisi Lejar yang isyaratnya jatuh semasa C pra-Lejar masih memegang
   kaedah+saham sama dibuang, seperti enjin); harga beli Lejar dilaras jika stor dilaras (split); matang = dibeli ≥ maks(14 hari, 1.5 × hari pegang backtest) lalu.
-- Status: BELUM CUKUP (< 20 matang), AMARAN (≥ 10 matang, t < −2 lawan jangkaan), KUAT / LEMAH (julat 95% skor di atas / di bawah 0),
-  PERHATI. Swing = pegang backtest 3–30 hari; kedudukan ikut skor sebulan (skor ÷ hari pegang × 21); < 100 dagangan backtest = sampel kecil.
+- Kukuh (keputusan pengguna 22 Okt 2026, `kajian/KAJIAN_DATA_TERCEMAR.md` R5–R7): purata hadapan = purata dipangkas 5% setiap hujung;
+  n dalam skor = n berkesan (n ÷ kesan reka bentuk berkelompok ikut hari beli; < 5 hari beli berbeza → bilangan hari); median, hari
+  beli berbeza, posisi lintas earnings dan purata tanpa earnings dilapor (tidak mengubah skor).
+- Status: BELUM CUKUP (< 20 matang atau < 10 hari beli berbeza), AMARAN (≥ 10 matang, t < −2 lawan jangkaan atas n berkesan),
+  KUAT / LEMAH (julat 95% skor di atas / di bawah 0), PERHATI. Swing = pegang backtest 3–30 hari; kedudukan ikut skor sebulan (skor ÷ hari pegang × 21); < 100 dagangan backtest = sampel kecil.
