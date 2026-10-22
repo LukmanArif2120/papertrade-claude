@@ -57,5 +57,27 @@ class TestDelist(unittest.TestCase):
             self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi), [])
 
 
+class TestTidakCairPosisi(unittest.TestCase):
+    def test_tidak_sah_ikut_sesi_isyarat(self):
+        # 22 Okt 2026: posisi C tidak cair pada sesi isyarat -> tidak_sah (tidak ditutup); cair pada isyarat -> kekal
+        g = saham(umum=None, n=180); g.loc[g.index[150:153], 'volume'] = 0   # tidak cair 150–172 sahaja
+        rows = [dict(tarikh_beli=str(IX[156].date()), tarikh_isyarat=str(IX[155].date()), saham='Y', kaedah='M01', harga_beli='50', keluar='False'),
+                dict(tarikh_beli=str(IX[120].date()), tarikh_isyarat=str(IX[119].date()), saham='Y', kaedah='M02', harga_beli='50', keluar='False')]
+        lajur = TestPosisi.LAJUR + ['tarikh_isyarat']
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'claude_4.csv')
+            with open(p, 'w', newline='') as f:
+                w = csv.DictWriter(f, lajur); w.writeheader()
+                for r in rows:
+                    w.writerow({k: r.get(k, '') for k in lajur})
+            x = TL.tanda_tidak_cair(d, {'Y': g})
+            self.assertEqual([y[2] for y in x], ['M01'])
+            with open(p) as f:
+                out = list(csv.DictReader(f))
+            self.assertEqual((out[0]['tidak_sah'], out[0]['keluar'], out[1]['tidak_sah']), ('True', 'False', ''))
+            self.assertIn('tidak cair', out[0]['sebab_tidak_sah'])
+            self.assertEqual(TL.tanda_tidak_cair(d, {'Y': g}), [])
+
+
 if __name__ == '__main__':
     unittest.main()

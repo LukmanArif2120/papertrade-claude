@@ -125,6 +125,22 @@ def univ_layak():
     return {x.strip().replace('US.', '') for x in open(p) if x.strip()} if os.path.exists(p) else None
 
 
+UNIV_ARKIB = os.path.join(HARGA, 'univ_arkib')
+
+
+def univ_sesi(S, semasa, simpan):
+    """Universe bagi sesi S (sejak 22 Okt 2026, kajian/KAJIAN_DATA_TERCEMAR.md R8): arkib `data/harga/univ_arkib/<S>.txt`
+    jika ada, supaya bina semula lejar memakai universe sebenar sesi itu; jika tiada, universe semasa — dan disimpan ke arkib
+    apabila S = sesi terkini (larian biasa), tidak semasa bina semula sesi lama."""
+    p = os.path.join(UNIV_ARKIB, f"{pd.Timestamp(S).strftime('%Y%m%d')}.txt")
+    if os.path.exists(p):
+        return {x.strip() for x in open(p) if x.strip()}
+    if semasa is not None and simpan:
+        os.makedirs(UNIV_ARKIB, exist_ok=True)
+        open(p, 'w').write('\n'.join(sorted(semasa)) + '\n')
+    return semasa
+
+
 # ---------------------------------------------------------------- stor harga repo
 def tulis_stor(d, p):
     """Format tetap: harga 6 angka bererti (seperti kod/stor.py), volum integer. Pulang True jika fail berubah."""
@@ -140,9 +156,11 @@ def tulis_stor(d, p):
 
 
 def tampal_moomoo(stor):
-    """Moomoo menang (tugasan_v3 §6): buka rasmi kline Moomoo yang disahkan rutin 6:02 (claude*.csv, nota 'kline')
-    menggantikan buka yfinance jika beza > 0.5%. Entri baharu hanya bagi tarikh selepas sesi terakhir lejar (posisi yang sudah
-    direkod tidak berubah); semua entri dalam buka_moomoo.csv dipakai semula setiap larian supaya tidak ditimpa yfinance."""
+    """Moomoo menang (tugasan_v3 §6): buka rasmi kline Moomoo yang disahkan rutin 6:02 (claude*.csv, nota bermula
+    'buka rasmi') menggantikan buka yfinance jika beza > 0.5%. Entri baharu hanya bagi tarikh selepas sesi terakhir lejar
+    (posisi yang sudah direkod tidak berubah); semua entri dalam buka_moomoo.csv dipakai semula setiap larian supaya tidak
+    ditimpa yfinance. Sejak 22 Okt 2026 (kajian/KAJIAN_DATA_TERCEMAR.md R1): nota 'buka sementara … (sahkan kline …)' TIDAK
+    diterima (buka 9:35 NY belum rasmi), dan nilai disahkan terkini menggantikan entri lama bagi saham+tarikh sama."""
     p = os.path.join(STOR, 'buka_moomoo.csv')
     T = pd.read_csv(p, dtype={'ticker': str}) if os.path.exists(p) else pd.DataFrame(columns=['ticker', 'date', 'open'])
     stp = os.path.join(LEJAR, 'status.json')
@@ -150,10 +168,10 @@ def tampal_moomoo(stor):
     fs = sorted(glob.glob(os.path.join(BS2, 'papertrade', 'claude*.csv')))
     if fs:
         C = pd.concat([pd.read_csv(f, dtype=str, keep_default_na=False) for f in fs])
-        C = C[(C.tidak_dibeli != 'True') & (C.harga_beli != '') & C.nota.str.contains('kline')]
+        C = C[(C.tidak_dibeli != 'True') & (C.harga_beli != '') & C.nota.str.contains(r'^(?:belian ke-\d+; )?buka rasmi', regex=True)]
         C = C.assign(date=C.tarikh_beli.str.replace('-', '').astype(int), open=pd.to_numeric(C.harga_beli, errors='coerce'))
         C = C[C.date > akhir].groupby(['saham', 'date'], as_index=False).open.median().rename(columns={'saham': 'ticker'})
-        T = pd.concat([T, C]).drop_duplicates(['ticker', 'date'], keep='first')
+        T = pd.concat([C, T]).drop_duplicates(['ticker', 'date'], keep='first')   # nilai disahkan terkini menang
     T = T.assign(date=T.date.astype('int64'), open=pd.to_numeric(T.open, errors='coerce').astype(float)).dropna(subset=['open'])
     n = 0
     for nm, d in stor.items():
@@ -210,8 +228,12 @@ def cmd_stor(a):
 
 # ---------------------------------------------------------------- logik dagangan (enjin v1.2, satu posisi)
 def langkah_keluar(g, p, tmax):
-    """Nilai posisi p (dict) atas bar g selepas p['dinilai_hingga'] (atau dari bar masuk). Ubah p di tempat.
-    Pulang dict keluar (tarikh_keluar, harga_keluar, sebab_keluar, j) atau None jika masih terbuka."""
+    """Nilai posisi p (dict) atas bar g dari bar masuk (laluan penuh setiap sesi, seperti enjin dan harian_c.nilai_keluar).
+    Ubah p di tempat (dinilai_hingga, keluar_esok = rekod sahaja). Pulang dict keluar (tarikh_keluar, harga_keluar,
+    sebab_keluar, j) atau None jika masih terbuka.
+    Sejak 22 Okt 2026 (kajian/KAJIAN_DATA_TERCEMAR.md R2): tidak lagi bermula dari `dinilai_hingga`. Modul yang exitc-nya
+    bergantung jujukan dagangan (`_exitc_*`: M19, M20, M31, M38, M40, M41, M76, M78, M81, M82) hanya boleh menanda bar j
+    apabila bar j+1 wujud; penilaian tokokan melangkau bar itu selamanya (GEF M76, DELL M81 tidak keluar)."""
     ix = g.index; n = len(g)
     try:
         i = ix.get_loc(pd.Timestamp(p['tarikh_isyarat']))
@@ -223,12 +245,8 @@ def langkah_keluar(g, p, tmax):
     o, h, l, c = g.open.values, g.high.values, g.low.values, g.close.values
     tg = g['tgt'].astype(float).values; ex = g['exitc'].fillna(False).astype(bool).values
     sp = nombor(p['henti']); sp = -np.inf if np.isnan(sp) else sp
-    j0 = k if not p.get('dinilai_hingga') else int(ix.searchsorted(pd.Timestamp(p['dinilai_hingga']), side='right'))
-    if j0 >= n:
-        return None
-    if p.get('keluar_esok'):
-        return dict(tarikh_keluar=tkh(ix[j0]), harga_keluar=float(o[j0]), sebab_keluar='isyarat keluar', j=j0)
-    for j in range(j0, n):
+    p['keluar_esok'] = False
+    for j in range(k, n):
         tgt = tg[j - 1] if j > i + 1 else np.nan
         if j > i + 1 and o[j] <= sp: return dict(tarikh_keluar=tkh(ix[j]), harga_keluar=float(o[j]), sebab_keluar='henti', j=j)
         if l[j] <= sp: return dict(tarikh_keluar=tkh(ix[j]), harga_keluar=float(sp), sebab_keluar='henti', j=j)
@@ -460,11 +478,12 @@ def cmd_jalan(a):
     with ctx.Pool(a.proses) as pool:
         for S in todo:
             t0 = time.time()
+            layak_s = univ_sesi(S, layak, S == sesi[-1])
             # data sesi S mesti lengkap (Harga harian awal kadang-kadang belum ada bar bagi sebahagian saham);
             # jika tidak, berhenti tanpa memajukan sesi — larian sandaran / esok memproses semula dengan data penuh
             sb = [x for x in sesi if x < S]
             if sb and not getattr(a, 'paksa', False):
-                ada = [t for t, g in FR.items() if (layak is None or t in layak) and sb[-1] in g.index]
+                ada = [t for t, g in FR.items() if (layak_s is None or t in layak_s) and sb[-1] in g.index]
                 cukup = sum(1 for t in ada if S in FR[t].index) / max(len(ada), 1)
                 if cukup < LIPUTAN_MIN:
                     print(json.dumps(dict(sesi=str(S.date()), ditangguh=f'liputan bar {cukup:.1%} < {LIPUTAN_MIN:.0%}')), flush=True)
@@ -479,7 +498,7 @@ def cmd_jalan(a):
             for p in T: Tm.setdefault(p['id_kaedah'], []).append(p)
             for w in W: Wm.setdefault(w['id_kaedah'], []).append(w)
             aa = {t: x['sebab'] for t, x in tidak_layak.tapis(FR, S).items()}   # diambil alih / tidak cair pada S
-            args = [(mid, S, Tm.pop(mid, []), Wm.pop(mid, []), layak, a431, bil.get(mid, {}), aa) for mid in kaedah]
+            args = [(mid, S, Tm.pop(mid, []), Wm.pop(mid, []), layak_s, a431, bil.get(mid, {}), aa) for mid in kaedah]
             hasil = pool.map(kerja, args, chunksize=1)
             T = [p for v in Tm.values() for p in v]; W = [w for v in Wm.values() for w in v]   # kaedah di luar senarai: kekal
             tutup, beli, langkau, isy, ralat, nota = [], [], [], [], [], []
@@ -530,7 +549,7 @@ def cmd_semak(a):
         if (T.tarikh_keluar < T.tarikh_beli).any(): salah.append('tutup: tarikh_keluar < tarikh_beli')
         hk = pd.to_numeric(T.harga_keluar, errors='coerce')
         if (~(hk > 0)).any(): salah.append('tutup: harga_keluar tidak sah')
-        if ~T.sebab_keluar.isin(['henti', 'sasaran', 'isyarat keluar', 'masa']).all(): salah.append('tutup: sebab_keluar tidak dikenali')
+        if ~T.sebab_keluar.isin(['henti', 'sasaran', 'isyarat keluar', 'masa', 'delist']).all(): salah.append('tutup: sebab_keluar tidak dikenali')
         baru = T[T.tutup_semua != '']   # baris sejak dua lorong: mesti tutup sepenuhnya
         if len(baru) and not (baru.tutup_semua.str.lower() == 'true').all(): salah.append('tutup: ada lorong keluar belum keluar (tutup_semua bukan True)')
     for nm, d in [('tutup', T), ('terbuka', O)]:

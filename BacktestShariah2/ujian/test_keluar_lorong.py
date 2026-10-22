@@ -121,6 +121,15 @@ class UjiBaris(unittest.TestCase):
         self.assertEqual((r['keluar_henti'], r['harga_keluar_henti']), ('True', '101'))
         self.assertIn(K.PENANDA, r['status_henti'])
 
+    def test_keluar_paksa_dibekukan(self):
+        # 22 Okt 2026 (R4): keluar paksa tidak_layak.py (isyarat palsu / delist) tidak dibuka semula
+        for st in ('Keluar: isyarat palsu, saham diambil alih (umum 2026-10-20; senarai) — tutup 2026-10-21 @ 45.68',
+                   'Keluar: delist / tiada data 6 sesi — tutup akhir 2026-10-16 @ 94.96'):
+            r = self.baris(keluar_henti='True', tarikh_keluar_henti=IX[PRA + 1], harga_keluar_henti='95', untung_henti_pct='-5.00',
+                           status_henti=st)
+            K.kemas_baris(r, self.H, [])
+            self.assertEqual((r['keluar_henti'], r['harga_keluar_henti'], r['status_henti']), ('True', '95', st))
+
     def test_semula_kira_lorong_yang_sudah_keluar(self):
         H = {'X': langkah(siri(110))}
         r = self.baris(keluar='False', keluar_henti='True', tarikh_keluar_henti=IX[PRA + 1], harga_keluar_henti='95',

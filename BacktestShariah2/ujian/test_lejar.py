@@ -9,7 +9,7 @@ import lejar, enjin
 MULA = pd.Timestamp('2025-06-02')
 
 
-def _sedia(fr, idx, buka_esok=True):
+def _sedia(fr, idx, buka_esok=True, exit_perlu_esok=False):
     for t, g in fr.items():
         c, o = g.close, g.open
         ma = c.rolling(10).mean()
@@ -19,12 +19,14 @@ def _sedia(fr, idx, buka_esok=True):
         sig[g.index < MULA] = False
         g['sig'] = sig.fillna(False); g['stop'] = stop; g['tgt'] = c * 1.08
         g['exitc'] = c < ma * 0.97; g['rank'] = c / c.shift(20) - 1
+        if exit_perlu_esok:   # seperti modul `_exitc_*` (M76, M82 …): bendera bar j hanya jika bar j+1 wujud
+            g['exitc'] = g['exitc'] & c.shift(-1).notna()
 
 
-def modul(nama, buka_esok=True):
+def modul(nama, buka_esok=True, exit_perlu_esok=False):
     m = types.ModuleType(f'kaedah.{nama}')
     m.ID = nama; m.NAMA = 'Ujian'; m.VARIAN = 'x'; m.TMAX = 15; m.WARM = 30; m.PERLU_BAR = 60; m.SILANG = False
-    m.sedia = lambda fr, idx: _sedia(fr, idx, buka_esok)
+    m.sedia = lambda fr, idx: _sedia(fr, idx, buka_esok, exit_perlu_esok)
     sys.modules[f'kaedah.{nama}'] = m
     return m
 
@@ -115,6 +117,53 @@ class UjiLejar(unittest.TestCase):
         self.assertEqual(sorted((p['saham'], p['tarikh_isyarat']) for p in T),
                          sorted((t, str(s.date())) for t, s in zip(terbuka_e.ticker, terbuka_e.sig)))
         self.assertFalse(any(x['sebab'] == 'buka <= henti' for x in langkau))
+
+    def test_exitc_perlu_bar_esok_sama_dengan_enjin(self):
+        # 22 Okt 2026 (R2): exitc bar terakhir belum diketahui pada sesi itu; lejar mesti tetap keluar seperti enjin
+        m = modul('M9008', exit_perlu_esok=True); fr, idx = data(benih=11)
+        E = enjin_trades(m, fr, idx); E = E[E.why != 'hujung']
+        T, W, tutup, langkau = jalan_lejar('M9008', fr, idx)
+        self.assertGreater((E.why == 'exit').sum() if 'exit' in set(E.why) else len(E), 3)
+        a = sorted((p['saham'], p['tarikh_isyarat'], p['tarikh_keluar'], p['sebab_keluar']) for p in tutup)
+        b = sorted((t, str(s.date()), str(x.date()), w) for t, s, x, w in zip(E.ticker, E.sig, E.ex, E.why))
+        self.assertEqual(a, b)
+
+    def test_tampal_moomoo_hanya_buka_rasmi(self):
+        # 22 Okt 2026 (R1): nota "buka sementara … (sahkan kline …)" tidak diterima; nilai disahkan terkini menang
+        with tempfile.TemporaryDirectory() as d:
+            stor = os.path.join(d, 'stor'); pt = os.path.join(d, 'papertrade'); lj = os.path.join(d, 'lejar')
+            for x in (stor, pt, lj): os.makedirs(x)
+            pd.DataFrame(dict(ticker=['AAA'], date=[20261020], open=[9.0])).to_csv(os.path.join(stor, 'buka_moomoo.csv'), index=False)
+            json.dump({'sesi_terakhir': '2026-10-19'}, open(os.path.join(lj, 'status.json'), 'w'))
+            pd.DataFrame(dict(tarikh_beli=['2026-10-20', '2026-10-20', '2026-10-21'], saham=['AAA', 'BBB', 'CCC'], harga_beli=['10.5', '20', '30'],
+                              tidak_dibeli=['', '', ''], nota=['buka rasmi kline 20 Okt (disahkan 6:02 MYT)',
+                                                               'buka sementara quote 9:37 NY (sahkan kline selepas 10:00)',
+                                                               'belian ke-2; buka rasmi kline 21 Okt (disahkan 6:02 MYT)'])) \
+                .to_csv(os.path.join(pt, 'claude.csv'), index=False)
+            S = {'harga_A.csv': pd.DataFrame(dict(ticker=['AAA', 'BBB', 'CCC'], date=[20261020, 20261020, 20261021], open=[10.0, 21.0, 31.0],
+                                                  high=[11.0, 22.0, 32.0], low=[9.5, 19.0, 29.0], close=[10.8, 20.5, 30.5], volume=[1e6] * 3))}
+            lama = lejar.STOR, lejar.LEJAR, lejar.BS2
+            lejar.STOR, lejar.LEJAR, lejar.BS2 = stor, lj, d
+            try:
+                lejar.tampal_moomoo(S)
+            finally:
+                lejar.STOR, lejar.LEJAR, lejar.BS2 = lama
+            self.assertEqual(list(S['harga_A.csv'].open), [10.5, 21.0, 30.0])
+            M = pd.read_csv(os.path.join(stor, 'buka_moomoo.csv')).set_index('ticker').open.to_dict()
+            self.assertEqual(M, {'AAA': 10.5, 'CCC': 30.0})
+
+    def test_univ_sesi_arkib(self):
+        # 22 Okt 2026 (R8): universe sesi terkini diarkib; bina semula memakai arkib, bukan universe semasa
+        with tempfile.TemporaryDirectory() as d:
+            lama = lejar.UNIV_ARKIB; lejar.UNIV_ARKIB = d
+            try:
+                self.assertEqual(lejar.univ_sesi('2026-10-20', {'AAA', 'BBB'}, False), {'AAA', 'BBB'})
+                self.assertFalse(os.listdir(d))                                   # sesi lama: tidak diarkib
+                lejar.univ_sesi('2026-10-21', {'AAA', 'BBB'}, True)
+                self.assertEqual(lejar.univ_sesi('2026-10-21', {'CCC'}, True), {'AAA', 'BBB'})
+                self.assertIsNone(lejar.univ_sesi('2026-10-22', None, True))
+            finally:
+                lejar.UNIV_ARKIB = lama
 
     def test_tampung_sesi_terlepas(self):
         # sesi tanpa isyarat baharu boleh terlepas; keluar dinilai bar demi bar apabila larian disambung

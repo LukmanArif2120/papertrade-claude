@@ -11,7 +11,7 @@
 #   python3 kod/tidak_layak.py senarai [--stor DIR] [--sesi S]
 #   python3 kod/tidak_layak.py posisi [--folder PT] [--stor DIR] [--tulis]
 #       Papertrade C: (a) ambil_alih.tanda_posisi (isyarat palsu -> tidak_sah, tutup); (b) posisi saham delist -> tutup
-#       pada tutup bar terakhir. Tanpa --tulis = cuba. Dijalankan setiap pagi selepas langkah keluar (rutin 6:02 langkah 2c).
+#       pada tutup bar terakhir; (c) saham tidak cair pada sesi isyarat -> tidak_sah (22 Okt 2026). Tanpa --tulis = cuba. Dijalankan setiap pagi selepas langkah keluar (rutin 6:02 langkah 2c).
 import argparse, json, os, sys
 
 import numpy as np
@@ -110,13 +110,41 @@ def tutup_delist(folder, frames, sesi, tulis=True):
     return out
 
 
+def tanda_tidak_cair(folder, frames, tulis=True):
+    """Posisi Papertrade C yang sahamnya tidak cair pada sesi isyarat (20 bar <= tarikh_isyarat; tiada pandang depan) ->
+    tidak_sah (keputusan pengguna 22 Okt 2026: konsisten dengan Lejar, yang menolak isyarat itu). Posisi tidak ditutup;
+    harga dan keluar terus dikemas kini tetapi tidak dikira dalam prestasi. Pulang senarai perubahan."""
+    import sahkan as SH
+    out = []
+    for p in sorted(os.path.join(folder, f) for f in os.listdir(folder) if f.startswith('claude') and f.endswith('.csv')):
+        lajur, rows = SH.baca(p)
+        ubah = False
+        for r in rows:
+            if SH.benar(r.get('tidak_dibeli')) or SH.benar(r.get('tidak_sah')) or not r.get('harga_beli'):
+                continue
+            g = frames.get(r.get('saham')); ti = r.get('tarikh_isyarat') or r.get('tarikh_beli')
+            if g is None or not ti:
+                continue
+            x = tidak_cair(g[g.index <= pd.Timestamp(ti)])
+            if not x:
+                continue
+            r['tidak_sah'] = 'True'; r['sebab_tidak_sah'] = f'isyarat palsu: saham {x} pada {ti}'
+            ubah = True
+            out.append((os.path.basename(p), r['saham'], r.get('kaedah'), r.get('tarikh_beli')))
+        if ubah and tulis:
+            SH.tulis(p, lajur, rows)
+    return out
+
+
 def posisi(folder, frames, sesi, tulis=True):
     """Langkah pagi/malam: isyarat palsu ambil alih (tidak_sah, tutup) kemudian posisi delist (tutup). Pulang ringkasan."""
     aa = AA.tanda_posisi(folder, frames, tulis)
     dl = tutup_delist(folder, frames, sesi, tulis)
+    tc = tanda_tidak_cair(folder, frames, tulis)
     return dict(ambil_alih=dict(ditutup=sum(x[4] != 'menunggu' for x in aa), menunggu=sum(x[4] == 'menunggu' for x in aa),
                                 saham=sorted({x[1] for x in aa})),
-                delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl})), _baris=aa + dl)
+                delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl})),
+                tidak_cair=dict(tidak_sah=len(tc), saham=sorted({x[1] for x in tc})), _baris=aa + dl + tc)
 
 
 # ---------------------------------------------------------------- CLI

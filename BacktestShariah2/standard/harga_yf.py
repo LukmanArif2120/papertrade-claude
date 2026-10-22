@@ -145,6 +145,7 @@ def cmd_sejarah(a):
     if not t:
         print('tiada ticker dalam perlu_sejarah.txt'); return
     d, gagal = muat_turun(t, period='3y')
+    d = d[d.date <= sesi_terakhir()]   # bar sesi yang belum tutup (larian semasa pasaran) = separa, bukan muktamad
     d = d.groupby('ticker', group_keys=False).tail(SIMPAN_BAR)
     d.to_csv(os.path.join(HARGA, 'sejarah.csv'), index=False, float_format='%.6g')
     tulis_status('sejarah', bil_ticker=int(d.ticker.nunique()), diminta=t, tiada_data=gagal)

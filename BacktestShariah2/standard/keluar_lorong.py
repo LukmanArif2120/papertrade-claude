@@ -147,7 +147,10 @@ def kemas_baris(r, H, nota, semula=()):
     e = nombor(r.get('harga_beli'))
     if e is None or e <= 0:
         return False
-    beku = benar(r.get('keluar_henti')) and PENANDA in (r.get('status_henti') or '') and 'henti' not in semula
+    st = r.get('status_henti') or ''
+    # keluar paksa (isyarat palsu ambil alih / delist; kod/tidak_layak.py) juga dibekukan — status tanpa PENANDA
+    beku = benar(r.get('keluar_henti')) and (PENANDA in st or st.startswith(('Keluar: isyarat palsu', 'Keluar: delist'))) \
+        and 'henti' not in semula
     if not beku:
         d = H.get(r.get('saham'))
         if d is None:
