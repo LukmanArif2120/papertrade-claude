@@ -60,8 +60,9 @@ def universe():
     return sorted(s - set(IDX)), IDX
 
 
-def panjang(df):
-    """DataFrame yf.download (lajur MultiIndex (medan, ticker)) -> format panjang LAJ."""
+def panjang(df, dividen=None):
+    """DataFrame yf.download (lajur MultiIndex (medan, ticker)) -> format panjang LAJ. Jika `dividen` (senarai) diberi dan
+    lajur 'Dividends' ada (actions=True), baris dividen > 0 (ticker, date, dividen) ditambah ke senarai itu."""
     if df is None or df.empty:
         return pd.DataFrame(columns=LAJ)
     if not isinstance(df.columns, pd.MultiIndex):
@@ -71,6 +72,9 @@ def panjang(df):
     d = d.rename(columns={'level_1': 'ticker', 'date': 'date'})
     d['ticker'] = d['ticker'].map(dari_yahoo)
     d['date'] = pd.to_datetime(d['date']).dt.strftime('%Y%m%d').astype(int)
+    if dividen is not None and 'dividends' in d:
+        v = pd.to_numeric(d['dividends'], errors='coerce')
+        dividen.append(d.loc[v > 0, ['ticker', 'date']].assign(dividen=v[v > 0]))
     return bersih(d[LAJ])
 
 
@@ -86,16 +90,17 @@ def bersih(d):
     return d.sort_values(['ticker', 'date']).reset_index(drop=True)
 
 
-def muat_turun(tickers, period, kumpulan=200, cuba=3):
+def muat_turun(tickers, period, kumpulan=200, cuba=3, dividen=None):
+    """Bar harian mentah (auto_adjust=False). `dividen` (senarai): actions=True dan rekod dividen dikumpul (peristiwa.py)."""
     import yfinance as yf
     out, gagal = [], []
     for i in range(0, len(tickers), kumpulan):
         ks = [ke_yahoo(t) for t in tickers[i:i + kumpulan]]
         for n in range(cuba):
             try:
-                df = yf.download(ks, period=period, interval='1d', auto_adjust=False, actions=False,
+                df = yf.download(ks, period=period, interval='1d', auto_adjust=False, actions=dividen is not None,
                                  group_by='column', threads=True, progress=False)
-                d = panjang(df)
+                d = panjang(df, dividen)
                 break
             except Exception as e:  # had kadar / rangkaian
                 if n == cuba - 1:
@@ -129,15 +134,21 @@ def cmd_terkini(a):
     os.makedirs(HARGA, exist_ok=True)
     saham, idx = universe()
     sesi = sesi_terakhir()
-    d, gagal = muat_turun(saham + idx, period='1mo')
+    div = []
+    d, gagal = muat_turun(saham + idx, period='1mo', dividen=div)
     d = d[d.date <= sesi].groupby('ticker', group_keys=False).tail(a.hari)
+    try:   # dividen untuk jadual faktor (kod/peristiwa.py); kegagalan tidak menghalang harga
+        import peristiwa
+        n_div = peristiwa.simpan_dividen(pd.concat(div, ignore_index=True) if div else None)
+    except Exception as e:
+        print(f'dividen: {type(e).__name__}: {e}', file=sys.stderr); n_div = None
     akhir = d.groupby('ticker').date.max()
     lewat = sorted(akhir[akhir < sesi].index)
     if d.ticker.nunique() < 0.5 * (len(saham) + len(idx)):
         print(f'GAGAL: hanya {d.ticker.nunique()} ticker; fail lama dikekalkan', file=sys.stderr); sys.exit(1)
     d.to_csv(os.path.join(HARGA, 'terkini.csv'), index=False, float_format='%.6g')
     tulis_status('terkini', sesi=sesi, bil_ticker=int(d.ticker.nunique()), bil_universe=len(saham) + len(idx),
-                 tiada_data=gagal, tiada_bar_sesi=lewat[:200], bil_tiada_bar_sesi=len(lewat))
+                 tiada_data=gagal, tiada_bar_sesi=lewat[:200], bil_tiada_bar_sesi=len(lewat), dividen_baharu=n_div)
     print(json.dumps(dict(sesi=sesi, ticker=int(d.ticker.nunique()), gagal=len(gagal), lewat=len(lewat))))
 
 
@@ -172,10 +183,18 @@ def gabung_satu(lama, kl, log=None):
     return pd.concat([lama, kl[LAJ]], ignore_index=True)
 
 
-def gabung(stor, baru):
-    """stor: dict nama->DataFrame (harga_A/B/idx). baru: DataFrame LAJ. Pulang (stor, nota)."""
+def gabung(stor, baru, folder=None):
+    """stor: dict nama->DataFrame (harga_A/B/idx). baru: DataFrame LAJ. Pulang (stor, nota).
+    folder (stor pada cakera): peristiwa besar dalam data/harga/faktor.csv digunakan dahulu pada bar lama stor (sekali,
+    <folder>/faktor_diguna.csv) dan pada bar baharu mentah, supaya sejarah merentasi tarikh_ex kekal seragam."""
     A = set(stor.get('harga_A.csv', pd.DataFrame(columns=LAJ)).ticker)
     nota = {}; log = []
+    if folder:
+        import peristiwa
+        rows = peristiwa.muat()
+        log += peristiwa.guna_stor(stor, folder, rows)
+        _, sudah = peristiwa._diguna(folder)
+        baru = peristiwa.laras_baru(baru, rows[[(s, e) in sudah for s, e in zip(rows.saham, rows.tarikh_ex)]] if len(rows) else rows)
     for nm in ['harga_A.csv', 'harga_B.csv', 'harga_idx.csv']:
         d = stor.get(nm, pd.DataFrame(columns=LAJ))
         if nm == 'harga_idx.csv':
@@ -202,7 +221,7 @@ def cmd_gabung(a):
     baru = pd.concat([pd.read_csv(f) for f in fail if os.path.exists(f)], ignore_index=True)
     stor = {nm: pd.read_csv(os.path.join(a.stor, nm)) for nm in ['harga_A.csv', 'harga_B.csv', 'harga_idx.csv']
             if os.path.exists(os.path.join(a.stor, nm))}
-    stor, nota = gabung(stor, baru)
+    stor, nota = gabung(stor, baru, a.stor)
     for nm, d in stor.items():
         d[LAJ].to_csv(os.path.join(a.stor, nm), index=False, float_format='%.6g')
     from stor import tulis_log_laras

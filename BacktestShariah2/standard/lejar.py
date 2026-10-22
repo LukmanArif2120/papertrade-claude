@@ -212,8 +212,21 @@ def cmd_stor(a):
     if len(m):
         r = (m.close_k / m.close_l).groupby(m.ticker).median()
         laras = {t: round(float(v), 6) for t, v in r.items() if abs(v - 1) > TOLERANSI_LARAS}
-    stor, nota = harga_yf.gabung(stor, baru)
-    nota['log_laras'] = tulis_log_laras(STOR, nota.pop('log_laras'))   # keputusan laras/anomali (tambah sahaja)
+    # peristiwa besar (kod/peristiwa.py): dividen yfinance >= 2% -> jadual faktor sebelum digabung (guna pada stor larian ini)
+    import peristiwa
+    sem = pd.concat([d for d in stor.values()] + [baru[LAJ]], ignore_index=True).drop_duplicates(['ticker', 'date'], keep='last')
+    fr_sem, _ = frames_dict({'harga_A.csv': sem})
+    nota_div = peristiwa.tambah_dari_dividen(fr_sem)
+    stor, nota = harga_yf.gabung(stor, baru, STOR)
+    nota['log_laras'] = tulis_log_laras(STOR, nota.pop('log_laras'))   # keputusan laras/anomali/faktor (tambah sahaja)
+    nota['faktor_dividen'] = [f"{x['saham']} {x['tarikh_ex']} {x['catatan']}" for x in nota_div]
+    try:   # calon spin-off / pengagihan (jurang <= −15% tanpa earnings) untuk disahkan rutin 6:02 (Moomoo rehab)
+        import penganalisis
+        fr_baru, idx_baru = frames_dict(stor)
+        nota['faktor_calon'] = [f"{x['saham']} {x['tarikh']} {x['jurang']}" for x in
+                                peristiwa.kesan_calon(fr_baru, list(idx_baru['SPY'].index), penganalisis.muat_earnings())]
+    except Exception as e:
+        nota['faktor_calon'] = f'{type(e).__name__}: {e}'
     nota['moomoo'] = tampal_moomoo(stor)
     ubah = [nm for nm, d in stor.items() if tulis_stor(d, os.path.join(STOR, nm))]
     # saham universe tanpa sejarah mencukupi -> minta sejarah 3 tahun (harga_harian.yml)

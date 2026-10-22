@@ -52,6 +52,7 @@ jobs:
           git add BacktestShariah2/lejar BacktestShariah2/data/harga/stor
           [ -d BacktestShariah2/portfolio_slot ] && git add BacktestShariah2/portfolio_slot
           [ -f BacktestShariah2/data/harga/perlu_sejarah.txt ] && git add BacktestShariah2/data/harga/perlu_sejarah.txt
+          git add BacktestShariah2/data/harga/faktor.csv BacktestShariah2/data/harga/faktor_calon.csv 2>/dev/null || true
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           SESI=$(python3 -c "import json;print(json.load(open('BacktestShariah2/lejar/status.json')).get('sesi_terakhir'))")
           git commit -q -m "Lejar penuh: sesi $SESI"

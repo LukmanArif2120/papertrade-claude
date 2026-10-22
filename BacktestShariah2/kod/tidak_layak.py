@@ -39,7 +39,8 @@ def versi():
     """Kunci peraturan (termasuk senarai ambil alih dan kelas berganda): lejar.py membina semula lejar apabila berubah."""
     import hashlib
     h = hashlib.sha1(open(KELAS, 'rb').read()).hexdigest()[:8] if os.path.exists(KELAS) else '-'
-    return f'{VERSI}; {AA.versi()}; kelas {h}'
+    import peristiwa
+    return f'{VERSI}; {AA.versi()}; kelas {h}; {peristiwa.versi()}'
 
 
 def kumpulan_kelas(path=KELAS):
@@ -224,11 +225,17 @@ def posisi(folder, frames, sesi, tulis=True):
     dl = tutup_delist(folder, frames, sesi, tulis)
     tc = tanda_tidak_cair(folder, frames, tulis)
     kb = tanda_kelas_berganda(folder, frames, tulis)
+    import peristiwa   # posisi merentasi tarikh_ex peristiwa besar yang sudah berlaku: harga beli/henti/sasaran x faktor
+    akhir = str(pd.DatetimeIndex(sesi)[-1].date()) if len(sesi) else ''
+    rows = peristiwa.muat()
+    fk = peristiwa.laras_c(folder, rows[rows.tarikh_ex <= akhir]) if tulis and len(rows) else []
     return dict(ambil_alih=dict(ditutup=sum(x[4] != 'menunggu' for x in aa), menunggu=sum(x[4] == 'menunggu' for x in aa),
                                 saham=sorted({x[1] for x in aa})),
                 delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl})),
                 tidak_cair=dict(tidak_sah=len(tc), saham=sorted({x[1] for x in tc})),
-                kelas_berganda=dict(tidak_sah=len(kb), saham=sorted({x[1] for x in kb})), _baris=aa + dl + tc + kb)
+                kelas_berganda=dict(tidak_sah=len(kb), saham=sorted({x[1] for x in kb})),
+                faktor=dict(dilaras=sum(x[5] == 'dilaras' for x in fk), semak=[x[:5] for x in fk if x[5] == 'semak']),
+                _baris=aa + dl + tc + kb)
 
 
 # ---------------------------------------------------------------- CLI
