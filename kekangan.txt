@@ -1,0 +1,7 @@
+# Versi pustaka dipin bagi workflow data harian (22 Okt 2026; laporan kajian 'Pengesanan data tercemar yang tinggal').
+# Versi = yang dipasang Actions (Python 3.11) pada 22 Okt 2026. Naikkan dengan sengaja selepas ujian main semula, bukan secara senyap.
+yfinance==1.7.0
+curl_cffi==0.16.3
+exchange_calendars==4.13.2
+pandas==3.0.6
+numpy==2.4.6

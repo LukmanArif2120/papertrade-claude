@@ -13,7 +13,9 @@ Subarahan:
 Universe = set 431 (data_mentah/dataset_S*.csv) + semua saham dalam papertrade/*.csv + data/harga/univ.txt
 (senarai skrin Shariah Moomoo, ditulis oleh imbasan 8:02 malam) + SPY, QQQ.
 Harga: OHLC mentah (auto_adjust=False; split dilaras oleh Yahoo, dividen tidak). Sumber tidak rasmi —
-Moomoo menang jika berbeza.
+Moomoo menang jika berbeza. NOTA (22 Okt 2026, laporan kajian 'Pengesanan data tercemar yang tinggal'): bar stor sebelum
+~2 Okt 2026 berasal daripada data backtest (kline Moomoo dilaras hadapan termasuk dividen = konvensyen backtest); bar
+yfinance selepasnya tidak dilaras dividen. Peristiwa besar (spin-off, dividen >= 2%) dilaras melalui data/harga/faktor.csv.
 """
 import sys, os, json, glob, argparse, time
 import pandas as pd, numpy as np
@@ -23,7 +25,7 @@ BS2 = os.path.dirname(HERE)
 ROOT = os.path.dirname(BS2)
 HARGA = os.path.join(BS2, 'data', 'harga')
 sys.path.insert(0, os.path.join(BS2, 'kod'))
-from stor import LAJ, SIMPAN_BAR, baca_kline  # noqa: E402
+from stor import LAJ, SIMPAN_BAR, baca_kline, nisbah_laras  # noqa: E402
 
 IDX = ['SPY', 'QQQ']
 TOLERANSI = 0.005
@@ -153,17 +155,19 @@ def cmd_sejarah(a):
     print(json.dumps(dict(ticker=int(d.ticker.nunique()), gagal=gagal)))
 
 
-def gabung_satu(lama, kl):
-    """Logik sama dengan kod/stor.py gabung_kline (laras nisbah jika harga lama berbeza > 0.3%)."""
+def gabung_satu(lama, kl, log=None):
+    """Logik sama dengan kod/stor.py gabung_kline: sejarah lama dilaras hanya jika nisbah bertindih seragam
+    (stor.nisbah_laras); keputusan 'laras'/'anomali' ditambah ke senarai log jika diberi."""
     if len(lama):
-        sama = lama.merge(kl, on='date', suffixes=('_l', '_k'))
-        if len(sama):
-            r = (sama.close_k / sama.close_l).median()
-            if abs(r - 1) > 0.003:
-                lama = lama.copy()
-                for c in ['open', 'high', 'low', 'close']:
-                    lama[c] = lama[c] * r
-                lama['volume'] = (lama['volume'] / r).round()
+        r, kep, n, serak = nisbah_laras(lama, kl)
+        if kep == 'laras':
+            lama = lama.copy()
+            for c in ['open', 'high', 'low', 'close']:
+                lama[c] = lama[c] * r
+            lama['volume'] = (lama['volume'] / r).round()
+        if log is not None and kep in ('laras', 'anomali'):
+            log.append(dict(ticker=str(kl.ticker.iloc[0]) if 'ticker' in kl and len(kl) else '', nisbah=round(r, 6), bar=n,
+                            serak=round(serak, 6), keputusan=kep, sumber='yfinance'))
         lama = lama[~lama.date.isin(kl.date)]
     return pd.concat([lama, kl[LAJ]], ignore_index=True)
 
@@ -171,7 +175,7 @@ def gabung_satu(lama, kl):
 def gabung(stor, baru):
     """stor: dict nama->DataFrame (harga_A/B/idx). baru: DataFrame LAJ. Pulang (stor, nota)."""
     A = set(stor.get('harga_A.csv', pd.DataFrame(columns=LAJ)).ticker)
-    nota = {}
+    nota = {}; log = []
     for nm in ['harga_A.csv', 'harga_B.csv', 'harga_idx.csv']:
         d = stor.get(nm, pd.DataFrame(columns=LAJ))
         if nm == 'harga_idx.csv':
@@ -185,10 +189,11 @@ def gabung(stor, baru):
         kump = dict(tuple(d.groupby('ticker'))) if len(d) else {}
         hasil = [g for t, g in kump.items() if t not in set(pilih.ticker)]
         for t, kl in pilih.groupby('ticker'):
-            hasil.append(gabung_satu(kump.get(t, pd.DataFrame(columns=LAJ)), kl))
+            hasil.append(gabung_satu(kump.get(t, pd.DataFrame(columns=LAJ)), kl, log))
         x = pd.concat(hasil, ignore_index=True).sort_values(['ticker', 'date'])
         stor[nm] = x.drop_duplicates(['ticker', 'date'], keep='last').groupby('ticker', group_keys=False).tail(SIMPAN_BAR)
         nota[nm] = dict(ticker_dikemaskini=int(pilih.ticker.nunique()), bar_terakhir=int(stor[nm].date.max()))
+    nota['log_laras'] = log
     return stor, nota
 
 
@@ -200,6 +205,8 @@ def cmd_gabung(a):
     stor, nota = gabung(stor, baru)
     for nm, d in stor.items():
         d[LAJ].to_csv(os.path.join(a.stor, nm), index=False, float_format='%.6g')
+    from stor import tulis_log_laras
+    nota['log_laras'] = tulis_log_laras(a.stor, nota.pop('log_laras'))
     print(json.dumps(nota, indent=1))
 
 

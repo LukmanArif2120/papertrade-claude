@@ -43,7 +43,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q pandas numpy yfinance exchange_calendars requests
+        run: pip install -q -c kekangan.txt pandas numpy yfinance exchange_calendars requests
       - name: Mod
         id: mod
         run: |
@@ -110,7 +110,7 @@ jobs:
           fi
       - name: Ujian unit
         continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
-        run: pip install -q -r requirements.txt && python3 -m unittest discover -s BacktestShariah2/ujian
+        run: pip install -q -c kekangan.txt -r requirements.txt && python3 -m unittest discover -s BacktestShariah2/ujian
       - name: Commit dan push
         run: |
           git config user.name "harian[bot]"

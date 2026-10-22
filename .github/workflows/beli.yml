@@ -55,7 +55,7 @@ jobs:
           python-version: '3.11'
       - name: Pasang pakej
         if: steps.masa.outputs.jalan != 'tidak'
-        run: pip install -q pandas numpy yfinance exchange_calendars
+        run: pip install -q -c kekangan.txt pandas numpy yfinance exchange_calendars
       - name: Percubaan (tiada fail ditulis)
         if: steps.masa.outputs.jalan == 'cuba'
         run: python3 BacktestShariah2/standard/harian_c.py beli --folder "${{ github.event.inputs.cuba_folder }}" --tarikh "${{ github.event.inputs.cuba_tarikh }}" --cuba

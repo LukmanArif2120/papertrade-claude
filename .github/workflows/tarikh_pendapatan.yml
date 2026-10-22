@@ -27,7 +27,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q pandas requests yfinance
+        run: pip install -q -c kekangan.txt pandas requests yfinance
       - name: Tarik tarikh
         env:
           DARI: ${{ github.event.inputs.dari }}

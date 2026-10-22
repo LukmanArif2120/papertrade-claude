@@ -37,7 +37,7 @@ jobs:
           python-version: '3.11'
       - name: Pasang pakej
         if: steps.masa.outputs.jalan == 'ya'
-        run: pip install -q pandas numpy requests yfinance exchange_calendars
+        run: pip install -q -c kekangan.txt pandas numpy requests yfinance exchange_calendars
       - name: Gred
         id: gred
         if: steps.masa.outputs.jalan == 'ya'

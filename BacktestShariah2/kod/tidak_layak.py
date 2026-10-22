@@ -8,7 +8,7 @@
 #    `data/kelas_berganda.csv`; pengesanan ikut nama tidak boleh dipercayai, cth. GHC/GHM dua syarikat Graham). Hanya kelas
 #    paling cair (median nilai 20 bar <= S) diimbas; kelas lain ditolak supaya satu isyarat tidak dikira dua kali (FOX/FOXA).
 #    Posisi C kaedah+hari beli sama yang membeli dua kelas: kelas kurang cair -> tidak_sah.
-# 3. Delist / tiada data: tiada bar bagi >= 5 sesi pasaran berturut (saham ditarik selepas ambil alih siap, cth. ATKR
+# 3. Delist / tiada data: tiada bar bagi >= 10 sesi pasaran berturut (5 sebelum 22 Okt 2026) (saham ditarik selepas ambil alih siap, cth. ATKR
 #    16 Okt 2026, SLP, QRVO). Saham ini tidak lagi beri isyarat; posisi terbuka tersangkut -> kedua-dua lorong ditutup pada
 #    tutup bar terakhir (anggaran nilai tunai; posisi kekal sah). Liputan data pasaran disemak dahulu oleh pemanggil.
 #
@@ -26,13 +26,13 @@ BS2 = os.path.dirname(HERE)
 sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(BS2, 'standard'))
 import ambil_alih as AA  # noqa: E402
 
-VERSI = 'tidak_layak v2 (22 Okt 2026): tidak cair 3/2/100k, delist 5 sesi, kelas berganda'
+VERSI = 'tidak_layak v3 (22 Okt 2026): tidak cair 3/2/100k, delist 10 sesi, kelas berganda'
 KELAS = os.path.join(BS2, 'data', 'kelas_berganda.csv')
 BAR_CAIR = 20
 JULAT0_MAKS = 3        # bar tanpa julat dalam 20 bar -> tidak cair
 VOL0_MAKS = 2          # bar tanpa volum dalam 20 bar -> tidak cair
 NILAI_MIN = 100_000.0  # median tutup x volum (USD)
-DELIST_SESI = 5
+DELIST_SESI = 10       # 22 Okt 2026: 5 -> 10 (penggantungan SEC H10 sehingga 10 hari dagangan; tarikan gagal sementara)
 
 
 def versi():

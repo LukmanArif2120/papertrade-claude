@@ -31,7 +31,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q pandas numpy
+        run: pip install -q -c kekangan.txt pandas numpy
       - name: Kemas kini stor harga repo (terkini.csv + sejarah saham baharu)
         run: python3 BacktestShariah2/standard/lejar.py stor
       - name: Proses sesi belum diproses (beli, keluar, isyarat)

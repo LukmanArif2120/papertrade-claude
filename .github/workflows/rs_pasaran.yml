@@ -51,7 +51,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q pandas numpy yfinance exchange_calendars
+        run: pip install -q -c kekangan.txt pandas numpy yfinance exchange_calendars
       - name: Kira RS seluruh pasaran
         env:
           SEJAK: ${{ github.event_name == 'push' && '2026-09-01' || github.event.inputs.sejak || '' }}

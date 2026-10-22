@@ -55,7 +55,7 @@ jobs:
           python-version: '3.11'
       - name: Pasang pakej
         if: steps.masa.outputs.jalan == 'ya'
-        run: pip install -q pandas numpy requests yfinance
+        run: pip install -q -c kekangan.txt pandas numpy requests yfinance
       - name: Diagnostik Yahoo
         if: steps.masa.outputs.jalan == 'ya' && github.event.inputs.diagnostik != ''
         env:

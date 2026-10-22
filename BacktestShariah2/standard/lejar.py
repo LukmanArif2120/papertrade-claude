@@ -41,7 +41,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 BS2 = os.path.dirname(HERE)
 KOD = os.path.join(BS2, 'kod'); sys.path.insert(0, KOD); sys.path.insert(0, HERE)
 import enjin  # noqa: E402
-from stor import muat, frames_dict, LAJ  # noqa: E402
+from stor import muat, frames_dict, LAJ, tulis_log_laras  # noqa: E402
 import keluar_lorong  # noqa: E402
 import tidak_layak  # noqa: E402
 import dagangan  # noqa: E402
@@ -129,11 +129,11 @@ def univ_layak():
     return {x.strip().replace('US.', '') for x in open(p) if x.strip()} if os.path.exists(p) else None
 
 
-UNIV_ARKIB = os.path.join(HARGA, 'univ_arkib')
+UNIV_ARKIB = os.path.join(LEJAR, 'univ_arkib')   # dalam lejar/ supaya di-commit oleh lejar.yml
 
 
 def univ_sesi(S, semasa, simpan):
-    """Universe bagi sesi S (sejak 22 Okt 2026, kajian/KAJIAN_DATA_TERCEMAR.md R8): arkib `data/harga/univ_arkib/<S>.txt`
+    """Universe bagi sesi S (sejak 22 Okt 2026, kajian/KAJIAN_DATA_TERCEMAR.md R8): arkib `lejar/univ_arkib/<S>.txt`
     jika ada, supaya bina semula lejar memakai universe sebenar sesi itu; jika tiada, universe semasa — dan disimpan ke arkib
     apabila S = sesi terkini (larian biasa), tidak semasa bina semula sesi lama."""
     p = os.path.join(UNIV_ARKIB, f"{pd.Timestamp(S).strftime('%Y%m%d')}.txt")
@@ -213,6 +213,7 @@ def cmd_stor(a):
         r = (m.close_k / m.close_l).groupby(m.ticker).median()
         laras = {t: round(float(v), 6) for t, v in r.items() if abs(v - 1) > TOLERANSI_LARAS}
     stor, nota = harga_yf.gabung(stor, baru)
+    nota['log_laras'] = tulis_log_laras(STOR, nota.pop('log_laras'))   # keputusan laras/anomali (tambah sahaja)
     nota['moomoo'] = tampal_moomoo(stor)
     ubah = [nm for nm, d in stor.items() if tulis_stor(d, os.path.join(STOR, nm))]
     # saham universe tanpa sejarah mencukupi -> minta sejarah 3 tahun (harga_harian.yml)

@@ -34,7 +34,7 @@ class TestCair(unittest.TestCase):
 class TestDelist(unittest.TestCase):
     def test_posisi_delist_ditutup(self):
         g = saham(umum=None, n=180)
-        sesi = list(IX[:186])          # 6 sesi selepas bar terakhir (indeks 179)
+        sesi = list(IX[:190])          # 10 sesi selepas bar terakhir (indeks 179)
         rows = [dict(tarikh_beli=str(IX[170].date()), saham='Y', kaedah='M01', harga_beli='50', keluar='False', keluar_henti='False'),
                 dict(tarikh_beli=str(IX[160].date()), saham='Y', kaedah='M02', harga_beli='50', keluar='True', tarikh_keluar=str(IX[165].date()),
                      harga_keluar='51', untung_akhir_pct='2.00', keluar_henti='False')]
@@ -44,7 +44,7 @@ class TestDelist(unittest.TestCase):
                 w = csv.DictWriter(f, TestPosisi.LAJUR); w.writeheader()
                 for r in rows:
                     w.writerow({k: r.get(k, '') for k in TestPosisi.LAJUR})
-            self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi[:183]), [])     # 3 sesi: belum
+            self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi[:189]), [])     # 9 sesi: belum
             x = TL.tutup_delist(d, {'Y': g}, sesi)
             self.assertEqual(len(x), 2)
             with open(p) as f:

@@ -31,7 +31,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q pandas numpy
+        run: pip install -q -c kekangan.txt pandas numpy
       - name: Jana papan penganalisis
         run: python3 BacktestShariah2/standard/penganalisis.py
       - name: Commit dan push

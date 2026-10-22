@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q -r requirements.txt
+        run: pip install -q -c kekangan.txt -r requirements.txt
       - name: Ujian unit
         run: python3 -m unittest discover -s BacktestShariah2/ujian
       - name: Semak data papertrade (sahkan.py)

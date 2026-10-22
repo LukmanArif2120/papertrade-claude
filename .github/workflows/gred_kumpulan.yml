@@ -50,7 +50,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q pandas numpy yfinance
+        run: pip install -q -c kekangan.txt pandas numpy yfinance
       - name: Kira gred kumpulan
         env:
           SESI: ${{ github.event.inputs.sejarah_sesi || '0' }}

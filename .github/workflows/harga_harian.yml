@@ -30,7 +30,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q pandas numpy yfinance exchange_calendars
+        run: pip install -q -c kekangan.txt pandas numpy yfinance exchange_calendars
       - name: Tarik 10 sesi terakhir
         run: python3 BacktestShariah2/standard/harga_yf.py terkini
       - name: Tarik sejarah (jika perlu_sejarah.txt wujud; fail dipadam selepas siap)
