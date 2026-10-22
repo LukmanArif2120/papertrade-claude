@@ -87,41 +87,41 @@ pencemaran di bawah terus masuk ke kedudukan.
 | ID | Punca | Mekanisme | Ukuran (C / Lejar) | Kawalan |
 |---|---|---|---|---|
 | A1 | Ambil alih tunai (harga terkunci) | Lonjakan hari pengumuman kelihatan breakout; ruang naik ≈ 0 | 89 C `tidak_sah`; Lejar lama 83 (68 selepas umum) | Ya — `ambil_alih.py`, `tidak_layak.py`, 6:02 langkah 2c; Lejar bina semula (sahkan 22 Okt) |
-| A2 | Ambil alih bayaran saham / campuran, tender offer | Harga ikut pembeli × nisbah (tidak terkunci); tender = terkunci ≥ 10–20 hari urus niaga | PEN (campuran) sahaja diketahui | Separa — senarai manual `data/ambil_alih.csv`; tiada pengesan berita/EDGAR (425, S-4, SC TO-T) |
-| A3 | Tidak cair (kelas B, saham nipis) | Bar tanpa julat/volum → breakout dan henti palsu; isian buka mustahil | 18 C (BKHA 6, AKA 4, WLYB 2, MGRT 2, FEDU 2, SENEB 1, MAYS 1); Lejar 38 | Isyarat baharu: ya. Posisi C lama: belum diputuskan |
+| A2 | Ambil alih bayaran saham / campuran, tender offer | Harga ikut pembeli × nisbah (tidak terkunci); tender = terkunci ≥ 10–20 hari urus niaga | PEN (campuran) sahaja diketahui | Ya (22 Okt) — `edgar.yml` (`standard/tawaran_edgar.py`: SC TO-T, SC 14D9, SC 13E3, 425) menambah ke `data/ambil_alih.csv`; menunggu rahsia `SEC_USER_AGENT` |
+| A3 | Tidak cair (kelas B, saham nipis) | Bar tanpa julat/volum → breakout dan henti palsu; isian buka mustahil | 18 C (BKHA 6, AKA 4, WLYB 2, MGRT 2, FEDU 2, SENEB 1, MAYS 1); Lejar 38 | Ya — isyarat baharu ditapis; posisi C lama `tidak_sah` (22 Okt, #7) |
 | A4 | Delist / tiada bar | Harga basi, posisi tersangkut | 0 terbuka kini (ATKR ditutup sebagai A1) | Ya — tutup pada tutup akhir. Pepijat P1 |
-| A5 | Lonjakan melampau, pump/squeeze, bar salah | Pulangan > +100% atau < −60% sehari lalu berbalik → isyarat momentum/volum palsu | Stor: 21 peristiwa / 10 saham (PHOE +997% → −87%, RPGL, VEEE, KELYB, MGRT, SVRN, ASST, AGL, AGPU, AEBI). C: ASST 10, SVRN 6 (log); lonjak-balik 25%/20%: 7 C (HQ, SVRN, TANH) | Tiada |
-| A6 | Dua kelas saham syarikat sama (FOX/FOXA, NWS/NWSA, BELFA/B, RUSHA/B, SENEA/B, WLY/WLYB) | Satu isyarat dikira dua kali; satu kelas biasanya tidak cair | 66 C | Tiada |
+| A5 | Lonjakan melampau, pump/squeeze, bar salah | Pulangan > +100% atau < −60% sehari lalu berbalik → isyarat momentum/volum palsu | Stor: 21 peristiwa / 10 saham (PHOE +997% → −87%, RPGL, VEEE, KELYB, MGRT, SVRN, ASST, AGL, AGPU, AEBI). C: ASST 10, SVRN 6 (log); lonjak-balik 25%/20%: 7 C (HQ, SVRN, TANH) | Lonjakan sebenar (R6), bukan ralat data: tidak ditapis; kesan pada kedudukan dikawal purata dipangkas 5% Papan |
+| A6 | Dua kelas saham syarikat sama (FOX/FOXA, NWS/NWSA, BELFA/B, RUSHA/B, SENEA/B, WLY/WLYB) | Satu isyarat dikira dua kali; satu kelas biasanya tidak cair | 66 C | Ya (22 Okt) — `data/kelas_berganda.csv`; kelas kurang cair `tidak_sah` |
 | A7 | Split / reverse split tidak dilaras | Lompatan 1/k atau ×k palsu | Ujian nisbah (k ≥ 2) atas 120 bar saham C/Lejar: 0 split tidak dilaras (PRIM, WGS = kejatuhan earnings, bukan split). Lejar: 0 posisi `laras` > 15% | Separa — yfinance melaras split; C lorong 1 tiada laras; tiada pengesan nisbah |
-| A8 | Dividen khas / ≥ 25%, spin-off, rights | Jurang ex-date kelihatan breakdown / kena henti | Tidak diukur (tiada data tindakan korporat dalam stor; `auto_adjust=False`, `actions=False`) | Tiada |
+| A8 | Dividen khas / ≥ 25%, spin-off, rights | Jurang ex-date kelihatan breakdown / kena henti | Tidak diukur (tiada data tindakan korporat dalam stor; `auto_adjust=False`, `actions=False`) | Ya (22 Okt) — `kod/peristiwa.py` + `data/harga/faktor.csv` (dividen yfinance automatik; jurang calon disahkan rutin 6:02 langkah 2d) |
 | A9 | IPO baharu / sejarah pendek, lock-up | Penunjuk belum stabil; tekanan lock-up | 4 C (HQ 148 bar, PARK, VSNT, BLLN < 260 bar) | Separa — `PERLU_BAR`/`WARM` setiap kaedah |
 | A10 | Jenis instrumen bukan saham (ADR, dana, ETF, keutamaan, unit/waran, SPAC) | Pemandu harga lain (NAV, FX, trust $10) | 0 C / 0 Lejar ikut nama TradingView | Cukup buat masa ini (universe Moomoo/Shariah); tiada semakan jenis |
-| A11 | Tawaran saham susulan / ATM | Jurang buka ≤ −5% pada volum ≥ 3× | 2 C, 1 Lejar pada hari beli | Tiada |
+| A11 | Tawaran saham susulan / ATM | Jurang buka ≤ −5% pada volum ≥ 3× | 2 C, 1 Lejar pada hari beli | Tiada — peristiwa sebenar (bukan ralat data); kecil, dipantau |
 
 ## B. Harga dan vendor data
 | ID | Punca | Ukuran | Kawalan |
 |---|---|---|---|
 | B1 | Buka sementara 9:35 NY ≠ buka rasmi kline | (log) 213–553 baris dibetulkan sehari, 23–58 beza > 0.5%; semakan sampel "SAMA" dalam log beli 9:35 tidak berkesan | Ya — 6:02 §5.2 membetulkan harga_beli |
 | B2 | Moomoo ≠ yfinance (buka; rendah sub-sen) | 59 C (1.4%) beza > 0.5% dengan buka stor: 24 saham 20 Okt (KN +2.8%, OII, RYZ +1.9%), DAC −3.5% (12 Okt, belum disahkan), SENEB/WLYB (tidak cair). SBH 19 Okt: kena henti dalam C, tidak dalam Lejar (log) | Separa — "Moomoo menang" (lihat B3) |
-| B3 | **`tampal_moomoo` menyimpan buka sementara** | Stor 20 Okt: 22 saham (KN 34.10 lawan 35.04); 21 Okt: 33 saham (FC 17.95 lawan 18.39); 52 posisi Lejar beza > 0.5% daripada C (log, KN disahkan) | **BELUM** — `nota.contains('kline')` turut sepadan "buka sementara … (sahkan kline …)"; `keep='first'` menghalang nilai disahkan |
+| B3 | **`tampal_moomoo` menyimpan buka sementara** | Stor 20 Okt: 22 saham (KN 34.10 lawan 35.04); 21 Okt: 33 saham (FC 17.95 lawan 18.39); 52 posisi Lejar beza > 0.5% daripada C (log, KN disahkan) | Ya (22 Okt, #1) — hanya nota `buka rasmi`; nilai disahkan menang; `buka_moomoo.csv` dijana semula |
 | B4 | Tarikan yfinance awal / bar hilang setiap saham | (log) 16 Okt: 110 posisi Lejar salah harga, diproses semula; 50 ticker tiada bar 20 Okt. Ukuran: 1 bar hilang dalam pegangan (ET) | Separa — liputan ≥ 99% dan masa ≥ 00:20 UTC; tiada semakan setiap saham |
-| B5 | **Bar separa intrahari (harian.yml semasa pasaran)** | REF 21 Okt (log) | **BELUM** — tiada gerbang masa |
+| B5 | **Bar separa intrahari (harian.yml semasa pasaran)** | REF 21 Okt (log) | Ya (22 Okt, #1) — `harga_yf.py sejarah` tanpa bar sesi belum tutup |
 | B6 | Pelarasan sejarah / dividen mengubah bar lama | Lejar `laras` (INTU ×1.0047, WLYB ×1.0037; log) | Ya bagi Lejar; C tiada |
 | B7 | Bar tidak sah (tinggi < buka/tutup, harga ≤ 0, bar salinan) | 0 OHLC tidak sah; bar salinan 35 C (BKHA, DV, FEDU, MAYS, MGRT, SENEB, WLYB = tidak cair/terkunci) | Separa (tidak cair) |
-| B8 | Buka lelongan lawan cetakan pertama (yfinance Open ≠ NOOP/NYSE open) | Sebahagian beza B2 | Tiada — konvensyen isian tidak direkod |
+| B8 | Buka lelongan lawan cetakan pertama (yfinance Open ≠ NOOP/NYSE open) | Sebahagian beza B2 | Ya (22 Okt) — buka yfinance muktamad = buka rasmi Moomoo 1,363/1,365 (R1); isian = buka rasmi (`tugasan_v3` §4) |
 
 ## C. Proses, peraturan dan kod
 | ID | Punca | Ukuran | Kawalan |
 |---|---|---|---|
-| C1 | "Belum didagangkan 9:36" dilangkau dalam C, tetapi dibeli Lejar pada buka rasmi | 12–19 baris sehari (log) | Tiada — set C ≠ Lejar |
+| C1 | "Belum didagangkan 9:36" dilangkau dalam C, tetapi dibeli Lejar pada buka rasmi | 12–19 baris sehari (log) | Ya (22 Okt) — C merekod `buka_lewat` dan diganti buka rasmi malam itu (satu peraturan 9:36) |
 | C2 | Rutin 9:35 tidak menilai peraturan buka kaedah (`buka_maks`/`nota_henti` kosong bagi ~130 kaedah) | 27 baris jadi TIDAK DIBELI keesokannya (log) | Separa — §5.4 esok; `harian_c.py beli` menilai |
-| C3 | Logik keluar Lejar ≠ C/Actions | GEF M76, DELL M81 (log); punca belum disiasat | **BELUM** |
+| C3 | Logik keluar Lejar ≠ C/Actions | GEF M76, DELL M81 (log); punca: lompat `dinilai_hingga` + exitc replika enjin | Ya (22 Okt, #2 + `kod/dagangan.py`) |
 | C4 | Rekod ke belakang 12 Okt (kohort pra-Lejar) | 598 posisi (276 slot penuh + 322) | Diterima; harga = buka stor |
 | C5 | Gred diisi semula ke belakang (pandang depan) | 1,126 posisi 17 Okt (log) | Ya — dikira semula pada tarikh isyarat |
 | C6 | Sambungan Moomoo/SST luput | Gred P/QR "–", medan SST basi (log) | Dicatat sahaja |
-| C7 | Drift universe apabila Lejar dibina semula (univ.txt semasa, bukan ikut tarikh) | 49 posisi Lejar berubah (hilang 25, tambah 24; 13 saham) | Tiada universe ikut tarikh |
-| P1 | **`lejar.py semak` tidak terima `delist`** | Belum berlaku | **BELUM** (ralat saya, 21 Okt) |
-| P2 | **Lorong 2 dibuka semula bagi posisi palsu** | 89 C | **BELUM** (ralat saya, 21 Okt; kesan kecil kerana `tidak_sah`) |
+| C7 | Drift universe apabila Lejar dibina semula (univ.txt semasa, bukan ikut tarikh) | 49 posisi Lejar berubah (hilang 25, tambah 24; 13 saham) | Ya (22 Okt, #7) — `lejar/univ_arkib/<sesi>.txt` |
+| P1 | **`lejar.py semak` tidak terima `delist`** | Belum berlaku | Ya (22 Okt, #3) |
+| P2 | **Lorong 2 dibuka semula bagi posisi palsu** | 89 C | Ya (22 Okt, #4) — keluar paksa dibekukan |
 | C8 | Peraturan berubah semasa ujian (lorong 2 ×3, penapis 21 Okt) | Semua kohort sebelum 19/21 Okt | Ya — VERSI + bina semula; perlu dilapor ikut versi |
 
 ## D. Bias perbandingan dan statistik
@@ -143,7 +143,7 @@ pencemaran di bawah terus masuk ke kedudukan.
 | E1 | Status Syariah tidak disahkan / gagal nisbah kewangan | `kewangan_ringkas`: lulus 2,635, gagal sebahagian 952, gagal 111, hampir had 256, kosong 286 → 1,063 C (25%) gagal/gagal sebahagian. `semak_shariah`: tiada_maklumat 2,880, disahkan_etf 970, sp500_tiada_spus 372 | Rekod sahaja (gred kewangan); universe = skrin Moomoo |
 | E2 | Saringan universe ikut nilai semasa (harga ≥ 10, Syariah) bukan ikut tarikh | Lejar 12 posisi harga_beli < 10 (penapis tutup isyarat ≥ 10) | Separa |
 
-## Cadangan (ikut keutamaan; menunggu keputusan pengguna)
+## Cadangan asal (21 Okt; kebanyakannya sudah dilaksana — lihat Status pelaksanaan dan lajur status di atas)
 1. **Pepijat (P1, P2, B3, B5):** baiki `semak` (terima `delist`); bekukan lorong 2 bagi baris `tidak_sah` / `delist`; `tampal_moomoo`
    hanya menerima nota `buka rasmi … (kline …)` dan nilai terkini menang; gerbang masa `harian.yml`; kemudian bina semula stor buka 20–21 Okt
    dan Lejar.
