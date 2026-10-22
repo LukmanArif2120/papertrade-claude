@@ -185,6 +185,8 @@ tbody tr.exit td:first-child{box-shadow:inset 3px 0 0 var(--neg)}
 tbody tr.exit:hover td{background:color-mix(in srgb,var(--neg) 20%,var(--surface))}
 tbody tr.void td{opacity:.5}
 tbody tr.void td:first-child{box-shadow:inset 3px 0 0 var(--warn)}
+tbody tr.skw-top td:first-child{box-shadow:inset 3px 0 0 var(--accent)}tbody tr.skw-x td{opacity:.55}
+@media (min-width:761px){table[data-st^="skw-"] th{overflow-wrap:normal}table[data-st^="skw-"] td:not(.tk){overflow-wrap:normal;white-space:nowrap}table[data-st^="skw-"] td .vv{font-size:.72rem}table[data-st^="skw-"] td.tk{min-width:160px}}
 td.name{text-align:left;white-space:normal;min-width:200px;max-width:320px}
 td.name b{font-weight:700;color:var(--fg);margin-right:6px}
 td .vv{display:block;color:var(--muted);font-size:.76rem;line-height:1.3;white-space:nowrap}
@@ -1263,8 +1265,9 @@ function normPT(r){const keluar=!!(r.keluar||r.tarikh_keluar);const kk=r.kaedah_
   untung_henti_pct:nomb(r.untung_henti_pct),harga_keluar_henti:nomb(r.harga_keluar_henti)});}
 /* dua lorong keluar (sejak 17 Okt 2026): 1 kaedah, 2 pegang selagi naik (standard/keluar_lorong.py) */
 const LORONG={kaedah:['keluar','tarikh_keluar','harga_keluar','untung_akhir_pct','isyarat_keluar'],henti:['keluar_henti','tarikh_keluar_henti','harga_keluar_henti','untung_henti_pct','status_henti']};
-/* untung lorong: akhir jika lorong itu sudah keluar, semasa jika masih dipegang */
-const hasilL=(r,l)=>r[LORONG[l][0]]?r[LORONG[l][3]]:r.untung_pct;
+/* untung lorong: akhir jika lorong itu sudah keluar, semasa jika masih dipegang (lorong 2 selepas lorong kaedah keluar: tutup terakhir,
+   kerana harga terkini baris itu dibekukan pada harga keluar lorong kaedah) */
+const hasilL=(r,l)=>r[LORONG[l][0]]?r[LORONG[l][3]]:l==='henti'&&r.keluar?semasaL2(r):r.untung_pct;
 const BLN=['Jan','Feb','Mac','Apr','Mei','Jun','Jul','Ogo','Sep','Okt','Nov','Dis'];
 /* hari dagangan (Isn–Jum) dari tarikh beli hingga tarikh keluar */
 function hariAntara(a,b){const x=Date.parse((a||'')+'T00:00:00Z'),y=Date.parse((b||'')+'T00:00:00Z');if(isNaN(x)||isNaN(y)||y<x)return null;let n=0;for(let d=new Date(x+864e5);d<=y;d.setUTCDate(d.getUTCDate()+1)){const w=d.getUTCDay();if(w&&w<6)n++;}return n;}
@@ -1276,9 +1279,9 @@ function selLorong(r,l){const [k,t,h,u,st]=LORONG[l];if(r.tidak_dibeli)return '<
   const kotak=(c,t,b)=>{const i=b.indexOf('</b>')+4;return `<div class="grc lr"><div class="lrk">${b.slice(0,i)}<span class="lrb ${c}">${t}</span></div><div class="grt">${b.slice(i)}</div></div>`;};
   if(r[k]){const hr=hariAntara(r.tarikh_beli,r[t]),sb=(r[st]||'').replace(/^Keluar:? ?/,'').replace(/ \([^)]*\)\s*$/,'');
     return kotak('p-exit','Keluar',`${pct(r[u])}<span class="vv nw">${esc(tkO(r[t]))} @ ${fx(r[h],2)}${hr!=null?' · '+hr+' hari':''}</span>${sb?`<span class="vv">${esc(sb)}</span>`:''}`);}
-  if(!r[st])return kotak('p-mute','Belum',`${pct(r.untung_pct)}<span class="vv">belum dinilai</span>`);
+  if(!r[st])return kotak('p-mute','Belum',`${pct(hasilL(r,l))}<span class="vv">belum dinilai</span>`);
   const tunggu=/menunggu/.test(r[st]),m=/\(([^)]*)\)\s*$/.exec(r[st]);
-  return kotak(tunggu?'p-warn':'p-hold',tunggu?'Tunggu':'Pegang',`${pct(r.untung_pct)}${r[st]==='Pegang'?'':`<span class="vv">${esc(tunggu||!m?r[st].replace(/ \(menunggu\)$/,''):m[1])}</span>`}${l==='henti'&&!tunggu?barL2(r):''}`);}
+  return kotak(tunggu?'p-warn':'p-hold',tunggu?'Tunggu':'Pegang',`${pct(hasilL(r,l))}${r[st]==='Pegang'?'':`<span class="vv">${esc(tunggu||!m?r[st].replace(/ \(menunggu\)$/,''):m[1])}</span>`}${l==='henti'&&!tunggu?barL2(r):''}`);}
 const sahSahaja=rs=>rs.filter(r=>!r.tidak_sah);
 function benar(v){return v===true||v==='True'||v==='true';}
 function nomb(v){return v==null||v===''||isNaN(+v)?null:+v;}
@@ -1717,6 +1720,7 @@ function renderPrestasi(which){
   ${prAliran(which)}
   ${prAnalisis(src,which)}
   ${prR(src,which)}
+  ${prSkor(src,which)}
   <div class="filters"><span class="lbl" data-tip="min_n">Minimum dagangan setiap kaedah</span>
     <div class="seg" id="prMin${which}">${[1,3,5,10].map(n=>`<button type="button" data-v="${n}" aria-pressed="${pf.minN===n}">${n===1?'Semua':'≥ '+n}</button>`).join('')}</div>
     <span class="mut" style="font-size:.82rem">${st.length} daripada ${all.length} kaedah dipapar dalam carta & jadual kaedah</span></div>
@@ -1762,6 +1766,7 @@ function renderPrestasi(which){
   [['hkSeg','hkSusun'],['hkMod','hkMod'],['hkBand','hkBand'],['hkMin','hkMin']].forEach(([id,k])=>{const hs=$('#'+id+which);if(hs)hs.onclick=e=>{const b=e.target.closest('button');if(!b)return;S[k]=k==='hkMin'?+b.dataset.v:b.dataset.v;renderAll();};});
   const sg=$('#prMin'+which);sg.onclick=e=>{const b=e.target.closest('button');if(!b)return;pf.minN=+b.dataset.v;renderAll();};
   bindLagi('prkMore'+which,pk);if(S.prl)bindLagi('prlMore',S.prl);
+  bindSegH('skwLihat'+which,v=>{S.skw.lihat=v;S.skw.shown=AWAL;});bindLagi('skwMore'+which,S.skw);
 }
 
 /* ================= Kaedah: katalog semua kaedah aktif (kaedah/katalog, sumber standard/katalog_kaedah.json) ================= */
@@ -2218,6 +2223,7 @@ const garisM=memo(g=>{if(!g||!Array.isArray(g.rows))return null;const T=(g.tarik
 const garis=()=>garisM(S.garis);
 const tutupPada=(s,t)=>{const G=garis();if(!G)return null;const i=G.T.indexOf(t),c=G.by[s];return i<0||!c?null:c[i];};
 const tutupAkhir=s=>{const G=garis(),c=G&&G.by[s];if(!c)return null;for(let i=c.length-1;i>=0;i--)if(c[i]!=null)return c[i];return null;};
+const semasaL2=r=>{const c=tutupAkhir(r.saham),hb=nomb(r.harga_beli);return c!=null&&hb?(c/hb-1)*100:r.untung_pct;};
 const akhirPos=r=>[r.tarikh_keluar,r.tarikh_keluar_henti].filter(Boolean).sort().pop()||'';
 function siriPos(r){const G=garis(),c=G&&G.by[r.saham];if(!c||!r.tarikh_beli)return null;const t=[],v=[],z=r.tutup_semua?akhirPos(r):'';
   G.T.forEach((d,i)=>{if(d>=r.tarikh_beli&&c[i]!=null&&(!z||d<z)){t.push(d);v.push(c[i]);}});return v.length?{t,v}:null;}
@@ -2530,6 +2536,93 @@ function prR(src,which){const ex=src.filter(r=>r.keluar),vr=ex.map(rOf).filter(x
       <div class="kpi"><div class="lbl">Masih dipegang</div><div class="v ${cls(avgOf(vo))}">${rTxt(avgOf(vo))}</div><div class="s">${nf(vo.length)} posisi · purata R semasa</div></div></div>
     <div class="chartbox" id="prR${which}"></div>
     <p class="sub" style="margin-top:6px">R = untung % ÷ risiko awal %, risiko awal = (harga beli − henti kaedah pada hari isyarat) ÷ harga beli. Bagi kaedah yang hentinya mengekor, R ialah anggaran (henti awal sahaja). Posisi dengan risiko awal &lt; 0.5% atau tanpa henti tidak dikira.</p></div>`;}
+
+/* ================= Skor kaedah swing (22 Okt 2026, permintaan pengguna) =================
+   Satu jadual kaedah × metrik dengan skor akhir 0–100%: Untung 40 · Konsisten 25 · Risiko 20 · Bukti 15. Untung dikira pada lorong
+   terbaik setiap kaedah (kaedah atau selagi naik); purata dilaras ke arah purata semua dagangan lorong itu (+SKW_K dagangan setara)
+   supaya sampel kecil tidak menang. Setiap metrik dipetakan ke 0–100 dengan julat tetap [a → 0, b → 100]; metrik tanpa data tidak
+   dikira (wajaran dibahagi semula). Layak = ≥ PR_MIN_TUTUP dagangan selesai (lorong kaedah) dan purata pegang backtest 3–30 hari. */
+const SKW_K=20,SKW_SWING=[3,30];
+const SKW_M=[['u1','U',25,'Untung purata dilaras',-3,6],['u2','U',10,'Untung sehari',0,0.4],['u3','U',5,'Lebih SPY',-3,3],
+  ['k1','K',10,'Kadar menang',30,70],['k2','K',10,'Faktor untung',0.8,2.5],['k3','K',5,'Median',-2,3],
+  ['r1','R',10,'Penurunan maks purata',-10,0],['r2','R',5,'Rugi purata',-10,-2],['r3','R',5,'Kerugian terbesar',-25,-5],
+  ['b1','B',5,'Dagangan selesai'],['b2','B',5,'Sebenar ÷ backtest',0,1],['b3','B',5,'Semakan luar sampel',0,3]];
+const skwLin=(v,a,b)=>v==null||isNaN(v)?null:clamp01((v-a)/(b-a))*100;
+const skwTahap=x=>!x.layak?['Tidak layak','p-mute']:x.skor>=70?['Teras','p-buy']:x.skor>=55?['Calon','p-near']:['Pantau','p-mute'];
+const hariL=(r,l)=>{const [k,t]=LORONG[l];return r[k]?hariAntara(r.tarikh_beli,r[t]):(hariSejak(r.tarikh_beli)??r.hari);};
+/* SPY tempoh sama bagi lorong: buka hari beli hingga buka hari keluar lorong itu, atau tutup terakhir jika masih dipegang */
+function spyL(r,l){const G=garis();if(!G||!G.sT.length||!r.tarikh_beli)return null;const a=G.spy[r.tarikh_beli];if(!a||!a.o)return null;
+  const [k,t]=LORONG[l];let b;if(r[k]&&r[t]){const x=G.spy[r[t]];b=x&&x.o;}else b=G.spy[G.sT[G.sT.length-1]].c;return b?(b/a.o-1)*100:null;}
+const skwData=memo((src,anl,G,docs,at,meta,kat,hst)=>{
+  const by={};src.forEach(r=>{(by[r.kaedah]=by[r.kaedah]||[]).push(r);});
+  let st=prStatsC.get(src);if(!st){st=prStats(src);prStatsC.set(src,st);}const SO={};st.forEach(o=>{SO[o.kaedah]=o;});
+  const glob={},AN={};['kaedah','henti'].forEach(l=>{glob[l]=avgOf(src.map(r=>hasilL(r,l)));});((anl&&anl.rows)||[]).forEach(r=>{AN[r.id]=r;});
+  const all=Object.entries(by).map(([k,a])=>{const o=SO[k]||{},L={};
+    ['kaedah','henti'].forEach(l=>{const v=a.map(r=>hasilL(r,l)).filter(x=>x!=null);L[l]={v,avg:avgOf(v)};});
+    const lor=(L.henti.avg??-1e9)>(L.kaedah.avg??-1e9)?'henti':'kaedah',v=L[lor].v,avg=L[lor].avg;
+    const shr=avg==null?null:(v.length*avg+SKW_K*(glob[lor]??0))/(v.length+SKW_K),hr=avgOf(a.map(r=>hariL(r,lor)));
+    const sp=a.map(r=>{const s=spyL(r,lor),u=hasilL(r,lor);return s==null||u==null?null:u-s;}).filter(x=>x!=null);
+    const w=v.filter(x=>x>0),l=v.filter(x=>x<0),sw=w.reduce((t,x)=>t+x,0),sl=-l.reduce((t,x)=>t+x,0);
+    const b=btOf(k),btAvg=b&&b.r.avg!=null?b.r.avg*100:null,btHari=b&&b.r.days!=null?b.r.days:null,an=AN[k];
+    const x={kaedah:k,n:a.length,peg:a.filter(r=>!r[LORONG[lor][0]]).length,xk:a.filter(r=>r.keluar).length,xh:a.filter(r=>r.keluar_henti).length,
+      lor,avgK:L.kaedah.avg,avgH:L.henti.avg,avg,shr,hr,btHari,btAvg,uh:shr==null||hr==null?null:shr/Math.max(1,hr),spy:sp.length?avgOf(sp):null,
+      win:v.length?w.length/v.length*100:null,pf:sl>0?sw/sl:sw>0?99:null,med:median(v),mae:o.maeAvg??null,rugi:l.length?avgOf(l):v.length?0:null,
+      worst:minOf(v),ex:o.ex||0,btr:btAvg!=null&&btAvg>0&&L.kaedah.avg!=null?L.kaedah.avg/btAvg:null,lulus:an&&an.lulus!=null?an.lulus:null,
+      awal:awalBT({kaedah:k,mula:o.mula})};
+    x.s={u1:skwLin(x.shr,-3,6),u2:skwLin(x.uh,0,0.4),u3:skwLin(x.spy,-3,3),k1:skwLin(x.win,30,70),k2:skwLin(x.pf,0.8,2.5),k3:skwLin(x.med,-2,3),
+      r1:skwLin(x.mae,-10,0),r2:skwLin(x.rugi,-10,-2),r3:skwLin(x.worst,-25,-5),
+      b1:x.ex<PR_MIN_TUTUP?x.ex/PR_MIN_TUTUP*40:Math.min(100,40+60*(x.ex-PR_MIN_TUTUP)/80),b2:x.btr==null?null:clamp01(x.btr)*100,b3:x.lulus==null?null:x.lulus/3*100};
+    let tw=0,ts=0;const g={};SKW_M.forEach(([id,gr,wt])=>{const s=x.s[id];if(s==null)return;tw+=wt;ts+=wt*s;const q=g[gr]||(g[gr]={w:0,s:0});q.w+=wt;q.s+=wt*s;});
+    x.g={};Object.keys(g).forEach(k=>{x.g[k]=g[k].s/g[k].w;});x.skor=tw?ts/tw:null;
+    x.swing=btHari!=null&&btHari>=SKW_SWING[0]&&btHari<=SKW_SWING[1];x.layak=x.ex>=PR_MIN_TUTUP&&x.swing&&x.skor!=null;
+    x.sebab=x.ex<PR_MIN_TUTUP?`${x.ex}/${PR_MIN_TUTUP} selesai`:btHari==null?'tiada backtest':!x.swing?`pegang backtest ${fx(btHari,0)} hari`:'';
+    return x;});
+  const L=all.filter(x=>x.layak).sort((a,b)=>b.skor-a.skor);L.forEach((x,i)=>{x.rk=i+1;});return {all,L};});
+const skwOf=src=>skwData(src,S.anl,S.garis,S.docs,S.at,S.meta,S.kat,S.hst);
+const skwLor=x=>`${cipL(x.lor==='henti'?'2':'K')} ${x.lor==='henti'?'Selagi naik':'Kaedah'}`;
+const skwPecah=x=>SKW_M.map(([id,,wt,lb])=>`${lb} (${wt}%): ${x.s[id]==null?'tiada data':fx(x.s[id],0)+'/100'}`).join('\n');
+const skwKump=x=>['U','K','R','B'].map(k=>`${k} ${x.g[k]==null?'–':fx(x.g[k],0)}`).join(' · ');
+const skwPill=x=>{const t=skwTahap(x);return `<span class="pill ${t[1]}"${x.layak?'':` title="${esc(x.sebab)}"`}>${x.layak?t[0]:esc(x.sebab)}</span>`;};
+const LP_SKW={key:x=>x.kaedah,btn:1,cls:x=>x.layak&&x.skor>=70?'s-pos':x.layak&&x.skor>=55?'s-hmp':'',
+  line:x=>`<span class="mut">${x.rk||'–'}</span><b>${esc(x.kaedah)}</b>${skwPill(x)}<span class="mlx">${skwLor(x)} <b class="${cls(x.avg)}">${sg2(x.avg)}</b></span><b class="mlr">${x.skor==null?'–':fx(x.skor,0)+'%'}</b>${mlC}`,
+  kad:x=>`<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(x.kaedah)}</b><span class="mkk">${esc(katNama(x.kaedah))}</span></span><b class="mku">${x.skor==null?'–':fx(x.skor,0)+'%'}</b></div>
+    <div class="mkr">${skwPill(x)}${x.awal?' <span class="pill p-warn" data-tip="terlalu_awal">terlalu awal</span>':''} · ${skwLor(x)} · ${skwKump(x)}</div>
+    <div class="mkz mkg2">${mkS('Untung % lorong terbaik',`<span class="${cls(x.avg)}">${sg2(x.avg)}</span> <span class="mut">dilaras ${sg2(x.shr)}</span>`,'skor_swing')}${mkS('Untung sehari',`<span class="${cls(x.uh)}">${sg2(x.uh)}</span> <span class="mut">${fx(x.hr,1)} hari</span>`,'skor_swing')}
+      ${mkS('Menang',fx(x.win,0)+'%','win_p')}${mkS('Faktor untung',x.pf==null?'–':x.pf>=99?'tiada rugi':fx(x.pf,2),'pf')}
+      ${mkS('Penurunan maks',`<span class="${cls(x.mae)}">${sg2(x.mae)}</span>`,'penurunan_maks')}${mkS('Kerugian terbesar',`<span class="${cls(x.worst)}">${sg2(x.worst)}</span>`,'kerugian_terbesar')}
+      ${mkS('Beli / dipegang',`${x.n} <span class="mut">/ ${x.peg}</span>`)}${mkS('Keluar K / 2',`${x.xk} <span class="mut">/ ${x.xh}</span>`,'dua_lorong')}
+      ${mkS('Lebih SPY',`<span class="${cls(x.spy)}">${sg2(x.spy)}</span>`)}${mkS('Semakan luar sampel',x.lulus==null?'–':x.lulus+'/3','anl_semakan')}</div></div>`};
+function prSkor(src,which){const D=skwOf(src),f=S.skw||(S.skw={lihat:'layak',shown:AWAL});if(!S.lajur.skw)S.lajur.skw='ringkas';
+  const rows=f.lihat==='semua'?D.all:D.L,ter=D.L.filter(x=>x.skor>=70),cal=D.L.filter(x=>x.skor>=55&&x.skor<70),nTop=Math.max(3,ter.length);
+  const sen=a=>a.map(x=>`<button type="button" class="lnk" data-kd="${esc(x.kaedah)}">${esc(x.kaedah)}</button> ${fx(x.skor,0)}% <span class="mut">(${x.lor==='henti'?'selagi naik':'kaedah'})</span>`).join(', ');
+  const ks=`${ter.length?`<b>Teras</b> (≥ 70%): ${sen(ter)}.`:`Belum ada kaedah Teras (≥ 70%).${D.L.length?` Teratas: ${sen(D.L.slice(0,3))}.`:''}`}${cal.length?` <b>Calon</b> (55–69%): ${sen(cal.slice(0,5))}${cal.length>5?` dan ${cal.length-5} lagi`:''}.`:''}`;
+  const skC={k:'skor',t:'Skor',tip:'skor_swing',v:x=>x.skor==null?-2000:x.layak?x.skor:x.skor-1000,c:()=>'utg',
+    f:x=>x.skor==null?'–':`<span class="skbar" title="${esc(skwPecah(x)).replace(/\n/g,'&#10;')}"><span><i style="width:${fx(x.skor,0)}%"></i></span><b>${fx(x.skor,0)}%</b></span><span class="vv nw">${skwKump(x)}</span>`};
+  const C=[{k:'rk',t:'#',v:x=>x.rk??999,f:x=>x.rk?`<b>${x.rk}</b>`:'<span class="mut">–</span>'},
+    {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,v:x=>+String(x.kaedah).replace(/\D/g,''),f:x=>`<b>${esc(x.kaedah)}</b> ${skwPill(x)}${x.awal?' <span class="pill p-warn" data-tip="terlalu_awal">terlalu awal</span>':''}<span class="vv">${esc(katNama(x.kaedah))}</span>`,c:()=>'tk'},
+    {k:'lor',t:'Lorong terbaik',tip:'dua_lorong',l:1,v:x=>x.lor==='henti'?1:0,f:x=>`<span class="nw">${skwLor(x)}</span><span class="vv nw">K ${sg2(x.avgK)} · 2 ${sg2(x.avgH)}</span>`},
+    {k:'n',t:'Beli',tip:'jumlah_dag',f:x=>`${x.n}<span class="vv nw">${x.peg} dipegang</span>`},
+    {k:'xk',t:'Keluar',tip:'dua_lorong',f:x=>`<span class="nw">K ${x.xk} · 2 ${x.xh}</span>`},
+    {k:'hr',t:'Hari pegang',tip:'hari_pt',f:x=>`${fx(x.hr,1)}<span class="vv nw">bt ${x.btHari==null?'–':fx(x.btHari,0)}</span>`},
+    {k:'avg',t:'Untung %',tip:'skor_swing',f:x=>`${untungHc(x.avg,5)}<span class="vv nw">dilaras ${sg2(x.shr)}</span>`},
+    {k:'uh',t:'Untung sehari',tip:'skor_swing',f:x=>`<span class="${cls(x.uh)}">${sg2(x.uh)}</span>`},
+    {k:'spy',t:'Lebih SPY',tip:'skor_swing',f:x=>`<span class="${cls(x.spy)}">${sg2(x.spy)}</span>`},
+    {k:'win',t:'Menang',tip:'win_p',f:x=>fx(x.win,0)+'%'},
+    {k:'pf',t:'Faktor untung',tip:'pf',f:x=>x.pf==null?'–':x.pf>=99?'<span class="pos">tiada rugi</span>':fx(x.pf,2)},
+    {k:'med',t:'Median',tip:'untung_median',f:x=>`<span class="${cls(x.med)}">${sg2(x.med)}</span>`},
+    {k:'mae',t:'Turun maks',tip:'penurunan_maks',f:x=>`<span class="${cls(x.mae)}">${sg2(x.mae)}</span>`},
+    {k:'rugi',t:'Rugi purata',tip:'kerugian_purata',f:x=>`<span class="${cls(x.rugi)}">${sg2(x.rugi)}</span>`},
+    {k:'worst',t:'Terburuk',tip:'kerugian_terbesar',f:x=>`<span class="${cls(x.worst)}">${sg2(x.worst)}</span>`},
+    {k:'ex',t:'Selesai',tip:'keyakinan',f:x=>`<span class="prog"><i style="width:${Math.min(100,x.ex/PR_MIN_TUTUP*100).toFixed(0)}%"></i></span><b>${x.ex}</b>${x.ex<PR_MIN_TUTUP?`<span class="mut">/${PR_MIN_TUTUP}</span>`:''}`},
+    {k:'btr',t:'Lawan backtest',tip:'bt_vs_pt',f:x=>x.btr==null?'<span class="mut">–</span>':`${fx(x.btr*100,0)}%<span class="vv nw">bt ${sg2(x.btAvg)}</span>`},
+    {k:'lulus',t:'Semakan',tip:'anl_semakan',f:x=>x.lulus==null?'<span class="mut">–</span>':`${x.lulus}/3`},skC];
+  const ringkas=['rk','kaedah','lor','avg','uh','win','pf','mae','ex','skor'],cols=lajurOf('skw')==='ringkas'?C.filter(c=>ringkas.includes(c.k)):C;
+  return `<div class="panel"><div class="panel-h"><h2 data-tip="skor_swing">Skor kaedah swing</h2><span class="sub">${nf(D.L.length)} daripada ${nf(D.all.length)} kaedah layak · ≥ ${PR_MIN_TUTUP} selesai · pegang backtest ${SKW_SWING.join('–')} hari · untung pada lorong terbaik</span></div>
+    <p class="kesimpulan">${ks}</p>
+    <div class="filters" style="margin-bottom:8px">${segH('skwLihat'+which,f.lihat,[['layak',`Layak (${D.L.length})`],['semua',`Semua (${D.all.length})`]],'Tapis')}${lajurSeg('skw')}</div>
+    ${sortTable({id:'skw-'+which,rows,cols,def:{k:'skor',dir:-1},limit:f.shown,lp:LP_SKW,attr:x=>`data-hk="${esc(x.kaedah)}" tabindex="0"`,
+      rcls:x=>'click'+(x.layak&&x.rk<=nTop?' skw-top':'')+(x.layak?'':' skw-x'),foot:kakiLagi('skwMore'+which),empty:'Belum ada kaedah layak.'})}
+    <p class="sub" style="margin-top:8px">Skor = purata berwajaran markah 0–100 setiap metrik: <b>Untung 40%</b> (untung purata dilaras 25, untung sehari 10, lebih SPY 5) · <b>Konsisten 25%</b> (menang 10, faktor untung 10, median 5) · <b>Risiko 20%</b> (penurunan maks purata 10, rugi purata 5, kerugian terbesar 5) · <b>Bukti 15%</b> (dagangan selesai 5, sebenar ÷ backtest 5, semakan luar sampel 5). Lorong terbaik = lorong yang untung puratanya lebih tinggi; metrik tanpa data tidak dikira. Teras ≥ 70% · Calon 55–69% · Pantau &lt; 55%. Hover Skor untuk pecahan; ketik baris untuk butiran kaedah.</p></div>`;}
 
 /* plot kotak setiap kaedah: kotak = Q1–Q3, garis tebal = median, bulatan = purata, misai = 1.5 × IQR (Tukey), titik = luar biasa */
 const kuantil=(s,f)=>{const p=(s.length-1)*f,i=Math.floor(p);return i+1<s.length?s[i]+(s[i+1]-s[i])*(p-i):s[i];};
@@ -3017,6 +3110,7 @@ const TIPS={
   hari_purata:{t:'Purata hari dipegang',d:'Purata hari dagangan dari tarikh beli hingga hari ini (atau hingga tarikh keluar).',e:''},
   min_n:{t:'Minimum dagangan',d:'Sembunyikan kaedah yang dagangannya kurang daripada bilangan ini daripada carta dan jadual kaedah. Kad KPI dan bahagian Paling Teruk tetap mengira semua.',e:''},
   kadar_gagal:{t:'Kadar gagal',d:'Peratus dagangan kaedah itu yang sedang rugi atau keluar dengan rugi.',e:'4 rugi daripada 5 = 80%. Amaran jika ≥ 60% (≥ 3 dagangan).'},
+  skor_swing:{t:'Skor kaedah swing',d:'Satu skor 0–100% bagi setiap kaedah untuk memilih kaedah swing yang untung dan mampan. Untung dikira pada lorong terbaik kaedah itu (ikut kaedah atau pegang selagi naik; lorong 2 yang masih dipegang dinilai pada tutup terakhir). Untung purata dilaras = (n × purata + 20 × purata semua dagangan lorong itu) ÷ (n + 20), supaya kaedah sampel kecil tidak menang. Julat markah (0 → 100): untung dilaras −3% → +6%; untung sehari (dilaras ÷ purata hari pegang) 0 → +0.4%; lebih SPY tempoh sama −3 → +3 mata; menang 30% → 70%; faktor untung (jumlah untung ÷ jumlah rugi) 0.8 → 2.5; median −2% → +3%; penurunan maks purata −10% → 0%; rugi purata −10% → −2%; kerugian terbesar −25% → −5%; selesai 20 = 40, 100 = 100; sebenar ÷ purata backtest 0 → 1; semakan luar sampel 0 → 3. Wajaran: Untung 40, Konsisten 25, Risiko 20, Bukti 15. Layak hanya selepas 20 dagangan selesai dan purata pegang backtest 3–30 hari.',e:'U 80 · K 60 · R 70 · B 50 = 40%×80 + 25%×60 + 20%×70 + 15%×50 = 68.5% → Calon.'},
   kerugian_purata:{t:'Kerugian purata',d:'Purata untung bagi dagangan yang rugi sahaja. Amaran jika −5% atau lebih teruk.',e:''},
   keluar_rugi:{t:'Isyarat keluar rugi',d:'Bilangan posisi yang kena isyarat keluar kaedah (henti rugi, isyarat jual) dengan untung akhir negatif. Amaran jika ≥ 3.',e:''},
   penurunan_maks:{t:'Penurunan maksimum',d:'Bagi setiap dagangan: harga rendah terendah sejak hari beli (hingga hari ini atau hingga keluar) ÷ harga beli − 1. Purata = risiko biasa yang ditanggung; terburuk = satu kejatuhan paling dalam. Lebih hampir 0 = lebih selamat.',e:'Beli 100, pernah jatuh ke 94 = −6%, walaupun kini untung.'},
@@ -3108,7 +3202,7 @@ const PNAV_MIN=3,PNAV_TELEFON=['v-utama'],PNAV_ADA={};
 /* tajuk kumpulan rel (desktop): [tajuk, kunci panel pertama kumpulan] ('' = panel pertama); kunci tiada = tajuk tidak dipapar */
 /* bahagian lalai jika belum dipilih (selainnya item pertama) */
 const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah','v-utama':'3 perkara utama'};
-const PNAV_KUMP={'v-pr-':[['Semua dagangan',''],['Setiap kaedah','untung lawan risiko'],['Eksperimen','banding dua lorong keluar']]};
+const PNAV_KUMP={'v-pr-':[['Semua dagangan',''],['Setiap kaedah','skor kaedah swing'],['Eksperimen','banding dua lorong keluar']]};
 let pnavPilih={};try{pnavPilih=JSON.parse(localStorage.getItem('pbs2_pnav_pilih')||'{}');}catch(e){}
 S.pnav=true;try{S.pnav=localStorage.getItem('pbs2_pnav')!=='0';}catch(e){}
 const pnavLayak=vid=>!PNAV_TELEFON.includes(vid)||skrinKecil();
