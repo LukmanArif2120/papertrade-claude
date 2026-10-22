@@ -257,3 +257,9 @@
 - R10: `kod/dagangan.py` — lajur exitc/tgt dagangan sendiri bagi 13 modul replika (Lejar, harian_c, rutin 6:02 langkah 2c `dagangan.py betul`). C: 14 posisi lorong 1 dibetulkan (DELL M81, ANF M82, BSX M19, MUR/GGG/SU/NUE/PTEN/TRMB M20, UMC/ARM M81, DT/PSX/DHT M82).
 - R5–R7: Papan Penganalisis kukuh (purata dipangkas, n berkesan ikut hari beli, BELUM CUKUP < 10 hari beli, lintas earnings). R8: arkib univ ikut sesi. R9: 18 posisi C tidak cair `tidak_sah`.
 - Lejar dibina semula automatik pada lejar.yml seterusnya (kunci `tidak_layak` + `keluar`). Ujian 218 lulus; `sahkan.py --betulkan` 0.
+
+## 22 Okt 2026 — pelaksanaan laporan "Pengesanan data tercemar yang tinggal" (keputusan pengguna)
+- Stor: `kekangan.txt` pin yfinance 1.7.0 / curl_cffi 0.16.3 / exchange_calendars 4.13.2 / pandas 3.0.6 / numpy 2.4.6 (versi Actions Python 3.11; CI lulus). `stor.nisbah_laras`: sejarah dilaras hanya jika nisbah bertindih seragam; anomali tidak menulis semula sejarah; log `data/harga/stor/log_laras.csv`. Data backtest = stor bagi 108/108 saham S1 (konvensyen dilaras hadapan termasuk dividen dikekalkan).
+- Peristiwa besar: `kod/peristiwa.py` + `data/harga/faktor.csv` (dividen yfinance ≥ 2% automatik; jurang ≤ −15% tanpa earnings → `faktor_calon.csv`, disahkan rutin 6:02 langkah 2d dengan Moomoo rehab). Calon pertama: TLK 16 Okt (−15.0%, nilai 6.7×).
+- Delist 10 sesi (dahulu 5). Belian "belum didagangkan" direkod sebagai buka sementara + buka_lewat (C = Lejar).
+- EDGAR: `standard/tawaran_edgar.py` + `edgar.yml`. Ujian pertama Actions: HTTP 403 tanpa e-mel dalam User-Agent → skrip melangkau sehingga rahsia repo `SEC_USER_AGENT` ditetapkan oleh pengguna.
