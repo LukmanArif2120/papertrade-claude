@@ -33,6 +33,38 @@ bias perbandingan) sebelum memutuskan penapis atau pembetulan seterusnya. Skop: 
 5. **Kesahihan universe:** 25% posisi C (1,063) ialah saham yang gred kewangan v7 nilai "Syariah gagal / gagal sebahagian". 68% posisi tiada
    pengesahan ETF Syariah (`tiada_maklumat`). Medan `is_shariah_compliant` TradingView kosong bagi AS.
 
+## Analisis punca akar (RCA, 22 Okt 2026 — susulan permintaan pengguna: data tepat untuk memilih kaedah swing terbaik)
+Keputusan pengguna 22 Okt: status Syariah **bukan** pencemaran (papertrade untuk memilih kaedah) — E1 digugurkan.
+
+**Laluan data ke pemilihan kaedah.** Kedudukan kaedah = Papan Penganalisis (`standard/penganalisis.py`): backtest dipotong + posisi
+hadapan MATANG (Lejar Penuh sejak 16 Okt + kohort C pra-Lejar 8–15 Okt, 1,669 posisi; dibeli ≥ maks(14 hari, 1.5 × hari pegang)).
+Pada 20 Okt **0 posisi matang** → kedudukan kini 100% backtest. Posisi matang pertama masuk 22 Okt; 20 posisi matang setiap kaedah
+26 Okt – 4 Nov; kohort Lejar 16 Okt (3,575 posisi, 62%) matang ~30 Okt. **Semua pembetulan mesti siap sebelum 26 Okt**, jika tidak
+pencemaran di bawah terus masuk ke kedudukan.
+
+| ID | Gejala | Punca akar (disahkan) | Kesan ke pemilihan kaedah |
+|---|---|---|---|
+| R1 (B2+B3+B5) | Buka stor ≠ buka rasmi (KN 34.10 lawan 35.04); "beza vendor" 59 posisi | **Bukan beza vendor.** Buka yfinance muktamad (`terkini.csv`) = buka rasmi Moomoo bagi 1,363/1,365 pasangan saham-hari 13–21 Okt (2 beza = SENEB, WLYB tidak cair). Rantai: penjaga/sandaran mencetus `harian.yml` semasa pasaran (14:18/14:29 UTC) → `lejar.py stor` → `tampal_moomoo` mengambil baris C bernota "buka sementara … (sahkan kline …)" kerana penapis `nota.contains('kline')` → disimpan dalam `buka_moomoo.csv` dengan `keep='first'` → dipakai semula setiap larian dan tidak pernah diganti. Juga bar separa intrahari (REF). | `buka_moomoo.csv`: 205/775 entri salah (> 0.1%): 97 saham 20 Okt, 108 saham 21 Okt. **289 posisi Lejar dibeli 20 Okt pada buka salah**; 21 Okt menyusul. Tinggi bar dipinda `max(tinggi, buka)` → penunjuk & isyarat terjejas sedikit. Bina semula Lejar 22 Okt 06:17 UTC akan memakai buka salah ini |
+| R2 (C3) | Lejar tidak keluar walaupun C keluar (GEF M76, DELL M81) | Modul kaedah yang `exitc` bergantung jujukan dagangan (`_exitc_*`: bendera keluar pada bar j hanya jika bar j+1 wujud — M19, M20, M31, M38, M40, M41, M76, M78, M82; juga M81) tidak dapat menanda bar terakhir. Lejar menilai secara tokokan (`dinilai_hingga`) dan **melangkau bar itu selamanya**; C/enjin menilai laluan penuh dari bar isyarat setiap hari, jadi tidak terjejas | 12 posisi Lejar terlepas keluar dalam 4 sesi (M82 8, M76 2, M81 2), bertambah setiap hari; kaedah ini dinilai dengan pegangan lebih panjang daripada peraturannya (backtest ≠ Lejar) |
+| R3 (P1) | — | `lejar.py semak` hanya terima sebab_keluar henti/sasaran/isyarat keluar/masa | CI merah apabila posisi delist pertama ditutup → lejar.yml/analisis tergendala |
+| R4 (P2) | 89 posisi palsu kembali "Pegang" lorong 2 | `keluar_lorong.kemas_baris` mengira semula baris yang status lorong 2 tiada penanda `paras keluar` | Tiada (baris `tidak_sah` dikecualikan), tetapi data C tidak konsisten |
+| R5 (D1/D2) | Purata kaedah didominasi satu peristiwa | Kluster: 59% posisi Lejar dalam kluster ≥ 5 kaedah; 62% dibeli satu hari. Papan menganggap setiap dagangan bebas (julat = SD/√n) | Julat keyakinan terlalu sempit; saiz sampel berkesan ≈ bilangan hari masuk berbeza (kini 1–5 setiap kaedah) |
+| R6 (A5/D4) | Purata kaedah kecil ditarik satu dagangan ekstrem | Lonjakan sebenar (bukan ralat data): ASST 2025 (meme), VEEE (squeeze, volum 75 juta), PHOE (mikro-kap, volum 1 ribu → 140 ribu). Papan memakai purata biasa | Satu squeeze boleh menaikkan/menjatuhkan kedudukan kaedah |
+| R7 (D3) | — | 37% belian ≤ 10 hari ke earnings; tempoh hadapan = musim earnings Okt | Pulangan hadapan kini bercampur jurang earnings; tidak setanding backtest sepanjang tahun |
+| R8 (C7) | 49 posisi Lejar berubah apabila dibina semula | Bina semula memakai `univ.txt` dan stor semasa, bukan ikut tarikh | Kecil (0.8%); tidak boleh dihasilkan semula tepat |
+| R9 (A3) | 18 posisi C tidak cair masih dikira | Penapis 21 Okt hanya untuk isyarat baharu | Sebahagian dalam kohort C pra-Lejar yang matang dahulu |
+
+## Pelan tindakan (menunggu kelulusan pengguna)
+| # | Tindakan | Menutup | Bila |
+|---|---|---|---|
+| 1 | `tampal_moomoo`: hanya nota `buka rasmi … (kline …)`; nilai disahkan terkini menang; buang entri salah 20–21 Okt daripada `buka_moomoo.csv` (atau matikan tampal — yfinance muktamad sudah sama). `harian.yml`: langkau `harga_yf terkini`/`lejar.py stor` antara 13:30–21:00 UTC (sesi AS) | R1 | Sebelum lejar.yml 06:17 UTC 22 Okt (atau bina semula selepas itu) |
+| 2 | `lejar.py`: nilai keluar dari bar isyarat setiap sesi (seperti C/enjin), bukan dari `dinilai_hingga`; ujian kesetaraan dengan modul `_exitc_*` | R2 | Sebelum 26 Okt |
+| 3 | `lejar.py semak` terima `delist`; `keluar_lorong` bekukan baris `tidak_sah`/delist | R3, R4 | Bersama #2 |
+| 4 | Bina semula Lejar sekali selepas #1–#3 (kunci VERSI) dan semak `banding` C lawan Lejar = 0 beza harga/keluar yang tidak dijelaskan | R1–R4 | Selepas #1–#3 |
+| 5 | Papan Penganalisis: (a) purata dipangkas 5% + median, (b) julat keyakinan berkelompok ikut hari masuk, (c) n berkesan = hari masuk unik, (d) tanda/asingkan posisi lintas earnings, (e) status "BELUM CUKUP" sehingga ≥ 10 hari masuk berbeza | R5–R7 | Sebelum 26 Okt |
+| 6 | 18 posisi C tidak cair → `tidak_sah` (konsisten dengan Lejar) | R9 | Bila-bila |
+| 7 | Simpan `univ.txt` ikut tarikh (arkib harian) supaya bina semula tepat | R8 | Kemudian |
+
 ## A. Isyarat palsu daripada tindakan korporat / jenis instrumen
 | ID | Punca | Mekanisme | Ukuran (C / Lejar) | Kawalan |
 |---|---|---|---|---|
