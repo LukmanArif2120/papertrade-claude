@@ -152,6 +152,48 @@ class UjiLejar(unittest.TestCase):
             M = pd.read_csv(os.path.join(stor, 'buka_moomoo.csv')).set_index('ticker').open.to_dict()
             self.assertEqual(M, {'AAA': 10.5, 'CCC': 30.0})
 
+    def test_modul_replika_keluar_dagangan_sendiri(self):
+        # 22 Okt 2026 (R10): exitc modul replika = bendera dagangan replika (bermula WARM). Lejar bermula di tengah: posisi yang
+        # isyaratnya jatuh semasa replika memegang dagangan lain mesti keluar ikut dagangan SENDIRI (kod/dagangan.py)
+        import dagangan
+        m = types.ModuleType('kaedah.M9009'); m.ID = 'M9009'; m.NAMA = 'Ujian'; m.VARIAN = 'x'; m.TMAX = 15; m.PERLU_BAR = 60
+        m.SILANG = False; m.WARM = 30
+
+        def _replika(g, warm):
+            o, c, sig = g.open.values, g.close.values, g.sig.values; n = len(g); ex = np.zeros(n, bool); i = warm
+            while i < n - 1:
+                if not sig[i]: i += 1; continue
+                e = o[i + 1]; j = i + 1; k = n - 1
+                while j < n:
+                    if c[j] < e * 0.97 and j + 1 < n: ex[j] = True; k = j + 1; break
+                    if j - i >= m.TMAX: k = j; break
+                    j += 1
+                i = k + 1
+            return ex
+
+        def sedia(fr, idx):
+            for g in fr.values():
+                c = g.close; ma = c.rolling(5).mean()
+                g['sig'] = (c > ma).fillna(False)            # isyarat berterusan (seperti M81/M82)
+                g['stop'] = np.nan; g['tgt'] = np.nan; g['rank'] = 0.0
+                g['exitc'] = _replika(g, m.WARM)
+        m.sedia = sedia; sys.modules['kaedah.M9009'] = m
+        fr, idx = data(benih=5)
+        dagangan.REPLIKA.add('M9009')
+        try:
+            T, W, tutup, langkau = jalan_lejar('M9009', fr, idx)
+        finally:
+            dagangan.REPLIKA.discard('M9009')
+        self.assertGreater(len(tutup), 5)
+        for p in tutup:
+            g = fr[p['saham']]; i = g.index.get_loc(pd.Timestamp(p['tarikh_isyarat'])); e = float(g.open.iloc[i + 1])
+            c = g.close.values; o = g.open.values; jangka = None
+            for j in range(i + 1, len(g)):
+                if c[j] < e * 0.97 and j + 1 < len(g): jangka = (str(g.index[j + 1].date()), o[j + 1], 'isyarat keluar'); break
+                if j - i >= m.TMAX: jangka = (str(g.index[j].date()), c[j], 'masa'); break
+            self.assertEqual((p['tarikh_keluar'], p['sebab_keluar']), (jangka[0], jangka[2]), p['saham'] + ' ' + p['tarikh_isyarat'])
+            self.assertAlmostEqual(float(p['harga_keluar']), float(jangka[1]), places=3)
+
     def test_univ_sesi_arkib(self):
         # 22 Okt 2026 (R8): universe sesi terkini diarkib; bina semula memakai arkib, bukan universe semasa
         with tempfile.TemporaryDirectory() as d:

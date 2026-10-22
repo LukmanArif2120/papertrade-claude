@@ -250,3 +250,10 @@
 - Watchlist: 285 → 212 (73 dibuang; 212 kekal 100%/isyarat sah).
 - Sektor pasaran: 21 halaman, 6106 saham → 3839 digred; `sektor/snapshot` v14. peta_industri (14 Okt) belum > 30 hari.
 - db: 11 batch (watchlist_3/4 dipadam), harian/status dikemas kini. `sahkan.py --betulkan` keluar 0 (0 ralat, 0 amaran, 4448 posisi).
+
+## 22 Okt 2026 — data hadapan tepat (RCA, keputusan pengguna "buat apa yang terbaik"; kajian/KAJIAN_DATA_TERCEMAR.md)
+- R1: `lejar.tampal_moomoo` hanya nota `buka rasmi`; `buka_moomoo.csv` dijana semula (295 nilai dibetulkan, 8 dibuang). Punca: buka sementara 9:35 NY disimpan sebagai "Moomoo menang" (289 posisi Lejar 20 Okt pada buka salah). yfinance muktamad = buka rasmi Moomoo 1,363/1,365.
+- R2: Lejar menilai keluar dari bar isyarat setiap sesi (GEF M76, DELL M81 … tidak lagi terlepas). R3: `semak` terima `delist`. R4: lorong 2 keluar paksa dibekukan.
+- R10: `kod/dagangan.py` — lajur exitc/tgt dagangan sendiri bagi 13 modul replika (Lejar, harian_c, rutin 6:02 langkah 2c `dagangan.py betul`). C: 14 posisi lorong 1 dibetulkan (DELL M81, ANF M82, BSX M19, MUR/GGG/SU/NUE/PTEN/TRMB M20, UMC/ARM M81, DT/PSX/DHT M82).
+- R5–R7: Papan Penganalisis kukuh (purata dipangkas, n berkesan ikut hari beli, BELUM CUKUP < 10 hari beli, lintas earnings). R8: arkib univ ikut sesi. R9: 18 posisi C tidak cair `tidak_sah`.
+- Lejar dibina semula automatik pada lejar.yml seterusnya (kunci `tidak_layak` + `keluar`). Ujian 218 lulus; `sahkan.py --betulkan` 0.

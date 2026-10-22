@@ -30,6 +30,7 @@ from stor import muat, frames_dict, LAJ  # noqa: E402
 import keluar_lorong as KL  # noqa: E402
 import sahkan as SH  # noqa: E402
 import tidak_layak as TL  # noqa: E402
+import dagangan  # noqa: E402
 
 PT = os.path.join(BS2, 'papertrade')
 STOR = os.path.join(BS2, 'data', 'harga', 'stor')
@@ -313,7 +314,8 @@ def kerja(arg):
             r['sah'] = dict(bar=bool(ok_bar), sig=bool(g['sig'].iloc[i]),
                             buka=r4(float(g.open.iloc[i + 1])) if ok_bar else None,
                             vol=float(g.volume.iloc[i + 1]) if ok_bar else None)
-        r['x'] = nilai_keluar(g, i, tmax)
+        gd = dagangan.sedia_dagangan(m, p['saham'], FR[p['saham']], IDX, p['ti']) if dagangan.perlu(mid, m) else None
+        r['x'] = nilai_keluar(gd if gd is not None else g, i, tmax)   # modul replika: lajur dagangan sendiri (R10)
         out['posisi'][p['k']] = r
     if not imbas:
         out['s'] = round(time.time() - t0, 1); return out
@@ -676,6 +678,8 @@ def cmd_malam(a):
         # posisi dibeli selepas pengumuman ambil alih (isyarat palsu: tidak_sah, tutup) dan posisi saham delist (tutup)
         tl = TL.posisi(folder, FR, list(IDX['SPY'].index)); tl.pop('_baris')
         rk['tidak_layak_posisi'] = tl
+        # kaedah replika: keluar posisi lama dinilai semula ikut dagangan sendiri (kod/dagangan.py, R10)
+        rk['dagangan_betul'] = len(dagangan.betul_c(folder, FR, IDX))
         if not a.tanpa_imbas:
             imbas(folder, S, hasil, masa, rk, a.isyarat)
         st['malam'] = rk

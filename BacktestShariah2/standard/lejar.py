@@ -44,6 +44,7 @@ import enjin  # noqa: E402
 from stor import muat, frames_dict, LAJ  # noqa: E402
 import keluar_lorong  # noqa: E402
 import tidak_layak  # noqa: E402
+import dagangan  # noqa: E402
 
 HARGA = os.path.join(BS2, 'data', 'harga')
 STOR = os.environ.get('LEJAR_STOR', os.path.join(HARGA, 'stor'))
@@ -58,6 +59,9 @@ LIPUTAN_MIN = 0.99   # pecahan saham layak (ada bar sesi sebelum) yang mesti ada
 # terbuka (termasuk hari lorong 1 keluar), seperti enjin.
 # False = tingkah laku enjin asal (posisi tutup apabila lorong 1 keluar); dipakai oleh ujian kesetaraan enjin.
 DUA_LORONG = True
+# Logik keluar Lejar (kunci bina semula bersama tidak_layak.versi()): 22 Okt 2026 — laluan penuh dari bar isyarat (R2) dan lajur
+# kaedah bagi dagangan sendiri untuk modul replika (kod/dagangan.py, R10)
+VERSI_KELUAR = 'laluan penuh + dagangan sendiri v1 (22 Okt 2026)'
 
 L_ASAS = ['id_kaedah', 'saham', 'sumber', 'tarikh_isyarat', 'rank', 'tarikh_beli', 'harga_beli', 'henti', 'sasaran',
           'tmax', 'belian_ke', 'dinilai_hingga', 'keluar_esok', 'laras']
@@ -337,12 +341,23 @@ def kerja(arg):
     except Exception as e:
         return dict(mid=mid, ralat=f'sedia: {type(e).__name__}: {e}', terbuka=terbuka, tunggu=tunggu)
     for g in fr.values(): enjin.siap(g)
+    sendiri = dagangan.perlu(mid, m)
+
+    def g_dagangan(t, g, ti):
+        """Modul replika (kod/dagangan.py): lajur kaedah bagi dagangan yang isyaratnya pada ti; selainnya g."""
+        if not sendiri:
+            return g
+        x = FR[t]
+        x = x[x.index <= St] if x.index[-1] > St else x
+        h = dagangan.sedia_dagangan(m, t, x, idx, ti)
+        return h if h is not None else g
     tutup, kekal, langkau, beli, nota = [], [], [], [], []
     # 1) keluar
     for p in terbuka:
         g = fr.get(p['saham'])
         if g is None:
             kekal.append(p); continue
+        g = g_dagangan(p['saham'], g, p['tarikh_isyarat'])
         e = float(p['harga_beli'])
         try:
             ob = float(g.open.loc[pd.Timestamp(p['tarikh_beli'])])
@@ -392,7 +407,7 @@ def kerja(arg):
                  tarikh_beli=tkh(g.index[i + 1]), harga_beli=r4(ob), henti=r4(sp) if not np.isnan(sp) else None,
                  sasaran=r4(nombor(g['tgt'].iloc[i])), tmax=tmax, belian_ke=bil[t], dinilai_hingga='', keluar_esok=False, laras='')
         beli.append(p)
-        p, habis = nilai_posisi(g, p, tmax)
+        p, habis = nilai_posisi(g_dagangan(t, g, s['tarikh_isyarat']), p, tmax)
         (tutup if habis else kekal).append(p)
         pegang.add(t)
     # 3) isyarat baharu bar S
@@ -440,12 +455,14 @@ def bina_semula(st):
         os.remove(f)
     if st.get('lorong2') != keluar_lorong.VERSI:
         dari, ke = st.get('lorong2') or '2 tutup turun berturut atau henti', keluar_lorong.VERSI
-    else:
+    elif st.get('tidak_layak') != tidak_layak.versi():
         dari, ke = st.get('tidak_layak') or 'tiada penapis tidak layak', tidak_layak.versi()
+    else:
+        dari, ke = st.get('keluar') or 'tokokan dari dinilai_hingga', VERSI_KELUAR
     rekod = dict(tarikh=pd.Timestamp.now(tz='Asia/Kuala_Lumpur').strftime('%Y-%m-%d %H:%M MYT'),
                  dari=dari, ke=ke, sesi_terakhir_lama=st.get('sesi_terakhir'))
     print(json.dumps(dict(bina_semula=rekod), ensure_ascii=False), flush=True)
-    st = dict(mula=st.get('mula'), lorong2=keluar_lorong.VERSI, tidak_layak=tidak_layak.versi(),
+    st = dict(mula=st.get('mula'), lorong2=keluar_lorong.VERSI, tidak_layak=tidak_layak.versi(), keluar=VERSI_KELUAR,
               bina_semula=st.get('bina_semula', []) + [rekod])
     json.dump(st, open(os.path.join(LEJAR, 'status.json'), 'w'), ensure_ascii=False, indent=1)
     return st
@@ -456,9 +473,10 @@ def cmd_jalan(a):
     os.makedirs(LEJAR, exist_ok=True)
     st, T, W, bil = keadaan()
     if DUA_LORONG and st.get('sesi_terakhir') and (st.get('lorong2') != keluar_lorong.VERSI
-                                                   or st.get('tidak_layak') != tidak_layak.versi()):
+                                                   or st.get('tidak_layak') != tidak_layak.versi()
+                                                   or st.get('keluar') != VERSI_KELUAR):
         st = bina_semula(st); T, W, bil = [], [], {}
-    st['lorong2'] = keluar_lorong.VERSI; st['tidak_layak'] = tidak_layak.versi()
+    st['lorong2'] = keluar_lorong.VERSI; st['tidak_layak'] = tidak_layak.versi(); st['keluar'] = VERSI_KELUAR
     FR, IDX = frames_dict(muat(STOR))
     sesi = [x for x in IDX['SPY'].index]
     akhir = st.get('sesi_terakhir')

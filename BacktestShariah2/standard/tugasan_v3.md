@@ -43,7 +43,10 @@ Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade
 ## 5. Kualiti data (wajib)
 1. `quote_stock_quote` dengan low/high = 0 bermaksud tiada dagangan; JANGAN tafsir sebagai kena henti. Guna kline harian.
 2. Harga beli = `open` kline harian rasmi hari beli.
-3. Keluar dinilai dengan enjin rasmi (`kod/`) dan `standard/harian_nilai_keluar.py` fungsi `keluar()`:
+3. Keluar dinilai dengan enjin rasmi (`kod/`) dan `standard/harian_nilai_keluar.py` fungsi `keluar()`. Kaedah replika (`kod/dagangan.py`
+   REPLIKA, sejak 22 Okt 2026): lajur exitc/tgt modul ialah milik dagangan replika (bermula WARM), jadi posisi yang isyaratnya jatuh
+   semasa replika memegang dagangan lain mesti dinilai dengan `dagangan.sedia_dagangan()` (dagangan sendiri); rutin 6:02 langkah 2c
+   `dagangan.py betul` membetulkannya secara automatik. Lejar dan `harian_c.py` memakainya terus:
    - henti dinilai dari hari masuk (buka jurang bawah henti dari hari kedua → harga buka);
    - sasaran hanya dari hari selepas hari masuk, dengan tgt hari sebelumnya;
    - isyarat keluar kaedah → jual pada BUKA hari berikutnya; had masa → tutup.
