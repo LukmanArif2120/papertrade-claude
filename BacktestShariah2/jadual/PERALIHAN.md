@@ -48,11 +48,12 @@ membanding setiap hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`); `rasm
 2. Pilih masa di antara rutin Claude (bukan semasa rutin sedang berjalan). Tulis `BacktestShariah2/papertrade/status_harian.json`
    = keadaan terakhir rutin Claude: `{"malam": {"sesi": "<sesi yang sudah dikemas kini DAN diimbas>"}, "beli": {"tarikh": "<tarikh belian terakhir>"}}`
    (tinggalkan `malam` jika imbasan sesi terakhir belum dibuat).
-3. `echo rasmi > BacktestShariah2/MOD_ACTIONS`; buang jadual `harga_harian.yml` (kekalkan workflow_dispatch);
+3. `echo rasmi > BacktestShariah2/MOD_ACTIONS`; jadual `harga_harian.yml` DIKEKALKAN (dijaga `penjaga_jadual`; dipakai workflow lain sebelum 05:07 UTC);
    `git rm -r BacktestShariah2/bayang/papertrade BacktestShariah2/bayang/pemangkin BacktestShariah2/bayang/isyarat` (laporan BANDING kekal).
 4. Matikan tugasan berjadual (`mcp__claude-code-remote__update_trigger`, enabled=false): tiga rutin "Papertrade – Kemas kini 6:02
-   pagi / Imbas 7:47 malam / Beli 9:35 NY" (`list_triggers`) dan tiga pengawas `trig_018zyZSoegh4fQWpWGv3wS9m`,
-   `trig_01AJf4h6GffXNmHXmQsVzzGF`, `trig_018eaPB3VHoodMscT1s8BiLs`.
+   pagi / Imbas 7:47 malam / Beli 9:35 NY" (`trig_01R2RcT5GZ4xGkncK5xa1jnH`, `trig_012DQb9KbjfhpKuopsMByNDh`,
+   `trig_018pfWtxtyMaC6aaThn7UDCo`; sahkan dengan `list_triggers`) dan pengawas yang masih aktif (`trig_018zyZSoegh4fQWpWGv3wS9m`,
+   `trig_01AJf4h6GffXNmHXmQsVzzGF`, `trig_018eaPB3VHoodMscT1s8BiLs`; 22 Okt sudah tiada dalam senarai aktif).
 5. Cipta dua tugasan berjadual baharu (`create_trigger`, `create_new_session_on_fire`=true, model `claude-sonnet-5-5`,
    connectors yang perlu sahaja): tolak db `CRON_TZ=America/New_York 20 10 * * 1-6`, prompt "Ikut BacktestShariah2/jadual/tolak_db.md";
    mingguan `CRON_TZ=Asia/Kuala_Lumpur 47 10 * * 0`, prompt "Ikut BacktestShariah2/jadual/mingguan.md".
