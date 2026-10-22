@@ -31,7 +31,8 @@ def main():
     for i, r in enumerate(P.itertuples(), 1):
         sk = '' if pd.isna(r.skor) else f'{float(r.skor):.1f}'
         ew = 'Ya' if str(r.menang_ew) == 'True' else 'Tidak'
-        L.append(f'| {i} | {r.id} | {r.kaedah} | {str(r.varian).replace("|", "\\|")} | {r.keputusan} | {sk} | {pct(r.cagr)} | {pct(r.mdd)} | {pct(r.win)} | {pct(r.avg)} | {pct(r.hit10)} | {ew} |')
+        vr = str(r.varian).replace('|', '\\|')   # serasi Python 3.11
+        L.append(f'| {i} | {r.id} | {r.kaedah} | {vr} | {r.keputusan} | {sk} | {pct(r.cagr)} | {pct(r.mdd)} | {pct(r.win)} | {pct(r.avg)} | {pct(r.hit10)} | {ew} |')
     open(a.out, 'w', encoding='utf-8').write('\n'.join(L) + '\n')
     print(a.out, len(P), 'kaedah')
 

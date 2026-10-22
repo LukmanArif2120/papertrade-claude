@@ -210,7 +210,8 @@ def ringkasan(hasil, spy_mula, spy_akhir, hari, CFG=None):
               '| Portfolio | Kaedah (slot, lorong) | Sesi | Pulangan % | SPY tempoh sama % |', '|---|---|---|---|---|']
         for k, c in CFG.items():
             R, E = hasil.get(k, (None, pd.DataFrame()))
-            L.append(f"| {k} | {', '.join(f'{i} ({n}, {c['lorong'][i]})' for i, n in c['kuota'].items())} | {len(E)} | "
+            kl = ', '.join('%s (%s, %s)' % (i, n, c['lorong'][i]) for i, n in c['kuota'].items())   # serasi Python 3.11
+            L.append(f"| {k} | {kl} | {len(E)} | "
                      + (f"{100 * (E.ekuiti.iloc[-1] - 1):+.2f} | {100 * (E.spy.iloc[-1] - 1):+.2f} |" if len(E) else '– | – |'))
     L += ['', 'Penilaian adil memerlukan sekurang-kurangnya 6–12 bulan (KAJIAN_PORTFOLIO.md). Kelebihan yang dicari: RS_10 mengatasi '
           'RAWAK_10 dan SPY dengan MDD yang setanding; GABUNGAN_10 mengatasi TOP1_10, RAWAK_KAEDAH_10 dan SPY.']
