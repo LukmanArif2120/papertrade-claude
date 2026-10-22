@@ -17,6 +17,8 @@ Moomoo/SST boleh beri dikumpul seminggu sekali; (4) dashboard dikemas kini oleh 
 | Tolak db dashboard | dalam setiap rutin | `jadual/tolak_db.md` (sesi Claude baharu, Isn–Sab 10:20 NY) |
 | Jejak kertas M166 V1 (`uji_kertas/jejak_M166.csv`) | imbas 7:47 langkah 4b | `harian.yml` (mod rasmi sahaja) |
 | Universe Shariah, sektor seluruh pasaran, SST, akaun Moomoo | setiap hari | `jadual/mingguan.md` (Ahad) |
+| Kewangan Moomoo (gred kewangan v7), peristiwa korporat (rehab Moomoo) | imbas 7:47 langkah 5c; 6:02 langkah 2d | `jadual/mingguan.md` 7b, 7c |
+| Saham tidak layak, kaedah replika (R10), belian buka_lewat | 6:02 langkah 2c; beli 9:35 | `harian_c.py` (sudah terbina) |
 
 Mod ditentukan oleh `BacktestShariah2/MOD_ACTIONS`: `bayang` = Actions menulis ke `BacktestShariah2/bayang/` sahaja dan
 membanding setiap hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`); `rasmi` = Actions menulis ke `papertrade/`.
@@ -28,6 +30,17 @@ membanding setiap hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`); `rasm
   Isyarat 3,600/3,601 sama; 92 isyarat tambahan Actions daripada 15 saham yang tiada sejarah harga pada larian Claude.
 - Beli 16 Okt: 819/820 sama; harga 819/819 = harga rasmi selepas pembetulan Claude. ANF M153 dilangkau terus (Claude:
   direkod kemudian ditanda tidak dibeli). 16 saham "belum didagangkan 9:36" dibeli pada buka rasmi dalam ulang tayang.
+
+## Bukti mod selari 19–21 Okt (bayang/BANDING_*.md; belian sebenar bayang lawan papertrade rasmi selepas semakan kesahihan)
+- Workflow: semua larian harian/beli/petang berjaya; jadual GitHub lewat ditampung `penjaga_jadual` (beli 20–21 Okt 10:13 NY).
+- Kemas kini: 20 Okt 3,266/3,267 sama (SBH: low data). 21 Okt 3,676/3,750: 74 beza semuanya peraturan baharu selepas rutin Claude
+  berjalan (60 penapis ambil alih 21 Okt 15:31 UTC, 14 kaedah replika R10) dan diterapkan ke rasmi kemudian.
+- Senarai beli: 603/604, 517/519; 21 Okt bayang 729 lawan Claude 730 (beza ulang tayang = penapis tidak layak/kelas berganda baharu).
+- Belian sama: 562, 445, 659; harga sama 562/562 dan 659/659. 20 Okt: 54 harga bayang salah kerana stor dicemari buka sementara
+  Moomoo (`lejar.tampal_moomoo`, dibetulkan R1 22 Okt; selepas peralihan tiada buka Moomoo ditulis). Belian Claude sahaja =
+  yang Claude sendiri tanda tidak sah esoknya (13, 7, 6), kecuali ADI (tiada bar Yahoo 19 Okt) dan HAFN ×5 (universe harian
+  Claude; Actions guna universe mingguan). Belian Actions sahaja = saham belum didagangkan pada masa belian Claude (peraturan
+  `buka_lewat` sejak 22 Okt menyamakan kedua-duanya).
 
 ## Langkah peralihan (sesi Claude dengan alat claude-code-remote; selepas 3 laporan BANDING lulus dan pengguna setuju)
 1. Semak `bayang/BANDING_*.md` 3 hari dagangan: kemas kini ≥ 99% sama (beza hanya data), senarai beli dan belian sama
