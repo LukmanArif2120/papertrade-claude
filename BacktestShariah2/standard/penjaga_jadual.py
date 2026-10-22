@@ -21,6 +21,7 @@ AWAL_MIN = 2             # larian dicipta sedikit sebelum cetusan masih dikira
 JAGA = {
     'harga_harian.yml': 'buka', 'skrin_tv.yml': 'buka', 'rs_pasaran.yml': 'buka', 'gred_kumpulan.yml': 'buka',
     'lejar.yml': 'buka', 'harian.yml': 'buka', 'petang.yml': ('ny', 9, 15), 'beli.yml': ('ny', 16, 45),
+    'edgar.yml': 'buka',
 }
 
 

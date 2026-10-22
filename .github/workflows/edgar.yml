@@ -1,0 +1,60 @@
+# Lapisan EDGAR: sasaran ambil alih bukan tunai (tender, pertukaran saham/campuran, penswastaan) -> data/ambil_alih.csv
+# (standard/tawaran_edgar.py; laporan BacktestShariah2/kajian/reports/Pengesanan data tercemar yang tinggal.md).
+# Sesi Claude tidak boleh capai sec.gov; runner GitHub boleh. SEC mewajibkan User-Agent dengan nama + e-mel hubungan:
+# simpan sebagai rahsia repo SEC_USER_AGENT (Settings -> Secrets and variables -> Actions).
+# Masa (UTC): 23:17 Isn–Jum (indeks harian EDGAR terbit selepas ~22:00 ET) dan sandaran 03:47 Sel–Sab.
+name: EDGAR ambil alih
+
+on:
+  schedule:
+    - cron: '17 23 * * 1-5'
+    - cron: '47 3 * * 2-6'
+  workflow_dispatch:
+    inputs:
+      mula:
+        description: 'Tarikh mula YYYY-MM-DD (isi semula); kosong = sambung dari status.json'
+        required: false
+      maks_hari:
+        description: 'Hari kerja maksimum dibaca'
+        required: false
+        default: '10'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: edgar
+  cancel-in-progress: false
+
+jobs:
+  edgar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q -c kekangan.txt pandas requests
+      - name: Baca indeks harian EDGAR
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          MULA: ${{ github.event.inputs.mula }}
+          MAKS: ${{ github.event.inputs.maks_hari }}
+        run: |
+          X=""; [ -n "$MULA" ] && X="--mula $MULA"
+          python3 BacktestShariah2/standard/tawaran_edgar.py jalan $X --maks-hari "${MAKS:-10}"
+      - name: Commit dan push
+        run: |
+          git config user.name "edgar[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/edgar BacktestShariah2/data/ambil_alih.csv
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          HARI=$(python3 -c "import json;print(json.load(open('BacktestShariah2/data/edgar/status.json')).get('hari_terakhir'))")
+          git commit -q -m "EDGAR ambil alih: hingga $HARI"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1
