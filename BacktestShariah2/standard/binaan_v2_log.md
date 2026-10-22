@@ -378,3 +378,14 @@
 - **Langkah 5c (kewangan):** `tuai_kewangan.py perlu` selepas CSV ditulis = 40 saham (log 20 Okt mencatat 0 kerana skrip dijalankan sebelum CSV ditulis — ralat langkah, kini dibetulkan). Dikumpul 26 saham lengkap (WFG, POLE, ZBIO, AMRZ, TOL, QTWO, FORR, OSPN, WDC, NOVT, ERIC, ELVR, BHE, ASYS, CYD, BELFB, AOSL, ROP, ASAN, GLUE, AORT, SLB, RUSHA, OSW, VSNT, ALKT). TIDAK dikumpul (14): FTW (separa), MLM, IIIN, HQ, HTLD, PNR, DORM, SQM, VECO, ACLS, CMI, ROK, WSO, MGEE — dihentikan kerana kos token hasil inline besar; baris mereka kekal "–" dan akan disenaraikan semula oleh `perlu`. 30 posisi beli 20 Okt masih tanpa data kewangan tertunggak.
 - db: `papertrade/watchlist` (+_2, _3; `kewangan_butiran` tidak dihantar) dibahagi dengan `bahagi_db.py`; `papertrade/senarai_beli` tidak ditolak; `harian/status` v32.
 - Tiada order. Tiada wang sebenar.
+
+## Imbas malam 22 Okt 2026 (data tutup 21 Okt)
+- Imbasan 134 kaedah: 2,843 isyarat mentah → `data/isyarat/2026-10-21_malam.csv.gz`; 1,112 s, tiada ralat. Skrin Moomoo 4 halaman = `terkini.csv` (beza 0).
+- **Senarai beli** 683 baris, 306 saham, 102 kaedah; 33 belian semula (belian_ke ≥ 2). Mingguan ditolak: 81 (21 Okt Rabu bukan hari dagangan terakhir minggu, §3a). Ditolak: 312 kerana posisi Claude kaedah+saham yang sama masih terbuka; 1,672 melebihi had 10 setiap kaedah; 79 calon watchlist kini lengkap.
+- Penapis: `ambil_alih` 9 (ATKR, BRZE, DV, PEN, PTC, RAMP, SLAB, SLP, TECH); `tidak_cair` 19 (AKA, BIO.B, BKHA, FEDU, ICCC, KELYB, KEQU, MAYS, MGRT, NCEW, NIPG, NSYS, PHOE, POLE, RGS, SENEB, STRR, VSECU, WLYB); `kelas_berganda` 0 — dikeluarkan daripada senarai beli dan watchlist.
+- **Watchlist** 279 calon: 219 baharu, 60 dibawa, 79 dipindah ke senarai beli, 73 dibuang.
+- Jejak kertas M166 V1: dijalankan (baris 21 Okt); tiada belian.
+- Gred: S/I v2, RS, kewangan v7, QR dan pemangkin v3. SST (`market_events`) tidak tersedia → QR hanya daripada Nasdaq; gred QR "–" bagi 11 baris senarai beli dan 5 baris watchlist. Pemangkin: 0 Moomoo, 384 Yahoo, 8 baris senarai beli "–" (tiada data).
+- **Langkah 5c (kewangan):** `perlu` selepas CSV ditulis = 28 saham. Dikumpul 22 saham lengkap. TIDAK dikumpul (6): CARR, RL, PDFS, MLM, IIIN, HQ — dihentikan kerana kos token hasil inline besar; kekal "–" dan disenaraikan semula oleh `perlu`.
+- db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `senarai_beli` tidak ditolak; `harian/status` v35.
+- Tiada order. Tiada wang sebenar.
