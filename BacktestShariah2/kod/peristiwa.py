@@ -186,10 +186,34 @@ def kesan_calon(frames, sesi, earnings=None, path=None, faktor=None, n_sesi=10):
     return baru
 
 
-def laras_c(folder, rows=None):
+def buka_semula_henti(x, g, ex):
+    """Baris C (dict, harga sudah dilaras) yang keluar 'kena henti' pada/selepas `ex`: jika Low setiap bar ex..tarikh_keluar
+    > henti dilaras, lorong 1 dibuka semula (keluar palsu akibat jurang peristiwa). Pulang True jika dibuka semula."""
+    import sahkan as SH
+    hn, tk = SH.nombor(x.get('henti')), x.get('tarikh_keluar') or ''
+    if g is None or not hn or 'kena henti' not in (x.get('isyarat_keluar') or '') or tk < ex:
+        return False
+    seg = g[(g.index >= pd.Timestamp(ex)) & (g.index <= pd.Timestamp(tk))]
+    if not len(seg) or float(seg.low.min()) <= hn:
+        return False
+    hk = float(g.close.iloc[-1]); hb = SH.nombor(x.get('harga_beli'))
+    sg = SH.nombor(x.get('sasaran'))
+    x.update(keluar='False', tarikh_keluar='', harga_keluar='', untung_akhir_pct='', harga_terkini=f'{hk:g}',
+             isyarat_keluar=f'Pegang (henti {hn:.2f}' + (f', sasaran {sg:.2f})' if sg else ')'))
+    if hb:
+        x['untung_pct'] = f'{(hk / hb - 1) * 100:.2f}'
+    if 'tutup_semua' in x:
+        x['tutup_semua'] = 'False'
+    x['nota'] = (x.get('nota') or '') + f'; keluar henti {tk} dibuka semula (Low ≥ {float(seg.low.min()):g} > henti dilaras {hn:g})'
+    return True
+
+
+def laras_c(folder, rows=None, frames=None):
     """Posisi Papertrade C yang dibeli sebelum tarikh_ex dan masih dipegang pada tarikh_ex (lorong 1 terbuka atau keluar >= ex):
     harga_beli, henti, sasaran x faktor (jumlah pulangan berterusan, sama seperti laras Lejar); untung dikira semula. Sekali
-    sahaja (penanda dalam nota). Pulang senarai perubahan; posisi yang keluar pada tarikh_ex dibenderakan 'semak'."""
+    sahaja (penanda dalam nota). Jika `frames` diberi, posisi yang keluar 'kena henti' pada/selepas tarikh_ex tetapi Low bar
+    tarikh_ex..tarikh_keluar tidak sampai henti dilaras (jurang peristiwa, bukan kejatuhan) dibuka semula ('dibuka semula').
+    Pulang senarai perubahan; posisi lain yang keluar pada tarikh_ex dibenderakan 'semak'."""
     import sahkan as SH
     rows = muat() if rows is None else rows
     if not len(rows):
@@ -229,8 +253,10 @@ def laras_c(folder, rows=None):
                     x['untung_henti_pct'] = f"{(SH.nombor(x['harga_keluar_henti']) / hb2 - 1) * 100:.2f}"
                 x['nota'] = ((x.get('nota') or '') + f'; {tanda} x{f:g} (harga beli/henti/sasaran dilaras)').lstrip('; ')
                 ubah = True
-                out.append((os.path.basename(p), x['saham'], x.get('kaedah'), tb, r.tarikh_ex,
-                            'semak' if kel and x.get('tarikh_keluar') == r.tarikh_ex else 'dilaras'))
+                jenis = 'semak' if kel and x.get('tarikh_keluar') == r.tarikh_ex else 'dilaras'
+                if kel and frames is not None and buka_semula_henti(x, frames.get(x['saham']), r.tarikh_ex):
+                    jenis = 'dibuka semula'
+                out.append((os.path.basename(p), x['saham'], x.get('kaedah'), tb, r.tarikh_ex, jenis))
         if ubah:
             SH.tulis(p, lajur, data)
     return out

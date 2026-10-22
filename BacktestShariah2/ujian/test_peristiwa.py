@@ -91,6 +91,34 @@ class TestPeristiwa(unittest.TestCase):
             self.assertEqual(out[1]['harga_beli'], '100')
             self.assertEqual(P.laras_c(d, fr), [])
 
+    def test_laras_c_buka_semula_henti(self):
+        lajur = ['tarikh_beli', 'saham', 'kaedah', 'harga_beli', 'harga_terkini', 'untung_pct', 'henti', 'sasaran', 'isyarat_keluar',
+                 'keluar', 'tarikh_keluar', 'harga_keluar', 'untung_akhir_pct', 'nota', 'tidak_dibeli', 'keluar_henti', 'tutup_semua']
+        rows = [dict(tarikh_beli='2026-10-13', saham='RR', kaedah='M99', harga_beli='18.33', henti='17.44', keluar='True',
+                     isyarat_keluar='Keluar: kena henti (19 Okt @ 17.44)', tarikh_keluar='2026-10-19', harga_keluar='17.44',
+                     tutup_semua='False'),
+                dict(tarikh_beli='2026-10-13', saham='RR', kaedah='M98', harga_beli='18.33', henti='17.90', keluar='True',
+                     isyarat_keluar='Keluar: kena henti (19 Okt @ 17.90)', tarikh_keluar='2026-10-19', harga_keluar='17.90')]
+        ix = pd.to_datetime(['2026-10-16', '2026-10-19', '2026-10-20'])
+        g = pd.DataFrame(dict(open=[17.9, 17.91, 17.61], high=[18.4, 17.92, 17.9], low=[17.7, 17.421, 17.5],
+                              close=[17.87, 17.52, 17.62], volume=1e5), index=ix)
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'claude_2.csv')
+            with open(p, 'w', newline='') as f:
+                w = csv.DictWriter(f, lajur); w.writeheader()
+                for r in rows:
+                    w.writerow({k: r.get(k, '') for k in lajur})
+            fr = pd.DataFrame([dict(saham='RR', tarikh_ex='2026-10-19', jenis='dividen_khas', faktor='0.975437', sumber='u',
+                                    catatan='', ditambah='')])
+            x = P.laras_c(d, fr, {'RR': g})
+            self.assertEqual([(y[2], y[5]) for y in x], [('M99', 'dibuka semula'), ('M98', 'semak')])
+            with open(p) as f:
+                out = list(csv.DictReader(f))
+            self.assertEqual((out[0]['keluar'], out[0]['tarikh_keluar'], out[0]['henti'], out[0]['harga_terkini']),
+                             ('False', '', '17.0116', '17.62'))
+            self.assertTrue(out[0]['isyarat_keluar'].startswith('Pegang (henti 17.01'))
+            self.assertEqual(out[1]['keluar'], 'True')             # henti dilaras 17.46 >= Low 17.421: keluar kekal
+
 
 if __name__ == '__main__':
     unittest.main()

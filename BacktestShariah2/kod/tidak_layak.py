@@ -228,13 +228,14 @@ def posisi(folder, frames, sesi, tulis=True):
     import peristiwa   # posisi merentasi tarikh_ex peristiwa besar yang sudah berlaku: harga beli/henti/sasaran x faktor
     akhir = str(pd.DatetimeIndex(sesi)[-1].date()) if len(sesi) else ''
     rows = peristiwa.muat()
-    fk = peristiwa.laras_c(folder, rows[rows.tarikh_ex <= akhir]) if tulis and len(rows) else []
+    fk = peristiwa.laras_c(folder, rows[rows.tarikh_ex <= akhir], frames) if tulis and len(rows) else []
     return dict(ambil_alih=dict(ditutup=sum(x[4] != 'menunggu' for x in aa), menunggu=sum(x[4] == 'menunggu' for x in aa),
                                 saham=sorted({x[1] for x in aa})),
                 delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl})),
                 tidak_cair=dict(tidak_sah=len(tc), saham=sorted({x[1] for x in tc})),
                 kelas_berganda=dict(tidak_sah=len(kb), saham=sorted({x[1] for x in kb})),
-                faktor=dict(dilaras=sum(x[5] == 'dilaras' for x in fk), semak=[x[:5] for x in fk if x[5] == 'semak']),
+                faktor=dict(dilaras=sum(x[5] == 'dilaras' for x in fk), semak=[x[:5] for x in fk if x[5] == 'semak'],
+                            dibuka_semula=[x[:5] for x in fk if x[5] == 'dibuka semula']),
                 _baris=aa + dl + tc + kb)
 
 
