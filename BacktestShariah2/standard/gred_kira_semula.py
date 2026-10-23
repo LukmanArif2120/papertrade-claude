@@ -78,6 +78,10 @@ def kira_baris(r, D, hi, ctx, kira):
         iu = r.get('industri_us') or ctx['pind'].get(t) or ''
         su = SEKTOR_INDUSTRI.get(iu) if iu else None
         (s1, g1), (s2, g2) = kum[0].get(su, (None, G.TIADA)), kum[1].get(iu, (None, G.TIADA))
+        if iu and g2 == G.TIADA and g1 != G.TIADA:   # industri < 3 saham: sandaran sektor (gred.SANDARAN_INDUSTRI)
+            s2, g2 = s1, g1
+            if G.SANDARAN_INDUSTRI not in (r.get('gred_pada') or ''):
+                r['gred_pada'] = (r.get('gred_pada') or '') + '; ' + G.SANDARAN_INDUSTRI
         r['skor_sektor'] = '' if s1 is None else round(s1, 1); r['gred_sektor'] = g1
         r['skor_industri'] = '' if s2 is None else round(s2, 1); r['gred_industri'] = g2
     else:

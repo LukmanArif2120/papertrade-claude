@@ -7,6 +7,7 @@ VARIAN = 'V0 Peraturan pengguna (henti tutup<LOWER isyarat, keluar MID turun)'
 TMAX = None
 WARM = 200
 ADA_HENTI = True
+HENTI_TUTUP = '_lo'   # henti ikut tutup: paras = LOWER BB hari isyarat (paparan & R sahaja; enjin keluar melalui exitc)
 SILANG = False
 PERLU_BAR = 30
 

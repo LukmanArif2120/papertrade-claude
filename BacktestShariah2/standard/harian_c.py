@@ -308,6 +308,9 @@ def kerja(arg):
         if i is None:
             out['posisi'][p['k']] = dict(nota=f"bar isyarat {p['ti']} tiada dalam stor"); continue
         sp = float(g['stop'].iloc[i]); r = dict(stop_i=r4(sp) if np.isfinite(sp) else None)
+        ht = getattr(m, 'HENTI_TUTUP', None)   # henti ikut tutup (cth. M31): paras untuk lajur henti sahaja (henti_isi.py)
+        if r['stop_i'] is None and ht and ht in g:
+            r['henti_tutup'] = r4(float(g[ht].iloc[i]))
         if p.get('semak'):
             tb = pd.Timestamp(p['tarikh_beli'])
             ok_bar = i + 1 < len(g) and g.index[i + 1] == tb
@@ -484,6 +487,10 @@ def kemas(folder, stor_dir, S, hasil, masa, ringkas):
                         continue
                     if res and res.get('stop_i') is not None:
                         r['henti'] = s(res['stop_i'])
+            if res and SH.kosong(r.get('henti')):   # henti kosong (rekod awal / henti ikut tutup): isi daripada bar isyarat
+                v = res.get('stop_i') if res.get('stop_i') is not None else res.get('henti_tutup')
+                if v is not None:
+                    r['henti'] = s(v)
             if benar(r.get('keluar')):
                 continue          # lorong 1 dibekukan
             # (c) keluar lorong 1

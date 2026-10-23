@@ -94,8 +94,8 @@ def semak_gred(nama, rows, ralat):
                 ralat.append(f'{nama}:{i}: {k} {r.get(k)!r} di luar 1–99')
         if (r.get('rs_sah') or '') not in ('', 'ya', 'tidak'):
             ralat.append(f'{nama}:{i}: rs_sah {r.get("rs_sah")!r} bukan ya/tidak')
-        if (r.get('rs_sumber') or '') not in ('', 'pasaran', 'stor'):
-            ralat.append(f'{nama}:{i}: rs_sumber {r.get("rs_sumber")!r} bukan pasaran/stor')
+        if (r.get('rs_sumber') or '') not in ('', 'pasaran', 'stor') and not re.fullmatch(r'anggaran sejarah pendek \(\d+ bar\)', r.get('rs_sumber') or ''):
+            ralat.append(f'{nama}:{i}: rs_sumber {r.get("rs_sumber")!r} bukan pasaran/stor/anggaran sejarah pendek')
 
 
 def semak_posisi(nama, lajur, rows, ralat, amaran, kunci):

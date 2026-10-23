@@ -131,6 +131,26 @@ def muat_spy(folder):
     return pd.Series(d.close.values, index=pd.to_datetime(d.date.astype(str))).sort_index()
 
 
+def rs_pendek(c, rujukan, harga_min=5.0, min_bar=64):
+    """RS anggaran bagi saham baru disenarai (64 <= bar < 253; audit 23 Okt 2026): purata berwajaran pulangan suku yang
+    tersedia (40% suku terkini, 20% setiap suku sebelum; wajaran dinormalkan) dipangkat lawan taburan skor penuh
+    `rujukan` (skor pasaran sesi sama, atau stor). Pulang Series rs (1–99) bagi saham tanpa skor penuh."""
+    c = c.sort_index(); out = {}
+    ruj = pd.Series(rujukan).dropna().sort_values().values
+    if not len(ruj):
+        return pd.Series(dtype=int)
+    for t in c.columns:
+        x = c[t].dropna()
+        if not (min_bar <= len(x) < 253) or x.index[-1] != c.index[-1] or x.iloc[-1] < harga_min:
+            continue
+        q = [x.iloc[-1]] + [x.iloc[-k] for k in (64, 127, 190) if len(x) >= k]
+        w = [0.4, 0.2, 0.2][:len(q) - 1]
+        s = sum(wi * (q[i] / q[i + 1] - 1) for i, wi in enumerate(w)) / sum(w)
+        if np.isfinite(s):
+            out[t] = int(np.clip(round(np.searchsorted(ruj, s, side='right') / len(ruj) * 98 + 1), 1, 99))
+    return pd.Series(out, dtype=int)
+
+
 def rs_semua(c, spy, folder_rs=None):
     """RS dan pengesahan bagi bar terakhir `c`: utama seluruh pasaran (rs_pasaran.csv sesi sama), sandaran stor harga.
     Pulang (DataFrame ticker: rs, mutlak12, mansfield, rs_industri, rs_sumber; spy_atas200)."""
@@ -147,10 +167,19 @@ def rs_semua(c, spy, folder_rs=None):
         p = pas.reindex(columns=['rs', 'mutlak12', 'mansfield', 'rs_industri']).copy()
         p['rs_sumber'] = 'pasaran'
         st = pd.concat([p, st[~st.index.isin(p.index)]])
+    # saham baru disenarai (< 253 bar): RS anggaran suku tersedia; pengesahan tiada (mutlak 12 bulan) -> gred maks C
+    ada = set(st.index[st['rs'].notna()]) if 'rs' in st else set()
+    ruj = pas['skor'] if pas is not None and 'skor' in pas else skor_rs(c)
+    pd_ = rs_pendek(c[[x for x in c.columns if x not in ada]], ruj)
+    if len(pd_):
+        x = pd.DataFrame({'rs': pd_.astype(float)})
+        x['rs_sumber'] = [f'anggaran sejarah pendek ({int(c[t].notna().sum())} bar)' for t in x.index]
+        st = pd.concat([st[~st.index.isin(x.index)], x])
     return st, atas
 
 
 # ---------- Sektor / Industri v2 (sejak 19 Okt 2026; standard/gred_kumpulan.py) ----------
+SANDARAN_INDUSTRI = 'industri sandaran sektor (industri < 3 saham)'
 HARI_KUMPULAN = 7   # data/kumpulan/gred_kumpulan.csv lebih lama daripada ini (hari kalendar) -> gred "–"
 
 
@@ -987,13 +1016,15 @@ def tambah(a):
     for r in rows:
         t = ambil(r, 'saham', 'Saham')
         iu = pind.get(t); su = SEKTOR_INDUSTRI.get(iu) if iu else None
-        r['industri_us'] = iu or ''; r['sektor_us'] = su or ''
+        r['industri_us'] = iu or ''; r['sektor_us'] = su or ''; sandar = False
         if v2:
             ts = ambil(r, 'tarikh_isyarat', 'tarikh_data')
             ksek, kind = snapshot_kumpulan(kpeta, ts, hari_ini)
             if not kind:
                 ktiada[ts or '?'] = ktiada.get(ts or '?', 0) + 1
             s1, g1 = ksek.get(su, (None, TIADA)); s2, g2 = kind.get(iu, (None, TIADA))
+            if iu and g2 == TIADA and g1 != TIADA:   # industri < 3 saham (tidak digred): sandaran sektor, ditanda (audit 23 Okt)
+                s2, g2 = s1, g1; sandar = True
         else:
             s1 = pusek.get(su) if su in pusek else sek.get(ambil(r, 'sektor', 'Sektor'))
             s2 = puind.get(iu) if iu in puind else ind.get(ambil(r, 'industri', 'Industri'))
@@ -1061,7 +1092,7 @@ def tambah(a):
             else:
                 r['gred_kewangan'] = TIADA; r['kewangan_ringkas'] = '– (tiada data kewangan)'
                 r['kewangan_tempoh'] = ''; r['kewangan_butiran'] = ''
-        r['gred_pada'] = a.tarikh
+        r['gred_pada'] = a.tarikh + ('; ' + SANDARAN_INDUSTRI if sandar else '')
     if v2 and ktiada:
         print(f'AMARAN: tiada snapshot gred_kumpulan bagi sesi {ktiada} (ada: {sorted(kpeta)[-3:]}); gred sektor/industri "–"')
     out = lajur + [k for k in LAJUR if k not in lajur]
