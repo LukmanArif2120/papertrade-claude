@@ -2,7 +2,8 @@
 # (registry 431, S1–S4, WFO W01, AUTOTUNE 2000 saham AS) dan data hadapan (Lejar Penuh + kohort Papertrade C sebelum Lejar).
 # Dicetus sebaik "Lejar penuh" siap (~06:30 UTC = 14:30 MYT), jadi laporan memakai lejar terkini dan sedia sebelum rutin
 # 6:02 pagi esok menolak db `analisis/papan` ke dashboard. Tanpa LLM. Keputusan pengguna 20 Okt 2026.
-# Tiada cron: penjaga_jadual.yml menjaga lejar.yml; larian lejar (jadual, sandaran atau dispatch) mencetus workflow ini.
+# Tiada cron: penjaga_jadual.yml menjaga lejar.yml; larian lejar jadual/sandaran mencetus workflow ini melalui workflow_run;
+# larian dispatch penjaga (GITHUB_TOKEN, tiada workflow_run) mencetusnya terus melalui langkah akhir lejar.yml (23 Okt 2026).
 name: Papan penganalisis
 
 on:
