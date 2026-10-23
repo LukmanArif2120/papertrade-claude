@@ -1437,7 +1437,7 @@ function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
   const pl=q?`<span class="pill ${q[1]}" style="padding:0 6px;margin-top:3px">${q[0]}</span>`:'';
   const sb=String(r.sumber_earnings||''),ps=/QR lalu (\d+) hari/.exec(sb),pq=ps?`<span class="vv nw">QR lalu ${ps[1]} hari</span>`:'';
   const txt=h!=null?`<b class="nw">${fx(h,0)} hari lagi</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}${pl}`:`<b class="nw">${sb==='tiada data'?'Tiada data':'Tiada laporan'}</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}${pl}`;
-  return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt):`<span class="mut" title="Tarikh earnings tiada dalam sumber data (Nasdaq/SST) pada hari isyarat; gred QR tidak dikira.">Tiada data</span>`;}
+  return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt+qrSeb(r)):`<span class="mut" title="${esc(/^tidak diketahui/.test(r.sumber_earnings||'')?'Tarikh earnings '+r.sumber_earnings+'. Gred QR tidak dikira.':'Tarikh earnings tiada dalam sumber data (Nasdaq/SST/yfinance/Moomoo) pada hari isyarat; gred QR tidak dikira.')}">Tiada data</span>${qrSeb(r)}`;}
 /* gred kewangan v7 (standard/gred_kewangan.py): ringkasan "B (K:A U:B T:C S:B) · peringkat · F:n · keyakinan … · Syariah …" */
 const SYLBL={'lulus':'p-buy','hampir had':'p-warn','gagal sebahagian':'p-warn','gagal':'p-exit'};
 function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:(\S+) S:(\S+)\) · ([^·]+?) · F:(\d+) · keyakinan (\S+)(?: · Syariah (.+))?$/.exec(s);
@@ -2634,7 +2634,9 @@ function silangSpark(bx,r,W){const s=siriPos(r);if(!s)return;const hb=nomb(r.har
 const riskAwal=r=>{const b=nomb(r.harga_beli),h=nomb(r.henti);return b&&h&&h<b?(1-h/b)*100:null;};
 const rOf=r=>{const k=riskAwal(r),u=r.keluar?r.untung_akhir_pct:r.untung_pct;return k==null||k<0.5||u==null?null:u/k;};
 const rTxt=v=>v==null||isNaN(v)?'–':(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(2)+'R';
-const rSel=r=>{const v=rOf(r),k=riskAwal(r);return v==null?'<span class="mut">–</span>':`<b class="${cls(v)}">${rTxt(v)}</b><span class="vv nw">risiko ${fx(k,1)}%</span>`;};
+const katHenti=id=>((((S.kat&&S.kat.rows)||[]).find(x=>x.id===id))||{}).henti||'';
+const tiadaHentiH=r=>{const t=katHenti(r.id_kaedah||r.kaedah);return nomb(r.henti)==null&&/^Tiada henti/i.test(t)?`<span class="mut" title="${esc(t)}">tiada henti (kaedah)</span>`:null;};
+const rSel=r=>{const v=rOf(r),k=riskAwal(r);return v==null?(tiadaHentiH(r)||'<span class="mut">–</span>'):`<b class="${cls(v)}">${rTxt(v)}</b><span class="vv nw">risiko ${fx(k,1)}%</span>`;};
 const R_BIN=[-2,-1.5,-1,-0.5,0,0.5,1,1.5,2,2.5,3];
 function drawR(box,vals){if(!box)return;const v=vals.filter(x=>x!=null&&!isNaN(x));if(!v.length){box.innerHTML='<p class="empty">Tiada dagangan dengan henti kaedah.</p>';return;}
   const nb=R_BIN.length+1,cnt=new Array(nb).fill(0);v.forEach(x=>{let i=0;while(i<R_BIN.length&&x>=R_BIN[i])i++;cnt[i]++;});
@@ -2700,7 +2702,9 @@ const skwAgregat=(P,W,geo=true)=>{let tw=0,t=0;for(const k in W){if(P[k]==null)r
   for(const k in W)t+=geo?W[k]/tw*Math.log(Math.max(5,P[k])):W[k]/tw*P[k];return geo?Math.exp(t):t;};
 const wilsonK=(k,n,z=1.96)=>{if(!n)return null;const p=k/n,d=1+z*z/n;return (p+z*z/(2*n)-z*Math.sqrt(p*(1-p)/n+z*z/(4*n*n)))/d;};
 const cvarK=(x,a=0.10,kMin=3)=>{const s=[...x].sort((p,q)=>p-q),k=Math.min(s.length,Math.max(kMin,Math.ceil(a*s.length)));return avgOf(s.slice(0,k));};
-const atrOf=r=>{const A=S.mae&&S.mae.atr;if(!A)return null;const v=A[`${r.akaun}|${r.saham}|${r.kaedah}|${r.tarikh_beli}`];return v==null?null:v;};
+const atrMapC=new WeakMap();
+const atrPeta=()=>{const d=S.maeAtr;if(d&&Array.isArray(d.rows)){let m=atrMapC.get(d);if(!m){m=Object.fromEntries(d.rows);atrMapC.set(d,m);}return m;}return S.mae&&S.mae.atr||null;};
+const atrOf=r=>{const A=atrPeta();if(!A)return null;const v=A[`${r.akaun}|${r.saham}|${r.kaedah}|${r.tarikh_beli}`];return v==null?null:v;};
 const skwLin=(v,a,b)=>v==null||isNaN(v)?null:clamp01((v-a)/(b-a))*100;
 const sdOf=a=>{if(a.length<2)return null;const m=avgOf(a);return Math.sqrt(a.reduce((t,x)=>t+(x-m)**2,0)/(a.length-1));};
 const SKW_KOS=0.001,SKW_N0=30,SKW_SDMIN=5,SKW_PANGKAS=0.05,SKW_G_TERAS=20,SKW_P_TERAS=0.9,SKW_MATANG_N=20,SKW_MATANG_G=10,SKW_UMUR_MIN=14;
@@ -3068,10 +3072,10 @@ function posColsP(p,akaun){const sh={k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f
   const ut={k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}<span class="vv nw">${fx(r.harga_beli,2)} → ${fx(r.harga_terkini,2)}</span>`,c:()=>'utg'};
   if(p==='gred')return [sh,ut,TRC,RSC,{k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>`<span class="nw">${esc(tkO(r.tarikh_beli))}</span>`},...grCols()];
   return [sh,ut,TRC,RSC,{k:'_r',t:'R',tip:'r_multiple',v:rOf,f:rSel},
-    {k:'_risk',t:'Risiko awal',tip:'r_multiple',v:riskAwal,f:r=>{const k=riskAwal(r);return k==null?'–':`${fx(k,1)}%<span class="vv nw">henti ${fx(r.henti,2)}</span>`;}},
+    {k:'_risk',t:'Risiko awal',tip:'r_multiple',v:riskAwal,f:r=>{const k=riskAwal(r);return k==null?(tiadaHentiH(r)||'–'):`${fx(k,1)}%<span class="vv nw">henti ${fx(r.henti,2)}</span>`;}},
     {k:'_mae',t:'Turun maks',tip:'penurunan_maks',v:maeOf,f:r=>{const m=maeOf(r);return m==null?'–':`<span class="${cls(m)}">${sg2(m)}</span>`;}},
     {k:'_mfe',t:'Naik maks',tip:'mfe',v:mfeOf,f:r=>{const m=mfeOf(r);return m==null?'–':`<span class="pos">${sg2(m)}</span>`;}},
-    {k:'_jk',t:'Ke henti kaedah',tip:'isyarat_keluar',v:r=>r.keluar?null:jarakL(r,'kaedah'),f:r=>{const j=r.keluar?null:jarakL(r,'kaedah');return j==null?'–':`<span class="${j>-2?'neg':''}">${sg2(j)}</span>`;}},
+    {k:'_jk',t:'Ke henti kaedah',tip:'isyarat_keluar',v:r=>r.keluar?null:jarakL(r,'kaedah'),f:r=>{const j=r.keluar?null:jarakL(r,'kaedah');return j==null?((!r.keluar&&tiadaHentiH(r))||'–'):`<span class="${j>-2?'neg':''}">${sg2(j)}</span>`;}},
     {k:'_l2',t:'Lorong 2',tip:'keluar_henti',ns:1,l:1,f:r=>{const a=l2Info(r);return a?`${barL2(r)}<span class="vv nw">paras ${fx(a.paras,2)}</span>`:(r.keluar_henti?cipL('2'):'–');}},
     {k:'hari',t:'Hari',tip:'hari_pt',f:hariSel,c:()=>'ctr'},
     {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>lorongRingkas(r),c:()=>'wrap'}];}
@@ -3267,6 +3271,9 @@ function trTip(s){const t=trendOf(s),T=[TR_TETAP];if(trAA(s))T.push('Saham ini d
   const n=S.trend&&S.trend.nota&&S.trend.nota[s];if(n)T.push('Nota data: '+n+'.');
   return T.join(' ');}
 const trPill=s=>{const i=trInfo(s);if(!i.t&&!trAA(s))return trendOf(s)?'<span class="mut" title="Sejarah harga kurang 201 sesi dalam stor; SMA200 belum boleh dikira.">Sejarah pendek</span>':'<span class="mut">–</span>';return `<span class="trd ${i.c}" title="${esc(trTip(s))}">${i.a?`<i class="tra">${i.a}</i>`:''}${esc(i.pill)}</span>`;};
+/* tarikh earnings seterusnya SEBENAR (jana_db.earn_sebenar, kalendar gabungan); dipapar jika berbeza daripada rekod hari isyarat */
+const qrSeb=r=>{const e=r.earn_seb;if(!e||e===String(r.tarikh_earnings||'').slice(0,10))return '';
+  return `<span class="vv nw qsb" title="Tarikh earnings seterusnya sebenar (kalendar gabungan Nasdaq / yfinance / Moomoo; sumber ${esc(r.earn_seb_sumber||'')}). Gred QR kekal ikut data pada hari isyarat.">sebenar ${esc(tkO(e))} · ${r.earn_seb_h} hari</span>`;};
 const trSel=r=>{const b=trBaris(r.saham);return `${trPill(r.saham)}${b?`<span class="vv trv">${esc(b)}</span>`:''}`;};
 const TRC={k:'_trend',t:'Trend',tip:'trend_jp',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.s!=null?t.s*1000+(t.s||1)*Math.min(999,t.umur||0):null;},f:trSel,c:()=>'trc'};
 function trSec(s){const i=trInfo(s);if(!i.t&&!trAA(s))return '';const b=trBaris(s);
@@ -3817,7 +3824,7 @@ renderNav();renderAll();
   subBhg('papertrade/watchlist','watch',['watch','sektor']);
   sub('sektor/snapshot','sektor',['sektor']);
   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
-  sub('prestasi/mae','mae',['prestasi']);
+  sub('prestasi/mae','mae',['prestasi']);subBhg('prestasi/mae_atr','maeAtr',['prestasi']);
   subBhg('prestasi/garis','garis',['utama','ptc','prestasi']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['prestasi']);subBhg('posisi/lorong2','l2s',['ptc']);subBhg('harian/trend','trend',['ptc','watch']);
   sub('prestasi/portfolio_slot','pslot',['utama','prestasi']);
   sub('analisis/papan','anl',['analisis']);
