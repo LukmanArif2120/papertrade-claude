@@ -293,3 +293,10 @@
 - Diisi: henti_isi.py (127; sepadan rekod < 0.04%), isi_audit.py (RS anggaran 6, industri sandaran sektor 3, tarikh_isyarat 197), qr_isi.py + kalendar_earnings.py (QR 34, pemangkin 35; baki ditanda sebab), gred kewangan v7.1 (ejen; 499/550 baris, baki 51 sebab tepat), perlu_sejarah.txt (Actions menarik 520 bar), keluar_lorong dikira semula, lorong2_siri meliputi Moomoo, prestasi/mae_atr dibahagi.
 - Kekal kosong dengan sebab sah: henti kaedah tanpa henti rugi (M01/M73/M82, dilabel), tarikh_isyarat sumber luar (11), tarikh earnings "tiada dalam 35 hari" (QR A; tarikh sebenar dalam earn_seb), baris tidak_sah.
 - Pembetulan sampingan: papertrade/moomoo melebihi had db selepas diisi -> medan teks panjang digugurkan dalam dokumen sandaran sahaja. db ditolak penuh (15 batch, 94 dokumen); artifact versi 112. Ujian 266 lulus; sahkan.py 0 ralat.
+
+## 2026-10-23 (9:37 NY) — Beli maya 9:35 NY
+- Pintu akhir `kod/tidak_layak.py fail --tulis`: 0 baris dibuang. Calon: 770 baris senarai_beli (316 saham; tarikh_imbasan 23 Okt). Direkod 761 baris (1 unit setiap kaedah+saham, sumber harian_c). Harga beli = buka sementara `quote_stock_quote` 9:37 NY; belum disahkan dengan kline. Gred disalin tanpa diubah ke CSV (db tanpa `kewangan_butiran`, ikut `jana_db.py`).
+- Belum didagangkan pada 9:35 (direkod dengan harga_beli = tutup isyarat, nota `buka_lewat`; 6:02 menggantikan dengan buka rasmi): MTX M19, STVN M99.
+- Fail: baris ditambah ke `claude_61.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_62` … `claude_72` (unjuran tertinggi 189,433 B). Dokumen db `papertrade/claude_61` … `claude_72` ditolak dalam dua batch; `harian/status` dikemas kini (beli_pada, beli_ringkas).
+- Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
+- Dilangkau 9: buka > buka_maks — FRPT M08, ROL M08, WS M08, NSIT M08; buka ≤ henti — COR M14, SSNC M23, PVH M70, GNTX M106, TANH M140. Tiada bertindih.
