@@ -301,3 +301,8 @@
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 9: buka > buka_maks — FRPT M08, ROL M08, WS M08, NSIT M08; buka ≤ henti — COR M14, SSNC M23, PVH M70, GNTX M106, TANH M140. Tiada bertindih.
 - Sahkan buka (10:08 NY, `quote_history_kline` ktype 2 autype 0, 23 Okt): sampel LAUR 38.69, BFAM 70.64, ADSK 254.06, ZETA 33.19, M 23.975 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
+
+## 24 Okt 2026 (6:02 MYT) — Kemas kini pagi (sesi AS Jumaat 23 Okt)
+- Posisi: ~186 C + 3 M keluar lorong 1 baharu, 55 menunggu buka, 1 belian 23 Okt tidak dibeli (§5.4 sig=False). Lorong 2: tutup_semua 223. `dagangan.py betul`: 21 posisi kaedah replika dinilai semula. `peristiwa.py calon`: NVEC `tolak` (`data/harga/faktor_calon.csv`).
+- Watchlist 270 → 179 (91 dibuang). Sektor pasaran 3829 digred; `sektor/snapshot` v16. SST tidak tersedia (perlu kebenaran semula): `sektor.csv` tidak ditambah, tiada data direka. Gabungan yfinance dilangkau.
+- db: 107 dokumen ditolak (18 batch; `posisi/lorong2_9`, `papertrade/ringkas_c_7` baharu); `watchlist_3` dipadam; `harian/status` v41. `sahkan.py --betulkan` keluar 0.
