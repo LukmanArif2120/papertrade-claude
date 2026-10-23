@@ -35,7 +35,7 @@ Universe "set 431" = gabungan dataset S1–S4 (108+108+107+108 saham). Label dik
   
   — [takrif.py](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/takrif.py); [jalan.py](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/jalan.py)
 - **Bilangan varian yang diuji:**
-  - 37 takrif keadaan: 30 takrif 3 keadaan termasuk varian +H2 dan 1 garis dasar rawak; 1 takrif 2 keadaan (Supertrend); 2 takrif 4 peringkat Weinstein; 4 skema gabungan G5 (dengan G5a+H2, jumlahnya 5 varian G5).
+  - 37 takrif keadaan: 29 takrif 3 keadaan (termasuk varian +H2 dan 1 garis dasar rawak); 1 takrif 2 keadaan (Supertrend); 2 takrif 4 peringkat Weinstein; 5 varian G5 (G5a, G5a+H2, G5b, G5c, G5d).
   - 14 peristiwa (7 mula naik, 7 mula turun).
   - 6 analisis umur keadaan × 4 baldi.
   - 3 kontras umur × 3 takrif.
@@ -129,7 +129,7 @@ Universe "set 431" = gabungan dataset S1–S4 (108+108+107+108 saham). Label dik
 | G5c L=D10 S=ZZ2 | 14 / 14 | 18.0 / 17.8 | 27/19/22/21/12 | -0.45 (-0.3) | +0.66 (+0.9) | -6.7 (-3.2) | -4.0 (-2.9) | -0.6 (-0.4) | +0.6 (+0.5) | -0.046 (-2.1) | -0.031 (-1.9) |
 | G5d L=D10 S=K1 | 9 / 9 | 26.5 / 26.6 | 28/18/22/19/13 | -0.32 (-0.2) | +0.69 (+0.9) | -7.2 (-3.5) | -4.0 (-3.0) | -1.1 (-0.7) | +0.5 (+0.4) | -0.045 (-2.1) | -0.028 (-1.8) |
 
-- **Pulangan lebihan.** Bagi semua 37 takrif, beza Bull − Bear x_f21 berada dalam |t| ≤ 1.3 (IS) dan |t| ≤ 1.5 (OOS). Corak yang sama berlaku pada x_f3, x_f5, x_f10 dan x_f30 (lihat hasil_*.json). Tandanya juga cenderung bertukar: D10+H2 −0.25% (IS) lawan +0.68% (OOS). — [hasil_IS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_IS.json); [hasil_OOS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_OOS.json)
+- **Pulangan lebihan.** Bagi semua 37 takrif, beza Bull − Bear x_f21 berada dalam |t| ≤ 1.2 (IS) dan |t| ≤ 1.5 (OOS). Merentas x_f3, x_f5, x_f10, x_f21 dan x_f30, |t| maksimum ialah 1.28 dalam IS (ZZ2 x_f3) dan 1.75 dalam OOS (ADX20 x_f30) (lihat hasil_*.json). Tandanya juga cenderung bertukar: D10+H2 −0.25% (IS) lawan +0.68% (OOS). — [hasil_IS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_IS.json); [hasil_OOS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_OOS.json)
 - **Kriteria pradaftar.** Kriteria utama yang dipradaftar ialah beza v_j8 Bull − Bear dengan t ≤ −2 dalam IS. **Tiada takrif yang lulus.** Pilihan seterusnya (D10+H2) ditanda **post-hoc**. Ia berdasarkan risiko mentah (x_j8), v_vr21, kestabilan dan keringkasan, dan direkod sebelum OOS. — [pilihan_IS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/pilihan_IS.json); [kriteria_prapendaftaran.md](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/kriteria_prapendaftaran.md)
 - **Keputusan hipotesis OOS** yang direkod sebelum OOS:
 
@@ -165,7 +165,7 @@ Universe "set 431" = gabungan dataset S1–S4 (108+108+107+108 saham). Label dik
 ## S3. Adakah pemisahan risiko itu hanya proksi volatiliti? Dan apa yang berlaku pada label jangka pendek?
 
 ### Takeaway
-Ya. Selepas dikawal dengan ATR14% (kuintil atau desil) atau dengan regresi Fama-MacBeth (log ATR% + log volatiliti 21 hari), beza risiko Bear − Bull bagi D10+H2, W4 dan K4 MAD **hilang** (|t| < 1 dalam IS dan OOS). Label trend jangka panjang menandakan saham yang lebih meruap. Ia tidak menambah maklumat risiko yang belum ada dalam ATR%. Sebaliknya, label jangka pendek "Bear" (ADX/DMI, TSMOM 10/21/63, LR20, Supertrend) meramal risiko jatuh neutral-volatiliti yang **lebih rendah** (−3.4 hingga −5.4 mata, t −4.1 hingga −4.5) dalam kedua-dua tempoh. Ini kesan pembalikan jangka pendek.
+Ya. Selepas dikawal dengan ATR14% (kuintil atau desil) atau dengan regresi Fama-MacBeth (log ATR% + log volatiliti 21 hari), beza risiko Bear − Bull bagi D10+H2, W4 dan K4 MAD **hilang** (|t| < 1 dalam IS dan OOS). Label trend jangka panjang menandakan saham yang lebih meruap. Ia tidak menambah maklumat risiko yang belum ada dalam ATR%. Sebaliknya, label jangka pendek "Bear" meramal risiko jatuh neutral-volatiliti yang **lebih rendah** dalam kedua-dua tempoh. Bagi ADX/DMI dan TSMOM 10/21/63 dalam regresi FM: −3.4 hingga −5.4 mata, t −4.1 hingga −4.5. Bagi LR20 dan Supertrend dalam kawalan kuintil: t 2.1–3.4. Ini kesan pembalikan jangka pendek.
 
 ### Cited Findings
 - **Kawalan volatiliti** ([kawal_vol.py](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/kawal_vol.py); output [IS](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/kawal_vol_IS.txt), [OOS](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/kawal_vol_OOS.txt)). P(jatuh > 8% dalam 10 sesi), mata %:
@@ -255,7 +255,7 @@ D10+H2 adalah monotonik dari segi risiko mentah dan volatiliti (Bull < Neutral <
   
   "Mula turun" (yang kebanyakannya tarik balik dalam trend naik) mempunyai P(jatuh) neutral-vol yang paling rendah: −2.92 (IS) dan −1.60 (OOS). Larian 12 sesi, 20.7 tukar setahun. — [jadual.md](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/jadual.md)
 - **Monotonik (rho Spearman tertib keadaan lawan purata).**
-  - D10+H2: −1.0 bagi x_j8, mae, mfe dan vr21 dalam kedua-dua tempoh. Bagi x_f21: −0.5 (IS) dan +0.5 (OOS), jadi tidak konsisten.
+  - D10+H2: |rho| = 1.0 (monotonik penuh, arah dijangka) bagi x_j8, MAE, MFE dan vr21 dalam kedua-dua tempoh. Bagi x_f21: −0.5 (IS) dan +0.5 (OOS), jadi tidak konsisten.
   - W4: −0.2 bagi x_j8, kerana P3 < P1 < P2 < P4.
   
   — [hasil_IS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_IS.json); [hasil_OOS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_OOS.json)
@@ -274,7 +274,7 @@ D10+H2 adalah monotonik dari segi risiko mentah dan volatiliti (Bull < Neutral <
 ## S5. "Mula naik" / "mula turun": adakah peristiwa permulaan meramal apa-apa, dan berapa lewat ia?
 
 ### Takeaway
-Daripada 7 calon "mula naik", tiada yang meramal pulangan lebihan positif secara konsisten. Calon terbaik IS (N4: EMA10 > EMA20 ketika SMA50 naik, x_f21 +0.60%) **berbalik** dalam OOS kepada −0.67% (t −2.7). Dalam OOS, kebanyakan peristiwa mula naik diikuti risiko jatuh neutral-volatiliti yang **lebih tinggi**, dan peristiwa mula turun diikuti risiko yang **lebih rendah** (pembalikan). Kadar gagal (tutup di bawah rendah 21 bar sebelum peristiwa) sama dengan jangkaan yang dipadan pada jarak ATR. Label mula naik juga lewat: median 23–58 sesi selepas rendah 63 sesi, apabila harga sudah naik 15–25%.
+Daripada 7 calon "mula naik", tiada yang meramal pulangan lebihan positif secara konsisten. Calon terbaik IS (N4: EMA10 > EMA20 ketika SMA50 naik, x_f21 +0.60%) **berbalik** dalam OOS kepada −0.67% (t −2.7). Dalam OOS, kebanyakan peristiwa mula naik diikuti risiko jatuh neutral-volatiliti yang **lebih tinggi**, dan peristiwa mula turun diikuti risiko yang **lebih rendah** (pembalikan). Kadar gagal (tutup di bawah rendah 21 bar sebelum peristiwa) sama dengan jangkaan yang dipadan pada jarak ATR. Label mula naik juga lewat: median 23–60 sesi selepas rendah 63 sesi, apabila harga sudah naik kira-kira 15–30%.
 
 ### Cited Findings
 - **Jadual peristiwa.** x_ dalam %, v_ dalam mata; t berkelompok bulan. "gagal21 sebenar/padan" = % peristiwa yang tutup di bawah rendah 21 bar sebelum peristiwa (bagi T*: di atas tinggi) dalam 21 sesi, lawan jangkaan berdasarkan jarak ke paras itu dalam unit ATR. "capai" = % yang mencapai D10 Bull (N*) atau D10 Bear (T*) dalam 10 dan 21 sesi. — [jadual.md](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/jadual.md); [teguh.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/teguh.json)
@@ -356,7 +356,7 @@ Bagi sauh tarikh, "sejak" yang stabil ialah tarikh tukar yang disahkan. "Titik m
 | TT-ringkas+H2 | Bear | > 60 lawan ≤ 60 | v_j8 | +3.92 (+2.3; +3.0) | +8.03 (+4.1; +4.1) |
 | TT-ringkas+H2 | Bull | > 60 lawan ≤ 60 | v_j8 | +3.11 (+2.2; +1.8) | +2.51 (+2.3; +2.2) |
 
-- **Bahagian sampel OOS.** D10+H2 Bear > 60 sesi meliputi 1.0% cerapan; Bear 21–60 sesi 4.4%; Bull > 60 sesi 3.8%. Tiada kontras umur yang bererti pada pulangan lebihan 21 hari (|t| ≤ 1.4). — [hasil_OOS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_OOS.json); [teguh.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/teguh.json)
+- **Bahagian sampel OOS.** D10+H2 Bear > 60 sesi meliputi 1.0% cerapan; Bear 21–60 sesi 4.4%; Bull > 60 sesi 3.8%. Bagi D10+H2, tiada kontras umur yang bererti pada pulangan lebihan 21 hari (|t| ≤ 1.4). TT-ringkas+H2 Bull > 60 sesi mencatat −1.19% (t −1.7) dalam IS sahaja. — [hasil_OOS.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/hasil_OOS.json); [teguh.json](/tmp/claude-0/-home-user-papertrade-claude/a40a74c5-2874-5b77-8397-3036eb71ebfc/scratchpad/trend2/teguh.json)
 - **Sauh tarikh** bagi tukar D10+H2 (ex-post "sebenar" = ekstrem dalam [t−126, t+21]):
   - Tarikh tukar (A) berlaku median 105–109 sesi selepas titik itu, dan harga sudah +36–42% (Bull) atau −25 hingga −29% (Bear).
   - Sauh B (ekstrem 63 sesi lalu) tepat ±2 sesi dalam 15–17% kes.
@@ -370,7 +370,7 @@ Bagi sauh tarikh, "sejak" yang stabil ialah tarikh tukar yang disahkan. "Titik m
 ### Inferences
 - **Soalan "sejak bila Bullish"** paling jujur dijawab dengan tarikh tukar yang disahkan, iaitu tarikh tutup kedua H2. Ia stabil: hanya 8.6 tukar setahun, dan titik ekstrem sebenar jarang berlaku selepasnya.
 - **Soalan "dari mana ia mula naik"** ialah konsep yang bergantung pada tetingkap. Untuk papan swing, rendah 63 sesi sebelum tukar memberi titik yang mudah difahami: median 48 sesi sebelum tukar dan +19–21% di bawah harga semasa, dengan 85% kebolehpercayaan. Rendah 126 sesi pula menggambarkan permulaan trend jangka sederhana (+36–41%).
-- **Umur boleh menjadi penanda risiko sebenar.** "Bear lama" ialah satu-satunya label yang menambah risiko melebihi volatiliti secara konsisten dengan t ≥ 3 pada lag 60 dalam kedua-dua tempoh. Ia boleh dipaparkan sebagai amaran. "Bear baharu" pula tidak patut diwarnakan lebih teruk daripada Bear biasa.
+- **Umur boleh menjadi penanda risiko sebenar.** Dalam keluarga label jangka panjang, "Bear lama" (D10+H2 Bear > 60 sesi atau W4 P4 > 60 sesi) ialah satu-satunya penanda yang menambah risiko jatuh melebihi volatiliti secara konsisten, dengan t ≥ 3 pada lag 60 dalam kedua-dua tempoh. Ia boleh dipaparkan sebagai amaran. "Bear baharu" pula tidak patut diwarnakan lebih teruk daripada Bear biasa.
 
 ### Gaps
 - Kontras umur ditulis selepas jadual baldi umur IS dilihat (baldi itu sendiri dipradaftar). Kontras tersebut perlu dianggap eksploratori walaupun konsisten dalam OOS.
