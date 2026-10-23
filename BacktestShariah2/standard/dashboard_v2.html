@@ -1313,7 +1313,7 @@ const watchColsR=()=>[
   TRC,RSC,
   {k:'pct_dipenuhi',t:'% hampir',tip:'pct_dipenuhi',f:wPill},
   {k:'harga_terkini',t:'Harga',tip:'harga_w',f:r=>`${fx(r.harga_terkini,2)}<span class="vv nw">paras ${fx(r.paras,2)}</span>`},
-  {k:'gred_keseluruhan',t:'Gred',tip:'gred_ringkas',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:grSatu},
+  {k:'gred_keseluruhan',t:'Gred',tip:'gred_ringkas',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:grSatu},
   {k:'pencetus',t:'Syarat belum cukup',tip:'syarat_belum',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}`,c:()=>'wrap'}];
 function renderWatch(){
   const el=$('#v-watch');const w=S.watch;
@@ -1447,13 +1447,13 @@ function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:
   const f=+m[6],sy=m[8];
   return grSel1(r.gred_kewangan,`<span class="kskor">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:''}${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`);}
 const grCols=()=>[
-  {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??9,f:r=>grKump(r,'Sektor')},
-  {k:'gred_industri',t:'Industri',tip:'g_i',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??9,f:r=>grKump(r,'Industri')},
+  {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
+  {k:'gred_industri',t:'Industri',tip:'g_i',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??null,f:r=>grKump(r,'Industri')},
   {k:'rs_rating',t:'RS',tip:'g_r',l:1,c:()=>'grd',v:r=>grNil(r.rs_rating),f:grRS},
-  {k:'hari_ke_earnings',t:'QR',tip:'g_q',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??9,f:grQR},
-  {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??9,f:grPem,c:()=>'grd grp'},
-  {k:'gred_kewangan',t:'Kewangan',tip:'g_k',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??9,f:grKew},
-  {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m0'}];
+  {k:'hari_ke_earnings',t:'QR',tip:'g_q',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??null,f:grQR},
+  {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??null,f:grPem,c:()=>'grd grp'},
+  {k:'gred_kewangan',t:'Kewangan',tip:'g_k',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??null,f:grKew},
+  {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m0'}];
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.tutup_semua?'exit':'')+' '+jalurPT(r);
 function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>r.tarikh_beli?`<span class="tpd" title="${esc(r.tarikh_beli)}">${esc(tkO(r.tarikh_beli))}</span><span class="tpl">${esc(r.tarikh_beli)}</span>`:'–'},
@@ -1510,7 +1510,7 @@ function posColsR(akaun){return [
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b class="nw">${esc(r.kaedah)}</b>`},
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>`<span class="nw">${esc(tkO(r.tarikh_beli))}</span>`},
   {k:'hari',t:'Hari',tip:'hari_pt',f:hariSel,c:()=>'ctr'},
-  {k:'gred_keseluruhan',t:'Gred',tip:'gred_ringkas',l:1,v:r=>GORD[r.gred_keseluruhan]??9,f:grSatu},
+  {k:'gred_keseluruhan',t:'Gred',tip:'gred_ringkas',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:grSatu},
   {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?'<span class="pill p-warn">Luar peraturan</span> ':''}${lorongRingkas(r)}`,c:()=>'wrap'}];}
 function renderPos(){
   const el=$('#v-pos'),a=S.akaun,ps=S.pos;const all=posRows(a);
