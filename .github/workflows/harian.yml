@@ -67,6 +67,9 @@ jobs:
           if [ -f BacktestShariah2/data/harga/perlu_sejarah.txt ]; then python3 BacktestShariah2/standard/harga_yf.py sejarah; fi
       - name: Stor harga repo (Lejar Penuh kekal dalam lejar.yml 06:17 UTC)
         run: python3 BacktestShariah2/standard/lejar.py stor
+      - name: Status trend D10+H2 (data/trend/status.json; medan beku untuk db harian/trend melalui jana_db.py)
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/trend_status.py tulis
       - name: Papertrade C — kemas kini posisi + imbas 134 kaedah
         id: malam
         continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
@@ -115,7 +118,7 @@ jobs:
         run: |
           git config user.name "harian[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add BacktestShariah2/data/harga BacktestShariah2/bayang 2>/dev/null || true
+          git add BacktestShariah2/data/harga BacktestShariah2/data/trend BacktestShariah2/bayang 2>/dev/null || true
           git add BacktestShariah2/uji_kertas/jejak_M166.csv 2>/dev/null || true
           git add "${{ steps.mod.outputs.folder }}" "${{ steps.mod.outputs.isyarat }}" "${{ steps.mod.outputs.pemangkin }}" "${{ steps.mod.outputs.log }}" 2>/dev/null || true
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi

@@ -281,3 +281,8 @@
 - Watchlist 276 → 166 (110 dibuang). Sektor pasaran 21 halaman (6119 saham → 3830 digred), `sektor/snapshot` v15.
 - jana_db: `prestasi/mae` (rows + atr) = 301 KB > had 262144; atr digugurkan sementara (halaman jatuh balik ÷ √hari). PERLU: pembahagian dokumen mae + pembaca halaman (subBhg) supaya atr kembali.
 - db: konflik versi (claude_51–60, watchlist, status ditulis oleh larian malam) ditangani dengan senarai semula versi; watchlist_3 dipadam. `sahkan.py --betulkan` keluar 0 (5095 posisi).
+
+## 23 Okt 2026 — Dashboard versi 103 diterbit ke pautan asal (artifact versi 108; keputusan pengguna)
+- Reka bentuk Padat (pratonton XmZf7…) + status trend D10H2-r2 daripada kajian `reports/Penentuan status trend saham mendalam.md`: lajur Trend (pil, baharu/lama, umur, sejak, titik mula; Bearish lama diisi merah), lajur Risiko (ATR14% + kuintil), cip jarak lorong 2 dalam ATR, 📅 earnings ≤ 10 sesi (+ semalam), baris rejim SPY, carta candlestick dua graf, warna gred lama (C kuning).
+- Baharu: `standard/trend_status.py`, `standard/lorong2_siri.py`, `ujian/test_trend_status.py` (8 ujian), `data/trend/status.json`; `jana_db.py` menjana `harian/trend` dan `posisi/lorong2` (7 bahagian); `harian.yml` langkah status trend (continue-on-error) dan commit `data/trend`; `jadual/tolak_db.md` langkah 3 juga koleksi `posisi`.
+- db: `posisi/lorong2` … `lorong2_7` dan `harian/trend` dicipta (versi 1). Ujian 244 lulus; `sahkan.py --betulkan` 0 ralat.

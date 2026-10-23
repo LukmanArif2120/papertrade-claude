@@ -16,7 +16,7 @@ Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e
    Jika tiada larian `queued`/`in_progress`, tembak sekali (`mcp__github__actions_run_trigger`, method `run_workflow`,
    workflow_id nama workflow, ref `main`). Jangan tunggu; teruskan dengan data sedia ada dan catat dalam notifikasi.
 3. Versi dokumen db: `ArtifactData` `list` bagi koleksi `papertrade` (query.limit 100; ulang dengan next_cursor),
-   `prestasi`, `harian`, `sektor` dan `analisis`, dengan `out_dir` <scratchpad>/lama (kandungan tidak perlu dibaca).
+   `prestasi`, `harian`, `sektor`, `analisis` dan `posisi`, dengan `out_dir` <scratchpad>/lama (kandungan tidak perlu dibaca).
    Tulis `<scratchpad>/versi.json` = {"papertrade/claude": versi, …} untuk SEMUA dokumen yang disenaraikan.
 4. `python3 BacktestShariah2/standard/jana_db.py --keluar <scratchpad>/db --versi <scratchpad>/versi.json`
    (pecah_claude/bahagi_db sudah dijalankan oleh Actions; skrip gagal jika mana-mana dokumen melebihi had 262,144 bait).
