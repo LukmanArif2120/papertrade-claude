@@ -4,7 +4,8 @@
 #
 #   python3 BacktestShariah2/standard/tuai_kewangan.py --transkrip ~/.claude/projects/<projek> --keluar <folder mentah>
 #   python3 BacktestShariah2/standard/tuai_kewangan.py perlu [--had 40] [--tarikh YYYY-MM-DD]
-#       -> senarai "T:abcd" saham yang perlu dikumpul (imbasan malam, jadual/imbas_2002.md langkah 5c): saham tanpa fail
+#       -> senarai "T:abcd" ("T:abcde" bagi pelapor separuh tahun: e = jenis 1 financial_type 11)
+#          saham yang perlu dikumpul (imbasan malam, jadual/imbas_2002.md langkah 5c): saham tanpa fail
 #          data/kewangan dahulu (senarai_beli, watchlist, posisi terbuka, kemudian posisi lain), kemudian saham aktif yang
 #          suku seterusnya sepatutnya sudah dilapor (akhir suku terakhir + 91 + 45 hari < hari ini) dan fail dikumpul > 7 hari lalu.
 #
@@ -12,11 +13,13 @@
 # menentukan nama fail. Hasil besar yang disimpan alat ke fail ("Output has been saved to <path>" atau
 # "<persisted-output> … Full output saved to: <path>") dibaca daripada fail itu.
 # financial_type 10 (suku + tahunan) dipecah ikut financial_type setiap laporan: 7 -> <T>_<jenis>_7_<halaman>.json,
-# 1–4 -> <T>_<jenis>_9_<halaman>.json. Snapshot berkelompok dipecah -> <T>_snap.json. Hasil gagal (ret_code lain,
+# 1–4 -> <T>_<jenis>_9_<halaman>.json. financial_type 11 (kumulatif) / 5 (Q6 = separuh tahun pertama, H1; sejak
+# 23 Okt 2026 untuk pelapor separuh tahun) dipecah: 5 -> <T>_<jenis>_6_c<halaman>.json, 7 -> _7_c<halaman> (Q1/Q9
+# kumulatif diabaikan). Snapshot berkelompok dipecah -> <T>_snap.json. Hasil gagal (ret_code lain,
 # cth. -11 had kadar; ralat alat) tidak ditulis. ret_code -10 ("no data") = jawapan muktamad: status 'tiada', tiada fail.
 # Hasil berulang: yang terkini menang.
 # Status: <keluar>/tuai_status.json {T: {"1"|"2"|"3": {"halaman": [...], "has_more": bool, "next_key": str} atau "tiada",
-#   "eph": true|"tiada", "snap": true}}.
+#   "eph": true|"tiada", "snap": true, "separuh": {"1"|"3": {"halaman": [...], "h1": n, ...} atau "tiada"}}}.
 import argparse, csv, glob, json, os, re, sys
 from datetime import date, timedelta
 
@@ -104,6 +107,8 @@ def tuai(paths, keluar):
             if t and a == 'quote_financials_earnings_price_history':
                 e = status.setdefault(t, {})
                 e['eph'] = e.get('eph') or 'tiada'   # data sebenar yang diterima kekal diutamakan
+            elif t and a == 'quote_financials_statements' and str(inp.get('financial_type') or '10') in ('5', '11'):
+                status.setdefault(t, {}).setdefault('separuh', {}).setdefault(str(inp.get('statement_type') or '1'), 'tiada')
             elif t and a == 'quote_financials_statements' and not halaman(inp).startswith('k'):
                 e = status.setdefault(t, {})
                 if str(inp.get('statement_type') or '1') not in e:
@@ -128,17 +133,31 @@ def tuai(paths, keluar):
             status.setdefault(t, {})['eph'] = True
             continue
         st, ft = str(inp.get('statement_type') or '1'), str(inp.get('financial_type') or '10')
-        if st not in ('1', '2', '3') or ft not in ('7', '9', '10'):
+        if st not in ('1', '2', '3') or ft not in ('5', '7', '9', '10', '11'):
             continue
         rl = (obj.get('data') or {}).get('report_list') or []
         hl = halaman(inp)
-        kump = {'9': [r for r in rl if r.get('financial_type') in (1, 2, 3, 4)],
-                '7': [r for r in rl if r.get('financial_type') == 7]} if ft == '10' else {ft: rl}
+        if ft == '10':
+            kump = {'9': [r for r in rl if r.get('financial_type') in (1, 2, 3, 4)],
+                    '7': [r for r in rl if r.get('financial_type') == 7]}
+        elif ft in ('5', '11'):   # kumulatif: Q6 (H1) dan tahunan sahaja
+            kump = {'6': [r for r in rl if r.get('financial_type') == 5],
+                    '7': [r for r in rl if r.get('financial_type') == 7]}
+        else:
+            kump = {ft: rl}
         for tp, laporan in kump.items():
-            if laporan:
-                tulis(os.path.join(keluar, f'{t}_{st}_{tp}_{hl}.json'), {'ret_code': 0, 'data': {'report_list': laporan}})
+            if laporan:   # kumulatif: awalan 'c' supaya tidak menimpa fail financial_type 10 halaman sama
+                nama = f'{t}_{st}_{tp}_{"c" if ft in ("5", "11") else ""}{hl}.json'
+                tulis(os.path.join(keluar, nama), {'ret_code': 0, 'data': {'report_list': laporan}})
         pg = obj.get('pagination') or {}
         s = status.setdefault(t, {})
+        if ft in ('5', '11'):   # status separuh tahun berasingan: tidak mengubah status suku
+            e = s.setdefault('separuh', {}).setdefault(st, {'halaman': []})
+            if hl not in e['halaman']:
+                e['halaman'].append(hl)
+            e['has_more'] = bool(pg.get('has_more')); e['next_key'] = pg.get('next_key')
+            e['h1'] = e.get('h1', 0) + len(kump['6'])
+            continue
         if not isinstance(s.get(st), dict):   # 'tiada' lama digantikan oleh data sebenar
             s[st] = {'halaman': []}
         e = s[st]
@@ -186,6 +205,17 @@ def perlu(folder, kewangan, hari_ini, had):
     return out[:had]
 
 
+def separuh_tahun(kewangan, t):
+    """Pelapor separuh tahun (v7.1): fail menyimpan 'separuh', atau 4 suku terakhir tanpa penyata pendapatan (Moomoo
+    hanya kunci kira-kira pada label Q2/Q4). Panggilan e = statement_type 1, financial_type 11, limit 50."""
+    p = os.path.join(kewangan, f'{t}.json')
+    if not os.path.exists(p):
+        return False
+    k = json.load(open(p, encoding='utf-8'))
+    suku = (k.get('suku') or [])[-4:]
+    return bool(k.get('separuh')) or (len(suku) >= 2 and all(not e.get('pendapatan') for e in suku))
+
+
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
     if argv[:1] == ['perlu']:
@@ -196,7 +226,7 @@ def main(argv=None):
         a = ap.parse_args(argv[1:])
         senarai = perlu(a.folder, a.kewangan, date.fromisoformat(a.tarikh), a.had)
         for t, sebab in senarai:
-            print(f'{t}:abcd  # {sebab}')
+            print(f'{t}:{"abcde" if separuh_tahun(a.kewangan, t) else "abcd"}  # {sebab}')
         print(f'{len(senarai)} saham', file=sys.stderr)
         return
     ap = argparse.ArgumentParser(description='Tuai hasil alat Moomoo daripada transkrip sesi ke folder mentah gred_kewangan')

@@ -244,9 +244,15 @@ class UjiHujungKeHujung(unittest.TestCase):
         self.assertIn(r['K'], ('D', 'E'))
 
     def test_data_pendek_dan_bank(self):
-        self.assertEqual(GK.kira(syarikat(n=6, mula=2025), hari_ini=date(2026, 10, 18))['gred'], '–')
+        k = syarikat(n=6, mula=2025)
+        self.assertEqual(GK.kira_teras(k, None, date(2026, 10, 18), None, '', '', 'standard', False)['gred'], '–')  # v7
+        r = GK.kira(k, hari_ini=date(2026, 10, 18))     # v7.1: sejarah pendek, keyakinan rendah
+        self.assertEqual(r['butiran']['sebab_v7'], '6 suku berturut (< 8)')
+        self.assertEqual(r['keyakinan'], 'rendah')
+        # label bank dengan penyata format biasa tanpa medan bank: model bank tidak dapat mengira K -> '–'
         r = GK.kira(syarikat(n=50, mula=2014), hari_ini=date(2026, 10, 18), sektor='Financial Services', industri='Banks')
         self.assertEqual(r['gred'], '–')
+        self.assertEqual(r['butiran']['sebab_v7'], 'bank/insurans/REIT: model lain diperlukan')
 
     def test_point_in_time(self):
         k = syarikat(n=50, mula=2014)

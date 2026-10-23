@@ -91,6 +91,27 @@ class TestTuai(unittest.TestCase):
         self.assertEqual(st['XYZ']['1']['halaman'], ['k1475164801'])
         self.assertFalse(st['XYZ']['1']['has_more'])
 
+    def test_kumulatif_separuh_tahun(self):
+        # v7.1: financial_type 11 (Q1/Q6/Q9/tahunan kumulatif) -> Q6 = H1 (_6_c), tahunan (_7_c); Q9 diabaikan
+        r = {'ret_code': 0, 'data': {'report_list': [laporan('2026/FY', 7, 1782748800000, 400.0),
+                                                      laporan('2026/Q6', 5, 1767110400000, 190.0),
+                                                      laporan('2026/Q9', 6, 1774886400000, 300.0)]},
+             'pagination': {'has_more': False, 'next_key': '-1'}}
+        self.guna(1, 'quote_financials_statements', {'symbol': 'US.XYZ', 'statement_type': 1, 'financial_type': 11,
+                                                     'limit': 50}, json.dumps(r))
+        self.guna(2, 'quote_financials_statements', {'symbol': 'US.XYZ', 'statement_type': 3, 'financial_type': 5},
+                  json.dumps({'ret_code': -10, 'ret_msg': 'no data'}))
+        keluar, st = self.jalan()
+        self.assertEqual(sorted(os.listdir(keluar)), ['XYZ_1_6_cp1.json', 'XYZ_1_7_cp1.json', 'tuai_status.json'])
+        self.assertEqual(st['XYZ']['separuh']['1']['h1'], 1)
+        self.assertEqual(st['XYZ']['separuh']['3'], 'tiada')
+        self.assertNotIn('1', st['XYZ'])            # status suku tidak diubah oleh data kumulatif
+        kew = os.path.join(self.d, 'kewangan')
+        GK.simpan(keluar, kew, '2026-10-23')
+        k = json.load(open(os.path.join(kew, 'XYZ.json'), encoding='utf-8'))
+        self.assertEqual([e['label'] for e in k['separuh']], ['2026/Q6'])
+        self.assertEqual([e['label'] for e in k['tahunan']], ['2026/FY'])
+
 
 class TestPerlu(unittest.TestCase):
     def test_tiada_fail_dahulu_kemudian_suku_baharu(self):
