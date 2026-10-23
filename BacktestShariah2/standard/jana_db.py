@@ -454,6 +454,17 @@ def main(argv=None):
     docs = {}
     M = baca_csv(os.path.join(a.folder, 'moomoo.csv'))
     docs['papertrade/moomoo'] = dict(akaun='4135388', dibina=dibina, harga_pada=harga_pada, nota=nota_pos, rows=[baris_db(r) for r in M])
+    # dokumen lama (halaman v90+ membaca papertrade/ringkas_m; ini sandaran sahaja): gugurkan medan teks panjang jika melebihi
+    # had satu dokumen (23 Okt 2026: medan audit yang diisi menjadikannya 270 KB)
+    gugur = []
+    for k in ('gred_pada', 'pemangkin_url', 'kewangan_ringkas', 'rs_tanda', 'pemangkin', 'sumber_earnings', 'nota'):
+        if bait(docs['papertrade/moomoo']) < HAD_DB - 2000:
+            break
+        for x in docs['papertrade/moomoo']['rows']:
+            x.pop(k, None)
+        gugur.append(k)
+    if gugur:
+        docs['papertrade/moomoo']['medan_digugurkan'] = gugur
     C = []
     fail_c = sorted(glob.glob(os.path.join(a.folder, 'claude*.csv')), key=nombor_fail)
     for p in fail_c:
@@ -510,7 +521,7 @@ def main(argv=None):
     pra = {}
     dc = docs.get('papertrade/claude', {})
     for kod, R, meta in (('c', [earn_sebenar(baris_db(r), r, KAL) for r in C], {k: dc[k] for k in ('dibina', 'harga_pada', 'nota', 'slot', 'batal') if k in dc}),
-                         ('m', [earn_sebenar(baris_db(r), r, KAL) for r in M], {k: v for k, v in docs['papertrade/moomoo'].items() if k != 'rows'})):
+                         ('m', [earn_sebenar(baris_db(r), r, KAL) for r in M], {k: v for k, v in docs['papertrade/moomoo'].items() if k not in ('rows', 'medan_digugurkan')})):
         for doc_id, d in ringkas_pt(R, f'ringkas_{kod}', meta):
             pra[f'papertrade/{doc_id}'] = d
     garis, mfe = garis_harga(M, C, a.stor)
