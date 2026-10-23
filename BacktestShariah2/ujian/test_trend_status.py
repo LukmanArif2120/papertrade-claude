@@ -82,6 +82,17 @@ class Dokumen(unittest.TestCase):
         self.assertAlmostEqual(b[K['pct_titik']], 50.0)
 
 
+class Alam(unittest.TestCase):
+    def test_semua_posisi_dan_stor(self):
+        import tempfile
+        with tempfile.TemporaryDirectory() as d:
+            tulis = lambda n, s: open(os.path.join(d, n), 'w', encoding='utf-8').write(s)
+            tulis('claude.csv', 'saham,tidak_dibeli,tutup_semua\nAAA,,True\nBBB,True,\n')
+            tulis('moomoo.csv', 'saham,tidak_dibeli\nCCC,\n')
+            tulis('watchlist.csv', 'Saham\nDDD\n')
+            self.assertEqual(T.alam(d, {'EEE': None}), {'AAA', 'CCC', 'DDD', 'EEE'})   # tutup kekal; tidak dibeli dibuang
+
+
 class Lorong2(unittest.TestCase):
     def test_sama_dengan_keluar_lorong(self):
         rng = np.random.default_rng(7)

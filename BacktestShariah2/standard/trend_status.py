@@ -209,13 +209,14 @@ def benar(v):
     return str(v).strip().lower() == 'true'
 
 
-def alam(folder=PT):
-    """Saham posisi Papertrade C yang belum tutup kedua-dua lorong (sah) dan saham watchlist."""
-    u = set()
-    for p in sorted(glob.glob(os.path.join(folder, 'claude*.csv'))):
-        with open(p, encoding='utf-8') as f:
-            u |= {x['saham'] for x in csv.DictReader(f)
-                  if not (benar(x.get('tidak_sah')) or benar(x.get('tidak_dibeli')) or benar(x.get('tutup_semua')))}
+def alam(folder=PT, H=None):
+    """Saham yang dipapar dashboard: semua posisi Papertrade C dan Moomoo lama (dipegang atau sudah keluar), watchlist,
+    dan semua saham stor H (jika diberi) supaya posisi baharu esok sudah ada status."""
+    u = set(H or ())
+    for p in sorted(glob.glob(os.path.join(folder, 'claude*.csv'))) + [os.path.join(folder, 'moomoo.csv')]:
+        if os.path.exists(p):
+            with open(p, encoding='utf-8') as f:
+                u |= {x['saham'] for x in csv.DictReader(f) if x.get('saham') and not benar(x.get('tidak_dibeli'))}
     p = os.path.join(folder, 'watchlist.csv')
     if os.path.exists(p):
         with open(p, encoding='utf-8') as f:
@@ -311,7 +312,7 @@ def bawa_semalam(baru, lama):
 def bina(folder=PT, stor=STOR, terkini=TERKINI, semalam=FAIL):
     H, nota = muat_harga(stor, terkini)
     I, _ = muat_harga(stor, terkini, fail=('harga_idx.csv',))
-    doc = dokumen(H, alam(folder), nota, I)
+    doc = dokumen(H, alam(folder, H), nota, I)
     lama = None
     if semalam and os.path.exists(semalam):
         try:

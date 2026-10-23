@@ -507,7 +507,7 @@ def main(argv=None):
         H, nota_h = TS.muat_harga(a.stor, tk)
         I, _ = TS.muat_harga(a.stor, tk, fail=('harga_idx.csv',))
         lama = json.load(open(TS.FAIL, encoding='utf-8')) if a.stor == STOR and os.path.exists(TS.FAIL) else None
-        docs['harian/trend'] = dict(TS.bawa_semalam(TS.dokumen(H, TS.alam(a.folder), nota_h, I), lama), dibina=dibina)
+        docs['harian/trend'] = dict(TS.bawa_semalam(TS.dokumen(H, TS.alam(a.folder, H), nota_h, I), lama), dibina=dibina)
         docs['posisi/lorong2'] = dict(L2.dokumen(H, a.folder), dibina=dibina, harga_hingga=f'{S} tutup')
     except Exception as e:  # noqa: BLE001
         print(f'amaran: harian/trend / posisi/lorong2 gagal: {e!r}', file=sys.stderr)

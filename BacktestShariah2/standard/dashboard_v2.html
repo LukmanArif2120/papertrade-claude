@@ -1437,7 +1437,7 @@ function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
   const pl=q?`<span class="pill ${q[1]}" style="padding:0 6px;margin-top:3px">${q[0]}</span>`:'';
   const sb=String(r.sumber_earnings||''),ps=/QR lalu (\d+) hari/.exec(sb),pq=ps?`<span class="vv nw">QR lalu ${ps[1]} hari</span>`:'';
   const txt=h!=null?`<b class="nw">${fx(h,0)} hari lagi</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}${pl}`:`<b class="nw">${sb==='tiada data'?'Tiada data':'Tiada laporan'}</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}${pl}`;
-  return grSel1(r.gred_qr,txt);}
+  return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt):`<span class="mut" title="Tarikh earnings tiada dalam sumber data (Nasdaq/SST) pada hari isyarat; gred QR tidak dikira.">Tiada data</span>`;}
 /* gred kewangan v7 (standard/gred_kewangan.py): ringkasan "B (K:A U:B T:C S:B) · peringkat · F:n · keyakinan … · Syariah …" */
 const SYLBL={'lulus':'p-buy','hampir had':'p-warn','gagal sebahagian':'p-warn','gagal':'p-exit'};
 function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:(\S+) S:(\S+)\) · ([^·]+?) · F:(\d+) · keyakinan (\S+)(?: · Syariah (.+))?$/.exec(s);
@@ -3266,9 +3266,9 @@ function trTip(s){const t=trendOf(s),T=[TR_TETAP];if(trAA(s))T.push('Saham ini d
   if(t.atr_pct!=null)T.push(`ATR14 ${fx(t.atr_pct,1)}% (kuintil ${t.atr_q||'–'} daripada 5; peluang jatuh > 8% dalam 10 sesi ≈ ${ATR_P[t.atr_q]||'–'} dalam backtest).`);
   const n=S.trend&&S.trend.nota&&S.trend.nota[s];if(n)T.push('Nota data: '+n+'.');
   return T.join(' ');}
-const trPill=s=>{const i=trInfo(s);if(!i.t&&!trAA(s))return '<span class="mut">–</span>';return `<span class="trd ${i.c}" title="${esc(trTip(s))}">${i.a?`<i class="tra">${i.a}</i>`:''}${esc(i.pill)}</span>`;};
+const trPill=s=>{const i=trInfo(s);if(!i.t&&!trAA(s))return trendOf(s)?'<span class="mut" title="Sejarah harga kurang 201 sesi dalam stor; SMA200 belum boleh dikira.">Sejarah pendek</span>':'<span class="mut">–</span>';return `<span class="trd ${i.c}" title="${esc(trTip(s))}">${i.a?`<i class="tra">${i.a}</i>`:''}${esc(i.pill)}</span>`;};
 const trSel=r=>{const b=trBaris(r.saham);return `${trPill(r.saham)}${b?`<span class="vv trv">${esc(b)}</span>`:''}`;};
-const TRC={k:'_trend',t:'Trend',tip:'trend_jp',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.s!=null?t.s*1000+(t.s||1)*Math.min(999,t.umur||0):-9999;},f:trSel,c:()=>'trc'};
+const TRC={k:'_trend',t:'Trend',tip:'trend_jp',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.s!=null?t.s*1000+(t.s||1)*Math.min(999,t.umur||0):null;},f:trSel,c:()=>'trc'};
 function trSec(s){const i=trInfo(s);if(!i.t&&!trAA(s))return '';const b=trBaris(s);
   return `<div class="sec"><h4 data-tip="trend_jp">Trend</h4><p class="ln">${trPill(s)}${b?` <span class="mut">${esc(b)}</span>`:''}</p><p class="ln mut kecil">${esc(trTip(s).slice(TR_TETAP.length+1)||TR_TETAP)}</p></div>`;}
 /* ATR14% + kuintil (lajur Risiko); kuintil 5 ambar */
@@ -3277,7 +3277,7 @@ const atrCip=s=>{const t=trendOf(s);if(!t||t.atr_pct==null)return '<span class="
 /* Penuh: pill + ATR bertindan dalam satu sel (jimat satu lajur supaya lorong 2 kekal kelihatan pada 1400px) */
 const atrKcl=s=>{const t=trendOf(s);return t&&t.atr_pct!=null?`<span class="atk${t.atr_q===5?' hmp':''}" title="ATR14 ${fx(t.atr_pct,1)}% · kuintil ${t.atr_q||'–'} daripada 5 (peluang jatuh > 8% dalam 10 sesi ≈ ${ATR_P[t.atr_q]||'–'} dalam backtest)">${fx(t.atr_pct,1)}%</span>`:'';};
 const TRCA=Object.assign({},TRC,{f:r=>`<span class="trA">${trPill(r.saham)}${padatDesk()?atrKcl(r.saham):atrCip(r.saham)}</span>${(b=>b?`<span class="vv trv">${esc(b)}</span>`:'')(trBaris(r.saham))}`});
-const RSC={k:'_risiko',t:'Risiko',tip:'atr_risiko',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.atr_pct!=null?t.atr_pct:-1;},f:r=>atrCip(r.saham),c:()=>'rsk'};
+const RSC={k:'_risiko',t:'Risiko',tip:'atr_risiko',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.atr_pct!=null?t.atr_pct:null;},f:r=>atrCip(r.saham),c:()=>'rsk'};
 /* jarak harga ke paras lorong 2 dalam unit ATR14 (Posisi); jalur dan peluang tercetus dalam 10 sesi daripada backtest 19 kaedah */
 const L2J=[[3,'Jauh','10–11%'],[2,'Sederhana','19–23%'],[1,'Dekat','36–43%'],[-Infinity,'Sangat dekat','61–67%']];
 function l2Jarak(r){const a=l2Info(r),t=trendOf(r.saham);if(!a||!t||t.atr_pct==null||!t.c)return null;const A=t.atr_pct/100*t.c;if(!(A>0))return null;
