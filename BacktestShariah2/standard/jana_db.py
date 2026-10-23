@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
-# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, harian/status,
+# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, harian/status,
 # harian/trend (trend_status.py), posisi/lorong2(+_2…; lorong2_siri.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
@@ -47,6 +47,29 @@ def baris_db(r, peta=None):
             k = peta.get(k, k)
         out[k] = nilai(v) if k not in ('saham', 'nama', 'kaedah_kongsi', 'tarikh_isyarat', 'tarikh_beli') else v
     return out
+
+
+def earn_sebenar(db, r, K):
+    """Tambah tarikh earnings seterusnya SEBENAR (kalendar gabungan kalendar_earnings.py) kepada baris db (bukan CSV): earn_seb,
+    earn_seb_h (hari dagangan dari sesi rujukan), earn_seb_sumber. Sesi rujukan = tarikh QR asal (gred_pada "QR pada X"),
+    tarikh_isyarat / tarikh_data, atau hari bekerja sebelum tarikh_beli. Gred QR asal tidak diubah (audit 23 Okt 2026)."""
+    from datetime import date, timedelta
+    import kalendar_earnings as KE
+    m = re.search(r'QR pada (\d{4}-\d\d-\d\d)', r.get('gred_pada') or '')
+    t0 = (m.group(1) if m else None) or r.get('tarikh_isyarat') or r.get('tarikh_data')
+    if t0:
+        D = date.fromisoformat(t0[:10])
+    elif r.get('tarikh_beli'):
+        D = date.fromisoformat(r['tarikh_beli'][:10]) - timedelta(days=1)
+        while D.weekday() > 4:
+            D -= timedelta(days=1)
+    else:
+        return db
+    te, sb = KE.seterusnya(K, r.get('saham') or r.get('Saham'), D)
+    if te:
+        db.update(earn_seb=te.isoformat(), earn_seb_h=int(np.busday_count(D + timedelta(days=1), te + timedelta(days=1))) if te > D else 0,
+                  earn_seb_sumber=sb)
+    return db
 
 
 def baca_csv(p):
@@ -465,25 +488,29 @@ def main(argv=None):
     sb = baca_csv(os.path.join(a.folder, 'senarai_beli.csv'))
     lihat = {r['saham'] for r in sb}
     # watchlist (dibahagi bawah had saiz)
+    import kalendar_earnings as KE
+    KAL = KE.muat()   # tarikh earnings sebenar (earn_sebenar) bagi ringkas_c/m dan watchlist
     wl = baca_csv(os.path.join(a.folder, 'watchlist.csv'))
     docs['papertrade/watchlist'] = dict(
         definisi='Hampir Signal: semua syarat entry selain pencetus dipenuhi; pencetus dalam <=2% (pct_dipenuhi = 100 - jarak_pct, '
                  'maks 99.9). Maks 5 setiap kaedah. Terkeluar signal dibuang serta-merta (tugasan_v3 §3).',
         dibina=malam.get('masa', dibina), gred_pada=st.get('gred', {}).get('tarikh', ''), pemangkin_pada=st.get('gred', {}).get('tarikh', ''),
-        tarikh_data=wl[0]['tarikh_data'] if wl else S, rows=[baris_db(r, PETA_WATCH) for r in wl])
+        tarikh_data=wl[0]['tarikh_data'] if wl else S, rows=[earn_sebenar(baris_db(r, PETA_WATCH), r, KAL) for r in wl])
     # prestasi
     mae = penurunan_maks(M, C, a.stor)
-    docs['prestasi/mae'] = dict(rows=mae, atr=atr_isyarat(M, C, a.stor), dibina=dibina, harga_hingga=f'{S} tutup',
-                                definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude). atr: ATR14 % pada hari isyarat (kunci sama).')
-    if bait(docs['prestasi/mae']) >= HAD_DB - 2000:   # 23 Okt 2026: mae + atr melebihi had satu dokumen; halaman jatuh balik ÷ √hari tanpa atr
-        docs['prestasi/mae'].pop('atr'); print('amaran: prestasi/mae melebihi had db — atr digugurkan (perlu pembahagian dokumen + halaman)', file=sys.stderr)
+    docs['prestasi/mae'] = dict(rows=mae, dibina=dibina, harga_hingga=f'{S} tutup',
+                                definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude). ATR isyarat: prestasi/mae_atr.')
+    # 23 Okt 2026: atr dipindah ke dokumen sendiri (dibahagi) kerana mae + atr melebihi had satu dokumen
+    docs['prestasi/mae_atr'] = dict(rows=sorted([k, v] for k, v in atr_isyarat(M, C, a.stor).items()), dibina=dibina,
+                                    harga_hingga=f'{S} tutup', definisi='ATR14 % pada hari isyarat (bar terakhir sebelum hari beli). '
+                                    'rows: [akaun|saham|kaedah|tarikh_beli, %].')
     docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
                                       nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
     # papertrade/ringkas_c, ringkas_m: semua baris dalam bentuk padat (halaman v90 membaca ini sahaja, bukan claude*)
     pra = {}
     dc = docs.get('papertrade/claude', {})
-    for kod, R, meta in (('c', [baris_db(r) for r in C], {k: dc[k] for k in ('dibina', 'harga_pada', 'nota', 'slot', 'batal') if k in dc}),
-                         ('m', [baris_db(r) for r in M], {k: v for k, v in docs['papertrade/moomoo'].items() if k != 'rows'})):
+    for kod, R, meta in (('c', [earn_sebenar(baris_db(r), r, KAL) for r in C], {k: dc[k] for k in ('dibina', 'harga_pada', 'nota', 'slot', 'batal') if k in dc}),
+                         ('m', [earn_sebenar(baris_db(r), r, KAL) for r in M], {k: v for k, v in docs['papertrade/moomoo'].items() if k != 'rows'})):
         for doc_id, d in ringkas_pt(R, f'ringkas_{kod}', meta):
             pra[f'papertrade/{doc_id}'] = d
     garis, mfe = garis_harga(M, C, a.stor)
@@ -537,7 +564,7 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     versi = json.load(open(a.versi)) if a.versi else {}
     tulis = []
-    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'harian_kaedah', 'trend', 'lorong2')
+    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'lorong2')
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
     semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
     for kol, bahagian in semua:

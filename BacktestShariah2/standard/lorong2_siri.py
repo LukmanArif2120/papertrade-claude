@@ -47,9 +47,9 @@ def siri(g, tb, sampai=0, sebelum=SEBELUM):
 
 
 def posisi(folder=PT):
-    """{(saham, tarikh_beli int): sampai int (0 = masih dipegang)} bagi posisi Papertrade C yang sah."""
+    """{(saham, tarikh_beli int): sampai int (0 = masih dipegang)} bagi posisi Papertrade C dan Moomoo lama yang sah."""
     P = {}
-    for p in glob.glob(os.path.join(folder, 'claude*.csv')):
+    for p in glob.glob(os.path.join(folder, 'claude*.csv')) + glob.glob(os.path.join(folder, 'moomoo.csv')):
         with open(p, encoding='utf-8') as f:
             rows = list(csv.DictReader(f))
         for r in rows:

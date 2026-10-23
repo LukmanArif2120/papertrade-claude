@@ -6,6 +6,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'standard'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'kod'))
 import gred as G  # noqa: E402
 import henti_isi as HI  # noqa: E402
+import kalendar_earnings as KE  # noqa: E402
+import qr_isi as QI  # noqa: E402
+from datetime import date  # noqa: E402
 
 
 class RsPendek(unittest.TestCase):
@@ -32,6 +35,30 @@ class ParasHenti(unittest.TestCase):
         self.assertEqual(HI.paras_henti(m, g, 1), (9.5, 'harga'))
         self.assertEqual(HI.paras_henti(m, g, 0), (8.0, 'tutup'))
         self.assertEqual(HI.paras_henti(types.SimpleNamespace(), g, 0), (None, None))
+
+
+class Kalendar(unittest.TestCase):
+    def setUp(self):
+        d = lambda s: date.fromisoformat(s)
+        self.K = {'Q': {d(x): 'Nasdaq' for x in ('2025-11-03', '2026-02-02', '2026-05-04', '2026-08-03', '2026-11-02')},
+                  'H': {d(x): 'Moomoo earnings_price_history' for x in ('2025-02-20', '2025-07-30', '2026-02-19', '2026-07-14')},
+                  'G': {d('2026-02-17'): 'Nasdaq', d('2026-11-03'): 'yfinance'}}
+        self.K['H'][d('2027-02-18')] = 'yfinance'
+
+    def test_seterusnya(self):
+        D = date(2026, 10, 12)
+        self.assertEqual(KE.seterusnya(self.K, 'Q', D)[0], date(2026, 11, 2))
+        self.assertEqual(KE.seterusnya(self.K, 'H', D)[0], date(2027, 2, 18))      # separuh tahun: kitaran ~180 hari
+        self.assertEqual(KE.seterusnya(self.K, 'G', date(2026, 10, 22))[0], date(2026, 11, 3))   # <= 80 hari
+        self.assertIsNone(KE.seterusnya(self.K, 'G', date(2026, 7, 1))[0])          # jurang data: tidak dipercayai
+
+    def test_anggaran_lepas_ditolak(self):
+        K = {'S': {date(2025, 10, 21): 'Moomoo earnings_price_history', date(2026, 3, 2): 'Moomoo earnings_price_history',
+                   date(2026, 9, 1): 'Moomoo earnings_price_history'}}
+        nx, sebab = QI.anggaran(K, 'S', date(2026, 10, 7), hari_ini=date(2026, 10, 23))
+        self.assertIsNone(nx); self.assertIn('sudah lepas', sebab)
+        nx, _ = QI.anggaran(K, 'S', date(2026, 10, 7), hari_ini=date(2026, 10, 15))
+        self.assertEqual(nx, date(2026, 10, 20))
 
 
 if __name__ == '__main__':
