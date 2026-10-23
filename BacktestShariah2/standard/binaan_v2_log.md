@@ -389,3 +389,15 @@
 - **Langkah 5c (kewangan):** `perlu` selepas CSV ditulis = 28 saham. Dikumpul 22 saham lengkap. TIDAK dikumpul (6): CARR, RL, PDFS, MLM, IIIN, HQ — dihentikan kerana kos token hasil inline besar; kekal "–" dan disenaraikan semula oleh `perlu`.
 - db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `senarai_beli` tidak ditolak; `harian/status` v35.
 - Tiada order. Tiada wang sebenar.
+
+## Imbas malam 23 Okt 2026 (data tutup 22 Okt)
+- Imbasan 134 kaedah: 3,483 isyarat mentah → `data/isyarat/2026-10-22_malam.csv.gz`; 778 s, tiada ralat. Skrin Moomoo 4 halaman (913 saham) = `terkini.csv` (beza 0 pada 925 ticker bertindih).
+- **Senarai beli** 770 baris, 316 saham, 105 kaedah; 36 belian semula (belian_ke ≥ 2). Mingguan ditolak: 69 (22 Okt Khamis bukan hari dagangan terakhir minggu, §3a). Ditolak: 456 kerana posisi Claude kaedah+saham yang sama masih terbuka; 2,140 melebihi had 10 setiap kaedah; 109 calon watchlist kini lengkap.
+- Penapis scanner: `ambil_alih` 9 (ATKR, BRZE, DV, PEN, PTC, RAMP, SLAB, SLP, TECH); `tidak_cair` 19 (AKA, BIO.B, BKHA, FEDU, ICCC, KELYB, KEQU, MAYS, MGRT, NCEW, NIPG, NSYS, PHOE, POLE, RGS, SENEB, STRR, VSECU, WLYB); `kelas_berganda` 0.
+- Pintu akhir (`tidak_layak.py fail --tulis`, langkah 6): 7 baris senarai beli dibuang, semuanya kelas berganda — FOX (M31, M34, M131, M148) dan NWS (M105, M124, M151). Selepas itu `fail` = 0 dibuang.
+- **Watchlist** 270 calon, 188 saham, 63 kaedah: 227 baharu, 43 dibawa, 109 dipindah ke senarai beli, 14 dibuang.
+- Jejak kertas M166 V1: dijalankan (baris 22 Okt); tiada belian.
+- Gred: S/I v2, RS, kewangan v7, QR dan pemangkin v3. SST (`market_events`) tidak tersedia → QR hanya daripada Nasdaq; gred QR "–" bagi 13 baris senarai beli dan 1 baris watchlist. Pemangkin: 0 Moomoo, 406 Yahoo/Nasdaq, 2 baris senarai beli "–" dan 1 baris watchlist "–" (tiada data); sementara ≤ 2 hari dipakai sehingga commit Actions "Data pemangkin" tiba (~12:33 UTC), kemudian `gred.py kumpul` + `tambah` diulang.
+- **Langkah 5c (kewangan):** `perlu` selepas CSV ditulis = 33 saham. Dikumpul 33 lengkap (LRCX, CRS, PHM, HUBG, SW, DORM, KFRC, JOUT, LEN, TILE, JBSS, JBTM, IPAR, ARW, CERT, STVN, EBF, WGS, MTH, WHR, WLK, CALM, WDFC, LFUS, HURC, MLR, AKAM, TEO, PNR, UFPI, JJSF, LZB, CCS). `perlu` akhir = 0 saham. Hasil besar disimpan alat ke fail (tiada kos token inline); beberapa panggilan ralat "orchestration error" diulang berjaya. Fail lama `data/kewangan` yang hanya berubah tarikh `dikumpul` dikembalikan (tidak di-commit). Langkah 5c tambahan "T:abcde" (separuh tahun, spec §12): tiada baris abcde dalam senarai `perlu` hari ini.
+- db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `senarai_beli` tidak ditolak; `harian/status` v39. Dokumen watchlist db sebelum tolakan ini telah ditulis ganti oleh larian lain (166 baris) — digantikan dengan 270 baris malam ini.
+- Tiada order. Tiada wang sebenar.
