@@ -1,115 +1,71 @@
 {
  "malam": {
-  "sesi": "2026-10-21",
-  "masa": "2026-10-22 14:23 MYT",
+  "sesi": "2026-10-22",
+  "masa": "2026-10-23 14:10 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 326,
+  "masa_kaedah_s": 324,
   "keluar_baru": {
    "M": {
-    "henti": 1,
-    "isyarat": 2
+    "henti": 1
    },
    "C": {
-    "sasaran": 17,
-    "henti": 62,
-    "isyarat": 39
+    "henti": 245,
+    "sasaran": 24,
+    "isyarat": 49
    }
   },
   "keluar_baru_jumlah": {
-   "M": 3,
-   "C": 118
+   "M": 1,
+   "C": 318
   },
-  "menunggu": 51,
-  "harga_beli_dibetulkan": 111,
-  "harga_beli_beza_besar": 22,
-  "tidak_dibeli": [
-   "EXPO M35",
-   "CRAI M117"
-  ],
+  "menunggu": 77,
+  "harga_beli_dibetulkan": 86,
+  "harga_beli_beza_besar": 21,
+  "tidak_dibeli": [],
   "nota": [
    "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
-   "C WLYB M30: tiada bar 2026-10-21 (harga terkini 2026-10-20)",
-   "C ATKR M11: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M66: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C WLYB M74: tiada bar 2026-10-21 (harga terkini 2026-10-20)",
-   "C ATKR M36: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M54: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M95: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M100: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M101: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M57: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M127: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C ATKR M102: tiada bar 2026-10-21 (harga terkini 2026-10-16)",
-   "C WLYB M80: tiada bar 2026-10-21 (harga terkini 2026-10-20)"
+   "C ASC M93: tiada bar 2026-10-22 (harga terkini 2026-10-21)",
+   "C ASC M39: tiada bar 2026-10-22 (harga terkini 2026-10-21)"
   ],
   "tidak_layak_posisi": {
    "ambil_alih": {
-    "ditutup": 89,
+    "ditutup": 0,
     "menunggu": 0,
-    "saham": [
-     "ATKR",
-     "BRZE",
-     "DV",
-     "PEN",
-     "PTC",
-     "RAMP",
-     "SLAB",
-     "TECH"
-    ]
+    "saham": []
    },
    "delist": {
     "ditutup": 0,
     "saham": []
    },
    "tidak_cair": {
-    "tidak_sah": 23,
-    "saham": [
-     "AKA",
-     "BKHA",
-     "FEDU",
-     "KELYB",
-     "MAYS",
-     "MGRT",
-     "PHOE",
-     "SENEB",
-     "WLYB"
-    ]
+    "tidak_sah": 0,
+    "saham": []
    },
    "kelas_berganda": {
-    "tidak_sah": 15,
-    "saham": [
-     "FOX",
-     "NWS"
-    ]
+    "tidak_sah": 0,
+    "saham": []
    },
    "faktor": {
     "dilaras": 0,
-    "semak": [
-     [
-      "claude_2.csv",
-      "RMR",
-      "M99",
-      "2026-10-13",
-      "2026-10-19"
-     ]
-    ]
+    "semak": [],
+    "dibuka_semula": []
    }
   },
-  "dagangan_betul": 10,
-  "senarai_beli": 681,
-  "saham_unik": 304,
-  "kaedah": 102,
-  "belian_semula": 30,
-  "dari_watchlist": 74,
-  "isyarat": 2839,
+  "dagangan_betul": 0,
+  "senarai_beli": 772,
+  "saham_unik": 318,
+  "kaedah": 104,
+  "belian_semula": 36,
+  "dari_watchlist": 110,
+  "isyarat": 3468,
   "ditolak": {
-   "dipegang": 317,
-   "had": 1657,
-   "tidak_cair": 45,
-   "ambil_alih": 47,
-   "kelas_berganda": 11,
-   "mingguan": 81
+   "dipegang": 460,
+   "had": 2107,
+   "tidak_cair": 15,
+   "kelas_berganda": 18,
+   "ambil_alih": 27,
+   "mingguan": 69
   },
   "tidak_layak": {
    "AKA": "tidak cair",
@@ -145,21 +101,21 @@
    "VSECU": "tidak cair",
    "WLYB": "tidak cair"
   },
-  "watchlist": 278,
-  "watchlist_baharu": 189,
-  "watchlist_dibuang": 122,
-  "watchlist_ke_senarai": 74,
+  "watchlist": 270,
+  "watchlist_baharu": 216,
+  "watchlist_dibuang": 114,
+  "watchlist_ke_senarai": 110,
   "minggu_akhir": false,
-  "fail_isyarat": "bayang/isyarat/2026-10-21_malam.csv.gz"
+  "fail_isyarat": "bayang/isyarat/2026-10-22_malam.csv.gz"
  },
  "gred": {
-  "tarikh": "2026-10-22",
-  "masa": "2026-10-22 20:23 MYT",
+  "tarikh": "2026-10-23",
+  "masa": "2026-10-23 14:16 MYT",
   "pemangkin": {
-   "–": 9,
-   "D": 190,
-   "C": 176,
-   "B": 306
+   "B": 354,
+   "C": 183,
+   "D": 230,
+   "–": 5
   }
  },
  "beli": {

@@ -50,3 +50,11 @@
 - Direkod 647 (293 saham; belian semula 28; fail claude_39.csv); dilangkau 34. Harga: buka sementara yfinance 10:17 NY.
 - Dilangkau: APPN M06: buka 48.70 > buka_maks 47.59; IAG M13: buka 16.90 <= henti 17.12; AUGO M14: buka 81.28 <= henti 83.24; AEM M20: buka 180.95 <= henti 182.64; B M20: buka 39.35 <= henti 39.84; CGAU M20: buka 21.30 <= henti 21.39; EMR M35: buka 160.79 <= henti 161.06; GGG M35: buka 73.11 <= henti 80.52; FTV M35: buka 57.97 <= henti 58.27; AUGO M49: buka 81.28 <= henti 85.25; OKTA M49: buka 207.26 <= henti 207.78; DHT M49: buka 23.75 <= henti 23.77; JCI M49: buka 148.38 <= henti 149.03; ARM M76: buka 217.07 <= henti 217.26; ASX M102: buka 40.06 <= henti 42.09; AMD M102: buka 523.62 <= henti 537.30; HPE M117: isyarat batal pada buka (peraturan kaedah); GGG M117: buka 73.11 <= henti 77.62; MSM M117: isyarat batal pada buka (peraturan kaedah); GGG M119: buka 73.11 <= henti 80.19; B M123: buka 39.35 <= henti 40.24; DGII M123: buka 73.82 <= henti 74.01; CGAU M125: isyarat batal pada buka (peraturan kaedah); MSM M128: isyarat batal pada buka (peraturan kaedah); B M139: isyarat batal pada buka (peraturan kaedah); IR M139: isyarat batal pada buka (peraturan kaedah); TSM M148: isyarat batal pada buka (peraturan kaedah); GGG M149: buka 73.11 <= henti 78.33; GGG M150: isyarat batal pada buka (peraturan kaedah); MSM M151: buka 126.01 <= henti 127.96.
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-23 14:10 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-10-22)
+- Keluar baharu 319 (C {'henti': 245, 'sasaran': 24, 'isyarat': 49}, M {'henti': 1}); menunggu buka sesi seterusnya: 77.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 86 (beza > 0.5%: 21). Tidak dibeli baharu: tiada.
+- Senarai beli 772 baris (318 saham, 104 kaedah; 110 daripada watchlist; belian semula 36). Ditolak: {'dipegang': 460, 'had': 2107, 'tidak_cair': 15, 'kelas_berganda': 18, 'ambil_alih': 27, 'mingguan': 69}.
+- Watchlist 270 (baharu 216, dibuang 114, ke senarai beli 110). Isyarat direkod: 3468 (bayang/isyarat/2026-10-22_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: M BB M31: bar isyarat 2026-09-30 tiada dalam stor; C ASC M93: tiada bar 2026-10-22 (harga terkini 2026-10-21); C ASC M39: tiada bar 2026-10-22 (harga terkini 2026-10-21).
+- Tiada order. Tiada wang sebenar.
