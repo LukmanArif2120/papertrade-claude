@@ -11,7 +11,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M159 Heikin-Ashi Trend | 596 | 132 | 464 | 12 | -2.72 | 2 | 2.01 | 0 |  | 40 | 0.17 | 6 |
 | M125 2-Bar Breakout | 454 | 20 | 434 | 0 | -8.73 | 3 | 2.03 | 0 |  | 30 | 166.86 | 443 |
 | M153 Range Leader | 406 | 122 | 284 | 24 | -1.85 | 2 | 3.08 | 0 |  | 43 | 0.18 | 6 |
-| M14 Walking with the Whales | 372 | 140 | 232 | 4 | -3.04 | 2 | 3.85 | 0 |  | 21 | 1.52 | 15 |
+| M14 Walking with the Whales | 372 | 140 | 232 | 4 | -3.04 | 2 | 3.84 | 0 |  | 21 | 1.52 | 15 |
 | M82 Arthur Hill Rotasi Sasaran 10% | 360 | 18 | 342 | 50 | 1.98 | 4 | 0.30 | 0 |  | 61 | 1.84 | 38 |
 | M155 Market Cycle Strategy | 286 | 7 | 279 | 0 | -9.14 | 3 | 0.84 | 0 |  | 49 | 1.56 | 17 |
 | M73 ADX(5) > 40 + Julat Terkecil 6 Hari | 282 | 106 | 176 | 73 | 0.78 | 3 | -1.65 | 0 |  | 63 | 0.18 | 5 |
@@ -47,12 +47,12 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M111 Sistem Volatiliti Wilder | 68 | 1 | 67 | 0 | -14.10 | 3 | 3.34 | 0 |  | 39 | 2.39 | 30 |
 | M30 BB Free Bar + Himpitan 50/2.5 | 67 | 7 | 60 | 0 | -4.26 | 3 | 4.51 | 0 |  | 37 | 3.80 | 34 |
 | M12 Parabolic SAR | 60 | 12 | 48 | 0 | -3.48 | 3 | 1.99 | 0 |  | 29 | 2.04 | 23 |
-| M156 Single Penetration (DiNapoli) | 60 | 2 | 58 | 0 | -8.63 | 2 | 1.96 | 0 |  | 52 | 0.69 | 9 |
+| M156 Single Penetration (DiNapoli) | 60 | 2 | 58 | 0 | -8.63 | 2 | 1.93 | 0 |  | 52 | 0.69 | 9 |
 | M123 CCI Correction (Lambert, ChartSchool) | 59 | 46 | 13 | 7 | -1.61 | 2 | 1.94 | 0 |  | 28 | 0.92 | 10 |
 | M39 Radge Pecahan Bollinger 100 hari | 58 | 1 | 57 | 0 | -7.13 | 1 | 2.69 | 0 |  | 37 | 9.11 | 96 |
 | M33 Supertrend + SMA10 | 56 | 3 | 53 | 0 | -11.20 | 4 | 3.14 | 0 |  | 40 | 1.65 | 33 |
 | M128 Inventory Retracement Bar (IRB, Rob Hoffman) | 54 | 4 | 50 | 0 | -5.16 | 2 | 2.80 | 0 |  | 34 | 0.55 | 12 |
-| M137 Livermore System | 53 | 1 | 52 | 0 | -1.03 | 1 | 3.67 | 0 |  | 35 | 4.22 | 37 |
+| M137 Livermore System | 53 | 1 | 52 | 0 | -1.03 | 1 | 3.64 | 0 |  | 35 | 4.22 | 37 |
 | M89 Chande 65sma-3cc | 51 | 7 | 44 | 0 | -5.05 | 1 | 2.68 | 0 |  | 34 | 1.83 | 26 |
 | M95 Nisbah Kebaharuan High 52 Minggu (Bhootra & Hur) | 50 | 1 | 49 | 0 | -5.54 | 2 | 2.03 | 0 |  | 32 | 2.68 | 29 |
 | M99 Three Line Break | 47 | 12 | 35 | 0 | -5.01 | 2 | 4.21 | 0 |  | 40 | 1.17 | 16 |
