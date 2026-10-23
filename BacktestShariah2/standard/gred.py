@@ -16,6 +16,7 @@
 import sys, os, re, csv, json, argparse
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from datetime import date, datetime, timedelta, timezone
+import kalendar_earnings as KE  # noqa: E402
 
 import numpy as np
 import pandas as pd
@@ -258,6 +259,17 @@ def peta_sektor(path_csv):
 
 
 # ---------- QR: jarak ke laporan suku (earnings) ----------
+_KAL = None
+
+
+def kalendar_gabung():
+    """Kalendar earnings gabungan (kalendar_earnings.muat), dimuat sekali."""
+    global _KAL
+    if _KAL is None:
+        _KAL = KE.muat()
+    return _KAL
+
+
 def hari_dagangan(dari, ke):
     """Bilangan hari bekerja (Isn–Jum) selepas `dari` hingga `ke` (anggaran hari dagangan; cuti diabaikan)."""
     if ke <= dari:
@@ -1047,6 +1059,11 @@ def tambah(a):
             te, sumber = date.fromisoformat(pem[t]['earnings_anggaran']), 'anggaran'
             if te < hari_ini or (liput_nas and te <= hari_ini + timedelta(days=35)):
                 te = None
+        if te is None and not liput_nas:
+            # kalendar gabungan (yfinance eps + Moomoo tambahan; audit 23 Okt 2026) bagi saham tanpa liputan Nasdaq/SST
+            tk, sk = KE.seterusnya(kalendar_gabung(), t, hari_ini)
+            if tk:
+                te, sumber = tk, sk
         h = None
         if te is None and ear is None and not liput_nas:
             r['tarikh_earnings'] = ''; r['hari_ke_earnings'] = ''; r['sumber_earnings'] = 'tiada data'; r['gred_qr'] = TIADA
