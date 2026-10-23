@@ -300,3 +300,4 @@
 - Fail: baris ditambah ke `claude_61.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_62` … `claude_72` (unjuran tertinggi 189,433 B). Dokumen db `papertrade/claude_61` … `claude_72` ditolak dalam dua batch; `harian/status` dikemas kini (beli_pada, beli_ringkas).
 - Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
 - Dilangkau 9: buka > buka_maks — FRPT M08, ROL M08, WS M08, NSIT M08; buka ≤ henti — COR M14, SSNC M23, PVH M70, GNTX M106, TANH M140. Tiada bertindih.
+- Sahkan buka (10:08 NY, `quote_history_kline` ktype 2 autype 0, 23 Okt): sampel LAUR 38.69, BFAM 70.64, ADSK 254.06, ZETA 33.19, M 23.975 — semuanya SAMA dengan harga_beli sementara; tiada pembetulan. Baki 6:02 pagi MYT mengesahkan semula.
