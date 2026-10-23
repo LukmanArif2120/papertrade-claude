@@ -58,3 +58,8 @@
 - Watchlist 270 (baharu 216, dibuang 114, ke senarai beli 110). Isyarat direkod: 3468 (bayang/isyarat/2026-10-22_malam.csv.gz).
 - Ralat kaedah: tiada. Nota: M BB M31: bar isyarat 2026-09-30 tiada dalam stor; C ASC M93: tiada bar 2026-10-22 (harga terkini 2026-10-21); C ASC M39: tiada bar 2026-10-22 (harga terkini 2026-10-21).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-23 22:15 MYT — GitHub Actions: beli maya 2026-10-23 (isyarat 2026-10-22)
+- Direkod 763 (314 saham; belian semula 36; fail claude_45.csv); dilangkau 9. Harga: buka sementara yfinance 10:15 NY.
+- Dilangkau: FRPT M08: buka 67.01 > buka_maks 66.15; ROL M08: buka 35.26 > buka_maks 33.39; WS M08: buka 40.03 > buka_maks 39.90; NSIT M08: buka 172.77 > buka_maks 170.67; SSNC M23: buka 86.36 <= henti 87.42; PVH M70: buka 82.25 <= henti 83.15; GNTX M106: buka 20.21 <= henti 20.77; PEGA M153: isyarat batal pada buka (peraturan kaedah); NEOG M153: isyarat batal pada buka (peraturan kaedah).
+- Tiada order. Tiada wang sebenar.
