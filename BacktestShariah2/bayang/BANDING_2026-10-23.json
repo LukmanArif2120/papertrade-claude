@@ -1,0 +1,315 @@
+[
+ {
+  "peringkat": "kemas",
+  "commit": "da528ff",
+  "sesi": "2026-10-22",
+  "ringkas": {
+   "sesi": "2026-10-22",
+   "masa": "2026-10-23 06:12 MYT",
+   "ralat_kaedah": [],
+   "kaedah_tanpa_modul": [],
+   "masa_kaedah_s": 211,
+   "keluar_baru": {
+    "M": {
+     "henti": 1
+    },
+    "C": {
+     "henti": 245,
+     "sasaran": 22,
+     "isyarat": 48
+    }
+   },
+   "keluar_baru_jumlah": {
+    "M": 1,
+    "C": 315
+   },
+   "menunggu": 76,
+   "harga_beli_dibetulkan": 400,
+   "harga_beli_beza_besar": 79,
+   "tidak_dibeli": [
+    "FTV M35",
+    "APA M70",
+    "HPE M117",
+    "MSM M117",
+    "CGAU M125",
+    "MSM M128",
+    "B M139",
+    "IR M139",
+    "TSM M148",
+    "GGG M150",
+    "MSM M152",
+    "ASST M153",
+    "ZETA M153",
+    "AMD M154"
+   ],
+   "nota": [],
+   "tidak_layak_posisi": {
+    "ambil_alih": {
+     "ditutup": 0,
+     "menunggu": 0,
+     "saham": []
+    },
+    "delist": {
+     "ditutup": 0,
+     "saham": []
+    },
+    "tidak_cair": {
+     "tidak_sah": 0,
+     "saham": []
+    },
+    "kelas_berganda": {
+     "tidak_sah": 0,
+     "saham": []
+    },
+    "faktor": {
+     "dilaras": 0,
+     "semak": [],
+     "dibuka_semula": []
+    }
+   },
+   "dagangan_betul": 0
+  },
+  "stat": {
+   "diubah_claude": 4022,
+   "dibanding": 5095,
+   "harga_beli_sama": 5094,
+   "keluar_sama": 5095,
+   "harga_terkini_sama": 3693,
+   "teks_sama": 4977,
+   "harga_keluar_sama": 1402,
+   "tidak_dibeli_sama": 63,
+   "baris": 5158,
+   "hanya_kami": 0,
+   "hanya_claude": 0
+  },
+  "beza": {
+   "harga_beli": [
+    "('C', 'M93', 'SITE', '2026-10-21', '2026-10-22'): kami 97.94 / Claude 97.53"
+   ],
+   "tidak_dibeli": [],
+   "keluar": [],
+   "harga_keluar": [],
+   "harga_terkini": []
+  },
+  "hanya_kami": [],
+  "hanya_claude": []
+ },
+ {
+  "peringkat": "imbas",
+  "commit": "9a99c0e..ccc9945",
+  "sesi": "2026-10-22",
+  "ringkas": {
+   "sesi": "2026-10-22",
+   "masa": "2026-10-23 19:54 MYT",
+   "ralat_kaedah": [],
+   "kaedah_tanpa_modul": [],
+   "masa_kaedah_s": 221,
+   "keluar_baru": {
+    "M": {},
+    "C": {}
+   },
+   "keluar_baru_jumlah": {
+    "M": 0,
+    "C": 0
+   },
+   "menunggu": 76,
+   "harga_beli_dibetulkan": 0,
+   "harga_beli_beza_besar": 0,
+   "tidak_dibeli": [],
+   "nota": [],
+   "tidak_layak_posisi": {
+    "ambil_alih": {
+     "ditutup": 0,
+     "menunggu": 0,
+     "saham": []
+    },
+    "delist": {
+     "ditutup": 0,
+     "saham": []
+    },
+    "tidak_cair": {
+     "tidak_sah": 0,
+     "saham": []
+    },
+    "kelas_berganda": {
+     "tidak_sah": 0,
+     "saham": []
+    },
+    "faktor": {
+     "dilaras": 0,
+     "semak": [],
+     "dibuka_semula": []
+    }
+   },
+   "dagangan_betul": 0,
+   "senarai_beli": 776,
+   "saham_unik": 317,
+   "kaedah": 105,
+   "belian_semula": 36,
+   "dari_watchlist": 109,
+   "isyarat": 3484,
+   "ditolak": {
+    "dipegang": 456,
+    "had": 2123,
+    "tidak_cair": 15,
+    "kelas_berganda": 18,
+    "ambil_alih": 27,
+    "mingguan": 69
+   },
+   "tidak_layak": {
+    "AKA": "tidak cair",
+    "ATKR": "ambil alih",
+    "BELFA": "kelas berganda",
+    "BIO.B": "tidak cair",
+    "BKHA": "tidak cair",
+    "BRZE": "ambil alih",
+    "DV": "ambil alih",
+    "FEDU": "tidak cair",
+    "FOX": "kelas berganda",
+    "ICCC": "tidak cair",
+    "KELYB": "tidak cair",
+    "KEQU": "tidak cair",
+    "MAYS": "tidak cair",
+    "MGRT": "tidak cair",
+    "NCEW": "tidak cair",
+    "NIPG": "tidak cair",
+    "NSYS": "tidak cair",
+    "NWS": "kelas berganda",
+    "PEN": "ambil alih",
+    "PHOE": "tidak cair",
+    "POLE": "tidak cair",
+    "PTC": "ambil alih",
+    "RAMP": "ambil alih",
+    "RGS": "tidak cair",
+    "RUSHB": "kelas berganda",
+    "SENEB": "tidak cair",
+    "SLAB": "ambil alih",
+    "SLP": "ambil alih",
+    "STRR": "tidak cair",
+    "TECH": "ambil alih",
+    "VSECU": "tidak cair",
+    "WLYB": "tidak cair"
+   },
+   "watchlist": 270,
+   "watchlist_baharu": 218,
+   "watchlist_dibuang": 5,
+   "watchlist_ke_senarai": 109,
+   "minggu_akhir": false,
+   "fail_isyarat": "../../../../../../tmp/bayang_ha6rkr1q/imbas/isyarat/2026-10-22_malam.csv.gz"
+  },
+  "stat": {
+   "senarai_kami": 776,
+   "senarai_claude": 770,
+   "senarai_sama": 770,
+   "henti_sama": 768,
+   "sasaran_sama": 769,
+   "belian_ke_sama": 770,
+   "gred_sektor_sama": 770,
+   "gred_industri_sama": 770,
+   "gred_rs_sama": 767,
+   "gred_qr_sama": 770,
+   "gred_pemangkin_sama": 766,
+   "watch_kami": 270,
+   "watch_claude": 270,
+   "watch_sama": 260
+  },
+  "beza": {
+   "hanya_kami": [
+    "('AEP', 'M148', '2026-10-22') asal=isyarat rank? sumber=431",
+    "('CP', 'M105', '2026-10-22') asal=isyarat rank? sumber=431",
+    "('LEN', 'M124', '2026-10-22') asal=isyarat rank? sumber=431",
+    "('MDT', 'M131', '2026-10-22') asal=isyarat rank? sumber=431",
+    "('NWSA', 'M31', '2026-10-22') asal=isyarat rank? sumber=431",
+    "('PNR', 'M106', '2026-10-22') asal=isyarat rank? sumber=431"
+   ],
+   "hanya_claude": [],
+   "henti": [
+    "('SIG', 'M102', '2026-10-22'): kami 114.31 / Claude 113.968",
+    "('SIG', 'M35', '2026-10-22'): kami 114.31 / Claude 113.968"
+   ],
+   "sasaran": [
+    "('NKE', 'M18', '2026-10-22'): kami 85.4822 / Claude 85.8231"
+   ],
+   "gred": [
+    "('CRAI', 'M119', '2026-10-22') gred_rs: kami D / Claude C",
+    "('CRAI', 'M132', '2026-10-22') gred_rs: kami D / Claude C",
+    "('CRAI', 'M23', '2026-10-22') gred_rs: kami D / Claude C",
+    "('SNN', 'M127', '2026-10-22') gred_pemangkin: kami – / Claude D",
+    "('SNN', 'M49', '2026-10-22') gred_pemangkin: kami – / Claude D",
+    "('SNN', 'M79', '2026-10-22') gred_pemangkin: kami – / Claude D",
+    "('SNN', 'M93', '2026-10-22') gred_pemangkin: kami – / Claude D"
+   ],
+   "belian_ke": []
+  },
+  "watch_hanya_kami": [
+   "('APA', 'M78')",
+   "('CAH', 'M23')",
+   "('CAH', 'M36')",
+   "('DAC', 'M26')",
+   "('DVN', 'M20')",
+   "('HBB', 'M77')",
+   "('IOSP', 'M100')",
+   "('NVO', 'M25')",
+   "('RBRK', 'M12')",
+   "('SWK', 'M06')"
+  ],
+  "watch_hanya_claude": [
+   "('AAPL', 'M25')",
+   "('ALLE', 'M78')",
+   "('AR', 'M12')",
+   "('GRMN', 'M100')",
+   "('PFE', 'M06')",
+   "('PTEN', 'M20')",
+   "('RXO', 'M36')",
+   "('SHEL', 'M23')",
+   "('TWLO', 'M77')",
+   "('ZUMZ', 'M26')"
+  ]
+ },
+ {
+  "peringkat": "beli",
+  "commit": "65ccd93",
+  "tarikh": "2026-10-23",
+  "ringkas": {
+   "tarikh": "2026-10-23",
+   "masa": "2026-10-23 21:38 MYT",
+   "isyarat": "2026-10-22",
+   "calon": 770,
+   "direkod": 761,
+   "dilangkau": 9,
+   "langkau": [
+    "FRPT M08: buka 67.01 > buka_maks 66.15",
+    "ROL M08: buka 35.26 > buka_maks 33.39",
+    "WS M08: buka 40.03 > buka_maks 39.90",
+    "NSIT M08: buka 172.77 > buka_maks 170.67",
+    "SSNC M23: buka 87.19 <= henti 87.42",
+    "PVH M70: buka 82.25 <= henti 83.15",
+    "GNTX M106: buka 20.21 <= henti 20.77",
+    "TANH M140: buka 17.77 <= henti 21.11",
+    "PEGA M153: isyarat batal pada buka (peraturan kaedah)"
+   ],
+   "saham_unik": 312,
+   "sumber_buka": "buka bar harian (ulang tayang)",
+   "fail": "claude_61.csv",
+   "belian_semula": 36,
+   "buka_lewat": []
+  },
+  "stat": {
+   "direkod_kami": 761,
+   "direkod_claude": 761,
+   "sama": 760,
+   "harga_banding_betul": 760,
+   "harga_sama_betul": 760,
+   "harga_sama_sementara": 360
+  },
+  "beza": {
+   "hanya_kami": [
+    "('M14', 'COR')"
+   ],
+   "hanya_claude": [
+    "('M153', 'PEGA')"
+   ],
+   "harga_lawan_betul": []
+  }
+ }
+]

@@ -1,32 +1,37 @@
 {
  "malam": {
-  "sesi": "2026-10-22",
-  "masa": "2026-10-23 14:10 MYT",
+  "sesi": "2026-10-23",
+  "masa": "2026-10-24 14:22 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 324,
+  "masa_kaedah_s": 233,
   "keluar_baru": {
    "M": {
-    "henti": 1
+    "isyarat": 3
    },
    "C": {
-    "henti": 245,
-    "sasaran": 24,
-    "isyarat": 49
+    "sasaran": 15,
+    "henti": 88,
+    "isyarat": 74
    }
   },
   "keluar_baru_jumlah": {
-   "M": 1,
-   "C": 318
+   "M": 3,
+   "C": 177
   },
-  "menunggu": 77,
-  "harga_beli_dibetulkan": 86,
-  "harga_beli_beza_besar": 21,
+  "menunggu": 57,
+  "harga_beli_dibetulkan": 68,
+  "harga_beli_beza_besar": 12,
   "tidak_dibeli": [],
   "nota": [
-   "M BB M31: bar isyarat 2026-09-30 tiada dalam stor",
-   "C ASC M93: tiada bar 2026-10-22 (harga terkini 2026-10-21)",
-   "C ASC M39: tiada bar 2026-10-22 (harga terkini 2026-10-21)"
+   "C ACA M54: tiada bar 2026-10-23 (harga terkini 2026-10-22)",
+   "C ACA M95: tiada bar 2026-10-23 (harga terkini 2026-10-22)",
+   "C ACA M06: tiada bar 2026-10-23 (harga terkini 2026-10-22)",
+   "C ACA M23: tiada bar 2026-10-23 (harga terkini 2026-10-22)",
+   "C ACA M46: tiada bar 2026-10-23 (harga terkini 2026-10-22)",
+   "C ACA M100: tiada bar 2026-10-23 (harga terkini 2026-10-22)",
+   "C ACA M101: tiada bar 2026-10-23 (harga terkini 2026-10-22)",
+   "C ACA M120: tiada bar 2026-10-23 (harga terkini 2026-10-22)"
   ],
   "tidak_layak_posisi": {
    "ambil_alih": {
@@ -53,26 +58,24 @@
    }
   },
   "dagangan_betul": 0,
-  "senarai_beli": 772,
-  "saham_unik": 318,
-  "kaedah": 104,
-  "belian_semula": 36,
-  "dari_watchlist": 110,
-  "isyarat": 3468,
+  "senarai_beli": 701,
+  "saham_unik": 290,
+  "kaedah": 105,
+  "belian_semula": 52,
+  "dari_watchlist": 92,
+  "isyarat": 2668,
   "ditolak": {
-   "dipegang": 460,
-   "had": 2107,
-   "tidak_cair": 15,
-   "kelas_berganda": 18,
-   "ambil_alih": 27,
-   "mingguan": 69
+   "dipegang": 477,
+   "tidak_cair": 44,
+   "had": 1411,
+   "ambil_alih": 28,
+   "kelas_berganda": 7
   },
   "tidak_layak": {
    "AKA": "tidak cair",
    "ATKR": "ambil alih",
    "BELFA": "kelas berganda",
    "BIO.B": "tidak cair",
-   "BKHA": "tidak cair",
    "BRZE": "ambil alih",
    "DV": "ambil alih",
    "FEDU": "tidak cair",
@@ -101,21 +104,22 @@
    "VSECU": "tidak cair",
    "WLYB": "tidak cair"
   },
-  "watchlist": 270,
-  "watchlist_baharu": 216,
-  "watchlist_dibuang": 114,
-  "watchlist_ke_senarai": 110,
-  "minggu_akhir": false,
-  "fail_isyarat": "bayang/isyarat/2026-10-22_malam.csv.gz"
+  "watchlist": 267,
+  "watchlist_baharu": 179,
+  "watchlist_dibuang": 90,
+  "watchlist_ke_senarai": 92,
+  "minggu_akhir": true,
+  "fail_isyarat": "bayang/isyarat/2026-10-23_malam.csv.gz"
  },
  "gred": {
-  "tarikh": "2026-10-23",
-  "masa": "2026-10-23 20:21 MYT",
+  "tarikh": "2026-10-24",
+  "masa": "2026-10-24 14:26 MYT",
   "pemangkin": {
-   "B": 355,
-   "C": 183,
-   "D": 230,
-   "–": 4
+   "D": 159,
+   "C": 167,
+   "B": 354,
+   "A": 12,
+   "–": 9
   }
  },
  "beli": {

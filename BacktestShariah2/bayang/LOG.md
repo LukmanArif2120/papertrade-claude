@@ -63,3 +63,11 @@
 - Direkod 763 (314 saham; belian semula 36; fail claude_45.csv); dilangkau 9. Harga: buka sementara yfinance 10:15 NY.
 - Dilangkau: FRPT M08: buka 67.01 > buka_maks 66.15; ROL M08: buka 35.26 > buka_maks 33.39; WS M08: buka 40.03 > buka_maks 39.90; NSIT M08: buka 172.77 > buka_maks 170.67; SSNC M23: buka 86.36 <= henti 87.42; PVH M70: buka 82.25 <= henti 83.15; GNTX M106: buka 20.21 <= henti 20.77; PEGA M153: isyarat batal pada buka (peraturan kaedah); NEOG M153: isyarat batal pada buka (peraturan kaedah).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-24 14:22 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-10-23)
+- Keluar baharu 180 (C {'sasaran': 15, 'henti': 88, 'isyarat': 74}, M {'isyarat': 3}); menunggu buka sesi seterusnya: 57.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 68 (beza > 0.5%: 12). Tidak dibeli baharu: tiada.
+- Senarai beli 701 baris (290 saham, 105 kaedah; 92 daripada watchlist; belian semula 52). Ditolak: {'dipegang': 477, 'tidak_cair': 44, 'had': 1411, 'ambil_alih': 28, 'kelas_berganda': 7}.
+- Watchlist 267 (baharu 179, dibuang 90, ke senarai beli 92). Isyarat direkod: 2668 (bayang/isyarat/2026-10-23_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: C ACA M54: tiada bar 2026-10-23 (harga terkini 2026-10-22); C ACA M95: tiada bar 2026-10-23 (harga terkini 2026-10-22); C ACA M06: tiada bar 2026-10-23 (harga terkini 2026-10-22); C ACA M23: tiada bar 2026-10-23 (harga terkini 2026-10-22); C ACA M46: tiada bar 2026-10-23 (harga terkini 2026-10-22); C ACA M100: tiada bar 2026-10-23 (harga terkini 2026-10-22); C ACA M101: tiada bar 2026-10-23 (harga terkini 2026-10-22); C ACA M120: tiada bar 2026-10-23 (harga terkini 2026-10-22).
+- Tiada order. Tiada wang sebenar.
