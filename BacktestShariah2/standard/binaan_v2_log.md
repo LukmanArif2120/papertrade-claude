@@ -401,3 +401,6 @@
 - **Langkah 5c (kewangan):** `perlu` selepas CSV ditulis = 33 saham. Dikumpul 33 lengkap (LRCX, CRS, PHM, HUBG, SW, DORM, KFRC, JOUT, LEN, TILE, JBSS, JBTM, IPAR, ARW, CERT, STVN, EBF, WGS, MTH, WHR, WLK, CALM, WDFC, LFUS, HURC, MLR, AKAM, TEO, PNR, UFPI, JJSF, LZB, CCS). `perlu` akhir = 0 saham. Hasil besar disimpan alat ke fail (tiada kos token inline); beberapa panggilan ralat "orchestration error" diulang berjaya. Fail lama `data/kewangan` yang hanya berubah tarikh `dikumpul` dikembalikan (tidak di-commit). Langkah 5c tambahan "T:abcde" (separuh tahun, spec §12): tiada baris abcde dalam senarai `perlu` hari ini.
 - db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `senarai_beli` tidak ditolak; `harian/status` v39. Dokumen watchlist db sebelum tolakan ini telah ditulis ganti oleh larian lain (166 baris) — digantikan dengan 270 baris malam ini.
 - Tiada order. Tiada wang sebenar.
+
+## Analisis mingguan 2026-10-24 (Sabtu)
+- `WFO/kod/analisis_sebenar.py`: 122 kaedah; AMARAN 0, SELARI 1 (M20), data belum cukup 121. Kaedah AMARAN: tiada. db `analisis/sebenar` dikemas kini. Tiada order. Tiada wang sebenar.
