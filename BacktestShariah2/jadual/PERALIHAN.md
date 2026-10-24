@@ -54,8 +54,9 @@ membanding setiap hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`); `rasm
    pagi / Imbas 7:47 malam / Beli 9:35 NY" (`trig_01R2RcT5GZ4xGkncK5xa1jnH`, `trig_012DQb9KbjfhpKuopsMByNDh`,
    `trig_018pfWtxtyMaC6aaThn7UDCo`; sahkan dengan `list_triggers`) dan pengawas yang masih aktif (`trig_018zyZSoegh4fQWpWGv3wS9m`,
    `trig_01AJf4h6GffXNmHXmQsVzzGF`, `trig_018eaPB3VHoodMscT1s8BiLs`; 22 Okt sudah tiada dalam senarai aktif).
-5. Cipta dua tugasan berjadual baharu (`create_trigger`, `create_new_session_on_fire`=true, model `claude-sonnet-5-5`,
+5. Cipta tiga tugasan berjadual baharu (`create_trigger`, `create_new_session_on_fire`=true, model `claude-sonnet-5-5`,
    connectors yang perlu sahaja): tolak db `CRON_TZ=America/New_York 20 10 * * 1-6`, prompt "Ikut BacktestShariah2/jadual/tolak_db.md";
-   mingguan `CRON_TZ=Asia/Kuala_Lumpur 47 10 * * 0`, prompt "Ikut BacktestShariah2/jadual/mingguan.md".
+   mingguan `CRON_TZ=Asia/Kuala_Lumpur 47 10 * * 0`, prompt "Ikut BacktestShariah2/jadual/mingguan.md"; notifikasi harian
+   `CRON_TZ=Asia/Kuala_Lumpur 17 15 * * 2-6`, prompt "Ikut BacktestShariah2/jadual/notifikasi_harian.md" (permintaan pengguna 24 Okt 2026).
 6. Kemas kini `standard/tugasan_v3.md` §2, `jadual/README.md` dan `CLAUDE.md` (rutin harian = Actions); catat dalam log; commit + push.
 7. Jika `status_harian.json` tiada `malam` bagi sesi terakhir, tembak `harian.yml` sekali (workflow_dispatch).

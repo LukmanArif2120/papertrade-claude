@@ -22,7 +22,8 @@ Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e
    (pecah_claude/bahagi_db sudah dijalankan oleh Actions; skrip gagal jika mana-mana dokumen melebihi had 262,144 bait).
 5. Bagi setiap fail `batch_N.json` yang dicetak: `ArtifactData` `batch`, `writes` = kandungan fail itu (setiap entri sudah
    ada `file_path` dan `if_version`). Ditolak kerana versi berubah → ulang langkah 3–5 sekali.
-6. Notifikasi (langkah terakhir, juga jika gagal): `PushNotification`, status "proactive", satu baris < 200 aksara:
-   `Dashboard <tarikh>: sesi <S>, <n> keluar baharu, <m> senarai beli, <k> direkod hari ini<; tembak harian/beli jika ada>`
-   (angka daripada `BacktestShariah2/papertrade/status_harian.json`: malam.keluar_baru_jumlah, malam.senarai_beli, beli.direkod).
+6. Notifikasi belian (langkah terakhir, juga jika gagal; permintaan pengguna 24 Okt 2026, `jadual/notifikasi_harian.md`):
+   senarai workflow gagal seperti `notifikasi_harian.md` langkah 2, kemudian
+   `python3 BacktestShariah2/standard/notifikasi.py beli --gagal "<…>" --tambah "db <ok|gagal: sebab><; tembak harian/beli jika ada>"`
+   → `PushNotification`, status "proactive", mesej = baris itu TEPAT. "Kalau tak beli, cakap tak beli" (skrip menulisnya).
 Tiada commit diperlukan (sesi ini tidak mengubah fail repo).

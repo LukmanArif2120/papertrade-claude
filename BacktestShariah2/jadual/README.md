@@ -29,5 +29,5 @@ Keputusan pengguna 17 Okt 2026 (jimat token): kerja harian dipindah ke GitHub Ac
 `analisis.yml` dicetus sebaik `lejar.yml` siap (`standard/penganalisis.py`); rutin 6:02 menolak `analisis/papan` ke db.
 Mod dalam `BacktestShariah2/MOD_ACTIONS`: `bayang` (sekarang) = Actions menulis ke `BacktestShariah2/bayang/` dan membanding setiap
 hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`); tiga rutin di atas KEKAL RASMI sehingga peralihan.
-Selepas peralihan (`PERALIHAN.md`): rutin di atas dan pengawas dimatikan; sesi Claude hanya `tolak_db.md` (Isn–Sab 10:20 NY) dan
-`mingguan.md` (Ahad).
+Selepas peralihan (`PERALIHAN.md`): rutin di atas dan pengawas dimatikan; sesi Claude hanya `tolak_db.md` (Isn–Sab 10:20 NY; notifikasi belian),
+`notifikasi_harian.md` (Sel–Sab 3:17 petang MYT; notifikasi kemas kini + imbas) dan `mingguan.md` (Ahad).
