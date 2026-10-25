@@ -14,6 +14,8 @@
 #   python3 BacktestShariah2/kajian/macd/kaji_macd.py penapis    -> MACD sebagai penapis 134 kaedah (penapis*.csv;
 #                                                                   perlu dagangan KAJIAN_LORONG2/T daripada kaji_lorong2.py jana)
 #   python3 BacktestShariah2/kajian/macd/kaji_macd.py calon      -> kaedah gabungan terpilih: semua tempoh, rawak, slot (calon.csv)
+#   python3 BacktestShariah2/kajian/macd/kaji_macd.py konsisten  -> susunan ATR% / 20 slot / rejim (konsisten*.csv)
+#   python3 BacktestShariah2/kajian/macd/kaji_macd.py ma         -> MA10 silang MA20, SMA dan EMA (ma_*.csv; 25 Okt 2026)
 import argparse, glob, json, os, pickle, sys
 import numpy as np, pandas as pd
 from numba import njit
@@ -28,6 +30,7 @@ BERMASALAH = {'ASST', 'FCEL', 'MTDR', 'OVV', 'PR', 'SM', 'VAL', 'XENE'}   # LAPO
 TEMPOH = {'D2000_A': ('D2000', '2010-01-04', '2018-12-31'), 'D2000_B': ('D2000', '2019-01-02', '2026-10-16'),
           'D431': ('D431', '2019-11-01', '2026-10-02')}
 ISYARAT = ['Z', 'H', 'Hn', 'Hp']          # Z = garisan MACD silang atas 0; H = histogram jadi +ve; Hn/Hp = H di bawah/atas 0
+ISYARAT_MA = ['XS', 'XE']                 # XS = SMA10 silang atas SMA20; XE = EMA10 silang atas EMA20
 PENAPIS = ['F0', 'FT', 'FT2', 'FR', 'FRT']
 KELUAR = {0: 'kaedah (MACD/histogram < 0)', 2: 'Chandelier tutup 4xATR14', 3: 'masa 21 hari'}
 
@@ -110,13 +113,28 @@ def baca(nama):
     return _CACHE[nama]
 
 
+def jarak_ma(A, isy):
+    """MA10 - MA20 (XS: SMA, XE: EMA); EMA perlu >= 60 bar seperti MACD."""
+    if f'_{isy}' not in A:
+        C = pd.DataFrame(A['close'])
+        if isy == 'XS': d = C.rolling(10).mean() - C.rolling(20).mean()
+        else: d = (C.ewm(span=10, adjust=False).mean() - C.ewm(span=20, adjust=False).mean()).where(C.notna().cumsum() >= 60)
+        A[f'_{isy}'] = d.to_numpy(np.float64)
+    return A[f'_{isy}']
+
+
+def _semalam(x):
+    return np.vstack([np.full((1, x.shape[1]), np.nan, x.dtype), x[:-1]])
+
+
 def topeng(A, isy, pen):
     """Isyarat (pada tutup) x penapis -> bool tarikh x ticker. Penapis dinilai pada tutup hari isyarat."""
     m, hs = A['M'], A['Hs']
     with np.errstate(invalid='ignore'):
-        mp = np.vstack([np.full((1, m.shape[1]), np.nan, np.float32), m[:-1]])
-        hp = np.vstack([np.full((1, hs.shape[1]), np.nan, np.float32), hs[:-1]])
+        mp, hp = _semalam(m), _semalam(hs)
         if isy == 'Z': s = (mp <= 0) & (m > 0)
+        elif isy in ISYARAT_MA:
+            d = jarak_ma(A, isy); s = (_semalam(d) <= 0) & (d > 0)
         elif isy == 'SEMUA': s = np.isfinite(m)                 # kawalan: setiap hari penapis benar (tanpa masa MACD)
         else:
             s = (hp <= 0) & (hs > 0)
@@ -140,6 +158,10 @@ def _nw_t(x, lag):
 
 
 def cmd_peristiwa(a):
+    peristiwa(ISYARAT, 'peristiwa.csv')
+
+
+def peristiwa(senarai, fail):
     rows = []
     for tp, (nama, d0, d1) in TEMPOH.items():
         A = baca(nama); dts = pd.DatetimeIndex(A['dates']); ok = (dts >= d0) & (dts <= d1)
@@ -155,7 +177,7 @@ def cmd_peristiwa(a):
             for pen in PENAPIS:
                 E = topeng(A, 'SEMUA', pen) & np.isfinite(X)
                 xb = np.where(E, X, 0).sum(1) / np.maximum(E.sum(1), 1)
-                for isy in ISYARAT:
+                for isy in senarai:
                     S = topeng(A, isy, pen) & np.isfinite(X); n = S.sum(1); hd = n > 0
                     xs = np.where(S, X, 0).sum(1) / np.maximum(n, 1)
                     d_ = np.where(hd, xs - xb, np.nan)
@@ -166,13 +188,13 @@ def cmd_peristiwa(a):
                                      atasi_spy=(X[S] > 0).mean() * 100,
                                      lebihan_penapis=np.nanmean(d_) * 100, t_penapis=_nw_t(d_, h)))
             print(tp, h, flush=True)
-    R = pd.DataFrame(rows).round(3); R.to_csv(f'{HERE}/peristiwa.csv', index=False); print(R[R.h == 21].to_string())
+    R = pd.DataFrame(rows).round(3); R.to_csv(f'{HERE}/{fail}', index=False); print(R[R.h == 21].to_string())
 
 
 # ---------------------------------------------------------------- 3. dagangan + portfolio
 @njit(cache=True)
 def keluar(o, h, l, c, atr, m, hs, e, jenis, nmaks):
-    """Dagangan masuk buka e. jenis 0 = MACD < 0 pada tutup (isyarat Z) / histogram < 0 (isyarat H*) -> jual buka esok
+    """Dagangan masuk buka e. jenis 0 = m < 0 pada tutup (MACD bagi Z, MA10 - MA20 bagi XS/XE) / histogram < 0 (isyarat H*) -> jual buka esok
     (jenis 0 guna m, jenis 1 guna hs); 2 = Chandelier tutup 4xATR14 paras hanya naik -> jual buka esok; 3 = 21 bar ->
     jual tutup. Pulang (indeks keluar, harga keluar). Bar tanpa data dilangkau; data tamat -> tutup terakhir."""
     n = len(c); hc = -1e18; lv = -1e18; last = -1; bil = 0
@@ -255,8 +277,9 @@ def ffill(C):
     df = pd.DataFrame(C); return df.ffill().to_numpy(np.float64)
 
 
-def jana_dagangan(A, S, jenis, d0, d1, nmaks=0):
-    return dagangan(A['open'], A['high'], A['low'], A['close'], A['ATR'], A['M'], A['Hs'], S, jenis, d0, d1, nmaks)
+def jana_dagangan(A, S, jenis, d0, d1, nmaks=0, m=None):
+    return dagangan(A['open'], A['high'], A['low'], A['close'], A['ATR'], A['M'] if m is None else m, A['Hs'], S, jenis,
+                    d0, d1, nmaks)
 
 
 def susun(E, T, skor, benih=None):
@@ -300,8 +323,8 @@ def jalan(A, isy, pen, jenis, d0, d1, slots=10, w=0.10, benih=None, rejim=False,
     S = topeng(A, isy, pen)
     if rejim:                                     # beli baharu hanya bila SPY > SMA200
         sc = pd.Series(A['spy_c']); S = S & (sc > sc.rolling(200).mean()).to_numpy()[:, None]
-    jn = (1 if isy != 'Z' else 0) if jenis == 0 else jenis
-    E, X, T, B, R = jana_dagangan(A, S, jn, d0 - 1, d1 - 1, nmaks)
+    jn = (0 if isy == 'Z' or isy in ISYARAT_MA else 1) if jenis == 0 else jenis
+    E, X, T, B, R = jana_dagangan(A, S, jn, d0 - 1, d1 - 1, nmaks, jarak_ma(A, isy) if isy in ISYARAT_MA else None)
     sk = A['RS'][E - 1, T].astype(np.float64) if skor == 'rs' else -A['ATR'][E - 1, T] / A['close'][E - 1, T]
     o = susun(E, T, sk, benih)
     E, X, T, B, R = E[o], X[o], T[o], B[o], R[o]
@@ -445,9 +468,42 @@ def cmd_konsisten(a):
     print(R.groupby('tempoh')[['cagr', 'mdd', 'sharpe_bulan', 'bulan_untung']].median())
 
 
+# ---------------------------------------------------------------- 7. MA10 silang MA20 (permintaan pengguna 25 Okt 2026)
+def cmd_ma(a):
+    """SMA10/20 dan EMA10/20: kajian peristiwa, grid (keluar kaedah = MA10 silang bawah MA20), pilihan pra-daftar sama
+    seperti calon (Sharpe bulanan tertinggi D2000_A, CAGR > SPY, >= 20 dagangan setahun), kemudian pengesahan + 20 benih rawak."""
+    peristiwa(ISYARAT_MA, 'ma_peristiwa.csv')
+    rows = []; KEL = dict(KELUAR); KEL[0] = 'kaedah (MA10 < MA20)'
+    for tp, (nama, t0, t1) in TEMPOH.items():
+        A = baca(nama); d0, d1 = indeks(A, t0, t1)
+        for k, v in rujukan(A, d0, d1).items(): rows.append(dict(tempoh=tp, isyarat=k, **v))
+        for isy in ISYARAT_MA:
+            for pen in PENAPIS:
+                uji = [(j, 'rs', 10) for j in KEL] + [(2, 'atr_rendah', 20)]
+                for jenis, skor, slots in uji:
+                    m, _ = jalan(A, isy, pen, jenis, d0, d1, slots=slots, w=1 / slots, skor=skor)
+                    rows.append(dict(tempoh=tp, isyarat=isy, penapis=pen, keluar=KEL[jenis], susunan=skor, slot=slots, **m))
+            print(tp, isy, flush=True)
+        pd.DataFrame(rows).round(2).to_csv(f'{HERE}/ma_grid.csv', index=False)
+    G = pd.DataFrame(rows); spy = G[(G.tempoh == 'D2000_A') & (G.isyarat == 'SPY')].cagr.iloc[0]
+    A_ = G[(G.tempoh == 'D2000_A') & G.isyarat.isin(ISYARAT_MA) & (G.cagr > spy) & (G.dagangan_setahun >= 20)]
+    if not len(A_):
+        print('tiada konfigurasi mengatasi SPY dalam D2000_A'); return
+    p = A_.sort_values('sharpe_bulan', ascending=False).iloc[0]; print('pilih', p[['isyarat', 'penapis', 'keluar', 'susunan', 'slot']].to_dict())
+    jn = {v: k for k, v in KEL.items()}[p.keluar]; out = []
+    for tp, (nama, t0, t1) in TEMPOH.items():
+        A = baca(nama); d0, d1 = indeks(A, t0, t1)
+        for b in [None] + list(range(1, 21)):
+            m, _ = jalan(A, p.isyarat, p.penapis, jn, d0, d1, slots=int(p.slot), w=1 / p.slot, skor=p.susunan, benih=b)
+            out.append(dict(isyarat=p.isyarat, penapis=p.penapis, keluar=p.keluar, susunan=p.susunan, slot=int(p.slot),
+                            tempoh=tp, benih=b, **m))
+    R = pd.DataFrame(out); R.round(2).to_csv(f'{HERE}/ma_calon.csv', index=False)
+    print(R.assign(rawak=R.benih.notna()).groupby(['tempoh', 'rawak'])[['cagr', 'mdd', 'sharpe_bulan', 'bulan_untung']].median())
+
+
 if __name__ == '__main__':
     p = argparse.ArgumentParser(); s = p.add_subparsers(required=True)
     for n, f in (('sedia', cmd_sedia), ('peristiwa', cmd_peristiwa), ('sim', cmd_sim), ('penapis', cmd_penapis),
-                 ('calon', cmd_calon), ('konsisten', cmd_konsisten)):
+                 ('calon', cmd_calon), ('konsisten', cmd_konsisten), ('ma', cmd_ma)):
         s.add_parser(n).set_defaults(f=f)
     a = p.parse_args(); a.f(a)

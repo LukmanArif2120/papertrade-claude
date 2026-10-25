@@ -1,9 +1,9 @@
-# Kajian "MACD jadi positif" dan gabungan kaedah (25 Okt 2026)
+# Kajian "MACD jadi positif", MA10 silang MA20 dan gabungan kaedah (25 Okt 2026)
 
 Permintaan pengguna 25 Okt 2026: adakah MACD jadi positif satu isyarat yang baik, bolehkah kaedah digabung atau dicipta,
 dan bolehkah sasaran 10% sebulan dicapai? Keutamaan pengguna: **konsisten** (untung dalam kebanyakan bulan; pulangan lebih
 rendah diterima), tempoh pegang ikut data. Skrip: `kajian/macd/kaji_macd.py` (`sedia`, `peristiwa`, `sim`, `penapis`, `calon`,
-`konsisten`). Hasil: `kajian/macd/*.csv`. Rekod kajian sahaja; tiada peraturan papertrade, Lejar atau dashboard diubah.
+`konsisten`, `ma`). Hasil: `kajian/macd/*.csv`. Rekod kajian sahaja; tiada peraturan papertrade, Lejar atau dashboard diubah.
 
 ## Data dan kaedah
 - **D431**: data_mentah set 431 (423 saham selepas 8 saham bermasalah dibuang), Nov 2019 – Okt 2026. Kaedah 134 direka atas
@@ -112,9 +112,36 @@ Sel: CAGR % · MDD % · Sharpe bulanan · bulan untung · bulan terburuk % · bu
   sekitar −9% hingga −17%. Pada ukuran ini SPY (Sharpe bulanan 0.95–1.05, 65–69% bulan untung) tidak dikalahkan oleh mana-mana
   konfigurasi dalam tempoh pengesahan D2000 B.
 
+## 7. MA10 silang MA20 (permintaan pengguna 25 Okt 2026)
+Rangka sama (`kaji_macd.py ma`; `ma_peristiwa.csv`, `ma_grid.csv`, `ma_calon.csv`). `XS` = SMA10 silang ke atas SMA20, `XE` =
+EMA10 silang ke atas EMA20. Keluar kaedah = MA10 silang ke bawah MA20 (jual buka esok). Kaedah sedia ada yang hampir sama:
+M20 EMA10/15 + sudut dan M161 EMA10/21 + Supertrend (kedua-duanya gagal semakan 2000 saham AS dalam Papan Penganalisis).
+
+- Kajian peristiwa (120 ujian): **tiada t > 2**, 4 ujian t < −2; kadar atasi SPY 43–51%. Contoh 21 hari, lebihan atas penapis:
+  XS F0 −0.04% / −0.13% / −0.02% (t −0.42 / −1.13 / −0.11); XE F0 −0.06% / −0.12% / +0.16% (t −0.74 / −0.94 / 0.75)
+  bagi D2000 A / D2000 B / D431.
+- Portfolio (40 konfigurasi; sel seperti §3):
+
+| Konfigurasi | D2000 A | D2000 B | D431 |
+|---|---|---|---|
+| XS F0, keluar MA10 < MA20, RS 10 slot | 0.7 · -44 · 0.14 · 46% · -15 · 5% | -2.3 · -58 · 0.10 · 48% · -24 · 16% | 21.9 · -34 · 0.84 · 61% · -22 · 13% |
+| XE F0, keluar MA10 < MA20, RS 10 slot | 2.8 · -49 · 0.24 · 58% · -18 · 5% | -1.3 · -60 · 0.11 · 56% · -21 · 12% | 34.0 · -29 · 1.19 · 60% · -16 · 14% |
+| XS F0 Chandelier, RS 10 slot | 16.8 · -40 · 0.79 · 65% · -17 · 11% | 3.1 · -59 · 0.26 · 52% · -32 · 11% | 28.5 · -41 · 0.93 · 62% · -17 · 18% |
+| XE FR Chandelier, RS 10 slot | 7.4 · -42 · 0.43 · 57% · -17 · 9% | 6.8 · -60 · 0.36 · 56% · -25 · 20% | 41.7 · -27 · 1.29 · 61% · -15 · 24% |
+| XS FRT Chandelier, ATR% rendah 20 slot (pilihan pra-daftar) | 12.5 · -26 · 0.86 · 65% · -11 · 0% | 9.0 · -35 · 0.52 · 56% · -18 · 9% | 22.3 · -23 · 0.95 · 58% · -20 · 14% |
+| XE FT2 Chandelier, ATR% rendah 20 slot (paling stabil, pasca-hoc) | 9.2 · -23 · 0.80 · 64% · -10 · 0% | 11.1 · -33 · 0.73 · 64% · -19 · 2% | 19.7 · -23 · 0.97 · 63% · -12 · 8% |
+
+- **0/40 mengatasi SPY dalam kedua-dua tempoh D2000**; 0 mengatasi SPY dalam tempoh B. Silang MA klasik (masuk silang naik,
+  keluar silang turun): kadar menang 33–39%, purata +0.7% setiap dagangan dalam D2000, pegang ~21 hari, ~115 dagangan setahun;
+  hanya D431 yang menunjukkan untung (bias set). Chandelier lebih baik daripada keluar MA dalam 22/30 perbandingan.
+- Pilihan pra-daftar (XS FRT, ATR% rendah, 20 slot) gagal pengesahan: D2000 B 9.0% (SPY 17.1%), D431 22.3% (sama rata 24.6%);
+  susunan rawak 20 benih median 10.3% / 25.0%, iaitu susunan tidak menambah nilai.
+- Konfigurasi paling stabil (XE FT2 ATR% rendah 20 slot) hampir sama dengan calon MACD Z FT2 (§4): kestabilan datang daripada
+  penapis trend + ATR% rendah + 20 slot + Chandelier, bukan daripada pencetus (MACD atau MA).
+
 ## Keputusan kajian (rekod; perubahan peraturan memerlukan keputusan pengguna)
-1. MACD jadi positif tidak digunakan sebagai pencetus beli atau penapis.
-2. Tiada kaedah MACD/gabungan baharu dimasukkan ke Lejar Penuh: pilihan pra-daftar gagal pengesahan (syarat skop 25 Okt 2026:
+1. MACD jadi positif dan MA10 silang MA20 (SMA atau EMA) tidak digunakan sebagai pencetus beli atau penapis.
+2. Tiada kaedah MACD/MA/gabungan baharu dimasukkan ke Lejar Penuh: pilihan pra-daftar gagal pengesahan (syarat skop 25 Okt 2026:
    masuk Lejar hanya jika lulus).
 3. Sebarang kaedah atau portfolio yang dicadang untuk modal sebenar perlu lulus D2000 tempoh A dan B (mengatasi SPY dengan MDD
    setanding), bukan D431 sahaja. Papan Penganalisis sudah menunjukkan 0 kaedah lulus semakan 2000 saham AS.
