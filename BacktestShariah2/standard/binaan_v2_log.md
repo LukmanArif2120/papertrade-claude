@@ -404,3 +404,15 @@
 
 ## Analisis mingguan 2026-10-24 (Sabtu)
 - `WFO/kod/analisis_sebenar.py`: 122 kaedah; AMARAN 0, SELARI 1 (M20), data belum cukup 121. Kaedah AMARAN: tiada. db `analisis/sebenar` dikemas kini. Tiada order. Tiada wang sebenar.
+
+## Imbas malam 26 Okt 2026 (data tutup 23 Okt, Jumaat)
+- Imbasan 134 kaedah: 2,674 isyarat mentah → `data/isyarat/2026-10-23_malam.csv.gz`; 981 s, tiada ralat. Skrin Moomoo 4 halaman (912 saham) = `terkini.csv` (beza 0 pada 925 ticker bertindih).
+- **Senarai beli** 702 baris, 287 saham, 105 kaedah; 51 belian semula (belian_ke ≥ 2). Mingguan ditolak: 0 (23 Okt Jumaat = hari dagangan terakhir minggu, jadi M37/M38/M41/M50/M52/M64/M78 sah). Ditolak: 473 kerana posisi Claude kaedah+saham yang sama masih terbuka; 1,426 melebihi had 10 setiap kaedah; 92 calon watchlist kini lengkap.
+- Penapis scanner: `ambil_alih` 9 (ATKR, BRZE, DV, PEN, PTC, RAMP, SLAB, SLP, TECH); `tidak_cair` 18 (AKA, BIO.B, FEDU, ICCC, KELYB, KEQU, MAYS, MGRT, NCEW, NIPG, NSYS, PHOE, POLE, RGS, SENEB, STRR, VSECU, WLYB); `kelas_berganda` 0.
+- Pintu akhir (`tidak_layak.py fail --tulis`, langkah 6): 1 baris senarai beli dibuang — RUSHB (M156), kelas berganda.
+- **Watchlist** 263 calon, 177 saham, 59 kaedah: 213 baharu, 50 dibawa, 92 dipindah ke senarai beli, 37 dibuang.
+- Jejak kertas M166 V1: dijalankan (baris 23 Okt); tiada belian.
+- Gred: S/I v2, RS, kewangan v7, QR dan pemangkin v3. SST (`market_events`) tidak tersedia → QR hanya daripada Nasdaq; gred QR "–" bagi 27 baris senarai beli dan 1 baris watchlist. Pemangkin: 0 Moomoo, 375 Yahoo/Nasdaq, 8 baris senarai beli "–" (tiada data), 0 baris watchlist "–"; sementara ≤ 2 hari dipakai sehingga commit Actions "Data pemangkin" tiba, kemudian `gred.py kumpul` + `tambah` diulang.
+- **Langkah 5c (kewangan):** `perlu` selepas CSV ditulis = 25 saham. Dikumpul 25 lengkap (FIX, VC, STRL, ECG, ESE, CECO, EME, AMBA, RL, AGL, AD, EDN, HL, BAND, SEDG, LOVE, SKYW, REF, ALNY, MRTN, WERN, FLS, SRAD, TPC, NTCT). `perlu` akhir = 0 saham. Panggilan ralat "orchestration error" diulang berjaya. Fail lama `data/kewangan` yang hanya berubah tarikh `dikumpul` dikembalikan (tidak di-commit). Tiada baris "abcde" (separuh tahun) dalam `perlu`.
+- db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `senarai_beli` tidak ditolak; `harian/status` v42.
+- Tiada order. Tiada wang sebenar.
