@@ -16,6 +16,8 @@
 #   python3 BacktestShariah2/kajian/macd/kaji_macd.py calon      -> kaedah gabungan terpilih: semua tempoh, rawak, slot (calon.csv)
 #   python3 BacktestShariah2/kajian/macd/kaji_macd.py konsisten  -> susunan ATR% / 20 slot / rejim (konsisten*.csv)
 #   python3 BacktestShariah2/kajian/macd/kaji_macd.py ma         -> MA10 silang MA20, SMA dan EMA (ma_*.csv; 25 Okt 2026)
+#   python3 BacktestShariah2/kajian/macd/kaji_macd.py pakej      -> momentum dipelbagai + RSI(2) pullback + gabungan 50/50
+#                                                                   (pakej_*.csv; 26 Okt 2026)
 import argparse, glob, json, os, pickle, sys
 import numpy as np, pandas as pd
 from numba import njit
@@ -31,6 +33,7 @@ TEMPOH = {'D2000_A': ('D2000', '2010-01-04', '2018-12-31'), 'D2000_B': ('D2000',
           'D431': ('D431', '2019-11-01', '2026-10-02')}
 ISYARAT = ['Z', 'H', 'Hn', 'Hp']          # Z = garisan MACD silang atas 0; H = histogram jadi +ve; Hn/Hp = H di bawah/atas 0
 ISYARAT_MA = ['XS', 'XE']                 # XS = SMA10 silang atas SMA20; XE = EMA10 silang atas EMA20
+ISYARAT_RSI = {'R5': 5, 'R10': 10}        # Connors: RSI(2) < ambang dan tutup > SMA200
 PENAPIS = ['F0', 'FT', 'FT2', 'FR', 'FRT']
 KELUAR = {0: 'kaedah (MACD/histogram < 0)', 2: 'Chandelier tutup 4xATR14', 3: 'masa 21 hari'}
 
@@ -123,6 +126,16 @@ def jarak_ma(A, isy):
     return A[f'_{isy}']
 
 
+def rsi2(A):
+    """RSI(2) Wilder (seperti enjin.rsi) dan tutup - SMA5 (keluar Connors)."""
+    if '_RSI2' not in A:
+        C = pd.DataFrame(A['close']); dl = C.diff()
+        au = dl.clip(lower=0).ewm(alpha=1 / 2, adjust=False).mean(); ad = (-dl.clip(upper=0)).ewm(alpha=1 / 2, adjust=False).mean()
+        A['_RSI2'] = (100 - 100 / (1 + au / ad)).where(C.notna().cumsum() >= 20).to_numpy(np.float64)
+        A['_S5d'] = (C - C.rolling(5).mean()).to_numpy(np.float64)
+    return A['_RSI2']
+
+
 def _semalam(x):
     return np.vstack([np.full((1, x.shape[1]), np.nan, x.dtype), x[:-1]])
 
@@ -135,6 +148,7 @@ def topeng(A, isy, pen):
         if isy == 'Z': s = (mp <= 0) & (m > 0)
         elif isy in ISYARAT_MA:
             d = jarak_ma(A, isy); s = (_semalam(d) <= 0) & (d > 0)
+        elif isy in ISYARAT_RSI: s = (rsi2(A) < ISYARAT_RSI[isy]) & (A['close'] > A['S200'])
         elif isy == 'SEMUA': s = np.isfinite(m)                 # kawalan: setiap hari penapis benar (tanpa masa MACD)
         else:
             s = (hp <= 0) & (hs > 0)
@@ -196,7 +210,7 @@ def peristiwa(senarai, fail):
 def keluar(o, h, l, c, atr, m, hs, e, jenis, nmaks):
     """Dagangan masuk buka e. jenis 0 = m < 0 pada tutup (MACD bagi Z, MA10 - MA20 bagi XS/XE) / histogram < 0 (isyarat H*) -> jual buka esok
     (jenis 0 guna m, jenis 1 guna hs); 2 = Chandelier tutup 4xATR14 paras hanya naik -> jual buka esok; 3 = 21 bar ->
-    jual tutup. Pulang (indeks keluar, harga keluar). Bar tanpa data dilangkau; data tamat -> tutup terakhir."""
+    jual tutup; 4 = m > 0 (tutup > SMA5, Connors) -> jual buka esok. Pulang (indeks keluar, harga keluar). Bar tanpa data dilangkau; data tamat -> tutup terakhir."""
     n = len(c); hc = -1e18; lv = -1e18; last = -1; bil = 0
     for j in range(e, n):
         if not np.isfinite(c[j]): continue
@@ -211,6 +225,7 @@ def keluar(o, h, l, c, atr, m, hs, e, jenis, nmaks):
             s = c[j] < lv
         elif jenis == 3:
             if bil >= 21: return j, c[j]
+        elif jenis == 4: s = m[j] > 0
         if nmaks > 0 and bil >= nmaks: return j, c[j]
         if s:
             for k in range(j + 1, n):
@@ -324,8 +339,11 @@ def jalan(A, isy, pen, jenis, d0, d1, slots=10, w=0.10, benih=None, rejim=False,
     if rejim:                                     # beli baharu hanya bila SPY > SMA200
         sc = pd.Series(A['spy_c']); S = S & (sc > sc.rolling(200).mean()).to_numpy()[:, None]
     jn = (0 if isy == 'Z' or isy in ISYARAT_MA else 1) if jenis == 0 else jenis
-    E, X, T, B, R = jana_dagangan(A, S, jn, d0 - 1, d1 - 1, nmaks, jarak_ma(A, isy) if isy in ISYARAT_MA else None)
-    sk = A['RS'][E - 1, T].astype(np.float64) if skor == 'rs' else -A['ATR'][E - 1, T] / A['close'][E - 1, T]
+    mk = jarak_ma(A, isy) if isy in ISYARAT_MA else (A['_S5d'] if jenis == 4 else None)
+    E, X, T, B, R = jana_dagangan(A, S, jn, d0 - 1, d1 - 1, nmaks, mk)
+    if skor == 'rs': sk = A['RS'][E - 1, T].astype(np.float64)
+    elif skor == 'rsi_rendah': sk = -A['_RSI2'][E - 1, T]
+    else: sk = -A['ATR'][E - 1, T] / A['close'][E - 1, T]
     o = susun(E, T, sk, benih)
     E, X, T, B, R = E[o], X[o], T[o], B[o], R[o]
     Cm = baca_cm(A)
@@ -501,9 +519,83 @@ def cmd_ma(a):
     print(R.assign(rawak=R.benih.notna()).groupby(['tempoh', 'rawak'])[['cagr', 'mdd', 'sharpe_bulan', 'bulan_untung']].median())
 
 
+# ---------------------------------------------------------------- 8. pakej konsisten (keputusan pengguna 26 Okt 2026)
+def momentum(A, d0, d1, N, rejim):
+    """Momentum dipelbagai: pada buka hari dagangan pertama setiap bulan, pegang N saham RS tertinggi (RS pada tutup
+    semalam, dalam alam) sama berat, beli-pegang hingga putaran berikutnya. rejim: SPY < SMA200 pada tutup semalam -> tunai.
+    Kos 0.1% setiap belah atas bahagian yang bertukar."""
+    dts = pd.DatetimeIndex(A['dates']); Cm = baca_cm(A)
+    if '_Om' not in A: A['_Om'] = np.where(np.isfinite(A['open']), A['open'], Cm)
+    Om = A['_Om']; sc = pd.Series(A['spy_c']); atas = (sc > sc.rolling(200).mean()).to_numpy()
+    m = dts.year * 12 + dts.month; r = [d for d in range(d0, d1) if d == d0 or m[d] != m[d - 1]]
+    cv = np.empty(d1 - d0); V = 1.0; lama = set(); tukar = []
+    for i, d in enumerate(r):
+        d2 = r[i + 1] if i + 1 < len(r) else d1
+        rs = np.where(A['U'][d - 1] & np.isfinite(A['open'][d]), np.nan_to_num(A['RS'][d - 1], nan=-1), -1)
+        H = [] if (rejim and not atas[d - 1]) else [k for k in np.argsort(-rs)[:N] if rs[k] >= 0]
+        baru = set(H); t = 1.0 if not lama else (len(baru - lama) / max(len(baru), 1) if baru else 1.0)
+        if lama and not baru: t = 1.0
+        V *= 1 - COST * ((1 if baru else 0) + (1 if lama else 0)) * t if (baru or lama) else 1
+        tukar.append(t if (baru or lama) else 0)
+        if H:
+            Hk = np.array(H); rel = Cm[d:d2][:, Hk] / A['open'][d, Hk]
+            cv[d - d0:d2 - d0] = V * rel.mean(1)
+            V *= (Om[d2, Hk] / A['open'][d, Hk]).mean() if d2 < len(dts) else rel[-1].mean()
+        else:
+            cv[d - d0:d2 - d0] = V
+        lama = baru
+    z = np.arange(1); out = metrik(cv, dts[d0:d1], z, z, np.zeros(1), z[:0], A['spy_c'][d0:d1])
+    out['pusing_ganti'] = np.mean(tukar) * 100
+    return out, pd.Series(cv, dts[d0:d1])
+
+
+def gabung(a, b):
+    """Dua kurva ekuiti, 50/50 diseimbang setiap hari."""
+    ra, rb = a.pct_change().fillna(a.iloc[0] - 1), b.pct_change().fillna(b.iloc[0] - 1)
+    return (1 + 0.5 * (ra + rb)).cumprod()
+
+
+def cmd_pakej(a):
+    """Peraturan pilih (ditetapkan 26 Okt 2026 sebelum larian): setiap bahagian = Sharpe bulanan tertinggi dalam D2000_A.
+    Gabungan LULUS jika Sharpe bulanan > SPY dalam D2000_B dan D431."""
+    rows = []; kurva = {}
+    MOM = [(n, rj) for n in (30, 50) for rj in (False, True)]
+    RSI = [(isy, sl, sk) for isy in ISYARAT_RSI for sl in (10, 20) for sk in ('rsi_rendah', 'rs')]
+    for tp, (nama, t0, t1) in TEMPOH.items():
+        A = baca(nama); d0, d1 = indeks(A, t0, t1); rsi2(A)
+        for k, v in rujukan(A, d0, d1).items(): rows.append(dict(tempoh=tp, bahagian='rujukan', konfigurasi=k, **v))
+        for n, rj in MOM:
+            m, cv = momentum(A, d0, d1, n, rj); k = f'MOM {n} saham' + (' rejim' if rj else '')
+            rows.append(dict(tempoh=tp, bahagian='MOM', konfigurasi=k, **m)); kurva[(tp, k)] = cv
+        for isy, sl, sk in RSI:
+            m, cv = jalan(A, isy, 'F0', 4, d0, d1, slots=sl, w=1 / sl, skor=sk, nmaks=10)
+            k = f'RSI2<{ISYARAT_RSI[isy]} {sl} slot susun {sk}'
+            rows.append(dict(tempoh=tp, bahagian='RSI2', konfigurasi=k, **m)); kurva[(tp, k)] = cv
+        m, cv = jalan(A, 'Z', 'FT2', 2, d0, d1, slots=20, w=0.05, skor='atr_rendah'); k = 'Z FT2 ATR% rendah 20 slot'
+        rows.append(dict(tempoh=tp, bahagian='TREND', konfigurasi=k, **m)); kurva[(tp, k)] = cv
+        print(tp, flush=True)
+    G = pd.DataFrame(rows)
+    pilih = {b: G[(G.tempoh == 'D2000_A') & (G.bahagian == b)].sort_values('sharpe_bulan', ascending=False).konfigurasi.iloc[0]
+             for b in ('MOM', 'RSI2')}
+    print('pilih', pilih)
+    for nm, (x, y) in {'GABUNG MOM+RSI2': (pilih['MOM'], pilih['RSI2']), 'GABUNG TREND+RSI2': ('Z FT2 ATR% rendah 20 slot', pilih['RSI2']),
+                       'GABUNG MOM+TREND': (pilih['MOM'], 'Z FT2 ATR% rendah 20 slot')}.items():
+        for tp, (nama, t0, t1) in TEMPOH.items():
+            A = baca(nama); d0, d1 = indeks(A, t0, t1); cv = gabung(kurva[(tp, x)], kurva[(tp, y)])
+            z = np.arange(1); m = metrik(cv.to_numpy(), cv.index, z, z, np.zeros(1), z[:0], A['spy_c'][d0:d1])
+            bx = kurva[(tp, x)].resample('ME').last().pct_change(); by = kurva[(tp, y)].resample('ME').last().pct_change()
+            rows.append(dict(tempoh=tp, bahagian='GABUNG', konfigurasi=f'{nm}: {x} + {y}', korelasi_bulan=bx.corr(by), **m))
+    G = pd.DataFrame(rows); G.round(3).to_csv(f'{HERE}/pakej.csv', index=False)
+    json.dump(pilih, open(f'{HERE}/pakej_pilih.json', 'w'), ensure_ascii=False)
+    sp = G[G.konfigurasi == 'SPY'].set_index('tempoh').sharpe_bulan
+    g = G[G.konfigurasi.str.startswith('GABUNG MOM+RSI2')].set_index('tempoh').sharpe_bulan
+    print('LULUS' if (g['D2000_B'] > sp['D2000_B']) and (g['D431'] > sp['D431']) else 'GAGAL', g.round(2).to_dict(), sp.round(2).to_dict())
+
+
 if __name__ == '__main__':
     p = argparse.ArgumentParser(); s = p.add_subparsers(required=True)
     for n, f in (('sedia', cmd_sedia), ('peristiwa', cmd_peristiwa), ('sim', cmd_sim), ('penapis', cmd_penapis),
-                 ('calon', cmd_calon), ('konsisten', cmd_konsisten), ('ma', cmd_ma)):
+                 ('calon', cmd_calon), ('konsisten', cmd_konsisten), ('ma', cmd_ma),
+                 ('pakej', cmd_pakej)):
         s.add_parser(n).set_defaults(f=f)
     a = p.parse_args(); a.f(a)

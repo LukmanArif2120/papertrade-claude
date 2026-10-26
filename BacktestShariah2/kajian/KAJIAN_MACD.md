@@ -1,9 +1,9 @@
-# Kajian "MACD jadi positif", MA10 silang MA20 dan gabungan kaedah (25 Okt 2026)
+# Kajian "MACD jadi positif", MA10 silang MA20 dan gabungan kaedah (25–26 Okt 2026)
 
 Permintaan pengguna 25 Okt 2026: adakah MACD jadi positif satu isyarat yang baik, bolehkah kaedah digabung atau dicipta,
 dan bolehkah sasaran 10% sebulan dicapai? Keutamaan pengguna: **konsisten** (untung dalam kebanyakan bulan; pulangan lebih
 rendah diterima), tempoh pegang ikut data. Skrip: `kajian/macd/kaji_macd.py` (`sedia`, `peristiwa`, `sim`, `penapis`, `calon`,
-`konsisten`, `ma`). Hasil: `kajian/macd/*.csv`. Rekod kajian sahaja; tiada peraturan papertrade, Lejar atau dashboard diubah.
+`konsisten`, `ma`, `pakej`). Hasil: `kajian/macd/*.csv`. Rekod kajian sahaja; tiada peraturan papertrade, Lejar atau dashboard diubah.
 
 ## Data dan kaedah
 - **D431**: data_mentah set 431 (423 saham selepas 8 saham bermasalah dibuang), Nov 2019 – Okt 2026. Kaedah 134 direka atas
@@ -139,8 +139,43 @@ M20 EMA10/15 + sudut dan M161 EMA10/21 + Supertrend (kedua-duanya gagal semakan 
 - Konfigurasi paling stabil (XE FT2 ATR% rendah 20 slot) hampir sama dengan calon MACD Z FT2 (§4): kestabilan datang daripada
   penapis trend + ATR% rendah + 20 slot + Chandelier, bukan daripada pencetus (MACD atau MA).
 
+## 8. Pakej konsisten: momentum dipelbagai + RSI(2) pullback + gabungan 50/50 (keputusan pengguna 26 Okt 2026)
+`kaji_macd.py pakej` (`pakej.csv`, `pakej_pilih.json`). Reka bentuk dan peraturan lulus ditetapkan sebelum larian:
+- MOM: pada buka hari dagangan pertama setiap bulan, pegang 30 atau 50 saham RS tertinggi sama berat; dengan/tanpa rejim
+  (SPY < SMA200 pada tutup semalam -> tunai). Kos 0.1% setiap belah atas bahagian yang bertukar.
+- RSI2 (Connors): RSI(2) < 5 atau < 10 dan tutup > SMA200; jual buka esok selepas tutup > SMA5, maksimum 10 hari; 10 atau 20
+  slot; susun RSI(2) terendah atau RS tertinggi.
+- Setiap bahagian dipilih ikut Sharpe bulanan tertinggi dalam D2000 A; gabungan 50/50 diseimbang setiap hari. LULUS jika
+  Sharpe bulanan gabungan > SPY dalam D2000 B dan D431.
+
+| Konfigurasi | D2000 A | D2000 B | D431 |
+|---|---|---|---|
+| SPY | 11.6 · -19 · 0.95 · 69% · -9 · 1% | 17.1 · -34 · 1.05 · 67% · -12 · 3% | 16.0 · -34 · 0.97 · 65% · -12 · 4% |
+| Sama rata alam | 11.2 · -26 · 0.79 · 67% · -11 · 2% | 11.9 · -42 · 0.65 · 61% · -20 · 4% | 24.6 · -41 · 1.11 · 63% · -20 · 7% |
+| MOM 50 saham | 5.8 · -41 · 0.36 · 60% · -19 · 6% | 12.4 · -61 · 0.50 · 55% · -23 · 17% | 44.8 · -36 · 1.41 · 68% · -25 · 20% |
+| MOM 50 saham rejim (terpilih) | 8.5 · -39 · 0.52 · 56% · -19 · 4% | -1.8 · -67 · 0.09 · 46% · -23 · 10% | 29.6 · -33 · 1.18 · 57% · -25 · 12% |
+| RSI2 < 5, 20 slot, susun RS (terpilih) | 2.5 · -32 · 0.24 · 61% · -14 · 0% | -0.3 · -49 · 0.12 · 51% · -30 · 9% | 14.4 · -33 · 0.84 · 68% · -18 · 1% |
+| Z FT2 ATR% rendah 20 slot (§4) | 11.7 · -16 · 0.99 · 69% · -10 · 0% | 10.6 · -30 · 0.67 · 62% · -17 · 3% | 19.3 · -27 · 1.04 · 68% · -10 · 6% |
+| Gabungan MOM + RSI2 (pra-daftar) | 5.8 · -32 · 0.43 · 57% · -16 · 1% | -0.0 · -53 · 0.12 · 52% · -18 · 5% | 22.7 · -20 · 1.24 · 68% · -9 · 6% |
+| Gabungan Z FT2 + RSI2 | 7.3 · -19 · 0.63 · 66% · -11 · 0% | 5.9 · -35 · 0.39 · 57% · -23 · 1% | 17.4 · -25 · 1.08 · 68% · -13 · 1% |
+| Gabungan MOM + Z FT2 | 10.6 · -28 · 0.78 · 67% · -14 · 0% | 5.7 · -41 · 0.37 · 53% · -13 · 4% | 25.1 · -22 · 1.26 · 69% · -15 · 8% |
+
+- **Gabungan pra-daftar GAGAL**: Sharpe bulanan 0.12 (D2000 B) dan 1.24 (D431) lawan SPY 1.05 dan 0.97.
+- MOM 30–50 saham (1.5–2.5% teratas alam) lemah dalam D2000 (2.5–12.4% setahun, MDD −39% hingga −74%). Kajian RS seluruh pasaran
+  (§15 `kajian/rs/RINGKASAN.md`) menunjukkan 10% teratas (~300 saham) mengatasi purata pasaran; hujung paling atas tidak.
+  Rejim SPY > SMA200 membantu 2010–2018 tetapi merosakkan 2019–2026 (pemulihan pantas 2020).
+- RSI2: kadar menang 60–63% (sama dengan literatur), tetapi purata setiap dagangan −0.05% hingga +0.16% dalam D2000 selepas kos
+  0.2% pergi-balik, dengan 560–1220 dagangan setahun. Kelebihan yang pernah dilaporkan tidak kekal selepas kos.
+- Korelasi bulanan antara bahagian 0.36–0.65: semuanya beli saham sahaja, jadi faedah kepelbagaian terhad.
+- Penanda aras yang adil bagi pemilihan sama berat ialah "sama rata alam" (D2000 B: 11.9%, MDD −42%), bukan SPY yang berwajaran
+  modal pasaran (17.1%; syarikat gergasi mendahului 2019–2026). Berbanding sama rata alam, Z FT2 ATR% rendah 20 slot memberi
+  pulangan hampir sama dengan MDD lebih kecil (−16% / −30% / −27% lawan −26% / −42% / −41%), Sharpe bulanan lebih tinggi
+  dalam D2000 A dan B (0.99 / 0.67 lawan 0.79 / 0.65), hampir sama dalam D431 (1.04 lawan 1.11), dan 62–69% bulan untung. Ini ciri paling
+  konsisten yang ditemui; ia masih di bawah SPY.
+
 ## Keputusan kajian (rekod; perubahan peraturan memerlukan keputusan pengguna)
-1. MACD jadi positif dan MA10 silang MA20 (SMA atau EMA) tidak digunakan sebagai pencetus beli atau penapis.
+1. MACD jadi positif dan MA10 silang MA20 (SMA atau EMA) tidak digunakan sebagai pencetus beli atau penapis. Momentum
+   30–50 saham dan RSI(2) pullback juga gagal (§8).
 2. Tiada kaedah MACD/MA/gabungan baharu dimasukkan ke Lejar Penuh: pilihan pra-daftar gagal pengesahan (syarat skop 25 Okt 2026:
    masuk Lejar hanya jika lulus).
 3. Sebarang kaedah atau portfolio yang dicadang untuk modal sebenar perlu lulus D2000 tempoh A dan B (mengatasi SPY dengan MDD
