@@ -306,3 +306,10 @@
 - Posisi: ~186 C + 3 M keluar lorong 1 baharu, 55 menunggu buka, 1 belian 23 Okt tidak dibeli (§5.4 sig=False). Lorong 2: tutup_semua 223. `dagangan.py betul`: 21 posisi kaedah replika dinilai semula. `peristiwa.py calon`: NVEC `tolak` (`data/harga/faktor_calon.csv`).
 - Watchlist 270 → 179 (91 dibuang). Sektor pasaran 3829 digred; `sektor/snapshot` v16. SST tidak tersedia (perlu kebenaran semula): `sektor.csv` tidak ditambah, tiada data direka. Gabungan yfinance dilangkau.
 - db: 107 dokumen ditolak (18 batch; `posisi/lorong2_9`, `papertrade/ringkas_c_7` baharu); `watchlist_3` dipadam; `harian/status` v41. `sahkan.py --betulkan` keluar 0.
+
+## 2026-10-26 (9:40 NY) — Beli maya 9:35 NY
+- Pintu akhir `kod/tidak_layak.py fail --tulis`: 0 baris dibuang. Calon: 702 baris senarai_beli (287 saham; tarikh_imbasan 26 Okt). Direkod 668 baris (1 unit setiap kaedah+saham, sumber harian_c). Harga beli = buka sementara `quote_stock_quote` 9:40 NY; belum disahkan dengan kline. Gred disalin tanpa diubah ke CSV (db tanpa `kewangan_butiran`, ikut `jana_db.py`).
+- Belum didagangkan pada 9:35 (direkod dengan harga_beli = tutup isyarat, nota `buka_lewat`; 6:02 menggantikan dengan buka rasmi): HURC M02 & M122, MTUS M08, HNI M10, ARTNA M10, HVT M38, NRP M80, M93, M107 & M131, BBSI M111, MKTW M151 (12 baris).
+- Fail: baris ditambah ke `claude_72.csv`, kemudian `pecah_claude.py --pecah` memecah ke `claude_73` … `claude_82`. Dokumen db `papertrade/claude_72` … `claude_82` ditolak dalam dua batch; `harian/status` dikemas kini (beli_pada, beli_ringkas).
+- Dikongsi: kaedah lain bagi saham sama dicatat dalam `kaedah_kongsi`.
+- Dilangkau 34: buka > buka_maks — RHI M06, KFRC M06, DVN M08, ASC M08; buka ≤ henti — BUUU (M06, M23, M39, M47, M54, M90, M137, M154, M156), PBR (M35, M48, M50, M57, M68, M102, M136, M149, M150), STNE (M08, M18), EQT (M12, M131), SM M13, VET M23, E M46, FOXA M70, SLB M74, AUGO M76, SHEL M102, AFYA M150. Perhatian: BUUU buka 5.36 lawan henti 26–53 dan PBR 21.54 lawan henti 23–26 (jurang besar) — kemungkinan peristiwa korporat/data harga rujukan; tidak dibeli ikut peraturan, patut disemak oleh rutin 6:02 langkah 2d.
