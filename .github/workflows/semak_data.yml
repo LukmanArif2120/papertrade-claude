@@ -11,7 +11,7 @@ on:
       - 'requirements.txt'
       - '**/*.py'
       - 'ruff.toml'
-      - '.github/workflows/semak_data.yml'
+      - '.github/workflows/**'
   workflow_dispatch:
 
 permissions:
@@ -34,6 +34,10 @@ jobs:
         run: pip install -q -c kekangan.txt -r requirements.txt
       - name: Semak pepijat kod (ruff; peraturan dalam ruff.toml)
         run: pip install -q ruff==0.16.9 && ruff check --output-format github .
+      - name: Semak workflow (actionlint; tanpa shellcheck, nota gaya shell diabaikan)
+        run: |
+          bash <(curl -sSL https://raw.githubusercontent.com/rhysd/actionlint/v1.7.12/scripts/download-actionlint.bash) 1.7.12 /tmp/al
+          /tmp/al/actionlint -shellcheck= -color
       - name: Ujian unit
         run: python3 -m unittest discover -s BacktestShariah2/ujian
       - name: Semak data papertrade (sahkan.py)
