@@ -13,6 +13,7 @@ import pandas as pd
 
 AKAR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(AKAR))
+from REVERSE.teras import data as D  # noqa: E402
 R = AKAR / 'REVERSE'
 CACHE = R / '.cache'
 
@@ -165,6 +166,16 @@ def main():
       f'(`REVERSE/PANDANG_HADAPAN_{th}.md`) |\n')
 
     A('## 2. Step 1–2 — run\n')
+    uv = D.universe()
+    uvy = uv[uv.bulan.str[:4] == str(th)].groupby('bulan').size()
+    A(f'Saiz universe {th} setiap bulan: min **{uvy.min()}**, median **{int(uvy.median())}**, '
+      f'maks **{uvy.max()}**; {ks["n_ticker_universe"]} ticker berbeza sepanjang tahun.\n')
+    if uvy.min() < 2000:
+        A(f'\n> **KAVEAT SAIZ UNIVERSE.** Universe {th} lebih kecil daripada had 2000 saham '
+          f'(min {uvy.min()} sebulan). Jumlah run, peristiwa dan kemunculan tahun ini **tidak '
+          f'setara** dengan tahun yang universenya penuh 2000; bandingkan kadar dan peratusan, '
+          f'bukan bilangan mutlak, dalam `BANDING_TAHUN.md`.\n')
+
     A(md_jadual(ms))
     A(f'\nJumlah: **{len(runs)} run layak**, {int((runs.entry_sah=="ya").sum())} '
       f'({(runs.entry_sah=="ya").mean()*100:.1f}%) dengan `entry_sah = ya` '

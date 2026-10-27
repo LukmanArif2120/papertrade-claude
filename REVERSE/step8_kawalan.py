@@ -214,10 +214,17 @@ def main():
             dy = dy[(dy.subset == 'S2') & (dy.populasi == 'a') & (dy.kumpulan_data == 'A')
                     & (dy.keluarga == 'PADU')]
             kelas_lain[y] = dy.set_index('signal').kelas.to_dict()
+        # Pindaan SPEC §13.11: "kelas sama" hanya mengesahkan sesuatu jika kelas itu ialah
+        # PENEMUAN. Signal berkelas TIDAK BERGUNA / COMMON BIASA pada setiap tahun memenuhi
+        # "kelas sama" secara remeh; itu bukan pengesahan, jadi G2 tidak boleh dinilai.
+        PENEMUAN = ('TERAS', 'UNIQUE', 'LANGKA')
         for nm in corong:
             kA = kls_A.kelas.get(nm, '-')
-            sama = [y for y in lain if kelas_lain[y].get(nm, '-') == kA]
             but = '; '.join(f'{y}={kelas_lain[y].get(nm, "-")}' for y in lain)
+            if kA not in PENEMUAN:
+                g2_lab[nm] = (f'TIDAK BOLEH DINILAI (kelas tahun ini {kA}, bukan penemuan; {but})')
+                continue
+            sama = [y for y in lain if kelas_lain[y].get(nm, '-') == kA]
             g2_lab[nm] = (f'LULUS ({len(sama)}/{len(lain)} tahun lain kelas sama: {but})'
                           if len(sama) >= 2 else
                           f'BELUM ({len(sama)}/{len(lain)} sama, perlu >= 2; {but})')

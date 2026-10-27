@@ -4,10 +4,11 @@ Kajian **signal dan indikator**, bukan kaedah Mxx repo dan bukan penalaan parame
 Arah terbalik daripada backtest: **hasil dahulu, signal kemudian**.
 
 - Spec dikunci sebelum larian pertama: **`SPEC.md`** (termasuk 9 pindaan bertarikh 27 Okt 2026).
-- Laporan setiap tahun: **`LAPORAN_2025.md`**, **`LAPORAN_2024.md`**, **`LAPORAN_2023.md`**, **`LAPORAN_2022.md`**, **`LAPORAN_2021.md`** (dijana `jana_laporan.py`).
+- Laporan setiap tahun: **`LAPORAN_2025.md`**, **`LAPORAN_2024.md`**, **`LAPORAN_2023.md`**, **`LAPORAN_2022.md`**, **`LAPORAN_2021.md`**, **`LAPORAN_2020.md`** (dijana `jana_laporan.py`).
 - Setiap signal/kombinasi yang diuji: `log_ujian.csv`.
 - Imbasan pandang ke hadapan: `PANDANG_HADAPAN_<TAHUN>.md` (14 tarikh potong setiap tahun, 0 kegagalan).
 - Perbandingan merentas tahun: **`BANDING_TAHUN.md`** (dijana `banding_tahun.py`).
+- Jadual keputusan satu baris setiap tahun: **`JADUAL_KEPUTUSAN.csv`** (dijana `jadual_keputusan.py`).
 
 ## Jalankan semula (urutan)
 
@@ -28,7 +29,7 @@ python3 REVERSE/banding_tahun.py                  # selepas >= 2 tahun siap
 
 Tahun lain: kod dan parameter **sama tanpa ubah**, universe ikut bulan tahun itu —
 tukar sahaja argumen tahun pada setiap skrip. Jangan ubah `SPEC.md` kecuali sebagai pindaan
-bertarikh. Siap setakat ini: **2025, 2024, 2023, 2022, 2021** — iaitu seluruh tempoh universe 2000 saham A02.
+bertarikh. Siap setakat ini: **2025, 2024, 2023, 2022, 2021, 2020**. Universe 2021-2025 ialah 2000 saham sebulan; **2020 lebih kecil (1638/1832/1940 min/median/maks)**, jadi bilangan mutlaknya tidak setara dan laporan 2020 membawa kaveat saiz universe.
 
 ## Data
 
@@ -50,13 +51,13 @@ guna Release `autotune-data` (A01 membuang saham meruap). Cache tempatan `REVERS
 
 ## Had fasa
 
-Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**. Dengan lima tahun siap, gate itu
-boleh dinilai: 3 signal berlabel **DITERIMA** pada 2025.
+Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**, dan (pindaan §13.11) kelas tahun itu
+sendiri mesti TERAS/UNIQUE/LANGKA. Dengan enam tahun siap: **7 label DITERIMA** (3 pada 2020,
+1 pada 2023, 3 pada 2025); 0 pada 2021, 2022 dan 2024.
 
 **Baca amaran percanggahan dalam `BANDING_TAHUN.md` §7 sebelum menggunakan label itu.** Gate 8.1
 seperti ditulis hanya memerlukan *kelas* yang sama, bukan *keputusan* yang sama; kedua-dua signal
 DITERIMA itu sebenarnya DITOLAK pada 2022, 2023 DAN 2024 kerana gagal G4 (bootstrap) dan
-G5 (outlier). Lima tahun, dan **tiada satu signal pun berstatus CALON atau DITERIMA pada lebih
-daripada satu tahun**. Tiada signal mengekalkan kelas TERAS/UNIQUE/LANGKA pada kelima-lima tahun
-(terbaik 4/5).
+G5 (outlier). Enam tahun, dan **tiada satu signal pun mengekalkan kelas TERAS/UNIQUE/LANGKA pada
+kesemua enam tahun**.
 Mengetatkan gate 8.1 ialah keputusan pengguna, bukan perubahan spec selepas melihat hasil.
