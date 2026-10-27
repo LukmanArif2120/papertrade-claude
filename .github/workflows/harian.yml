@@ -130,3 +130,13 @@ jobs:
           done
           echo "Push gagal; larian sandaran seterusnya memproses semula daripada keadaan repo." >&2
           exit 1
+      - name: Notifikasi ntfy (ringkasan kerja baharu; amaran gagal oleh amaran_ntfy.yml)
+        # Permintaan pengguna 27 Okt 2026: ntfy setiap kali kerja papertrade siap (topik sama dengan amaran_ntfy.yml)
+        if: success() && steps.mod.outputs.mod == 'rasmi' && steps.malam.outputs.baru == 'ya'
+        env:
+          TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
+        run: |
+          M=$(python3 BacktestShariah2/standard/notifikasi.py malam --folder "${{ steps.mod.outputs.folder }}")
+          echo "$M"
+          curl -sS -m 20 -H "Title: Papertrade: kemas kini + imbas" -H "Tags: chart_with_upwards_trend" -d "$M" \
+            "https://ntfy.sh/$TOPIK" > /dev/null || echo "::warning::ntfy gagal"

@@ -23,7 +23,7 @@ on:
       cuba_folder:
         description: 'Folder senarai_beli untuk percubaan (baca sahaja)'
         required: false
-        default: 'BacktestShariah2/bayang/papertrade'
+        default: 'BacktestShariah2/papertrade'
 
 permissions:
   contents: write
@@ -91,3 +91,13 @@ jobs:
             sleep $((n * 20))
           done
           exit 1
+      - name: Notifikasi ntfy (ringkasan belian / tak beli; amaran gagal oleh amaran_ntfy.yml)
+        # Permintaan pengguna 27 Okt 2026: ntfy setiap kali kerja papertrade siap. "Kalau tak beli, cakap tak beli."
+        if: success() && steps.beli.outputs.ubah == 'ya' && steps.beli.outputs.mod == 'rasmi'
+        env:
+          TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
+        run: |
+          M=$(python3 BacktestShariah2/standard/notifikasi.py beli --folder "${{ steps.beli.outputs.folder }}")
+          echo "$M"
+          curl -sS -m 20 -H "Title: Papertrade: beli" -H "Tags: shopping_cart" -d "$M" \
+            "https://ntfy.sh/$TOPIK" > /dev/null || echo "::warning::ntfy gagal"
