@@ -121,9 +121,10 @@ def kemas_ambil(rekod, path=AMBIL):
     d = pd.read_csv(path, dtype=str, keep_default_na=False) if os.path.exists(path) else pd.DataFrame(columns=LAJUR_AMBIL)
     d = d.reindex(columns=LAJUR_AMBIL).fillna('')
     tambah, tamat = [], []
+    bukan = set(d.saham[d.bayaran.str.lower() == 'bukan'])   # disahkan bukan sasaran (cth. pembeli yang memfail 425)
     for r in sorted(rekod, key=lambda x: x['tarikh']):
         aktif = (d.saham == r['saham']) & (d.tarikh_tamat == '') & (d.bayaran.str.lower() != 'bukan')
-        if r['status'] == 'aktif' and not aktif.any():
+        if r['status'] == 'aktif' and not aktif.any() and r['saham'] not in bukan:
             d = pd.concat([d, pd.DataFrame([dict(saham=r['saham'], tarikh_umum=r['tarikh'], tarikh_tamat='', pembeli=r.get('pembeli', ''),
                                                  harga_tawaran='', bayaran='edgar', sumber=f"EDGAR {r['borang']} {r['akses']}")])],
                           ignore_index=True)

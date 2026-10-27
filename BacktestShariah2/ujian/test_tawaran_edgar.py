@@ -76,6 +76,17 @@ class TestEdgar(unittest.TestCase):
                              ('2026-10-21', 'edgar', 'EDGAR 425 a1'))
             self.assertEqual(E.kemas_ambil(r[:1], p), ([], []))
 
+    def test_kemas_ambil_hormati_bukan(self):
+        # pembeli yang memfail 425 atas dirinya sendiri (EQT-RRC 26 Okt 2026) ditanda 'bukan': tidak ditambah semula
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'ambil_alih.csv')
+            pd.DataFrame([dict(saham='EQT', tarikh_umum='2026-10-26', tarikh_tamat='', pembeli='', harga_tawaran='',
+                               bayaran='bukan', sumber='pembeli')]).to_csv(p, index=False)
+            r = [dict(status='aktif', saham='EQT', tarikh='2026-10-28', borang='425', akses='b1'),
+                 dict(status='aktif', saham='RRC', tarikh='2026-10-28', borang='425', akses='b2')]
+            self.assertEqual(E.kemas_ambil(r, p), (['RRC'], []))
+            self.assertEqual(len(pd.read_csv(p)), 2)
+
 
 if __name__ == '__main__':
     unittest.main()
