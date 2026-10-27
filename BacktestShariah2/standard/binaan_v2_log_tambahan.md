@@ -322,3 +322,11 @@
 - Harga: kline Moomoo (screen + BB, VIAV, LITE, LUXE, STNE, EFOR, BUUU, SPY, QQQ); gabung yfinance DILANGKAU kerana bar yfinance 26 Okt berbeza > 0,5% daripada Moomoo bagi 40 saham (dibuka awal). ACA tiada bar sejak 22 Okt (delist belum ≥ 10 sesi).
 - Watchlist 263 → 193 (70 dibuang). Sektor pasaran 3818 saham; `sektor/snapshot` v17. SST kini tersedia (sector_rotation dll. dipanggil) tetapi `sektor.csv` v1 tidak ditambah (format lama dihentikan sejak 22 Okt).
 - db: 122 dokumen ditolak (20 batch; baharu `prestasi/mae_atr_2`, `prestasi/mfe_2`, `posisi/lorong2_10`, `papertrade/ringkas_c_8`, `ringkas_c_kamus_5`); `watchlist_3` dipadam; `harian/status` v44. `sahkan.py --betulkan` keluar 0 (6511 posisi).
+
+## 2026-10-27 13:25 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-10-26)
+- Keluar baharu 1 (C {'isyarat': 1}, M {}); menunggu buka sesi seterusnya: 64.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 0 (beza > 0.5%: 0). Tidak dibeli baharu: tiada.
+- Senarai beli 618 baris (292 saham, 101 kaedah; 96 daripada watchlist; belian semula 44). Ditolak: {'dipegang': 426, 'tidak_cair': 44, 'had': 1298, 'kelas_berganda': 9, 'ambil_alih': 41, 'mingguan': 41}.
+- Watchlist 269 (baharu 179, dibuang 7, ke senarai beli 96). Isyarat direkod: 2477 (data/isyarat/2026-10-26_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: C WLY M30: tiada bar 2026-10-26 (harga terkini 2026-10-23); C WLY M74: tiada bar 2026-10-26 (harga terkini 2026-10-23); C BUUU M73: buka stor 4.34 lawan harga_beli 43.37 (> 15%; split/data tidak sepadan) — tidak dinilai; C ACA M95: tiada bar 2026-10-26 (harga terkini 2026-10-22); C ACA M54: tiada bar 2026-10-26 (harga terkini 2026-10-22); C BUUU M12: buka stor 42.67 lawan harga_beli 4.267 (> 15%; split/data tidak sepadan) — tidak dinilai; C ACA M06: tiada bar 2026-10-26 (harga terkini 2026-10-22); C ACA M23: tiada bar 2026-10-26 (harga terkini 2026-10-22).
+- Tiada order. Tiada wang sebenar.

@@ -3,5 +3,134 @@
   "tarikh": "2026-10-26",
   "direkod": 668,
   "sumber": "rutin Claude 9:35 NY (keadaan terakhir sebelum peralihan ke GitHub Actions, 27 Okt 2026)"
+ },
+ "malam": {
+  "sesi": "2026-10-26",
+  "masa": "2026-10-27 13:25 MYT",
+  "ralat_kaedah": [],
+  "kaedah_tanpa_modul": [],
+  "masa_kaedah_s": 207,
+  "keluar_baru": {
+   "M": {},
+   "C": {
+    "isyarat": 1
+   }
+  },
+  "keluar_baru_jumlah": {
+   "M": 0,
+   "C": 1
+  },
+  "menunggu": 64,
+  "harga_beli_dibetulkan": 0,
+  "harga_beli_beza_besar": 0,
+  "tidak_dibeli": [],
+  "nota": [
+   "C WLY M30: tiada bar 2026-10-26 (harga terkini 2026-10-23)",
+   "C WLY M74: tiada bar 2026-10-26 (harga terkini 2026-10-23)",
+   "C BUUU M73: buka stor 4.34 lawan harga_beli 43.37 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C ACA M95: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C ACA M54: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C BUUU M12: buka stor 42.67 lawan harga_beli 4.267 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C ACA M06: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C ACA M23: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C ACA M46: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C BUUU M49: buka stor 41.91 lawan harga_beli 4.191 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C ACA M100: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C ACA M101: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C ACA M120: tiada bar 2026-10-26 (harga terkini 2026-10-22)",
+   "C WLY M134: tiada bar 2026-10-26 (harga terkini 2026-10-23)",
+   "C WLY M149: tiada bar 2026-10-26 (harga terkini 2026-10-23)"
+  ],
+  "tidak_layak_posisi": {
+   "ambil_alih": {
+    "ditutup": 6,
+    "menunggu": 0,
+    "saham": [
+     "RRC"
+    ]
+   },
+   "delist": {
+    "ditutup": 0,
+    "saham": []
+   },
+   "tidak_cair": {
+    "tidak_sah": 0,
+    "saham": []
+   },
+   "kelas_berganda": {
+    "tidak_sah": 0,
+    "saham": []
+   },
+   "faktor": {
+    "dilaras": 0,
+    "semak": [],
+    "dibuka_semula": []
+   }
+  },
+  "dagangan_betul": 0,
+  "senarai_beli": 618,
+  "saham_unik": 292,
+  "kaedah": 101,
+  "belian_semula": 44,
+  "dari_watchlist": 96,
+  "isyarat": 2477,
+  "ditolak": {
+   "dipegang": 426,
+   "tidak_cair": 44,
+   "had": 1298,
+   "kelas_berganda": 9,
+   "ambil_alih": 41,
+   "mingguan": 41
+  },
+  "tidak_layak": {
+   "AKA": "tidak cair",
+   "ATKR": "ambil alih",
+   "BELFA": "kelas berganda",
+   "BIO.B": "tidak cair",
+   "BRZE": "ambil alih",
+   "DV": "ambil alih",
+   "FEDU": "tidak cair",
+   "FOX": "kelas berganda",
+   "ICCC": "tidak cair",
+   "KELYB": "tidak cair",
+   "KEQU": "tidak cair",
+   "MAYS": "tidak cair",
+   "MGRT": "tidak cair",
+   "NCEW": "tidak cair",
+   "NIPG": "tidak cair",
+   "NSYS": "tidak cair",
+   "NWS": "kelas berganda",
+   "PEN": "ambil alih",
+   "PHOE": "tidak cair",
+   "POLE": "tidak cair",
+   "PTC": "ambil alih",
+   "RAMP": "ambil alih",
+   "RGS": "tidak cair",
+   "RRC": "ambil alih",
+   "RUSHB": "kelas berganda",
+   "SENEB": "tidak cair",
+   "SLAB": "ambil alih",
+   "SLP": "ambil alih",
+   "STRR": "tidak cair",
+   "TECH": "ambil alih",
+   "WLYB": "tidak cair"
+  },
+  "watchlist": 269,
+  "watchlist_baharu": 179,
+  "watchlist_dibuang": 7,
+  "watchlist_ke_senarai": 96,
+  "minggu_akhir": false,
+  "fail_isyarat": "data/isyarat/2026-10-26_malam.csv.gz"
+ },
+ "gred": {
+  "tarikh": "2026-10-27",
+  "masa": "2026-10-27 13:29 MYT",
+  "pemangkin": {
+   "B": 257,
+   "D": 172,
+   "C": 187,
+   "–": 1,
+   "A": 1
+  }
  }
 }
