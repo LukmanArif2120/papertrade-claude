@@ -214,7 +214,7 @@ def tala(mid, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=None, ke
             if kunci in jejak:
                 r = jejak[kunci]; tr.set_user_attr('ulang', True); return r['skor']
             try:
-                mt, rh = pn.jalan(P, ['A'], harian=True)['A']
+                mt, rh = pn.jalan(P, ['A'], harian=True)['A']  # noqa: F821 (pn ditakrif sebelum obj dipanggil; del selepas kajian)
                 r = dict(P=P, skor=O.skor(mt), lulus=O.lulus(mt), thn_min=mt['thn_min'], m=mt,
                          rh=rh.values.astype(np.float32))
             except Exception as e:

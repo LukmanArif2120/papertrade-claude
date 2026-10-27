@@ -1,0 +1,17 @@
+# Pustaka kajian (27 Okt 2026): BUKAN untuk workflow malam (requirements.txt kekal ringan).
+# Pasang dalam sesi kajian / AUTOTUNE A04 / L03 sahaja:
+#   pip install -c kekangan.txt -r requirements.txt -r requirements-kajian.txt
+# Versi diuji serentak dengan pandas 3.0.6 + numpy 2.4.6 (kekangan.txt) atas Python 3.11.
+# optuna dipin 4.9.0: RobustGPSampler (OptunaHub samplers/value_at_risk) gagal dengan optuna 5.0.0
+# (modul dalaman optuna._gp.scipy_blas_thread_patch dibuang) dan perlu uniform_input_noise_rads.
+# shap dipin 0.51.0: versi ≥ 0.52 perlukan Python ≥ 3.12 (Actions guna 3.11).
+edgartools==5.62.1
+arch==8.0.0
+alphalens-reloaded==0.5.1
+lightgbm==4.7.0
+shap==0.51.0
+optuna==4.9.0
+optunahub==0.5.0
+# torch dari PyPI ialah binaan CUDA (besar, ~beberapa GB); di Actions boleh guna binaan CPU yang lebih kecil:
+#   pip install torch==2.14.1 --index-url https://download.pytorch.org/whl/cpu  (belum diuji: hos disekat dalam sesi awan)
+torch==2.14.1
