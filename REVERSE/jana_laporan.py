@@ -113,20 +113,33 @@ def main():
           f'{gagal4} gagal gate bootstrap (G4) dan {gagal5} ditanda BERGANTUNG PADA OUTLIER (G5). '
           f'Ini keputusan, bukan kegagalan teknikal: tiada signal ENTRY tahun ini bertahan selepas '
           f'had bawah 95% bootstrap blok dan ujian tanpa 5% pemenang teratas.\n')
-    A(f'4. **Rujukan (c) "pegang tanpa jual" MENANG.** Tiada satu pun daripada 234 sistem '
-      f'HOLD×EXIT mengalahkan ketiga-tiga rujukan. Jangkaan rujukan (c) = '
-      f'{l7b["rujukan"]["REF_pegang_252"]:.2f}% setiap dagangan lawan '
-      f'{l7b["rujukan"]["REF_chandelier_4atr"]:.2f}% (Chandelier) dan '
-      f'{l7b["rujukan"]["REF_jual_hari63"]:.2f}% (jual hari 63). Mengikut arahan Step 7b.4, '
-      f'jawapan kajian ialah **"jangan jual"**.\n')
-    A(f'5. **Tetapi "jangan jual" tidak boleh mengisi portfolio.** Dalam Step 9 ia hanya membuka '
-      f'**{int(ref.n_posisi_dibuka)} posisi sepanjang tahun** (8 slot terisi pada Januari dan '
-      f'tidak pernah kosong), berbanding ~130 calon/tahun yang diperlukan. Pulangannya '
-      f'{ref.pulangan_tahun:.2f}% ialah **loteri 8 saham**, bukan sistem.\n')
+    RUJ_NAMA = {'REF_pegang_252': 'pegang tanpa jual hingga hari ke-252',
+                'REF_chandelier_4atr': 'Chandelier 4×ATR14', 'REF_jual_hari63': 'jual hari ke-63'}
+    menang_ruj = max(l7b['rujukan'], key=lambda k: l7b['rujukan'][k])
+    n_menang = len(l7b['sistem'])
+    n_sistem = l7b.get('n_sistem', 237) - 3
+    if n_menang == 0:
+        A(f'4. **Rujukan "{RUJ_NAMA[menang_ruj]}" MENANG.** Tiada satu pun daripada {n_sistem} '
+          f'sistem HOLD×EXIT mengalahkan ketiga-tiga rujukan. Jangkaan: '
+          + ', '.join(f'{l7b["rujukan"][k]:+.2f}% ({RUJ_NAMA[k]})' for k in
+                      sorted(l7b['rujukan'], key=lambda k: -l7b['rujukan'][k]))
+          + '. Mengikut arahan Step 7b.4, jawapan kajian tahun ini ialah **"jangan jual"**.\n')
+    else:
+        A(f'4. **{n_menang} daripada {n_sistem} sistem HOLD×EXIT mengalahkan ketiga-tiga '
+          f'rujukan** — berbeza daripada tahun lain. Rujukan terbaik hanya '
+          f'{l7b["ambang"]:+.2f}% setiap dagangan ("{RUJ_NAMA[menang_ruj]}"): '
+          + ', '.join(f'{l7b["rujukan"][k]:+.2f}% ({RUJ_NAMA[k]})' for k in
+                      sorted(l7b['rujukan'], key=lambda k: -l7b['rujukan'][k]))
+          + '. Apabila memegang tanpa jual tidak lagi menguntungkan, exit aktif baru berbaloi.\n')
+    A(f'5. **Kapasiti slot, bukan kadar menang, yang mengikat.** Dalam Step 9 rujukan '
+      f'pegang-252 hanya membuka **{int(ref.n_posisi_dibuka)} posisi sepanjang tahun** (8 slot '
+      f'terisi awal dan tidak pernah kosong), berbanding ~130 calon/tahun yang diperlukan. '
+      f'Pulangannya {ref.pulangan_tahun:.2f}% ialah hasil **{int(ref.n_posisi_dibuka)} saham**, '
+      f'bukan sistem.\n')
     A(f'6. **Sasaran +10% sebulan (median): TIDAK TERCAPAI oleh mana-mana sistem.** Yang terbaik '
       f'ialah {ref.median_bulanan:.2f}% sebulan (median) dengan MDD {ref.mdd:.2f}%.\n')
-    A(f'7. **Keluarga EXIT dan SISTEM gagal sepenuhnya pada FDR:** 0/{fdr["EXIT"]["n"]} signal '
-      f'EXIT dan 0/{fdr["SISTEM"]["n"]} sistem lulus q ≤ 0.01.\n')
+    A(f'7. **Keluarga EXIT dan SISTEM pada FDR:** {fdr["EXIT"]["lulus"]}/{fdr["EXIT"]["n"]} signal '
+      f'EXIT dan {fdr["SISTEM"]["lulus"]}/{fdr["SISTEM"]["n"]} sistem lulus q ≤ 0.01.\n')
 
     A('## 1. Semakan kesediaan Step 0\n')
     A('| Semakan | Hasil |\n|---|---|\n'
@@ -386,11 +399,19 @@ def main():
                  'purata_menang', 'purata_kalah', 'purata_hari_pegang', 'mae_median',
                  'pct_exit_terlalu_awal', 'pct_terbuka_hari252', 'pct_terpotong_data',
                  'siri_kalah_terpanjang']))
-    A(f'\n**Keputusan: rujukan (c) "pegang tanpa jual sampai hari ke-252" menang, dan '
-      f'0 / 234 sistem mengalahkan ketiga-tiga rujukan** (ambang = jangkaan rujukan terbaik = '
-      f'{l7b["ambang"]:.3f}%). Mengikut arahan Step 7b.4, jawapan kajian ialah **"jangan jual"** — '
-      f'dan itu dilaporkan sebagai penemuan, bukan kegagalan.\n')
-    A('\n### 15 sistem terbaik daripada 234\n')
+    if n_menang == 0:
+        A(f'\n**Keputusan: rujukan "{RUJ_NAMA[menang_ruj]}" menang, dan 0 / {n_sistem} sistem '
+          f'mengalahkan ketiga-tiga rujukan** (ambang = jangkaan rujukan terbaik = '
+          f'{l7b["ambang"]:.3f}%). Mengikut arahan Step 7b.4, jawapan kajian ialah '
+          f'**"jangan jual"** — dan itu dilaporkan sebagai penemuan, bukan kegagalan.\n')
+    else:
+        A(f'\n**Keputusan: {n_menang} / {n_sistem} sistem mengalahkan ketiga-tiga rujukan** '
+          f'(ambang = jangkaan rujukan terbaik = {l7b["ambang"]:.3f}%, '
+          f'"{RUJ_NAMA[menang_ruj]}"). Ini berlaku kerana rujukan itu sendiri lemah tahun ini, '
+          f'bukan semestinya kerana sistem itu kuat — bandingkan dengan tahun lain dalam '
+          f'`BANDING_TAHUN.md` sebelum menyimpulkan apa-apa. Semuanya masih perlu melalui '
+          f'FDR keluarga SISTEM dalam Step 8.\n')
+    A(f'\n### 15 sistem terbaik daripada {n_sistem}\n')
     A(md_jadual(hh[~hh.sistem.str.startswith('REF_')],
                 ['sistem', 'n', 'median_pulangan', 'purata_pulangan', 'jangkaan', 'kadar_menang',
                  'purata_hari_pegang', 'mae_median', 'pct_exit_terlalu_awal',
@@ -424,7 +445,10 @@ def main():
         for nm in terima.signal:
             tolak = []
             for y in tahun_lain:
-                dy = pd.read_csv(R / f'keputusan_{y}.csv').set_index('signal')
+                fy = R / f'keputusan_{y}.csv'
+                if not fy.exists():
+                    continue
+                dy = pd.read_csv(fy).set_index('signal')
                 if nm in dy.index and dy.loc[nm, 'keputusan'] == 'DITOLAK':
                     tolak.append(f'{y} (G4 {dy.loc[nm, "G4_bootstrap"]}, '
                                  f'G5 {dy.loc[nm, "G5_outlier"]})')
@@ -531,10 +555,17 @@ def main():
       f'ialah hasil paling kukuh (SIHAT {kpb.get("PULLBACK SIHAT", float("nan")):.1f}% / '
       f'PASARAN {kpb.get("PULLBACK PASARAN", float("nan")):.1f}% menyambung ke puncak baru lawan '
       f'AMARAN {kpb.get("AMARAN", float("nan")):.1f}%).\n')
-    A(f'3. **EXIT** — 0/{fdr["EXIT"]["n"]} lulus FDR; 0/234 sistem mengalahkan rujukan. '
-      '**Jawapan kajian: jangan jual.**\n')
-    A('4. **PORTFOLIO** — sasaran +10% sebulan tidak tercapai; penghalang utama ialah kapasiti '
-      'slot apabila pegangan panjang, bukan kadar menang.\n')
+    A(f'3. **EXIT** — {fdr["EXIT"]["lulus"]}/{fdr["EXIT"]["n"]} signal lulus FDR; '
+      f'{n_menang}/{n_sistem} sistem mengalahkan ketiga-tiga rujukan dan '
+      f'{fdr["SISTEM"]["lulus"]}/{fdr["SISTEM"]["n"]} lulus FDR keluarga SISTEM. '
+      + ('**Jawapan kajian tahun ini: jangan jual.**\n' if n_menang == 0 else
+         '**Tahun ini exit aktif berbaloi** kerana memegang tanpa jual hampir tidak '
+         'menguntungkan.\n'))
+    capai = pf[pf.median_bulanan >= 10]
+    A(f'4. **PORTFOLIO** — sasaran +10% sebulan '
+      + (f'dicapai oleh {len(capai)} sistem.\n' if len(capai) else
+         'tidak tercapai oleh mana-mana sistem; penghalang utama ialah kapasiti slot apabila '
+         'pegangan panjang, bukan kadar menang.\n'))
     if n_terima:
         A(f'5. **{n_terima} signal DITERIMA** — kelas yang sama dalam ≥ 2 tahun lain '
           f'({tahun_lain}) selain lulus semua gate keras: '
