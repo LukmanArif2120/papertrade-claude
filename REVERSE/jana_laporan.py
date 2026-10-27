@@ -117,7 +117,8 @@ def main():
                 'REF_chandelier_4atr': 'Chandelier 4×ATR14', 'REF_jual_hari63': 'jual hari ke-63'}
     menang_ruj = max(l7b['rujukan'], key=lambda k: l7b['rujukan'][k])
     n_menang = len(l7b['sistem'])
-    n_sistem = l7b.get('n_sistem', 237) - 3
+    # l7b['n_sistem'] sudah mengecualikan 3 rujukan (lihat step7b_hadapan.py)
+    n_sistem = l7b.get('n_sistem', 234)
     if n_menang == 0:
         A(f'4. **Rujukan "{RUJ_NAMA[menang_ruj]}" MENANG.** Tiada satu pun daripada {n_sistem} '
           f'sistem HOLD×EXIT mengalahkan ketiga-tiga rujukan. Jangkaan: '
@@ -130,7 +131,11 @@ def main():
           f'{l7b["ambang"]:+.2f}% setiap dagangan ("{RUJ_NAMA[menang_ruj]}"): '
           + ', '.join(f'{l7b["rujukan"][k]:+.2f}% ({RUJ_NAMA[k]})' for k in
                       sorted(l7b['rujukan'], key=lambda k: -l7b['rujukan'][k]))
-          + '. Apabila memegang tanpa jual tidak lagi menguntungkan, exit aktif baru berbaloi.\n')
+          + '. Apabila memegang tanpa jual tidak lagi menguntungkan, exit aktif baru berbaloi.'
+          + (' **Perhatikan: ambang itu NEGATIF.** Mengalahkan rujukan yang merugikan hanya '
+             'bermakna "kurang rugi", bukan untung — periksa lajur `jangkaan` dan '
+             '`median_pulangan` setiap sistem, bukan hanya kedudukannya berbanding rujukan.\n'
+             if l7b['ambang'] <= 0 else '\n'))
     A(f'5. **Kapasiti slot, bukan kadar menang, yang mengikat.** Dalam Step 9 rujukan '
       f'pegang-252 hanya membuka **{int(ref.n_posisi_dibuka)} posisi sepanjang tahun** (8 slot '
       f'terisi awal dan tidak pernah kosong), berbanding ~130 calon/tahun yang diperlukan. '
@@ -405,12 +410,20 @@ def main():
           f'{l7b["ambang"]:.3f}%). Mengikut arahan Step 7b.4, jawapan kajian ialah '
           f'**"jangan jual"** — dan itu dilaporkan sebagai penemuan, bukan kegagalan.\n')
     else:
+        sis_ = hh[~hh.sistem.str.startswith('REF_')].copy()
+        sis_['j'] = pd.to_numeric(sis_.jangkaan, errors='coerce')
+        n_pos = int((sis_.j > 0).sum())
+        n_med_pos = int((pd.to_numeric(sis_.median_pulangan, errors='coerce') > 0).sum())
         A(f'\n**Keputusan: {n_menang} / {n_sistem} sistem mengalahkan ketiga-tiga rujukan** '
           f'(ambang = jangkaan rujukan terbaik = {l7b["ambang"]:.3f}%, '
           f'"{RUJ_NAMA[menang_ruj]}"). Ini berlaku kerana rujukan itu sendiri lemah tahun ini, '
-          f'bukan semestinya kerana sistem itu kuat — bandingkan dengan tahun lain dalam '
-          f'`BANDING_TAHUN.md` sebelum menyimpulkan apa-apa. Semuanya masih perlu melalui '
-          f'FDR keluarga SISTEM dalam Step 8.\n')
+          f'bukan semestinya kerana sistem itu kuat.\n')
+        A(f'\nUkuran mutlak, bukan kedudukan: **{n_pos} / {n_sistem}** sistem berjangkaan '
+          f'positif dan **{n_med_pos} / {n_sistem}** bermedian pulangan positif. '
+          + ('Ambang rujukan NEGATIF tahun ini, jadi "mengalahkan rujukan" boleh bermakna '
+             'sekadar kurang rugi.\n' if l7b['ambang'] <= 0 else '\n')
+          + '\nSemuanya masih perlu melalui FDR keluarga SISTEM dalam Step 8 '
+          f'({fdr["SISTEM"]["lulus"]}/{fdr["SISTEM"]["n"]} lulus q ≤ 0.01).\n')
     A(f'\n### 15 sistem terbaik daripada {n_sistem}\n')
     A(md_jadual(hh[~hh.sistem.str.startswith('REF_')],
                 ['sistem', 'n', 'median_pulangan', 'purata_pulangan', 'jangkaan', 'kadar_menang',

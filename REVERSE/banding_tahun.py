@@ -216,15 +216,28 @@ def main():
     ny = len(tahun)
     kon_mer = ('atr_pct', 'bb_lebar', 'julat20', 'julat10')
     semua_mer = len(kekal) and all(any(k in x for k in kon_mer) for x in kekal.signal)
-    A(f'1. **Kelas kekal, keputusan tidak.** {len(kekal)} signal mengekalkan kelas '
-      f'TERAS/UNIQUE/LANGKA pada semua {ny} tahun'
-      + (' — kesemuanya konteks pengembangan kemeruapan (ATR%, julat 20 hari, lebar Bollinger '
-         'pada kuintil tertinggi)' if semua_mer else '')
-      + (f': {", ".join("`" + x + "`" for x in kekal.signal)}' if len(kekal) else '')
-      + f'. **Tetapi {len(calon_semua)} berstatus CALON atau DITERIMA pada semua {ny} tahun.** '
-      f'Kelas Step 4 (lift atas populasi peristiwa) konsisten; gate yang keras (G4 bootstrap, '
-      f'G5 outlier) tidak. Itulah jurang paling penting dalam perbandingan ini: kekonsistenan '
-      f'lift **bukan** kekonsistenan kelebihan dagangan.\n')
+    maks = int(bt.n_tahun_kelas_baik.max()) if len(bt) else 0
+    atas = bt[bt.n_tahun_kelas_baik == maks] if maks else bt.head(0)
+    kon_mer = ('atr_pct', 'bb_lebar', 'julat20', 'julat10')
+    if len(kekal):
+        semua_mer = all(any(k in x for k in kon_mer) for x in kekal.signal)
+        A(f'1. **Kelas kekal, keputusan tidak.** {len(kekal)} signal mengekalkan kelas '
+          f'TERAS/UNIQUE/LANGKA pada semua {ny} tahun'
+          + (' — kesemuanya konteks pengembangan kemeruapan' if semua_mer else '')
+          + f': {", ".join("`" + x + "`" for x in kekal.signal)}. **Tetapi '
+          f'{len(calon_semua)} berstatus CALON atau DITERIMA pada semua {ny} tahun.** '
+          f'Kelas Step 4 konsisten; gate yang keras (G4 bootstrap, G5 outlier) tidak.\n')
+    else:
+        A(f'1. **Tiada signal konsisten merentas {ny} tahun — malah kelasnya pun tidak.** '
+          f'**0** signal mengekalkan kelas TERAS/UNIQUE/LANGKA pada semua {ny} tahun; yang '
+          f'terbaik hanya {maks}/{ny} tahun ({len(atas)} signal: '
+          f'{", ".join("`" + x + "`" for x in atas.signal)}). '
+          f'**0 berstatus CALON atau DITERIMA pada lebih daripada satu tahun.**\n')
+        A(f'   Ini perubahan penting berbanding empat tahun. Dengan 2022-2025 sahaja, '
+          f'`q5:atr_pct` dan `rsi_lintas50&q5:atr_pct` kekal UNIQUE keempat-empat tahun dan '
+          f'kelihatan seperti keluarga signal yang stabil. Menambah 2021 mematahkannya: '
+          f'kedua-duanya **TIDAK BERGUNA** pada 2021. Apa yang kelihatan konsisten merentas '
+          f'empat tahun sebenarnya konsisten merentas satu rejim sahaja.\n')
     pem = ['b:macd_cross', 'b:rsi_lintas50', 'b:ema_crossback', 'b:donchian20', 'b:pocket_pivot',
            'b:gap_and_go']
     pem_lulus = [(y, nm) for y in tahun for nm in pem if cu[y].kelas.get(nm, '-') in BAIK]
@@ -237,10 +250,28 @@ def main():
     menang_ref = {y: max(('REF_pegang_252', 'REF_chandelier_4atr', 'REF_jual_hari63'),
                          key=lambda k: float(hh[y][hh[y].sistem == k].jangkaan.iloc[0]))
                   for y in tahun}
-    A(f'3. **{"Konsisten" if (e0 and s0) else "Sebahagian"}:** keluarga EXIT '
-      f'{"kosong" if e0 else "tidak kosong"} dan SISTEM '
-      f'{"kosong" if s0 else "tidak kosong"} pada FDR setiap tahun; rujukan yang menang Step 7b '
-      f'setiap tahun: ' + ', '.join(f'{y}=`{menang_ref[y]}`' for y in tahun) + '.\n')
+    A(f'3. **Keluarga EXIT {"kosong pada FDR setiap tahun" if e0 else "tidak kosong"}; '
+      f'keluarga SISTEM {"kosong setiap tahun" if s0 else "TIDAK kosong setiap tahun"}.**\n')
+    pos_tahun = {}
+    for y in tahun:
+        l7b = json.loads((CACHE / f'lulus7b_{y}.json').read_text())
+        h = hh[y][~hh[y].sistem.str.startswith('REF_')].copy()
+        h['j'] = pd.to_numeric(h.jangkaan, errors='coerce')
+        n_pos = int((h.j > 0).sum())
+        pos_tahun[y] = (len(l7b['sistem']), fdr[y]['SISTEM']['lulus'], n_pos, len(h),
+                        l7b['ambang'])
+        A(f'   - {y}: rujukan menang `{menang_ref[y]}` (ambang {l7b["ambang"]:+.2f}%); '
+          f'{len(l7b["sistem"])}/{len(h)} sistem mengalahkan ketiga-tiga rujukan, '
+          f'{fdr[y]["SISTEM"]["lulus"]}/{fdr[y]["SISTEM"]["n"]} lulus FDR, **{n_pos}/{len(h)} '
+          f'berjangkaan POSITIF**.\n')
+    buruk = [y for y in tahun if pos_tahun[y][1] > 0 and pos_tahun[y][2] == 0]
+    if buruk:
+        y0 = buruk[0]
+        m, f_, pz, n_, amb = pos_tahun[y0]
+        A(f'   Lajur terakhir itu yang penting. Pada tahun yang rujukannya sendiri merugikan, '
+          f'ramai sistem "mengalahkan rujukan" dan lulus FDR sambil masih kehilangan wang: pada '
+          f'{y0}, {m}/{n_} mengalahkan rujukan dan {f_} lulus FDR, tetapi **{pz}/{n_} '
+          f'berjangkaan positif**. Kedudukan berbanding rujukan bukan ukuran keuntungan.\n')
     pb = {y: he[y][he[y].jenis == 'kelas_pullback'].set_index('nama').pct_sambung_puncak_baru
           for y in tahun}
     A('4. **Konsisten:** kelas pullback membezakan sambungan ke puncak baru setiap tahun — '
