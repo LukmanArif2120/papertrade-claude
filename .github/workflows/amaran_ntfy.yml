@@ -19,6 +19,7 @@ on:
       - Semak data
       - Data pemangkin
       - Fundamental SEC
+      - Senarai bursa
     types: [completed]
   workflow_dispatch:
 

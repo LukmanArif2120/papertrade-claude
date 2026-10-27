@@ -1,0 +1,32 @@
+# Siasatan sekali guna (27 Okt 2026, senarai alat #81): sesi Claude tidak boleh capai optionstrategist.com.
+# Muat turun halaman data volatiliti percuma, robots.txt dan halaman terma sebagai artifact (tiada commit) supaya
+# format dan syarat penggunaan automatik dapat disemak sebelum skrip pengumpul ditulis. Padam selepas siasatan.
+name: Siasat IV
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  siasat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Muat turun
+        run: |
+          mkdir -p siasat && cd siasat
+          UA="Mozilla/5.0 (papertrade-claude research)"
+          for u in https://optionstrategist.com/calculators/free-volatility-data https://optionstrategist.com/robots.txt \
+                   https://optionstrategist.com/terms-of-use https://optionstrategist.com/terms https://optionstrategist.com/privacy-policy; do
+            f=$(echo "$u" | sed 's#https://##; s#[/:]#_#g')
+            curl -sSL -m 30 -A "$UA" -o "$f" -w "$u %{http_code} %{size_download}\n" "$u" || echo "$u GAGAL"
+          done
+          # pautan fail data (txt/csv) dalam halaman
+          grep -oiE 'href="[^"]+\.(txt|csv|xls|xlsx)"' optionstrategist.com_calculators_free-volatility-data | head -20 || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: siasat-iv
+          path: siasat/
+          retention-days: 3

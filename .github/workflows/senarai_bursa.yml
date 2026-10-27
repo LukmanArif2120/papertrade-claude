@@ -1,0 +1,43 @@
+# Senarai bursa: petikan harian direktori simbol Nasdaq Trader -> BacktestShariah2/data/senarai_bursa/
+# (standard/senarai_bursa.py; 27 Okt 2026). Sejarah saham tersenarai/delist point-in-time terbina mulai hari ini.
+# Sesi Claude tidak boleh capai nasdaqtrader.com; runner GitHub boleh. Masa (UTC): 23:53 Isn–Jum, sandaran 04:23 Sel–Sab.
+name: Senarai bursa
+
+on:
+  schedule:
+    - cron: '53 23 * * 1-5'
+    - cron: '23 4 * * 2-6'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: senarai-bursa
+  cancel-in-progress: false
+
+jobs:
+  senarai:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q -c kekangan.txt pandas
+      - name: Petikan direktori simbol
+        run: python3 BacktestShariah2/standard/senarai_bursa.py jalan
+      - name: Commit dan push
+        run: |
+          git config user.name "senarai[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/senarai_bursa 2>/dev/null || true
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Senarai bursa: $(date -u +%F)"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1
