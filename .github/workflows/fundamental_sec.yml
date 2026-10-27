@@ -38,12 +38,15 @@ jobs:
         env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
           MAKS: ${{ github.event.inputs.maks_fakta }}
-        run: python3 BacktestShariah2/standard/fundamental_sec.py jalan --maks-fakta "${MAKS:-300}"
+        run: |
+          [ -n "$SEC_USER_AGENT" ] || echo "::warning::Rahsia SEC_USER_AGENT belum ditetapkan; data SEC tidak diambil"
+          python3 BacktestShariah2/standard/fundamental_sec.py jalan --maks-fakta "${MAKS:-300}"
       - name: Commit dan push
         run: |
           git config user.name "sec[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add BacktestShariah2/data/sec BacktestShariah2/data/edgar/company_tickers.json
+          git add BacktestShariah2/data/sec 2>/dev/null || true
+          git add BacktestShariah2/data/edgar/company_tickers.json 2>/dev/null || true
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "Fundamental SEC: $(date -u +%F)"
           for n in 1 2 3; do
