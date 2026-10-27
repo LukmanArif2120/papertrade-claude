@@ -1,6 +1,7 @@
 tahun,n_ticker_universe,n_run,pct_entry_sah,n_bertangga,n_peristiwa_sah,n_padu_s2_keputusan,had_bersyarat,pct_kohort_melebihi_100,n_corong,diterima,calon,ditolak,fdr_entry,fdr_hold,fdr_exit,fdr_sistem,rujukan_7b_menang,ambang_jangkaan_rujukan,n_sistem_mengalahkan_3_rujukan,n_sistem_jangkaan_positif,n_sistem,spy_pulangan,rawak_terbaik,sistem_signal_terbaik,kalah_kepada_spy,kalah_kepada_rawak,n_sistem_median_bulanan_ge10,asas_entry_step9
+2020,2131,4593,59.5,513,12858,272,AKTIF,54.6,16,3,3,10,16/16,9/18,0/68,0/234,pegang_252,60.66,0,234,234,17.2,102.8,93.7,0/6,6/6,0,CALON selepas Step 8
 2021,2370,4413,75.0,224,15259,128,AKTIF,15.6,27,0,0,27,22/27,10/18,0/62,173/234,jual_hari63,-2.81,196,0,234,30.5,2.4,12.3,6/6,4/6,0,lulus Step 7 sahaja (TIADA signal CALON tahun ini)
 2022,2330,5541,65.9,299,15440,171,AKTIF,18.2,21,0,0,21,15/21,13/18,0/66,0/234,pegang_252,0.55,14,18,234,-18.6,-36.9,-5.3,1/6,0/6,0,lulus Step 7 sahaja (TIADA signal CALON tahun ini)
-2023,2268,4048,76.4,283,13642,200,AKTIF,31.4,20,0,1,19,7/20,0/18,0/64,0/234,pegang_252,16.25,0,190,234,26.7,10.7,56.4,2/6,0/6,0,CALON selepas Step 8
+2023,2268,4048,76.4,283,13642,200,AKTIF,31.4,20,1,0,19,7/20,0/18,0/64,0/234,pegang_252,16.25,0,190,234,26.7,10.7,56.4,2/6,0/6,0,CALON selepas Step 8
 2024,2264,3744,80.4,206,14151,116,AKTIF,22.7,18,0,0,18,12/18,0/18,0/62,0/234,pegang_252,8.68,0,99,234,25.6,20.5,11.0,6/6,6/6,0,lulus Step 7 sahaja (TIADA signal CALON tahun ini)
 2025,2321,4507,68.6,401,13998,189,AKTIF,39.8,19,3,1,15,18/19,11/18,0/62,0/234,pegang_252,27.57,0,228,234,18.0,29.5,128.9,5/6,5/6,0,CALON selepas Step 8

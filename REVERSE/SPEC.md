@@ -606,3 +606,20 @@ output menanda `asas_entry = "lulus Step 7 sahaja (TIADA signal CALON tahun ini)
 kriteria akhir (prestasi portfolio) tetap dijawab dengan angka untuk setiap tahun, dan supaya
 perbandingan merentas tahun mempunyai baris yang setara. Angka itu **bukan** bukti sistem lulus —
 ia dilaporkan di bawah label asas entry yang jelas.
+
+### 13.11 — 27 Okt 2026: gate 8.1 tidak boleh disahkan oleh kelas yang bukan penemuan
+
+**Kecacatan pelaksanaan, ditemui apabila 2020 siap.** Gate 8.1 seperti ditulis ("kelas sama dalam
+≥ 2 tahun lain") dilaksanakan secara literal, jadi `macd_cross&q1:sektor_1b` dilabel **DITERIMA**
+pada 2020 kerana kelasnya **TIDAK BERGUNA** pada kesemua enam tahun — "sama" pada 5/5 tahun lain.
+Signal itu memasuki corong melalui laluan `lift_presisi ≥ 3` (Step 4.5), bukan melalui kelasnya.
+
+Kekonsistenan "tidak berguna" bukan pengesahan. Dikunci: **G2 hanya boleh dinilai jika kelas tahun
+itu sendiri ialah TERAS, UNIQUE atau LANGKA** (kelas yang arahan anggap penemuan). Jika tidak, G2 =
+`TIDAK BOLEH DINILAI (kelas tahun ini <kelas>, bukan penemuan)` dan signal tidak boleh dinaik taraf
+ke DITERIMA.
+
+Pembetulan ini **mengetatkan** gate, bukan melonggarkannya, jadi ia tidak memihak kepada sebarang
+hasil. Ia juga tidak menjawab soalan berasingan yang masih terbuka kepada pengguna: sama ada gate
+8.1 patut menuntut **keputusan** CALON dalam ≥ 2 tahun lain, bukan sekadar kelas yang sama. Soalan
+itu kekal keputusan pengguna.

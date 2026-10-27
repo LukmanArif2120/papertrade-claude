@@ -2,7 +2,7 @@
 
 Dijana skrip `REVERSE/jana_laporan.py` pada 27 Okt 2026. Spec dikunci: `REVERSE/SPEC.md`.
 
-> **KAVEAT WAJIB (dua arah).** Data A02 **tiada saham delist** (bias survivorship): run dipandang **tinggi** (had atas) DAN kadar signal palsu dipandang **rendah**. Satu tahun = **satu rejim pasaran**. Peta sektor bukan titik-masa. Gate 8.1 ada 4 tahun lain untuk mengesahkan ([2021, 2022, 2023, 2024]); **3 signal DITERIMA**, selebihnya maksimum CALON (SPEC §11.8).
+> **KAVEAT WAJIB (dua arah).** Data A02 **tiada saham delist** (bias survivorship): run dipandang **tinggi** (had atas) DAN kadar signal palsu dipandang **rendah**. Satu tahun = **satu rejim pasaran**. Peta sektor bukan titik-masa. Gate 8.1 ada 5 tahun lain untuk mengesahkan ([2020, 2021, 2022, 2023, 2024]); **3 signal DITERIMA**, selebihnya maksimum CALON (SPEC §11.8).
 
 ## 0. Jawapan ringkas
 
@@ -32,6 +32,8 @@ Dijana skrip `REVERSE/jana_laporan.py` pada 27 Okt 2026. Spec dikunci: `REVERSE/
 | f. `semak_hadapan` atas modul indikator | **LULUS** — 14 tarikh potong (≥ 12), 26,950 perbandingan, **0 kegagalan** (`REVERSE/PANDANG_HADAPAN_2025.md`) |
 
 ## 2. Step 1–2 — run
+
+Saiz universe 2025 setiap bulan: min **2000**, median **2000**, maks **2000**; 2321 ticker berbeza sepanjang tahun.
 
 | bulan | n_run | n_super | n_padu | n_biasa | n_bertangga | n_lonjakan | n_stabil | n_entry_sah | n_masih_naik | n_peristiwa | med_naik |
 |---|---|---|---|---|---|---|---|---|---|---|---|
@@ -822,25 +824,25 @@ Perbandingan yang diminta arahan: **18 signal lulus FDR daripada 19 diuji**, man
 
 | signal | G1_sah_dalam_tahun | G2_merentas_tahun | G3_nilai_p | G3_fdr | G4_bootstrap | G5_outlier | G6 | step7 | keputusan |
 |---|---|---|---|---|---|---|---|---|---|
-| rsi_lintas50&q5:julat20 | GAGAL | LULUS (3/4 tahun lain kelas sama: 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q5:bb_lebar | GAGAL | LULUS (2/4 tahun lain kelas sama: 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q5:atr_pct | LULUS | LULUS (3/4 tahun lain kelas sama: 2021=TIDAK BERGUNA; 2022=UNIQUE; 2023=UNIQUE; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITERIMA |
-| q5:atr_pct | LULUS | LULUS (3/4 tahun lain kelas sama: 2021=TIDAK BERGUNA; 2022=UNIQUE; 2023=UNIQUE; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITERIMA |
-| q5:julat20 | SEBAHAGIAN | LULUS (3/4 tahun lain kelas sama: 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITERIMA |
-| q5:bb_lebar | SEBAHAGIAN | BELUM (0/4 sama, perlu >= 2; 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=SEDERHANA) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
-| macd_cross&q1:j_52w_tinggi | LULUS | BELUM (1/4 sama, perlu >= 2; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=LANGKA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| q5:j_ema9 | GAGAL | LULUS (2/4 tahun lain kelas sama: 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| macd_cross&q1:cerun_ma50 | LULUS | BELUM (1/4 sama, perlu >= 2; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=LANGKA; 2024=TIDAK BERGUNA) | 0.002 | LULUS | GAGAL | LULUS | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q1:j_52w_tinggi | GAGAL | LULUS (3/4 tahun lain kelas sama: 2021=UNIQUE; 2022=UNIQUE; 2023=UNIQUE; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| pocket_pivot&q1:j_52w_tinggi | GAGAL | LULUS (2/4 tahun lain kelas sama: 2021=UNIQUE; 2022=LANGKA; 2023=LANGKA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q1:cerun_ma50 | GAGAL | BELUM (0/4 sama, perlu >= 2; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| macd_cross&q1:j_ma200 | LULUS | LULUS (4/4 tahun lain kelas sama: 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q5:j_ma200 | LULUS | LULUS (3/4 tahun lain kelas sama: 2021=UNIQUE; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.94106 | GAGAL | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| q1:j_52w_tinggi | SEBAHAGIAN | LULUS (2/4 tahun lain kelas sama: 2021=TIDAK BERGUNA; 2022=UNIQUE; 2023=UNIQUE; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| q1:roc20 | SEBAHAGIAN | BELUM (0/4 sama, perlu >= 2; 2021=TIDAK BERGUNA; 2022=SEDERHANA; 2023=TIDAK BERGUNA; 2024=SEDERHANA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| pocket_pivot&q1:cerun_ma50 | LULUS | LULUS (4/4 tahun lain kelas sama: 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.002 | LULUS | LULUS | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| q1:cerun_ma50 | GAGAL | BELUM (0/4 sama, perlu >= 2; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=COMMON BIASA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| q1:j_ma50 | LULUS | BELUM (0/4 sama, perlu >= 2; 2021=SEDERHANA; 2022=COMMON BIASA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| rsi_lintas50&q5:julat20 | GAGAL | LULUS (4/5 tahun lain kelas sama: 2020=UNIQUE; 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q5:bb_lebar | GAGAL | LULUS (3/5 tahun lain kelas sama: 2020=UNIQUE; 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q5:atr_pct | LULUS | LULUS (3/5 tahun lain kelas sama: 2020=LANGKA; 2021=TIDAK BERGUNA; 2022=UNIQUE; 2023=UNIQUE; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITERIMA |
+| q5:atr_pct | LULUS | LULUS (4/5 tahun lain kelas sama: 2020=UNIQUE; 2021=TIDAK BERGUNA; 2022=UNIQUE; 2023=UNIQUE; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITERIMA |
+| q5:julat20 | SEBAHAGIAN | LULUS (4/5 tahun lain kelas sama: 2020=UNIQUE; 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITERIMA |
+| q5:bb_lebar | SEBAHAGIAN | BELUM (0/5 sama, perlu >= 2; 2020=UNIQUE; 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=SEDERHANA) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
+| macd_cross&q1:j_52w_tinggi | LULUS | BELUM (1/5 sama, perlu >= 2; 2020=TIDAK BERGUNA; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=LANGKA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| q5:j_ema9 | GAGAL | LULUS (3/5 tahun lain kelas sama: 2020=UNIQUE; 2021=UNIQUE; 2022=UNIQUE; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| macd_cross&q1:cerun_ma50 | LULUS | LULUS (2/5 tahun lain kelas sama: 2020=LANGKA; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=LANGKA; 2024=TIDAK BERGUNA) | 0.002 | LULUS | GAGAL | LULUS | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q1:j_52w_tinggi | GAGAL | LULUS (3/5 tahun lain kelas sama: 2020=TIDAK BERGUNA; 2021=UNIQUE; 2022=UNIQUE; 2023=UNIQUE; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| pocket_pivot&q1:j_52w_tinggi | GAGAL | LULUS (2/5 tahun lain kelas sama: 2020=TIDAK BERGUNA; 2021=UNIQUE; 2022=LANGKA; 2023=LANGKA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q1:cerun_ma50 | GAGAL | BELUM (0/5 sama, perlu >= 2; 2020=TIDAK BERGUNA; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| macd_cross&q1:j_ma200 | LULUS | TIDAK BOLEH DINILAI (kelas tahun ini TIDAK BERGUNA, bukan penemuan; 2020=TIDAK BERGUNA; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q5:j_ma200 | LULUS | TIDAK BOLEH DINILAI (kelas tahun ini TIDAK BERGUNA, bukan penemuan; 2020=TIDAK BERGUNA; 2021=UNIQUE; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.94106 | GAGAL | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| q1:j_52w_tinggi | SEBAHAGIAN | LULUS (3/5 tahun lain kelas sama: 2020=UNIQUE; 2021=TIDAK BERGUNA; 2022=UNIQUE; 2023=UNIQUE; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| q1:roc20 | SEBAHAGIAN | BELUM (1/5 sama, perlu >= 2; 2020=UNIQUE; 2021=TIDAK BERGUNA; 2022=SEDERHANA; 2023=TIDAK BERGUNA; 2024=SEDERHANA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| pocket_pivot&q1:cerun_ma50 | LULUS | TIDAK BOLEH DINILAI (kelas tahun ini TIDAK BERGUNA, bukan penemuan; 2020=TIDAK BERGUNA; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.002 | LULUS | LULUS | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| q1:cerun_ma50 | GAGAL | BELUM (0/5 sama, perlu >= 2; 2020=UNIQUE; 2021=TIDAK BERGUNA; 2022=TIDAK BERGUNA; 2023=COMMON BIASA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| q1:j_ma50 | LULUS | BELUM (0/5 sama, perlu >= 2; 2020=SEDERHANA; 2021=SEDERHANA; 2022=COMMON BIASA; 2023=TIDAK BERGUNA; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
 
 
 **DITERIMA: 3** · **CALON: 1** — `q5:bb_lebar` · **DITOLAK: 15.**
@@ -956,7 +958,7 @@ Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. As
 
 4. **PORTFOLIO** — sasaran +10% sebulan tidak tercapai oleh mana-mana sistem; penghalang utama ialah kapasiti slot apabila pegangan panjang, bukan kadar menang.
 
-5. **3 signal DITERIMA** — kelas yang sama dalam ≥ 2 tahun lain ([2021, 2022, 2023, 2024]) selain lulus semua gate keras: `rsi_lintas50&q5:atr_pct`, `q5:atr_pct`, `q5:julat20`. Lihat `BANDING_TAHUN.md`.
+5. **3 signal DITERIMA** — kelas yang sama dalam ≥ 2 tahun lain ([2020, 2021, 2022, 2023, 2024]) selain lulus semua gate keras: `rsi_lintas50&q5:atr_pct`, `q5:atr_pct`, `q5:julat20`. Lihat `BANDING_TAHUN.md`.
 
 
 ## 13. Fail output
