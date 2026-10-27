@@ -2,7 +2,7 @@
 
 Dijana skrip `REVERSE/jana_laporan.py` pada 27 Okt 2026. Spec dikunci: `REVERSE/SPEC.md`.
 
-> **KAVEAT WAJIB (dua arah).** Data A02 **tiada saham delist** (bias survivorship): run dipandang **tinggi** (had atas) DAN kadar signal palsu dipandang **rendah**. Satu tahun = **satu rejim pasaran**. Peta sektor bukan titik-masa. Gate 8.1 ada 2 tahun lain ([2024, 2025]); keputusan **maksimum CALON** (SPEC §11.8).
+> **KAVEAT WAJIB (dua arah).** Data A02 **tiada saham delist** (bias survivorship): run dipandang **tinggi** (had atas) DAN kadar signal palsu dipandang **rendah**. Satu tahun = **satu rejim pasaran**. Peta sektor bukan titik-masa. Gate 8.1 ada 3 tahun lain ([2022, 2024, 2025]); keputusan **maksimum CALON** (SPEC §11.8).
 
 ## 0. Jawapan ringkas
 
@@ -12,13 +12,13 @@ Dijana skrip `REVERSE/jana_laporan.py` pada 27 Okt 2026. Spec dikunci: `REVERSE/
 
 3. **Signal entry: 1 CALON daripada 20 yang masuk corong**: `macd_cross&q1:cerun_ma50`.
 
-4. **Rujukan (c) "pegang tanpa jual" MENANG.** Tiada satu pun daripada 234 sistem HOLD×EXIT mengalahkan ketiga-tiga rujukan. Jangkaan rujukan (c) = 16.25% setiap dagangan lawan 1.51% (Chandelier) dan 2.86% (jual hari 63). Mengikut arahan Step 7b.4, jawapan kajian ialah **"jangan jual"**.
+4. **Rujukan "pegang tanpa jual hingga hari ke-252" MENANG.** Tiada satu pun daripada 231 sistem HOLD×EXIT mengalahkan ketiga-tiga rujukan. Jangkaan: +16.25% (pegang tanpa jual hingga hari ke-252), +2.86% (jual hari ke-63), +1.51% (Chandelier 4×ATR14). Mengikut arahan Step 7b.4, jawapan kajian tahun ini ialah **"jangan jual"**.
 
-5. **Tetapi "jangan jual" tidak boleh mengisi portfolio.** Dalam Step 9 ia hanya membuka **8 posisi sepanjang tahun** (8 slot terisi pada Januari dan tidak pernah kosong), berbanding ~130 calon/tahun yang diperlukan. Pulangannya 24.72% ialah **loteri 8 saham**, bukan sistem.
+5. **Kapasiti slot, bukan kadar menang, yang mengikat.** Dalam Step 9 rujukan pegang-252 hanya membuka **8 posisi sepanjang tahun** (8 slot terisi awal dan tidak pernah kosong), berbanding ~130 calon/tahun yang diperlukan. Pulangannya 24.72% ialah hasil **8 saham**, bukan sistem.
 
 6. **Sasaran +10% sebulan (median): TIDAK TERCAPAI oleh mana-mana sistem.** Yang terbaik ialah 3.44% sebulan (median) dengan MDD -21.11%.
 
-7. **Keluarga EXIT dan SISTEM gagal sepenuhnya pada FDR:** 0/64 signal EXIT dan 0/234 sistem lulus q ≤ 0.01.
+7. **Keluarga EXIT dan SISTEM pada FDR:** 0/64 signal EXIT dan 0/234 sistem lulus q ≤ 0.01.
 
 ## 1. Semakan kesediaan Step 0
 
@@ -728,10 +728,10 @@ Set kemasukan: gabungan semua kemunculan 18 signal yang lulus Step 7 = 247,287 (
 | REF_chandelier_4atr | 24000 | -4.61 | 1.51 | 1.507 | 39.39 | 22.02 | 11.82 | 54.7 | -8.18 | 80.1 | 0.5 | 0.0 | 33 |
 
 
-**Keputusan: rujukan (c) "pegang tanpa jual sampai hari ke-252" menang, dan 0 / 234 sistem mengalahkan ketiga-tiga rujukan** (ambang = jangkaan rujukan terbaik = 16.246%). Mengikut arahan Step 7b.4, jawapan kajian ialah **"jangan jual"** — dan itu dilaporkan sebagai penemuan, bukan kegagalan.
+**Keputusan: rujukan "pegang tanpa jual hingga hari ke-252" menang, dan 0 / 231 sistem mengalahkan ketiga-tiga rujukan** (ambang = jangkaan rujukan terbaik = 16.246%). Mengikut arahan Step 7b.4, jawapan kajian ialah **"jangan jual"** — dan itu dilaporkan sebagai penemuan, bukan kegagalan.
 
 
-### 15 sistem terbaik daripada 234
+### 15 sistem terbaik daripada 231
 
 | sistem | n | median_pulangan | purata_pulangan | jangkaan | kadar_menang | purata_hari_pegang | mae_median | pct_exit_terlalu_awal | pct_terbuka_hari252 |
 |---|---|---|---|---|---|---|---|---|---|
@@ -913,11 +913,11 @@ Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. As
 
 2. **HOLD** — 0/18 signal lulus FDR; kelas pullback ialah hasil paling kukuh (SIHAT 91.5% / PASARAN 80.0% menyambung ke puncak baru lawan AMARAN 46.2%).
 
-3. **EXIT** — 0/64 lulus FDR; 0/234 sistem mengalahkan rujukan. **Jawapan kajian: jangan jual.**
+3. **EXIT** — 0/64 signal lulus FDR; 0/231 sistem mengalahkan ketiga-tiga rujukan dan 0/234 lulus FDR keluarga SISTEM. **Jawapan kajian tahun ini: jangan jual.**
 
-4. **PORTFOLIO** — sasaran +10% sebulan tidak tercapai; penghalang utama ialah kapasiti slot apabila pegangan panjang, bukan kadar menang.
+4. **PORTFOLIO** — sasaran +10% sebulan tidak tercapai oleh mana-mana sistem; penghalang utama ialah kapasiti slot apabila pegangan panjang, bukan kadar menang.
 
-5. **Tiada signal dilabel DITERIMA.** Gate 8.1 memerlukan kelas yang sama dalam ≥ 2 tahun LAIN; tahun lain yang siap: [2024, 2025]. Lihat `BANDING_TAHUN.md` untuk status merentas tahun.
+5. **Tiada signal dilabel DITERIMA.** Gate 8.1 memerlukan kelas yang sama dalam ≥ 2 tahun LAIN; tahun lain yang siap: [2022, 2024, 2025]. Lihat `BANDING_TAHUN.md` untuk status merentas tahun.
 
 
 ## 13. Fail output
