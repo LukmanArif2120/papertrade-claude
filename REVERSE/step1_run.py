@@ -69,6 +69,13 @@ def main():
     kump = univ.drop_duplicates('ticker').set_index('ticker')['kumpulan']
     aa = R.peta_ambil_alih(AKAR / 'BacktestShariah2' / 'data' / 'ambil_alih.csv')
     print(f'[{time.time()-t0:.0f}s] ticker {len(fr)} | bar kalendar {len(kal)} | sektor {si.shape[1]}')
+    liputan = int((peta.sumber_sektor != 'tiada').sum())
+    kesediaan = dict(n_ticker_universe=len(tick), n_ticker_harga=len(fr), n_bar_kalendar=len(kal),
+                     n_sektor=int(si.shape[1]), liputan_sektor=liputan,
+                     pct_liputan_sektor=round(liputan / max(len(tick), 1) * 100, 1),
+                     n_lain_lain=int((peta.sektor == 'Lain-lain').sum()),
+                     n_kelas_asas=int((peta.sumber_sektor == 'kelas_asas').sum()),
+                     mula_muat=mula_muat, akhir_muat=akhir_muat)
 
     t_awal = pd.Timestamp(f'{th}-01-01')
     t_akhir = pd.Timestamp(f'{th}-12-31')
@@ -208,6 +215,11 @@ def main():
     CACHE.mkdir(parents=True, exist_ok=True)
     sig.to_parquet(CACHE / f'signals_{th}.parquet', index=False)
     (CACHE / f'lajur_ind_{th}.json').write_text(json.dumps(IND))
+    kesediaan['n_hari_saham'] = int(len(sig))
+    kesediaan['n_hari_saham_dalam_univ'] = int((sig.dalam_univ == 1).sum())
+    kesediaan['saat_larian'] = round(time.time() - t0, 1)
+    kesediaan['saat_per_ticker'] = round((time.time() - t0) / max(len(fr), 1), 4)
+    (CACHE / f'kesediaan_{th}.json').write_text(json.dumps(kesediaan, indent=1))
 
     runs = pd.DataFrame(baris_r)
     if len(runs):

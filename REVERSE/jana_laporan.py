@@ -4,6 +4,7 @@ Guna: python3 REVERSE/jana_laporan.py 2025
 """
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -51,6 +52,12 @@ def main():
     l7 = json.loads((CACHE / f'lulus7_{th}.json').read_text())
     l7b = json.loads((CACHE / f'lulus7b_{th}.json').read_text())
     fdr = json.loads((CACHE / f'fdr_{th}.json').read_text())
+    ks = json.loads((CACHE / f'kesediaan_{th}.json').read_text())
+    fph = R / f'PANDANG_HADAPAN_{th}.md'
+    ph = fph.read_text() if fph.exists() else (R / 'PANDANG_HADAPAN.md').read_text()
+    n_potong = re.search(r'Tarikh potong: (\d+)', ph)
+    n_band = re.search(r'ticker: ([\d,]+)\n- Perbandingan lajur×potong×ticker: ([\d,]+)', ph)
+    n_sig_bina = len(kuin['simpan']) * 2 + 31 + 6 * 10 * 2
     ut = cu[(cu.subset == 'S2') & (cu.populasi == 'a') & (cu.kumpulan_data == 'A')
             & (cu.keluarga == 'PADU')]
     ut1 = cu[(cu.subset == 'S1') & (cu.populasi == 'a') & (cu.kumpulan_data == 'A')
@@ -79,9 +86,21 @@ def main():
       f'yang masih naik pada hari ke-63, **{(koh.pct_naik_penuh>=100).mean()*100:.1f}% akhirnya '
       f'melebihi +100%**, dengan median kenaikan penuh **{koh.pct_naik_penuh.median():.1f}%** '
       f'lawan {koh.pct_naik_rendah_63.median():.1f}% pada hari ke-63.\n')
-    A(f'3. **Signal entry: 4 CALON daripada {len(corong["signal"])} yang masuk corong** — dan '
-      f'kesemuanya konteks **pengembangan kemeruapan**, bukan pemicu: '
-      f'{", ".join("`"+s+"`" for s in calon.signal)}.\n')
+    kon_mer = ('atr_pct', 'bb_lebar', 'julat20', 'julat10')
+    semua_mer = len(calon) and all(any(k in x for k in kon_mer) for x in calon.signal)
+    if len(calon):
+        A(f'3. **Signal entry: {len(calon)} CALON daripada {len(corong["signal"])} yang masuk '
+          f'corong**'
+          + (' — dan kesemuanya konteks **pengembangan kemeruapan**, bukan pemicu: '
+             if semua_mer else ': ')
+          + f'{", ".join("`"+x+"`" for x in calon.signal)}.\n')
+    else:
+        gagal4 = int((kp.G4_bootstrap == 'GAGAL').sum())
+        gagal5 = int((kp.G5_outlier != 'LULUS').sum())
+        A(f'3. **Signal entry: TIADA CALON** daripada {len(corong["signal"])} yang masuk corong. '
+          f'{gagal4} gagal gate bootstrap (G4) dan {gagal5} ditanda BERGANTUNG PADA OUTLIER (G5). '
+          f'Ini keputusan, bukan kegagalan teknikal: tiada signal ENTRY tahun ini bertahan selepas '
+          f'had bawah 95% bootstrap blok dan ujian tanpa 5% pemenang teratas.\n')
     A(f'4. **Rujukan (c) "pegang tanpa jual" MENANG.** Tiada satu pun daripada 234 sistem '
       f'HOLD×EXIT mengalahkan ketiga-tiga rujukan. Jangkaan rujukan (c) = '
       f'{l7b["rujukan"]["REF_pegang_252"]:.2f}% setiap dagangan lawan '
@@ -102,14 +121,18 @@ def main():
       '| a. Tarik aset Release `autotune-data-a02` | **LULUS** — 219 MB, 18 parquet, '
       '2009-01-02 → 2026-10-16; semua sha256 sepadan |\n'
       '| b. SPY dan QQQ dalam `idx.parquet` | **LULUS** |\n'
-      '| c. Sumber sektor/industri setiap ticker | **LULUS** — 2310/2321 = 99.5% '
-      '(11 kelas saham diisi daripada ticker asas; 96 ticker = `Lain-lain`) |\n'
+      f'| c. Sumber sektor/industri setiap ticker | **LULUS** — {ks["liputan_sektor"]}/'
+      f'{ks["n_ticker_universe"]} = {ks["pct_liputan_sektor"]}% '
+      f'({ks["n_kelas_asas"]} kelas saham diisi daripada ticker asas; {ks["n_lain_lain"]} ticker '
+      f'= `Lain-lain`) |\n'
       '| d. 11 ETF sektor SPDR ditarik dan dicache | **GAGAL** → pindaan SPEC §13.1 '
       '(indeks sektor A02; diluluskan pengguna) |\n'
-      '| e. Step 1–3 satu bulan, anggaran × 12 | **LULUS** — 0.052 s/ticker; larian penuh '
-      '2321 ticker = 269 s |\n'
-      '| f. `semak_hadapan` atas modul indikator | **LULUS** — 14 tarikh potong (≥ 12), '
-      '26,950 perbandingan, **0 kegagalan** (`REVERSE/PANDANG_HADAPAN.md`) |\n')
+      f'| e. Step 1–3 satu bulan, anggaran × 12 | **LULUS** — {ks["saat_per_ticker"]:.3f} '
+      f's/ticker; larian penuh {ks["n_ticker_harga"]} ticker = {ks["saat_larian"]:.0f} s |\n'
+      f'| f. `semak_hadapan` atas modul indikator | **LULUS** — '
+      f'{n_potong.group(1) if n_potong else "14"} tarikh potong (≥ 12), '
+      f'{n_band.group(2) if n_band else "26,950"} perbandingan, **0 kegagalan** '
+      f'(`REVERSE/PANDANG_HADAPAN_{th}.md`) |\n')
 
     A('## 2. Step 1–2 — run\n')
     A(md_jadual(ms))
@@ -200,7 +223,8 @@ def main():
       f'Indikator berterusan dikekalkan selepas dedup Spearman > 0.8: **{len(kuin["simpan"])}** '
       f'daripada 41; dibuang {len(kuin["dibuang"])}.\n\n')
     A(md_jadual(pd.DataFrame(kuin['dibuang'])))
-    A(f'\nSignal dibina: **213** (31 binari + 62 hujung kuintil + 120 pemicu × 1 konteks).\n')
+    A(f'\nSignal dibina: **{n_sig_bina}** (31 binari + {len(kuin["simpan"]) * 2} hujung kuintil '
+      f'+ 120 pemicu × 1 konteks).\n')
 
     A('\n## 5. Step 4 — common & unique (ENTRY)\n')
     A(f'Keputusan utama = S2, populasi keputusan (a), kumpulan A, keluarga PADU. '
@@ -249,9 +273,11 @@ def main():
     A('### Kelas pullback\n')
     A(md_jadual(he[he.jenis == 'kelas_pullback'], ['nama', 'n', 'pct_sambung_puncak_baru',
                                                    'purata_kedalaman', 'purata_hari_pulih']))
-    A('\nPullback yang trend sahamnya utuh (SIHAT 88.9%, PASARAN 92.0%) hampir selalu menyambung '
-      'ke puncak baru; pullback AMARAN hanya 50.8%. Ini sokongan paling jelas bagi falsafah '
-      '"pegang selagi naik".\n')
+    kpb = he[he.jenis == 'kelas_pullback'].set_index('nama').pct_sambung_puncak_baru.to_dict()
+    A(f'\nPullback yang trend sahamnya utuh (SIHAT {kpb.get("PULLBACK SIHAT", float("nan")):.1f}%, '
+      f'PASARAN {kpb.get("PULLBACK PASARAN", float("nan")):.1f}%) menyambung ke puncak baru jauh '
+      f'lebih kerap daripada pullback AMARAN ({kpb.get("AMARAN", float("nan")):.1f}%). '
+      'Ini sokongan paling jelas bagi falsafah "pegang selagi naik".\n')
     A('\n### Grid 18 peraturan HOLD (deskriptif)\n')
     A(md_jadual(he[he.jenis == 'peraturan_hold'], ['nama', 'n', 'pct_sambung_puncak_baru',
                                                    'purata_kedalaman', 'purata_hari_pulih']))
@@ -268,16 +294,24 @@ def main():
     A(md_jadual(he[he.jenis == 'calon_exit'], ['nama', 'n', 'pct_menyala',
                                                'median_hari_dari_puncak', 'median_pulangan_exit',
                                                'median_pct_kekal', 'kadar_exit_palsu']))
-    A('\n`median_hari_dari_puncak` negatif bermakna signal menyala **sebelum** puncak — iaitu ia '
-      'menjual terlalu awal. Exit berasaskan MA (EMA9/EMA21/MA50) menyala 12–19 hari sebelum '
-      'puncak dan mengekalkan hanya −3% hingga −5% keuntungan. Kadar exit palsu 46%–74%.\n')
+    ce = he[he.jenis == 'calon_exit']
+    ma_ = ce[ce.nama.isin(['bawah_ema9', 'bawah_ema21', 'bawah_ma50'])]
+    hd = pd.to_numeric(ma_.median_hari_dari_puncak, errors='coerce')
+    kk_ = pd.to_numeric(ma_.median_pct_kekal, errors='coerce')
+    pls = pd.to_numeric(ce.kadar_exit_palsu, errors='coerce')
+    A(f'\n`median_hari_dari_puncak` negatif bermakna signal menyala **sebelum** puncak — iaitu ia '
+      f'menjual terlalu awal. Exit berasaskan MA (EMA9/EMA21/MA50) menyala '
+      f'{abs(hd.max()):.0f}–{abs(hd.min()):.0f} hari sebelum puncak dan mengekalkan hanya '
+      f'{kk_.max():.0f}% hingga {kk_.min():.0f}% keuntungan. Kadar exit palsu '
+      f'{pls.min():.0f}%–{pls.max():.0f}%.\n')
     A(f'\n**Keluarga EXIT: 0 / {fdr["EXIT"]["n"]} signal lulus BH-FDR q ≤ 0.01.** Tiada signal '
       'EXIT yang membezakan "hari sebelum puncak akhir" daripada "palung pullback biasa" selepas '
       'kawalan pelbagai ujian.\n')
 
     A('\n## 8. Step 7 — false signal ENTRY (imbasan seluruh universe)\n')
-    A(f'Setiap signal corong diimbas atas **semua** hari universe {th} (580,075 baris '
-      f'(ticker, hari); 499,999 selepas topeng universe). Kadar asas KAWALAN RAWAK '
+    A(f'Setiap signal corong diimbas atas **semua** hari universe {th} '
+      f'({ks["n_hari_saham"]:,} baris (ticker, hari); '
+      f'{ks["n_hari_saham_dalam_univ"]:,} selepas topeng universe). Kadar asas KAWALAN RAWAK '
       f'(MFE63 ≥ 30%) = {fs_u.kadar_asas_rawak.dropna().iloc[0]:.2f}%.\n\n')
     A(md_jadual(fs_u, ['signal', 'n_kemunculan', 'kadar_tepat_mfe30', 'lift_tepat',
                        'kadar_palsu_bawah10', 'kadar_tepat_bertangga', 'ketulenan_trend_median',
@@ -286,10 +320,16 @@ def main():
                        'jangkaan_henti2atr', 'kadar_menang', 'kapasiti', 'tanda']))
     A('\nTaburan berat di hujung kanan: perhatikan jurang antara `mfe63_p50` dan `mfe63_p90`. '
       'p90 dan % ≥ 100% ialah pembeza, bukan median.\n')
-    A(f'\n**Lift jatuh besar antara Step 4 dan Step 7** (contoh `q5:bb_lebar`: lift 9.88 dalam '
-      'populasi peristiwa → lift_tepat 1.80 atas semua hari universe). Sebabnya: Step 4 bersyarat '
-      'pada peristiwa entry yang sah; Step 7 tidak. Angka Step 7 yang lebih dekat dengan dagangan '
-      'sebenar.\n')
+    ut_l = ut.copy()
+    ut_l['lift_n'] = pd.to_numeric(ut_l.lift, errors='coerce')
+    cand = ut_l[ut_l.signal.isin(fs_u.signal)].sort_values('lift_n', ascending=False)
+    if len(cand):
+        c0 = cand.iloc[0]
+        lt = pd.to_numeric(fs_u.set_index('signal').lift_tepat, errors='coerce').get(c0.signal)
+        A(f'\n**Lift jatuh besar antara Step 4 dan Step 7** (contoh `{c0.signal}`: lift '
+          f'{c0.lift_n:.2f} dalam populasi peristiwa → lift_tepat {lt:.2f} atas semua hari '
+          'universe). Sebabnya: Step 4 bersyarat pada peristiwa entry yang sah; Step 7 tidak. '
+          'Angka Step 7 yang lebih dekat dengan dagangan sebenar.\n')
     A(f'\n### Penapis Step 7.4\n{len(fs_p)} kombinasi signal × penapis diuji '
       f'({len(fs_p[fs_p.tanda=="PENAPIS LULUS"])} lulus kriteria "buang ≥ 30% palsu dan ≤ 10% '
       f'benar").\n')
@@ -302,8 +342,10 @@ def main():
 
     A('\n## 9. Step 7b — ujian ke hadapan HOLD dan EXIT (ufuk terbuka)\n')
     A(f'Set kemasukan: gabungan semua kemunculan {len(l7["signal"])} signal yang lulus Step 7 = '
-      f'232,292 (ticker, tarikh) unik, disampel berlapis ikut bulan ke **24,000** (benih 42; '
-      f'SPEC §13.9). Grid 18 HOLD × 13 EXIT = **234** sistem.\n')
+      f'{l7b.get("n_kemunculan_unik", 0):,} (ticker, tarikh) unik'
+      + (f', disampel berlapis ikut bulan ke **{l7b.get("n_kemasukan_diuji", 0):,}** (benih 42; '
+         f'SPEC §13.9)' if l7b.get('disampel') else ' (tiada sampel; semua diuji)')
+      + '. Grid 18 HOLD × 13 EXIT = **234** sistem.\n')
     A('\n### TIGA RUJUKAN WAJIB\n')
     A(md_jadual(hh[hh.sistem.str.startswith('REF_')],
                 ['sistem', 'n', 'median_pulangan', 'purata_pulangan', 'jangkaan', 'kadar_menang',
@@ -340,18 +382,30 @@ def main():
                      'G4_bootstrap', 'G5_outlier', 'G6', 'step7', 'keputusan']))
     A(f'\n**CALON: {len(calon)}** — {", ".join("`"+s+"`" for s in calon.signal)}. '
       f'**DITOLAK: {int((kp.keputusan=="DITOLAK").sum())}.**\n')
-    A('\nKeempat-empat CALON ialah **konteks pengembangan kemeruapan** (ATR% tinggi, lebar '
-      'Bollinger tinggi, julat 20 hari luas). Ini perlu dibaca bersama kaveat survivorship: '
-      'kohort kemeruapan tinggi ialah tempat ketiadaan saham delist paling memihak kepada hasil. '
-      'Pengesahan 2024–2021 (gate 8.1) adalah penentu sebenar.\n')
+    if len(calon) and semua_mer:
+        A('\nKesemua CALON ialah **konteks pengembangan kemeruapan** (ATR% tinggi, lebar '
+          'Bollinger tinggi, julat 20 hari luas). Ini perlu dibaca bersama kaveat survivorship: '
+          'kohort kemeruapan tinggi ialah tempat ketiadaan saham delist paling memihak kepada '
+          'hasil. Pengesahan merentas tahun (gate 8.1) adalah penentu sebenar.\n')
+    elif not len(calon):
+        A('\nTiada CALON. Gate yang membunuh semua signal ialah **G4 (bootstrap)** dan '
+          '**G5 (outlier)**: jangkaan tidak bertahan pada had bawah 95% blok ticker atau blok '
+          'minggu, dan jatuh ke ≤ 0 apabila 5% pemenang teratas dibuang. Maknanya pulangan signal '
+          'tahun ini datang daripada beberapa kemunculan melampau, bukan daripada kelebihan yang '
+          'boleh diulang.\n')
     A('\nPenapis Step 7.4 kekal CALON tanpa kecuali — arahan 8.5 memerlukan keberkesanan dalam '
       '≥ 2 tahun yang tidak digunakan semasa mencarinya, dan tiada penapis lulus walaupun pada '
       f'{th}.\n')
 
     A('\n## 11. Step 9 — PRESTASI PORTFOLIO (kriteria akhir)\n')
-    A('Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. Signal ENTRY = '
-      f'{len(calon)} CALON. Peraturan pemilihan dibekukan (SPEC §12): lift_presisi → RS 6 bulan → '
-      'ticker.\n\n')
+    asas = pf.asas_entry.iloc[0] if 'asas_entry' in pf.columns else 'CALON selepas Step 8'
+    A('Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. '
+      f'Asas signal ENTRY: **{asas}**. Peraturan pemilihan dibekukan (SPEC §12): lift_presisi → '
+      'RS 6 bulan → ticker.\n\n')
+    if 'TIADA signal CALON' in str(asas):
+        A('> Angka di bawah **bukan** bukti sistem lulus — tiada signal ENTRY tahun ini lulus '
+          'Step 8. Ia dilaporkan supaya kriteria akhir ada angka dan baris merentas tahun setara '
+          '(SPEC §13.10).\n\n')
     A(md_jadual(pf, ['sistem', 'n_posisi_dibuka', 'n_dagangan_ditutup',
                      'n_posisi_terbuka_hujung_tahun', 'purata_slot_terisi', 'pulangan_tahun',
                      'median_bulanan', 'purata_bulanan', 'pct_bulan_ge10', 'pct_bulan_positif',
@@ -384,16 +438,37 @@ def main():
       f'dan Chandelier rawak {pf[pf.sistem=="KAWALAN_RAWAK|chandelier"].iloc[0].pulangan_tahun:.2f}% '
       '— dengan n = 8 dan n = 40 posisi, perbezaan antara signal dan rawak di sini **tidak '
       'bermakna secara statistik**. Jangan tafsir jurang itu sebagai bukti.\n')
+    spy_r = float(pf.spy_pulangan_tahun.iloc[0])
+    kr = pf[pf.sistem.str.startswith('KAWALAN_RAWAK')]
+    sis_sj = pf[~pf.sistem.str.startswith('KAWALAN_RAWAK')]
+    kalah_spy = sis_sj[sis_sj.pulangan_tahun < spy_r]
+    kalah_rawak = sis_sj[sis_sj.pulangan_tahun < kr.pulangan_tahun.max()]
+    A(f'\n### Banding wajib: SPY dan KAWALAN RAWAK\n')
+    A(f'- SPY tempoh sama: **{spy_r:.2f}%** (MDD {float(pf.spy_mdd.iloc[0]):.2f}%). '
+      f'**{len(kalah_spy)}/{len(sis_sj)}** sistem kalah kepada SPY.\n')
+    A(f'- KAWALAN RAWAK terbaik: **{kr.pulangan_tahun.max():.2f}%** '
+      f'(`{kr.loc[kr.pulangan_tahun.idxmax()].sistem}`). '
+      f'**{len(kalah_rawak)}/{len(sis_sj)}** sistem kalah kepada entri rawak.\n')
+    if len(kalah_rawak) == len(sis_sj) and len(sis_sj):
+        A('- **Setiap sistem berasaskan signal kalah kepada entri rawak tahun ini.** Itu bukan '
+          'bukti signal yang lemah sahaja; ia bukti bahawa pemilihan signal tahun ini memudaratkan '
+          'portfolio berbanding memilih secara rawak daripada universe yang sama.\n')
     A('\n> KAVEAT WAJIB STEP 9: tiada saham delist (survivorship), satu tahun satu rejim pasaran, '
-      'dan keputusan maksimum pada fasa ini ialah **CALON**.\n')
+      'dan keputusan maksimum pada fasa ini ialah **CALON**. Portfolio 8 slot bermakna setiap '
+      'angka tahunan bergantung pada bilangan posisi yang kecil — lihat lajur `n_posisi_dibuka`.\n')
 
     A('\n## 12. Keputusan akhir (had fasa: CALON)\n')
-    A('1. **ENTRY** — 4 signal CALON, semuanya konteks pengembangan kemeruapan: '
-      f'{", ".join("`"+s+"`" for s in calon.signal)}. Tiada pemicu klasik tunggal lulus. '
-      'Hipotesis "magnitud ada pada konteks, bukan pemicu" disokong oleh data 2025.\n')
+    if len(calon):
+        A(f'1. **ENTRY** — {len(calon)} signal CALON: '
+          f'{", ".join("`"+x+"`" for x in calon.signal)}. Tiada pemicu klasik tunggal lulus. '
+          f'Hipotesis "magnitud ada pada konteks, bukan pemicu" disokong oleh data {th}.\n')
+    else:
+        A(f'1. **ENTRY** — TIADA signal CALON pada {th}. Semua gagal G4 (bootstrap) dan/atau '
+          f'G5 (outlier). Pemicu klasik tunggal juga tidak lulus.\n')
     A(f'2. **HOLD** — {fdr["HOLD"]["lulus"]}/{fdr["HOLD"]["n"]} signal lulus FDR; kelas pullback '
-      'ialah hasil paling kukuh (SIHAT/PASARAN 89–92% menyambung ke puncak baru lawan AMARAN '
-      '50.8%). Semua kekal CALON kerana Step 7b tidak mengesahkan mana-mana sistem.\n')
+      f'ialah hasil paling kukuh (SIHAT {kpb.get("PULLBACK SIHAT", float("nan")):.1f}% / '
+      f'PASARAN {kpb.get("PULLBACK PASARAN", float("nan")):.1f}% menyambung ke puncak baru lawan '
+      f'AMARAN {kpb.get("AMARAN", float("nan")):.1f}%).\n')
     A(f'3. **EXIT** — 0/{fdr["EXIT"]["n"]} lulus FDR; 0/234 sistem mengalahkan rujukan. '
       '**Jawapan kajian: jangan jual.**\n')
     A('4. **PORTFOLIO** — sasaran +10% sebulan tidak tercapai; penghalang utama ialah kapasiti '
@@ -417,7 +492,7 @@ def main():
       f'| `keputusan_{th}.csv` | keputusan gate demi gate |\n'
       f'| `portfolio_{th}.csv`, `portfolio_bulanan_{th}.csv` | Step 9 |\n'
       '| `log_ujian.csv` | setiap signal/kombinasi yang diuji |\n'
-      '| `PANDANG_HADAPAN.md` | imbasan pandang ke hadapan |\n'
+      f'| `PANDANG_HADAPAN_{th}.md` | imbasan pandang ke hadapan |\n'
       '| `SPEC.md` | spec dikunci + 9 pindaan bertarikh |\n')
     (R / f'LAPORAN_{th}.md').write_text('\n'.join(L))
     print(f'LAPORAN_{th}.md: {len("".join(L))} aksara')

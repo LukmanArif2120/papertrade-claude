@@ -1,6 +1,6 @@
 """STEP 8 — kawalan kebetulan (WAJIB sebelum kesimpulan).
 
-8.1 pengesahan dalam tahun (kumpulan B) + merentas tahun (TIDAK TERSEDIA pada fasa 2025)
+8.1 pengesahan dalam tahun (kumpulan B) + merentas tahun (tahun lain yang sudah siap)
 8.2 ujian label rawak 1000x (tukar label hasil, bilangan sama setiap bulan) + BH-FDR q <= 0.01,
     BERASINGAN bagi keluarga ENTRY, HOLD, EXIT, SISTEM; keluarga SUPER PADU FDR sendiri
 8.3 bootstrap 1000x, blok ikut ticker DAN berasingan ikut minggu
@@ -202,6 +202,25 @@ def main():
     jni = jn.set_index('signal')
     fsi = fs[~fs.signal.str.contains(r'\| penapis:')].set_index('signal')
     lulus_fdr = set(fdr['ENTRY/PADU']['signal'])
+    # 8.1 merentas tahun: kelas yang sama dalam >= 2 tahun LAIN
+    lain = sorted(int(f.stem.split('_')[-1]) for f in KELUAR.glob('common_unique_*.csv')
+                  if f.stem.split('_')[-1].isdigit() and int(f.stem.split('_')[-1]) != th)
+    g2_lab, g2_asas = {}, (f'TIDAK TERSEDIA (tiada tahun lain siap)' if not lain
+                           else f'perlu >= 2 tahun lain; siap: {lain}')
+    if lain:
+        kelas_lain = {}
+        for y in lain:
+            dy = pd.read_csv(KELUAR / f'common_unique_{y}.csv')
+            dy = dy[(dy.subset == 'S2') & (dy.populasi == 'a') & (dy.kumpulan_data == 'A')
+                    & (dy.keluarga == 'PADU')]
+            kelas_lain[y] = dy.set_index('signal').kelas.to_dict()
+        for nm in corong:
+            kA = kls_A.kelas.get(nm, '-')
+            sama = [y for y in lain if kelas_lain[y].get(nm, '-') == kA]
+            but = '; '.join(f'{y}={kelas_lain[y].get(nm, "-")}' for y in lain)
+            g2_lab[nm] = (f'LULUS ({len(sama)}/{len(lain)} tahun lain kelas sama: {but})'
+                          if len(sama) >= 2 else
+                          f'BELUM ({len(sama)}/{len(lain)} sama, perlu >= 2; {but})')
     krow = []
     for nm in corong:
         g = {}
@@ -210,7 +229,7 @@ def main():
         g['G1_sah_dalam_tahun'] = ('LULUS' if g['G1_kelas_A'] == g['G1_kelas_B']
                                    else ('SEBAHAGIAN' if g['G1_kelas_B'] in
                                          ('TERAS', 'UNIQUE', 'LANGKA', 'SEDERHANA') else 'GAGAL'))
-        g['G2_merentas_tahun'] = 'TIDAK TERSEDIA (fasa 2025)'
+        g['G2_merentas_tahun'] = g2_lab.get(nm, g2_asas)
         g['G3_nilai_p'] = round(float(pmA.nilai_p.get(nm, np.nan)), 5)
         g['G3_fdr'] = 'LULUS' if nm in lulus_fdr else 'GAGAL'
         lbt = pmA.lift_bawah95_blok_ticker.get(nm, np.nan)
@@ -235,14 +254,16 @@ def main():
         g['kapasiti'] = fsi.kapasiti.get(nm, '')
         keras = (g['step7'] == 'LULUS' and g['G3_fdr'] == 'LULUS' and g['G4_bootstrap'] == 'LULUS'
                  and g['G5_outlier'] == 'LULUS' and g['G1_sah_dalam_tahun'] != 'GAGAL')
-        g['keputusan'] = 'CALON' if keras else 'DITOLAK'
-        g['had_fasa'] = 'maksimum CALON sebelum 2024-2021 disahkan (SPEC §11.8)'
+        g['keputusan'] = ('DITERIMA' if (keras and g['G2_merentas_tahun'].startswith('LULUS'))
+                          else ('CALON' if keras else 'DITOLAK'))
+        g['had_fasa'] = ('maksimum CALON sebelum >= 2 tahun lain mengesahkan kelas yang sama '
+                         '(gate 8.1, SPEC §11.8)')
         krow.append(dict(signal=nm, **g))
     kp = pd.DataFrame(krow)
     kp.to_csv(KELUAR / f'keputusan_{th}.csv', index=False)
     pm.to_csv(KELUAR / f'kawalan_rawak_bootstrap_{th}.csv', index=False)
     jn.to_csv(KELUAR / f'jangkaan_kemunculan_{th}.csv', index=False)
-    print('\nKEPUTUSAN (maksimum CALON pada fasa 2025):')
+    print(f'\nKEPUTUSAN tahun {th} (maksimum CALON sebelum >= 2 tahun lain disahkan):')
     print(kp[['signal', 'G1_sah_dalam_tahun', 'G3_nilai_p', 'G3_fdr', 'G4_bootstrap',
               'G5_outlier', 'G6', 'step7', 'keputusan']].to_string(index=False))
     print(f"\nCALON {int((kp.keputusan=='CALON').sum())} | DITOLAK "

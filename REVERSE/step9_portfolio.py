@@ -186,8 +186,15 @@ def main():
     kuin = json.loads((CACHE / f'kuintil_{th}.json').read_text())['sempadan']
     sig = pd.read_parquet(CACHE / f'signals_{th}.parquet')
     sig = sig[sig.dalam_univ == 1].reset_index(drop=True)
+    asas = 'CALON selepas Step 8'
     if not calon:
-        print('TIADA signal ENTRY berstatus CALON — Step 9 tidak boleh dijalankan.')
+        # SPEC pindaan §13.10: jika TIADA signal CALON, Step 9 tetap dijalankan atas signal yang
+        # lulus Step 7 supaya kriteria akhir ada angka — dilabel jelas, BUKAN sistem yang lulus.
+        calon = json.loads((CACHE / f'lulus7_{th}.json').read_text())['signal']
+        asas = 'lulus Step 7 sahaja (TIADA signal CALON tahun ini)'
+        print(f'TIADA signal ENTRY berstatus CALON — sandaran: {len(calon)} signal lulus Step 7.')
+    if not calon:
+        print('Tiada signal lulus Step 7 juga — Step 9 tidak boleh dijalankan.')
         return
     sg = S.bina(sig, kuin)
     mana = np.zeros(len(sig), dtype=bool)
@@ -200,7 +207,7 @@ def main():
             if skor.get((t, d), (-1, -1, '')) < v:
                 skor[(t, d)] = v
     entri = sig.loc[mana, ['ticker', 'tarikh']].drop_duplicates().reset_index(drop=True)
-    print(f'signal ENTRY CALON {len(calon)} | kemunculan entri unik {len(entri)}')
+    print(f'signal ENTRY ({asas}): {len(calon)} | kemunculan entri unik {len(entri)}')
     tick = sorted(entri.ticker.unique())
     fr = D.muat_harga(tick, f'{th - 2}-06-01', '2026-10-16')
     ix = D.muat_indeks(f'{th - 2}-06-01', '2026-10-16')
@@ -259,6 +266,7 @@ def main():
               f"{r['median_bulanan']:6.2f}% buka {r['n_posisi_dibuka']:3d} tutup "
               f"{r['n_dagangan_ditutup']:3d} slot {r['purata_slot_terisi']:.1f}")
     out = pd.DataFrame(rows)
+    out['asas_entry'] = asas
     out['had_fasa'] = 'CALON sahaja (SPEC §11.8)'
     out['kaveat'] = 'tiada saham delist (survivorship); satu tahun satu rejim pasaran'
     out.to_csv(KELUAR / f'portfolio_{th}.csv', index=False)

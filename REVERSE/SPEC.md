@@ -594,3 +594,15 @@ sistem lulus (kerana rujukan (c) menang), Step 9 tetap dijalankan atas: (i) keti
 wajib, (ii) tiga sistem jangkaan tertinggi daripada Step 7b, (iii) portfolio KAWALAN RAWAK, semuanya
 dengan signal ENTRY yang berstatus CALON selepas Step 8. Ini supaya kriteria akhir (prestasi
 portfolio) tetap dijawab dengan angka, bukan dibiar kosong.
+
+### 13.10 — 27 Okt 2026: Step 9 apabila TIADA signal CALON
+
+Tahun 2024 menghasilkan **0 signal ENTRY berstatus CALON** (semua 18 gagal gate G4 bootstrap dan
+G5 outlier). Arahan Step 9 menetapkan portfolio dibina "bagi setiap sistem yang lulus Step 8", jadi
+secara literal Step 9 2024 tiada apa untuk dinilai.
+
+Dikunci: apabila tiada signal CALON, Step 9 tetap dijalankan atas signal yang **lulus Step 7**, dan
+output menanda `asas_entry = "lulus Step 7 sahaja (TIADA signal CALON tahun ini)"`. Ini supaya
+kriteria akhir (prestasi portfolio) tetap dijawab dengan angka untuk setiap tahun, dan supaya
+perbandingan merentas tahun mempunyai baris yang setara. Angka itu **bukan** bukti sistem lulus —
+ia dilaporkan di bawah label asas entry yang jelas.
