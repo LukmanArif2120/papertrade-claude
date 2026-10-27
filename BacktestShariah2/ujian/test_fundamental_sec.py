@@ -111,6 +111,13 @@ class TestSUE(unittest.TestCase):
         s = F.kira_sue(self._suku(eps), pd.DataFrame(columns=['akhir', 'nilai']), pd.DataFrame(columns=['tarikh_fail']))
         self.assertAlmostEqual(s.sue.iloc[-1], 0.05 / F.SUE_MIN_SP)
 
+    def test_penapis_kewarasan_eps(self):
+        eps = [0.4, 0.5, 0.3, 0.4, 0.5, 0.6, 0.4, 0.5, 0.6, 0.7, -40000.0, 0.6, 0.7]   # ralat unit XBRL
+        s = F.kira_sue(self._suku(eps), pd.DataFrame(columns=['akhir', 'nilai']), pd.DataFrame(columns=['tarikh_fail']))
+        self.assertTrue(np.isnan(s.sue.iloc[10]))
+        self.assertTrue(np.isfinite(s.sue.iloc[12]))
+        self.assertLess(abs(s.sue.iloc[12]), 50)
+
     def test_tumbuh_dan_pecutan_hasil(self):
         h = self._suku([100, 100, 100, 100, 110, 120, 100, 100])
         s = F.kira_sue(self._suku([1.0] * 8), h, pd.DataFrame(columns=['tarikh_fail']))

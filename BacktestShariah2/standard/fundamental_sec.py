@@ -16,7 +16,8 @@
 #   earnings_8k.csv saham, cik, tarikh_fail, masa_terima, akses, items   (8-K mengandungi Item 2.02)
 #   sue.csv         saham, akhir, eps, eps_lalu, sue, hasil, tumbuh_hasil, pecutan_hasil, tarikh_umum, sumber_tarikh
 #                   SUE = (EPS_t − EPS_t−4) / maks(sisihan piawai perbezaan sama 8 suku sebelumnya (min 4), USD0.01);
-#                   EPS_t−4 = angka perbandingan dalam pemfailan suku t (dilaras pecahan saham). tarikh_umum =
+#                   EPS_t−4 = angka perbandingan dalam pemfailan suku t (dilaras pecahan saham); SUE kosong jika |EPS|
+#                   > 20 × median |EPS| saham + 1 (ralat unit XBRL). tarikh_umum =
 #                   8-K Item 2.02 pertama dalam (akhir, tarikh_fail]; jika tiada, tarikh_fail 10-Q/10-K (sumber_tarikh).
 #                   tumbuh_hasil = hasil_t / hasil_t−4 − 1; pecutan_hasil = tumbuh_t − tumbuh_t−1.
 #   status.json     akses terakhir setiap CIK (larian tambahan: companyfacts hanya diambil semula jika ada 10-Q/10-K baharu)
@@ -41,7 +42,9 @@ TAG_EPS = ['EarningsPerShareDiluted', 'EarningsPerShareBasicAndDiluted', 'Earnin
 TAG_HASIL = ['Revenues', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'SalesRevenueNet',
              'RevenueFromContractWithCustomerIncludingAssessedTax', 'RevenuesNetOfInterestExpense']
 BORANG_LAPOR = {'10-Q', '10-K', '10-Q/A', '10-K/A', '10-KT', '20-F', '40-F'}
-VERSI = 2           # naikkan bila kiraan berubah: semua companyfacts diambil semula (v2: perbandingan pemfailan sama + penyebut minimum)
+VERSI = 3           # naikkan bila kiraan berubah: semua companyfacts diambil semula (v2: perbandingan pemfailan sama +
+                    # penyebut minimum; v3: penapis kewarasan EPS)
+EPS_GANDA_MAKS = 20  # |EPS| > 20 × median |EPS| saham + 1 = ralat unit XBRL (cth. DXCM −40000): SUE dikosongkan
 SUE_MIN_SP = 0.01   # penyebut minimum SUE (USD 1 sen): elak SUE meletup bila EPS hampir malar
 LAJUR_EH = ['saham', 'cik', 'metrik', 'mula', 'akhir', 'nilai', 'tarikh_fail', 'borang', 'akses', 'terbitan']
 LAJUR_8K = ['saham', 'cik', 'tarikh_fail', 'masa_terima', 'akses', 'items']
@@ -162,12 +165,17 @@ def kira_sue(eps, hasil, k8, banding=None):
         return float(c.iloc[-1]) if len(c) else np.nan
 
     eps_dt = pd.Series(e.nilai.values, index=akhir)
+    sifar = e.nilai.abs()[e.nilai.abs() > 0]
+    batas = EPS_GANDA_MAKS * (float(sifar.median()) if len(sifar) else 0.0) + 1.0
     beza = []
     for i, r in e.iterrows():
         t = akhir[i]
         el = float(banding[r.akhir]) if banding is not None and r.akhir in banding.index else lalu(eps_dt, t)
         d = r.nilai - el if not np.isnan(el) else np.nan
         sejarah = [x for x in beza[-8:] if not np.isnan(x)]
+        waras = abs(r.nilai) <= batas and (np.isnan(el) or abs(el) <= batas)
+        if not waras:
+            d = np.nan                                  # tidak masuk sejarah perbezaan juga
         sue = d / max(np.std(sejarah, ddof=1), SUE_MIN_SP) if not np.isnan(d) and len(sejarah) >= 4 else np.nan
         beza.append(d)
         h = float(hs_dt.get(t, np.nan)) if len(hs_dt) else np.nan
