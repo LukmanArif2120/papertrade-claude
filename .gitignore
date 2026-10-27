@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 BacktestShariah2/kod/data/
 .claude/worktrees/
+REVERSE/.cache/
