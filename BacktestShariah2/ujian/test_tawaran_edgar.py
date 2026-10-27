@@ -88,5 +88,40 @@ class TestEdgar(unittest.TestCase):
             self.assertEqual(len(pd.read_csv(p)), 2)
 
 
+class TestBelumTerbit(unittest.TestCase):
+    """27 Okt 2026: indeks hari terakhir belum terbit (HTTP 403/404) bukan kegagalan dan tidak ditanda diproses."""
+    def jalan(self, respon):
+        import json, types
+        d = tempfile.mkdtemp()
+        asal = (E.EDGAR, E.ambil, E.muat_peta, E.universe, E.kemas_ambil, os.environ.get('SEC_USER_AGENT'))
+        E.EDGAR, E.muat_peta, E.universe, E.kemas_ambil = d, (lambda: {}), (lambda: set()), (lambda r: ([], []))
+        E.ambil = respon
+        os.environ['SEC_USER_AGENT'] = 'ujian ujian@contoh.com'
+        try:
+            kod = E.jalan(types.SimpleNamespace(hingga='2026-10-27', mula='2026-10-23', maks_hari=10))
+            with open(os.path.join(d, 'status.json')) as f:
+                return kod, json.load(f)
+        finally:
+            E.EDGAR, E.ambil, E.muat_peta, E.universe, E.kemas_ambil = asal[:5]
+            if asal[5] is None:
+                os.environ.pop('SEC_USER_AGENT', None)
+            else:
+                os.environ['SEC_USER_AGENT'] = asal[5]
+
+    def test_403_hari_terakhir(self):
+        def ambil(url):
+            if '20261027' in url:
+                raise RuntimeError(f'{url}: HTTP 403')
+            return None if '20261026' in url else INDEKS.split('\n')[0] + '\n'
+        kod, st = self.jalan(ambil)
+        self.assertEqual(kod, 0)
+        self.assertEqual(st['hari_terakhir'], '2026-10-26')   # 27 Okt dicuba semula larian seterusnya
+        self.assertEqual(st['gagal'], [])
+
+    def test_404_hari_terakhir(self):
+        kod, st = self.jalan(lambda url: None)
+        self.assertEqual((kod, st['hari_terakhir']), (0, '2026-10-26'))
+
+
 if __name__ == '__main__':
     unittest.main()
