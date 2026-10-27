@@ -86,9 +86,14 @@ def main():
 
     A('## 0. Jawapan ringkas\n')
     ref = pf[pf.sistem == 'REF_pegang_252'].iloc[0]
-    A(f'1. **{len(runs)} run layak** dikenal pasti dalam {th}; setiap 12 bulan ada calon (tiada '
-      f'"TIADA CALON"). {int((runs.kumpulan=="SUPER PADU").sum())} SUPER PADU (≥100%), '
-      f'{int((runs.kumpulan=="PADU").sum())} PADU, {int((runs.kumpulan=="BIASA").sum())} BIASA.\n')
+    bln_kosong = ms[ms.n_run == 0].bulan.tolist()
+    A(f'1. **{len(runs)} run layak** dikenal pasti dalam {th}; '
+      + ('setiap 12 bulan ada calon (tiada "TIADA CALON"). '
+         if not bln_kosong else
+         f'**{len(bln_kosong)} bulan TIADA CALON** ({", ".join(bln_kosong)}) — lihat §2. ')
+      + f'{int((runs.kumpulan == "SUPER PADU").sum())} SUPER PADU (≥100%), '
+      f'{int((runs.kumpulan == "PADU").sum())} PADU, '
+      f'{int((runs.kumpulan == "BIASA").sum())} BIASA.\n')
     A(f'2. **Kohort "naik dan naik" ialah penemuan terkuat kajian ini.** Daripada {len(koh)} run '
       f'yang masih naik pada hari ke-63, **{(koh.pct_naik_penuh>=100).mean()*100:.1f}% akhirnya '
       f'melebihi +100%**, dengan median kenaikan penuh **{koh.pct_naik_penuh.median():.1f}%** '
@@ -148,6 +153,28 @@ def main():
       f'(tiada amaran: syarat 10 hari menolak {100-(runs.entry_sah=="ya").mean()*100:.1f}% '
       f'< 50%). Dilangkau: {len(sk)} '
       f'({int((sk.sebab=="terlalu perlahan").sum()) if "sebab" in sk else 0} "terlalu perlahan").\n')
+    if bln_kosong:
+        A('\n### Bulan TIADA CALON (arahan Step 1.3)\n')
+        sk2 = sk.copy()
+        sk2['tarikh'] = pd.to_datetime(sk2.get('tarikh'), errors='coerce')
+        sk2['bulan'] = sk2.tarikh.dt.strftime('%Y-%m')
+        for b in bln_kosong:
+            A(f'\n**{b} — TIADA CALON.** 3 run terhampir beserta syarat yang gagal:\n\n')
+            d = sk2[(sk2.bulan == b) & (sk2.sebab == 'terlalu perlahan')].copy()
+            if not len(d):
+                A('_(tiada calon run sama sekali bulan ini — tiada tutup ≥ 5% di atas rendah '
+                  'terendah 20 hari)_\n')
+                continue
+            d['hari'] = pd.to_numeric(d.hari_ke_puncak, errors='coerce')
+            d['naik'] = pd.to_numeric(d.pct_naik_rendah, errors='coerce')
+            d['ambang'] = np.where(d.hari <= 21, 10.0, np.where(d.hari <= 42, 20.0, 30.0))
+            d['jurang'] = d.naik - d.ambang
+            d = d.sort_values('jurang', ascending=False).head(3)
+            d['syarat_gagal'] = [f'hari_ke_puncak {int(h)} perlukan %_naik_rendah ≥ {a:.0f}%, '
+                                 f'dapat {n:.1f}% (kurang {abs(j):.1f} mata)'
+                                 for h, a, n, j in zip(d.hari, d.ambang, d.naik, d.jurang)]
+            A(md_jadual(d, ['ticker', 'tarikh', 'hari_ke_puncak', 'pct_naik_rendah',
+                            'syarat_gagal']))
     A('\n### Bucket %_naik × tempoh\n')
     A(md_jadual(pd.crosstab(runs.bucket_pct, runs.bucket_tempoh).reset_index()))
     A('\n### KUMPULAN × KELAS LAJU (sel n < 20 = SAMPEL KECIL)\n')
