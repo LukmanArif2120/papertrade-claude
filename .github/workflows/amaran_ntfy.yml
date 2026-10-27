@@ -1,5 +1,5 @@
 # Amaran telefon (ntfy, 27 Okt 2026): hantar notifikasi apabila workflow utama gagal atau dibatalkan.
-# Topik = rahsia repo NTFY_TOPIC jika ada; jika tiada, topik pengguna "claude" (ntfy.sh/claude, awam).
+# Topik = rahsia repo NTFY_TOPIC jika ada; jika tiada, topik pengguna "claude_azim" (ntfy.sh/claude_azim).
 # workflow_run hanya aktif selepas fail ini berada di cawangan lalai (main).
 name: Amaran ntfy
 
@@ -31,7 +31,7 @@ jobs:
     steps:
       - name: Hantar ke ntfy
         env:
-          TOPIK: ${{ secrets.NTFY_TOPIC || 'claude' }}
+          TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
           NAMA: ${{ github.event.workflow_run.name || 'Ujian amaran ntfy' }}
           HASIL: ${{ github.event.workflow_run.conclusion || 'ujian' }}
           PAUTAN: ${{ github.event.workflow_run.html_url || format('{0}/{1}/actions', github.server_url, github.repository) }}
