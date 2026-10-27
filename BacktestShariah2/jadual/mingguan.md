@@ -1,4 +1,4 @@
-# Data Moomoo/SST mingguan (sesi Claude BAHARU; aktif selepas peralihan, lihat `PERALIHAN.md`)
+# Data Moomoo/SST mingguan (sesi Claude BAHARU; aktif sejak peralihan 27 Okt 2026, lihat `PERALIHAN.md`)
 
 Masa: Ahad 10:47 pagi MYT (pasaran AS tutup; data tutup Jumaat). Model `claude-sonnet-5-5`. Automatik; jangan tanya soalan.
 LARANGAN: tiada order (`trading_order_*`, `sim_trade_input/modify/cancel_order`); hook projek menyekatnya.
@@ -9,7 +9,7 @@ Alat (ToolSearch; jika `select:mcp__Moo_Moo__…` gagal, cari ikut nama alat, ct
 `select:mcp__Moo_Moo__quote_stock_screen,mcp__Moo_Moo__quote_plate_list,mcp__Moo_Moo__quote_plate_stock,mcp__Moo_Moo__sim_trade_position_list`,
 `select:mcp__SST_Terminal__market_events,mcp__SST_Terminal__institutional_flow,mcp__SST_Terminal__unusual_volume`,
 `select:mcp__Moo_Moo__quote_financials_statements,mcp__Moo_Moo__quote_financials_earnings_price_history,mcp__Moo_Moo__quote_market_snapshot,mcp__Moo_Moo__quote_corporate_actions_rehab`,
-`select:ArtifactData,PushNotification`.
+`select:ArtifactData,mcp__github__actions_run_trigger` (notifikasi ntfy sahaja, keputusan pengguna 27 Okt 2026; JANGAN guna PushNotification).
 
 1. `git pull --rebase origin main`.
 2. Universe Shariah (skrin Moomoo; screen_queries & retrieve_queries sama seperti `jadual/imbas_2002.md` langkah 2, limit 250,
@@ -38,5 +38,6 @@ Alat (ToolSearch; jika `select:mcp__Moo_Moo__…` gagal, cari ikut nama alat, ct
    biarkan calon dan catat). Posisi C dilaras oleh `harian_c.py malam` seterusnya (`tidak_layak.py posisi`), stor/Lejar oleh `lejar.py stor`.
 8. `python3 BacktestShariah2/standard/sahkan.py` → mesti 0. Catatan dalam `standard/binaan_v2_log.md`
    (bilangan universe, sektor_pasaran, SST, perbezaan Moomoo, kewangan, peristiwa). Commit `Mingguan Moomoo/SST <tarikh>: <ringkas>` + push.
-9. Notifikasi (langkah terakhir, juga jika gagal): `PushNotification`, status "proactive", satu baris < 200 aksara:
-   `Mingguan <tarikh>: universe <n>, sektor <tarikh>, SST <ok/ralat>, kewangan <n>, Moomoo <beza>`.
+9. Notifikasi (langkah terakhir, juga jika gagal): `mcp__github__actions_run_trigger` (method `run_workflow`, owner `pedagangsenja`,
+   repo `papertrade-claude`, workflow_id `amaran_ntfy.yml`, ref `main`, inputs {"tajuk": "mingguan <tarikh>", "mesej":
+   "universe <n>, sektor <tarikh>, SST <ok/ralat>, kewangan <n>, Moomoo <beza>"} — satu baris < 200 aksara).

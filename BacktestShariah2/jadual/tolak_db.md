@@ -1,4 +1,4 @@
-# Tolak db dashboard harian (sesi Claude BAHARU setiap kali; aktif selepas peralihan, lihat `PERALIHAN.md`)
+# Tolak db dashboard harian (sesi Claude BAHARU setiap kali; aktif sejak peralihan 27 Okt 2026, lihat `PERALIHAN.md`)
 
 Masa: 10:20 pagi New York, Isnin–Sabtu (= 10:20 atau 11:20 malam MYT), iaitu selepas belian 9:35 NY.
 Model `claude-sonnet-5-5`. Automatik; jangan tanya soalan. Tiada order Moomoo, tiada wang sebenar.
@@ -6,7 +6,8 @@ Semua pengiraan dibuat oleh GitHub Actions (`standard/harian_c.py`, `.github/wor
 Sesi ini hanya (1) memastikan Actions sudah berjalan dan (2) menolak fail yang sudah dijana ke db dashboard.
 Jangan baca fail CSV besar dan jangan bina JSON dengan tangan; guna skrip.
 
-Alat (satu panggilan ToolSearch): `select:ArtifactData,PushNotification,mcp__github__actions_list,mcp__github__actions_run_trigger`
+Alat (satu panggilan ToolSearch): `select:ArtifactData,mcp__github__actions_list,mcp__github__actions_run_trigger`
+Notifikasi (keputusan pengguna 27 Okt 2026): ntfy SAHAJA (ringkasan belian dihantar oleh `beli.yml`); JANGAN guna PushNotification.
 Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e
 
 1. `git pull --rebase origin main`.
@@ -22,8 +23,7 @@ Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e
    (pecah_claude/bahagi_db sudah dijalankan oleh Actions; skrip gagal jika mana-mana dokumen melebihi had 262,144 bait).
 5. Bagi setiap fail `batch_N.json` yang dicetak: `ArtifactData` `batch`, `writes` = kandungan fail itu (setiap entri sudah
    ada `file_path` dan `if_version`). Ditolak kerana versi berubah → ulang langkah 3–5 sekali.
-6. Notifikasi belian (langkah terakhir, juga jika gagal; permintaan pengguna 24 Okt 2026, `jadual/notifikasi_harian.md`):
-   senarai workflow gagal seperti `notifikasi_harian.md` langkah 2, kemudian
-   `python3 BacktestShariah2/standard/notifikasi.py beli --gagal "<…>" --tambah "db <ok|gagal: sebab><; tembak harian/beli jika ada>"`
-   → `PushNotification`, status "proactive", mesej = baris itu TEPAT. "Kalau tak beli, cakap tak beli" (skrip menulisnya).
+6. Amaran (hanya jika langkah 2–5 gagal atau db tidak ditolak): `mcp__github__actions_run_trigger` (method `run_workflow`,
+   owner `pedagangsenja`, repo `papertrade-claude`, workflow_id `amaran_ntfy.yml`, ref `main`, inputs
+   {"tajuk": "tolak db gagal", "mesej": "<tarikh>: <sebab ringkas, < 200 aksara>"}). Berjaya → tiada notifikasi.
 Tiada commit diperlukan (sesi ini tidak mengubah fail repo).

@@ -1,7 +1,6 @@
 # Satu baris notifikasi telefon (< 200 aksara) daripada papertrade/status_harian.json selepas kerja GitHub Actions
-# (permintaan pengguna 24 Okt 2026: notifikasi kerja papertrade sahaja, mula selepas peralihan). Dipakai oleh
-# jadual/notifikasi_harian.md (selepas harian.yml) dan jadual/tolak_db.md langkah 6 (selepas beli.yml).
-# Tanpa rangkaian: senarai workflow gagal diberi oleh sesi Claude (--gagal). "Kalau tak beli, cakap tak beli."
+# (permintaan pengguna 24 Okt 2026). Sejak 27 Okt 2026 dihantar ke ntfy oleh langkah akhir harian.yml dan beli.yml;
+# amaran workflow gagal oleh amaran_ntfy.yml. Tanpa rangkaian (--gagal pilihan). "Kalau tak beli, cakap tak beli."
 #
 # Guna:
 #   python3 notifikasi.py malam [--folder F] [--gagal harian.yml,lejar.yml] [--masa "YYYY-MM-DD HH:MM"] [--tambah TEKS]

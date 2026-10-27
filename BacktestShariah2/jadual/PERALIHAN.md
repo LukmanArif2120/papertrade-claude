@@ -1,4 +1,9 @@
-# Peralihan rutin Claude → GitHub Actions (keputusan pengguna 17 Okt 2026)
+# Peralihan rutin Claude → GitHub Actions (keputusan pengguna 17 Okt 2026; SELESAI 27 Okt 2026)
+
+Status 27 Okt 2026 (pengguna: "boleh kita beralih ke github actions? dan guna ntfy je setiap kali run"): MOD rasmi;
+`papertrade/status_harian.json` = belian Claude terakhir 26 Okt (imbas sesi 26 Okt oleh `harian.yml`); data bayang dibuang
+(BANDING + LOG kekal); tiga rutin Claude dimatikan; tugasan tolak db + mingguan dicipta; notifikasi = ntfy (bukan sesi Claude).
+Berpatah balik: `echo bayang > BacktestShariah2/MOD_ACTIONS` dan hidupkan semula tiga rutin (`update_trigger` enabled=true).
 
 Tujuan: jimat token (rutin Claude ~37 juta token sehari) supaya papertrade boleh berjalan pada pelan Pro.
 Keputusan pengguna: (1) berjalan selari 3 hari dagangan dahulu; (2) belian kekal sekitar 9:35 NY; (3) data yang hanya
@@ -54,9 +59,9 @@ membanding setiap hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`); `rasm
    pagi / Imbas 7:47 malam / Beli 9:35 NY" (`trig_01R2RcT5GZ4xGkncK5xa1jnH`, `trig_012DQb9KbjfhpKuopsMByNDh`,
    `trig_018pfWtxtyMaC6aaThn7UDCo`; sahkan dengan `list_triggers`) dan pengawas yang masih aktif (`trig_018zyZSoegh4fQWpWGv3wS9m`,
    `trig_01AJf4h6GffXNmHXmQsVzzGF`, `trig_018eaPB3VHoodMscT1s8BiLs`; 22 Okt sudah tiada dalam senarai aktif).
-5. Cipta tiga tugasan berjadual baharu (`create_trigger`, `create_new_session_on_fire`=true, model `claude-sonnet-5-5`,
+5. Cipta dua tugasan berjadual baharu (`create_trigger`, `create_new_session_on_fire`=true, model `claude-sonnet-5-5`,
    connectors yang perlu sahaja): tolak db `CRON_TZ=America/New_York 20 10 * * 1-6`, prompt "Ikut BacktestShariah2/jadual/tolak_db.md";
-   mingguan `CRON_TZ=Asia/Kuala_Lumpur 47 10 * * 0`, prompt "Ikut BacktestShariah2/jadual/mingguan.md"; notifikasi harian
-   `CRON_TZ=Asia/Kuala_Lumpur 17 15 * * 2-6`, prompt "Ikut BacktestShariah2/jadual/notifikasi_harian.md" (permintaan pengguna 24 Okt 2026).
+   mingguan `CRON_TZ=Asia/Kuala_Lumpur 47 10 * * 0`, prompt "Ikut BacktestShariah2/jadual/mingguan.md". (Notifikasi harian sesi Claude yang dirancang 24 Okt digantikan
+   ntfy daripada Actions, keputusan pengguna 27 Okt 2026.)
 6. Kemas kini `standard/tugasan_v3.md` §2, `jadual/README.md` dan `CLAUDE.md` (rutin harian = Actions); catat dalam log; commit + push.
 7. Jika `status_harian.json` tiada `malam` bagi sesi terakhir, tembak `harian.yml` sekali (workflow_dispatch).

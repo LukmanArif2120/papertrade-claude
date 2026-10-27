@@ -10,14 +10,19 @@ Dokumen ini **satu-satunya** rujukan peraturan bagi tugasan harian. Ia mengganti
 - Prinsip pengguna: "Kalau tak beli, cakap tak beli." Data mesti betul; jangan reka.
 - Hari operasi: hari dagangan NYSE sahaja (semak `quote_trading_days` / `quote_market_state`; cuti = catat dan berhenti).
 
-## 2. Jadual (semua tugasan guna model `claude-sonnet-5-5`)
-| Tugasan | Masa | Prosedur |
+## 2. Jadual (sejak 27 Okt 2026: GitHub Actions rasmi, §10; tugasan Claude guna model `claude-sonnet-5-5`)
+| Tugasan | Masa | Pelaksana |
 |---|---|---|
-| Kemas kini | 6:02 pagi MYT, Selasa–Sabtu | `jadual/kemas_kini_0602.md` |
-| Imbas pasaran | 7:47 malam MYT, Isnin–Jumaat (dahulu 8:02) | `jadual/imbas_2002.md` |
-| Beli maya | 9:35 pagi New York, Isnin–Jumaat | `jadual/beli_0935.md` |
+| Kemas kini posisi + imbas 134 kaedah + gred | 05:07 UTC (1:07 ptg MYT) Sel–Sab + sandaran | Actions `harian.yml` (`standard/harian_c.py malam`, `gred`) |
+| Gred P sebelum buka | 11:47 UTC Isn–Jum | Actions `petang.yml` |
+| Beli maya | 9:40 pagi New York Isn–Jum + sandaran | Actions `beli.yml` (`standard/harian_c.py beli`) |
+| Tolak db dashboard | 10:20 pagi New York Isn–Sab | sesi Claude `jadual/tolak_db.md` |
+| Data Moomoo/SST (universe, sektor, SST, kewangan, peristiwa, akaun sim) | Ahad 10:47 pagi MYT | sesi Claude `jadual/mingguan.md` |
 
-Pada 6:02 pagi SEMUA data dashboard dikemas kini: Sector, Watchlist, Paper Trade M, Papertrade C, Prestasi, `harian/status`.
+Notifikasi telefon (keputusan pengguna 27 Okt 2026): ntfy (topik `claude_azim`) — ringkasan setiap kerja papertrade baharu
+(`harian.yml`, `beli.yml` melalui `standard/notifikasi.py`) dan amaran bila mana-mana workflow utama gagal (`amaran_ntfy.yml`).
+Rutin Claude 6:02 / 7:47 / 9:35 (`jadual/kemas_kini_0602.md`, `imbas_2002.md`, `beli_0935.md`) DIMATIKAN 27 Okt 2026; fail
+prosedur disimpan sebagai rujukan dan sandaran (hidupkan semula + `MOD_ACTIONS` = `bayang` untuk berpatah balik).
 
 ## 3. Kaedah dan isyarat
 - 134 kaedah M (87 asal + 47 calon K145+ M115–M161 sejak 16 Okt 2026: entry daripada `spec/KATALOG_K145.md`, henti/keluar/tempoh = pilihan WFO suku terkini dibekukan sebagai varian V1; tiada `hampir()` → tiada watchlist bagi kaedah ini; prestasi luar sampel: `WFO/laporan/W01_LAPORAN.md`); varian dipilih dalam registry set 431: skor tertinggi bukan DITOLAK, jika tiada, CAGR tertinggi. Indikator I01–I32 tidak digunakan.
@@ -94,7 +99,7 @@ Gred keseluruhan (paparan) sejak 19 Okt 2026 = purata mata Industri (kecuali kae
 - Dijalankan oleh GitHub Actions `.github/workflows/lejar.yml` (06:17 UTC Sel–Sab, sandaran 10:17; sesi ditangguh jika data yfinance belum muktamad), tanpa LLM dan tanpa Moomoo; larian terlepas ditampung. Butiran: `lejar/README.md`, kod `standard/lejar.py`.
 - Fasa 1 (2 minggu): berjalan selari; Papertrade C dan tiga rutin tidak berubah (kecuali sumber stor harga, §6). Rutin tidak menulis ke `lejar/`. Peralihan (rutin 9:35 NY dibersarakan, dsb.) hanya selepas pengguna meluluskan berdasarkan perbandingan.
 
-## 10. Peralihan ke GitHub Actions (keputusan pengguna 17 Okt 2026; mod selari 3 hari dagangan)
+## 10. Peralihan ke GitHub Actions (keputusan pengguna 17 Okt 2026; mod selari 19–23 Okt; RASMI sejak 27 Okt 2026)
 - Kerja harian tanpa LLM: `standard/harian_c.py` (kemas kini posisi, imbas 134 kaedah, gred, beli 9:35 NY) dijalankan oleh
   `.github/workflows/harian.yml` (05:07 UTC Sel–Sab + sandaran), `beli.yml` (9:40 NY + sandaran) dan `petang.yml` (gred P).
   Peraturan sama dengan §3–§8 (ulang tayang 16–17 Okt: sama tepat dengan rutin Claude kecuali beza data; `jadual/PERALIHAN.md`).

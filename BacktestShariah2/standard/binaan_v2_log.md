@@ -416,3 +416,10 @@
 - **Langkah 5c (kewangan):** `perlu` selepas CSV ditulis = 25 saham. Dikumpul 25 lengkap (FIX, VC, STRL, ECG, ESE, CECO, EME, AMBA, RL, AGL, AD, EDN, HL, BAND, SEDG, LOVE, SKYW, REF, ALNY, MRTN, WERN, FLS, SRAD, TPC, NTCT). `perlu` akhir = 0 saham. Panggilan ralat "orchestration error" diulang berjaya. Fail lama `data/kewangan` yang hanya berubah tarikh `dikumpul` dikembalikan (tidak di-commit). Tiada baris "abcde" (separuh tahun) dalam `perlu`.
 - db: `papertrade/watchlist` (+_2, _3) dibahagi dengan `bahagi_db.py`; `senarai_beli` tidak ditolak; `harian/status` v42.
 - Tiada order. Tiada wang sebenar.
+
+## 27 Okt 2026 — Peralihan ke GitHub Actions (keputusan pengguna: "boleh kita beralih ke github actions? dan guna ntfy je setiap kali run")
+- Bukti mod selari 19–23 Okt (`bayang/BANDING_*.md`; `jadual/PERALIHAN.md`): kemas kini 23 Okt 5,095/5,095 posisi sama; senarai beli 770/770 baris Claude ada; belian 760/761 sama, harga 100% sama; semua workflow berjaya.
+- MOD_ACTIONS = rasmi. `papertrade/status_harian.json` = belian Claude terakhir 26 Okt (668); imbas sesi 26 Okt dan belian 27 Okt oleh Actions. Data bayang dibuang (BANDING + LOG kekal).
+- Rutin Claude dimatikan: Kemas kini 6:02 (`trig_01R2RcT5GZ4xGkncK5xa1jnH`), Imbas 7:47 (`trig_012DQb9KbjfhpKuopsMByNDh`), Beli 9:35 (`trig_018pfWtxtyMaC6aaThn7UDCo`).
+- Tugasan Claude baharu (Sonnet 5.5, sesi baharu): tolak db Isn–Sab 10:20 NY (`jadual/tolak_db.md`), mingguan Ahad 10:47 MYT (`jadual/mingguan.md`).
+- Notifikasi = ntfy topik `claude_azim`: `harian.yml` (keluar + senarai beli) dan `beli.yml` (dibeli / tak beli + sebab) melalui `standard/notifikasi.py`; amaran gagal `amaran_ntfy.yml`; sesi Claude menghantar mesej melalui `workflow_dispatch` `amaran_ntfy.yml` (ntfy.sh disekat proksi sesi Claude). Notifikasi Claude harian yang dirancang 24 Okt tidak dicipta.
