@@ -17,6 +17,7 @@ Repo ini menggantikan Project claude.ai "Backtest Shariah 2" sebagai stor utama 
 - `BacktestShariah2/laporan/` (papan: `standard/jana_papan.py`; Papan Penganalisis `PENGANALISIS.md` + `data/analisis/papan.json`: `standard/penganalisis.py`, Actions `analisis.yml`), `BacktestShariah2/data/` (registry gabungan, P01/P02, `lapisan/`), `BacktestShariah2/uji_kertas/log.csv`, `uji_kertas/jejak_M166.csv` (jejak kertas M166 V1 sahaja, tiada belian; hingga 15 Jan 2027).
 - `WFO/kaedah_baru/step2_<ID>.py` — skrip STEP-2 Rangka R (M162–M167, L01). Kaedah baharu: tambah `kod/registry/<ID>.csv`, baris ke `data/registry_M_gabung.csv`, db dashboard `registry/<ID>` (`standard/dashboard_kemaskini.py`), dan jana semula papan.
 - `data_mentah/` — dataset_S1–S4.csv, index_benchmark.csv (data backtest).
+- `requirements-kajian.txt` (27 Okt 2026) — pustaka kajian (edgartools, arch, alphalens-reloaded, lightgbm, shap, optuna 4.9.0 + optunahub RobustGPSampler, torch) untuk sesi kajian / AUTOTUNE A04 / L03 sahaja; bukan workflow malam. `ruff.toml` + actionlint dijalankan `semak_data.yml`.
 
 Laluan lama dalam dokumen (`standard/x`, `papertrade/x`, `spec/`) = `BacktestShariah2/standard/x`, `BacktestShariah2/papertrade/x`, `BacktestShariah2/spec/SPEC_SEMUA_KAEDAH.md`.
 
