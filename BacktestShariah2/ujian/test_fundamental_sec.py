@@ -92,6 +92,25 @@ class TestSUE(unittest.TestCase):
         self.assertEqual((r.tarikh_umum, r.sumber_tarikh), ('2024-01-25', '8k'))
         self.assertEqual(s.sumber_tarikh.iloc[0], 'fail')
 
+    def test_banding_pemfailan_sama_merentasi_pecahan_saham(self):
+        # 2023 difail sebelum pecahan 4:1 (EPS 4.0); 10-Q 2024 mencetak perbandingan 2023 dilaras (1.0)
+        f = {'facts': {'us-gaap': {'EarningsPerShareDiluted': {'units': {'USD/shares': [
+            _x('2023-01-01', '2023-03-31', 4.0, '2023-05-01', accn='q1-23'),
+            _x('2024-01-01', '2024-03-31', 1.1, '2024-05-01', accn='q1-24'),
+            _x('2023-01-01', '2023-03-31', 1.0, '2024-05-01', accn='q1-24')]}}}}}
+        mentah = F.hurai_fakta(f, F.TAG_EPS, 'USD/shares')
+        q = F.suku(mentah)
+        self.assertEqual(list(q.nilai), [4.0, 1.1])                  # siri kekal nilai pertama difail
+        b = F.nilai_banding(mentah, q)
+        self.assertEqual(b.to_dict(), {'2024-03-31': 1.0})
+        s = F.kira_sue(q, pd.DataFrame(columns=['akhir', 'nilai']), pd.DataFrame(columns=['tarikh_fail']), b)
+        self.assertAlmostEqual(s.eps_lalu.iloc[1], 1.0)              # bukan 4.0 (sebelum pecahan)
+
+    def test_penyebut_minimum(self):
+        eps = [1.0] * 12 + [1.05]                                    # perbezaan sejarah semua 0
+        s = F.kira_sue(self._suku(eps), pd.DataFrame(columns=['akhir', 'nilai']), pd.DataFrame(columns=['tarikh_fail']))
+        self.assertAlmostEqual(s.sue.iloc[-1], 0.05 / F.SUE_MIN_SP)
+
     def test_tumbuh_dan_pecutan_hasil(self):
         h = self._suku([100, 100, 100, 100, 110, 120, 100, 100])
         s = F.kira_sue(self._suku([1.0] * 8), h, pd.DataFrame(columns=['tarikh_fail']))

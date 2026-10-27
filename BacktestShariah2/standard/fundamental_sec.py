@@ -15,7 +15,8 @@
 #   eps_hasil.csv   saham, cik, metrik (eps|hasil), mula, akhir, nilai, tarikh_fail, borang, akses, terbitan
 #   earnings_8k.csv saham, cik, tarikh_fail, masa_terima, akses, items   (8-K mengandungi Item 2.02)
 #   sue.csv         saham, akhir, eps, eps_lalu, sue, hasil, tumbuh_hasil, pecutan_hasil, tarikh_umum, sumber_tarikh
-#                   SUE = (EPS_t − EPS_t−4) / sisihan piawai perbezaan sama 8 suku sebelumnya (min 4). tarikh_umum =
+#                   SUE = (EPS_t − EPS_t−4) / maks(sisihan piawai perbezaan sama 8 suku sebelumnya (min 4), USD0.01);
+#                   EPS_t−4 = angka perbandingan dalam pemfailan suku t (dilaras pecahan saham). tarikh_umum =
 #                   8-K Item 2.02 pertama dalam (akhir, tarikh_fail]; jika tiada, tarikh_fail 10-Q/10-K (sumber_tarikh).
 #                   tumbuh_hasil = hasil_t / hasil_t−4 − 1; pecutan_hasil = tumbuh_t − tumbuh_t−1.
 #   status.json     akses terakhir setiap CIK (larian tambahan: companyfacts hanya diambil semula jika ada 10-Q/10-K baharu)
@@ -40,6 +41,8 @@ TAG_EPS = ['EarningsPerShareDiluted', 'EarningsPerShareBasicAndDiluted', 'Earnin
 TAG_HASIL = ['Revenues', 'RevenueFromContractWithCustomerExcludingAssessedTax', 'SalesRevenueNet',
              'RevenueFromContractWithCustomerIncludingAssessedTax', 'RevenuesNetOfInterestExpense']
 BORANG_LAPOR = {'10-Q', '10-K', '10-Q/A', '10-K/A', '10-KT', '20-F', '40-F'}
+VERSI = 2           # naikkan bila kiraan berubah: semua companyfacts diambil semula (v2: perbandingan pemfailan sama + penyebut minimum)
+SUE_MIN_SP = 0.01   # penyebut minimum SUE (USD 1 sen): elak SUE meletup bila EPS hampir malar
 LAJUR_EH = ['saham', 'cik', 'metrik', 'mula', 'akhir', 'nilai', 'tarikh_fail', 'borang', 'akses', 'terbitan']
 LAJUR_8K = ['saham', 'cik', 'tarikh_fail', 'masa_terima', 'akses', 'items']
 LAJUR_SUE = ['saham', 'akhir', 'eps', 'eps_lalu', 'sue', 'hasil', 'tumbuh_hasil', 'pecutan_hasil', 'tarikh_umum',
@@ -124,8 +127,25 @@ def akses_lapor_terkini(js):
     return None
 
 
-def kira_sue(eps, hasil, k8):
-    """eps/hasil: DataFrame suku (akhir, nilai, tarikh_fail); k8: DataFrame 8-K (tarikh_fail) -> DataFrame LAJUR_SUE."""
+def nilai_banding(mentah, q):
+    """Bagi setiap suku dilapor terus (terbitan=0): nilai suku setahun lebih awal seperti tercetak dalam pemfailan YANG SAMA
+    (angka perbandingan; sudah dilaras pecahan saham dan masih point-in-time). Siri akhir -> nilai."""
+    out = {}
+    if mentah.empty or q.empty:
+        return pd.Series(out, dtype=float)
+    m = mentah[mentah.tempoh_hari.between(80, 100)].copy()
+    m['akhir_dt'] = pd.to_datetime(m.akhir)
+    for _, x in q[q.terbitan == 0].iterrows():
+        t = pd.Timestamp(x.akhir)
+        c = m[(m.akses == x.akses) & (m.akhir_dt >= t - pd.Timedelta(days=390)) & (m.akhir_dt <= t - pd.Timedelta(days=340))]
+        if len(c):
+            out[x.akhir] = float(c.sort_values('keutamaan').nilai.iloc[0])
+    return pd.Series(out, dtype=float)
+
+
+def kira_sue(eps, hasil, k8, banding=None):
+    """eps/hasil: DataFrame suku (akhir, nilai, tarikh_fail); k8: DataFrame 8-K (tarikh_fail); banding: siri akhir -> EPS
+    setahun lebih awal daripada pemfailan sama (nilai_banding; jika tiada, nilai pertama difail) -> DataFrame LAJUR_SUE."""
     if eps.empty:
         return pd.DataFrame(columns=LAJUR_SUE[1:])
     e = eps.sort_values('akhir').reset_index(drop=True)
@@ -145,10 +165,10 @@ def kira_sue(eps, hasil, k8):
     beza = []
     for i, r in e.iterrows():
         t = akhir[i]
-        el = lalu(eps_dt, t)
+        el = float(banding[r.akhir]) if banding is not None and r.akhir in banding.index else lalu(eps_dt, t)
         d = r.nilai - el if not np.isnan(el) else np.nan
         sejarah = [x for x in beza[-8:] if not np.isnan(x)]
-        sue = d / np.std(sejarah, ddof=1) if not np.isnan(d) and len(sejarah) >= 4 and np.std(sejarah, ddof=1) > 0 else np.nan
+        sue = d / max(np.std(sejarah, ddof=1), SUE_MIN_SP) if not np.isnan(d) and len(sejarah) >= 4 else np.nan
         beza.append(d)
         h = float(hs_dt.get(t, np.nan)) if len(hs_dt) else np.nan
         hl = lalu(hs_dt, t)
@@ -187,8 +207,11 @@ def jalan(a):
         for t in ts:
             if t in univ:
                 cik_saham.setdefault(c, t)          # satu ticker bagi setiap CIK (kelas pertama dalam senarai SEC)
-    akses = st.get('akses', {})
+    akses = st.get('akses', {}) if st.get('versi') == VERSI else {}   # versi kiraan berubah -> isi semula
+    sej8k = set(st.get('sejarah_8k', [])) | (set(st.get('akses', {})) if 'sejarah_8k' not in st else set())
     eh, k8, sue = _baca('eps_hasil.csv', LAJUR_EH), _baca('earnings_8k.csv', LAJUR_8K), _baca('sue.csv', LAJUR_SUE)
+    if st.get('versi') != VERSI:                # tiada campuran baris kiraan lama dan baharu
+        eh, sue = pd.DataFrame(columns=LAJUR_EH), pd.DataFrame(columns=LAJUR_SUE)
     baru_eh, baru_k8, baru_sue, dikemas, gagal, fakta_n = [], [], [], [], [], 0
     for cik, t in sorted(cik_saham.items(), key=lambda kv: kv[1]):
         try:
@@ -196,12 +219,15 @@ def jalan(a):
         except Exception as e:
             gagal.append(f'{t} submissions: {e}'); continue
         kk = hurai_8k(sub)
-        if str(cik) not in akses:                   # larian pertama: halaman 8-K lama juga
+        if str(cik) not in sej8k:                   # kali pertama: halaman 8-K lama juga (sekali sahaja setiap CIK)
+            lengkap = True
             for f in (sub.get('filings', {}).get('files') or []):
                 try:
                     kk = pd.concat([kk, hurai_8k(json.loads(TE.ambil(SUBMISSIONS_LAMA.format(nama=f['name'])) or '{}'))])
                 except Exception as e:
-                    gagal.append(f'{t} {f.get("name")}: {e}')
+                    gagal.append(f'{t} {f.get("name")}: {e}'); lengkap = False
+            if lengkap:
+                sej8k.add(str(cik))
         lama8 = k8[k8.saham == t][['tarikh_fail', 'masa_terima', 'akses', 'items']]
         kk = pd.concat([lama8, kk], ignore_index=True).drop_duplicates('akses')   # sejarah 8-K lama dikekalkan
         lapor = akses_lapor_terkini(sub)
@@ -212,12 +238,13 @@ def jalan(a):
             except Exception as e:
                 gagal.append(f'{t} companyfacts: {e}'); continue
             fakta_n += 1
-            qe = suku(hurai_fakta(js, TAG_EPS, 'USD/shares'))
+            me = hurai_fakta(js, TAG_EPS, 'USD/shares')
+            qe = suku(me)
             qh = suku(hurai_fakta(js, TAG_HASIL, 'USD'))
             for m, q in (('eps', qe), ('hasil', qh)):
                 if not q.empty:
                     baru_eh.append(q.assign(saham=t, cik=cik, metrik=m)[LAJUR_EH])
-            s = kira_sue(qe, qh, kk)
+            s = kira_sue(qe, qh, kk, nilai_banding(me, qe))
             if not s.empty:
                 baru_sue.append(s.assign(saham=t)[LAJUR_SUE])
             akses[str(cik)] = lapor
@@ -235,7 +262,7 @@ def jalan(a):
     k8.sort_values(['saham', 'tarikh_fail']).to_csv(os.path.join(SEC, 'earnings_8k.csv'), index=False)
     sue.sort_values(['saham', 'akhir']).to_csv(os.path.join(SEC, 'sue.csv'), index=False, float_format='%.6g')
     baki = sum(1 for c in cik_saham if str(c) not in akses)
-    st.update(akses=akses, dijana=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), saham_universe=len(cik_saham),
+    st.update(versi=VERSI, akses=akses, sejarah_8k=sorted(sej8k), dijana=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), saham_universe=len(cik_saham),
               companyfacts_diambil=fakta_n, belum_diisi=baki, gagal=gagal[:20])
     json.dump(st, open(stp, 'w'), ensure_ascii=False, indent=1, sort_keys=True)
     print(json.dumps(dict(saham=len(cik_saham), companyfacts=fakta_n, belum_diisi=baki, baris_sue=len(sue),
