@@ -18,6 +18,7 @@ on:
       - Papan penganalisis
       - Semak data
       - Data pemangkin
+      - Fundamental SEC
     types: [completed]
   workflow_dispatch:
 

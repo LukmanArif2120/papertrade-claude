@@ -1,0 +1,53 @@
+# Fundamental SEC: EPS/hasil suku point-in-time (XBRL companyfacts) + tarikh earnings 8-K Item 2.02 + SUE
+# -> BacktestShariah2/data/sec/ (standard/fundamental_sec.py; 27 Okt 2026). Sesi Claude tidak boleh capai sec.gov;
+# runner GitHub boleh. Rahsia repo SEC_USER_AGENT (nama + e-mel) wajib oleh SEC.
+# Isian awal berperingkat: companyfacts maksimum 300 saham setiap larian; larian seterusnya hanya ambil semula
+# saham yang ada 10-Q/10-K baharu. Masa (UTC): 23:41 Isn–Jum dan sandaran 04:11 Sel–Sab.
+name: Fundamental SEC
+
+on:
+  schedule:
+    - cron: '41 23 * * 1-5'
+    - cron: '11 4 * * 2-6'
+  workflow_dispatch:
+    inputs:
+      maks_fakta:
+        description: 'companyfacts maksimum setiap larian'
+        required: false
+        default: '300'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fundamental-sec
+  cancel-in-progress: false
+
+jobs:
+  sec:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q -c kekangan.txt pandas numpy requests
+      - name: Ambil data SEC
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          MAKS: ${{ github.event.inputs.maks_fakta }}
+        run: python3 BacktestShariah2/standard/fundamental_sec.py jalan --maks-fakta "${MAKS:-300}"
+      - name: Commit dan push
+        run: |
+          git config user.name "sec[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/sec BacktestShariah2/data/edgar/company_tickers.json
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Fundamental SEC: $(date -u +%F)"
+          for n in 1 2 3; do
+            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
+            sleep $((n * 10))
+          done
+          exit 1
