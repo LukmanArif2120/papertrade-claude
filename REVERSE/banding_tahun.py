@@ -58,10 +58,13 @@ def main():
     A(f'# BANDING MERENTAS TAHUN — REVERSE ({", ".join(str(y) for y in tahun)})\n')
     A('Dijana `REVERSE/banding_tahun.py`. Kod dan parameter **sama tanpa ubah** bagi setiap tahun; '
       'universe ikut bulan tahun berkenaan. Spec: `REVERSE/SPEC.md`.\n')
+    n_terima_semua = sum(int((kp[y].keputusan == 'DITERIMA').sum()) for y in tahun)
+    boleh = len(tahun) - 1 >= 2
     A('> **KAVEAT.** Tiada saham delist (survivorship) dalam mana-mana tahun. Gate 8.1 memerlukan '
       f'kelas yang sama dalam **≥ 2 tahun LAIN**; dengan {len(tahun)} tahun siap, setiap tahun '
-      f'hanya mempunyai {len(tahun) - 1} tahun lain, jadi **tiada signal boleh dinaik taraf ke '
-      'DITERIMA**. Had kekal CALON.\n')
+      f'mempunyai {len(tahun) - 1} tahun lain, jadi naik taraf ke DITERIMA '
+      + ('**mungkin** pada fasa ini' if boleh else '**belum mungkin**')
+      + f'. Jumlah signal DITERIMA setakat ini: **{n_terima_semua}**.\n')
 
     A('## 1. Run dan peristiwa\n')
     rows = []
@@ -210,47 +213,102 @@ def main():
           f'(SPY {b.spy_pulangan_tahun:.2f}%)\n')
 
     A('\n## 7. Kesimpulan merentas tahun\n')
+    ny = len(tahun)
+    kon_mer = ('atr_pct', 'bb_lebar', 'julat20', 'julat10')
+    semua_mer = len(kekal) and all(any(k in x for k in kon_mer) for x in kekal.signal)
     A(f'1. **Kelas kekal, keputusan tidak.** {len(kekal)} signal mengekalkan kelas '
-      f'TERAS/UNIQUE/LANGKA pada kedua-dua tahun — kesemuanya konteks pengembangan kemeruapan '
-      f'(ATR%, julat 20 hari, lebar Bollinger pada kuintil tertinggi): '
-      f'{", ".join("`"+x+"`" for x in kekal.signal)}. **Tetapi {len(calon_semua)} berstatus CALON '
-      f'dalam kedua-dua tahun.** Kelas Step 4 (lift atas populasi peristiwa) terus konsisten; '
-      f'gate yang keras (G4 bootstrap, G5 outlier) tidak. Itulah jurang yang paling penting dalam '
-      f'perbandingan ini: kekonsistenan lift **bukan** kekonsistenan kelebihan dagangan.\n')
-    A('2. **Konsisten:** tiada pemicu klasik tunggal lulus pada mana-mana tahun. Hipotesis '
-      '"magnitud ada pada konteks, bukan pemicu" disokong dua kali.\n')
-    A('3. **Konsisten:** keluarga EXIT dan SISTEM kosong pada FDR kedua-dua tahun; rujukan '
-      '"jangan jual" menang kedua-dua tahun.\n')
-    A('4. **Konsisten:** kelas pullback (trend saham utuh lawan rosak) membezakan sambungan ke '
-      'puncak baru dengan margin besar kedua-dua tahun.\n')
-    A('5. **Tidak konsisten:** magnitud mutlak. Median pulangan rujukan pegang-252 +10.1% (2025) '
-      'lawan −2.0% (2024); kohort masih_naik 39.8% melebihi +100% (2025) lawan 22.7% (2024). '
-      'Tahun berbeza = rejim berbeza; angka 2025 bukan jangkaan.\n')
-    A('6. **Paling penting untuk keputusan dagangan: portfolio berasaskan signal kalah kepada '
-      'entri rawak pada KEDUA-DUA tahun.**\n')
+      f'TERAS/UNIQUE/LANGKA pada semua {ny} tahun'
+      + (' — kesemuanya konteks pengembangan kemeruapan (ATR%, julat 20 hari, lebar Bollinger '
+         'pada kuintil tertinggi)' if semua_mer else '')
+      + (f': {", ".join("`" + x + "`" for x in kekal.signal)}' if len(kekal) else '')
+      + f'. **Tetapi {len(calon_semua)} berstatus CALON atau DITERIMA pada semua {ny} tahun.** '
+      f'Kelas Step 4 (lift atas populasi peristiwa) konsisten; gate yang keras (G4 bootstrap, '
+      f'G5 outlier) tidak. Itulah jurang paling penting dalam perbandingan ini: kekonsistenan '
+      f'lift **bukan** kekonsistenan kelebihan dagangan.\n')
+    pem = ['b:macd_cross', 'b:rsi_lintas50', 'b:ema_crossback', 'b:donchian20', 'b:pocket_pivot',
+           'b:gap_and_go']
+    pem_lulus = [(y, nm) for y in tahun for nm in pem if cu[y].kelas.get(nm, '-') in BAIK]
+    A(f'2. **{"Konsisten" if not pem_lulus else "Hampir konsisten"}:** pemicu klasik tunggal '
+      f'mencapai kelas TERAS/UNIQUE/LANGKA dalam {len(pem_lulus)} daripada {len(pem) * ny} '
+      f'kombinasi (pemicu × tahun). Hipotesis "magnitud ada pada konteks, bukan pemicu" '
+      f'disokong pada setiap {ny} tahun.\n')
+    e0 = all(fdr[y]['EXIT']['lulus'] == 0 for y in tahun)
+    s0 = all(fdr[y]['SISTEM']['lulus'] == 0 for y in tahun)
+    menang_ref = {y: max(('REF_pegang_252', 'REF_chandelier_4atr', 'REF_jual_hari63'),
+                         key=lambda k: float(hh[y][hh[y].sistem == k].jangkaan.iloc[0]))
+                  for y in tahun}
+    A(f'3. **{"Konsisten" if (e0 and s0) else "Sebahagian"}:** keluarga EXIT '
+      f'{"kosong" if e0 else "tidak kosong"} dan SISTEM '
+      f'{"kosong" if s0 else "tidak kosong"} pada FDR setiap tahun; rujukan yang menang Step 7b '
+      f'setiap tahun: ' + ', '.join(f'{y}=`{menang_ref[y]}`' for y in tahun) + '.\n')
+    pb = {y: he[y][he[y].jenis == 'kelas_pullback'].set_index('nama').pct_sambung_puncak_baru
+          for y in tahun}
+    A('4. **Konsisten:** kelas pullback membezakan sambungan ke puncak baru setiap tahun — '
+      + '; '.join(f'{y}: SIHAT {pb[y].get("PULLBACK SIHAT", float("nan")):.1f}% / '
+                  f'PASARAN {pb[y].get("PULLBACK PASARAN", float("nan")):.1f}% lawan '
+                  f'AMARAN {pb[y].get("AMARAN", float("nan")):.1f}%' for y in tahun) + '.\n')
+    med = {y: float(hh[y][hh[y].sistem == 'REF_pegang_252'].median_pulangan.iloc[0])
+           for y in tahun}
+    k100 = {y: round((koh[y].pct_naik_penuh >= 100).mean() * 100, 1) for y in tahun}
+    A('5. **Tidak konsisten:** magnitud mutlak. Median pulangan rujukan pegang-252 '
+      + ', '.join(f'{med[y]:+.1f}% ({y})' for y in tahun)
+      + '; kohort masih_naik yang melebihi +100%: '
+      + ', '.join(f'{k100[y]:.1f}% ({y})' for y in tahun)
+      + '. Tahun berbeza = rejim berbeza; angka tahun terbaik bukan jangkaan.\n')
+    arah = {}
     for y in tahun:
         d = pf[y]
         kr = d[d.sistem.str.startswith('KAWALAN_RAWAK')]
         sj = d[~d.sistem.str.startswith('KAWALAN_RAWAK')]
-        spy_r = float(d.spy_pulangan_tahun.iloc[0])
-        k_spy = int((sj.pulangan_tahun < spy_r).sum())
-        k_rwk = int((sj.pulangan_tahun < kr.pulangan_tahun.max()).sum())
-        lebih = sj[sj.pulangan_tahun >= kr.pulangan_tahun.max()]
+        arah[y] = (int((sj.pulangan_tahun < float(d.spy_pulangan_tahun.iloc[0])).sum()),
+                   int((sj.pulangan_tahun < kr.pulangan_tahun.max()).sum()), len(sj),
+                   float(d.spy_pulangan_tahun.iloc[0]), float(kr.pulangan_tahun.max()))
+    n_tahun_kalah = sum(1 for y in tahun if arah[y][1] > arah[y][2] / 2)
+    A(f'6. **Paling penting untuk keputusan dagangan: arah bertukar dari tahun ke tahun.** '
+      f'Portfolio berasaskan signal kalah kepada entri rawak pada {n_tahun_kalah} daripada {ny} '
+      f'tahun.\n')
+    for y in tahun:
+        ks, kr_, n_, spy_r, rwk = arah[y]
+        d = pf[y]
+        sj = d[~d.sistem.str.startswith('KAWALAN_RAWAK')]
+        lebih = sj[sj.pulangan_tahun >= rwk]
         nota = ''
         if len(lebih):
             b = lebih.loc[lebih.pulangan_tahun.idxmax()]
-            nota = (f' Satu-satunya yang mengalahkan rawak ialah `{b.sistem}` '
-                    f'({b.pulangan_tahun:.2f}%) dengan hanya {int(b.n_posisi_dibuka)} posisi '
-                    f'dibuka — saiz sampel yang tidak boleh dijadikan asas keputusan.')
-        A(f'   - {y}: SPY {spy_r:+.2f}%, rawak terbaik {kr.pulangan_tahun.max():+.2f}%; '
-          f'**{k_spy}/{len(sj)}** sistem kalah kepada SPY dan **{k_rwk}/{len(sj)}** kalah kepada '
-          f'entri rawak.{nota}\n')
-    A('   Tiada bukti kelebihan yang boleh diulang. Portfolio 8 slot bermakna setiap angka '
-      'tahunan bergantung pada bilangan posisi yang kecil.\n')
-    A('7. **Had kekal CALON.** Gate 8.1 memerlukan kelas sama dalam ≥ 2 tahun lain. Dengan dua '
-      'tahun siap, setiap tahun hanya mempunyai satu tahun lain. Perlu sekurang-kurangnya satu '
-      'tahun lagi (2023) sebelum sebarang signal boleh dilabel DITERIMA — dan atas bukti 2024, '
-      'tahun tambahan lebih berkemungkinan menolak daripada menerima.\n')
+            nota = (f' Terbaik yang mengalahkan rawak: `{b.sistem}` ({b.pulangan_tahun:+.2f}%) '
+                    f'dengan {int(b.n_posisi_dibuka)} posisi dibuka.')
+        A(f'   - {y}: SPY {spy_r:+.2f}%, rawak terbaik {rwk:+.2f}%; **{ks}/{n_}** sistem kalah '
+          f'kepada SPY dan **{kr_}/{n_}** kalah kepada entri rawak.{nota}\n')
+    A(f'   Tiga tahun, tiga keputusan berbeza: 2023 signal mengalahkan rawak, 2024 kalah '
+      f'sepenuhnya, 2025 kalah kecuali satu kes 8 posisi. **Itu taburan, bukan kelebihan.** '
+      f'Portfolio 8 slot bermakna setiap angka tahunan bergantung pada bilangan posisi yang '
+      f'kecil (lihat `n_posisi_dibuka`).\n')
+    sasaran = sum(int((pf[y].median_bulanan >= 10).sum()) for y in tahun)
+    jum = sum(len(pf[y]) for y in tahun)
+    A(f'   Sasaran +10% sebulan (median): **{sasaran} daripada {jum}** kombinasi '
+      f'(sistem × tahun) mencapainya.\n')
+    if n_terima_semua:
+        A(f'7. **{n_terima_semua} signal DITERIMA** (gate 8.1 dipenuhi) — tetapi lihat amaran '
+          f'percanggahan di bawah.\n')
+        for y in tahun:
+            for nm in kp[y][kp[y].keputusan == 'DITERIMA'].index:
+                tolak = [str(y2) for y2 in tahun
+                         if y2 != y and kp[y2].keputusan.get(nm, '') == 'DITOLAK']
+                A(f'   - {y}: `{nm}` DITERIMA'
+                  + (f', tetapi DITOLAK pada {", ".join(tolak)} (gagal G4 bootstrap / '
+                     f'G5 outlier di sana).\n' if tolak else '.\n'))
+        A('\n> **AMARAN.** Gate 8.1 hanya memerlukan **kelas yang sama** dalam ≥ 2 tahun lain, '
+          'bukan keputusan yang sama. Signal di atas lulus kerana kelas Step 4-nya konsisten, '
+          'sedangkan tahun yang mengesahkannya menolaknya pada gate keras. Spec tidak diubah '
+          'selepas melihat hasil; mengetatkan gate 8.1 (memerlukan CALON, bukan sekadar kelas '
+          'sama) ialah keputusan pengguna.\n')
+    elif boleh:
+        A(f'7. **Masih tiada DITERIMA walaupun gate 8.1 sudah boleh dinilai** ({len(tahun)} tahun '
+          f'siap, {len(tahun) - 1} tahun lain setiap satu). Signal gagal pada gate keras '
+          f'(G4 bootstrap / G5 outlier) atau kelasnya tidak sama merentas tahun.\n')
+    else:
+        A(f'7. **Had kekal CALON.** Gate 8.1 memerlukan kelas sama dalam ≥ 2 tahun lain; dengan '
+          f'{len(tahun)} tahun siap setiap tahun hanya mempunyai {len(tahun) - 1}.\n')
     (R / 'BANDING_TAHUN.md').write_text('\n'.join(L))
     print(f'BANDING_TAHUN.md siap | tahun {tahun} | KEKAL {len(kekal)} | '
           f'CALON semua tahun {len(calon_semua)}')

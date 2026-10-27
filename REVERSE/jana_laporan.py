@@ -72,10 +72,17 @@ def main():
 
     A(f'# LAPORAN REVERSE {th} — reverse engineer saham padu US (ENTRY / HOLD / EXIT)\n')
     A(f'Dijana skrip `REVERSE/jana_laporan.py` pada 27 Okt 2026. Spec dikunci: `REVERSE/SPEC.md`.\n')
+    n_terima = int((kp.keputusan == 'DITERIMA').sum())
+    tahun_lain = sorted(int(f.stem.split('_')[-1]) for f in R.glob('common_unique_*.csv')
+                        if f.stem.split('_')[-1].isdigit() and int(f.stem.split('_')[-1]) != th)
     A('> **KAVEAT WAJIB (dua arah).** Data A02 **tiada saham delist** (bias survivorship): run '
       'dipandang **tinggi** (had atas) DAN kadar signal palsu dipandang **rendah**. Satu tahun = '
-      '**satu rejim pasaran**. Peta sektor bukan titik-masa. Keputusan **maksimum CALON** pada '
-      'fasa ini (SPEC §11.8).\n')
+      '**satu rejim pasaran**. Peta sektor bukan titik-masa. '
+      + (f'Gate 8.1 ada {len(tahun_lain)} tahun lain untuk mengesahkan ({tahun_lain}); '
+         f'**{n_terima} signal DITERIMA**, selebihnya maksimum CALON (SPEC §11.8).\n'
+         if n_terima else
+         f'Gate 8.1 ada {len(tahun_lain)} tahun lain ({tahun_lain}); keputusan '
+         f'**maksimum CALON** (SPEC §11.8).\n'))
 
     A('## 0. Jawapan ringkas\n')
     ref = pf[pf.sistem == 'REF_pegang_252'].iloc[0]
@@ -380,8 +387,36 @@ def main():
     A('\n### Keputusan gate demi gate\n')
     A(md_jadual(kp, ['signal', 'G1_sah_dalam_tahun', 'G2_merentas_tahun', 'G3_nilai_p', 'G3_fdr',
                      'G4_bootstrap', 'G5_outlier', 'G6', 'step7', 'keputusan']))
-    A(f'\n**CALON: {len(calon)}** — {", ".join("`"+s+"`" for s in calon.signal)}. '
-      f'**DITOLAK: {int((kp.keputusan=="DITOLAK").sum())}.**\n')
+    terima = kp[kp.keputusan == 'DITERIMA']
+    A(f'\n**DITERIMA: {len(terima)}** · **CALON: {len(calon)}**'
+      + (f' — {", ".join("`"+x+"`" for x in calon.signal)}' if len(calon) else '')
+      + f' · **DITOLAK: {int((kp.keputusan == "DITOLAK").sum())}.**\n')
+    if len(terima):
+        # Adakah tahun yang mengesahkan itu sendiri MENOLAK signal yang sama?
+        canggah = []
+        for nm in terima.signal:
+            tolak = []
+            for y in tahun_lain:
+                dy = pd.read_csv(R / f'keputusan_{y}.csv').set_index('signal')
+                if nm in dy.index and dy.loc[nm, 'keputusan'] == 'DITOLAK':
+                    tolak.append(f'{y} (G4 {dy.loc[nm, "G4_bootstrap"]}, '
+                                 f'G5 {dy.loc[nm, "G5_outlier"]})')
+            if tolak:
+                canggah.append((nm, tolak))
+        if canggah:
+            A('\n> ### AMARAN PERCANGGAHAN GATE 8.1 — baca sebelum menggunakan label DITERIMA\n')
+            A('>\n> Gate 8.1 seperti ditulis dalam arahan hanya memerlukan **kelas yang sama** '
+              'dalam ≥ 2 tahun lain. Ia **tidak** memerlukan tahun-tahun itu lulus gate keras '
+              'mereka sendiri. Akibatnya:\n>\n')
+            for nm, tolak in canggah:
+                A(f'> - `{nm}` dilabel **DITERIMA** di sini, tetapi **DITOLAK** dalam '
+                  f'{"; ".join(tolak)}.\n')
+            A('>\n> Maknanya: lift Step 4 konsisten merentas tahun, tetapi kelebihan dagangan '
+              '**tidak**. Label DITERIMA di atas adalah betul secara mekanikal mengikut spec yang '
+              'dikunci, dan saya tidak mengubah spec selepas melihat hasil. Tetapi ia **tidak '
+              'boleh** dibaca sebagai "signal ini boleh didagangkan". Keputusan sama ada gate 8.1 '
+              'perlu diketatkan (contoh: memerlukan keputusan CALON, bukan sekadar kelas sama, '
+              'dalam ≥ 2 tahun lain) ialah keputusan pengguna.\n')
     if len(calon) and semua_mer:
         A('\nKesemua CALON ialah **konteks pengembangan kemeruapan** (ATR% tinggi, lebar '
           'Bollinger tinggi, julat 20 hari luas). Ini perlu dibaca bersama kaveat survivorship: '
@@ -473,8 +508,15 @@ def main():
       '**Jawapan kajian: jangan jual.**\n')
     A('4. **PORTFOLIO** — sasaran +10% sebulan tidak tercapai; penghalang utama ialah kapasiti '
       'slot apabila pegangan panjang, bukan kadar menang.\n')
-    A('5. **Tiada signal boleh dilabel DITERIMA** sebelum 2024–2021 disahkan (gate 8.1, '
-      'SPEC §11.8). Langkah seterusnya memerlukan arahan pengguna "teruskan 2024".\n')
+    if n_terima:
+        A(f'5. **{n_terima} signal DITERIMA** — kelas yang sama dalam ≥ 2 tahun lain '
+          f'({tahun_lain}) selain lulus semua gate keras: '
+          f'{", ".join("`"+x+"`" for x in kp[kp.keputusan == "DITERIMA"].signal)}. '
+          f'Lihat `BANDING_TAHUN.md`.\n')
+    else:
+        A(f'5. **Tiada signal dilabel DITERIMA.** Gate 8.1 memerlukan kelas yang sama dalam '
+          f'≥ 2 tahun LAIN; tahun lain yang siap: {tahun_lain if tahun_lain else "tiada"}. '
+          f'Lihat `BANDING_TAHUN.md` untuk status merentas tahun.\n')
 
     A('\n## 13. Fail output\n')
     A('| Fail | Isi |\n|---|---|\n'
