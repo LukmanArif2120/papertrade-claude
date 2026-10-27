@@ -56,8 +56,10 @@ def _baca(paths):
     return pd.concat(fr, ignore_index=True) if fr else pd.DataFrame(columns=['ticker', 'date', 'open', 'high', 'low', 'close'])
 
 
-def muat_harga(stor=STOR, terkini=TERKINI, fail=('harga_A.csv', 'harga_B.csv')):
-    """-> ({ticker: DataFrame date(int)/open/high/low/close menaik}, {ticker: nota})"""
+def muat_harga(stor=STOR, terkini=TERKINI, fail=('harga_A.csv', 'harga_B.csv'),
+               lajur=('date', 'open', 'high', 'low', 'close')):
+    """-> ({ticker: DataFrame lajur (date int) menaik}, {ticker: nota}); lajur yang tiada dalam fail dilangkau
+    (stage.py meminta 'volume')."""
     S = _baca([os.path.join(stor, f) for f in fail])
     T = _baca([terkini]) if terkini else S.iloc[:0]
     Tg = dict(tuple(T.groupby('ticker'))) if len(T) else {}
@@ -75,7 +77,7 @@ def muat_harga(stor=STOR, terkini=TERKINI, fail=('harga_A.csv', 'harga_B.csv')):
             if tk is not None:
                 g = pd.concat([g, tk[tk.date > g.date.max()]], ignore_index=True)
         g = g.assign(date=g.date.astype(int))
-        out[t] = g[['date', 'open', 'high', 'low', 'close']].reset_index(drop=True)
+        out[t] = g[[k for k in lajur if k in g.columns]].reset_index(drop=True)
     return out, nota
 
 

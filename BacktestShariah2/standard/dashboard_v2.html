@@ -691,6 +691,14 @@ td.rsk{white-space:nowrap}
 body.padat .tablewrap td .trA{flex-direction:row;align-items:center;gap:5px}
 .atk{font-size:.72rem;font-weight:600;color:var(--muted);white-space:nowrap}.atk.hmp{color:var(--warn)}
 .tra{font-style:normal}
+/* Stage Analysis Weinstein (v104): label sub-stage + penggred kualiti (+/−) berasingan */
+.stg{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border-radius:6px;font-size:.72rem;font-weight:700;white-space:nowrap;border:1px solid;line-height:1.45}
+.st-up{color:#86efac;background:rgba(34,197,94,.24);border-color:rgba(74,222,128,.75)}
+.st-ne{color:#fde047;background:rgba(250,204,21,.17);border-color:rgba(250,204,21,.65)}
+.st-dn{color:#fca5a5;background:rgba(239,68,68,.24);border-color:rgba(248,113,113,.75)}
+.stq{font-style:normal;font-size:.66rem;font-weight:800;padding:0 3px;border-radius:3px;border:1px solid}
+.stq-p{color:#86efac;border-color:rgba(74,222,128,.6)}.stq-n{color:#fca5a5;border-color:rgba(248,113,113,.6)}
+td.stc{white-space:nowrap}
 @media (min-width:761px){body.padat .tablewrap td .tra{display:none}body.padat .tablewrap td .trd{padding:1px 5px}body.padat .tablewrap td .l2bar{width:38px}}
 </style>
 
@@ -1310,7 +1318,7 @@ function wBeli(r){const t0=String(S.watch&&S.watch.tarikh_data||r.ditambah||'').
 const watchColsR=()=>[
   {k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b>${baruW(r)} ${esc(r.nama||'')}`,c:()=>'name'},
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`},
-  TRC,RSC,
+  TRC,RSC,STC,
   {k:'pct_dipenuhi',t:'% hampir',tip:'pct_dipenuhi',f:wPill},
   {k:'harga_terkini',t:'Harga',tip:'harga_w',f:r=>`${fx(r.harga_terkini,2)}<span class="vv nw">paras ${fx(r.paras,2)}</span>`},
   {k:'gred_keseluruhan',t:'Gred',tip:'gred_ringkas',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:grSatu},
@@ -1351,7 +1359,7 @@ function renderWatch(){
       <input type="search" id="wQ" placeholder="Cari saham, sektor, industri" value="${esc(wf.q)}" aria-label="Cari watchlist"></div>
     ${sortTable({id:'watch',rows,def:{k:'pct_dipenuhi',dir:-1},limit:wf.shown,attr:r=>`data-wl="${r._w}" tabindex="0"`,rcls:r=>'click'+bukaC('w'+r._w),cols:lajurOf('watch')==='ringkas'?watchColsR():[
       {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`<b>${esc(r.saham)}</b>${baruW(r)}<span class="vv">${esc(r.nama||'')}</span>`,c:()=>'tk m0'},
-      {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`,c:()=>'kw m0'},TRC,RSC,
+      {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`,c:()=>'kw m0'},TRC,RSC,STC,
       {k:'harga_terkini',t:'Harga',tip:'harga_w',f:r=>fx(r.harga_terkini,2)},
       {k:'pct_dipenuhi',t:'% hampir',tip:'pct_dipenuhi',f:wPill,c:()=>'pc m0'},
       {k:'pencetus',t:'Syarat belum cukup',tip:'syarat_belum',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}<span class="vv">${esc(r.sebab||'')}</span><span class="vv">${esc(r.syarat_belum||'')}</span>`,c:()=>'wrap syr'},
@@ -1459,7 +1467,7 @@ function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>r.tarikh_beli?`<span class="tpd" title="${esc(r.tarikh_beli)}">${esc(tkO(r.tarikh_beli))}</span><span class="tpl">${esc(r.tarikh_beli)}</span>`:'–'},
   {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`${titikPos(r)}<b>${esc(r.saham)}</b>${baruPos(r)}${earnH(r)}${r.tutup_semua?'':cipKeluar(r)}${akaun&&r.akaun?` <span class="pill p-mute" title="${r.akaun==='M'?'Moomoo':'Claude'}">${r.akaun}</span>`:''}`,c:()=>'tk m0'},
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>{const kk=kongsiOf(r);return `${esc(r.kaedah)}${kk.length?`<span class="kng" aria-label="Isyarat sama daripada ${kk.length} kaedah lain">+${kk.length}</span><span class="vv kng-l">kongsi: ${esc(kk.join(' '))}</span><span class="kgd"><span class="kgh">Isyarat sama juga daripada ${kk.length} kaedah:</span>${kk.map(id=>`<span class="kgi"><b>${esc(id)}</b> ${esc(katNama(id))}${katMasuk(id)?`<span class="kgm">Masuk: ${esc(katMasuk(id))}</span>`:''}</span>`).join('')}</span>`:''}`;},c:()=>'kdh m0'},
-  TRCA,
+  TRCA,STC,
   ...(padatDesk()?[]:[{k:'harga_beli',t:'Harga beli',tip:'harga_beli',f:r=>fx(r.harga_beli,2)},{k:'unit',t:'Unit',tip:'unit',f:r=>fx(r.unit,0)},{k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)}]),
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${padatDesk()?`<span class="vv nw">beli ${fx(r.harga_beli,2)} → ${r.keluar?'keluar':'kini'} ${fx(r.harga_terkini,2)}</span>`:''}${spyCip(r)}`,c:()=>'utg m0'},
   {k:'_r',t:'R',tip:'r_multiple',v:rOf,f:rSel},
@@ -1504,7 +1512,7 @@ function lorongRingkas(r){const s=String(r.isyarat_keluar||'');
 /* lajur ringkas posisi: lorong 2 dan gred penuh dalam helaian butiran */
 function posColsR(akaun){return [
   {k:'saham',t:'Saham',tip:'saham',l:1,c:()=>'tk',f:r=>`${titikPos(r)}<b>${esc(r.saham)}</b>${baruPos(r)}${earnH(r)}${r.tutup_semua?'':cipKeluar(r)}${akaun&&r.akaun?` <span class="pill p-mute" title="${r.akaun==='M'?'Moomoo lama':'Papertrade C'}">${r.akaun}</span>`:''}`},
-  TRC,RSC,
+  TRC,RSC,STC,
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}<span class="vv nw">${fx(r.harga_beli,2)} → ${fx(r.harga_terkini,2)}</span>${spyCip(r)}`},
   {k:'_spark',t:'Sejak beli',tip:'carta_kecil',ns:1,l:1,f:r=>sparkPos(r)},
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b class="nw">${esc(r.kaedah)}</b>`},
@@ -2301,6 +2309,7 @@ function openPos(id){const r=posRows('gab').find(x=>x._p===id);if(!r)return;cons
     <div class="sec"><h4 data-tip="isyarat_keluar">Keluar kaedah (lorong 1)</h4>${selLorong(r,'kaedah')}</div>
     <div class="sec"><h4 data-tip="keluar_henti">Pegang selagi naik (lorong 2)</h4>${selLorong(r,'henti')}</div>
     ${trSec(r.saham)}
+    ${stSec(r.saham)}
     ${rpPos(r)}
     <div class="sec"><h4 data-tip="gred">Gred pada hari isyarat</h4>${gredList(r)}</div>
     <div class="acts"><button type="button" class="btn" data-kd="${esc(r.kaedah)}">Lihat kaedah ${esc(r.kaedah)}</button><button type="button" class="btn ghost" data-tutup>Tutup</button></div>`);
@@ -2313,6 +2322,7 @@ function openWatch(i){const r=watchRows()[i];if(!r)return;const lk=wLengkap(r)?w
     <div class="mgrid">${mSel(lk?'Status':'% hampir',wPill(r),lk?'isyarat_lengkap':'pct_dipenuhi')}${mSel('Harga',fx(r.harga_terkini,2),'harga_w')}${mSel('Paras pencetus',fx(r.paras,2),'paras')}${mSel('Jarak',sg2(r.jarak_pct),'jarak')}${mSel('Tarikh masuk watchlist',tkP(r.ditambah),'ditambah')}${mSel('Hari dalam watchlist',fx(r.hari,0),'hari_watch')}</div>
     <div class="sec"><h4 data-tip="syarat_belum">Syarat belum cukup</h4><p class="ln"><b>${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}</p>${r.sebab?`<p class="ln">${esc(r.sebab)}</p>`:''}${r.syarat_belum?`<p class="ln mut">${esc(r.syarat_belum)}</p>`:''}</div>
     ${trSec(r.saham)}
+    ${stSec(r.saham)}
     <div class="sec"><h4 data-tip="gred">Gred</h4>${gredList(r)}</div>
     <div class="acts"><button type="button" class="btn" data-kd="${esc(r.kaedah)}">Lihat kaedah ${esc(r.kaedah)}</button><button type="button" class="btn ghost" data-tutup>Tutup</button></div>`);}
 /* ================= v3 (20 Okt 2026): elemen bacaan pantas =================
@@ -3070,8 +3080,8 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
   try{localStorage.setItem('pbs3_pandangan',PANDANGAN);}catch(x){}renderAll();});
 function posColsP(p,akaun){const sh={k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`${titikPos(r)}<b>${esc(r.saham)}</b>${baruPos(r)}${earnH(r)}${r.tutup_semua?'':cipKeluar(r)}${akaun&&r.akaun?` <span class="pill p-mute">${r.akaun}</span>`:''}<span class="vv">${esc(r.kaedah)}</span>`,c:()=>'tk grd'};
   const ut={k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}<span class="vv nw">${fx(r.harga_beli,2)} → ${fx(r.harga_terkini,2)}</span>`,c:()=>'utg'};
-  if(p==='gred')return [sh,ut,TRC,RSC,{k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>`<span class="nw">${esc(tkO(r.tarikh_beli))}</span>`},...grCols()];
-  return [sh,ut,TRC,RSC,{k:'_r',t:'R',tip:'r_multiple',v:rOf,f:rSel},
+  if(p==='gred')return [sh,ut,TRC,RSC,STC,{k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>`<span class="nw">${esc(tkO(r.tarikh_beli))}</span>`},...grCols()];
+  return [sh,ut,TRC,RSC,STC,{k:'_r',t:'R',tip:'r_multiple',v:rOf,f:rSel},
     {k:'_risk',t:'Risiko awal',tip:'r_multiple',v:riskAwal,f:r=>{const k=riskAwal(r);return k==null?(tiadaHentiH(r)||'–'):`${fx(k,1)}%<span class="vv nw">henti ${fx(r.henti,2)}</span>`;}},
     {k:'_mae',t:'Turun maks',tip:'penurunan_maks',v:maeOf,f:r=>{const m=maeOf(r);return m==null?'–':`<span class="${cls(m)}">${sg2(m)}</span>`;}},
     {k:'_mfe',t:'Naik maks',tip:'mfe',v:mfeOf,f:r=>{const m=mfeOf(r);return m==null?'–':`<span class="pos">${sg2(m)}</span>`;}},
@@ -3285,6 +3295,40 @@ const atrCip=s=>{const t=trendOf(s);if(!t||t.atr_pct==null)return '<span class="
 const atrKcl=s=>{const t=trendOf(s);return t&&t.atr_pct!=null?`<span class="atk${t.atr_q===5?' hmp':''}" title="ATR14 ${fx(t.atr_pct,1)}% · kuintil ${t.atr_q||'–'} daripada 5 (peluang jatuh > 8% dalam 10 sesi ≈ ${ATR_P[t.atr_q]||'–'} dalam backtest)">${fx(t.atr_pct,1)}%</span>`:'';};
 const TRCA=Object.assign({},TRC,{f:r=>`<span class="trA">${trPill(r.saham)}${padatDesk()?atrKcl(r.saham):atrCip(r.saham)}</span>${(b=>b?`<span class="vv trv">${esc(b)}</span>`:'')(trBaris(r.saham))}`});
 const RSC={k:'_risiko',t:'Risiko',tip:'atr_risiko',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.atr_pct!=null?t.atr_pct:null;},f:r=>atrCip(r.saham),c:()=>'rsk'};
+/* --- Stage Analysis Weinstein (harian/stage; standard/stage.py): bar mingguan + MA 30 minggu, 11 sub-stage screener
+   stageanalysis.net (2A · 2 · 2− · 2B · 2B− · 1/3 · 4A · 4 · 4− · 4B · 4B−) + penggred kualiti (+/−) daripada Mansfield RP
+   dan volum minggu mula. PAPARAN SAHAJA: bukan penapis belian, bukan isyarat jual. */
+let STM=null,STR=null;
+const stMap=()=>{const D=S.stage;if(!D)return null;if(STR!==D){STR=D;const L=D.lajur||[];STM=new Map((D.rows||[]).map(x=>{const o={};L.forEach((k,i)=>{o[k]=x[i];});return [x[0],o];}));}return STM;};
+const stageOf=s=>{const m=stMap();return (m&&m.get(s))||null;};
+const ST_KLS={'2':'st-up','0':'st-ne','4':'st-dn'};
+const ST_NAMA={'2':'Stage 2 (fasa naik)','0':'Stage 1/3 (asas atau kawasan puncak)','4':'Stage 4 (fasa turun)'};
+const ST_TETAP='Stage Analysis Stan Weinstein pada bar mingguan: Stage 2 = tutup atas MA 30 minggu yang menaik (fasa naik); Stage 4 = tutup bawah MA 30 minggu yang menurun (fasa turun); 1/3 = selain itu (asas selepas Stage 4, kawasan puncak selepas Stage 2 — kedua-duanya serupa pada carta). A = minggu breakout/breakdown pertama kitaran ini; B = sudah 39 minggu atau lebih dalam kitaran; “−” dalam label = harga menentang arah peringkat berbanding MA 10 minggu. Dikira daripada stor harga repo mengikut takrif stageanalysis.net (tiada sambungan ke laman itu). Paparan sahaja: bukan penapis belian dan bukan isyarat jual; keluar kekal ikut lorong kaedah dan lorong 2.';
+function stBaris(s){const t=stageOf(s);if(!t||t.p==null)return '';
+  const B=[(t.tepat?'':'≥ ')+t.minggu+' minggu'];
+  if(t.tepat&&t.mula)B.push('sejak '+tkI(t.mula));
+  if(t.p===0)B.push(t.dari===2?'kawasan puncak':t.dari===4?'kawasan asas':'asas/puncak tidak pasti');
+  return B.join(' · ');}
+function stTip(s){const t=stageOf(s),T=[ST_TETAP];if(!t||t.p==null)return T.join(' ');
+  T.push(`${ST_NAMA[String(t.p)]}: label ${t.label}.`);
+  if(t.p===0)T.push(t.dari===2?'Peringkat berarah sebelumnya Stage 2, jadi ini kawasan puncak (Stage 3).':t.dari===4?'Peringkat berarah sebelumnya Stage 4, jadi ini kawasan asas (Stage 1).':'Tiada peringkat berarah sebelumnya dalam liputan data: asas atau puncak tidak dapat dibezakan.');
+  if(!t.tepat)T.push('Kitaran ini bermula sebelum liputan data (stor 520 sesi ≈ 104 minggu): bilangan minggu ialah had bawah dan label A tidak diberi.');
+  if(t.ma30!=null)T.push(`Tutup mingguan ${fx(t.c,2)} · MA30 ${fx(t.ma30,2)} (${sgp(t.cerun,2)} seminggu) · MA10 ${fx(t.ma10,2)}.`);
+  if(t.mansfield!=null)T.push(`Mansfield RP ${sgp(t.mansfield)}: kekuatan relatif lawan SPY berbanding purata 52 minggunya.`);
+  if(t.vol_mula!=null)T.push(`Volum minggu mula kitaran ${fx(t.vol_mula,1)}× purata 4 minggu sebelumnya.`);
+  if(t.kualiti)T.push(t.kualiti==='+'?'Penggred (+) = corak cemerlang: Mansfield positif dan volum mula memadai. Berbeza daripada “−” dalam label, yang merujuk MA 10 minggu.':'Penggred (−) = corak hambar: Mansfield negatif. Berbeza daripada “−” dalam label, yang merujuk MA 10 minggu.');
+  if(t.separa)T.push('Minggu terakhir masih berjalan; label boleh berubah sebelum tutup Jumaat.');
+  return T.join(' ');}
+const stPill=s=>{const t=stageOf(s);
+  if(trAA(s))return '<span class="mut" title="Saham dalam senarai ambil alih: harga terkunci pada tawaran, stage tidak bermakna.">Diambil alih</span>';
+  if(!t)return '<span class="mut">–</span>';
+  if(t.p==null)return `<span class="mut" title="${esc((t.sebab?t.sebab+'. ':'')+ST_TETAP)}">Sejarah pendek</span>`;
+  return `<span class="stg ${ST_KLS[String(t.p)]}" title="${esc(stTip(s))}">${esc(t.label)}${t.kualiti?`<i class="stq ${t.kualiti==='+'?'stq-p':'stq-n'}">${esc(t.kualiti)}</i>`:''}</span>`;};
+const stNilai=s=>{const t=stageOf(s);if(!t||t.p==null)return null;
+  return (t.p===2?300:t.p===0?200:100)+(/A$/.test(t.label)?40:0)-(/B/.test(t.label)?20:0)-(t.label.indexOf('−')>=0?10:0)+(1-Math.min(200,t.minggu||0)/200);};
+const STC={k:'_stage',t:'Stage',tip:'stage_w',l:1,v:r=>stNilai(r.saham),f:r=>{const b=stBaris(r.saham);return `${stPill(r.saham)}${b?`<span class="vv trv">${esc(b)}</span>`:''}`;},c:()=>'stc'};
+function stSec(s){const t=stageOf(s);if(!t)return '';const b=stBaris(s);
+  return `<div class="sec"><h4 data-tip="stage_w">Stage</h4><p class="ln">${stPill(s)}${b?` <span class="mut">${esc(b)}</span>`:''}</p><p class="ln mut kecil">${esc(stTip(s).slice(ST_TETAP.length+1)||ST_TETAP)}</p></div>`;}
 /* jarak harga ke paras lorong 2 dalam unit ATR14 (Posisi); jalur dan peluang tercetus dalam 10 sesi daripada backtest 19 kaedah */
 const L2J=[[3,'Jauh','10–11%'],[2,'Sederhana','19–23%'],[1,'Dekat','36–43%'],[-Infinity,'Sangat dekat','61–67%']];
 function l2Jarak(r){const a=l2Info(r),t=trendOf(r.saham);if(!a||!t||t.atr_pct==null||!t.c)return null;const A=t.atr_pct/100*t.c;if(!(A>0))return null;
@@ -3509,6 +3553,7 @@ let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(wi
 /* ================= tooltip istilah (ganti tab Panduan istilah) ================= */
 const TIPS={
   trend_jp:{t:'Trend (susunan SMA 50/150/200)',d:'Bullish = tutup > SMA50 > SMA150 > SMA200; Bearish = tutup < SMA50 < SMA150 < SMA200; lain-lain Neutral. Status bertukar hanya selepas 2 tutup berturut. "Sejak" = tutup kedua itu (umur dikira dari situ, tarikh sah = 1); baharu = ≤ 20 sesi, lama = > 60 sesi; Neutral menunjukkan status sebelumnya. Titik mula = harga terendah (Bullish) atau tertinggi (Bearish) dalam 63 sesi hingga tarikh sah, dibekukan; berapa jauh harga sudah bergerak sebelum label bertukar. Kajian 23 Okt 2026 (lebih 500 varian, 2020–2026): status ini tidak meramal pulangan 3–30 hari dan tiada peraturan jual berasaskannya yang lebih baik daripada lorong 1/lorong 2. Bullish tidak bermaksud lebih selamat; risiko diukur oleh ATR (lajur Risiko), jarak lorong 2 dan earnings. Bearish lama (diisi merah) satu-satunya amaran: lebih kerap jatuh > 8% dalam 10 sesi (bukti sederhana).',e:'Bullish lama · 142 sesi · sejak 1 Apr (+38.5%) · titik mula 2 Jan @ 121.61 (+87%)'},
+  stage_w:{t:'Stage (Stage Analysis Weinstein)',d:'Peringkat kitaran saham pada bar MINGGUAN dengan purata bergerak 30 minggu (MA30), kaedah Stan Weinstein. Stage 2 = tutup di atas MA30 yang menaik (fasa naik); Stage 4 = tutup di bawah MA30 yang menurun (fasa turun); 1/3 = selain itu — asas (selepas Stage 4) atau kawasan puncak (selepas Stage 2); kedua-duanya kelihatan sama pada carta, jadi screener stageanalysis.net menggabungkannya dan baris kecil di bawah label menyatakan yang mana. Sebelas label sama seperti screener itu: 2A (minggu breakout pertama kitaran ini) · 2 · 2− · 2B · 2B− · 1/3 · 4A (minggu breakdown pertama) · 4 · 4− · 4B · 4B−. B = sudah 39 minggu atau lebih dalam kitaran yang sama (surut sementara ke 1/3 tidak menetapkan semula kiraan). “−” dalam label = harga menentang arah peringkat berbanding MA 10 minggu (Stage 2 bawah MA10 = hambar; Stage 4 atas MA10 = mula perk up). Cip kecil (+)/(−) di sebelah label ialah penggred kualiti Weinstein dan BERBEZA daripada “−” dalam label: (+) = garis Mansfield RP positif dan volum minggu mula ≥ 2× purata 4 minggu sebelumnya; (−) = Mansfield negatif. Dikira daripada stor harga repo mengikut takrif yang diterbitkan stageanalysis.net; tiada sambungan ke laman itu (tiada API awam). Stor 520 sesi ≈ 104 minggu, jadi kitaran yang bermula lebih awal ditanda “≥ n minggu” dan tidak diberi label A. PAPARAN SAHAJA (keputusan pengguna 27 Okt 2026): belum diuji sama ada ia meramal pulangan 3–30 hari, jadi ia bukan penapis belian dan bukan isyarat jual — keluar kekal ikut lorong kaedah dan lorong 2.',e:'2B+ · 64 minggu · sejak 15 Ogo 2025'},
   atr_risiko:{t:'Risiko (ATR14%)',d:'ATR14% = purata julat harian 14 sesi ÷ harga. Q1–Q5 = kuintil merentas semua saham stor pada tarikh sama (Q5 ambar). Backtest posisi 19 kaedah, 2020–2026: peluang jatuh > 8% dalam 10 sesi ≈ 7–11% (Q1), 11–16% (Q2), 16–23% (Q3), 21–31% (Q4), 31–42% (Q5). Ini ukuran risiko yang lulus ujian luar sampel; status trend tidak menambah maklumat melebihinya. Maklumat, bukan peraturan saiz posisi atau isyarat jual. Earnings (📅, ≤ 10 sesi) menambah risiko jatuh tajam +6.5 hingga +13.9 mata.',e:'ATR 3.1% Q3'},
   r_multiple:{t:'R (unit risiko)',d:'Untung dibahagi risiko awal. Risiko awal = (harga beli − henti kaedah pada hari isyarat) ÷ harga beli. +2R = untung dua kali ganda risiko; −1R = rugi sebanyak risiko penuh. Bagi kaedah yang hentinya mengekor, R ialah anggaran kerana hanya henti awal digunakan.',e:'Beli 100, henti 95 (risiko 5%), kini 110 (+10%) = +2R.'},
   plot_kotak:{t:'Plot kotak',d:'Sebaran untung setiap kaedah. Kotak = separuh tengah dagangan (Q1 hingga Q3); garis tebal = median; bulatan = purata; misai = julat biasa (1.5 × lebar kotak, kaedah Tukey); titik = dagangan luar biasa. Kotak sempit = keputusan konsisten; purata jauh dari median = dipengaruhi beberapa dagangan besar.'},
@@ -3825,7 +3870,7 @@ renderNav();renderAll();
   sub('sektor/snapshot','sektor',['sektor']);
   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
   sub('prestasi/mae','mae',['prestasi']);subBhg('prestasi/mae_atr','maeAtr',['prestasi']);
-  subBhg('prestasi/garis','garis',['utama','ptc','prestasi']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['prestasi']);subBhg('posisi/lorong2','l2s',['ptc']);subBhg('harian/trend','trend',['ptc','watch']);
+  subBhg('prestasi/garis','garis',['utama','ptc','prestasi']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['prestasi']);subBhg('posisi/lorong2','l2s',['ptc']);subBhg('harian/trend','trend',['ptc','watch']);subBhg('harian/stage','stage',['ptc','watch']);
   sub('prestasi/portfolio_slot','pslot',['utama','prestasi']);
   sub('analisis/papan','anl',['analisis']);
   sub('kaedah/katalog','kat',['kaedah']);

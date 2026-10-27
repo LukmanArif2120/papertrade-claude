@@ -70,6 +70,9 @@ jobs:
       - name: Status trend D10+H2 (data/trend/status.json; medan beku untuk db harian/trend melalui jana_db.py)
         continue-on-error: true
         run: python3 BacktestShariah2/standard/trend_status.py tulis
+      - name: Stage Analysis mingguan (data/stage/status.json; db harian/stage melalui jana_db.py)
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/stage.py tulis
       - name: Papertrade C — kemas kini posisi + imbas 134 kaedah
         id: malam
         continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
@@ -118,7 +121,7 @@ jobs:
         run: |
           git config user.name "harian[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add BacktestShariah2/data/harga BacktestShariah2/data/trend BacktestShariah2/bayang 2>/dev/null || true
+          git add BacktestShariah2/data/harga BacktestShariah2/data/trend BacktestShariah2/data/stage BacktestShariah2/bayang 2>/dev/null || true
           git add BacktestShariah2/uji_kertas/jejak_M166.csv 2>/dev/null || true
           git add "${{ steps.mod.outputs.folder }}" "${{ steps.mod.outputs.isyarat }}" "${{ steps.mod.outputs.pemangkin }}" "${{ steps.mod.outputs.log }}" 2>/dev/null || true
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi

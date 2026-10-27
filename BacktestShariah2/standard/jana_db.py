@@ -7,7 +7,7 @@
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
 # papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, harian/status,
-# harian/trend (trend_status.py), posisi/lorong2(+_2…; lorong2_siri.py). sektor/snapshot dijana oleh tugasan
+# harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
 
@@ -537,18 +537,19 @@ def main(argv=None):
                                                    'harian % sejajar tarikh (null = tiada posisi), n: posisi dipegang, ev: [[indeks hari, beli, keluar untung, '
                                                    'keluar rugi]]}; k Semua = semua kaedah; spy: untung harian % SPY. Untung harian = '
                                                    'Σ perubahan nilai ÷ Σ nilai awal hari (posisi USD sama; keluar ikut lorong kaedah).')
-    # harian/trend (pill Trend D10+H2, ATR14% + kuintil, rejim SPY) dan posisi/lorong2 (candlestick + paras lorong 2 setiap
-    # saham|tarikh_beli); kegagalan di sini tidak menghalang dokumen lain
+    # harian/trend (pill Trend D10+H2, ATR14% + kuintil, rejim SPY), harian/stage (lajur Stage Analysis mingguan) dan
+    # posisi/lorong2 (candlestick + paras lorong 2 setiap saham|tarikh_beli); kegagalan di sini tidak menghalang dokumen lain
     try:
-        import trend_status as TS, lorong2_siri as L2
+        import trend_status as TS, lorong2_siri as L2, stage as ST
         tk = TERKINI if a.stor == STOR else None
-        H, nota_h = TS.muat_harga(a.stor, tk)
+        H, nota_h = TS.muat_harga(a.stor, tk, lajur=('date', 'open', 'high', 'low', 'close', 'volume'))
         I, _ = TS.muat_harga(a.stor, tk, fail=('harga_idx.csv',))
         lama = json.load(open(TS.FAIL, encoding='utf-8')) if a.stor == STOR and os.path.exists(TS.FAIL) else None
         docs['harian/trend'] = dict(TS.bawa_semalam(TS.dokumen(H, TS.alam(a.folder, H), nota_h, I), lama), dibina=dibina)
         docs['posisi/lorong2'] = dict(L2.dokumen(H, a.folder), dibina=dibina, harga_hingga=f'{S} tutup')
+        docs['harian/stage'] = dict(ST.dokumen(H, TS.alam(a.folder, H), I), dibina=dibina)
     except Exception as e:  # noqa: BLE001
-        print(f'amaran: harian/trend / posisi/lorong2 gagal: {e!r}', file=sys.stderr)
+        print(f'amaran: harian/trend / harian/stage / posisi/lorong2 gagal: {e!r}', file=sys.stderr)
     ps = portfolio_slot(dibina)
     if ps:
         docs['prestasi/portfolio_slot'] = ps
@@ -575,7 +576,7 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     versi = json.load(open(a.versi)) if a.versi else {}
     tulis = []
-    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'lorong2')
+    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'stage', 'lorong2')
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
     semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
     for kol, bahagian in semua:
