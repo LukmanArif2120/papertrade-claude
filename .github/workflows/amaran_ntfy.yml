@@ -1,0 +1,45 @@
+# Amaran telefon (ntfy, 27 Okt 2026): hantar notifikasi apabila workflow utama gagal atau dibatalkan.
+# Topik = rahsia repo NTFY_TOPIC jika ada; jika tiada, topik pengguna "claude_azim" (ntfy.sh/claude_azim).
+# workflow_run hanya aktif selepas fail ini berada di cawangan lalai (main).
+name: Amaran ntfy
+
+on:
+  workflow_run:
+    workflows:
+      - Harga harian
+      - Saringan TradingView
+      - RS pasaran
+      - Gred kumpulan
+      - Lejar penuh
+      - Harian Actions
+      - Gred petang
+      - Beli 9:35 NY
+      - EDGAR ambil alih
+      - Papan penganalisis
+      - Semak data
+      - Data pemangkin
+    types: [completed]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  amaran:
+    if: github.event_name == 'workflow_dispatch' || contains(fromJSON('["failure","timed_out","startup_failure"]'), github.event.workflow_run.conclusion)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Hantar ke ntfy
+        env:
+          TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
+          NAMA: ${{ github.event.workflow_run.name || 'Ujian amaran ntfy' }}
+          HASIL: ${{ github.event.workflow_run.conclusion || 'ujian' }}
+          PAUTAN: ${{ github.event.workflow_run.html_url || format('{0}/{1}/actions', github.server_url, github.repository) }}
+        run: |
+          curl -sS -m 20 \
+            -H "Title: papertrade-claude: $NAMA ($HASIL)" \
+            -H "Tags: warning" \
+            -H "Priority: high" \
+            -H "Click: $PAUTAN" \
+            -d "$NAMA berakhir dengan status $HASIL. Tekan untuk buka larian." \
+            "https://ntfy.sh/$TOPIK"
