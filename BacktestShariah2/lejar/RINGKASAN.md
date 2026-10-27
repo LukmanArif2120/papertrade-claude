@@ -8,7 +8,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 
 | Kaedah | Posisi | Tutup | Terbuka | Menang % | Purata tutup % | Hari | Purata terbuka % | Selagi naik n | Purata selagi naik % | Menang jangka % | Purata jangka % | Hari jangka |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| M159 Heikin-Ashi Trend | 683 | 250 | 433 | 14 | -3.16 | 3 | 2.84 | 6 | -13.44 | 40 | 0.17 | 6 |
+| M159 Heikin-Ashi Trend | 683 | 250 | 433 | 14 | -3.16 | 3 | 2.83 | 6 | -13.44 | 40 | 0.17 | 6 |
 | M125 2-Bar Breakout | 543 | 37 | 506 | 0 | -10.30 | 4 | 2.29 | 4 | -14.02 | 30 | 166.86 | 443 |
 | M153 Range Leader | 501 | 165 | 336 | 22 | -2.15 | 3 | 3.19 | 4 | -15.22 | 43 | 0.18 | 6 |
 | M14 Walking with the Whales | 461 | 174 | 287 | 5 | -3.10 | 2 | 3.71 | 3 | -13.63 | 21 | 1.52 | 15 |
@@ -19,8 +19,8 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M13 Garis Trend Action/Safety Line | 334 | 101 | 233 | 2 | -3.43 | 2 | 1.91 | 2 | -15.54 | 34 | 0.97 | 11 |
 | M116 2/20 EMA Breakout (Landry) | 273 | 11 | 262 | 0 | -14.46 | 4 | 2.45 | 1 | -16.98 | 50 | 0.40 | 9 |
 | M92 CCI-50 | 233 | 33 | 200 | 9 | -4.61 | 3 | 1.99 | 1 | -13.68 | 49 | 1.17 | 13 |
-| M31 Band Walk (BB 20/2) | 228 | 0 | 228 |  |  |  | 2.12 | 0 |  | 43 | 3.30 | 32 |
-| M50 Elder Triple Screen | 223 | 73 | 150 | 0 | -3.29 | 2 | 2.77 | 0 |  | 23 | 1.80 | 18 |
+| M31 Band Walk (BB 20/2) | 228 | 0 | 228 |  |  |  | 2.11 | 0 |  | 43 | 3.30 | 32 |
+| M50 Elder Triple Screen | 223 | 73 | 150 | 0 | -3.29 | 2 | 2.76 | 0 |  | 23 | 1.80 | 18 |
 | M161 EMA 10/21 + Supertrend (10,3) | 221 | 29 | 192 | 0 | -7.06 | 4 | 2.35 | 1 | -15.97 | 35 | 1.43 | 18 |
 | M81 Bensdorp Long Trend High Momentum | 210 | 10 | 200 | 0 | -15.41 | 6 | 0.98 | 1 | -12.37 | 32 | 8.56 | 105 |
 | M27 Price Action 4 Tiang | 205 | 121 | 84 | 18 | -2.52 | 3 | 4.71 | 2 | -10.43 | 35 | 0.36 | 7 |
@@ -51,7 +51,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M12 Parabolic SAR | 94 | 23 | 71 | 4 | -3.21 | 3 | 2.53 | 0 |  | 29 | 2.04 | 23 |
 | M156 Single Penetration (DiNapoli) | 79 | 2 | 77 | 0 | -8.63 | 2 | 2.88 | 2 | -13.21 | 52 | 0.69 | 9 |
 | M123 CCI Correction (Lambert, ChartSchool) | 75 | 58 | 17 | 14 | -1.58 | 2 | 2.64 | 0 |  | 28 | 0.92 | 10 |
-| M79 Radge: 20% Flipper | 74 | 3 | 71 | 0 | -11.61 | 3 | 1.05 | 0 |  | 40 | 6.25 | 60 |
+| M79 Radge: 20% Flipper | 74 | 3 | 71 | 0 | -11.61 | 3 | 1.04 | 0 |  | 40 | 6.25 | 60 |
 | M137 Livermore System | 74 | 3 | 71 | 0 | -4.50 | 3 | 3.16 | 0 |  | 35 | 4.22 | 37 |
 | M78 Alvarez Pecahan Mingguan DTAYS | 73 | 2 | 71 | 0 | -12.09 | 5 | 2.69 | 0 |  | 32 | 3.17 | 40 |
 | M128 Inventory Retracement Bar (IRB, Rob Hoffman) | 73 | 8 | 65 | 12 | -3.31 | 2 | 2.94 | 0 |  | 34 | 0.55 | 12 |
@@ -72,7 +72,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M04 BB Squeeze Breakout | 50 | 5 | 45 | 20 | -0.99 | 3 | 2.70 | 0 |  | 36 | 4.96 | 32 |
 | M10 EMA3 + CCI + MACD | 49 | 2 | 47 | 0 | -5.36 | 1 | 2.51 | 0 |  | 33 | 4.70 | 54 |
 | M106 DMI Wilder | 46 | 13 | 33 | 0 | -2.46 | 3 | 1.32 | 0 |  | 32 | 1.01 | 12 |
-| M149 3-Step Pullback | 45 | 3 | 42 | 0 | -24.34 | 6 | 2.68 | 0 |  | 19 | 59.37 | 273 |
+| M149 3-Step Pullback | 45 | 3 | 42 | 0 | -24.34 | 6 | 2.66 | 0 |  | 19 | 59.37 | 273 |
 | M11 NR7 Breakout + Volume | 44 | 22 | 22 | 36 | -0.74 | 2 | 2.38 | 1 | -8.34 | 36 | 2.86 | 20 |
 | M127 Slingshot Bullish | 44 | 14 | 30 | 0 | -1.94 | 2 | 3.37 | 0 |  | 19 | 2.60 | 16 |
 | M122 Moving Momentum (ChartSchool) | 43 | 15 | 28 | 0 | -5.29 | 3 | 1.64 | 0 |  | 35 | 1.79 | 24 |
@@ -101,7 +101,7 @@ Dua lorong keluar (sejak 17 Okt 2026): Tutup/Menang/Purata tutup = lorong 1 (per
 | M26 Garis Trend Undur 3 Sentuhan + Pecahan | 19 | 11 | 8 | 55 | -0.42 | 2 | 2.59 | 0 |  | 50 | 5.17 | 39 |
 | M29 EMA3 + RSI75 + Stokastik | 18 | 12 | 6 | 0 | -2.14 | 1 | 4.49 | 0 |  | 18 | 3.22 | 35 |
 | M129 Wick Play | 18 | 0 | 18 |  |  |  | 2.44 | 0 |  | 38 | 2.60 | 38 |
-| M134 First Kiss After Daylight (Landry) | 18 | 1 | 17 | 0 | -22.30 | 4 | 2.65 | 0 |  | 34 | 5.41 | 35 |
+| M134 First Kiss After Daylight (Landry) | 18 | 1 | 17 | 0 | -22.30 | 4 | 2.61 | 0 |  | 34 | 5.41 | 35 |
 | M91 Stochastic Pop (Bernstein/Steckler) | 17 | 0 | 17 |  |  |  | 2.28 | 0 |  | 42 | 1.63 | 18 |
 | M115 Bow Tie (Landry) | 15 | 2 | 13 | 0 | -2.61 | 2 | 4.92 | 0 |  | 27 | 1.06 | 18 |
 | M68 Kell Base n' Break | 14 | 1 | 13 | 0 | -0.12 | 1 | 2.73 | 0 |  | 36 | 1.35 | 35 |
