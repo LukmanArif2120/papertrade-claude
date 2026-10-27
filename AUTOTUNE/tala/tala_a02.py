@@ -133,9 +133,9 @@ def tala(mid, lorong, k, sumber, n_trials=PERCUBAAN, had_minit=HAD_MINIT, tamat=
             if kunci in jejak:
                 tr.set_user_attr('ulang', True); return jejak[kunci]['skor']
             try:
-                mt, rh, _ = pn.jalan02(P, ['A'], (lorong,), harian=True)[(lorong, 'A')]
+                mt, rh, _ = pn.jalan02(P, ['A'], (lorong,), harian=True)[(lorong, 'A')]  # noqa: F821 (pn ditakrif sebelum obj dipanggil; del selepas kajian)
                 r = dict(P=P, skor=SK(mt), lulus=LU(mt), thn_min=mt['thn_min'], m=mt,
-                         rh=(rh - pn.spy_r.reindex(rh.index).fillna(0.0)).values.astype(np.float32))
+                         rh=(rh - pn.spy_r.reindex(rh.index).fillna(0.0)).values.astype(np.float32))  # noqa: F821 (pn ditakrif sebelum obj dipanggil; del selepas kajian)
             except Exception as e:
                 r = dict(P=P, skor=-2.0, lulus=False, thn_min=-1.0, m=None, rh=None, ralat=f'{type(e).__name__}: {e}'[:300])
                 if len(H['ralat']) < 5: H['ralat'].append('percubaan: ' + r['ralat'])
