@@ -4,7 +4,7 @@ Kajian **signal dan indikator**, bukan kaedah Mxx repo dan bukan penalaan parame
 Arah terbalik daripada backtest: **hasil dahulu, signal kemudian**.
 
 - Spec dikunci sebelum larian pertama: **`SPEC.md`** (termasuk 9 pindaan bertarikh 27 Okt 2026).
-- Laporan setiap tahun: **`LAPORAN_2025.md`**, **`LAPORAN_2024.md`**, **`LAPORAN_2023.md`** (dijana `jana_laporan.py`).
+- Laporan setiap tahun: **`LAPORAN_2025.md`**, **`LAPORAN_2024.md`**, **`LAPORAN_2023.md`**, **`LAPORAN_2022.md`** (dijana `jana_laporan.py`).
 - Setiap signal/kombinasi yang diuji: `log_ujian.csv`.
 - Imbasan pandang ke hadapan: `PANDANG_HADAPAN_<TAHUN>.md` (14 tarikh potong setiap tahun, 0 kegagalan).
 - Perbandingan merentas tahun: **`BANDING_TAHUN.md`** (dijana `banding_tahun.py`).
@@ -28,7 +28,7 @@ python3 REVERSE/banding_tahun.py                  # selepas >= 2 tahun siap
 
 Tahun lain: kod dan parameter **sama tanpa ubah**, universe ikut bulan tahun itu —
 tukar sahaja argumen tahun pada setiap skrip. Jangan ubah `SPEC.md` kecuali sebagai pindaan
-bertarikh. Siap setakat ini: **2025, 2024, 2023**.
+bertarikh. Siap setakat ini: **2025, 2024, 2023, 2022**.
 
 ## Data
 
@@ -50,10 +50,12 @@ guna Release `autotune-data` (A01 membuang saham meruap). Cache tempatan `REVERS
 
 ## Had fasa
 
-Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**. Dengan 2025, 2024 dan 2023 siap,
-gate itu kini boleh dinilai: 2 signal berlabel **DITERIMA** pada 2025.
+Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**. Dengan 2025, 2024, 2023 dan 2022
+siap, gate itu boleh dinilai: 3 signal berlabel **DITERIMA** pada 2025.
 
 **Baca amaran percanggahan dalam `BANDING_TAHUN.md` §7 sebelum menggunakan label itu.** Gate 8.1
 seperti ditulis hanya memerlukan *kelas* yang sama, bukan *keputusan* yang sama; kedua-dua signal
-DITERIMA itu sebenarnya DITOLAK pada 2023 dan 2024 kerana gagal G4 (bootstrap) dan G5 (outlier).
+DITERIMA itu sebenarnya DITOLAK pada 2022, 2023 DAN 2024 kerana gagal G4 (bootstrap) dan
+G5 (outlier). Empat tahun, dan tiada satu signal pun berstatus CALON atau DITERIMA pada lebih
+daripada satu tahun.
 Mengetatkan gate 8.1 ialah keputusan pengguna, bukan perubahan spec selepas melihat hasil.

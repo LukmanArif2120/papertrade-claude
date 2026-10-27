@@ -1,0 +1,190 @@
+signal,n_kemunculan,kekerapan_setahun,kadar_tepat_mfe30,kadar_asas_rawak,lift_tepat,kadar_palsu_bawah10,kadar_tepat_bertangga,ketulenan_trend_median,mfe63_p50,mfe63_p75,mfe63_p90,mfe252_p50,mfe252_p75,mfe252_p90,median_hari_mfe63,pct_mfe63_ge30,pct_mfe63_ge100,pct_mfe252_ge100,purata_mfe63_selepas_kos,pct_henti7_dahulu,pct_henti2atr_dahulu,jangkaan_henti2atr,kadar_menang,purata_menang,purata_kalah,jangkaan_bulanan_anggaran,pct_terpotong,kapasiti,tanda,buang_palsu_pct,buang_benar_pct
+rsi_lintas50&q5:atr_pct,5769,5769.0,25.0,11.61,2.153,37.79,1.79,75.0,15.49,30.0,47.72,27.64,52.55,87.7,23.0,25.0,0.88,7.56,21.05,77.57,67.39,-6.716,22.36,26.14,16.18,-6.716,0.0,PELENGKAP,,,
+rsi_lintas50&q5:atr_pct | penapis:spy_atas_ma50,1497,,,,,,,,,,,,,,,,,,,,,,,,,,,,,53.7,66.2
+rsi_lintas50&q5:atr_pct | penapis:spy_atas_ma200,864,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.7,90.4
+rsi_lintas50&q5:atr_pct | penapis:sektor_atas_ma50,1543,,,,,,,,,,,,,,,,,,,,,,,,,,,,,56.9,58.2
+rsi_lintas50&q5:atr_pct | penapis:vol_n50_ge_1.5,587,,,,,,,,,,,,,,,,,,,,,,,,,,,,,84.8,82.2
+rsi_lintas50&q5:atr_pct | penapis:harga_atas_ma50,1691,,,,,,,,,,,,,,,,,,,,,,,,,,,,,53.0,53.8
+rsi_lintas50&q5:atr_pct | penapis:lapis_ge_3,437,,,,,,,,,,,,,,,,,,,,,,,,,,,,,88.4,87.2
+rsi_lintas50&q5:atr_pct | penapis:pengesahan_1_tutup,1650,,,,,,,,,,,,,,,,,,,,,,,,,,,,,62.2,42.7
+rsi_lintas50&q5:atr_pct | penapis:pengesahan_2_tutup,1528,,,,,,,,,,,,,,,,,,,,,,,,,,,,,68.4,41.7
+q5:atr_pct,109463,109463.0,27.92,11.61,2.405,34.17,2.26,57.1,16.93,32.28,51.38,29.28,56.47,92.79,25.0,27.92,1.13,8.53,22.74,75.01,62.5,-5.128,26.61,27.2,16.85,-5.128,0.0,PELENGKAP,,,
+q5:atr_pct | penapis:spy_atas_ma50,21845,,,,,,,,,,,,,,,,,,,,,,,,,,,,,60.4,77.0
+q5:atr_pct | penapis:spy_atas_ma200,13652,,,,,,,,,,,,,,,,,,,,,,,,,,,,,70.8,91.1
+q5:atr_pct | penapis:sektor_atas_ma50,21108,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.6,71.8
+q5:atr_pct | penapis:vol_n50_ge_1.5,9761,,,,,,,,,,,,,,,,,,,,,,,,,,,,,86.4,84.7
+q5:atr_pct | penapis:harga_atas_ma50,17968,,,,,,,,,,,,,,,,,,,,,,,,,,,,,70.3,77.5
+q5:atr_pct | penapis:lapis_ge_3,8478,,,,,,,,,,,,,,,,,,,,,,,,,,,,,86.5,88.8
+q5:atr_pct | penapis:pengesahan_1_tutup,31092,,,,,,,,,,,,,,,,,,,,,,,,,,,,,61.1,45.9
+q5:atr_pct | penapis:pengesahan_2_tutup,30209,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.4,42.2
+rsi_lintas50&q5:julat20,5155,5155.0,23.92,11.61,2.06,39.65,1.78,75.0,14.23,29.2,47.34,26.3,51.19,85.19,24.0,23.92,0.89,7.37,20.25,78.08,68.71,-6.387,22.31,25.42,15.52,-6.387,0.0,PELENGKAP,,,
+rsi_lintas50&q5:julat20 | penapis:spy_atas_ma50,1341,,,,,,,,,,,,,,,,,,,,,,,,,,,,,54.0,67.5
+rsi_lintas50&q5:julat20 | penapis:spy_atas_ma200,893,,,,,,,,,,,,,,,,,,,,,,,,,,,,,63.3,88.4
+rsi_lintas50&q5:julat20 | penapis:sektor_atas_ma50,1368,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.0,60.3
+rsi_lintas50&q5:julat20 | penapis:vol_n50_ge_1.5,552,,,,,,,,,,,,,,,,,,,,,,,,,,,,,83.8,82.2
+rsi_lintas50&q5:julat20 | penapis:harga_atas_ma50,1486,,,,,,,,,,,,,,,,,,,,,,,,,,,,,54.5,55.0
+rsi_lintas50&q5:julat20 | penapis:lapis_ge_3,346,,,,,,,,,,,,,,,,,,,,,,,,,,,,,89.7,89.0
+rsi_lintas50&q5:julat20 | penapis:pengesahan_1_tutup,1511,,,,,,,,,,,,,,,,,,,,,,,,,,,,,60.2,43.4
+rsi_lintas50&q5:julat20 | penapis:pengesahan_2_tutup,1352,,,,,,,,,,,,,,,,,,,,,,,,,,,,,68.3,42.8
+rsi_lintas50&q1:j_52w_tinggi,5614,5614.0,24.72,11.61,2.13,37.19,1.53,75.0,15.71,29.76,45.4,29.24,53.28,83.53,26.0,24.72,0.55,6.73,20.15,75.24,66.69,-4.976,25.03,24.33,14.76,-4.976,0.0,PELENGKAP,,,
+rsi_lintas50&q1:j_52w_tinggi | penapis:spy_atas_ma50,1628,,,,,,,,,,,,,,,,,,,,,,,,,,,,,47.2,62.2
+rsi_lintas50&q1:j_52w_tinggi | penapis:spy_atas_ma200,707,,,,,,,,,,,,,,,,,,,,,,,,,,,,,71.7,91.6
+rsi_lintas50&q1:j_52w_tinggi | penapis:sektor_atas_ma50,1635,,,,,,,,,,,,,,,,,,,,,,,,,,,,,51.6,55.0
+rsi_lintas50&q1:j_52w_tinggi | penapis:vol_n50_ge_1.5,510,,,,,,,,,,,,,,,,,,,,,,,,,,,,,86.7,83.2
+rsi_lintas50&q1:j_52w_tinggi | penapis:harga_atas_ma50,1479,,,,,,,,,,,,,,,,,,,,,,,,,,,,,56.5,58.9
+rsi_lintas50&q1:j_52w_tinggi | penapis:lapis_ge_3,67,,,,,,,,,,,,,,,,,,,,,,,,,,,,,98.2,97.9
+rsi_lintas50&q1:j_52w_tinggi | penapis:pengesahan_1_tutup,1529,,,,,,,,,,,,,,,,,,,,,,,,,,,,,62.6,46.0
+rsi_lintas50&q1:j_52w_tinggi | penapis:pengesahan_2_tutup,1428,,,,,,,,,,,,,,,,,,,,,,,,,,,,,68.3,44.7
+pocket_pivot&q1:j_52w_tinggi,5390,5390.0,22.0,11.61,1.895,38.81,1.15,82.9,14.34,27.77,42.3,26.72,51.19,79.63,22.0,22.0,0.22,5.77,18.65,77.25,69.54,-6.123,21.86,23.44,14.39,-6.123,0.0,PELENGKAP,,,
+pocket_pivot&q1:j_52w_tinggi | penapis:spy_atas_ma50,1831,,,,,,,,,,,,,,,,,,,,,,,,,,,,,37.1,56.6
+pocket_pivot&q1:j_52w_tinggi | penapis:spy_atas_ma200,731,,,,,,,,,,,,,,,,,,,,,,,,,,,,,71.9,87.9
+pocket_pivot&q1:j_52w_tinggi | penapis:sektor_atas_ma50,1892,,,,,,,,,,,,,,,,,,,,,,,,,,,,,38.7,48.6
+pocket_pivot&q1:j_52w_tinggi | penapis:vol_n50_ge_1.5,1178,,,,,,,,,,,,,,,,,,,,,,,,,,,,,65.8,61.0
+pocket_pivot&q1:j_52w_tinggi | penapis:harga_atas_ma50,2116,,,,,,,,,,,,,,,,,,,,,,,,,,,,,30.8,43.7
+pocket_pivot&q1:j_52w_tinggi | penapis:lapis_ge_3,123,,,,,,,,,,,,,,,,,,,,,,,,,,,,,95.3,98.0
+pocket_pivot&q1:j_52w_tinggi | penapis:pengesahan_1_tutup,1396,,,,,,,,,,,,,,,,,,,,,,,,,,,,,62.7,48.1
+pocket_pivot&q1:j_52w_tinggi | penapis:pengesahan_2_tutup,1356,,,,,,,,,,,,,,,,,,,,,,,,,,,,,67.0,43.9
+q5:julat20,145218,145218.0,23.32,11.61,2.009,36.75,2.03,58.7,15.16,28.69,46.0,27.81,52.41,85.67,28.0,23.32,0.83,7.12,20.5,74.18,64.51,-3.963,28.11,23.96,14.88,-3.963,0.0,PELENGKAP,,,
+q5:julat20 | penapis:spy_atas_ma50,28888,,,,,,,,,,,,,,,,,,,,,,,,,,,,,60.6,76.8
+q5:julat20 | penapis:spy_atas_ma200,17541,,,,,,,,,,,,,,,,,,,,,,,,,,,,,73.5,90.0
+q5:julat20 | penapis:sektor_atas_ma50,29008,,,,,,,,,,,,,,,,,,,,,,,,,,,,,64.0,71.2
+q5:julat20 | penapis:vol_n50_ge_1.5,13248,,,,,,,,,,,,,,,,,,,,,,,,,,,,,85.1,84.4
+q5:julat20 | penapis:harga_atas_ma50,26943,,,,,,,,,,,,,,,,,,,,,,,,,,,,,65.3,75.1
+q5:julat20 | penapis:lapis_ge_3,13150,,,,,,,,,,,,,,,,,,,,,,,,,,,,,83.5,87.1
+q5:julat20 | penapis:pengesahan_1_tutup,40379,,,,,,,,,,,,,,,,,,,,,,,,,,,,,58.7,45.8
+q5:julat20 | penapis:pengesahan_2_tutup,39254,,,,,,,,,,,,,,,,,,,,,,,,,,,,,63.3,41.9
+rsi_lintas50&q5:bb_lebar,4607,4607.0,22.94,11.61,1.976,39.51,1.61,75.0,14.12,28.55,46.36,26.2,50.53,84.96,25.0,22.94,0.72,7.34,19.89,78.1,68.94,-6.169,22.88,24.27,15.2,-6.169,0.0,PELENGKAP,,,
+rsi_lintas50&q5:bb_lebar | penapis:spy_atas_ma50,1168,,,,,,,,,,,,,,,,,,,,,,,,,,,,,53.4,69.7
+rsi_lintas50&q5:bb_lebar | penapis:spy_atas_ma200,783,,,,,,,,,,,,,,,,,,,,,,,,,,,,,63.4,89.0
+rsi_lintas50&q5:bb_lebar | penapis:sektor_atas_ma50,1175,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.5,62.0
+rsi_lintas50&q5:bb_lebar | penapis:vol_n50_ge_1.5,499,,,,,,,,,,,,,,,,,,,,,,,,,,,,,83.6,81.1
+rsi_lintas50&q5:bb_lebar | penapis:harga_atas_ma50,1234,,,,,,,,,,,,,,,,,,,,,,,,,,,,,56.6,58.0
+rsi_lintas50&q5:bb_lebar | penapis:lapis_ge_3,259,,,,,,,,,,,,,,,,,,,,,,,,,,,,,91.3,90.4
+rsi_lintas50&q5:bb_lebar | penapis:pengesahan_1_tutup,1294,,,,,,,,,,,,,,,,,,,,,,,,,,,,,61.3,44.3
+rsi_lintas50&q5:bb_lebar | penapis:pengesahan_2_tutup,1175,,,,,,,,,,,,,,,,,,,,,,,,,,,,,68.0,44.0
+rsi_lintas50&q1:j_ma200,5381,5381.0,20.94,11.61,1.804,38.8,1.3,76.5,14.11,27.05,42.78,26.42,49.86,80.5,24.0,20.94,0.45,5.89,18.77,76.71,69.56,-5.213,23.56,23.07,13.93,-5.213,0.0,PELENGKAP,,,
+rsi_lintas50&q1:j_ma200 | penapis:spy_atas_ma50,1486,,,,,,,,,,,,,,,,,,,,,,,,,,,,,47.4,65.6
+rsi_lintas50&q1:j_ma200 | penapis:spy_atas_ma200,682,,,,,,,,,,,,,,,,,,,,,,,,,,,,,71.3,92.7
+rsi_lintas50&q1:j_ma200 | penapis:sektor_atas_ma50,1447,,,,,,,,,,,,,,,,,,,,,,,,,,,,,52.9,58.9
+rsi_lintas50&q1:j_ma200 | penapis:vol_n50_ge_1.5,470,,,,,,,,,,,,,,,,,,,,,,,,,,,,,86.8,82.8
+rsi_lintas50&q1:j_ma200 | penapis:harga_atas_ma50,1083,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.1,66.6
+rsi_lintas50&q1:j_ma200 | penapis:lapis_ge_3,10,,,,,,,,,,,,,,,,,,,,,,,,,,,,,99.9,99.4
+rsi_lintas50&q1:j_ma200 | penapis:pengesahan_1_tutup,1439,,,,,,,,,,,,,,,,,,,,,,,,,,,,,61.3,44.1
+rsi_lintas50&q1:j_ma200 | penapis:pengesahan_2_tutup,1310,,,,,,,,,,,,,,,,,,,,,,,,,,,,,67.0,44.8
+q5:bb_lebar,140650,140650.0,21.76,11.61,1.874,37.93,1.89,60.8,14.49,27.47,44.51,27.16,50.85,83.92,29.0,21.76,0.77,6.74,19.78,74.21,65.45,-3.859,28.01,22.92,14.28,-3.859,0.0,PELENGKAP,,,
+q5:bb_lebar | penapis:spy_atas_ma50,29852,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.5,76.6
+q5:bb_lebar | penapis:spy_atas_ma200,16742,,,,,,,,,,,,,,,,,,,,,,,,,,,,,74.2,90.2
+q5:bb_lebar | penapis:sektor_atas_ma50,30691,,,,,,,,,,,,,,,,,,,,,,,,,,,,,59.3,70.7
+q5:bb_lebar | penapis:vol_n50_ge_1.5,12189,,,,,,,,,,,,,,,,,,,,,,,,,,,,,86.1,84.4
+q5:bb_lebar | penapis:harga_atas_ma50,30269,,,,,,,,,,,,,,,,,,,,,,,,,,,,,58.7,73.1
+q5:bb_lebar | penapis:lapis_ge_3,14435,,,,,,,,,,,,,,,,,,,,,,,,,,,,,80.5,86.8
+q5:bb_lebar | penapis:pengesahan_1_tutup,39150,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.8,45.7
+q5:bb_lebar | penapis:pengesahan_2_tutup,37930,,,,,,,,,,,,,,,,,,,,,,,,,,,,,62.3,41.9
+macd_cross&q1:j_ma200,4890,4890.0,20.53,11.61,1.768,35.36,1.23,60.7,15.21,26.38,42.46,27.9,49.86,79.96,29.0,20.53,0.41,5.69,19.48,74.42,65.34,-4.144,27.01,22.34,13.95,-4.144,0.0,PELENGKAP,,,
+macd_cross&q1:j_ma200 | penapis:spy_atas_ma50,715,,,,,,,,,,,,,,,,,,,,,,,,,,,,,70.0,80.5
+macd_cross&q1:j_ma200 | penapis:spy_atas_ma200,463,,,,,,,,,,,,,,,,,,,,,,,,,,,,,78.3,91.3
+macd_cross&q1:j_ma200 | penapis:sektor_atas_ma50,668,,,,,,,,,,,,,,,,,,,,,,,,,,,,,73.9,78.5
+macd_cross&q1:j_ma200 | penapis:vol_n50_ge_1.5,413,,,,,,,,,,,,,,,,,,,,,,,,,,,,,84.8,85.0
+macd_cross&q1:j_ma200 | penapis:harga_atas_ma50,325,,,,,,,,,,,,,,,,,,,,,,,,,,,,,87.2,89.6
+macd_cross&q1:j_ma200 | penapis:lapis_ge_3,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,100.0,100.0
+macd_cross&q1:j_ma200 | penapis:pengesahan_1_tutup,1269,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.8,46.3
+macd_cross&q1:j_ma200 | penapis:pengesahan_2_tutup,1166,,,,,,,,,,,,,,,,,,,,,,,,,,,,,65.3,43.6
+pocket_pivot&q1:j_ma200,4487,4487.0,20.75,11.61,1.787,38.78,1.18,83.3,13.93,26.61,41.69,26.19,50.43,79.51,21.0,20.75,0.22,5.55,18.39,76.44,69.49,-5.557,22.24,23.08,13.75,-5.557,0.0,PELENGKAP,,,
+pocket_pivot&q1:j_ma200 | penapis:spy_atas_ma50,1409,,,,,,,,,,,,,,,,,,,,,,,,,,,,,39.2,62.3
+pocket_pivot&q1:j_ma200 | penapis:spy_atas_ma200,621,,,,,,,,,,,,,,,,,,,,,,,,,,,,,69.9,89.6
+pocket_pivot&q1:j_ma200 | penapis:sektor_atas_ma50,1404,,,,,,,,,,,,,,,,,,,,,,,,,,,,,43.7,54.5
+pocket_pivot&q1:j_ma200 | penapis:vol_n50_ge_1.5,931,,,,,,,,,,,,,,,,,,,,,,,,,,,,,65.9,63.8
+pocket_pivot&q1:j_ma200 | penapis:harga_atas_ma50,1349,,,,,,,,,,,,,,,,,,,,,,,,,,,,,46.5,55.1
+pocket_pivot&q1:j_ma200 | penapis:lapis_ge_3,3,,,,,,,,,,,,,,,,,,,,,,,,,,,,,99.8,100.0
+pocket_pivot&q1:j_ma200 | penapis:pengesahan_1_tutup,1160,,,,,,,,,,,,,,,,,,,,,,,,,,,,,62.4,45.6
+pocket_pivot&q1:j_ma200 | penapis:pengesahan_2_tutup,1118,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.6,42.3
+macd_cross&q5:bb_lebar,5435,5435.0,20.63,11.61,1.777,37.9,1.51,62.5,14.31,26.4,43.18,26.55,49.32,81.93,28.0,20.63,0.59,6.16,19.37,75.69,66.33,-4.491,26.59,22.79,14.37,-4.491,0.0,PELENGKAP,,,
+macd_cross&q5:bb_lebar | penapis:spy_atas_ma50,837,,,,,,,,,,,,,,,,,,,,,,,,,,,,,70.8,79.0
+macd_cross&q5:bb_lebar | penapis:spy_atas_ma200,731,,,,,,,,,,,,,,,,,,,,,,,,,,,,,71.7,86.9
+macd_cross&q5:bb_lebar | penapis:sektor_atas_ma50,864,,,,,,,,,,,,,,,,,,,,,,,,,,,,,71.8,74.8
+macd_cross&q5:bb_lebar | penapis:vol_n50_ge_1.5,509,,,,,,,,,,,,,,,,,,,,,,,,,,,,,84.0,83.9
+macd_cross&q5:bb_lebar | penapis:harga_atas_ma50,609,,,,,,,,,,,,,,,,,,,,,,,,,,,,,80.1,82.2
+macd_cross&q5:bb_lebar | penapis:lapis_ge_3,200,,,,,,,,,,,,,,,,,,,,,,,,,,,,,93.8,93.6
+macd_cross&q5:bb_lebar | penapis:pengesahan_1_tutup,1467,,,,,,,,,,,,,,,,,,,,,,,,,,,,,58.5,45.4
+macd_cross&q5:bb_lebar | penapis:pengesahan_2_tutup,1331,,,,,,,,,,,,,,,,,,,,,,,,,,,,,65.1,45.4
+q1:j_52w_tinggi,109065,109065.0,26.52,11.61,2.284,33.73,1.96,57.6,16.95,31.08,47.92,30.64,56.09,88.81,28.0,26.52,0.88,7.58,21.77,72.69,62.42,-3.922,28.21,25.34,15.42,-3.922,0.0,PELENGKAP,,,
+q1:j_52w_tinggi | penapis:spy_atas_ma50,22210,,,,,,,,,,,,,,,,,,,,,,,,,,,,,58.3,76.3
+q1:j_52w_tinggi | penapis:spy_atas_ma200,10640,,,,,,,,,,,,,,,,,,,,,,,,,,,,,76.2,93.4
+q1:j_52w_tinggi | penapis:sektor_atas_ma50,21339,,,,,,,,,,,,,,,,,,,,,,,,,,,,,63.7,72.4
+q1:j_52w_tinggi | penapis:vol_n50_ge_1.5,8490,,,,,,,,,,,,,,,,,,,,,,,,,,,,,88.0,85.9
+q1:j_52w_tinggi | penapis:harga_atas_ma50,14676,,,,,,,,,,,,,,,,,,,,,,,,,,,,,74.1,82.2
+q1:j_52w_tinggi | penapis:lapis_ge_3,1209,,,,,,,,,,,,,,,,,,,,,,,,,,,,,97.7,98.7
+q1:j_52w_tinggi | penapis:pengesahan_1_tutup,29973,,,,,,,,,,,,,,,,,,,,,,,,,,,,,60.5,46.6
+q1:j_52w_tinggi | penapis:pengesahan_2_tutup,29247,,,,,,,,,,,,,,,,,,,,,,,,,,,,,65.7,42.5
+q5:j_ema9,37832,37832.0,15.91,11.61,1.37,45.54,1.39,89.4,11.45,22.57,37.39,22.46,44.07,73.5,24.0,15.91,0.33,5.2,16.15,78.5,73.43,-4.716,23.56,20.65,12.53,-4.716,0.0,PELENGKAP,BUNYI LATAR,,
+q5:j_ema9 | penapis:spy_atas_ma50,12426,,,,,,,,,,,,,,,,,,,,,,,,,,,,,42.2,58.9
+q5:j_ema9 | penapis:spy_atas_ma200,5575,,,,,,,,,,,,,,,,,,,,,,,,,,,,,73.4,83.6
+q5:j_ema9 | penapis:sektor_atas_ma50,14127,,,,,,,,,,,,,,,,,,,,,,,,,,,,,37.3,44.8
+q5:j_ema9 | penapis:vol_n50_ge_1.5,5055,,,,,,,,,,,,,,,,,,,,,,,,,,,,,78.4,77.9
+q5:j_ema9 | penapis:harga_atas_ma50,19206,,,,,,,,,,,,,,,,,,,,,,,,,,,,,14.5,25.7
+q5:j_ema9 | penapis:lapis_ge_3,7418,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.9,71.4
+q5:j_ema9 | penapis:pengesahan_1_tutup,9993,,,,,,,,,,,,,,,,,,,,,,,,,,,,,59.9,48.7
+q5:j_ema9 | penapis:pengesahan_2_tutup,9387,,,,,,,,,,,,,,,,,,,,,,,,,,,,,64.4,46.1
+pocket_pivot&q5:bb_lebar,9296,9296.0,18.02,11.61,1.552,43.99,1.69,90.0,12.14,24.28,40.31,24.41,47.76,80.21,24.0,18.02,0.39,6.2,17.15,78.35,72.31,-4.743,23.35,22.37,13.01,-4.743,0.0,PELENGKAP,,,
+pocket_pivot&q5:bb_lebar | penapis:spy_atas_ma50,3286,,,,,,,,,,,,,,,,,,,,,,,,,,,,,37.0,57.7
+pocket_pivot&q5:bb_lebar | penapis:spy_atas_ma200,1526,,,,,,,,,,,,,,,,,,,,,,,,,,,,,70.5,81.0
+pocket_pivot&q5:bb_lebar | penapis:sektor_atas_ma50,3763,,,,,,,,,,,,,,,,,,,,,,,,,,,,,32.0,41.3
+pocket_pivot&q5:bb_lebar | penapis:vol_n50_ge_1.5,2362,,,,,,,,,,,,,,,,,,,,,,,,,,,,,60.5,55.3
+pocket_pivot&q5:bb_lebar | penapis:harga_atas_ma50,4828,,,,,,,,,,,,,,,,,,,,,,,,,,,,,14.2,21.3
+pocket_pivot&q5:bb_lebar | penapis:lapis_ge_3,1940,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.8,65.2
+pocket_pivot&q5:bb_lebar | penapis:pengesahan_1_tutup,2539,,,,,,,,,,,,,,,,,,,,,,,,,,,,,60.2,45.6
+pocket_pivot&q5:bb_lebar | penapis:pengesahan_2_tutup,2462,,,,,,,,,,,,,,,,,,,,,,,,,,,,,63.6,41.9
+q1:cerun_ema21,96411,96411.0,21.38,11.61,1.842,35.14,1.88,50.9,15.27,27.31,43.49,27.87,50.86,82.1,31.0,21.38,0.74,6.16,20.08,70.92,62.19,-2.587,32.09,21.8,14.11,-2.587,0.0,PELENGKAP,,,
+q1:cerun_ema21 | penapis:spy_atas_ma50,9320,,,,,,,,,,,,,,,,,,,,,,,,,,,,,80.1,87.5
+q1:cerun_ema21 | penapis:spy_atas_ma200,9936,,,,,,,,,,,,,,,,,,,,,,,,,,,,,75.6,91.9
+q1:cerun_ema21 | penapis:sektor_atas_ma50,8057,,,,,,,,,,,,,,,,,,,,,,,,,,,,,84.7,86.1
+q1:cerun_ema21 | penapis:vol_n50_ge_1.5,8702,,,,,,,,,,,,,,,,,,,,,,,,,,,,,84.3,83.5
+q1:cerun_ema21 | penapis:harga_atas_ma50,470,,,,,,,,,,,,,,,,,,,,,,,,,,,,,99.1,99.2
+q1:cerun_ema21 | penapis:lapis_ge_3,345,,,,,,,,,,,,,,,,,,,,,,,,,,,,,99.4,99.3
+q1:cerun_ema21 | penapis:pengesahan_1_tutup,25763,,,,,,,,,,,,,,,,,,,,,,,,,,,,,56.9,45.8
+q1:cerun_ema21 | penapis:pengesahan_2_tutup,25156,,,,,,,,,,,,,,,,,,,,,,,,,,,,,61.3,41.6
+macd_cross&q1:rs_spy_6b,4346,4346.0,19.4,11.61,1.671,41.58,1.15,59.6,13.2,25.44,41.47,24.49,47.31,77.87,26.0,19.4,0.46,5.27,18.23,78.9,70.23,-5.39,22.78,23.72,13.98,-5.39,0.0,PELENGKAP,,,
+macd_cross&q1:rs_spy_6b | penapis:spy_atas_ma50,811,,,,,,,,,,,,,,,,,,,,,,,,,,,,,65.4,77.9
+macd_cross&q1:rs_spy_6b | penapis:spy_atas_ma200,711,,,,,,,,,,,,,,,,,,,,,,,,,,,,,66.5,87.4
+macd_cross&q1:rs_spy_6b | penapis:sektor_atas_ma50,713,,,,,,,,,,,,,,,,,,,,,,,,,,,,,71.8,75.9
+macd_cross&q1:rs_spy_6b | penapis:vol_n50_ge_1.5,390,,,,,,,,,,,,,,,,,,,,,,,,,,,,,85.5,84.8
+macd_cross&q1:rs_spy_6b | penapis:harga_atas_ma50,437,,,,,,,,,,,,,,,,,,,,,,,,,,,,,82.3,86.1
+macd_cross&q1:rs_spy_6b | penapis:lapis_ge_3,7,,,,,,,,,,,,,,,,,,,,,,,,,,,,,99.6,100.0
+macd_cross&q1:rs_spy_6b | penapis:pengesahan_1_tutup,1167,,,,,,,,,,,,,,,,,,,,,,,,,,,,,59.6,48.2
+macd_cross&q1:rs_spy_6b | penapis:pengesahan_2_tutup,1070,,,,,,,,,,,,,,,,,,,,,,,,,,,,,67.1,43.5
+q1:j_ma200,126698,126698.0,22.29,11.61,1.919,34.68,1.79,56.2,15.65,27.99,43.83,28.75,52.06,82.8,29.0,22.29,0.69,6.33,20.23,71.9,63.5,-3.201,29.59,22.77,14.12,-3.201,0.0,PELENGKAP,,,
+q1:j_ma200 | penapis:spy_atas_ma50,21329,,,,,,,,,,,,,,,,,,,,,,,,,,,,,63.8,80.7
+q1:j_ma200 | penapis:spy_atas_ma200,11675,,,,,,,,,,,,,,,,,,,,,,,,,,,,,77.3,93.9
+q1:j_ma200 | penapis:sektor_atas_ma50,19447,,,,,,,,,,,,,,,,,,,,,,,,,,,,,70.4,77.2
+q1:j_ma200 | penapis:vol_n50_ge_1.5,9984,,,,,,,,,,,,,,,,,,,,,,,,,,,,,86.8,85.1
+q1:j_ma200 | penapis:harga_atas_ma50,9724,,,,,,,,,,,,,,,,,,,,,,,,,,,,,85.2,88.6
+q1:j_ma200 | penapis:lapis_ge_3,101,,,,,,,,,,,,,,,,,,,,,,,,,,,,,99.8,99.9
+q1:j_ma200 | penapis:pengesahan_1_tutup,33510,,,,,,,,,,,,,,,,,,,,,,,,,,,,,58.4,46.0
+q1:j_ma200 | penapis:pengesahan_2_tutup,32883,,,,,,,,,,,,,,,,,,,,,,,,,,,,,62.7,41.6
+rsi_lintas50&q1:cerun_ma50,5088,5088.0,18.85,11.61,1.623,41.12,1.36,77.5,13.18,25.36,40.93,23.84,46.31,77.19,26.0,18.85,0.33,5.17,17.84,76.2,69.56,-4.403,25.77,21.94,13.55,-4.403,0.0,PELENGKAP,,,
+rsi_lintas50&q1:cerun_ma50 | penapis:spy_atas_ma50,1295,,,,,,,,,,,,,,,,,,,,,,,,,,,,,54.8,63.6
+rsi_lintas50&q1:cerun_ma50 | penapis:spy_atas_ma200,952,,,,,,,,,,,,,,,,,,,,,,,,,,,,,59.1,90.0
+rsi_lintas50&q1:cerun_ma50 | penapis:sektor_atas_ma50,1322,,,,,,,,,,,,,,,,,,,,,,,,,,,,,57.2,55.5
+rsi_lintas50&q1:cerun_ma50 | penapis:vol_n50_ge_1.5,497,,,,,,,,,,,,,,,,,,,,,,,,,,,,,85.2,80.5
+rsi_lintas50&q1:cerun_ma50 | penapis:harga_atas_ma50,524,,,,,,,,,,,,,,,,,,,,,,,,,,,,,84.9,78.3
+rsi_lintas50&q1:cerun_ma50 | penapis:lapis_ge_3,43,,,,,,,,,,,,,,,,,,,,,,,,,,,,,98.6,98.6
+rsi_lintas50&q1:cerun_ma50 | penapis:pengesahan_1_tutup,1358,,,,,,,,,,,,,,,,,,,,,,,,,,,,,60.9,43.7
+rsi_lintas50&q1:cerun_ma50 | penapis:pengesahan_2_tutup,1283,,,,,,,,,,,,,,,,,,,,,,,,,,,,,64.3,44.0
+pocket_pivot&q1:rs_spy_6b,5302,5302.0,16.56,11.61,1.426,46.93,0.98,80.7,10.91,22.62,37.84,20.53,43.98,72.88,21.0,16.56,0.19,4.77,15.73,80.78,75.69,-6.266,18.37,22.39,12.72,-6.266,0.0,PELENGKAP,BUNYI LATAR,,
+pocket_pivot&q1:rs_spy_6b | penapis:spy_atas_ma50,2128,,,,,,,,,,,,,,,,,,,,,,,,,,,,,29.8,56.6
+pocket_pivot&q1:rs_spy_6b | penapis:spy_atas_ma200,1378,,,,,,,,,,,,,,,,,,,,,,,,,,,,,51.2,81.3
+pocket_pivot&q1:rs_spy_6b | penapis:sektor_atas_ma50,1929,,,,,,,,,,,,,,,,,,,,,,,,,,,,,39.4,51.9
+pocket_pivot&q1:rs_spy_6b | penapis:vol_n50_ge_1.5,1110,,,,,,,,,,,,,,,,,,,,,,,,,,,,,68.3,63.4
+pocket_pivot&q1:rs_spy_6b | penapis:harga_atas_ma50,2017,,,,,,,,,,,,,,,,,,,,,,,,,,,,,36.8,49.3
+pocket_pivot&q1:rs_spy_6b | penapis:lapis_ge_3,77,,,,,,,,,,,,,,,,,,,,,,,,,,,,,97.1,99.4
+pocket_pivot&q1:rs_spy_6b | penapis:pengesahan_1_tutup,1362,,,,,,,,,,,,,,,,,,,,,,,,,,,,,63.9,47.2
+pocket_pivot&q1:rs_spy_6b | penapis:pengesahan_2_tutup,1291,,,,,,,,,,,,,,,,,,,,,,,,,,,,,67.5,45.0
+q1:j_ma50,187641,187641.0,17.13,11.61,1.476,38.76,1.71,53.3,13.64,24.39,38.54,25.07,45.75,73.06,31.0,17.13,0.49,4.64,17.89,70.88,65.36,-2.01,31.84,19.95,12.27,-2.01,0.0,PELENGKAP,BUNYI LATAR,,
+q1:j_ma50 | penapis:spy_atas_ma50,21586,,,,,,,,,,,,,,,,,,,,,,,,,,,,,76.5,86.0
+q1:j_ma50 | penapis:spy_atas_ma200,20525,,,,,,,,,,,,,,,,,,,,,,,,,,,,,75.0,92.7
+q1:j_ma50 | penapis:sektor_atas_ma50,17740,,,,,,,,,,,,,,,,,,,,,,,,,,,,,82.6,84.2
+q1:j_ma50 | penapis:vol_n50_ge_1.5,15385,,,,,,,,,,,,,,,,,,,,,,,,,,,,,85.6,84.7
+q1:j_ma50 | penapis:harga_atas_ma50,0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,100.0,100.0
+q1:j_ma50 | penapis:lapis_ge_3,1849,,,,,,,,,,,,,,,,,,,,,,,,,,,,,98.2,98.3
+q1:j_ma50 | penapis:pengesahan_1_tutup,48938,,,,,,,,,,,,,,,,,,,,,,,,,,,,,56.8,45.6
+q1:j_ma50 | penapis:pengesahan_2_tutup,48235,,,,,,,,,,,,,,,,,,,,,,,,,,,,,59.9,40.7
