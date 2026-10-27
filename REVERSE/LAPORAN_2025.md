@@ -26,10 +26,10 @@ Dijana skrip `REVERSE/jana_laporan.py` pada 27 Okt 2026. Spec dikunci: `REVERSE/
 |---|---|
 | a. Tarik aset Release `autotune-data-a02` | **LULUS** — 219 MB, 18 parquet, 2009-01-02 → 2026-10-16; semua sha256 sepadan |
 | b. SPY dan QQQ dalam `idx.parquet` | **LULUS** |
-| c. Sumber sektor/industri setiap ticker | **LULUS** — 2310/2321 = 99.5% (11 kelas saham diisi daripada ticker asas; 96 ticker = `Lain-lain`) |
+| c. Sumber sektor/industri setiap ticker | **LULUS** — 2314/2321 = 99.7% (4 kelas saham diisi daripada ticker asas; 96 ticker = `Lain-lain`) |
 | d. 11 ETF sektor SPDR ditarik dan dicache | **GAGAL** → pindaan SPEC §13.1 (indeks sektor A02; diluluskan pengguna) |
-| e. Step 1–3 satu bulan, anggaran × 12 | **LULUS** — 0.052 s/ticker; larian penuh 2321 ticker = 269 s |
-| f. `semak_hadapan` atas modul indikator | **LULUS** — 14 tarikh potong (≥ 12), 26,950 perbandingan, **0 kegagalan** (`REVERSE/PANDANG_HADAPAN.md`) |
+| e. Step 1–3 satu bulan, anggaran × 12 | **LULUS** — 0.111 s/ticker; larian penuh 2321 ticker = 257 s |
+| f. `semak_hadapan` atas modul indikator | **LULUS** — 14 tarikh potong (≥ 12), 26,950 perbandingan, **0 kegagalan** (`REVERSE/PANDANG_HADAPAN_2025.md`) |
 
 ## 2. Step 1–2 — run
 
@@ -587,7 +587,7 @@ Keenam pemicu diuji sebagai signal tunggal. Dilaporkan walaupun ditolak, seperti
 | PULLBACK SIHAT | 1394 | 88.9 | -8.1 | 6.0 |
 
 
-Pullback yang trend sahamnya utuh (SIHAT 88.9%, PASARAN 92.0%) hampir selalu menyambung ke puncak baru; pullback AMARAN hanya 50.8%. Ini sokongan paling jelas bagi falsafah "pegang selagi naik".
+Pullback yang trend sahamnya utuh (SIHAT 88.9%, PASARAN 92.0%) menyambung ke puncak baru jauh lebih kerap daripada pullback AMARAN (50.8%). Ini sokongan paling jelas bagi falsafah "pegang selagi naik".
 
 
 ### Grid 18 peraturan HOLD (deskriptif)
@@ -672,7 +672,7 @@ Pullback yang trend sahamnya utuh (SIHAT 88.9%, PASARAN 92.0%) hampir selalu men
 | trail_8pct | 2865 | 96.2 | 5.0 | -1.57 | -5.9 | 51.2 |
 
 
-`median_hari_dari_puncak` negatif bermakna signal menyala **sebelum** puncak — iaitu ia menjual terlalu awal. Exit berasaskan MA (EMA9/EMA21/MA50) menyala 12–19 hari sebelum puncak dan mengekalkan hanya −3% hingga −5% keuntungan. Kadar exit palsu 46%–74%.
+`median_hari_dari_puncak` negatif bermakna signal menyala **sebelum** puncak — iaitu ia menjual terlalu awal. Exit berasaskan MA (EMA9/EMA21/MA50) menyala 12–19 hari sebelum puncak dan mengekalkan hanya -3% hingga -5% keuntungan. Kadar exit palsu 46%–74%.
 
 
 **Keluarga EXIT: 0 / 62 signal lulus BH-FDR q ≤ 0.01.** Tiada signal EXIT yang membezakan "hari sebelum puncak akhir" daripada "palung pullback biasa" selepas kawalan pelbagai ujian.
@@ -709,7 +709,7 @@ Setiap signal corong diimbas atas **semua** hari universe 2025 (580,075 baris (t
 Taburan berat di hujung kanan: perhatikan jurang antara `mfe63_p50` dan `mfe63_p90`. p90 dan % ≥ 100% ialah pembeza, bukan median.
 
 
-**Lift jatuh besar antara Step 4 dan Step 7** (contoh `q5:bb_lebar`: lift 9.88 dalam populasi peristiwa → lift_tepat 1.80 atas semua hari universe). Sebabnya: Step 4 bersyarat pada peristiwa entry yang sah; Step 7 tidak. Angka Step 7 yang lebih dekat dengan dagangan sebenar.
+**Lift jatuh besar antara Step 4 dan Step 7** (contoh `rsi_lintas50&q5:julat20`: lift 23.76 dalam populasi peristiwa → lift_tepat 2.21 atas semua hari universe). Sebabnya: Step 4 bersyarat pada peristiwa entry yang sah; Step 7 tidak. Angka Step 7 yang lebih dekat dengan dagangan sebenar.
 
 
 ### Penapis Step 7.4
@@ -738,7 +738,7 @@ Taburan berat di hujung kanan: perhatikan jurang antara `mfe63_p50` dan `mfe63_p
 
 ## 9. Step 7b — ujian ke hadapan HOLD dan EXIT (ufuk terbuka)
 
-Set kemasukan: gabungan semua kemunculan 14 signal yang lulus Step 7 = 232,292 (ticker, tarikh) unik, disampel berlapis ikut bulan ke **24,000** (benih 42; SPEC §13.9). Grid 18 HOLD × 13 EXIT = **234** sistem.
+Set kemasukan: gabungan semua kemunculan 14 signal yang lulus Step 7 = 0 (ticker, tarikh) unik, disampel berlapis ikut bulan ke **0** (benih 42; SPEC §13.9). Grid 18 HOLD × 13 EXIT = **234** sistem.
 
 
 ### TIGA RUJUKAN WAJIB
@@ -822,31 +822,31 @@ Perbandingan yang diminta arahan: **18 signal lulus FDR daripada 19 diuji**, man
 
 | signal | G1_sah_dalam_tahun | G2_merentas_tahun | G3_nilai_p | G3_fdr | G4_bootstrap | G5_outlier | G6 | step7 | keputusan |
 |---|---|---|---|---|---|---|---|---|---|
-| rsi_lintas50&q5:julat20 | GAGAL | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q5:bb_lebar | GAGAL | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q5:atr_pct | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
-| q5:atr_pct | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
-| q5:julat20 | SEBAHAGIAN | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
-| q5:bb_lebar | SEBAHAGIAN | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
-| macd_cross&q1:j_52w_tinggi | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| q5:j_ema9 | GAGAL | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| macd_cross&q1:cerun_ma50 | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.002 | LULUS | GAGAL | LULUS | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q1:j_52w_tinggi | GAGAL | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| pocket_pivot&q1:j_52w_tinggi | GAGAL | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q1:cerun_ma50 | GAGAL | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | GAGAL | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| macd_cross&q1:j_ma200 | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| rsi_lintas50&q5:j_ma200 | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.94106 | GAGAL | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| q1:j_52w_tinggi | SEBAHAGIAN | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
-| q1:roc20 | SEBAHAGIAN | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| pocket_pivot&q1:cerun_ma50 | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.002 | LULUS | LULUS | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| q1:cerun_ma50 | GAGAL | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
-| q1:j_ma50 | LULUS | TIDAK TERSEDIA (fasa 2025) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| rsi_lintas50&q5:julat20 | GAGAL | BELUM (1/1 sama, perlu >= 2; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q5:bb_lebar | GAGAL | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q5:atr_pct | LULUS | BELUM (1/1 sama, perlu >= 2; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
+| q5:atr_pct | LULUS | BELUM (1/1 sama, perlu >= 2; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
+| q5:julat20 | SEBAHAGIAN | BELUM (1/1 sama, perlu >= 2; 2024=UNIQUE) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
+| q5:bb_lebar | SEBAHAGIAN | BELUM (0/1 sama, perlu >= 2; 2024=SEDERHANA) | 0.001 | LULUS | LULUS | LULUS | LULUS | LULUS | CALON |
+| macd_cross&q1:j_52w_tinggi | LULUS | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| q5:j_ema9 | GAGAL | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| macd_cross&q1:cerun_ma50 | LULUS | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.002 | LULUS | GAGAL | LULUS | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q1:j_52w_tinggi | GAGAL | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| pocket_pivot&q1:j_52w_tinggi | GAGAL | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q1:cerun_ma50 | GAGAL | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| macd_cross&q1:j_ma200 | LULUS | BELUM (1/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| rsi_lintas50&q5:j_ma200 | LULUS | BELUM (1/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.94106 | GAGAL | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| q1:j_52w_tinggi | SEBAHAGIAN | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | LULUS | BERGANTUNG PADA OUTLIER | LULUS | LULUS | DITOLAK |
+| q1:roc20 | SEBAHAGIAN | BELUM (0/1 sama, perlu >= 2; 2024=SEDERHANA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| pocket_pivot&q1:cerun_ma50 | LULUS | BELUM (1/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.002 | LULUS | LULUS | LULUS | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| q1:cerun_ma50 | GAGAL | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
+| q1:j_ma50 | LULUS | BELUM (0/1 sama, perlu >= 2; 2024=TIDAK BERGUNA) | 0.001 | LULUS | GAGAL | BERGANTUNG PADA OUTLIER | LULUS | GAGAL (BUNYI LATAR) | DITOLAK |
 
 
 **CALON: 4** — `rsi_lintas50&q5:atr_pct`, `q5:atr_pct`, `q5:julat20`, `q5:bb_lebar`. **DITOLAK: 15.**
 
 
-Keempat-empat CALON ialah **konteks pengembangan kemeruapan** (ATR% tinggi, lebar Bollinger tinggi, julat 20 hari luas). Ini perlu dibaca bersama kaveat survivorship: kohort kemeruapan tinggi ialah tempat ketiadaan saham delist paling memihak kepada hasil. Pengesahan 2024–2021 (gate 8.1) adalah penentu sebenar.
+Kesemua CALON ialah **konteks pengembangan kemeruapan** (ATR% tinggi, lebar Bollinger tinggi, julat 20 hari luas). Ini perlu dibaca bersama kaveat survivorship: kohort kemeruapan tinggi ialah tempat ketiadaan saham delist paling memihak kepada hasil. Pengesahan merentas tahun (gate 8.1) adalah penentu sebenar.
 
 
 Penapis Step 7.4 kekal CALON tanpa kecuali — arahan 8.5 memerlukan keberkesanan dalam ≥ 2 tahun yang tidak digunakan semasa mencarinya, dan tiada penapis lulus walaupun pada 2025.
@@ -854,7 +854,7 @@ Penapis Step 7.4 kekal CALON tanpa kecuali — arahan 8.5 memerlukan keberkesana
 
 ## 11. Step 9 — PRESTASI PORTFOLIO (kriteria akhir)
 
-Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. Signal ENTRY = 4 CALON. Peraturan pemilihan dibekukan (SPEC §12): lift_presisi → RS 6 bulan → ticker.
+Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. Asas signal ENTRY: **CALON selepas Step 8**. Peraturan pemilihan dibekukan (SPEC §12): lift_presisi → RS 6 bulan → ticker.
 
 
 | sistem | n_posisi_dibuka | n_dagangan_ditutup | n_posisi_terbuka_hujung_tahun | purata_slot_terisi | pulangan_tahun | median_bulanan | purata_bulanan | pct_bulan_ge10 | pct_bulan_positif | bulan_terbaik | bulan_terburuk | mdd | purata_hari_pegang | pusing_ganti_bulanan | spy_pulangan_tahun | spy_mdd |
@@ -920,14 +920,21 @@ Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. Si
 - KAWALAN RAWAK pegang-252 memberi 9.51% dan Chandelier rawak 29.47% — dengan n = 8 dan n = 40 posisi, perbezaan antara signal dan rawak di sini **tidak bermakna secara statistik**. Jangan tafsir jurang itu sebagai bukti.
 
 
-> KAVEAT WAJIB STEP 9: tiada saham delist (survivorship), satu tahun satu rejim pasaran, dan keputusan maksimum pada fasa ini ialah **CALON**.
+### Banding wajib: SPY dan KAWALAN RAWAK
+
+- SPY tempoh sama: **18.01%** (MDD -18.76%). **5/6** sistem kalah kepada SPY.
+
+- KAWALAN RAWAK terbaik: **29.47%** (`KAWALAN_RAWAK|chandelier`). **5/6** sistem kalah kepada entri rawak.
+
+
+> KAVEAT WAJIB STEP 9: tiada saham delist (survivorship), satu tahun satu rejim pasaran, dan keputusan maksimum pada fasa ini ialah **CALON**. Portfolio 8 slot bermakna setiap angka tahunan bergantung pada bilangan posisi yang kecil — lihat lajur `n_posisi_dibuka`.
 
 
 ## 12. Keputusan akhir (had fasa: CALON)
 
-1. **ENTRY** — 4 signal CALON, semuanya konteks pengembangan kemeruapan: `rsi_lintas50&q5:atr_pct`, `q5:atr_pct`, `q5:julat20`, `q5:bb_lebar`. Tiada pemicu klasik tunggal lulus. Hipotesis "magnitud ada pada konteks, bukan pemicu" disokong oleh data 2025.
+1. **ENTRY** — 4 signal CALON: `rsi_lintas50&q5:atr_pct`, `q5:atr_pct`, `q5:julat20`, `q5:bb_lebar`. Tiada pemicu klasik tunggal lulus. Hipotesis "magnitud ada pada konteks, bukan pemicu" disokong oleh data 2025.
 
-2. **HOLD** — 11/18 signal lulus FDR; kelas pullback ialah hasil paling kukuh (SIHAT/PASARAN 89–92% menyambung ke puncak baru lawan AMARAN 50.8%). Semua kekal CALON kerana Step 7b tidak mengesahkan mana-mana sistem.
+2. **HOLD** — 11/18 signal lulus FDR; kelas pullback ialah hasil paling kukuh (SIHAT 88.9% / PASARAN 92.0% menyambung ke puncak baru lawan AMARAN 50.8%).
 
 3. **EXIT** — 0/62 lulus FDR; 0/234 sistem mengalahkan rujukan. **Jawapan kajian: jangan jual.**
 
@@ -954,5 +961,5 @@ Portfolio 8 slot × 12.5%, kos penuh, tiada leverage, satu posisi satu saham. Si
 | `keputusan_2025.csv` | keputusan gate demi gate |
 | `portfolio_2025.csv`, `portfolio_bulanan_2025.csv` | Step 9 |
 | `log_ujian.csv` | setiap signal/kombinasi yang diuji |
-| `PANDANG_HADAPAN.md` | imbasan pandang ke hadapan |
+| `PANDANG_HADAPAN_2025.md` | imbasan pandang ke hadapan |
 | `SPEC.md` | spec dikunci + 9 pindaan bertarikh |

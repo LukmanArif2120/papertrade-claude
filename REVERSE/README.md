@@ -4,14 +4,15 @@ Kajian **signal dan indikator**, bukan kaedah Mxx repo dan bukan penalaan parame
 Arah terbalik daripada backtest: **hasil dahulu, signal kemudian**.
 
 - Spec dikunci sebelum larian pertama: **`SPEC.md`** (termasuk 9 pindaan bertarikh 27 Okt 2026).
-- Laporan: **`LAPORAN_2025.md`** (dijana `jana_laporan.py`).
+- Laporan setiap tahun: **`LAPORAN_2025.md`**, **`LAPORAN_2024.md`** (dijana `jana_laporan.py`).
 - Setiap signal/kombinasi yang diuji: `log_ujian.csv`.
-- Imbasan pandang ke hadapan: `PANDANG_HADAPAN.md` (14 tarikh potong, 0 kegagalan).
+- Imbasan pandang ke hadapan: `PANDANG_HADAPAN_<TAHUN>.md` (14 tarikh potong setiap tahun, 0 kegagalan).
+- Perbandingan merentas tahun: **`BANDING_TAHUN.md`** (dijana `banding_tahun.py`).
 
 ## Jalankan semula (urutan)
 
 ```
-python3 REVERSE/semak_hadapan.py                  # kesediaan 0.3f
+python3 REVERSE/semak_hadapan.py 2025             # kesediaan 0.3f
 python3 REVERSE/step1_run.py 2025                 # Step 1-2 + cache indikator  (~270 s)
 python3 REVERSE/step2b_kohort.py 2025             # Step 2b                     (~30 s)
 python3 REVERSE/step3_signal.py 2025              # kuintil dibeku + dedup      (~7 s)
@@ -22,11 +23,12 @@ python3 REVERSE/step7b_hadapan.py 2025            # Step 7b, 234 sistem         
 python3 REVERSE/step8_kawalan.py 2025             # Step 8                      (~105 s)
 python3 REVERSE/step9_portfolio.py 2025           # Step 9 (kriteria akhir)      (~20 s)
 python3 REVERSE/jana_laporan.py 2025
+python3 REVERSE/banding_tahun.py                  # selepas >= 2 tahun siap
 ```
 
 Tahun lain: kod dan parameter **sama tanpa ubah**, universe ikut bulan tahun itu —
-`python3 REVERSE/step1_run.py 2024` dan seterusnya. Jangan ubah `SPEC.md` kecuali sebagai pindaan
-bertarikh.
+tukar sahaja argumen tahun pada setiap skrip. Jangan ubah `SPEC.md` kecuali sebagai pindaan
+bertarikh. Siap setakat ini: **2025, 2024**.
 
 ## Data
 
@@ -48,5 +50,6 @@ guna Release `autotune-data` (A01 membuang saham meruap). Cache tempatan `REVERS
 
 ## Had fasa
 
-Gate 8.1 memerlukan pengesahan 2024–2021. Keputusan **tertinggi** selepas 2025 sahaja ialah
-**CALON**. Tiada signal boleh dilabel DITERIMA sebelum dua tahun lain disahkan.
+Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**. Dengan 2025 dan 2024 siap,
+setiap tahun hanya mempunyai satu tahun lain, jadi keputusan **tertinggi** kekal **CALON**.
+Tiada signal boleh dilabel DITERIMA sebelum sekurang-kurangnya satu tahun lagi disahkan.

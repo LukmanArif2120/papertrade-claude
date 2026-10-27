@@ -79,7 +79,8 @@ def main():
     for nm in lulus:
         mana |= sg[nm]
     ent = sig.loc[mana, ['ticker', 'tarikh']].drop_duplicates().reset_index(drop=True)
-    print(f'signal lulus Step 7: {len(lulus)} | kemunculan unik (ticker,tarikh): {len(ent)}')
+    n_unik = len(ent)
+    print(f'signal lulus Step 7: {len(lulus)} | kemunculan unik (ticker,tarikh): {n_unik}')
     disampel = False
     if len(ent) > a_.had_kemunculan:
         ent['bulan'] = ent.tarikh.dt.strftime('%Y-%m')
@@ -251,7 +252,8 @@ def main():
                         'pct_exit_terlalu_awal']].to_string(index=False))
     (CACHE / f'lulus7b_{th}.json').write_text(json.dumps(
         dict(ambang=perlu, rujukan={r.sistem: float(r.jangkaan_n) for _, r in ruj.iterrows()},
-             sistem=menang.sistem.tolist(), disampel=disampel), indent=1))
+             sistem=menang.sistem.tolist(), disampel=disampel, n_kemunculan_unik=n_unik,
+             n_kemasukan_diuji=int(sah.sum()), n_sistem=len(sis)), indent=1))
     print(f'[{time.time()-t0:.0f}s] siap')
 
 

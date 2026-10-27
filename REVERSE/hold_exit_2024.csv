@@ -1,0 +1,358 @@
+fasa,jenis,nama,n,pct_sambung_puncak_baru,purata_kedalaman,purata_hari_pulih,label,pct_menyala,median_hari_dari_puncak,median_pulangan_exit,median_pct_kekal,kadar_exit_palsu,subset,n_populasi,K_padu,K_gagal,lift,presisi,lift_presisi,kelas
+HOLD,kelas_pullback,AMARAN,4489,47.2,-16.56,11.4,CALON,,,,,,,,,,,,,
+HOLD,kelas_pullback,PULLBACK PASARAN,408,82.6,-9.03,10.4,CALON,,,,,,,,,,,,,
+HOLD,kelas_pullback,PULLBACK SIHAT,1034,88.4,-8.12,6.8,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=5%,Y=ema9",4,100.0,-5.0,5.8,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=5%,Y=ema21",1477,92.0,-7.26,6.5,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=5%,Y=ma50",2207,87.7,-8.47,8.3,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=7%,Y=ema9",1180,92.5,-5.91,5.6,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=7%,Y=ema21",1774,91.9,-7.07,6.5,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=7%,Y=ma50",2421,88.6,-8.25,8.0,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=10%,Y=ema9",2345,89.0,-7.15,7.3,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=10%,Y=ema21",2493,89.0,-7.52,7.5,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=10%,Y=ma50",2842,87.6,-8.3,8.3,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=12%,Y=ema9",2878,86.8,-7.86,8.2,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=12%,Y=ema21",2951,86.7,-8.06,8.2,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=12%,Y=ma50",3156,85.7,-8.57,8.6,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=15%,Y=ema9",3589,81.7,-8.97,9.1,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=15%,Y=ema21",3614,81.6,-9.05,9.2,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=15%,Y=ma50",3693,81.0,-9.29,9.2,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=20%,Y=ema9",4383,73.4,-10.47,9.8,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=20%,Y=ema21",4396,73.4,-10.52,9.8,CALON,,,,,,,,,,,,,
+HOLD,peraturan_hold,"X=20%,Y=ma50",4426,73.0,-10.62,9.8,CALON,,,,,,,,,,,,,
+EXIT,calon_exit,atr_lonjak_15x,1119,,,,CALON,38.3,14.0,-3.12,-16.2,47.0,,,,,,,,
+EXIT,calon_exit_SUPER PADU,atr_lonjak_15x,20,,,,CALON,,,76.31,58.8,65.0,,,,,,,,
+EXIT,calon_exit_PADU,atr_lonjak_15x,524,,,,CALON,,,9.37,33.6,52.7,,,,,,,,
+EXIT,calon_exit_BIASA,atr_lonjak_15x,575,,,,CALON,,,-10.24,-112.0,41.2,,,,,,,,
+EXIT,calon_exit_BERTANGGA,atr_lonjak_15x,82,,,,CALON,,,10.46,31.1,48.8,,,,,,,,
+EXIT,calon_exit_LONJAKAN,atr_lonjak_15x,481,,,,CALON,,,-8.21,-61.6,45.1,,,,,,,,
+EXIT,calon_exit_STABIL,atr_lonjak_15x,556,,,,CALON,,,-0.22,-0.6,48.4,,,,,,,,
+EXIT,calon_exit,bawah_ema21,2919,,,,CALON,100.0,-11.0,-0.83,-3.9,57.9,,,,,,,,
+EXIT,calon_exit_SUPER PADU,bawah_ema21,36,,,,CALON,,,0.18,0.1,83.3,,,,,,,,
+EXIT,calon_exit_PADU,bawah_ema21,1221,,,,CALON,,,0.01,0.1,87.9,,,,,,,,
+EXIT,calon_exit_BIASA,bawah_ema21,1662,,,,CALON,,,-1.11,-9.9,35.4,,,,,,,,
+EXIT,calon_exit_BERTANGGA,bawah_ema21,189,,,,CALON,,,-0.74,-2.3,95.2,,,,,,,,
+EXIT,calon_exit_LONJAKAN,bawah_ema21,1444,,,,CALON,,,-1.65,-10.9,51.9,,,,,,,,
+EXIT,calon_exit_STABIL,bawah_ema21,1286,,,,CALON,,,0.38,3.2,59.2,,,,,,,,
+EXIT,calon_exit,bawah_ema9,2920,,,,CALON,100.0,-15.0,-0.18,0.3,59.4,,,,,,,,
+EXIT,calon_exit_SUPER PADU,bawah_ema9,37,,,,CALON,,,2.08,1.7,94.6,,,,,,,,
+EXIT,calon_exit_PADU,bawah_ema9,1221,,,,CALON,,,0.64,2.3,90.3,,,,,,,,
+EXIT,calon_exit_BIASA,bawah_ema9,1662,,,,CALON,,,-0.61,-3.5,35.9,,,,,,,,
+EXIT,calon_exit_BERTANGGA,bawah_ema9,189,,,,CALON,,,-0.03,-0.1,97.9,,,,,,,,
+EXIT,calon_exit_LONJAKAN,bawah_ema9,1445,,,,CALON,,,-1.29,-7.6,52.6,,,,,,,,
+EXIT,calon_exit_STABIL,bawah_ema9,1286,,,,CALON,,,1.35,9.9,61.4,,,,,,,,
+EXIT,calon_exit,bawah_ma50,2881,,,,CALON,98.7,-7.0,-0.79,-4.1,55.8,,,,,,,,
+EXIT,calon_exit_SUPER PADU,bawah_ma50,32,,,,CALON,,,-0.03,-0.1,90.6,,,,,,,,
+EXIT,calon_exit_PADU,bawah_ma50,1193,,,,CALON,,,0.28,1.1,82.3,,,,,,,,
+EXIT,calon_exit_BIASA,bawah_ma50,1656,,,,CALON,,,-1.4,-14.5,36.1,,,,,,,,
+EXIT,calon_exit_BERTANGGA,bawah_ma50,187,,,,CALON,,,0.4,1.0,85.6,,,,,,,,
+EXIT,calon_exit_LONJAKAN,bawah_ma50,1428,,,,CALON,,,-1.58,-10.9,49.8,,,,,,,,
+EXIT,calon_exit_STABIL,bawah_ma50,1266,,,,CALON,,,-0.22,-1.3,58.3,,,,,,,,
+EXIT,calon_exit,chandelier_4atr,2646,,,,CALON,90.6,14.0,-2.55,-16.4,44.2,,,,,,,,
+EXIT,calon_exit_SUPER PADU,chandelier_4atr,24,,,,CALON,,,50.48,55.2,58.3,,,,,,,,
+EXIT,calon_exit_PADU,chandelier_4atr,1050,,,,CALON,,,7.59,28.6,56.4,,,,,,,,
+EXIT,calon_exit_BIASA,chandelier_4atr,1572,,,,CALON,,,-5.14,-61.0,35.9,,,,,,,,
+EXIT,calon_exit_BERTANGGA,chandelier_4atr,159,,,,CALON,,,12.52,40.9,51.6,,,,,,,,
+EXIT,calon_exit_LONJAKAN,chandelier_4atr,1306,,,,CALON,,,-5.96,-55.6,44.6,,,,,,,,
+EXIT,calon_exit_STABIL,chandelier_4atr,1181,,,,CALON,,,0.46,3.8,42.8,,,,,,,,
+EXIT,calon_exit,climax_25_15h,747,,,,CALON,25.6,-7.0,19.48,71.3,55.6,,,,,,,,
+EXIT,calon_exit_SUPER PADU,climax_25_15h,37,,,,CALON,,,18.8,20.8,100.0,,,,,,,,
+EXIT,calon_exit_PADU,climax_25_15h,628,,,,CALON,,,20.54,71.3,58.1,,,,,,,,
+EXIT,calon_exit_BIASA,climax_25_15h,82,,,,CALON,,,13.84,93.1,15.9,,,,,,,,
+EXIT,calon_exit_BERTANGGA,climax_25_15h,98,,,,CALON,,,23.09,58.4,76.5,,,,,,,,
+EXIT,calon_exit_LONJAKAN,climax_25_15h,380,,,,CALON,,,17.64,73.6,50.0,,,,,,,,
+EXIT,calon_exit_STABIL,climax_25_15h,269,,,,CALON,,,19.92,72.3,55.8,,,,,,,,
+EXIT,calon_exit,div_macd,2626,,,,CALON,89.9,-12.0,4.43,32.1,50.1,,,,,,,,
+EXIT,calon_exit_SUPER PADU,div_macd,34,,,,CALON,,,9.43,9.9,97.1,,,,,,,,
+EXIT,calon_exit_PADU,div_macd,1170,,,,CALON,,,6.11,24.6,83.3,,,,,,,,
+EXIT,calon_exit_BIASA,div_macd,1422,,,,CALON,,,3.25,43.8,21.6,,,,,,,,
+EXIT,calon_exit_BERTANGGA,div_macd,188,,,,CALON,,,6.82,26.1,87.8,,,,,,,,
+EXIT,calon_exit_LONJAKAN,div_macd,1228,,,,CALON,,,3.7,38.0,36.2,,,,,,,,
+EXIT,calon_exit_STABIL,div_macd,1210,,,,CALON,,,4.85,29.8,58.3,,,,,,,,
+EXIT,calon_exit,div_rsi,2345,,,,CALON,80.3,-11.0,5.96,42.3,49.9,,,,,,,,
+EXIT,calon_exit_SUPER PADU,div_rsi,33,,,,CALON,,,16.85,20.1,97.0,,,,,,,,
+EXIT,calon_exit_PADU,div_rsi,1106,,,,CALON,,,9.18,36.2,80.4,,,,,,,,
+EXIT,calon_exit_BIASA,div_rsi,1206,,,,CALON,,,3.81,48.9,20.6,,,,,,,,
+EXIT,calon_exit_BERTANGGA,div_rsi,187,,,,CALON,,,10.43,36.0,81.8,,,,,,,,
+EXIT,calon_exit_LONJAKAN,div_rsi,1038,,,,CALON,,,5.08,49.8,35.6,,,,,,,,
+EXIT,calon_exit_STABIL,div_rsi,1120,,,,CALON,,,6.02,38.7,57.7,,,,,,,,
+EXIT,calon_exit,gap_besar,374,,,,CALON,12.8,-4.0,24.99,81.0,51.3,,,,,,,,
+EXIT,calon_exit_SUPER PADU,gap_besar,31,,,,CALON,,,48.08,53.3,83.9,,,,,,,,
+EXIT,calon_exit_PADU,gap_besar,291,,,,CALON,,,25.86,82.5,55.0,,,,,,,,
+EXIT,calon_exit_BIASA,gap_besar,52,,,,CALON,,,13.59,83.3,11.5,,,,,,,,
+EXIT,calon_exit_BERTANGGA,gap_besar,47,,,,CALON,,,34.19,77.2,68.1,,,,,,,,
+EXIT,calon_exit_LONJAKAN,gap_besar,237,,,,CALON,,,21.67,81.2,46.4,,,,,,,,
+EXIT,calon_exit_STABIL,gap_besar,90,,,,CALON,,,29.71,79.0,55.6,,,,,,,,
+EXIT,calon_exit,hari_agihan,2481,,,,CALON,85.0,5.0,0.9,8.6,44.9,,,,,,,,
+EXIT,calon_exit_SUPER PADU,hari_agihan,31,,,,CALON,,,42.26,41.4,77.4,,,,,,,,
+EXIT,calon_exit_PADU,hari_agihan,1056,,,,CALON,,,8.96,34.4,65.1,,,,,,,,
+EXIT,calon_exit_BIASA,hari_agihan,1394,,,,CALON,,,-2.65,-25.4,28.8,,,,,,,,
+EXIT,calon_exit_BERTANGGA,hari_agihan,168,,,,CALON,,,10.59,35.2,63.7,,,,,,,,
+EXIT,calon_exit_LONJAKAN,hari_agihan,1195,,,,CALON,,,-2.0,-12.4,41.2,,,,,,,,
+EXIT,calon_exit_STABIL,hari_agihan,1118,,,,CALON,,,2.92,19.6,46.0,,,,,,,,
+EXIT,calon_exit,hist_neg3,2897,,,,CALON,99.2,-8.0,0.37,4.4,54.5,,,,,,,,
+EXIT,calon_exit_SUPER PADU,hist_neg3,36,,,,CALON,,,1.46,1.1,91.7,,,,,,,,
+EXIT,calon_exit_PADU,hist_neg3,1212,,,,CALON,,,2.09,8.1,85.1,,,,,,,,
+EXIT,calon_exit_BIASA,hist_neg3,1649,,,,CALON,,,-0.33,-0.3,31.2,,,,,,,,
+EXIT,calon_exit_BERTANGGA,hist_neg3,188,,,,CALON,,,2.42,8.6,92.6,,,,,,,,
+EXIT,calon_exit_LONJAKAN,hist_neg3,1428,,,,CALON,,,-1.0,-4.8,48.0,,,,,,,,
+EXIT,calon_exit_STABIL,hist_neg3,1281,,,,CALON,,,1.75,13.8,56.2,,,,,,,,
+EXIT,calon_exit,jauh_ma50_2x,1329,,,,CALON,45.5,-12.0,10.03,61.2,49.7,,,,,,,,
+EXIT,calon_exit_SUPER PADU,jauh_ma50_2x,30,,,,CALON,,,38.86,53.5,90.0,,,,,,,,
+EXIT,calon_exit_PADU,jauh_ma50_2x,752,,,,CALON,,,14.12,57.0,70.9,,,,,,,,
+EXIT,calon_exit_BIASA,jauh_ma50_2x,547,,,,CALON,,,6.51,70.8,18.3,,,,,,,,
+EXIT,calon_exit_BERTANGGA,jauh_ma50_2x,139,,,,CALON,,,15.88,56.5,77.0,,,,,,,,
+EXIT,calon_exit_LONJAKAN,jauh_ma50_2x,573,,,,CALON,,,7.96,61.6,43.5,,,,,,,,
+EXIT,calon_exit_STABIL,jauh_ma50_2x,617,,,,CALON,,,10.66,63.1,49.3,,,,,,,,
+EXIT,calon_exit,macd_bawah,2910,,,,CALON,99.7,-5.0,0.94,9.3,53.1,,,,,,,,
+EXIT,calon_exit_SUPER PADU,macd_bawah,36,,,,CALON,,,8.92,10.2,91.7,,,,,,,,
+EXIT,calon_exit_PADU,macd_bawah,1218,,,,CALON,,,4.01,15.8,83.3,,,,,,,,
+EXIT,calon_exit_BIASA,macd_bawah,1656,,,,CALON,,,-0.35,1.5,30.1,,,,,,,,
+EXIT,calon_exit_BERTANGGA,macd_bawah,189,,,,CALON,,,3.57,12.8,91.5,,,,,,,,
+EXIT,calon_exit_LONJAKAN,macd_bawah,1435,,,,CALON,,,-1.33,-7.0,47.0,,,,,,,,
+EXIT,calon_exit_STABIL,macd_bawah,1286,,,,CALON,,,3.31,22.6,54.4,,,,,,,,
+EXIT,calon_exit,pullback_amaran,2860,,,,CALON,97.9,18.0,-6.52,-40.0,68.9,,,,,,,,
+EXIT,calon_exit_SUPER PADU,pullback_amaran,33,,,,CALON,,,-3.93,-3.7,87.9,,,,,,,,
+EXIT,calon_exit_PADU,pullback_amaran,1182,,,,CALON,,,-1.73,-6.0,82.0,,,,,,,,
+EXIT,calon_exit_BIASA,pullback_amaran,1645,,,,CALON,,,-9.85,-119.0,59.1,,,,,,,,
+EXIT,calon_exit_BERTANGGA,pullback_amaran,187,,,,CALON,,,-0.41,-1.8,90.9,,,,,,,,
+EXIT,calon_exit_LONJAKAN,pullback_amaran,1428,,,,CALON,,,-8.9,-75.2,69.1,,,,,,,,
+EXIT,calon_exit_STABIL,pullback_amaran,1245,,,,CALON,,,-4.71,-26.1,65.3,,,,,,,,
+EXIT,calon_exit,rsi_70_60,2092,,,,CALON,71.6,1.0,6.67,42.8,51.1,,,,,,,,
+EXIT,calon_exit_SUPER PADU,rsi_70_60,36,,,,CALON,,,16.65,19.4,86.1,,,,,,,,
+EXIT,calon_exit_PADU,rsi_70_60,1101,,,,CALON,,,11.73,46.1,73.0,,,,,,,,
+EXIT,calon_exit_BIASA,rsi_70_60,955,,,,CALON,,,3.04,37.8,24.5,,,,,,,,
+EXIT,calon_exit_BERTANGGA,rsi_70_60,172,,,,CALON,,,13.19,42.7,81.4,,,,,,,,
+EXIT,calon_exit_LONJAKAN,rsi_70_60,867,,,,CALON,,,4.18,36.0,43.9,,,,,,,,
+EXIT,calon_exit_STABIL,rsi_70_60,1053,,,,CALON,,,7.5,46.2,52.0,,,,,,,,
+EXIT,calon_exit,trail_10pct,2678,,,,CALON,91.7,9.0,-2.73,-13.3,48.7,,,,,,,,
+EXIT,calon_exit_SUPER PADU,trail_10pct,37,,,,CALON,,,5.62,4.6,78.4,,,,,,,,
+EXIT,calon_exit_PADU,trail_10pct,1116,,,,CALON,,,7.04,29.3,65.6,,,,,,,,
+EXIT,calon_exit_BIASA,trail_10pct,1525,,,,CALON,,,-5.3,-61.2,35.5,,,,,,,,
+EXIT,calon_exit_BERTANGGA,trail_10pct,180,,,,CALON,,,10.04,36.8,62.8,,,,,,,,
+EXIT,calon_exit_LONJAKAN,trail_10pct,1368,,,,CALON,,,-5.3,-38.2,48.2,,,,,,,,
+EXIT,calon_exit_STABIL,trail_10pct,1130,,,,CALON,,,-0.1,0.2,46.9,,,,,,,,
+EXIT,calon_exit,trail_15pct,2071,,,,CALON,70.9,18.0,-7.28,-45.1,46.4,,,,,,,,
+EXIT,calon_exit_SUPER PADU,trail_15pct,37,,,,CALON,,,31.29,44.9,78.4,,,,,,,,
+EXIT,calon_exit_PADU,trail_15pct,855,,,,CALON,,,3.63,14.9,51.5,,,,,,,,
+EXIT,calon_exit_BIASA,trail_15pct,1179,,,,CALON,,,-10.39,-120.3,41.7,,,,,,,,
+EXIT,calon_exit_BERTANGGA,trail_15pct,148,,,,CALON,,,11.28,36.6,43.9,,,,,,,,
+EXIT,calon_exit_LONJAKAN,trail_15pct,1138,,,,CALON,,,-9.57,-76.8,49.3,,,,,,,,
+EXIT,calon_exit_STABIL,trail_15pct,785,,,,CALON,,,-4.95,-28.6,42.7,,,,,,,,
+EXIT,calon_exit,trail_2atr,2919,,,,CALON,100.0,2.0,0.14,3.6,52.4,,,,,,,,
+EXIT,calon_exit_SUPER PADU,trail_2atr,37,,,,CALON,,,0.76,1.0,81.1,,,,,,,,
+EXIT,calon_exit_PADU,trail_2atr,1220,,,,CALON,,,3.49,14.5,81.2,,,,,,,,
+EXIT,calon_exit_BIASA,trail_2atr,1662,,,,CALON,,,-1.04,-6.9,30.7,,,,,,,,
+EXIT,calon_exit_BERTANGGA,trail_2atr,189,,,,CALON,,,3.02,10.3,88.9,,,,,,,,
+EXIT,calon_exit_LONJAKAN,trail_2atr,1445,,,,CALON,,,-2.1,-14.1,48.4,,,,,,,,
+EXIT,calon_exit_STABIL,trail_2atr,1285,,,,CALON,,,2.35,19.4,51.7,,,,,,,,
+EXIT,calon_exit,trail_3atr,2874,,,,CALON,98.4,8.0,-0.99,-3.3,47.1,,,,,,,,
+EXIT,calon_exit_SUPER PADU,trail_3atr,33,,,,CALON,,,44.42,49.7,63.6,,,,,,,,
+EXIT,calon_exit_PADU,trail_3atr,1192,,,,CALON,,,5.83,24.6,66.5,,,,,,,,
+EXIT,calon_exit_BIASA,trail_3atr,1649,,,,CALON,,,-3.08,-32.5,32.7,,,,,,,,
+EXIT,calon_exit_BERTANGGA,trail_3atr,185,,,,CALON,,,9.33,36.0,66.5,,,,,,,,
+EXIT,calon_exit_LONJAKAN,trail_3atr,1422,,,,CALON,,,-4.0,-31.9,45.3,,,,,,,,
+EXIT,calon_exit_STABIL,trail_3atr,1267,,,,CALON,,,1.92,14.0,46.3,,,,,,,,
+EXIT,calon_exit,trail_8pct,2831,,,,CALON,97.0,5.0,-1.52,-5.9,49.9,,,,,,,,
+EXIT,calon_exit_SUPER PADU,trail_8pct,37,,,,CALON,,,0.23,0.3,91.9,,,,,,,,
+EXIT,calon_exit_PADU,trail_8pct,1174,,,,CALON,,,5.49,23.8,72.7,,,,,,,,
+EXIT,calon_exit_BIASA,trail_8pct,1620,,,,CALON,,,-3.42,-37.2,32.5,,,,,,,,
+EXIT,calon_exit_BERTANGGA,trail_8pct,188,,,,CALON,,,5.94,24.4,75.0,,,,,,,,
+EXIT,calon_exit_LONJAKAN,trail_8pct,1421,,,,CALON,,,-3.67,-24.8,47.8,,,,,,,,
+EXIT,calon_exit_STABIL,trail_8pct,1222,,,,CALON,,,0.8,6.3,48.5,,,,,,,,
+HOLD,common_unique,b:ad_tinggi_baru,68,,,,CALON,,,,,,S1,5931.0,1.28,0.98,1.309,63.24,1.114,TIDAK BERGUNA
+HOLD,common_unique,b:atas_awan,1887,,,,CALON,,,,,,S1,5931.0,47.92,10.65,4.499,85.53,1.506,UNIQUE
+HOLD,common_unique,b:atas_ema21,769,,,,CALON,,,,,,S1,5931.0,21.47,1.79,11.961,94.02,1.656,UNIQUE
+HOLD,common_unique,b:atas_ma50,1800,,,,CALON,,,,,,S1,5931.0,47.18,8.23,5.731,88.28,1.555,UNIQUE
+HOLD,common_unique,b:bb_squeeze,29,,,,CALON,,,,,,S1,5931.0,0.74,0.16,4.756,86.21,1.518,TIDAK BERGUNA
+HOLD,common_unique,b:breakout_52w,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:breakout_asas,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:bullish_engulfing,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:donchian20,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:donchian55,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:ema_crossback,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:gap_and_go,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:garis_rs_tinggi,3,,,,CALON,,,,,,S1,5931.0,0.06,0.04,1.522,66.67,1.174,TIDAK BERGUNA
+HOLD,common_unique,b:hammer,176,,,,CALON,,,,,,S1,5931.0,3.09,2.81,1.099,59.09,1.041,TIDAK BERGUNA
+HOLD,common_unique,b:inside_day,330,,,,CALON,,,,,,S1,5931.0,6.32,4.56,1.385,64.55,1.137,TIDAK BERGUNA
+HOLD,common_unique,b:macd_atas0,2394,,,,CALON,,,,,,S1,5931.0,60.72,13.62,4.459,85.42,1.504,TERAS
+HOLD,common_unique,b:macd_cross,3,,,,CALON,,,,,,S1,5931.0,0.03,0.08,0.38,33.33,0.587,TIDAK BERGUNA
+HOLD,common_unique,b:nr7,538,,,,CALON,,,,,,S1,5931.0,10.04,7.8,1.286,62.83,1.106,TIDAK BERGUNA
+HOLD,common_unique,b:obv_tinggi_baru,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:outside_day,583,,,,CALON,,,,,,S1,5931.0,10.42,9.05,1.151,60.21,1.06,TIDAK BERGUNA
+HOLD,common_unique,b:pasaran_naik,3431,,,,CALON,,,,,,S1,5931.0,66.12,46.98,1.408,64.91,1.143,COMMON BIASA
+HOLD,common_unique,b:pocket_pivot,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:psar_naik,901,,,,CALON,,,,,,S1,5931.0,24.58,2.85,8.631,91.9,1.618,UNIQUE
+HOLD,common_unique,b:pullback_dalam_7pct,3459,,,,CALON,,,,,,S1,5931.0,82.3,26.8,3.071,80.14,1.411,TERAS
+HOLD,common_unique,b:qqq_ma200,5658,,,,CALON,,,,,,S1,5931.0,99.26,90.32,1.099,59.08,1.04,COMMON BIASA
+HOLD,common_unique,b:qqq_ma50,3489,,,,CALON,,,,,,S1,5931.0,64.96,50.76,1.28,62.71,1.104,COMMON BIASA
+HOLD,common_unique,b:rsi_lintas50,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:rsi_lintas60,0,,,,CALON,,,,,,S1,5931.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:sektor_atas_ma50,1973,,,,CALON,,,,,,S1,5931.0,40.59,23.64,1.717,69.29,1.22,TIDAK BERGUNA
+HOLD,common_unique,b:sektor_naik,1973,,,,CALON,,,,,,S1,5931.0,40.59,23.64,1.717,69.29,1.22,TIDAK BERGUNA
+HOLD,common_unique,b:spy_ma200,5689,,,,CALON,,,,,,S1,5931.0,99.41,91.34,1.088,58.85,1.036,COMMON BIASA
+HOLD,common_unique,b:spy_ma50,3435,,,,CALON,,,,,,S1,5931.0,66.15,47.09,1.405,64.86,1.142,COMMON BIASA
+HOLD,common_unique,b:spy_ma50_menaik,5521,,,,CALON,,,,,,S1,5931.0,98.96,85.37,1.159,60.37,1.063,COMMON BIASA
+HOLD,common_unique,b:supertrend_naik,1819,,,,CALON,,,,,,S1,5931.0,49.17,6.36,7.731,91.04,1.603,UNIQUE
+HOLD,common_unique,b:tenkan_atas,2191,,,,CALON,,,,,,S1,5931.0,56.74,10.92,5.194,87.22,1.536,TERAS
+HOLD,common_unique,b:vcp,179,,,,CALON,,,,,,S1,5931.0,4.75,0.74,6.408,89.39,1.574,LANGKA
+HOLD,common_unique,b:ad_tinggi_baru,8,,,,CALON,,,,,,S2,728.0,1.08,1.17,0.921,75.0,0.98,TIDAK BERGUNA
+HOLD,common_unique,b:atas_awan,377,,,,CALON,,,,,,S2,728.0,62.66,16.37,3.827,92.57,1.21,TERAS
+HOLD,common_unique,b:atas_ema21,177,,,,CALON,,,,,,S2,728.0,31.06,2.34,13.278,97.74,1.277,UNIQUE
+HOLD,common_unique,b:atas_ma50,378,,,,CALON,,,,,,S2,728.0,64.45,11.11,5.801,94.97,1.241,TERAS
+HOLD,common_unique,b:bb_squeeze,5,,,,CALON,,,,,,S2,728.0,0.9,0.0,6.535,100.0,1.307,TIDAK BERGUNA
+HOLD,common_unique,b:breakout_52w,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:breakout_asas,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:bullish_engulfing,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:donchian20,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:donchian55,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:ema_crossback,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:gap_and_go,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:garis_rs_tinggi,1,,,,CALON,,,,,,S2,728.0,0.18,0.0,1.307,100.0,1.307,TIDAK BERGUNA
+HOLD,common_unique,b:hammer,15,,,,CALON,,,,,,S2,728.0,1.97,2.34,0.844,73.33,0.958,TIDAK BERGUNA
+HOLD,common_unique,b:inside_day,43,,,,CALON,,,,,,S2,728.0,6.64,3.51,1.893,86.05,1.125,TIDAK BERGUNA
+HOLD,common_unique,b:macd_atas0,469,,,,CALON,,,,,,S2,728.0,78.82,17.54,4.492,93.6,1.223,TERAS
+HOLD,common_unique,b:macd_cross,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:nr7,88,,,,CALON,,,,,,S2,728.0,12.39,11.11,1.115,78.41,1.025,TIDAK BERGUNA
+HOLD,common_unique,b:obv_tinggi_baru,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:outside_day,75,,,,CALON,,,,,,S2,728.0,10.95,8.19,1.338,81.33,1.063,TIDAK BERGUNA
+HOLD,common_unique,b:pasaran_naik,461,,,,CALON,,,,,,S2,728.0,69.66,42.69,1.632,84.16,1.1,SEDERHANA
+HOLD,common_unique,b:pocket_pivot,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:psar_naik,165,,,,CALON,,,,,,S2,728.0,28.19,4.68,6.025,95.15,1.244,UNIQUE
+HOLD,common_unique,b:pullback_dalam_7pct,565,,,,CALON,,,,,,S2,728.0,91.74,31.58,2.905,90.44,1.182,TERAS
+HOLD,common_unique,b:qqq_ma200,705,,,,CALON,,,,,,S2,728.0,99.64,87.72,1.136,78.72,1.029,COMMON BIASA
+HOLD,common_unique,b:qqq_ma50,463,,,,CALON,,,,,,S2,728.0,67.15,52.05,1.29,80.78,1.056,COMMON BIASA
+HOLD,common_unique,b:rsi_lintas50,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:rsi_lintas60,0,,,,CALON,,,,,,S2,728.0,0.0,0.0,0.0,,,TIDAK BERGUNA
+HOLD,common_unique,b:sektor_atas_ma50,296,,,,CALON,,,,,,S2,728.0,46.5,21.64,2.149,87.5,1.144,SEDERHANA
+HOLD,common_unique,b:sektor_naik,296,,,,CALON,,,,,,S2,728.0,46.5,21.64,2.149,87.5,1.144,SEDERHANA
+HOLD,common_unique,b:spy_ma200,708,,,,CALON,,,,,,S2,728.0,99.64,89.47,1.114,78.39,1.025,COMMON BIASA
+HOLD,common_unique,b:spy_ma50,462,,,,CALON,,,,,,S2,728.0,69.66,43.27,1.61,83.98,1.098,SEDERHANA
+HOLD,common_unique,b:spy_ma50_menaik,692,,,,CALON,,,,,,S2,728.0,99.46,80.7,1.232,80.06,1.046,COMMON BIASA
+HOLD,common_unique,b:supertrend_naik,395,,,,CALON,,,,,,S2,728.0,68.4,8.19,8.355,96.46,1.261,TERAS
+HOLD,common_unique,b:tenkan_atas,433,,,,CALON,,,,,,S2,728.0,73.79,12.87,5.735,94.92,1.241,TERAS
+HOLD,common_unique,b:vcp,41,,,,CALON,,,,,,S2,728.0,6.82,1.75,3.889,92.68,1.211,TIDAK BERGUNA
+EXIT,common_unique,q1:adx14,3735,,,,CALON,,,,,,S1,31626.0,11.41,17.24,0.662,89.96,0.966,TIDAK BERGUNA
+EXIT,common_unique,q1:atr_pct,5752,,,,CALON,,,,,,S1,31626.0,19.34,2.62,7.379,99.01,1.063,UNIQUE
+EXIT,common_unique,q1:bb_lebar,1931,,,,CALON,,,,,,S1,31626.0,6.35,2.8,2.264,96.84,1.04,TIDAK BERGUNA
+EXIT,common_unique,q1:cci20,3575,,,,CALON,,,,,,S1,31626.0,7.55,62.07,0.122,62.24,0.668,TIDAK BERGUNA
+EXIT,common_unique,q1:cerun_ma50,3513,,,,CALON,,,,,,S1,31626.0,10.48,19.68,0.532,87.82,0.943,TIDAK BERGUNA
+EXIT,common_unique,q1:cmf20,3779,,,,CALON,,,,,,S1,31626.0,10.86,26.71,0.407,84.63,0.909,TIDAK BERGUNA
+EXIT,common_unique,q1:hari_gc,4201,,,,CALON,,,,,,S1,31626.0,13.47,10.71,1.258,94.45,1.014,TIDAK BERGUNA
+EXIT,common_unique,q1:hari_macd_cross,1496,,,,CALON,,,,,,S1,31626.0,5.08,0.05,110.408,99.93,1.073,LANGKA
+EXIT,common_unique,q1:j_52w_tinggi,5486,,,,CALON,,,,,,S1,31626.0,15.94,36.41,0.438,85.56,0.919,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ema21,5527,,,,CALON,,,,,,S1,31626.0,12.81,80.6,0.159,68.28,0.733,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ema9,11182,,,,CALON,,,,,,S1,31626.0,30.92,95.49,0.324,81.43,0.874,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ma200,4687,,,,CALON,,,,,,S1,31626.0,13.52,32.46,0.416,84.94,0.912,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ma50,3423,,,,CALON,,,,,,S1,31626.0,8.37,44.05,0.19,72.01,0.773,TIDAK BERGUNA
+EXIT,common_unique,q1:julat10,5087,,,,CALON,,,,,,S1,31626.0,17.01,3.59,4.743,98.47,1.057,UNIQUE
+EXIT,common_unique,q1:julat20,1936,,,,CALON,,,,,,S1,31626.0,6.42,2.07,3.103,97.68,1.049,TIDAK BERGUNA
+EXIT,common_unique,q1:lapis,3503,,,,CALON,,,,,,S1,31626.0,10.2,22.99,0.444,85.73,0.921,TIDAK BERGUNA
+EXIT,common_unique,q1:macd_hist,3236,,,,CALON,,,,,,S1,31626.0,8.24,37.2,0.222,75.0,0.805,TIDAK BERGUNA
+EXIT,common_unique,q1:mdi,16730,,,,CALON,,,,,,S1,31626.0,56.17,8.6,6.533,98.88,1.062,TERAS
+EXIT,common_unique,q1:mfi14,2387,,,,CALON,,,,,,S1,31626.0,5.95,29.15,0.204,73.44,0.789,TIDAK BERGUNA
+EXIT,common_unique,q1:nisbah_atr,5486,,,,CALON,,,,,,S1,31626.0,16.83,24.28,0.693,90.38,0.97,TIDAK BERGUNA
+EXIT,common_unique,q1:pdi,3913,,,,CALON,,,,,,S1,31626.0,9.86,46.44,0.212,74.19,0.797,TIDAK BERGUNA
+EXIT,common_unique,q1:roc20,2750,,,,CALON,,,,,,S1,31626.0,6.68,36.0,0.186,71.53,0.768,TIDAK BERGUNA
+EXIT,common_unique,q1:rs_spy_12b,5041,,,,CALON,,,,,,S1,31626.0,15.14,26.8,0.565,88.43,0.95,TIDAK BERGUNA
+EXIT,common_unique,q1:rs_spy_6b,5004,,,,CALON,,,,,,S1,31626.0,14.81,29.47,0.503,87.19,0.936,TIDAK BERGUNA
+EXIT,common_unique,q1:rsi2,17108,,,,CALON,,,,,,S1,31626.0,50.7,100.0,0.507,87.29,0.937,COMMON BIASA
+EXIT,common_unique,q1:sektor_1b,4786,,,,CALON,,,,,,S1,31626.0,13.84,32.69,0.423,85.14,0.914,TIDAK BERGUNA
+EXIT,common_unique,q1:stoch_d,3014,,,,CALON,,,,,,S1,31626.0,6.64,48.69,0.136,64.86,0.697,TIDAK BERGUNA
+EXIT,common_unique,q1:stoch_k,6241,,,,CALON,,,,,,S1,31626.0,14.82,86.25,0.172,69.94,0.751,TIDAK BERGUNA
+EXIT,common_unique,q1:vol_n50,7883,,,,CALON,,,,,,S1,31626.0,24.96,24.41,1.023,93.26,1.002,TIDAK BERGUNA
+EXIT,common_unique,q1:vol_n50_5h,6261,,,,CALON,,,,,,S1,31626.0,19.73,20.64,0.956,92.83,0.997,TIDAK BERGUNA
+EXIT,common_unique,q1:vol_naik_turun20,2917,,,,CALON,,,,,,S1,31626.0,7.75,29.24,0.265,78.2,0.84,TIDAK BERGUNA
+EXIT,common_unique,q5:adx14,12384,,,,CALON,,,,,,S1,31626.0,40.08,26.62,1.506,95.32,1.024,TIDAK BERGUNA
+EXIT,common_unique,q5:atr_pct,6566,,,,CALON,,,,,,S1,31626.0,18.88,46.21,0.409,84.69,0.909,TIDAK BERGUNA
+EXIT,common_unique,q5:bb_lebar,13103,,,,CALON,,,,,,S1,31626.0,41.14,45.43,0.906,92.46,0.993,TIDAK BERGUNA
+EXIT,common_unique,q5:cci20,14977,,,,CALON,,,,,,S1,31626.0,50.49,4.97,10.168,99.28,1.066,TERAS
+EXIT,common_unique,q5:cerun_ma50,11752,,,,CALON,,,,,,S1,31626.0,37.82,28.28,1.337,94.77,1.018,TIDAK BERGUNA
+EXIT,common_unique,q5:cmf20,11410,,,,CALON,,,,,,S1,31626.0,37.51,16.69,2.247,96.82,1.04,SEDERHANA
+EXIT,common_unique,q5:hari_gc,7370,,,,CALON,,,,,,S1,31626.0,23.44,21.43,1.094,93.68,1.006,TIDAK BERGUNA
+EXIT,common_unique,q5:hari_macd_cross,3606,,,,CALON,,,,,,S1,31626.0,10.79,19.68,0.548,88.13,0.946,TIDAK BERGUNA
+EXIT,common_unique,q5:j_52w_tinggi,12592,,,,CALON,,,,,,S1,31626.0,42.76,0.0,13521.938,100.0,1.074,UNIQUE
+EXIT,common_unique,q5:j_ema21,17548,,,,CALON,,,,,,S1,31626.0,58.99,8.0,7.374,99.01,1.063,TERAS
+EXIT,common_unique,q5:j_ema9,8592,,,,CALON,,,,,,S1,31626.0,29.01,2.21,13.146,99.44,1.068,UNIQUE
+EXIT,common_unique,q5:j_ma200,10938,,,,CALON,,,,,,S1,31626.0,35.62,20.55,1.733,95.91,1.03,TIDAK BERGUNA
+EXIT,common_unique,q5:j_ma50,17377,,,,CALON,,,,,,S1,31626.0,57.71,17.52,3.294,97.81,1.05,TERAS
+EXIT,common_unique,q5:julat10,9453,,,,CALON,,,,,,S1,31626.0,28.57,47.77,0.598,89.01,0.956,TIDAK BERGUNA
+EXIT,common_unique,q5:julat20,10942,,,,CALON,,,,,,S1,31626.0,33.33,51.77,0.644,89.71,0.963,TIDAK BERGUNA
+EXIT,common_unique,q5:lapis,14581,,,,CALON,,,,,,S1,31626.0,47.43,28.14,1.686,95.8,1.029,TIDAK BERGUNA
+EXIT,common_unique,q5:macd_hist,13945,,,,CALON,,,,,,S1,31626.0,46.22,15.31,3.019,97.61,1.048,UNIQUE
+EXIT,common_unique,q5:mdi,3036,,,,CALON,,,,,,S1,31626.0,6.86,46.67,0.147,66.57,0.715,TIDAK BERGUNA
+EXIT,common_unique,q5:mfi14,17775,,,,CALON,,,,,,S1,31626.0,58.81,20.92,2.811,97.44,1.046,TERAS
+EXIT,common_unique,q5:nisbah_atr,7634,,,,CALON,,,,,,S1,31626.0,23.94,26.76,0.895,92.38,0.992,TIDAK BERGUNA
+EXIT,common_unique,q5:pdi,14613,,,,CALON,,,,,,S1,31626.0,48.71,12.23,3.983,98.18,1.054,UNIQUE
+EXIT,common_unique,q5:roc20,21167,,,,CALON,,,,,,S1,31626.0,69.46,32.69,2.125,96.64,1.038,TERAS
+EXIT,common_unique,q5:rs_spy_12b,8600,,,,CALON,,,,,,S1,31626.0,27.27,26.21,1.04,93.37,1.003,TIDAK BERGUNA
+EXIT,common_unique,q5:rs_spy_6b,8700,,,,CALON,,,,,,S1,31626.0,27.77,23.95,1.159,94.01,1.01,TIDAK BERGUNA
+EXIT,common_unique,q5:rsi2,5711,,,,CALON,,,,,,S1,31626.0,19.39,0.0,6132.766,100.0,1.074,UNIQUE
+EXIT,common_unique,q5:sektor_1b,9716,,,,CALON,,,,,,S1,31626.0,32.24,10.16,3.173,97.73,1.049,UNIQUE
+EXIT,common_unique,q5:stoch_d,19670,,,,CALON,,,,,,S1,31626.0,66.07,9.7,6.811,98.93,1.062,TERAS
+EXIT,common_unique,q5:stoch_k,10273,,,,CALON,,,,,,S1,31626.0,34.88,0.05,758.602,99.99,1.074,UNIQUE
+EXIT,common_unique,q5:vol_n50,4837,,,,CALON,,,,,,S1,31626.0,15.21,16.41,0.927,92.62,0.995,TIDAK BERGUNA
+EXIT,common_unique,q5:vol_n50_5h,6335,,,,CALON,,,,,,S1,31626.0,19.99,20.64,0.968,92.91,0.998,TIDAK BERGUNA
+EXIT,common_unique,q5:vol_naik_turun20,15059,,,,CALON,,,,,,S1,31626.0,49.62,20.51,2.42,97.04,1.042,SEDERHANA
+EXIT,common_unique,q1:adx14,226,,,,CALON,,,,,,S2,2494.0,7.94,14.7,0.54,73.01,0.876,TIDAK BERGUNA
+EXIT,common_unique,q1:atr_pct,51,,,,CALON,,,,,,S2,2494.0,2.36,0.48,4.891,96.08,1.153,TIDAK BERGUNA
+EXIT,common_unique,q1:bb_lebar,57,,,,CALON,,,,,,S2,2494.0,2.5,1.2,2.076,91.23,1.094,TIDAK BERGUNA
+EXIT,common_unique,q1:cci20,381,,,,CALON,,,,,,S2,2494.0,8.27,50.36,0.164,45.14,0.542,TIDAK BERGUNA
+EXIT,common_unique,q1:cerun_ma50,73,,,,CALON,,,,,,S2,2494.0,1.68,9.16,0.184,47.95,0.575,TIDAK BERGUNA
+EXIT,common_unique,q1:cmf20,218,,,,CALON,,,,,,S2,2494.0,6.88,18.07,0.381,65.6,0.787,TIDAK BERGUNA
+EXIT,common_unique,q1:hari_gc,471,,,,CALON,,,,,,S2,2494.0,20.06,13.01,1.541,88.54,1.062,TIDAK BERGUNA
+EXIT,common_unique,q1:hari_macd_cross,138,,,,CALON,,,,,,S2,2494.0,6.64,0.0,165.547,100.0,1.2,LANGKA
+EXIT,common_unique,q1:j_52w_tinggi,322,,,,CALON,,,,,,S2,2494.0,10.2,26.51,0.385,65.84,0.79,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ema21,559,,,,CALON,,,,,,S2,2494.0,11.83,75.42,0.157,44.01,0.528,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ema9,1065,,,,CALON,,,,,,S2,2494.0,32.03,96.14,0.333,62.54,0.75,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ma200,182,,,,CALON,,,,,,S2,2494.0,4.81,19.76,0.243,54.95,0.659,TIDAK BERGUNA
+EXIT,common_unique,q1:j_ma50,119,,,,CALON,,,,,,S2,2494.0,0.58,25.78,0.022,10.08,0.121,TIDAK BERGUNA
+EXIT,common_unique,q1:julat10,100,,,,CALON,,,,,,S2,2494.0,4.43,1.93,2.296,92.0,1.104,TIDAK BERGUNA
+EXIT,common_unique,q1:julat20,47,,,,CALON,,,,,,S2,2494.0,2.07,0.96,2.146,91.49,1.098,TIDAK BERGUNA
+EXIT,common_unique,q1:lapis,67,,,,CALON,,,,,,S2,2494.0,0.91,11.57,0.079,28.36,0.34,TIDAK BERGUNA
+EXIT,common_unique,q1:macd_hist,410,,,,CALON,,,,,,S2,2494.0,12.99,33.73,0.385,65.85,0.79,TIDAK BERGUNA
+EXIT,common_unique,q1:mdi,1237,,,,CALON,,,,,,S2,2494.0,57.0,12.53,4.549,95.8,1.149,TERAS
+EXIT,common_unique,q1:mfi14,226,,,,CALON,,,,,,S2,2494.0,6.73,20.72,0.325,61.95,0.743,TIDAK BERGUNA
+EXIT,common_unique,q1:nisbah_atr,281,,,,CALON,,,,,,S2,2494.0,9.76,18.8,0.52,72.24,0.867,TIDAK BERGUNA
+EXIT,common_unique,q1:pdi,313,,,,CALON,,,,,,S2,2494.0,8.18,34.46,0.237,54.31,0.652,TIDAK BERGUNA
+EXIT,common_unique,q1:roc20,133,,,,CALON,,,,,,S2,2494.0,2.31,20.48,0.113,36.09,0.433,TIDAK BERGUNA
+EXIT,common_unique,q1:rs_spy_12b,380,,,,CALON,,,,,,S2,2494.0,13.61,23.37,0.582,74.47,0.893,TIDAK BERGUNA
+EXIT,common_unique,q1:rs_spy_6b,203,,,,CALON,,,,,,S2,2494.0,6.16,18.07,0.341,63.05,0.756,TIDAK BERGUNA
+EXIT,common_unique,q1:rsi2,1537,,,,CALON,,,,,,S2,2494.0,53.97,100.0,0.54,73.0,0.876,COMMON BIASA
+EXIT,common_unique,q1:sektor_1b,413,,,,CALON,,,,,,S2,2494.0,14.48,26.99,0.536,72.88,0.874,TIDAK BERGUNA
+EXIT,common_unique,q1:stoch_d,329,,,,CALON,,,,,,S2,2494.0,8.42,37.11,0.227,53.19,0.638,TIDAK BERGUNA
+EXIT,common_unique,q1:stoch_k,726,,,,CALON,,,,,,S2,2494.0,18.18,83.86,0.217,52.07,0.625,TIDAK BERGUNA
+EXIT,common_unique,q1:vol_n50,636,,,,CALON,,,,,,S2,2494.0,25.97,23.13,1.123,84.91,1.019,TIDAK BERGUNA
+EXIT,common_unique,q1:vol_n50_5h,540,,,,CALON,,,,,,S2,2494.0,22.37,18.07,1.238,86.11,1.033,TIDAK BERGUNA
+EXIT,common_unique,q1:vol_naik_turun20,201,,,,CALON,,,,,,S2,2494.0,6.06,18.07,0.335,62.69,0.752,TIDAK BERGUNA
+EXIT,common_unique,q5:adx14,1102,,,,CALON,,,,,,S2,2494.0,46.61,32.05,1.454,87.93,1.055,TIDAK BERGUNA
+EXIT,common_unique,q5:atr_pct,783,,,,CALON,,,,,,S2,2494.0,29.0,43.37,0.669,77.01,0.924,TIDAK BERGUNA
+EXIT,common_unique,q5:bb_lebar,1166,,,,CALON,,,,,,S2,2494.0,47.52,42.89,1.108,84.73,1.016,TIDAK BERGUNA
+EXIT,common_unique,q5:cci20,978,,,,CALON,,,,,,S2,2494.0,45.94,5.54,8.288,97.65,1.171,UNIQUE
+EXIT,common_unique,q5:cerun_ma50,1615,,,,CALON,,,,,,S2,2494.0,69.5,40.96,1.697,89.47,1.073,SEDERHANA
+EXIT,common_unique,q5:cmf20,1009,,,,CALON,,,,,,S2,2494.0,43.82,23.61,1.856,90.29,1.083,TIDAK BERGUNA
+EXIT,common_unique,q5:hari_gc,504,,,,CALON,,,,,,S2,2494.0,20.68,17.83,1.16,85.32,1.023,TIDAK BERGUNA
+EXIT,common_unique,q5:hari_macd_cross,303,,,,CALON,,,,,,S2,2494.0,11.74,14.22,0.826,80.53,0.966,TIDAK BERGUNA
+EXIT,common_unique,q5:j_52w_tinggi,934,,,,CALON,,,,,,S2,2494.0,44.93,0.0,1120.441,100.0,1.2,UNIQUE
+EXIT,common_unique,q5:j_ema21,1440,,,,CALON,,,,,,S2,2494.0,67.2,10.36,6.485,97.01,1.164,TERAS
+EXIT,common_unique,q5:j_ema9,706,,,,CALON,,,,,,S2,2494.0,33.67,1.45,23.288,99.15,1.189,UNIQUE
+EXIT,common_unique,q5:j_ma200,1237,,,,CALON,,,,,,S2,2494.0,53.73,28.92,1.858,90.3,1.083,SEDERHANA
+EXIT,common_unique,q5:j_ma50,1699,,,,CALON,,,,,,S2,2494.0,76.48,26.27,2.912,93.58,1.123,TERAS
+EXIT,common_unique,q5:julat10,954,,,,CALON,,,,,,S2,2494.0,37.18,43.61,0.853,81.03,0.972,TIDAK BERGUNA
+EXIT,common_unique,q5:julat20,1123,,,,CALON,,,,,,S2,2494.0,44.06,49.88,0.883,81.57,0.978,TIDAK BERGUNA
+EXIT,common_unique,q5:lapis,1411,,,,CALON,,,,,,S2,2494.0,60.03,39.28,1.528,88.45,1.061,SEDERHANA
+EXIT,common_unique,q5:macd_hist,777,,,,CALON,,,,,,S2,2494.0,34.34,15.18,2.262,91.89,1.102,SEDERHANA
+EXIT,common_unique,q5:mdi,265,,,,CALON,,,,,,S2,2494.0,5.87,34.46,0.17,46.04,0.552,TIDAK BERGUNA
+EXIT,common_unique,q5:mfi14,1337,,,,CALON,,,,,,S2,2494.0,58.59,28.67,2.043,91.1,1.093,TERAS
+EXIT,common_unique,q5:nisbah_atr,858,,,,CALON,,,,,,S2,2494.0,34.49,33.98,1.015,83.57,1.002,TIDAK BERGUNA
+EXIT,common_unique,q5:pdi,1087,,,,CALON,,,,,,S2,2494.0,49.3,14.94,3.3,94.3,1.131,UNIQUE
+EXIT,common_unique,q5:roc20,1839,,,,CALON,,,,,,S2,2494.0,79.75,43.61,1.829,90.16,1.082,SEDERHANA
+EXIT,common_unique,q5:rs_spy_12b,962,,,,CALON,,,,,,S2,2494.0,40.45,29.16,1.387,87.42,1.049,TIDAK BERGUNA
+EXIT,common_unique,q5:rs_spy_6b,978,,,,CALON,,,,,,S2,2494.0,41.56,27.47,1.513,88.34,1.06,TIDAK BERGUNA
+EXIT,common_unique,q5:rsi2,347,,,,CALON,,,,,,S2,2494.0,16.69,0.0,416.266,100.0,1.2,UNIQUE
+EXIT,common_unique,q5:sektor_1b,673,,,,CALON,,,,,,S2,2494.0,30.06,11.57,2.599,92.87,1.114,SEDERHANA
+EXIT,common_unique,q5:stoch_d,1258,,,,CALON,,,,,,S2,2494.0,58.2,11.57,5.032,96.18,1.154,TERAS
+EXIT,common_unique,q5:stoch_k,610,,,,CALON,,,,,,S2,2494.0,29.34,0.0,731.765,100.0,1.2,UNIQUE
+EXIT,common_unique,q5:vol_n50,374,,,,CALON,,,,,,S2,2494.0,15.25,13.73,1.11,84.76,1.017,TIDAK BERGUNA
+EXIT,common_unique,q5:vol_n50_5h,508,,,,CALON,,,,,,S2,2494.0,20.49,19.76,1.037,83.86,1.006,TIDAK BERGUNA
+EXIT,common_unique,q5:vol_naik_turun20,1267,,,,CALON,,,,,,S2,2494.0,56.23,23.61,2.381,92.27,1.107,TERAS
