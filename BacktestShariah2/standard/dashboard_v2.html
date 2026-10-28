@@ -578,11 +578,18 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
 .tablewrap .sbn{display:none!important}
 .sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .sbn-nota .more{padding:4px 10px;font-size:.78rem}
-/* 28 Okt 2026 (permintaan pengguna): mod "papar semua lajur" — jadual kembali boleh diskrol mendatar, tiada lajur disembunyi */
-.tablewrap.skrolx,.tablewrap.tw-grd.skrolx{overflow-x:auto}
-.tablewrap.skrolx>table{width:auto;min-width:100%}
-.tablewrap.skrolx .frz{position:sticky;left:0;z-index:2;box-shadow:1px 0 0 var(--line)}
-.tablewrap.skrolx th.frz{z-index:3}
+/* 28 Okt 2026 (permintaan pengguna): mod "Semua lajur" — tiada lajur disembunyi dan TIADA skrol mendatar; jadual
+   kekal 100% lebar dan sel membalut. (Skrol mendatar dicuba dan dibuang: `overflow` pada .tablewrap menjadikan
+   tajuk melekit relatif kepada kotak skrol, jadi baris tajuk timbul di tengah jadual.) */
+.tablewrap.skrolx td,.tablewrap.skrolx th{overflow-wrap:break-word}
+/* lebar tetap dilonggarkan supaya 100% lebar mencukupi walaupun skrin sempit */
+@media (min-width:761px){
+  .tablewrap.tw-grd.skrolx td.grp,.tablewrap.tw-grd.skrolx td.grk,
+  body.padat .tablewrap.tw-grd.skrolx td.grp,body.padat .tablewrap.tw-grd.skrolx td.grk{width:auto;min-width:0;max-width:none}
+  .tablewrap.skrolx td.wrap,.tablewrap.skrolx td.syr,.tablewrap.skrolx td.name{min-width:0}
+  .tablewrap.skrolx td.wrap.lrg{min-width:104px;max-width:none}
+  .tablewrap.skrolx td.kdh{max-width:none}
+}
 /* ================= v103 (23 Okt 2026): mod Padat, pop timbul, gerakan, ulang tayang lorong 2, makmal ================= */
 /* Padat (desktop): satu barisan setiap baris; butiran .vv dalam pop timbul bila hover. Telefon tidak berubah (kad lipat). */
 @media (min-width:761px){
@@ -3555,7 +3562,6 @@ let LJS=true;try{LJS=localStorage.getItem('pbs3_lajur_semua')!=='0';}catch(e){}
 const bolehSkrol=w=>LJS&&!skrinKecil()&&/\btw-grd\b/.test(w.className);
 /* segmen di ATAS jadual (permintaan pengguna 28 Okt 2026: butang di bawah jadual terlalu sukar dicari) */
 const ljsSeg=()=>skrinKecil()?'':`<div class="seg" role="group" aria-label="Lajur jadual">${[['1','Semua lajur'],['0','Muat lebar skrin']].map(([v,t])=>`<button type="button" data-ljs="${v}" aria-pressed="${(LJS?'1':'0')===v}"${v==='1'?' data-tip="lajur_semua"':''}>${t}</button>`).join('')}</div>`;
-const NOTA_LJS='<p class="sbn-nota">Semua lajur dipapar — skrol jadual ke kanan untuk melihatnya. <button type="button" class="more" data-ljs="0">Muat ikut lebar skrin</button></p>';
 function muatLajur(){
   document.querySelectorAll('.tablewrap').forEach(w=>{
     const t=w.querySelector(':scope>table');if(!t)return;
@@ -3563,7 +3569,8 @@ function muatLajur(){
     const nt=w.nextElementSibling;if(nt&&nt.classList.contains('sbn-nota'))nt.remove();
     if(!w.offsetParent||(skrinKecil()&&/\btw-(lp|grd)\b/.test(w.className)))return;
     w.classList.toggle('skrolx',bolehSkrol(w));
-    if(bolehSkrol(w)){if(w.scrollWidth>w.clientWidth+1)w.insertAdjacentHTML('afterend',NOTA_LJS);return;}
+    /* mod "Semua lajur": lebar tetap dilonggarkan dan sel membalut dahulu (CSS .skrolx); lajur hanya disembunyi
+       jika jadual MASIH terkeluar selepas itu, supaya tiada kandungan terpotong di skrin sempit */
     const hr=t.tHead&&t.tHead.rows.length===1?t.tHead.rows[0]:null;if(!hr)return;
     const ths=[...hr.cells];if(ths.some(h=>h.colSpan>1))return;
     const lebih=()=>t.offsetWidth>w.clientWidth+1;if(!lebih())return;
