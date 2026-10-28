@@ -629,8 +629,9 @@ th.isi,td.isi{width:100%;padding:0;min-width:0}
      membalut sehingga 2 baris supaya lajur jadi sempit dan semua lajur muat tanpa skrol mendatar */
   body.padat .tablewrap tbody td{white-space:nowrap}
   /* hanya sel teks panjang dibenarkan membalut; Saham, Kaedah, tarikh dan nombor kekal satu baris supaya mudah dibaca */
-  body.padat .tablewrap tbody td.grd,body.padat .tablewrap tbody td.grp,body.padat .tablewrap tbody td.grk,
-  body.padat .tablewrap tbody td.name{white-space:normal;overflow-wrap:break-word}
+  body.padat .tablewrap tbody td.grd,body.padat .tablewrap tbody td.grp,body.padat .tablewrap tbody td.grk{white-space:normal;overflow-wrap:break-word}
+  /* nama panjang (kaedah, industri) dipotong satu baris dalam mod Padat: tanpa ini baris jadi 28px lawan 45px */
+  body.padat .tablewrap td.name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}
   body.padat .tablewrap tbody td .nw{white-space:nowrap}
   body.padat .tablewrap thead th{white-space:normal}
   /* 28 Okt 2026 (permintaan pengguna): lencana Pegang/Keluar/Tunggu kekal DI BAWAH peratus untung walaupun mod Padat */
