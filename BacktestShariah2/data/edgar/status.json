@@ -1,17 +1,10 @@
 {
  "hari_terakhir": "2026-10-26",
- "dijana": "2026-10-27 04:34 UTC",
- "hari": [
-  "2026-10-26"
- ],
- "ditambah": [
-  "RRC",
-  "EQT"
- ],
+ "dijana": "2026-10-28 00:45 UTC",
+ "hari": [],
+ "ditambah": [],
  "ditamatkan": [],
  "calon": 0,
- "gagal": [
-  "2026-10-27: https://www.sec.gov/Archives/edgar/daily-index/2026/QTR4/form.20261027.idx: HTTP 403"
- ],
+ "gagal": [],
  "ua_rahsia": true
 }
