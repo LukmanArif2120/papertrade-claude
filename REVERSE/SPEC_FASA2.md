@@ -469,3 +469,33 @@ yang sudah gagal ujian kebetulan hanya mencari kebetulan yang lebih besar.
 `step9_portfolio.jalankan()` fasa 1 **diguna semula, bukan difork**, supaya nombor setanding. Satu
 parameter `saiz` ditambah padanya; apabila ia tidak diberi, `bhg == BAHAGIAN` dan pemeriksaan
 `isfinite` mustahil menolaknya, jadi tingkah laku fasa 1 tidak berubah sama sekali.
+
+### 9.9 — 28 Okt 2026: gerbang §5 menuntut KEDUA-DUA tahun layak DAN isian awal selesai
+
+Pada 16:30 UTC rantaian automatik memulakan `step11` (penilaian §5, sekali sahaja) kerana gerbang
+yang saya kodkan dipenuhi: ketiga-tiga lajur mencapai 13 tahun layak, melepasi minimum 10 (§9.7).
+**Ia dihentikan sebelum sebarang keputusan ditulis.**
+
+Sebabnya: gerbang itu mengukur perkara yang salah. Liputan ketika itu hanya **1,081 daripada 2,237
+ticker (48%)** bagi 2025, dengan **1,530 CIK masih belum diisi**. §4.4 menetapkan penilaian
+dijalankan "atas populasi penuh", dan sebab yang dicatat di sana ialah **kecenderungan pemilihan**
+— universe lama ialah watchlist dan posisi C, iaitu nama yang lebih besar dan lebih cair. Pada 48%
+kecenderungan itu baru separuh dibetulkan.
+
+Bilangan tahun layak dan keterwakilan sampel ialah dua perkara berbeza. Ambang 3,000 setahun (§9.7)
+memastikan setiap tahun ada data **cukup banyak**; ia tidak mengatakan apa-apa tentang sama ada
+sampel itu **keratan-rentas universe REVERSE**. Gerbang lama hanya menyemak yang pertama.
+
+**Gerbang dikunci (kedua-dua syarat):**
+
+1. ≥ 10 tahun layak bagi setiap lajur SEC (§9.7, §9.5); **dan**
+2. isian awal selesai — `belum_diisi = 0` dalam `data/sec/status.json`.
+
+Pengesan dataran (12 kitaran × 10 min = 2 jam tanpa pertambahan **liputan mahupun `belum_diisi`**)
+kekal sebagai jaring keselamatan, supaya rantaian tidak tergantung jika isian awal berhenti maju.
+Jika ia mencetus, penilaian diteruskan dengan liputan yang ada dan laporan menyatakannya — tetapi
+itu keputusan terakhir, bukan pertama.
+
+Dicatat kerana ia hampir menjadi kesilapan yang paling mahal dalam kajian ini: tembakan pradaftar
+hanya ada satu, dan membelanjakannya atas sampel yang saya sendiri sudah dokumenkan sebagai berat
+sebelah akan menjadikan keputusannya tidak boleh dipercayai — tanpa cara untuk mengulanginya.

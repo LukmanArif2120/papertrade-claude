@@ -44,16 +44,22 @@ while :; do
   L=$(layak)
   baki=$(python3 -c "import json;print(json.load(open('BacktestShariah2/data/sec/status.json')).get('belum_diisi','?'))" 2>/dev/null || echo '?')
   LOG "tahun layak (sue tumbuh pecutan) = $L | belum_diisi=$baki"
+  # Gerbang = KEDUA-DUA syarat (§9.9): >= 10 tahun layak setiap lajur (§9.7) DAN isian awal
+  # selesai (§4.4 "populasi penuh"). Tahun layak sahaja tidak cukup: pada 28 Okt 16:30 gerbang
+  # lama dipenuhi (13 13 13) sedangkan liputan hanya 48% ticker dan 1,530 CIK belum diisi.
   kurang=$(echo "$L" | tr ' ' '\n' | awk '$1 < 10' | wc -l)
-  [ "$kurang" -eq 0 ] && { LOG "gerbang §9.7 dipenuhi: ketiga-tiga lajur >= 10 tahun layak"; break; }
-  if [ "$L" = "$lalu" ]; then
+  if [ "$kurang" -eq 0 ] && [ "$baki" = "0" ]; then
+    LOG "gerbang §9.9 dipenuhi: >= 10 tahun layak setiap lajur DAN isian awal selesai"
+    break
+  fi
+  if [ "$L $baki" = "$lalu" ]; then
     sama=$((sama + 1))
     LOG "liputan tidak bertambah ($sama/$DATARAN)"
     [ "$sama" -ge "$DATARAN" ] && { LOG "DATARAN: diteruskan dengan liputan yang ada; lajur tidak cukup akan dilapor BELUM BOLEH DINILAI"; break; }
   else
     sama=0
   fi
-  lalu=$L
+  lalu="$L $baki"
   sleep "$JEDA"
 done
 
