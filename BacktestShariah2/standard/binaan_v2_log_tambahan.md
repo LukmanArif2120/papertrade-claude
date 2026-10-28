@@ -423,3 +423,5 @@ Penemuan dan pembetulan:
 - **Terlalu rapat**: jarak mendatar sel mod Padat 3px → 5px.
 
 Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat** — tiada pertindihan, tiada ketidakpadanan jajaran tajuk/sel, tiada kandungan menyentuh tepi sel, tiada jadual terkeluar bekas. Satu nota tinggal: lajur "Kaedah" Analisis 230px sedangkan baris terpendek hanya 17% — lebar itu diperlukan oleh nama kaedah yang panjang dalam baris lain.
+
+**Dashboard v121 (artifact versi 130).** Permintaan pengguna: peratus lorong lebih besar daripada nombor lain dalam baris yang sama ("kecilkan dua size ni atau bagi sama"). Ukuran dalam render sebenar: `.lrp` 15.2px (0.95rem, peraturan `body.padat td.lrg .lrp`) lawan 13.76px bagi sel jadual, lajur R dan nombor gred. `.lrp` kini `font-size:inherit` dalam mod Padat — semua nombor dalam baris 13.76px; tebal dan warna hijau/merah kekal.
