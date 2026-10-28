@@ -236,10 +236,16 @@ def main():
             for nm in k[k.lulus_gate_keras == 'ya'].signal:
                 keras_multi[nm] = keras_multi.get(nm, 0) + 1
     byk = sorted([nm for nm, c in keras_multi.items() if c >= 2])
+    byk3 = sorted([nm for nm, c in keras_multi.items() if c >= 3])
+    n_terima = sum(int((kp[y].keputusan == 'DITERIMA').sum()) for y in tahun)
     A(f'\nSignal yang lulus gate keras dalam **≥ 2 tahun**: '
       f'**{len(byk)}**{" (" + ", ".join("`" + x + "`" for x in byk) + ")" if byk else ""}. '
-      f'Itulah sebab gate 8.1 yang diketatkan menghasilkan '
-      f'{sum(int((kp[y].keputusan == "DITERIMA").sum()) for y in tahun)} DITERIMA.\n')
+      f'Signal yang lulus dalam **≥ 3 tahun**: **{len(byk3)}**'
+      f'{" (" + ", ".join("`" + x + "`" for x in byk3) + ")" if byk3 else ""}.\n')
+    A(f'\nGate 8.1 menuntut ≥ 2 tahun **LAIN**, jadi satu signal perlu lulus gate keras dalam '
+      f'**≥ 3 tahun** untuk dinaik taraf. Keempat-empat signal di atas lulus dalam tepat 2 tahun '
+      f'(2020 dan 2025) — satu tahun pendek. Itulah sebab gate yang diketatkan menghasilkan '
+      f'**{n_terima} DITERIMA**.\n')
 
     A('\n## 10. Fail\n')
     A('Setiap tahun: `LAPORAN_<TAHUN>.md`, `runs_`, `monthly_summary_`, `skipped_`, '

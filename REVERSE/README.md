@@ -3,7 +3,8 @@
 Kajian **signal dan indikator**, bukan kaedah Mxx repo dan bukan penalaan parameter. Tiada Optuna.
 Arah terbalik daripada backtest: **hasil dahulu, signal kemudian**.
 
-- Spec dikunci sebelum larian pertama: **`SPEC.md`** (termasuk 9 pindaan bertarikh 27 Okt 2026).
+- **Keputusan penutup fasa 1: `KEPUTUSAN_FASA1.md`** (dijana `jana_keputusan_fasa1.py`) — baca ini dahulu.
+- Spec dikunci sebelum larian pertama: **`SPEC.md`** (12 pindaan bertarikh).
 - Laporan setiap tahun: **`LAPORAN_2025.md`**, **`LAPORAN_2024.md`**, **`LAPORAN_2023.md`**, **`LAPORAN_2022.md`**, **`LAPORAN_2021.md`**, **`LAPORAN_2020.md`** (dijana `jana_laporan.py`).
 - Setiap signal/kombinasi yang diuji: `log_ujian.csv`.
 - Imbasan pandang ke hadapan: `PANDANG_HADAPAN_<TAHUN>.md` (14 tarikh potong setiap tahun, 0 kegagalan).
@@ -51,13 +52,14 @@ guna Release `autotune-data` (A01 membuang saham meruap). Cache tempatan `REVERS
 
 ## Had fasa
 
-Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**, dan (pindaan §13.11) kelas tahun itu
-sendiri mesti TERAS/UNIQUE/LANGKA. Dengan enam tahun siap: **7 label DITERIMA** (3 pada 2020,
-1 pada 2023, 3 pada 2025); 0 pada 2021, 2022 dan 2024.
+Gate 8.1 diketatkan atas keputusan pengguna 28 Okt 2026 (pindaan §13.12): naik taraf ke DITERIMA
+memerlukan signal **lulus gate keras** dalam ≥ 2 tahun LAIN, bukan sekadar kelas yang sama.
+Hasilnya: **0 DITERIMA** merentas enam tahun; 11 CALON (6 pada 2020, 1 pada 2023, 4 pada 2025).
+Empat signal lulus gate keras dalam tepat 2 tahun (2020 dan 2025) — satu tahun pendek daripada
+syarat.
 
-**Baca amaran percanggahan dalam `BANDING_TAHUN.md` §7 sebelum menggunakan label itu.** Gate 8.1
-seperti ditulis hanya memerlukan *kelas* yang sama, bukan *keputusan* yang sama; kedua-dua signal
-DITERIMA itu sebenarnya DITOLAK pada 2022, 2023 DAN 2024 kerana gagal G4 (bootstrap) dan
-G5 (outlier). Enam tahun, dan **tiada satu signal pun mengekalkan kelas TERAS/UNIQUE/LANGKA pada
-kesemua enam tahun**.
+**Fasa 1 ditutup 28 Okt 2026.** Hipotesis ditolak: tiada signal entry berasaskan indikator harga
+menunjukkan kelebihan berulang. Sasaran +10% sebulan: 0 daripada 36 sistem-tahun. Portfolio
+berasaskan signal memberi pulangan lebih rendah daripada entri rawak (+12.76% lawan +13.94%
+setahun) dengan drawdown 10 mata peratus lebih dalam. Butiran penuh: `KEPUTUSAN_FASA1.md`.
 Mengetatkan gate 8.1 ialah keputusan pengguna, bukan perubahan spec selepas melihat hasil.

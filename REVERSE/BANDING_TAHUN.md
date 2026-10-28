@@ -2,7 +2,7 @@
 
 Dijana `REVERSE/banding_tahun.py`. Kod dan parameter **sama tanpa ubah** bagi setiap tahun; universe ikut bulan tahun berkenaan. Spec: `REVERSE/SPEC.md`.
 
-> **KAVEAT.** Tiada saham delist (survivorship) dalam mana-mana tahun. Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**; dengan 6 tahun siap, setiap tahun mempunyai 5 tahun lain, jadi naik taraf ke DITERIMA **mungkin** pada fasa ini. Jumlah signal DITERIMA setakat ini: **7**.
+> **KAVEAT.** Tiada saham delist (survivorship) dalam mana-mana tahun. Gate 8.1 memerlukan kelas yang sama dalam **≥ 2 tahun LAIN**; dengan 6 tahun siap, setiap tahun mempunyai 5 tahun lain, jadi naik taraf ke DITERIMA **mungkin** pada fasa ini. Jumlah signal DITERIMA setakat ini: **0**.
 
 ## 1. Run dan peristiwa
 
@@ -44,16 +44,16 @@ _(tiada baris)_
 | signal | kelas_2020 | lift_2020 | keputusan_2020 | kelas_2021 | lift_2021 | keputusan_2021 | kelas_2022 | lift_2022 | keputusan_2022 | kelas_2023 | lift_2023 | keputusan_2023 | kelas_2024 | lift_2024 | keputusan_2024 | kelas_2025 | lift_2025 | keputusan_2025 |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | rsi_lintas50&q5:julat20 | UNIQUE | 7.025 | DITOLAK | UNIQUE | 11.582 | DITOLAK | UNIQUE | 10.286 | DITOLAK | TIDAK BERGUNA | 0.694 | DITOLAK | UNIQUE | 9.615 | DITOLAK | UNIQUE | 23.76 | DITOLAK |
-| rsi_lintas50&q5:atr_pct | LANGKA | 6.499 | CALON | TIDAK BERGUNA | 0.789 | DITOLAK | UNIQUE | 17.427 | DITOLAK | UNIQUE | 13.024 | DITOLAK | UNIQUE | 15.148 | DITOLAK | UNIQUE | 19.602 | DITERIMA |
-| q5:julat20 | UNIQUE | 11.24 | DITERIMA | UNIQUE | 9.484 | DITOLAK | UNIQUE | 4.578 | DITOLAK | TIDAK BERGUNA | 1.194 | DITOLAK | UNIQUE | 9.778 | DITOLAK | UNIQUE | 11.88 | DITERIMA |
-| q5:atr_pct | UNIQUE | 9.813 | DITERIMA | TIDAK BERGUNA | 1.465 | DITOLAK | UNIQUE | 12.986 | DITOLAK | UNIQUE | 10.306 | DITOLAK | UNIQUE | 11.67 | DITOLAK | UNIQUE | 14.334 | DITERIMA |
-| q5:bb_lebar | UNIQUE | 10.491 | DITERIMA | UNIQUE | 7.523 | DITOLAK | UNIQUE | 4.337 | DITOLAK | TIDAK BERGUNA | 1.306 | DITOLAK | SEDERHANA | 2.063 | DITOLAK | TERAS | 9.876 | CALON |
+| rsi_lintas50&q5:atr_pct | LANGKA | 6.499 | CALON | TIDAK BERGUNA | 0.789 | DITOLAK | UNIQUE | 17.427 | DITOLAK | UNIQUE | 13.024 | DITOLAK | UNIQUE | 15.148 | DITOLAK | UNIQUE | 19.602 | CALON |
+| q5:julat20 | UNIQUE | 11.24 | CALON | UNIQUE | 9.484 | DITOLAK | UNIQUE | 4.578 | DITOLAK | TIDAK BERGUNA | 1.194 | DITOLAK | UNIQUE | 9.778 | DITOLAK | UNIQUE | 11.88 | CALON |
+| q5:atr_pct | UNIQUE | 9.813 | CALON | TIDAK BERGUNA | 1.465 | DITOLAK | UNIQUE | 12.986 | DITOLAK | UNIQUE | 10.306 | DITOLAK | UNIQUE | 11.67 | DITOLAK | UNIQUE | 14.334 | CALON |
+| q5:bb_lebar | UNIQUE | 10.491 | CALON | UNIQUE | 7.523 | DITOLAK | UNIQUE | 4.337 | DITOLAK | TIDAK BERGUNA | 1.306 | DITOLAK | SEDERHANA | 2.063 | DITOLAK | TERAS | 9.876 | CALON |
 | q5:j_ema9 | UNIQUE | 8.029 | DITOLAK | UNIQUE | 7.64 | DITOLAK | UNIQUE | 5.755 | DITOLAK | TIDAK BERGUNA | 0.472 | DITOLAK | TIDAK BERGUNA | 1.984 | DITOLAK | UNIQUE | 6.93 | DITOLAK |
 | pocket_pivot&q1:j_52w_tinggi | TIDAK BERGUNA | 4.906 | - | UNIQUE | 9.707 | DITOLAK | LANGKA | 9.984 | DITOLAK | LANGKA | 6.692 | DITOLAK | TIDAK BERGUNA | 0.238 | - | LANGKA | 5.765 | DITOLAK |
 | q1:j_52w_tinggi | UNIQUE | 4.357 | DITOLAK | TIDAK BERGUNA | 1.352 | DITOLAK | UNIQUE | 3.133 | DITOLAK | UNIQUE | 5.365 | DITOLAK | TIDAK BERGUNA | 0.556 | DITOLAK | UNIQUE | 4.044 | DITOLAK |
 | rsi_lintas50&q5:bb_lebar | UNIQUE | 7.731 | DITOLAK | UNIQUE | 10.327 | DITOLAK | UNIQUE | 8.432 | DITOLAK | TIDAK BERGUNA | 0.778 | DITOLAK | TIDAK BERGUNA | 1.19 | DITOLAK | UNIQUE | 21.06 | DITOLAK |
 | rsi_lintas50&q1:j_52w_tinggi | TIDAK BERGUNA | 2.59 | - | UNIQUE | 3.422 | DITOLAK | UNIQUE | 10.619 | DITOLAK | UNIQUE | 5.453 | DITOLAK | TIDAK BERGUNA | 0.265 | DITOLAK | UNIQUE | 6.237 | DITOLAK |
-| macd_cross&q1:cerun_ma50 | LANGKA | 6.245 | DITOLAK | TIDAK BERGUNA | 3.033 | DITOLAK | TIDAK BERGUNA | 0.361 | - | LANGKA | 5.285 | DITERIMA | TIDAK BERGUNA | 0.079 | - | LANGKA | 5.445 | DITOLAK |
+| macd_cross&q1:cerun_ma50 | LANGKA | 6.245 | DITOLAK | TIDAK BERGUNA | 3.033 | DITOLAK | TIDAK BERGUNA | 0.361 | - | LANGKA | 5.285 | CALON | TIDAK BERGUNA | 0.079 | - | LANGKA | 5.445 | DITOLAK |
 | ema_crossback&q5:bb_lebar | LANGKA | 5.353 | DITOLAK | UNIQUE | 9.279 | DITOLAK | TIDAK BERGUNA | 10.396 | - | TIDAK BERGUNA | 3.874 | - | LANGKA | 7.383 | DITOLAK | TIDAK BERGUNA | 7.92 | - |
 | q1:cerun_ma50 | UNIQUE | 4.774 | CALON | TIDAK BERGUNA | 1.867 | - | TIDAK BERGUNA | 1.124 | - | COMMON BIASA | 0.792 | DITOLAK | TIDAK BERGUNA | 0.476 | - | TERAS | 3.24 | DITOLAK |
 | macd_cross&q5:bb_lebar | LANGKA | 33.899 | DITOLAK | LANGKA | 7.722 | DITOLAK | TIDAK BERGUNA | 1.205 | DITOLAK | TIDAK BERGUNA | 0.306 | - | TIDAK BERGUNA | 0.397 | - | TIDAK BERGUNA | 10.024 | - |
@@ -245,21 +245,4 @@ Perbezaan SIHAT/PASARAN lawan AMARAN kekal besar pada kedua-dua tahun. Ini hasil
 
    Sasaran +10% sebulan (median): **0 daripada 48** kombinasi (sistem × tahun) mencapainya.
 
-7. **7 signal DITERIMA** (gate 8.1 dipenuhi) — tetapi lihat amaran percanggahan di bawah.
-
-   - 2020: `q5:julat20` DITERIMA, tetapi DITOLAK pada 2021, 2022, 2023, 2024 (gagal G4 bootstrap / G5 outlier di sana).
-
-   - 2020: `q5:atr_pct` DITERIMA, tetapi DITOLAK pada 2021, 2022, 2023, 2024 (gagal G4 bootstrap / G5 outlier di sana).
-
-   - 2020: `q5:bb_lebar` DITERIMA, tetapi DITOLAK pada 2021, 2022, 2023, 2024 (gagal G4 bootstrap / G5 outlier di sana).
-
-   - 2023: `macd_cross&q1:cerun_ma50` DITERIMA, tetapi DITOLAK pada 2020, 2021, 2025 (gagal G4 bootstrap / G5 outlier di sana).
-
-   - 2025: `rsi_lintas50&q5:atr_pct` DITERIMA, tetapi DITOLAK pada 2021, 2022, 2023, 2024 (gagal G4 bootstrap / G5 outlier di sana).
-
-   - 2025: `q5:atr_pct` DITERIMA, tetapi DITOLAK pada 2021, 2022, 2023, 2024 (gagal G4 bootstrap / G5 outlier di sana).
-
-   - 2025: `q5:julat20` DITERIMA, tetapi DITOLAK pada 2021, 2022, 2023, 2024 (gagal G4 bootstrap / G5 outlier di sana).
-
-
-> **AMARAN.** Gate 8.1 hanya memerlukan **kelas yang sama** dalam ≥ 2 tahun lain, bukan keputusan yang sama. Signal di atas lulus kerana kelas Step 4-nya konsisten, sedangkan tahun yang mengesahkannya menolaknya pada gate keras. Spec tidak diubah selepas melihat hasil; mengetatkan gate 8.1 (memerlukan CALON, bukan sekadar kelas sama) ialah keputusan pengguna.
+7. **Masih tiada DITERIMA walaupun gate 8.1 sudah boleh dinilai** (6 tahun siap, 5 tahun lain setiap satu). Signal gagal pada gate keras (G4 bootstrap / G5 outlier) atau kelasnya tidak sama merentas tahun.
