@@ -15,7 +15,9 @@
 set -u
 cd "$(dirname "$0")/.." || exit 1
 JEDA=600          # saat antara kitaran
-DATARAN=4         # kitaran tanpa pertambahan liputan sebelum diteruskan
+DATARAN=12        # kitaran tanpa pertambahan sebelum diteruskan (12 x 600s = 2 jam;
+                  # MESTI jauh lebih lama daripada satu larian isian awal ~45 min,
+                  # jika tidak rantaian berputus asa sebelum larian itu commit)
 LOG() { echo "[$(date -u +%H:%M:%S)] $*"; }
 
 layak() {   # cetak "sue tumbuh_hasil pecutan_hasil" = bilangan tahun layak setiap lajur
