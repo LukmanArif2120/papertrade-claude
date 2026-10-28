@@ -1,5 +1,5 @@
 # Ujian portfolio maya 10 slot (standard/portfolio_slot.py): had slot, satu posisi setiap saham, susunan RS, keluar lorong 2,
-# saiz ikut ekuiti, kawalan rawak deterministik.
+# saiz ikut ekuiti, kawalan rawak deterministik, saiz berskala risiko RISIKO_10.
 import os, sys, unittest
 import numpy as np, pandas as pd
 
@@ -84,6 +84,37 @@ class TestPortfolioSlot(unittest.TestCase):
         # gantung: tiada belian baharu kaedah itu mulai tarikh log
         R, _ = ps.bina(pd.DataFrame(rows, columns=kol), 'TOP1_10', HARI[:3], lambda s, d: 10.0, cfg1, {'M70': '2026-10-19'})
         self.assertEqual(set(R.tarikh_beli), {'2026-10-16'})
+
+    def test_risiko10_saiz_berskala_atr_dan_susunan_sama_rs(self):
+        """RISIKO_10: saiz = risiko/(K x ATR%), dihadkan SAIZ_MIN..SAIZ_MAKS; susunan calon sama dengan RS_10."""
+        rows = [baris('A', 90), baris('B', 80), baris('C', 70)]
+        atr = {'A': 0.25, 'B': 2.5, 'C': 50.0}          # ATR% sangat rendah / sederhana / sangat tinggi
+        R, E = ps.bina(calon(rows), 'RISIKO_10', HARI[:1], lambda s, d: 10.0,
+                       atrp=lambda s, d: atr[s])
+        saiz = dict(zip(R.saham, R.saiz_pct))
+        # A: 0.010/(4*0.0025) = 1.0 -> dihadkan SAIZ_MAKS; C: 0.010/(4*0.50) = 0.005 -> dihadkan SAIZ_MIN
+        self.assertAlmostEqual(saiz['A'], ps.SAIZ_MAKS * 100, places=4)
+        self.assertAlmostEqual(saiz['C'], ps.SAIZ_MIN * 100, places=4)
+        self.assertAlmostEqual(saiz['B'], ps.RISIKO / (ps.K_ATR * 0.025) * 100, places=4)
+        self.assertGreater(saiz['A'], saiz['B'])        # ATR rendah -> posisi lebih besar
+        self.assertGreater(saiz['B'], saiz['C'])
+        r_rs, _ = ps.bina(calon(rows), 'RS_10', HARI[:1], lambda s, d: 10.0)
+        self.assertEqual(list(R.saham), list(r_rs.saham))   # susunan dipasangkan dengan RS_10
+
+    def test_risiko10_atr_tiada_jatuh_balik_saiz_tetap(self):
+        rows = [baris('A', 90)]
+        R, _ = ps.bina(calon(rows), 'RISIKO_10', HARI[:1], lambda s, d: 10.0, atrp=lambda s, d: None)
+        self.assertAlmostEqual(float(R.saiz_pct.iloc[0]), ps.W * 100, places=4)
+        R2, _ = ps.bina(calon(rows), 'RISIKO_10', HARI[:1], lambda s, d: 10.0)   # atrp=None
+        self.assertAlmostEqual(float(R2.saiz_pct.iloc[0]), ps.W * 100, places=4)
+
+    def test_rs10_tidak_terjejas_oleh_atrp(self):
+        """Lorong sedia ada mesti kekal sama walaupun atrp dihantar."""
+        rows = [baris(f'S{i:02d}', 50 + i) for i in range(12)]
+        a, _ = ps.bina(calon(rows), 'RS_10', HARI[:2], lambda s, d: 10.0)
+        b, _ = ps.bina(calon(rows), 'RS_10', HARI[:2], lambda s, d: 10.0, atrp=lambda s, d: 5.0)
+        self.assertEqual(list(a.saham), list(b.saham))
+        self.assertTrue(np.allclose(a.saiz_pct.astype(float), b.saiz_pct.astype(float)))
 
     def test_log_gantung(self):
         import json, tempfile

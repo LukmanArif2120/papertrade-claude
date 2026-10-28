@@ -3,6 +3,14 @@ tiada wang sebenar. Dibina semula sepenuhnya daripada Lejar Penuh pada setiap la
   RS_10    — setiap sesi beli, slot kosong diisi dengan posisi lejar baharu yang RS pasarannya (data/rs/rs_pasaran.csv pada
              tarikh isyarat) tertinggi; RS tiada -> paling akhir.
   RAWAK_10 — kawalan: susunan rawak tetap (benih = tarikh beli), supaya kelebihan RS boleh diukur ke hadapan.
+  RISIKO_10 — susunan SAMA seperti RS_10, tetapi saiz berskala kemeruapan: saiz = risiko 1% ekuiti / (4 x ATR14%),
+             dihadkan 2%-25%. Dipasangkan dengan RS_10 supaya satu-satunya perbezaan ialah SAIZ (A/B bersih).
+             Asal: REVERSE/KEPUTUSAN_1B.md - dalam enam tahun data A02, saiz berskala risiko memperbaiki MDD
+             terbaik 6/6 tahun (-27%..-17% -> -10%..-6%) tetapi TIDAK memperbaiki pulangan. Lorong ini menguji
+             dapatan kawalan risiko itu ke hadapan. Nota: jika tunai tidak cukup, saiz dikecilkan ke tunai
+             (konvensyen portfolio_slot), bukan dilangkau seperti REVERSE/SPEC_1B.md §2. Kerana saiznya kecil,
+             10 slot tidak menghabiskan tunai: lorong ini berpendedahan LEBIH RENDAH daripada RS_10, jadi MDD-nya
+             mesti dibaca bersama lajur `tunai`, bukan sebagai perbandingan setara.
 Gabungan beku (22 Okt 2026, Fasa 4 item 13; data/analisis/gabungan_beku.json; hanya posisi dibeli >= mula_jejak):
   GABUNGAN_10     — kaedah gabungan beku, kuota slot setiap kaedah (slot tidak terpakai dikongsi), keluar ikut lorong
                     terbaik setiap kaedah (kaedah = keluar lorong 1 Lejar, tunai sesi berikutnya; henti = lorong 2).
@@ -33,8 +41,10 @@ KELUAR = os.environ.get('PORTFOLIO_SLOT_DIR', os.path.join(BS2, 'portfolio_slot'
 BEKU = os.environ.get('GABUNGAN_BEKU', os.path.join(BS2, 'data', 'analisis', 'gabungan_beku.json'))
 PAPAN = os.environ.get('PAPAN_ANALISIS', os.path.join(BS2, 'data', 'analisis', 'papan.json'))
 SLOT, W, KOS = 10, 0.10, 0.001
+RISIKO, K_ATR, SAIZ_MIN, SAIZ_MAKS = 0.010, 4.0, 0.02, 0.25   # RISIKO_10 (REVERSE/SPEC_1B.md)
 PORTFOLIO = {'RS_10': 'RS pasaran tertinggi', 'RAWAK_10': 'Rawak (kawalan)', 'GABUNGAN_10': 'Gabungan kaedah beku',
-             'TOP1_10': 'Kaedah #1 sahaja', 'RAWAK_KAEDAH_10': 'Kaedah rawak (kawalan gabungan)'}
+             'TOP1_10': 'Kaedah #1 sahaja', 'RAWAK_KAEDAH_10': 'Kaedah rawak (kawalan gabungan)',
+             'RISIKO_10': 'RS pasaran tertinggi, saiz berskala risiko'}
 BEKU_JENIS = ('GABUNGAN_10', 'TOP1_10', 'RAWAK_KAEDAH_10')
 L_POSISI = ['saham', 'id_kaedah', 'tarikh_isyarat', 'rs', 'tarikh_beli', 'harga_beli', 'saiz_pct', 'status', 'tarikh_keluar',
             'harga_keluar', 'untung_pct', 'harga_terkini', 'untung_semasa_pct', 'lorong']
@@ -62,7 +72,7 @@ def calon_lejar():
 
 def susun(G, jenis, tarikh):
     """Susunan calon satu sesi beli. G diisih saham, id_kaedah (tetap)."""
-    if jenis == 'RS_10':
+    if jenis in ('RS_10', 'RISIKO_10'):
         return G.assign(_k=G.rs.fillna(-1.0)).sort_values('_k', ascending=False, kind='stable')
     rng = np.random.default_rng(int(tarikh.replace('-', '')))
     return G.iloc[rng.permutation(len(G))]
@@ -98,9 +108,10 @@ def keluar_pada(p, d, sebelum_beli):
     return None
 
 
-def bina(P, jenis, hari, tutup, cfg=None, gantung=None):
+def bina(P, jenis, hari, tutup, cfg=None, gantung=None, atrp=None):
     """hari: senarai tarikh 'YYYY-MM-DD' (sesi dagangan); tutup(saham, tarikh) -> harga tutup atau None. cfg (portfolio beku):
-    dict(mula, kuota, lorong); gantung: {id_kaedah: tarikh mula tiada belian}. Pulang (posisi DataFrame, ekuiti DataFrame)."""
+    dict(mula, kuota, lorong); gantung: {id_kaedah: tarikh mula tiada belian}; atrp(saham, tarikh) -> ATR14% (RISIKO_10
+    sahaja). Pulang (posisi DataFrame, ekuiti DataFrame)."""
     tunai = eq = 1.0; pos = {}; rekod = []; kurva = []; gantung = gantung or {}
     if cfg:
         P = P[P.id_kaedah.isin(list(cfg['kuota'])) & (P.tarikh_beli >= cfg['mula'])]
@@ -118,9 +129,18 @@ def bina(P, jenis, hari, tutup, cfg=None, gantung=None):
             rekod.append(dict(p, status='Keluar', tarikh_keluar=t, harga_keluar=hk,
                               untung_pct=100 * (hk / p['harga_beli'] * (1 - KOS) / (1 + KOS) - 1)))
 
+    def pecahan(r):
+        """Pecahan ekuiti bagi satu posisi. RISIKO_10: risiko tetap / (K x ATR%), dihadkan; lain: W tetap."""
+        if jenis != 'RISIKO_10':
+            return W
+        a = atrp(r['saham'], d) if atrp else None
+        if a is None or not (a > 0):
+            return W                      # ATR tiada -> jatuh balik ke saiz tetap (direkod apa adanya)
+        return min(max(RISIKO / (K_ATR * a / 100.0), SAIZ_MIN), SAIZ_MAKS)
+
     def beli(r):
         nonlocal tunai
-        am = min(tunai, eq * W)
+        am = min(tunai, eq * pecahan(r))
         if am <= 1e-12:
             return False
         lor = cfg['lorong'][r['id_kaedah']] if cfg else 'henti'
@@ -214,7 +234,15 @@ def ringkasan(hasil, spy_mula, spy_akhir, hari, CFG=None):
             L.append(f"| {k} | {kl} | {len(E)} | "
                      + (f"{100 * (E.ekuiti.iloc[-1] - 1):+.2f} | {100 * (E.spy.iloc[-1] - 1):+.2f} |" if len(E) else '– | – |'))
     L += ['', 'Penilaian adil memerlukan sekurang-kurangnya 6–12 bulan (KAJIAN_PORTFOLIO.md). Kelebihan yang dicari: RS_10 mengatasi '
-          'RAWAK_10 dan SPY dengan MDD yang setanding; GABUNGAN_10 mengatasi TOP1_10, RAWAK_KAEDAH_10 dan SPY.']
+          'RAWAK_10 dan SPY dengan MDD yang setanding; GABUNGAN_10 mengatasi TOP1_10, RAWAK_KAEDAH_10 dan SPY.',
+          '', 'RISIKO_10 dipasangkan dengan RS_10: susunan calon SAMA, hanya saiz berbeza (risiko 1% ekuiti / 4×ATR14%, '
+          'dihadkan 2%–25%). Yang dicari di sini ialah MDD lebih baik pada pulangan yang setanding — bukan pulangan lebih '
+          'tinggi. Dalam enam tahun data A02 (REVERSE/KEPUTUSAN_1B.md) saiz berskala risiko memperbaiki MDD 6/6 tahun '
+          'tetapi memburukkan pulangan; jika pola itu berulang ke hadapan, ia pengesahan, bukan kegagalan.',
+          '', '**Baca MDD RISIKO_10 bersama lajur `tunai`.** Kerana saham momentum Shariah kebanyakannya ber-ATR tinggi, '
+          'saiznya kecil (2%–5%) dan 10 slot tidak menghabiskan tunai: sebahagian daripada MDD yang lebih baik datang '
+          'daripada **pendedahan yang lebih rendah**, bukan daripada saiz yang lebih bijak. Perbandingan yang adil ialah '
+          'MDD bagi setiap unit pendedahan; lihat `RISIKO_10_ekuiti.csv` lajur `tunai`.']
     return '\n'.join(L) + '\n'
 
 
@@ -226,6 +254,21 @@ def main():
     spy = idx['SPY'].close
     hari = [d.strftime('%Y-%m-%d') for d in spy.index if d.strftime('%Y-%m-%d') >= P.tarikh_beli.min()]
     cl = {t: g.close for t, g in fr.items()}
+
+    def _atr_pct(g):
+        tr = pd.concat([g.high - g.low, (g.high - g.close.shift(1)).abs(),
+                        (g.low - g.close.shift(1)).abs()], axis=1).max(axis=1)
+        a = tr.ewm(alpha=1 / 14.0, adjust=False, min_periods=14).mean()
+        return a / g.close.replace(0, np.nan) * 100.0
+
+    ap = {t: _atr_pct(g) for t, g in fr.items() if {'high', 'low', 'close'} <= set(g.columns)}
+
+    def atrp(s, d):
+        a = ap.get(s)
+        if a is None:
+            return None
+        v = a.asof(pd.Timestamp(d))
+        return float(v) if pd.notna(v) and v > 0 else None
 
     def tutup(s, d):
         c = cl.get(s)
@@ -239,7 +282,7 @@ def main():
     for k in PORTFOLIO:
         if k in BEKU_JENIS and k not in CFG:
             continue
-        R, E = bina(P, k, hari, tutup, CFG.get(k), GT)
+        R, E = bina(P, k, hari, tutup, CFG.get(k), GT, atrp)
         a = float(idx['SPY'].open.asof(pd.Timestamp(E.tarikh.iloc[0]))) if len(E) else None   # SPY tempoh sama (buka hari pertama)
         E['spy'] = [float(spy.asof(pd.Timestamp(d))) / a for d in E.tarikh] if a else np.nan
         R.to_csv(os.path.join(KELUAR, f'{k}_posisi.csv'), index=False, float_format='%.4f')
