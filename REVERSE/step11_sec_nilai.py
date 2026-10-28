@@ -82,12 +82,21 @@ def pulangan_dagang(th, ev):
 
 
 def sasaran(th, ev):
-    """Pulangan boleh didagangkan: cache fasa 1 jika ada, jika tidak kira laluan ringkas."""
+    """Pulangan boleh didagangkan: cache fasa 1 jika ada, jika tidak kira laluan ringkas.
+
+    Laluan ringkas dicache ke `.cache/pul_dagang_<th>.csv` supaya step11 boleh disambung jika ia
+    gagal separuh jalan: pengiraan 8 tahun baharu (~80 ribu peristiwa) tidak perlu diulang."""
     f = CACHE / f'hadapan_{th}.parquet'
     if f.exists():
         h = pd.read_parquet(f, columns=['ticker', 'tarikh', 'pul_henti2atr'])
         return h.rename(columns={'ticker': 'saham'})
-    return pulangan_dagang(th, ev)
+    c = CACHE / f'pul_dagang_{th}.csv'
+    if c.exists():
+        return pd.read_csv(c, parse_dates=['tarikh'])
+    d = pulangan_dagang(th, ev)
+    d.to_csv(c, index=False)
+    print(f'  pulangan dagangan {th} dikira dan dicache: {len(d)} baris')
+    return d
 
 
 def hasil_label(th):
