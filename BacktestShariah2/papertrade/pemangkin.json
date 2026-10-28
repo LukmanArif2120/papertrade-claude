@@ -261,67 +261,27 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
-    "tajuk": "The AI economy, Apple's iPhone Duo issues, and Meta partners with Nvidia",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/video/the-ai-economy-apples-iphone-duo-issues-and-meta-partners-with-nvidia-174040695.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Can Apple charge $38.99 for new Siri AI?",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/video/can-apple-charge-3899-for-new-siri-ai-173242587.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Steve Jobs Thought They Were ‘Ergonomically Terrible,’ but Apple Is Reportedly Betting You’ll Pay a Premium for the Touchscreen MacBook Pro",
+    "tajuk": "Nvidia Vs. Apple: Opposing Philosophies Racing Toward The Same $6 Trillion Goal",
     "tarikh": "2026-10-28",
     "selepas_tutup": false,
     "hari_lalu": 0,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/steve-jobs-thought-were-ergonomically-043036424.html?.tsrc=rss",
+    "url": "https://247wallst.com/investing/2026/10/28/nvidia-vs-apple-opposing-philosophies-racing-toward-the-same-6-trillion-goal/?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Anthropic Held More Cash Than Nvidia and Apple Combined Ahead of IPO",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://beincrypto.com/anthropic-cash-nvidia-apple-combined-ipo/?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "'We're Trading Them Like Baseball Cards': Mark Cuban Warns ‘Everything’s a Meme Stock’ as AAPL, GOOGL and MU Fuel Market Bubble Fears",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/were-trading-them-baseball-cards-220034335.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Apple (AAPL) Could Be 36% Overvalued As AI Launches Meet iPhone Duo Scrutiny",
-    "tarikh": "2026-10-27",
+    "tajuk": "Google and Apple Fined in Korea Over Prohibited App Market Practices",
+    "tarikh": "2026-10-28",
     "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/apple-aapl-could-36-overvalued-190540249.html?.tsrc=rss",
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/technology/articles/google-apple-fined-korea-over-095328221.html?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Apple Just Became the Most Valuable Company in the World. It Faces a Key iPhone Test.",
-    "tarikh": "2026-10-27",
+    "tajuk": "South Korea fines Google and Apple over unfair app market practices",
+    "tarikh": "2026-10-28",
     "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://www.barchart.com/story/news/8482828/apple-just-became-the-most-valuable-company-in-the-world-it-faces-a-key-iphone-test?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Instagram quietly makes major change for Apple TV users",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://www.thestreet.com/entertainment/instagram-quietly-makes-major-change-for-apple-tv-users?.tsrc=rss",
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/technology/articles/south-korea-fines-google-apple-095158608.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -401,14 +361,6 @@
     "selepas_tutup": false,
     "hari_lalu": 4,
     "url": "https://finance.yahoo.com/healthcare/articles/abbott-laboratories-abt-posted-higher-101300665.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Abbott (ABT) Stock Shrugs Off Q3 Results As Spin Off Looms",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": false,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/abbott-abt-stock-shrugs-off-151335233.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -761,14 +713,6 @@
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Analog Devices Recommends Shareholders Reject \"Mini-Tender\" Offer by Tutanota LLC",
-    "tarikh": "2026-10-21",
-    "selepas_tutup": false,
-    "hari_lalu": 7,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/analog-devices-recommends-shareholders-reject-130000645.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
     "tajuk": "Texas Instruments Raised Its Dividend Again. Can Analog Chips Keep Funding It?",
     "tarikh": "2026-10-26",
     "selepas_tutup": false,
@@ -878,6 +822,22 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "ADP (NASDAQ:ADP) reports Q3 CY2026 in line with expectations",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/adp-nasdaq-adp-reports-q3-121741475.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Automatic Data Processing (ADP) Tops Q1 Earnings and Revenue Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/automatic-data-processing-adp-tops-113502767.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Automatic Data Processing Earnings Ahead: What Past Reactions Say About The Stock",
     "tarikh": "2026-10-27",
@@ -1153,14 +1113,6 @@
     "selepas_tutup": false,
     "hari_lalu": 11,
     "url": "https://finance.yahoo.com/markets/stocks/articles/american-eagle-outfitters-aeo-behind-131502306.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Did Aerie Momentum Just Shift American Eagle's (AEO) Investment Narrative?",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/did-aerie-momentum-just-shift-121810146.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -1859,6 +1811,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Zacks.com featured highlights include Allegion, United Rentals and Clean Harbors",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-com-featured-highlights-allegion-075500278.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "What Makes Allegion (ALLE) a New Buy Stock",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -1928,14 +1888,6 @@
     "selepas_tutup": true,
     "hari_lalu": 6,
     "url": "https://www.tikr.com/blog/allegion-soars-11-as-q3-beat-fuels-raised-2026-outlook-on-steady-momentum?ref=yahoofinance&.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Why Allegion (ALLE) stock is up today",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": false,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/why-allegion-alle-stock-today-171753045.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -2178,12 +2130,12 @@
   "berita": [],
   "analisis": [
    {
-    "kategori": "naik_sasaran_besar",
-    "mata": 2,
+    "kategori": "naik_sasaran",
+    "mata": 1,
     "firma": "Susquehanna",
-    "tarikh": "2026-10-21",
-    "hari_lalu": 7,
-    "sasaran": 620.0,
+    "tarikh": "2026-10-28",
+    "hari_lalu": 0,
+    "sasaran": 650.0,
     "url": ""
    }
   ],
@@ -3031,6 +2983,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Is Antero Resources (AR) Undervalued After Its Fresh FERC Filings?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/antero-resources-ar-undervalued-fresh-110826703.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Antero Resources (AR) Stock May Be Below Fair Value On Earnings",
     "tarikh": "2026-10-27",
@@ -4125,14 +4085,6 @@
     "hari_lalu": 11,
     "url": "https://finance.yahoo.com/markets/stocks/articles/avient-avnt-names-ceo-stock-131110748.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Avient (AVNT) Stock Could Be 40% Below Fair Value After Raised Guidance",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/avient-avnt-stock-could-40-121212451.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -4210,6 +4162,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Avantor (NYSE:AVTR) reports upbeat Q3 2026",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/avantor-nyse-avtr-reports-upbeat-101345043.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "What to expect from Avantor’s (AVTR) Q3 earnings",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -4223,6 +4183,14 @@
     "selepas_tutup": false,
     "hari_lalu": 7,
     "url": "https://finance.yahoo.com/markets/stocks/articles/avantor-avtr-regaining-market-confidence-130703682.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Avantor, Inc. (AVTR) Surpasses Q3 Earnings and Revenue Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/avantor-inc-avtr-surpasses-q3-105002863.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -4451,6 +4419,14 @@
     "selepas_tutup": false,
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/markets/stocks/articles/axti-stock-q3-earnings-release-151100172.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "TTMI vs. AXTI: Which AI Infrastructure Stock Is the Better Pick?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/technology/ai/articles/ttmi-vs-axti-ai-infrastructure-104200336.html?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
@@ -5180,6 +5156,54 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "What Biogen Doubters Overlooked",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/biogen-doubters-overlooked-121318625.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Biogen (NASDAQ:BIIB) delivers impressive Q3 2026",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/biogen-nasdaq-biib-delivers-impressive-115452974.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Biogen Inc. (BIIB) Tops Q3 Earnings and Revenue Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/biogen-inc-biib-tops-q3-105002335.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Biogen beats Q3 estimates, raises guidance floor on growth",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/biogen-beats-q3-estimates-raises-104448778.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Biogen Has 'Returned To Growth,' Says CEO — What To Know About Its Report",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/m/cc12a091-ae18-37bc-aeed-89c45056519b/biogen-has-%27returned-to.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Biogen Crushes Earnings Estimates. As Old Blockbusters Fade, New Bets Pick Up the Slack.",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/m/a0b5a1af-a777-3690-9120-9d945f8dfe1c/biogen-crushes-earnings.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Biogen (BIIB) Nears Earnings As Investors Ask If The Stock Is Already Fully Valued",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -5209,46 +5233,6 @@
     "selepas_tutup": false,
     "hari_lalu": 2,
     "url": "https://finance.yahoo.com/healthcare/articles/biogen-q3-preview-growth-products-123800609.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Biogen (BIIB) Surges 5.3%: Is This an Indication of Further Gains?",
-    "tarikh": "2026-10-23",
-    "selepas_tutup": false,
-    "hari_lalu": 5,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/biogen-biib-surges-5-3-101900188.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Biogen +5% on BofA Price Target Hike Ahead of “Relatively Quiet” Q3",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": true,
-    "hari_lalu": 6,
-    "url": "https://www.tikr.com/blog/biogen-5-on-bofa-price-target-hike-ahead-of-relatively-quiet-q3?ref=yahoofinance&.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Biogen Inc. (BIIB) Expected to Beat Earnings Estimates: What to Know Ahead of Q3 Release",
-    "tarikh": "2026-10-21",
-    "selepas_tutup": false,
-    "hari_lalu": 7,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/biogen-inc-biib-expected-beat-130018257.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "The Zacks Analyst Blog Highlights BridgeBio Pharma, Intellia Therapeutics, Biogen and Viking Therapeutics",
-    "tarikh": "2026-10-21",
-    "selepas_tutup": false,
-    "hari_lalu": 7,
-    "url": "https://finance.yahoo.com/healthcare/articles/zacks-analyst-blog-highlights-bridgebio-120600877.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Biogen to Present New Data Across Nephrology Portfolio, Including Long-term EMPAVELI® (pegcetacoplan) Phase 3 Results, at American Society of Nephrology (ASN) Kidney Week",
-    "tarikh": "2026-10-19",
-    "selepas_tutup": false,
-    "hari_lalu": 9,
-    "url": "https://finance.yahoo.com/healthcare/articles/biogen-present-data-across-nephrology-113000312.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -5417,6 +5401,22 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Baker Hughes (BKR) Secures 1.1 GW AI Power And Cooling Order",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/baker-hughes-bkr-secures-1-111015239.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Baker Hughes Wins Significant Subsea Production Systems and Services Award for Eni’s Cronos Gas Development",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/baker-hughes-wins-significant-subsea-110000642.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Baker Hughes Q3 Profit Falls 33% as Orders Surge 31%",
     "tarikh": "2026-10-27",
@@ -6351,16 +6351,7 @@
  "BVN": {
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
-  "berita": [
-   {
-    "tajuk": "Lower Gold Guidance Could Be A Key Test For Buenaventura Stock (BVN)",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/lower-gold-guidance-could-key-071806858.html?.tsrc=rss",
-    "sumber": "yahoo"
-   }
-  ],
+  "berita": [],
   "analisis": [],
   "orang_dalam": {},
   "institusi": null,
@@ -6522,6 +6513,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Carrier Global (CARR) Q3 earnings: what to expect",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/carrier-global-carr-q3-earnings-102234815.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Carrier Global (CARR) Reports Next Week: Wall Street Expects Earnings Growth",
     "tarikh": "2026-10-22",
@@ -6906,14 +6905,6 @@
     "selepas_tutup": true,
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/markets/stocks/articles/constellation-energy-corporation-ceg-beats-204502657.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Constellation Energy Corporation (CEG) is Attracting Investor Attention: Here is What You Should Know",
-    "tarikh": "2026-10-23",
-    "selepas_tutup": false,
-    "hari_lalu": 5,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/constellation-energy-corporation-ceg-attracting-120004325.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -7491,6 +7482,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Clearwater Paper (CLW) Stock Price Sinks After Q3 Results Flag Fragile EBITDA",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/clearwater-paper-clw-stock-price-111454559.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Clearwater Paper (CLW) Q3 2026 Earnings Call Transcript",
     "tarikh": "2026-10-26",
@@ -8392,14 +8391,6 @@
     "hari_lalu": 2,
     "url": "https://finance.yahoo.com/technology/ai/articles/presidio-integrates-cisco-iq-presidio-200000869.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Cisco Expands Partner Opportunity with New Cisco 360 Program Updates, High Yield Customer Experience Offerings, and AI-Ready Innovations",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": true,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/technology/ai/articles/cisco-expands-partner-opportunity-cisco-200000859.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -8415,6 +8406,22 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "CoStar Group (CSGP) Stock Looks About Right Despite Its 62% Fall",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/costar-group-csgp-stock-looks-102217377.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "CoStar Group (CSGP) Could Be 14% Undervalued On Q3 Earnings Watch",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/costar-group-csgp-could-14-091209964.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "CoStar (CSGP) Q3 2026 Earnings Call Transcript",
     "tarikh": "2026-10-28",
@@ -8446,17 +8453,19 @@
     "hari_lalu": 3,
     "url": "https://finance.yahoo.com/markets/stocks/articles/costar-csgp-reports-q3-everything-035047027.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "AI Uncertainty Challenges CoStar’s (CSGP) Residential Property Platforms",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": false,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/real-estate/articles/ai-uncertainty-challenges-costar-csgp-132526471.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
-  "analisis": [],
+  "analisis": [
+   {
+    "kategori": "potong_sasaran",
+    "mata": -2,
+    "firma": "BTIG",
+    "tarikh": "2026-10-28",
+    "hari_lalu": 0,
+    "sasaran": 35.0,
+    "url": ""
+   }
+  ],
   "orang_dalam": {},
   "institusi": null,
   "earnings_lalu_tarikh": "2026-10-27",
@@ -8469,6 +8478,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "UniFirst Sinks 10% as FTC Reportedly Moves to Block $5.5 Billion Cintas Takeover",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://www.tikr.com/blog/unifirst-sinks-10-as-ftc-reportedly-moves-to-block-5-5-billion-cintas-takeover?ref=yahoofinance&.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Cintas Corporation Announces Quarterly Cash Dividend",
     "tarikh": "2026-10-27",
@@ -8790,6 +8807,30 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "If You'd Invested $10,000 in Chevron (CVX) Stock 1 Year Ago, Here's How Much You'd Have Today",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://www.fool.com/investing/2026/10/28/if-youd-invested-10000-in-chevron-cvx-stock-1-year/?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "TotalEnergies takes 25% of 26 Chevron-run offshore U.S. exploration leases",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/totalenergies-takes-25-26-chevron-095828165.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "United States: TotalEnergies Enters 26 Chevron-Operated Offshore Exploration Blocks, Strengthening the Successful U.S. Partnership Between Both Companies",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/united-states-totalenergies-enters-26-071500708.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "AI Power Stocks Fell 7% to 13% in a Week While Exxon and Chevron Just Hit Record Highs. Here's Which Side I'd Rather Own.",
     "tarikh": "2026-10-27",
     "selepas_tutup": true,
@@ -8819,14 +8860,6 @@
     "selepas_tutup": false,
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/markets/stocks/articles/chevron-eyes-q3-earnings-beat-111100910.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Chevron (CVX) Plans $13.8 Billion Vaca Muerta Expansion Through 2035",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/energy/articles/chevron-cvx-plans-13-8-151037904.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -9368,6 +9401,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "HF Sinclair (DINO) Q3 Earnings and Revenues Surpass Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/hf-sinclair-dino-q3-earnings-105003197.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "What Makes HF Sinclair (DINO) a Strong Momentum Stock: Buy Now?",
     "tarikh": "2026-10-22",
@@ -10451,6 +10492,22 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Is Emerson Electric (EMR) Undervalued Following Its Recent Run Ahead Of Earnings?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/emerson-electric-emr-undervalued-following-110840243.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Emerson (EMR) Stock May Be Fully Priced As Earnings Face A Premium",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/emerson-emr-stock-may-fully-091056151.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Emerson Electric (EMR) Outperforms Broader Market: What You Need to Know",
     "tarikh": "2026-10-27",
     "selepas_tutup": true,
@@ -10973,6 +11030,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Energy Transfer vs. Enterprise Products: Which High-Yield Payout Is Safer?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://247wallst.com/investing/2026/10/28/energy-transfer-vs-enterprise-products-which-high-yield-payout-is-safer/?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Is Distribution Hike Altering The Investment Case For Energy Transfer Stock (ET)?",
     "tarikh": "2026-10-24",
     "selepas_tutup": false,
@@ -11145,14 +11210,6 @@
     "selepas_tutup": true,
     "hari_lalu": 2,
     "url": "https://finance.yahoo.com/markets/stocks/articles/eaton-etn-outpaces-stock-market-204502327.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Eaton (ETN) Sees a More Significant Dip Than Broader Market: Some Facts to Know",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": true,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/eaton-etn-sees-more-significant-205003308.html?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
@@ -12472,7 +12529,16 @@
  "FSS": {
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
-  "berita": [],
+  "berita": [
+   {
+    "tajuk": "Federal Signal (FSS) reports Q3: everything you need to know ahead of earnings",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/federal-signal-fss-reports-q3-093434849.html?.tsrc=rss",
+    "sumber": "yahoo"
+   }
+  ],
   "analisis": [],
   "orang_dalam": {},
   "institusi": null,
@@ -12569,6 +12635,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Fortive (NYSE:FTV) reports bullish Q3 2026",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/fortive-nyse-ftv-reports-bullish-121142315.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Fortive (FTV) to report earnings tomorrow: here is what to expect",
     "tarikh": "2026-10-27",
@@ -12671,6 +12745,22 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "GE HealthCare Technologies (GEHC) Q3 Earnings and Revenues Beat Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/ge-healthcare-technologies-gehc-q3-105003433.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "GE HealthCare’s (NASDAQ:GEHC) Q3 2026 sales beat estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/ge-healthcare-nasdaq-gehc-q3-103124481.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "GEHC Ahead of Q3 Earnings: Can Strong Demand Offset Macro Headwinds?",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -12692,14 +12782,6 @@
     "selepas_tutup": true,
     "hari_lalu": 6,
     "url": "https://finance.yahoo.com/healthcare/articles/ge-healthcare-technologies-gehc-vs-204552089.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "GE HealthCare Technologies (GEHC) Could Be 19% Undervalued As Imaging Push Gains Ground",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/healthcare/articles/ge-healthcare-technologies-gehc-could-121737478.html?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
@@ -13320,6 +13402,30 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Garmin Gets Q3 Lift From Adventure Watches, Fitness Wearables",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/m/be7b36b7-6167-393b-9520-527d0e1f84f6/garmin-gets-q3-lift-from.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Garmin (GRMN) Q3 Earnings Beat Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/garmin-grmn-q3-earnings-beat-113504889.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Garmin announces third quarter 2026 results",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/garmin-announces-third-quarter-2026-110000628.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Garmin (GRMN) Q3 Earnings on the Horizon: Analysts' Insights on Key Performance Measures",
     "tarikh": "2026-10-23",
     "selepas_tutup": false,
@@ -13374,14 +13480,6 @@
     "hari_lalu": 2,
     "url": "https://finance.yahoo.com/markets/stocks/articles/garmin-gears-report-q3-earnings-133600941.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "DAKT or GRMN: Which Is the Better Value Stock Right Now?",
-    "tarikh": "2026-10-21",
-    "selepas_tutup": false,
-    "hari_lalu": 7,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/dakt-grmn-better-value-stock-144003304.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -13392,6 +13490,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "FCC Approves $11.5 Billion Amazon Leo Acquisition Of Globalstar",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://www.tikr.com/blog/amazon-amzn-stock-fcc-approves-leo-globalstar-acquisition?ref=yahoofinance&.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "FCC Authorizes Globalstar’s Third-Generation C-3 System for Operations in the United States",
     "tarikh": "2026-10-19",
@@ -13422,6 +13528,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "GSK (GSK) Q3 Earnings and Revenues Beat Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/gsk-gsk-q3-earnings-revenues-101002997.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "What Could GSK (LSE:GSK) Oncology Progress Mean For Investors?",
     "tarikh": "2026-10-27",
@@ -13460,14 +13574,6 @@
     "selepas_tutup": false,
     "hari_lalu": 7,
     "url": "https://finance.yahoo.com/markets/stocks/articles/analysts-estimate-gsk-gsk-report-130012807.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "What Is GSK (LSE:GSK) Telling Investors With Its New Lung Cancer Data?",
-    "tarikh": "2026-10-19",
-    "selepas_tutup": true,
-    "hari_lalu": 9,
-    "url": "https://finance.yahoo.com/healthcare/articles/gsk-lse-gsk-telling-investors-232418537.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -13524,6 +13630,30 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Hayward (NYSE:HAYW) delivers strong Q3 2026 numbers, stock soars",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/hayward-nyse-hayw-delivers-strong-114408466.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Hayward Holdings Reports Third Quarter Fiscal Year 2026 Financial Results and Increases 2026 Guidance",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/hayward-holdings-reports-third-quarter-110100472.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Q3 Earnings Ahead Could Change The Bull Case For Hayward Holdings Stock",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/q3-earnings-ahead-could-change-091000676.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Hayward Holdings, Inc. (HAYW) Was Down in Q3 2026, but This Fund Remains Confident in Its Investment Thesis",
     "tarikh": "2026-10-27",
@@ -13808,14 +13938,6 @@
     "hari_lalu": 7,
     "url": "https://finance.yahoo.com/technology/articles/hp-brings-ferrari-creative-vision-193000006.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Earnings Beat Could Be A Big Test For HP Stock (HPQ)",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/earnings-beat-could-big-test-081652414.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -14027,6 +14149,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Can Hawkins (HWKN) Stock Sustain Its Q2 Earnings Rally?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/hawkins-hwkn-stock-sustain-q2-121003745.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Hawkins (HWKN) Stock Looks Fully Priced On Current Cash Flow",
     "tarikh": "2026-10-27",
@@ -14683,19 +14813,11 @@
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Can Slightly Higher Processor Revenues Aid Intel's Q3 Earnings?",
+    "tajuk": "NVIDIA Just Took CPU Business From AMD and Intel. What It Does to the Target",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
     "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/slightly-higher-processor-revenues-aid-133500743.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Can Higher Data Center Revenues Propel Intel's Q3 Earnings?",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/technology/ai/articles/higher-data-center-revenues-propel-133400434.html?.tsrc=rss",
+    "url": "https://247wallst.com/investing/2026/10/27/nvidia-just-took-cpu-business-from-amd-and-intel-what-it-does-to-the-target/?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -14874,6 +14996,22 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Iovance Biotherapeutics (IOVA) Stock Could Look Fully Priced Despite ESMO Data",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/iovance-biotherapeutics-iova-stock-could-091521982.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Iovance Biotherapeutics (IOVA) Could Be 19% Undervalued After Phase 2 Melanoma Data",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/iovance-biotherapeutics-iova-could-19-081338192.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Iovance Biotherapeutics to Report Third Quarter 2026 Financial Results and Corporate Updates on Thursday, November 5, 2026",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -15042,6 +15180,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Is Intuitive Surgical (ISRG) Undervalued As Upbeat Earnings Lifted Sentiment?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/intuitive-surgical-isrg-undervalued-upbeat-080732235.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Is It Worth Investing in Intuitive Surgical (ISRG) Based on Wall Street's Bullish Views?",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -15066,27 +15212,11 @@
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Intuitive Surgical (ISRG) Stock Faces A Q3 Earnings Valuation Reality Check",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": false,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/intuitive-surgical-isrg-stock-faces-101037493.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
     "tajuk": "Intuitive Surgical (ISRG) is an Incredible Growth Stock: 3 Reasons Why",
     "tarikh": "2026-10-26",
     "selepas_tutup": false,
     "hari_lalu": 2,
     "url": "https://finance.yahoo.com/markets/stocks/articles/intuitive-surgical-isrg-incredible-growth-154502723.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "2 Healthcare Stocks to Buy After Crushing Q3 Earnings Expectations: ELV & ISRG",
-    "tarikh": "2026-10-21",
-    "selepas_tutup": true,
-    "hari_lalu": 7,
-    "url": "https://finance.yahoo.com/healthcare/articles/2-healthcare-stocks-buy-crushing-204600686.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -15607,6 +15737,38 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Johnson Controls (JCI) Stock Looks Fully Priced Following Its 235% Run",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/johnson-controls-jci-stock-looks-101606364.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "What Is Behind The Move In Johnson Controls Stock?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://www.trefis.com/stock/jci/articles/621057/what-is-behind-the-move-in-johnson-controls-stock/2026-10-28?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Johnson Controls Stock Jumps Into Focus After Earnings Beat And Higher 2027 Guidance",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/johnson-controls-stock-jumps-focus-091519950.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Johnson Controls International (JCI) Earnings Beat Puts Fair Value Back In Focus",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/johnson-controls-international-jci-earnings-081331217.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "What Johnson Controls International (JCI) Said on Its Q4 Earnings Call",
     "tarikh": "2026-10-27",
     "selepas_tutup": true,
@@ -15653,41 +15815,19 @@
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/markets/stocks/articles/johnson-controls-reports-q4-fy26-105500336.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Johnson Controls International Reports Soon: How Has The Stock Reacted To Past Earnings?",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": true,
-    "hari_lalu": 2,
-    "url": "https://www.trefis.com/stock/jci/articles/620308/johnson-controls-international-reports-soon-how-has-the-stock-reacted-to-past-earnings/2026-10-26?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Truelink Capital Signs Definitive Agreement to Acquire Johnson Controls' Global Intrusion Products Business",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": true,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/truelink-capital-signs-definitive-agreement-200500026.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Johnson Controls to Post Q4 Earnings: Is a Beat in the Cards?",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/johnson-controls-post-q4-earnings-140700549.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Johnson Controls (JCI) Q3 earnings: what to expect",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/johnson-controls-jci-q3-earnings-085447047.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
-  "analisis": [],
+  "analisis": [
+   {
+    "kategori": "naik_sasaran",
+    "mata": 1,
+    "firma": "Baird",
+    "tarikh": "2026-10-28",
+    "hari_lalu": 0,
+    "sasaran": 172.0,
+    "url": ""
+   }
+  ],
   "orang_dalam": {},
   "institusi": null,
   "earnings_lalu_tarikh": "2026-10-27",
@@ -15823,6 +15963,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "The Zacks Analyst Blog Highlights Eli Lilly, Novartis, Johnson & Johnson and AbbVie",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/zacks-analyst-blog-highlights-eli-072900817.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Johnson & Johnson (JNJ) Stock Trades At A Discount Following Its 97% Run",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -15836,14 +15984,6 @@
     "selepas_tutup": false,
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/healthcare/articles/johnson-johnson-host-enterprise-business-113000276.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "What Do Johnson & Johnson (JNJ) Cancer Trial Wins Mean For Its Stock?",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/healthcare/articles/johnson-johnson-jnj-cancer-trial-191205816.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -16143,6 +16283,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Kirby (NYSE:KEX) delivers impressive Q3 2026",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/kirby-nyse-kex-delivers-impressive-111837465.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "What to expect from Kirby’s (KEX) Q3 earnings",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -16354,7 +16502,17 @@
     "sumber": "yahoo"
    }
   ],
-  "analisis": [],
+  "analisis": [
+   {
+    "kategori": "naik_sasaran",
+    "mata": 1,
+    "firma": "BTIG",
+    "tarikh": "2026-10-28",
+    "hari_lalu": 0,
+    "sasaran": 30.0,
+    "url": ""
+   }
+  ],
   "orang_dalam": {},
   "institusi": null,
   "earnings_lalu_tarikh": "2026-10-27",
@@ -17098,19 +17256,19 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Does Lowered Revenue Outlook Change The Bull Case For Lululemon Stock (LULU)?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/does-lowered-revenue-outlook-change-120629334.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Lululemon (LULU) Suffers a Larger Drop Than the General Market: Key Insights",
     "tarikh": "2026-10-23",
     "selepas_tutup": true,
     "hari_lalu": 5,
     "url": "https://finance.yahoo.com/markets/stocks/articles/lululemon-lulu-suffers-larger-drop-204503736.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Lululemon (LULU) Stock Looks Overvalued Following Its 78% Five Year Slump",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": false,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/lululemon-lulu-stock-looks-overvalued-131614165.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -17749,7 +17907,16 @@
  "MGY": {
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
-  "berita": [],
+  "berita": [
+   {
+    "tajuk": "Magnolia Oil & Gas Announces Quarterly Dividend",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/magnolia-oil-gas-announces-quarterly-110000569.html?.tsrc=rss",
+    "sumber": "yahoo"
+   }
+  ],
   "analisis": [],
   "orang_dalam": {},
   "institusi": null,
@@ -17763,6 +17930,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Mohawk Industries (MHK) to report earnings tomorrow: here is what to expect",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/mohawk-industries-mhk-report-earnings-070234345.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Will Mohawk Industries (MHK) Beat Estimates Again in Its Next Earnings Report?",
     "tarikh": "2026-10-22",
@@ -18189,6 +18364,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Here Are Wednesday’s Top Wall Street Analyst Research Calls: Enphase Energy, F5, Marvell Technology, MSG Rangers, Pentair, Silicon Motion Technology, Spotify Technology, Texas Instruments, Whirlpool,",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://247wallst.com/investing/2026/10/28/here-are-wednesdays-top-wall-street-analyst-research-calls-enphase-energy-f5-marvell-technology-msg-rangers-pentair-silicon-motion-technology-spotify-technology-texas-instruments-whi/?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Intel, Microchip Technology, Marvell Technology, onsemi, and Seagate stocks trade up, what you need to know",
     "tarikh": "2026-10-27",
     "selepas_tutup": true,
@@ -18343,59 +18526,27 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
-    "tajuk": "Earnings from Google and Microsoft and a Fed rate decision: What to Watch",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/video/earnings-google-microsoft-fed-rate-000000143.html?.tsrc=rss",
+    "tajuk": "Verisk Brings Its Proprietary Insurance Intelligence to Amazon and Microsoft AI Platforms, Expands Offerings Within Claude",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/technology/ai/articles/verisk-brings-proprietary-insurance-intelligence-122500008.html?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
     "tajuk": "Dow Jones Futures Fall, Techs Rise As SK Hynix Crushes Views; Fed, Microsoft, Google On Deck",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
     "url": "https://finance.yahoo.com/m/7066a700-b33b-3fa1-858d-f75f49b920da/dow-jones-futures-fall%2C-techs.html?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Artificial Intelligence (AI) in Pharmacovigilance Global Market Report 2026 | Capitalize on 19.6% CAGR to 2030 as Oracle, Microsoft, Google and IQVIA Accelerate Automation",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/healthcare/articles/artificial-intelligence-ai-pharmacovigilance-global-211000913.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Artificial Intelligence (AI)-Driven Drug Safety and Pharmacovigilance Platforms Market Report 2026 | Capitalize on 20.2% CAGR with Microsoft, IBM, Oracle, IQVIA, and Veeva",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/healthcare/articles/artificial-intelligence-ai-driven-drug-210800065.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Global Edge Infrastructure Market Report 2026: Size, Share, Trends and Forecast to 2030 | Capitalize on 5G, AI and IoT with Microsoft, AWS, Dell, NVIDIA and Cisco",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/technology/articles/global-edge-infrastructure-market-report-210400243.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Global Emerging Technologies Market Report 2026: Size, Trends and Forecast to 2030 | Capitalize on 16% CAGR as AWS, Nvidia, Microsoft and OpenAI Accelerate AI, Cloud and Automation",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/technology/ai/articles/global-emerging-technologies-market-report-210300416.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Global Green Information Technology (IT) for Insurers Market Report 2026 | Capitalize on 13.6% CAGR as Microsoft, AWS, Google, and Dell Scale Green Cloud Adoption",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/technology/articles/global-green-information-technology-insurers-210200646.html?.tsrc=rss",
+    "tajuk": "Microsoft Vs. Oracle: Same 2-Pronged AI Strategy, Very Different Outcomes",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://247wallst.com/investing/2026/10/28/microsoft-vs-oracle-same-2-pronged-ai-strategy-very-different-outcomes/?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -18560,6 +18711,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Earnings to watch: Strategy (MSTR) reports Q3 results tomorrow",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/earnings-watch-strategy-mstr-reports-085434730.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Strategy (MSTR) Stock May Be Undervalued On Bitcoin Policy Shift",
     "tarikh": "2026-10-27",
@@ -18799,6 +18958,22 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Does MasTec (MTZ) Have Enough Earnings Power For This Price?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/does-mastec-mtz-enough-earnings-091045972.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "MasTec (MTZ) Q3 earnings report preview: what to look for",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/mastec-mtz-q3-earnings-report-063834310.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "MasTec (MTZ) Earnings Expected to Grow: What to Know Ahead of Next Week's Release",
     "tarikh": "2026-10-22",
     "selepas_tutup": false,
@@ -18863,16 +19038,7 @@
  "MU": {
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
-  "berita": [
-   {
-    "tajuk": "What Could Robot Memory Demand Mean For Micron Technology (MU) Stock?",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": true,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/technology/ai/articles/could-robot-memory-demand-mean-231405467.html?.tsrc=rss",
-    "sumber": "yahoo"
-   }
-  ],
+  "berita": [],
   "analisis": [],
   "orang_dalam": {},
   "institusi": null,
@@ -19262,7 +19428,17 @@
     "sumber": "yahoo"
    }
   ],
-  "analisis": [],
+  "analisis": [
+   {
+    "kategori": "naik_sasaran",
+    "mata": 1,
+    "firma": "Susquehanna",
+    "tarikh": "2026-10-28",
+    "hari_lalu": 0,
+    "sasaran": 46.0,
+    "url": ""
+   }
+  ],
   "orang_dalam": {},
   "institusi": null,
   "earnings_lalu_tarikh": "2026-10-26",
@@ -19730,6 +19906,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Netflix and ServiceNow Have Fallen More Than 30% From Their Records. Both Are Stocks to Buy and Hold Through 2030.",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://www.fool.com/investing/2026/10/28/netflix-and-servicenow-have-fallen-more-than-30-from-their-records-both-are-stocks-to-buy-and-hold-through-2030/?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "ServiceNow and Google Cloud advance agentic AI for industry workflows",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -19799,14 +19983,6 @@
     "selepas_tutup": true,
     "hari_lalu": 4,
     "url": "https://www.tikr.com/blog/servicenow-wants-to-be-no-1-in-security-heres-what-its-7-75-billion-armis-bet-must-show-on-october-28?ref=yahoofinance&.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "ServiceNow’s Moment of Truth: Can Agentic AI Growth Justify a Premium 80x Earnings Multiple on Oct. 28?",
-    "tarikh": "2026-10-24",
-    "selepas_tutup": false,
-    "hari_lalu": 4,
-    "url": "https://247wallst.com/investing/2026/10/24/servicenows-moment-of-truth-can-agentic-ai-growth-justify-a-premium-80x-earnings-multiple-on-oct-28/?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -19928,6 +20104,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Should Insight Stock's New High Stop You From Buying?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://www.trefis.com/stock/nsit/articles/621024/should-insight-stocks-new-high-stop-you-from-buying/2026-10-28?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Insight to Host Virtual Investor and Analyst Strategic Briefing on December 2, 2026",
     "tarikh": "2026-10-22",
@@ -20254,14 +20438,6 @@
     "hari_lalu": 1,
     "url": "https://www.fool.com/earnings/call-transcripts/2026/10/27/novartis-nvs-q3-2026-earnings-call-transcript/?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Novartis (NVS) Q3 Earnings: Taking a Look at Key Metrics Versus Estimates",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/healthcare/articles/novartis-nvs-q3-earnings-taking-123004394.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -20414,6 +20590,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Old Dominion Freight Line (NASDAQ:ODFL) surprises with Q3 2026 sales",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/old-dominion-freight-line-nasdaq-113206065.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Old Dominion Freight Line (ODFL) vs. SAIA and XPO: Can Pricing Power and a Freight Recovery Drive Further Upside?",
     "tarikh": "2026-10-27",
@@ -20935,6 +21119,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Oshkosh (OSK) to report earnings tomorrow: here is what to expect",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/oshkosh-osk-report-earnings-tomorrow-102234739.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Earnings Preview: Oshkosh (OSK) Q3 Earnings Expected to Decline",
     "tarikh": "2026-10-22",
     "selepas_tutup": false,
@@ -21059,6 +21251,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Has Ovintiv (OVV) Become Expensive After Its Logan Energy Deal?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/ovintiv-ovv-become-expensive-logan-081109908.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Ovintiv (OVV) Stock Looks About Right Despite The $890 Million Logan Deal",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -21128,14 +21328,6 @@
     "selepas_tutup": false,
     "hari_lalu": 2,
     "url": "https://financialpost.com/commodities/alberta-oilpatch-dealmaking-boom-continues-ovintiv-buys-logan?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Why Ovintiv (OVV) Might be Well Poised for a Surge",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/why-ovintiv-ovv-might-well-152002148.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -21505,6 +21697,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Zacks Industry Outlook Highlights Marathon Petroleum, PBF Energy and Phillips 66",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/zacks-industry-outlook-highlights-marathon-072200795.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Zacks.com featured highlights include Estee Lauder, IMAX, Stanley Black & Decker, Sterling Infrastructure and PBF Energy",
     "tarikh": "2026-10-27",
@@ -21930,6 +22130,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Why Should Pfizer Stock Holders Watch This One Number?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://www.trefis.com/stock/pfe/articles/621004/why-should-pfizer-stock-holders-watch-this-one-number/2026-10-28?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Pfizer (PFE) Scores Phase 3 Cancer Win As FDA Broadens Another Oncology Approval",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -21951,30 +22159,6 @@
     "selepas_tutup": false,
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/healthcare/articles/pfizer-elrexfio-outperforms-standard-regimens-104500090.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Pfizer Rose Nearly 21% in 2026 as Its Forward P/E Climbed From About 9 to 11 Times. Here’s What November 3 Has to Show",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": true,
-    "hari_lalu": 2,
-    "url": "https://www.tikr.com/blog/pfizer-rose-nearly-21-in-2026-as-its-forward-p-e-climbed-from-about-9-to-11-times-heres-what-november-3-has-to-show?ref=yahoofinance&.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Pfizer (PFE) Stock Looks Above Fair Value As 30% Run Continues",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/pfizer-pfe-stock-looks-above-190956194.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Pfizer’s TALZENNA Plus XTANDI FDA-Approved for an Earlier Metastatic Prostate Cancer Treatment Setting",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/healthcare/articles/pfizer-talzenna-plus-xtandi-fda-174100422.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -22239,6 +22423,15 @@
    }
   ],
   "analisis": [
+   {
+    "kategori": "naik_taraf",
+    "mata": 2,
+    "firma": "BNP Paribas",
+    "tarikh": "2026-10-28",
+    "hari_lalu": 0,
+    "sasaran": 65.0,
+    "url": ""
+   },
    {
     "kategori": "potong_sasaran",
     "mata": -2,
@@ -22561,6 +22754,38 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Parsons (NYSE:PSN) surprises with Q3 2026 sales but stock drops on weak guidance",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/parsons-nyse-psn-surprises-q3-111006819.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Parsons (PSN) Surpasses Q3 Earnings Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/parsons-psn-surpasses-q3-earnings-105004381.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Parsons Announces Chief Financial Officer Transition",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/parsons-announces-chief-financial-officer-104000411.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Parsons Reports Third Quarter 2026 Results",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/parsons-reports-third-quarter-2026-103000448.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Parsons earnings: what to look for from PSN",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -22635,6 +22860,30 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Phillips 66 beats estimates on strong refining margins",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/phillips-66-beats-estimates-strong-114652139.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Phillips 66 (PSX) Q3 Earnings and Revenues Beat Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/phillips-66-psx-q3-earnings-113506269.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "Phillips 66 Reports Third-Quarter Results: Delivers 98% Refining Utilization and Strong Midstream Volumes",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/phillips-66-reports-third-quarter-110000891.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "How to Earn $500 a Month From Phillips 66 Stock Ahead of Q3 Earnings",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -22667,19 +22916,11 @@
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Phillips 66 (PSX) Raises Quarterly Dividend To $1.33 Per Share",
-    "tarikh": "2026-10-23",
+    "tajuk": "Zacks Industry Outlook Highlights Marathon Petroleum, PBF Energy and Phillips 66",
+    "tarikh": "2026-10-28",
     "selepas_tutup": false,
-    "hari_lalu": 5,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/phillips-66-psx-raises-quarterly-091610026.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Phillips 66 (PSX) Falls More Steeply Than Broader Market: What Investors Need to Know",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": true,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/phillips-66-psx-falls-more-211502273.html?.tsrc=rss",
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/energy/articles/zacks-industry-outlook-highlights-marathon-072200795.html?.tsrc=rss",
     "sumber": "yahoo"
    },
    {
@@ -22837,14 +23078,6 @@
     "hari_lalu": 2,
     "url": "https://finance.yahoo.com/markets/stocks/articles/qualcomm-qcom-laps-stock-market-204503353.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Is QUALCOMM (QCOM) Undervalued After Reaffirming Its Dividend?",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/qualcomm-qcom-undervalued-reaffirming-dividend-170833442.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [
@@ -22929,6 +23162,15 @@
    }
   ],
   "analisis": [
+   {
+    "kategori": "turun_taraf",
+    "mata": -2,
+    "firma": "Barclays",
+    "tarikh": "2026-10-28",
+    "hari_lalu": 0,
+    "sasaran": 53.0,
+    "url": ""
+   },
    {
     "kategori": "naik_sasaran_besar",
     "mata": 2,
@@ -23188,16 +23430,7 @@
  "RDNT": {
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
-  "berita": [
-   {
-    "tajuk": "What RadNet (RDNT) Earnings Beat Means For Shareholders",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/healthcare/articles/radnet-rdnt-earnings-beat-means-081209313.html?.tsrc=rss",
-    "sumber": "yahoo"
-   }
-  ],
+  "berita": [],
   "analisis": [],
   "orang_dalam": {},
   "institusi": null
@@ -25378,14 +25611,6 @@
     "hari_lalu": 11,
     "url": "https://finance.yahoo.com/markets/stocks/articles/why-everyone-watching-signet-jewelers-151347114.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Will De Beers Investment Talks Change Signet Jewelers Stock Narrative",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/beers-investment-talks-change-signet-121138438.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -25414,6 +25639,22 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "SiteOne (NYSE:SITE) misses Q3 2026 revenue estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/siteone-nyse-misses-q3-2026-105122581.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "SiteOne Landscape (SITE) Q3 Earnings and Revenues Beat Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/siteone-landscape-q3-earnings-revenues-101003250.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Earnings to watch: SiteOne (SITE) reports Q3 results tomorrow",
     "tarikh": "2026-10-27",
@@ -25908,6 +26149,22 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Is Sandisk (SNDK) Cheap Following AI Infrastructure Optimism And SK Hynix Results?",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/sandisk-sndk-cheap-following-ai-101452752.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "MU, SNDK, Neocloud Stocks Extend Gains On Anthropic Boost, SK Hynix Q3 Stunner; Jim Cramer Urges Caution",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://stocktwits.com/news-articles/markets/equity/mu-sndk-neocloud-stocks-extend-gains-on-anthropic-boost-sk-hynix-q3-stunner-jim-cramer-urges-caution/cZU93s9RB61?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Rising Flash-Memory Needs Support SanDisk’s (SNDK) Growth Potential",
     "tarikh": "2026-10-27",
@@ -27106,22 +27363,6 @@
     "hari_lalu": 11,
     "url": "https://finance.yahoo.com/markets/stocks/articles/time-best-invention-recognition-stanley-151518062.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Stanley Black And Decker (SWK) Stock Looks Near Fair Value Despite Its 42% Run",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/stanley-black-decker-swk-stock-080951401.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Stanley Black And Decker (SWK) After DALE Recognition Still Looks Modestly Undervalued",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/stanley-black-decker-swk-dale-071111258.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -27463,6 +27704,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "TE Connectivity (TEL) Beats Q4 Earnings and Revenue Estimates",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/te-connectivity-tel-beats-q4-105004950.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Why TE Connectivity (TEL) is Poised to Beat Earnings Estimates Again",
     "tarikh": "2026-10-27",
     "selepas_tutup": false,
@@ -27771,19 +28020,19 @@
     "sumber": "yahoo"
    },
    {
+    "tajuk": "Toll Brothers (TOL) Opens New Luxury Communities Across Nine States And Washington Venture",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/real-estate/articles/toll-brothers-tol-opens-luxury-121528985.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Why Toll Brothers (TOL) Outpaced the Stock Market Today",
     "tarikh": "2026-10-27",
     "selepas_tutup": true,
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/markets/stocks/articles/why-toll-brothers-tol-outpaced-204503934.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "How New Luxury Communities Will Impact Toll Brothers Stock",
-    "tarikh": "2026-10-20",
-    "selepas_tutup": false,
-    "hari_lalu": 8,
-    "url": "https://finance.yahoo.com/real-estate/articles/luxury-communities-impact-toll-brothers-091521743.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -27860,6 +28109,14 @@
     "selepas_tutup": false,
     "hari_lalu": 8,
     "url": "https://finance.yahoo.com/markets/stocks/articles/trex-company-ring-nyse-opening-130000144.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
+    "tajuk": "The Zacks Analyst Blog Highlights Innodata, Argan, Trex, Quanta Services and Sterling Infrastructure",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-innodata-073500522.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -28081,22 +28338,6 @@
     "hari_lalu": 1,
     "url": "https://www.fool.com/coverage/charts/2026/10/27/broadcom-vs-taiwan-semiconductor-two-ai-powerhouses-one-surprising-revenue-trend/?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Bull of the Day: Taiwan Semiconductor Manufacturing Company (TSM)",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://finance.yahoo.com/technology/articles/bull-day-taiwan-semiconductor-manufacturing-070000451.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Apple vs. Taiwan Semiconductor: Which Tech Stock Is a Better Buy in 2026?",
-    "tarikh": "2026-10-27",
-    "selepas_tutup": false,
-    "hari_lalu": 1,
-    "url": "https://www.fool.com/coverage/better-buy/2026/10/26/apple-vs-taiwan-semiconductor-which-tech-stock-is-a-better-buy-in-2026/?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -28112,6 +28353,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Trane Technologies (TT) Q3 earnings report preview: what to look for",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/trane-technologies-tt-q3-earnings-123034924.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Unlocking Q3 Potential of Trane Technologies (TT): Exploring Wall Street Estimates for Key Metrics",
     "tarikh": "2026-10-27",
@@ -28964,14 +29213,6 @@
     "hari_lalu": 4,
     "url": "https://finance.yahoo.com/markets/stocks/articles/valaris-val-stock-may-48-060952207.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Valterra Platinum (JSE:VAL) Stock Gets Fair Value Bump On Split Analyst Views",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/valterra-platinum-jse-val-stock-061310410.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -29208,6 +29449,14 @@
   "sumber_pemangkin": "yahoo",
   "berita": [
    {
+    "tajuk": "Clinical Trial Data Might Change The Case For Investing In Veracyte Stock (VCYT)",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/clinical-trial-data-might-change-120911397.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
+   {
     "tajuk": "Will Veracyte (VCYT) Beat Estimates Again in Its Next Earnings Report?",
     "tarikh": "2026-10-21",
     "selepas_tutup": false,
@@ -29413,14 +29662,6 @@
     "selepas_tutup": false,
     "hari_lalu": 5,
     "url": "https://finance.yahoo.com/energy/articles/earnings-beat-impact-valero-energy-181459282.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Valero Energy Corporation (VLO): Benefiting From Tight Fuel Markets",
-    "tarikh": "2026-10-23",
-    "selepas_tutup": false,
-    "hari_lalu": 5,
-    "url": "https://finance.yahoo.com/energy/articles/valero-energy-corporation-vlo-benefiting-144858403.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -29698,14 +29939,6 @@
     "sumber": "yahoo"
    },
    {
-    "tajuk": "Gilead Sciences (GILD) vs. AMGN and VRTX: Can Oncology Growth and HIV Strength Drive a New Growth Era Beyond Acquisitions?",
-    "tarikh": "2026-10-22",
-    "selepas_tutup": true,
-    "hari_lalu": 6,
-    "url": "https://finance.yahoo.com/healthcare/articles/gilead-sciences-gild-vs-amgn-203322161.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
     "tajuk": "Vertex Pharmaceuticals (VRTX) Stock Sinks As Market Gains: Here's Why",
     "tarikh": "2026-10-26",
     "selepas_tutup": true,
@@ -29881,6 +30114,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Waters Launches AI-Powered Peak Integration Expanding its Suite of Premium AI Subscription Capabilities for Empower Software",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/news/waters-launches-ai-powered-peak-120000082.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Waters and Labcorp to Expand Access to Cervical Cancer Screening with the Most Comprehensive FDA-Approved HPV Testing Option Beginning in Late 2026",
     "tarikh": "2026-10-23",
@@ -30065,14 +30306,6 @@
     "selepas_tutup": false,
     "hari_lalu": 1,
     "url": "https://finance.yahoo.com/markets/stocks/articles/know-beyond-why-western-digital-120002808.html?.tsrc=rss",
-    "sumber": "yahoo"
-   },
-   {
-    "tajuk": "Western Digital (WDC) Stock Still Looks Undervalued Following Its Huge 3 Year Run",
-    "tarikh": "2026-10-26",
-    "selepas_tutup": false,
-    "hari_lalu": 2,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/western-digital-wdc-stock-still-181020805.html?.tsrc=rss",
     "sumber": "yahoo"
    }
   ],
@@ -31096,14 +31329,6 @@
     "hari_lalu": 7,
     "url": "https://finance.yahoo.com/media-advertising/articles/wpp-lse-wpp-reshapes-leadership-031911132.html?.tsrc=rss",
     "sumber": "yahoo"
-   },
-   {
-    "tajuk": "How Investors May Respond To WPP (LSE:WPP) Expanded Kyndryl Partnership",
-    "tarikh": "2026-10-17",
-    "selepas_tutup": false,
-    "hari_lalu": 11,
-    "url": "https://finance.yahoo.com/markets/stocks/articles/investors-may-respond-wpp-lse-091348436.html?.tsrc=rss",
-    "sumber": "yahoo"
    }
   ],
   "analisis": [],
@@ -31314,7 +31539,16 @@
  "WST": {
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
-  "berita": [],
+  "berita": [
+   {
+    "tajuk": "West Pharmaceutical Services earnings: what to look for from WST",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/healthcare/articles/west-pharmaceutical-services-earnings-look-074234802.html?.tsrc=rss",
+    "sumber": "yahoo"
+   }
+  ],
   "analisis": [],
   "orang_dalam": {},
   "institusi": null
@@ -31345,6 +31579,14 @@
   "dikumpul": "2026-10-28",
   "sumber_pemangkin": "yahoo",
   "berita": [
+   {
+    "tajuk": "Select Water Solutions (WTTR) Stock Looks Above Fair Value After Its 261% Run",
+    "tarikh": "2026-10-28",
+    "selepas_tutup": false,
+    "hari_lalu": 0,
+    "url": "https://finance.yahoo.com/markets/stocks/articles/select-water-solutions-wttr-stock-072144046.html?.tsrc=rss",
+    "sumber": "yahoo"
+   },
    {
     "tajuk": "Select Water Solutions, Inc. (WTTR) to Report Q3 Results: Wall Street Expects Earnings Growth",
     "tarikh": "2026-10-27",
