@@ -140,6 +140,36 @@ def main():
                  'lebar — sedangkan universe REVERSE ialah 2,000 teratas ikut nilai dagangan, iaitu '
                  'dengan sengaja membuang bahagian keratan-rentas itu.')
     L.append('')
+    pf = _baca('sec_portfolio_ringkas.csv')
+    if pf is not None and not pf.empty:
+        L.append('## 5b. §5.4 Portfolio 8 slot × 12.5% (kriteria akhir)')
+        L.append('')
+        L.append('Kos penuh, tiga rujukan keluar fasa 1, dua saiz (tetap 12.5% dan berskala risiko '
+                 'SPEC_1B k = 4 risiko 1.0%). Nilai di bawah ialah **median merentas tahun**. '
+                 '§6 syarat 3: signal mesti mengalahkan KAWALAN RAWAK pada pulangan **dan** MDD.')
+        L.append('')
+        L.append(jadual(pf))
+        L.append('')
+        sig = pf[pf.jenis == 'signal']
+        rwk = pf[pf.jenis == 'RAWAK']
+        if not sig.empty and not rwk.empty:
+            for kel in sorted(set(sig.keluar) & set(rwk.keluar)):
+                for sz in sorted(set(sig.saiz) & set(rwk.saiz)):
+                    a = sig[(sig.keluar == kel) & (sig.saiz == sz)]
+                    b = rwk[(rwk.keluar == kel) & (rwk.saiz == sz)]
+                    if a.empty or b.empty:
+                        continue
+                    pa, pb = float(a.pulangan_tahunan.iloc[0]), float(b.pulangan_tahunan.iloc[0])
+                    ma, mb = float(a.mdd.iloc[0]), float(b.mdd.iloc[0])
+                    menang = 'YA' if (pa > pb and ma > mb) else 'TIDAK'
+                    L.append(f'- `{kel}` / saiz {sz}: signal {pa:.2f}%/tahun MDD {ma:.2f}% lawan '
+                             f'rawak {pb:.2f}%/tahun MDD {mb:.2f}% -> mengalahkan rawak pada '
+                             f'pulangan DAN MDD: **{menang}**')
+            L.append('')
+        L.append('Sasaran +10%/bulan dibaca daripada lajur `median_bulanan` dan `pct_bulan_ge10` '
+                 'di atas, tanpa dimaniskan.')
+        L.append('')
+
     L.append('## 6. Apa yang leg ini TIDAK menjawab')
     L.append('')
     L.append('- Leg **RS/gred** fasa 2 masih menunggu data terkumpul (anggaran ~Okt 2027). Keputusan '
