@@ -624,19 +624,23 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat .tablewrap tbody td .nw{white-space:nowrap}
   body.padat .tablewrap thead th{white-space:normal}
   /* 28 Okt 2026 (permintaan pengguna): lencana Pegang/Keluar/Tunggu kekal DI BAWAH peratus untung walaupun mod Padat */
-  body.padat td.lrg .lrk{display:flex;flex-direction:column;align-items:center;gap:1px}
-  /* 28 Okt 2026 (permintaan pengguna): "3.7 ATR" turun ke baris bawah bar lorong 2 dan dijajar dengan bar */
-  body.padat .tablewrap td.lrg .grt{flex-direction:column;align-items:flex-start;gap:1px}
+  /* 28 Okt 2026 (permintaan pengguna): sel lorong jadi grid 2x2 supaya BARIS 1 = peratus + bar lorong 2 dan
+     BARIS 2 = pil Pegang/Keluar + cip jarak ATR; semuanya sejajar betul-betul */
+  body.padat td.lrg .grc.lr{display:grid;grid-template-columns:auto auto;column-gap:8px;row-gap:2px;align-items:center;justify-items:start;justify-content:start}
+  body.padat td.lrg .lrk,body.padat .tablewrap td.lrg .grt{display:contents}
+  body.padat td.lrg .lrp{grid-column:1;grid-row:1}
+  body.padat td.lrg .lrb{grid-column:1;grid-row:2}
+  body.padat td.lrg .l2bar{grid-column:2;grid-row:1}
+  body.padat td.lrg .l2j{grid-column:2;grid-row:2}
   body.padat td.lrg .lrb{height:1.5em;font-size:.66rem}
   body.padat .tablewrap td .grt{display:flex;flex-direction:row;align-items:center;gap:6px;min-width:0}
   body.padat .tablewrap td .grt .pill{margin-top:0!important}
   body.padat .tablewrap td .kskor{display:none}
   body.padat .tablewrap td .grt>.pill{overflow:hidden;text-overflow:ellipsis;max-width:110px}
-  /* 28 Okt 2026 (permintaan pengguna): sel gred jadi grid 2 lajur — cip gred + nilai pada baris pertama, pil
-     ("Selamat", "Syariah …") pada baris kedua bermula di bawah CIP, sejajar dengan pil "Pegang" lajur lorong */
-  body.padat td.grd .grc{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:start;column-gap:5px;row-gap:2px}
-  body.padat td.grd .grt{display:contents}
-  body.padat td.grd .grc .pill{grid-column:1/-1;justify-self:start;max-width:none;margin-top:0!important}
+  /* 28 Okt 2026: pil "Selamat"/"Syariah …" ialah ADIK .grc (lihat grSel1 `bawah`), jadi ia bermula di bawah cip
+     gred tanpa trik grid — lebar sel dikira biasa, tiada lajur bertindih */
+  body.padat td.grd .grt{flex-direction:column;align-items:flex-start;gap:1px}
+  body.padat td.grd>.pill{max-width:none}
   /* semua sel berlabuh pada baris PERTAMA supaya cip gred dan nilai sebaris merentas lajur (sel 1 baris lawan 2 baris) */
   body.padat .tablewrap tbody td{vertical-align:top}
   body.padat .tablewrap tbody td .grc,body.padat .tablewrap tbody td .grc.lr{align-items:flex-start}
@@ -735,7 +739,9 @@ body.padat .tablewrap td .l2bar{display:inline-block;margin-top:0}
 .rejim{font-size:.8rem;color:var(--fg-2);background:var(--sunk);border-left:3px solid var(--accent);border-radius:4px;padding:6px 10px;margin:0 0 10px}.rejim.rj-t{border-left-color:var(--warn);color:var(--fg)}
 td.rsk{white-space:nowrap}
 .trA{display:inline-flex;flex-direction:column;align-items:flex-start;gap:2px}
-body.padat .tablewrap td .trA{flex-direction:row;align-items:center;gap:5px}
+/* 28 Okt 2026 (permintaan pengguna): ATR% turun ke baris bawah pil trend, sejajar dengan pil lain */
+body.padat .tablewrap td .trA{flex-direction:column;align-items:flex-start;gap:1px}
+body.padat .tablewrap td .trA .atk{margin-left:0}
 .atk{font-size:.72rem;font-weight:600;color:var(--muted);white-space:nowrap;margin-left:5px}.atk.hmp{color:var(--warn)}
 .tra{font-style:normal}
 /* Stage Analysis Weinstein (v104): label sub-stage + penggred kualiti (+/−) berasingan */
@@ -1463,7 +1469,8 @@ const grB=(g,lbl,tt)=>`<span class="gr g-${GORD[g]!=null?g:'x'}" title="${esc(tt
 const adaGred=r=>GDIM.some(([k])=>GORD[r[k]]!=null);
 /* satu lajur bagi setiap dimensi S I R P Q (nilai pada hari isyarat), kemudian gred keseluruhan */
 const grNil=v=>v==null||v===''?null:Number(v);
-const grSel1=(g,body)=>GORD[g]!=null?`<div class="grc">${grB(g)}<div class="grt">${body}</div></div>`:'<span class="mut">–</span>';
+/* `bawah` = elemen yang duduk DI BAWAH cip gred (pil Selamat, Syariah …), bukan di dalam .grt yang berlekuk */
+const grSel1=(g,body,bawah)=>GORD[g]!=null?`<div class="grc">${grB(g)}<div class="grt">${body}</div></div>${bawah||''}`:'<span class="mut">–</span>';
 /* prestasi 1 bulan sektor/industri semasa daripada tab Sector (padanan nama) */
 /* peta disimpan di luar objek db: objek data langsung boleh dibekukan (iPhone), jadi jangan tulis medan padanya */
 const skPetaC=new WeakMap();
@@ -1494,8 +1501,8 @@ function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
   /* 28 Okt 2026 (permintaan pengguna): nombor sahaja dalam sel; "hari lagi", tarikh dan sebab dalam tooltip hover */
   const ttQR=h!=null?`${fx(h,0)} hari dagangan lagi ke laporan suku${tk?' ('+tk+')':''}${sb.startsWith('anggaran')?' — tarikh anggaran':''}${q?'. '+q[0]:''}`
     :(sb==='tiada data'?'Tiada tarikh earnings dalam sumber data pada hari isyarat.':'Tiada laporan suku dalam 30 hari dagangan selepas isyarat.');
-  const txt=h!=null?`<b class="nw" title="${esc(ttQR)}">${fx(h,0)}</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}${pl}`:`<b class="nw" title="${esc(ttQR)}">${sb==='tiada data'?'Tiada data':'Tiada'}</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}${pl}`;
-  return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt+qrSeb(r)):`<span class="mut" title="${esc(/^tidak diketahui/.test(r.sumber_earnings||'')?'Tarikh earnings '+r.sumber_earnings+'. Gred QR tidak dikira.':'Tarikh earnings tiada dalam sumber data (Nasdaq/SST/yfinance/Moomoo) pada hari isyarat; gred QR tidak dikira.')}">Tiada data</span>${qrSeb(r)}`;}
+  const txt=h!=null?`<b class="nw" title="${esc(ttQR)}">${fx(h,0)}</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}`:`<b class="nw" title="${esc(ttQR)}">${sb==='tiada data'?'Tiada data':'Tiada'}</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}`;
+  return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt+qrSeb(r),pl):`<span class="mut" title="${esc(/^tidak diketahui/.test(r.sumber_earnings||'')?'Tarikh earnings '+r.sumber_earnings+'. Gred QR tidak dikira.':'Tarikh earnings tiada dalam sumber data (Nasdaq/SST/yfinance/Moomoo) pada hari isyarat; gred QR tidak dikira.')}">Tiada data</span>${qrSeb(r)}`;}
 /* gred kewangan v7 (standard/gred_kewangan.py): ringkasan "B (K:A U:B T:C S:B) · peringkat · F:n · keyakinan … · Syariah …" */
 const SYLBL={'lulus':'p-buy','hampir had':'p-warn','gagal sebahagian':'p-warn','gagal':'p-exit'};
 function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:(\S+) S:(\S+)\) · ([^·]+?) · F:(\d+) · keyakinan (\S+)(?: · Syariah (.+))?$/.exec(s);
@@ -1503,7 +1510,7 @@ function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:
   if(!m)return grSel1(r.gred_kewangan,`<span>${esc(s)}</span>`);
   const sub=[['K',m[1],'Kekukuhan'],['U',m[2],'Keuntungan'],['T',m[3],'Pertumbuhan'],['S',m[4],'Arah suku terkini']].map(([l,g,n])=>`<span title="${n}"><small>${l}</small>${grB(g,'',n)}</span>`).join('');
   const f=+m[6],sy=m[8];
-  return grSel1(r.gred_kewangan,`<span class="kskor">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:''}${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`);}
+  return grSel1(r.gred_kewangan,`<span class="kskor">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`,sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:'');}
 /* Susunan = keutamaan: muatLajur menyembunyikan dari KANAN apabila tetingkap tidak cukup lebar, jadi lajur yang paling
    berguna diletak di kiri. 28 Okt 2026 (permintaan pengguna: "saya tidak nampak industri dan RS"): Industri dan RS
    (kajian 2019–2026: Industri A kuat, RS A disahkan +1.5% dalam 63 hari) mendahului Sektor, yang paparan sahaja. */
