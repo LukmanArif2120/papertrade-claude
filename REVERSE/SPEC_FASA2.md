@@ -274,3 +274,50 @@ Apa yang `RISIKO_10` sebenarnya uji: sama ada saiz berskala risiko memperbaiki d
 isyarat Mxx**. Mekanisme saiz itu umum, jadi hasilnya tetap bermaklumat — tetapi ia **bukan**
 pengesahan atau penafian dapatan 1b. Ujian ke hadapan yang betul bagi 1b memerlukan lorong yang
 kemasukannya daripada peristiwa sah REVERSE, bukan daripada Lejar.
+
+### 9.3 — 28 Okt 2026: §5.1, §6 dan §7 diselaraskan untuk leg SEC (14 tahun, bukan 6 suku)
+
+§5–§7 ditulis ketika spec ini menganggap **semua** lajur fasa 2 bermula 2026 dan populasinya Lejar
+Penuh. §4.1 (leg SEC titik-masa sejak 2009) dan §9.1 (populasi = peristiwa sah REVERSE) membatalkan
+kedua-dua anggapan itu. Tiga tempat menjadi tidak sah dan diselaraskan di sini, **sebelum sebarang
+keputusan leg SEC dilihat**:
+
+**§5.1 — ufuk ujian pemangkatan.** "≥ 4 daripada 6 suku pertama" ditulis untuk data yang baru
+terkumpul 6 suku. Leg SEC ada 2012–2025 (14 tahun penuh; 2026 tidak lengkap, dikecualikan seperti
+fasa 1). Bagi leg SEC, Spearman dikira **setiap tahun**, dan lajur diteruskan hanya jika tandanya
+konsisten dalam **≥ 10 daripada 14 tahun** dan |rho| purata ≥ 0.05. Bar ini bermakna: `ujian_pangkat.py`
+fasa 1 mendapati 7 daripada 30 indikator konsisten-tanda lawan puncak hindsight tetapi hanya **1
+daripada 30** lawan pulangan boleh didagangkan. §5.1 asal kekal terpakai kepada leg RS/gred.
+
+**§6 — ambang penerimaan, syarat keempat ditambah untuk leg SEC.** Fasa 1 mengajar bahawa satu
+tahun tidak bermakna apa-apa: gerbang 8.1 mula-mula menerima `q5:atr_pct`, `q5:julat20` dan
+`q5:bb_lebar` pada 2020 dan 2025 secara berasingan, dan tiada satu pun bertahan apabila disyaratkan
+lulus gerbang keras dalam ≥ 2 tahun lain (`SPEC.md` §13.12). Maka bagi leg SEC, syarat tambahan:
+
+4. lajur itu mesti lulus gerbang keras dalam **≥ 2 tahun selain tahun ia ditemui**, dengan kelas
+   tahun itu sendiri merupakan penemuan (bukan TIDAK BERGUNA) — iaitu gerbang 8.1 `SPEC.md` §13.11
+   dan §13.12 yang sama, tanpa pelonggaran.
+
+**§7 — had yang diakui, dua butir dibatalkan untuk leg SEC.**
+
+- ~~"Tempoh ujian bermula 2026 — satu rejim pasaran sahaja. Keputusan tertinggi ialah CALON."~~
+  Tidak terpakai: leg SEC merangkumi 2012–2025, termasuk pasaran menaik rendah-meruap 2013–2019,
+  pembetulan 2015–2016, keruntuhan dan pemulihan 2020, pasaran menurun 2022. Ia boleh mencapai
+  keputusan penuh, bukan CALON, jika §6 (1)–(4) dipenuhi. Had §7 asal kekal bagi leg RS/gred.
+- ~~"Lejar Penuh tiada bias survivorship — ini lebih baik daripada data A02 fasa 1, dan satu sebab
+  fasa 2 berbaloi walaupun fasa 1 ditolak."~~ Dibatalkan oleh §9.1: populasi bukan Lejar Penuh.
+  Leg SEC berjalan atas universe A02 yang **sama** dengan fasa 1, jadi ia mewarisi sifat
+  survivorship yang sama. Itu **had**, bukan kelebihan. Sebab leg SEC berbaloi ialah ia sumber
+  maklumat yang berbeza (bukan harga), bukan kerana datanya lebih bersih.
+
+Had tambahan leg SEC yang diakui sekarang, bukan selepas keputusan:
+
+- **Liputan XBRL berperingkat.** Mandat SEC berperingkat 2009–2011: 89 saham ada EPS titik-masa pada
+  2009, 253 pada 2010, 482 pada 2011. Sebab itu ujian bermula 2012, bukan 2009.
+- **PEAD tertumpu pada saham kecil.** Universe REVERSE ialah 2,000 teratas ikut nilai dagangan,
+  iaitu dengan sengaja membuang bahagian keratan-rentas di mana PEAD paling kuat didokumenkan.
+  Jangkaan priori oleh itu rendah, dan dinyatakan di sini supaya keputusan "tiada kesan" tidak
+  dilaporkan sebagai kejutan.
+- **Lajur SEC hadir pada kira-kira 27–30% peristiwa sah** (§4.4) walaupun selepas liputan ticker
+  dilebarkan, kerana SUE memerlukan sejarah suku yang cukup. Peristiwa tanpa lajur SEC dikecualikan
+  daripada ujian pemangkatan lajur itu, bukan diisi sifar.
