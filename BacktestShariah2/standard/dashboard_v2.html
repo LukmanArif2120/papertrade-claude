@@ -1370,7 +1370,7 @@ function renderWatch(){
     ${lengkap.length?`<div class="kpi"><div class="lbl" data-tip="isyarat_lengkap">Isyarat lengkap</div><div class="v">${lengkap.length}</div><div class="s">${[nLW?`${nLW} menunggu belian pada buka ${esc(tkO(tbW))}`:'',nLB?`${nLB} dibeli`:'',nLP?`${nLP} dilangkau`:'',nLT?`<span class="neg">${nLT} tidak dibeli</span>`:''].filter(Boolean).join(' · ')}</div></div>`:`<div class="kpi"><div class="lbl">Dibina</div><div class="v" style="font-size:1.25rem">${esc(w.dibina||'–')}</div><div class="s">Maks 5 setiap kaedah · dibuang bila terkeluar signal</div></div>`}
   </div>
   <div class="panel"><div class="panel-h"><h2>Hampir Signal</h2><span class="sub">${rows.length} calon · ketik tajuk lajur untuk susun</span></div>${rejimHtml()}
-    <div class="filters" style="margin-bottom:10px">${lajurSeg('watch')}<select id="wK" aria-label="Tapis kaedah"><option value="">Semua kaedah</option>${kdP.map(k=>`<option value="${esc(k)}" ${wf.k===k?'selected':''}>${esc(k)}</option>`).join('')}</select>
+    <div class="filters" style="margin-bottom:10px">${lajurSeg('watch')}${ljsSeg()}<select id="wK" aria-label="Tapis kaedah"><option value="">Semua kaedah</option>${kdP.map(k=>`<option value="${esc(k)}" ${wf.k===k?'selected':''}>${esc(k)}</option>`).join('')}</select>
       ${selSI('w',all,wf)}
       <input type="search" id="wQ" placeholder="Cari saham, sektor, industri" value="${esc(wf.q)}" aria-label="Cari watchlist"></div>
     ${sortTable({id:'watch',rows,def:{k:'pct_dipenuhi',dir:-1},limit:wf.shown,attr:r=>`data-wl="${r._w}" tabindex="0"`,rcls:r=>'click'+bukaC('w'+r._w),cols:lajurOf('watch')==='ringkas'?watchColsR():[
@@ -1555,7 +1555,7 @@ function renderPos(){
    :`<p class="headline">Gabungan Papertrade C dan Moomoo lama. Lencana <b>C</b> atau <b>M</b> di sebelah simbol menunjukkan akaun.</p>`;
   el.innerHTML=head+ptKpis(all,a==='m'?'Moomoo':a==='c'?'Claude dibeli':'gabungan')+panelPeta(sahSahaja(peg),fb.st)+`
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>${rejimHtml()}
-    <div class="filters" style="margin-bottom:8px">${segH('posSt',ps.st,[['semua',`Semua (${all.length})`],['pegang',`Dipegang (${peg.length})`],['keluar',`Sudah keluar (${kel.length})`]],'Status')}${skrinKecil()?lajurSeg('pos'):pandSeg()}</div>
+    <div class="filters" style="margin-bottom:8px">${segH('posSt',ps.st,[['semua',`Semua (${all.length})`],['pegang',`Dipegang (${peg.length})`],['keluar',`Sudah keluar (${kel.length})`]],'Status')}${skrinKecil()?lajurSeg('pos'):pandSeg()}${ljsSeg()}</div>
     ${fb.html}${(cols=>sortTable({id:'pos'+a,rows,cols,def:{k:cols.some(c=>c.k==='untung_pct')?'untung_pct':'isyarat_keluar',dir:-1},rcls:r=>rclsPT(r)+' click'+bukaC('p'+r._p),limit:fb.st.shown,attr:r=>`data-pos="${esc(r._p)}" tabindex="0"`,foot:kakiLagi('posMore')}))(pd?posColsP(pd,a==='gab'):rk?posColsR(a==='gab'):ptCols(a==='gab'))}</div>
   ${tdb.length?`<div class="panel"><div class="panel-h"><h2>Isyarat tidak dibeli</h2><span class="sub">${tdb.length} isyarat · dilangkau ikut peraturan kaedah · tidak dikira dalam Prestasi</span></div>${sortTable({id:'ptctdb',rows:tdb,def:{k:'kaedah',dir:1},limit:TELEFON?tdbS.shown:0,foot:TELEFON?kakiLagi('tdbMore'):null,lp:{key:r=>r.saham+'|'+r.kaedah+'|'+(r.tarikh_beli_dirancang||r.tarikh_beli),line:r=>`<b>${esc(r.saham)}</b><span class="mut">${esc(r.kaedah)}</span><span class="mlx">${esc(r.sebab_tidak_sah||'')}</span><span class="mlr mut">${esc(tkO(r.tarikh_beli_dirancang||r.tarikh_beli))}</span>${mlC}`},cols:[
       {k:'tarikh_beli_dirancang',t:'Tarikh',l:1,f:r=>esc(r.tarikh_beli_dirancang||r.tarikh_beli||'–')},{k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b>`,c:()=>'tk'},{k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1},
@@ -3551,6 +3551,8 @@ function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const e
    bagi jadual bergred (Posisi, Watchlist). Jadual lain kekal muat ikut lebar skrin. */
 let LJS=true;try{LJS=localStorage.getItem('pbs3_lajur_semua')!=='0';}catch(e){}
 const bolehSkrol=w=>LJS&&!skrinKecil()&&/\btw-grd\b/.test(w.className);
+/* segmen di ATAS jadual (permintaan pengguna 28 Okt 2026: butang di bawah jadual terlalu sukar dicari) */
+const ljsSeg=()=>skrinKecil()?'':`<div class="seg" role="group" aria-label="Lajur jadual">${[['1','Semua lajur'],['0','Muat lebar skrin']].map(([v,t])=>`<button type="button" data-ljs="${v}" aria-pressed="${(LJS?'1':'0')===v}"${v==='1'?' data-tip="lajur_semua"':''}>${t}</button>`).join('')}</div>`;
 const NOTA_LJS='<p class="sbn-nota">Semua lajur dipapar — skrol jadual ke kanan untuk melihatnya. <button type="button" class="more" data-ljs="0">Muat ikut lebar skrin</button></p>';
 function muatLajur(){
   document.querySelectorAll('.tablewrap').forEach(w=>{
@@ -3580,7 +3582,7 @@ function muatLajur(){
 {const hd=document.querySelector('header.top');const set=()=>document.documentElement.style.setProperty('--hdr',(hd?hd.offsetHeight:0)+'px');set();
   try{new ResizeObserver(set).observe(hd);}catch(e){}}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ljs]');if(!b)return;
-  LJS=b.dataset.ljs==='1';try{localStorage.setItem('pbs3_lajur_semua',LJS?'1':'0');}catch(x){}muatLajur();
+  LJS=b.dataset.ljs==='1';try{localStorage.setItem('pbs3_lajur_semua',LJS?'1':'0');}catch(x){}renderAll();
   toast(LJS?'Semua lajur dipapar (skrol mendatar)':'Lajur dimuatkan ikut lebar skrin');});
 let rzm;window.addEventListener('resize',()=>{clearTimeout(rzm);rzm=setTimeout(muatLajur,150);});
 let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(window.innerWidth-lw)<40)return;lw=window.innerWidth;clearTimeout(rz);rz=setTimeout(renderAll,200);});
@@ -3621,6 +3623,7 @@ const TIPS={
   at_pf:{t:'Faktor untung (PF)',d:'Jumlah untung semua dagangan menang ÷ jumlah rugi semua dagangan kalah. MENANG perlu ≥ 1.3 pada A dan B.',e:'PF 1.0 = pulang modal; PF 1.5 = untung 1.5 kali rugi.'},
   at_oos2:{t:'OOS bersih 2013–2018',d:'Gabungan 6 tetingkap ujian walk-forward 2013…2018; setiap tetingkap memakai parameter yang ditala atas 3 tahun sebelumnya. A = saham kumpulan tala, B = saham kumpulan semakan. Tempoh ini sebelum kebanyakan kaedah direka.',e:'CAGR hijau = mengatasi SPY tempoh sama.'},
   at_peng:{t:'Pengesahan 2019 – kini',d:'Parameter AKHIR (latih 2016–2018) diuji atas 2019-01-01 hingga data terakhir, saham A+B. Tidak digunakan semasa pemilihan.',e:'SPY sekitar 17% setahun dalam tempoh ini.'},
+  lajur_semua:{t:'Semua lajur',d:'Jadual Posisi dan Watchlist memapar semua lajur dan boleh diskrol mendatar (lajur Saham melekit di kiri). "Muat lebar skrin" pula menyembunyikan lajur yang tidak muat — Kewangan, Pemangkin, Sektor, QR, Sejak beli, R dahulu; Industri, RS dan dua lajur lorong paling akhir.',e:'Pilihan disimpan dalam pelayar ini sahaja.'},
   at_label:{t:'Label AUTOTUNE',d:'TINGGI: CAGR OOS-A dan OOS-B > SPY, MDD OOS-A ≥ −30%, CAGR tempoh kunci > SPY, DSR ≥ 0.95 dan PBO ≤ 0.30. SEDERHANA: tiga syarat pertama sahaja. RENDAH: CAGR OOS-A > 0. GAGAL: selain itu. BUKAN SWING: purata pegang OOS-A < 2 atau > 60 hari. PANDANG HADAPAN: imbasan potong-data mendapati kod memakai data hari esok; dikecualikan. BELUM DITALA: modul gagal kesetaraan atau kajian tidak lengkap.',e:'Hanya TINGGI dan SEDERHANA menjadi calon portfolio gabungan.'},
   at_oosa:{t:'OOS-A',d:'Gabungan 12 tetingkap ujian walk-forward (2013 – Sep 2024). Setiap tetingkap memakai parameter yang ditala atas 3 tahun sebelumnya, saham kumpulan A (kumpulan tala). SPY = tempoh yang sama.',e:'CAGR OOS-A 15% lawan SPY 12% = mengatasi SPY.'},
   at_oosb:{t:'OOS-B',d:'Tetingkap dan parameter sama seperti OOS-A, tetapi atas saham kumpulan B yang tidak digunakan semasa tala (semakan merentas saham).',e:'OOS-B jauh di bawah OOS-A menandakan parameter terlalu sesuai dengan saham A.'},
