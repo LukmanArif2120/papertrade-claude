@@ -268,6 +268,12 @@ def jalan(a):
         lama8 = k8[k8.saham == t][['tarikh_fail', 'masa_terima', 'akses', 'items']]
         kk = pd.concat([lama8, kk], ignore_index=True).drop_duplicates('akses')   # sejarah 8-K lama dikekalkan
         lapor = akses_lapor_terkini(sub)
+        if not lapor:
+            # Tiada 10-Q/10-K/20-F dalam submissions (ETF, dana, syarikat dorman): tiada companyfacts
+            # suku untuk diambil, SELAMANYA. Tanda siap supaya `belum_diisi` tidak dikira kekal > 0
+            # dan isian awal boleh dilaporkan selesai. '' tidak akan sama dengan mana-mana `lapor`
+            # sebenar, jadi ia tidak menghalang pengambilan jika pemfailan muncul kemudian.
+            akses.setdefault(str(cik), '')
         perlu = lapor and akses.get(str(cik)) != lapor
         if perlu and fakta_n < a.maks_fakta:
             try:
