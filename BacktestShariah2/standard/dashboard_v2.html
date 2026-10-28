@@ -595,6 +595,12 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat td.grp .pmt{-webkit-line-clamp:1}
   body.padat .tablewrap.tw-grd td.grp,body.padat .tablewrap.tw-grd td.grk{width:150px;min-width:150px;max-width:150px}
   body.padat td.grd .vv.nm1{display:none}
+  /* 28 Okt 2026 (permintaan pengguna): cip gred A-E lebih kecil dan sel lebih rapat supaya semua lajur muat */
+  body.padat .tablewrap tbody td,body.padat .tablewrap thead th{padding-inline:3px}
+  body.padat td.grd .grc,body.padat td.gks .grc{gap:5px}
+  body.padat td.grd .grc>.gr,body.padat td.gks .grc>.gr{min-width:1.55em;height:1.7em;padding:0 4px;font-size:.86rem}
+  body.padat td.grd .grt b{font-size:.8rem}
+  body.padat td.utg,body.padat td.ctr{padding-inline:2px}
   body.padat td.kdh{max-width:none;white-space:nowrap}
   body.padat .tablewrap td .l2bar{vertical-align:middle}
   body.padat .tablewrap tbody td{white-space:nowrap}
@@ -1482,7 +1488,9 @@ function ptCols(akaun){return [
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>{const kk=kongsiOf(r);return `${esc(r.kaedah)}${kk.length?`<span class="kng" aria-label="Isyarat sama daripada ${kk.length} kaedah lain">+${kk.length}</span><span class="vv kng-l">kongsi: ${esc(kk.join(' '))}</span><span class="kgd"><span class="kgh">Isyarat sama juga daripada ${kk.length} kaedah:</span>${kk.map(id=>`<span class="kgi"><b>${esc(id)}</b> ${esc(katNama(id))}${katMasuk(id)?`<span class="kgm">Masuk: ${esc(katMasuk(id))}</span>`:''}</span>`).join('')}</span>`:''}`;},c:()=>'kdh m0'},
   TRCA,STC,
   ...(padatDesk()?[]:[{k:'harga_beli',t:'Harga beli',tip:'harga_beli',f:r=>fx(r.harga_beli,2)},{k:'unit',t:'Unit',tip:'unit',f:r=>fx(r.unit,0)},{k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)}]),
-  {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${padatDesk()?`<span class="vv nw">beli ${fx(r.harga_beli,2)} → ${r.keluar?'keluar':'kini'} ${fx(r.harga_terkini,2)}</span>`:''}${spyCip(r)}`,c:()=>'utg m0'},
+  /* Untung % telefon sahaja (permintaan pengguna 28 Okt 2026): di desktop peratus yang sama sudah ada dalam
+     "Keluar kaedah" dan "Pegang selagi naik", jadi lajur ini hanya memakan lebar */
+  ...(skrinKecil()?[{k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${spyCip(r)}`,c:()=>'utg m0'}]:[]),
   {k:'_r',t:'R',tip:'r_multiple',hc:'kp-lo',v:rOf,f:rSel},
   {k:'_spark',t:'Sejak beli',tip:'carta_kecil',hc:'kp-lo',ns:1,l:1,f:r=>sparkPos(r)},
   {k:'hari',t:'Hari dipegang',tip:'hari_pt',f:hariSel,c:()=>'ctr m0'},
@@ -1548,7 +1556,7 @@ function renderPos(){
   el.innerHTML=head+ptKpis(all,a==='m'?'Moomoo':a==='c'?'Claude dibeli':'gabungan')+panelPeta(sahSahaja(peg),fb.st)+`
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>${rejimHtml()}
     <div class="filters" style="margin-bottom:8px">${segH('posSt',ps.st,[['semua',`Semua (${all.length})`],['pegang',`Dipegang (${peg.length})`],['keluar',`Sudah keluar (${kel.length})`]],'Status')}${skrinKecil()?lajurSeg('pos'):pandSeg()}</div>
-    ${fb.html}${sortTable({id:'pos'+a,rows,cols:pd?posColsP(pd,a==='gab'):rk?posColsR(a==='gab'):ptCols(a==='gab'),def:{k:'untung_pct',dir:-1},rcls:r=>rclsPT(r)+' click'+bukaC('p'+r._p),limit:fb.st.shown,attr:r=>`data-pos="${esc(r._p)}" tabindex="0"`,foot:kakiLagi('posMore')})}</div>
+    ${fb.html}${(cols=>sortTable({id:'pos'+a,rows,cols,def:{k:cols.some(c=>c.k==='untung_pct')?'untung_pct':'isyarat_keluar',dir:-1},rcls:r=>rclsPT(r)+' click'+bukaC('p'+r._p),limit:fb.st.shown,attr:r=>`data-pos="${esc(r._p)}" tabindex="0"`,foot:kakiLagi('posMore')}))(pd?posColsP(pd,a==='gab'):rk?posColsR(a==='gab'):ptCols(a==='gab'))}</div>
   ${tdb.length?`<div class="panel"><div class="panel-h"><h2>Isyarat tidak dibeli</h2><span class="sub">${tdb.length} isyarat · dilangkau ikut peraturan kaedah · tidak dikira dalam Prestasi</span></div>${sortTable({id:'ptctdb',rows:tdb,def:{k:'kaedah',dir:1},limit:TELEFON?tdbS.shown:0,foot:TELEFON?kakiLagi('tdbMore'):null,lp:{key:r=>r.saham+'|'+r.kaedah+'|'+(r.tarikh_beli_dirancang||r.tarikh_beli),line:r=>`<b>${esc(r.saham)}</b><span class="mut">${esc(r.kaedah)}</span><span class="mlx">${esc(r.sebab_tidak_sah||'')}</span><span class="mlr mut">${esc(tkO(r.tarikh_beli_dirancang||r.tarikh_beli))}</span>${mlC}`},cols:[
       {k:'tarikh_beli_dirancang',t:'Tarikh',l:1,f:r=>esc(r.tarikh_beli_dirancang||r.tarikh_beli||'–')},{k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b>`,c:()=>'tk'},{k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1},
       {k:'harga_buka_rujukan',t:'Harga buka',f:r=>fx(r.harga_buka_rujukan,2)},{k:'henti',t:'Henti',f:r=>fx(r.henti,2)},
