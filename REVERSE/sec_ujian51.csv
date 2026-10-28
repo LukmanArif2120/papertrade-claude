@@ -1,4 +1,4 @@
 lajur,n_tahun,konsisten,tahun_dikecualikan,rho_purata,rho_min,rho_maks,rho_abs,perlu_konsisten,boleh_dinilai,lulus_51
 sue,14,11,,0.0224,-0.0247,0.0834,0.0295,10,True,False
 tumbuh_hasil,14,11,,-0.0411,-0.1712,0.077,0.06,10,True,True
-pecutan_hasil,14,12,,0.0272,-0.0359,0.0859,0.033,10,True,False
+pecutan_hasil,14,12,,0.0272,-0.0359,0.0859,0.0331,10,True,False

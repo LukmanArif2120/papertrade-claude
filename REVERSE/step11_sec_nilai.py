@@ -223,7 +223,8 @@ def ujian_52_53(d):
             continue
         rawak = rng.random(ada.size) < (ada.sum() / max(pop.sum(), 1))
         m = ST.metrik(hasil[pop], ada[pop], rawak[pop], keluarga='PADU')
-        p = ST.permutasi_lift(hasil[pop], ada[pop], bulan[pop], keluarga='PADU', n=1000)
+        p, lift_rawak_permutasi = ST.permutasi_lift(hasil[pop], ada[pop], bulan[pop],
+                                                    keluarga='PADU', n=1000)
         pul = d.pul_henti2atr.to_numpy('float64')[ada]
         bt_t = ST.bootstrap_blok(pul, d.saham.to_numpy()[ada], n=1000)
         bt_w = ST.bootstrap_blok(pul, d.minggu.to_numpy()[ada], n=1000)
@@ -233,6 +234,8 @@ def ujian_52_53(d):
                   if urut.size > 20 else np.nan)
         rows.append(dict(signal=nama, n=int(ada.sum()), K_padu=round(m['K_padu'], 2),
                          lift=round(m['lift'], 3), presisi=round(m['presisi'], 2),
+                         lift_rawak_permutasi=(round(lift_rawak_permutasi, 3)
+                                               if np.isfinite(lift_rawak_permutasi) else np.nan),
                          lift_presisi=round(m['lift_presisi'], 3), p_permutasi=p,
                          pul_purata=round(float(np.nanmean(pul)) * 100, 3),
                          jangkaan=round(jang * 100, 3), jangkaan_tanpa_5pct=round(tanpa5 * 100, 3),
