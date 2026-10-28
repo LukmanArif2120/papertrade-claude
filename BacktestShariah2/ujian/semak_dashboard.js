@@ -82,12 +82,15 @@ let gagal=0;
     const tabs=await p.$$eval('#mainTabs button',bs=>bs.map(b=>b.dataset.tab));
     for(const tab of tabs){
       const btn=await p.$(`#mainTabs button[data-tab="${tab}"]`);if(!btn)continue;
-      await btn.click();await p.waitForTimeout(800);
-        const sub=await p.$$('.pnav-in button');
-      const kump=[...(sub.length?sub.slice(0,6):[null])];
-      for(const s of kump){
-        if(s){try{await s.click();await p.waitForTimeout(450);}catch(e){continue;}}
-        const nama=s?await s.evaluate(e=>e.textContent.trim().slice(0,22)):'';
+      try{await btn.click({timeout:5000});}catch(e){continue;}await p.waitForTimeout(800);
+        const nSub=Math.min(6,await p.$$eval('.pnav-in button',bs=>bs.length).catch(()=>0));
+      for(let si=0;si<Math.max(1,nSub);si++){
+        let nama='';
+        if(nSub){try{
+          const bs=await p.$$('.pnav-in button');if(!bs[si])continue;
+          nama=await bs[si].evaluate(e=>e.textContent.trim().slice(0,22));
+          await bs[si].click({timeout:4000});await p.waitForTimeout(450);
+        }catch(e){continue;}}
         const hasil=await p.evaluate(AUDIT);
         hasil.forEach(h=>{
           const berat=h.bertindih.length||h.tajuk.length||h.keluar||h.tepi.length;
@@ -98,7 +101,8 @@ let gagal=0;
               kosong:h.kosong.slice(0,4),sempit:h.sempit.slice(0,4),tinggi:h.tinggi,sbn:h.sbn}));});
       }
       if(tab==='posisi')for(const v of ['ringkas','risiko','gred']){
-        const vb=await p.$(`[data-pand] button[data-v="${v}"]`);if(!vb)continue;await vb.click();await p.waitForTimeout(600);
+        const vb=await p.$(`[data-pand] button[data-v="${v}"]`);if(!vb)continue;
+        try{await vb.click({timeout:4000});}catch(e){continue;}await p.waitForTimeout(600);
         const hasil=await p.evaluate(AUDIT);
         hasil.forEach(h=>{const berat=h.bertindih.length||h.tajuk.length||h.keluar||h.tepi.length;if(berat)gagal++;
           const ringan=h.kosong.length||h.sempit.length||h.valign.length||(h.tinggi[1]-h.tinggi[0]>30);
