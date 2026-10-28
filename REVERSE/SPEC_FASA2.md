@@ -80,6 +80,52 @@ lajur tidak kosong, dan ≥ 250 hari dagangan bertindih. Bezanya, bagi SEC amban
 sejarah, bukan oleh menunggu. Penilaian leg SEC dijalankan **berasingan** daripada leg RS/gred,
 dan keluarga FDR-nya dikira berasingan (tiada penggabungan kiraan ujian antara dua leg).
 
+### 4.2 Masa ketersediaan data SEC (dikunci 28 Okt 2026, sebelum sebarang keputusan dilihat)
+
+Data SEC titik-masa pada peringkat **nilai** (§4.1), tetapi itu belum cukup: cap masa pemfailan
+mesti ditukar kepada **sesi dagangan** yang betul. Petikan 28 Okt 2026, `data/sec/earnings_8k.csv`
+(54,109 baris, `masa_terima` penuh, tiada yang kosong), ditukar ke waktu New York:
+
+| Waktu pemfailan (ET) | Baris | % |
+|---|---|---|
+| Selepas tutup (≥ 16:00) | 28,161 | **52.0** |
+| Pra-buka (< 09:30) | 19,217 | 35.5 |
+| Intraday (09:30–15:59) | 6,731 | 12.4 |
+
+Dan 5.2% baris mempunyai `tarikh_fail` **berbeza** daripada tarikh ET `masa_terima`.
+
+Maka menggunakan `tarikh_fail` sebagai tarikh ketersediaan akan memberi **lebih separuh** peristiwa
+maklumat kira-kira satu sesi dagangan lebih awal — tepat jenis kelebihan palsu yang fasa 1 dibina
+untuk mengelak, dan ia akan muncul sebagai "penemuan" yang hilang sepenuhnya dalam dagangan.
+
+**Peraturan dikunci.** Hari sesuatu nilai SEC boleh digunakan = **sesi dagangan pertama yang
+pembukaannya (09:30 ET) jatuh selepas cap masa pemfailan**. Satu peraturan, tiga kes:
+
+| Difail | Tersedia |
+|---|---|
+| 06:00 ET Selasa | buka Selasa |
+| 11:00 ET Selasa | buka Rabu |
+| 20:00 ET Selasa | buka Rabu |
+| 20:00 ET Jumaat | buka Isnin |
+
+Butiran yang juga dikunci:
+
+- Zon waktu dikira dengan `America/New_York` (`zoneinfo`), **bukan offset tetap**: data merangkumi
+  2004–2026, termasuk peraturan waktu musim panas sebelum dan selepas perubahan 2007.
+- Kalendar sesi = **tarikh dalam stor harga**, bukan kalendar kalendar: cuti pasaran dilangkau.
+- Tepat 09:30 ET dikira **sudah lepas** (sesi berikut), kerana harga buka itu sendiri tidak boleh
+  didagangkan atas maklumat yang tiba pada saat yang sama.
+- `sue.csv` dengan `sumber_tarikh == 'fail'` (1,914 baris; tiada 8-K Item 2.02 dijumpai, jadi hanya
+  tarikh pemfailan 10-Q/10-K diketahui): waktu tidak diketahui, maka **dianggap selepas tutup** pada
+  tarikh itu. Pilihan konservatif; ia tidak boleh mencipta kelebihan.
+- Nilai `eps_hasil.csv` menggunakan `tarikh_fail` 10-Q/10-K melalui peraturan yang sama.
+
+Pelaksanaan: `REVERSE/teras/sec.py` `hari_tersedia()`; ujian
+`BacktestShariah2/ujian/test_reverse_sec.py` (14 ujian, termasuk sempadan waktu musim panas,
+peraturan pra-2007, cuti, dan sifat "hari tersedia tidak pernah mendahului tarikh pemfailan" atas
+data sebenar). Penilaian leg SEC **tidak boleh** menggunakan `tarikh_fail` secara terus.
+
+
 ## 5. Ujian (dipradaftar)
 
 1. **Pemangkatan** — Spearman antara setiap lajur dan pulangan boleh didagangkan, dikira
