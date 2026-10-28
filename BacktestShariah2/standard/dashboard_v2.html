@@ -583,6 +583,9 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
 }
 /* lajur yang tidak muat lebar skrin disembunyi (muatLajur); nota menamakannya */
 .tablewrap .sbn{display:none!important}
+/* lajur pengisi: menyerap lebar baki; tiada di telefon (jadual jadi kad) */
+th.isi,td.isi{width:100%;padding:0;min-width:0}
+@media (max-width:760px){th.isi,td.isi{display:none!important}}
 .sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .sbn-nota .more{padding:4px 10px;font-size:.78rem}
 /* 28 Okt 2026 (permintaan pengguna): mod "Semua lajur" — tiada lajur disembunyi dan TIADA skrol mendatar; jadual
@@ -872,6 +875,9 @@ function sortTable(o){
   /* kad lipat telefon (o.lp: line, kad, key, btn, cls): baris tertutup satu baris (.mline), dibuka = kad (.mkad) */
   const lp=o.lp&&Object.assign({},o.lp);if(lp&&!lp.kad)lp.kad=kadUmum(o.cols);if(lp)o=Object.assign({},o,{cols:[...o.cols,{k:'_ml',t:'',ns:1,l:1,hc:'mline',c:()=>'mline',f:lp.line},{k:'_mk',t:'',ns:1,l:1,hc:'mkad',c:()=>'mkad',f:lp.kad},...(lp.btn?[BTN_PENUH]:[])]});
   const lpK=r=>o.id+'|'+lp.key(r);
+  /* lajur pengisi (28 Okt 2026): tanpa ini, lebar baki jadual 100% diagihkan kepada lajur teks terlebar, jadi
+     satu lajur boleh jadi 400px untuk kandungan 40px. Pengisi menyerap baki itu di hujung kanan. */
+  o=Object.assign({},o,{cols:[...o.cols,{k:'_isi',t:'',ns:1,hc:'isi',c:()=>'isi',f:()=>''}]});
   const th=o.cols.map(c=>`<th class="${c.l?'l':''} ${c.frz?'frz':''} ${c.hc||''}"${c.ns?'':` data-k="${c.k}" data-d="${c.l?'asc':'desc'}" aria-sort="${st.k===c.k?(st.dir<0?'descending':'ascending'):'none'}"`}${c.tip?` data-tip="${c.tip}"`:''}><span>${c.t}</span></th>`).join('');
   const tb=rows.map((r,i)=>`<tr${o.attr?' '+o.attr(r):''}${lp?` data-lp="${esc(lpK(r))}"`:''} class="${o.rcls?o.rcls(r):''}${lp?(lp.cls?' '+lp.cls(r):'')+bukaC(lpK(r)):''}">${o.cols.map(c=>`<td class="${c.l?'l':''} ${c.frz?'frz':''} ${c.c?c.c(r):''}">${c.f?c.f(r,i):esc(isNil(r[c.k])?'–':r[c.k])}</td>`).join('')}</tr>`).join('');
   const grd=o.cols.some(c=>c.c&&/\bgrd\b/.test(c.c({})||''));
@@ -3619,7 +3625,7 @@ function muatLajur(){
     const kp=i=>ths[i].classList.contains('kp-lo')?0:ths[i].classList.contains('kp-hi')?2:1;
     urut.sort((a,b)=>kp(a)-kp(b));
     for(const i of urut){if(!lebih())break;if(utama(i))continue;
-      ths[i].classList.add('sbn');rows.forEach(tr=>tr.cells[i].classList.add('sbn'));sor.push((ths[i].textContent||'').replace(/[↕↓↑]/g,'').trim());}
+      ths[i].classList.add('sbn');rows.forEach(tr=>tr.cells[i].classList.add('sbn'));const nm=(ths[i].textContent||'').replace(/[↕↓↑]/g,'').trim();if(nm)sor.push(nm);}
     if(!t.classList.contains('hmt'))sor.reverse();
     if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'}${/\btw-grd\b/.test(w.className)?' <button type="button" class="more" data-ljs="1">Papar semua lajur</button>':''}</p>`);
   });
