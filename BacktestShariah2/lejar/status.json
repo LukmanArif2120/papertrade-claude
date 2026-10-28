@@ -23,8 +23,8 @@
    "sesi_terakhir_lama": "2026-10-23"
   }
  ],
- "sesi_terakhir": "2026-10-26",
- "kemaskini": "2026-10-27 17:54 MYT",
+ "sesi_terakhir": "2026-10-27",
+ "kemaskini": "2026-10-28 17:56 MYT",
  "bil_kaedah": 134,
  "larian": [
   {
@@ -130,6 +130,19 @@
    "ralat": [],
    "nota": [],
    "masa_s": 327
+  },
+  {
+   "sesi": "2026-10-27",
+   "beli": 1035,
+   "tutup": 94,
+   "langkau": 46,
+   "isyarat": 2787,
+   "terbuka": 12244,
+   "tunggu": 1368,
+   "kaedah_isyarat": 104,
+   "ralat": [],
+   "nota": [],
+   "masa_s": 306
   }
  ]
 }
