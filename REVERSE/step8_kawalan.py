@@ -202,32 +202,43 @@ def main():
     jni = jn.set_index('signal')
     fsi = fs[~fs.signal.str.contains(r'\| penapis:')].set_index('signal')
     lulus_fdr = set(fdr['ENTRY/PADU']['signal'])
-    # 8.1 merentas tahun: kelas yang sama dalam >= 2 tahun LAIN
+    # 8.1 merentas tahun (pindaan SPEC §13.12, keputusan pengguna 28 Okt 2026):
+    # naik taraf ke DITERIMA memerlukan signal LULUS GATE KERAS (step7 + G1 + G3 + G4 + G5)
+    # dalam >= 2 tahun LAIN -- bukan sekadar kelas Step 4 yang sama. Kelas tetap dilaporkan.
     lain = sorted(int(f.stem.split('_')[-1]) for f in KELUAR.glob('common_unique_*.csv')
                   if f.stem.split('_')[-1].isdigit() and int(f.stem.split('_')[-1]) != th)
-    g2_lab, g2_asas = {}, (f'TIDAK TERSEDIA (tiada tahun lain siap)' if not lain
+    g2_lab, g2_asas = {}, ('TIDAK TERSEDIA (tiada tahun lain siap)' if not lain
                            else f'perlu >= 2 tahun lain; siap: {lain}')
+    PENEMUAN = ('TERAS', 'UNIQUE', 'LANGKA')
     if lain:
-        kelas_lain = {}
+        kelas_lain, keras_lain = {}, {}
         for y in lain:
             dy = pd.read_csv(KELUAR / f'common_unique_{y}.csv')
             dy = dy[(dy.subset == 'S2') & (dy.populasi == 'a') & (dy.kumpulan_data == 'A')
                     & (dy.keluarga == 'PADU')]
             kelas_lain[y] = dy.set_index('signal').kelas.to_dict()
-        # Pindaan SPEC §13.11: "kelas sama" hanya mengesahkan sesuatu jika kelas itu ialah
-        # PENEMUAN. Signal berkelas TIDAK BERGUNA / COMMON BIASA pada setiap tahun memenuhi
-        # "kelas sama" secara remeh; itu bukan pengesahan, jadi G2 tidak boleh dinilai.
-        PENEMUAN = ('TERAS', 'UNIQUE', 'LANGKA')
+            fy = KELUAR / f'keputusan_{y}.csv'
+            if fy.exists():
+                ky = pd.read_csv(fy).set_index('signal')
+                if 'lulus_gate_keras' in ky.columns:
+                    keras_lain[y] = (ky.lulus_gate_keras == 'ya').to_dict()
+                else:  # laluan pertama: lajur belum ditulis
+                    keras_lain[y] = ky.keputusan.isin(['CALON', 'DITERIMA']).to_dict()
+            else:
+                keras_lain[y] = {}
         for nm in corong:
             kA = kls_A.kelas.get(nm, '-')
             but = '; '.join(f'{y}={kelas_lain[y].get(nm, "-")}' for y in lain)
             if kA not in PENEMUAN:
-                g2_lab[nm] = (f'TIDAK BOLEH DINILAI (kelas tahun ini {kA}, bukan penemuan; {but})')
+                g2_lab[nm] = f'TIDAK BOLEH DINILAI (kelas tahun ini {kA}, bukan penemuan; {but})'
                 continue
+            lulus_lain = [y for y in lain if keras_lain.get(y, {}).get(nm, False)]
             sama = [y for y in lain if kelas_lain[y].get(nm, '-') == kA]
-            g2_lab[nm] = (f'LULUS ({len(sama)}/{len(lain)} tahun lain kelas sama: {but})'
-                          if len(sama) >= 2 else
-                          f'BELUM ({len(sama)}/{len(lain)} sama, perlu >= 2; {but})')
+            g2_lab[nm] = (
+                f'LULUS ({len(lulus_lain)}/{len(lain)} tahun lain LULUS GATE KERAS: '
+                f'{lulus_lain}; kelas: {but})' if len(lulus_lain) >= 2 else
+                f'BELUM ({len(lulus_lain)}/{len(lain)} tahun lain lulus gate keras, perlu >= 2; '
+                f'kelas sama {len(sama)}/{len(lain)}; {but})')
     krow = []
     for nm in corong:
         g = {}
@@ -261,10 +272,11 @@ def main():
         g['kapasiti'] = fsi.kapasiti.get(nm, '')
         keras = (g['step7'] == 'LULUS' and g['G3_fdr'] == 'LULUS' and g['G4_bootstrap'] == 'LULUS'
                  and g['G5_outlier'] == 'LULUS' and g['G1_sah_dalam_tahun'] != 'GAGAL')
+        g['lulus_gate_keras'] = 'ya' if keras else 'tidak'
         g['keputusan'] = ('DITERIMA' if (keras and g['G2_merentas_tahun'].startswith('LULUS'))
                           else ('CALON' if keras else 'DITOLAK'))
-        g['had_fasa'] = ('maksimum CALON sebelum >= 2 tahun lain mengesahkan kelas yang sama '
-                         '(gate 8.1, SPEC §11.8)')
+        g['had_fasa'] = ('maksimum CALON sebelum >= 2 tahun lain LULUS GATE KERAS bagi signal '
+                         'yang sama (gate 8.1, SPEC §11.8 + §13.12)')
         krow.append(dict(signal=nm, **g))
     kp = pd.DataFrame(krow)
     kp.to_csv(KELUAR / f'keputusan_{th}.csv', index=False)
