@@ -576,7 +576,15 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
 }
 /* lajur yang tidak muat lebar skrin disembunyi (muatLajur); nota menamakannya */
 .tablewrap .sbn{display:none!important}
-.sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted)}
+.sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sbn-nota .more{padding:4px 10px;font-size:.78rem}
+/* 28 Okt 2026 (permintaan pengguna): mod "papar semua lajur" — jadual kembali boleh diskrol mendatar, tiada lajur disembunyi */
+.tablewrap.skrolx,.tablewrap.tw-grd.skrolx{overflow-x:auto}
+.tablewrap.skrolx>table{width:max-content;min-width:100%}
+.tablewrap.skrolx th,.tablewrap.skrolx td{white-space:nowrap}
+.tablewrap.skrolx td.wrap,.tablewrap.skrolx td.grp,.tablewrap.skrolx td.grk,.tablewrap.skrolx td.syr,.tablewrap.skrolx td.name{white-space:normal}
+.tablewrap.skrolx .frz{position:sticky;left:0;z-index:2;box-shadow:1px 0 0 var(--line)}
+.tablewrap.skrolx th.frz{z-index:3}
 /* ================= v103 (23 Okt 2026): mod Padat, pop timbul, gerakan, ulang tayang lorong 2, makmal ================= */
 /* Padat (desktop): satu barisan setiap baris; butiran .vv dalam pop timbul bila hover. Telefon tidak berubah (kad lipat). */
 @media (min-width:761px){
@@ -3531,12 +3539,16 @@ function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const e
 /* tiada skrol mendatar: jika jadual lebih lebar daripada bekasnya, sembunyi lajur dari kanan ke kiri (untung bulanan: bulan
    terlama dahulu), kecuali lajur utama: lajur pertama, Saham/Kaedah, lajur ringkas telefon m0, Untung %; nota di bawah jadual
    menamakannya. Kad telefon (tw-lp, tw-grd ≤ 760px) tidak disentuh. Dipanggil selepas setiap lukisan (topScrolls) dan ubah saiz. */
+let LJS=false;try{LJS=localStorage.getItem('pbs3_lajur_semua')==='1';}catch(e){}
+const NOTA_LJS='<p class="sbn-nota">Semua lajur dipapar — skrol jadual ke kanan untuk melihatnya. <button type="button" class="more" data-ljs="0">Muat ikut lebar skrin</button></p>';
 function muatLajur(){
   document.querySelectorAll('.tablewrap').forEach(w=>{
     const t=w.querySelector(':scope>table');if(!t)return;
     w.querySelectorAll('.sbn').forEach(x=>x.classList.remove('sbn'));
     const nt=w.nextElementSibling;if(nt&&nt.classList.contains('sbn-nota'))nt.remove();
     if(!w.offsetParent||(skrinKecil()&&/\btw-(lp|grd)\b/.test(w.className)))return;
+    w.classList.toggle('skrolx',LJS&&!skrinKecil());
+    if(LJS&&!skrinKecil()){if(w.scrollWidth>w.clientWidth+1)w.insertAdjacentHTML('afterend',NOTA_LJS);return;}
     const hr=t.tHead&&t.tHead.rows.length===1?t.tHead.rows[0]:null;if(!hr)return;
     const ths=[...hr.cells];if(ths.some(h=>h.colSpan>1))return;
     const lebih=()=>t.offsetWidth>w.clientWidth+1;if(!lebih())return;
@@ -3551,11 +3563,14 @@ function muatLajur(){
     for(const i of urut){if(!lebih())break;if(utama(i))continue;
       ths[i].classList.add('sbn');rows.forEach(tr=>tr.cells[i].classList.add('sbn'));sor.push((ths[i].textContent||'').replace(/[↕↓↑]/g,'').trim());}
     if(!t.classList.contains('hmt'))sor.reverse();
-    if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'}</p>`);
+    if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'} <button type="button" class="more" data-ljs="1">Papar semua lajur</button></p>`);
   });
 }
 {const hd=document.querySelector('header.top');const set=()=>document.documentElement.style.setProperty('--hdr',(hd?hd.offsetHeight:0)+'px');set();
   try{new ResizeObserver(set).observe(hd);}catch(e){}}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ljs]');if(!b)return;
+  LJS=b.dataset.ljs==='1';try{localStorage.setItem('pbs3_lajur_semua',LJS?'1':'0');}catch(x){}muatLajur();
+  toast(LJS?'Semua lajur dipapar (skrol mendatar)':'Lajur dimuatkan ikut lebar skrin');});
 let rzm;window.addEventListener('resize',()=>{clearTimeout(rzm);rzm=setTimeout(muatLajur,150);});
 let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(window.innerWidth-lw)<40)return;lw=window.innerWidth;clearTimeout(rz);rz=setTimeout(renderAll,200);});
 
