@@ -610,8 +610,11 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat .tablewrap td .l2bar{vertical-align:middle}
   /* 28 Okt 2026 (permintaan pengguna "saya takmau scroll ke kanan … boleh jadikan 2 line sahaja"): sel dibenarkan
      membalut sehingga 2 baris supaya lajur jadi sempit dan semua lajur muat tanpa skrol mendatar */
-  body.padat .tablewrap tbody td{white-space:normal;overflow-wrap:break-word}
-  body.padat .tablewrap tbody td .nw,body.padat .tablewrap tbody td .vv.nw{white-space:nowrap}
+  body.padat .tablewrap tbody td{white-space:nowrap}
+  /* hanya sel teks panjang dibenarkan membalut; Saham, Kaedah, tarikh dan nombor kekal satu baris supaya mudah dibaca */
+  body.padat .tablewrap tbody td.grd,body.padat .tablewrap tbody td.grp,body.padat .tablewrap tbody td.grk,
+  body.padat .tablewrap tbody td.wrap,body.padat .tablewrap tbody td.syr,body.padat .tablewrap tbody td.name{white-space:normal;overflow-wrap:break-word}
+  body.padat .tablewrap tbody td .nw{white-space:nowrap}
   body.padat .tablewrap thead th{white-space:normal}
   /* 28 Okt 2026 (permintaan pengguna): lencana Pegang/Keluar/Tunggu kekal DI BAWAH peratus untung walaupun mod Padat */
   body.padat td.lrg .lrk{display:flex;flex-direction:column;align-items:center;gap:1px}
@@ -623,6 +626,11 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   /* 28 Okt 2026 (permintaan pengguna): pil "Selamat", "Syariah …" dll. duduk DI BAWAH nilai dalam sel gred */
   body.padat td.grd .grt{flex-direction:column;align-items:flex-start;gap:1px}
   body.padat td.grd .grt>.pill{max-width:none}
+  /* semua sel berlabuh pada baris PERTAMA supaya cip gred dan nilai sebaris merentas lajur (sel 1 baris lawan 2 baris) */
+  body.padat .tablewrap tbody td{vertical-align:top}
+  body.padat .tablewrap tbody td .grc,body.padat .tablewrap tbody td .grc.lr{align-items:flex-start}
+  body.padat .tablewrap tbody td .grc>.gr{height:1.7em}
+  body.padat .tablewrap tbody td .grt{justify-content:flex-start}
   body.padat .tablewrap td ul,body.padat .tablewrap td .kring{display:none}
 }
 #popsel .kskor{display:flex!important}#popsel ul{display:block!important;margin:4px 0 0;padding-left:16px}#popsel .kring{display:block!important}
