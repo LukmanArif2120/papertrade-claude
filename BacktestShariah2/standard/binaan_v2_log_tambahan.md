@@ -443,3 +443,8 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Watchlist 282 (baharu 206, dibuang 107, ke senarai beli 86). Isyarat direkod: 2787 (data/isyarat/2026-10-27_malam.csv.gz).
 - Ralat kaedah: tiada. Nota: C WLYB M30: tiada bar 2026-10-27 (harga terkini 2026-10-26); C WLYB M74: tiada bar 2026-10-27 (harga terkini 2026-10-26); C ACA M95: tiada bar 2026-10-27 (harga terkini 2026-10-22); C ACA M54: tiada bar 2026-10-27 (harga terkini 2026-10-22); C ACA M06: tiada bar 2026-10-27 (harga terkini 2026-10-22); C ACA M23: tiada bar 2026-10-27 (harga terkini 2026-10-22); C ACA M46: tiada bar 2026-10-27 (harga terkini 2026-10-22); C ACA M100: tiada bar 2026-10-27 (harga terkini 2026-10-22).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-28 22:31 MYT — GitHub Actions: beli maya 2026-10-28 (isyarat 2026-10-27)
+- Direkod 600 (277 saham; belian semula 51; fail claude_87.csv); dilangkau 13. Harga: buka sementara yfinance 10:31 NY.
+- Dilangkau: NVDA M13: buka 219.88 <= henti 256.05; BTU M13: buka 23.33 <= henti 25.25; OLLI M14: buka 83.51 <= henti 83.64; ABT M18: buka 101.82 <= henti 101.91; CHD M18: buka 103.98 <= henti 104.19; PFE M18: buka 29.49 <= henti 29.51; GEF M49: buka 82.13 <= henti 82.89; ULTA M70: buka 620.43 <= henti 620.68; NRP M128: isyarat batal pada buka (peraturan kaedah); NRP M129: isyarat batal pada buka (peraturan kaedah); RXO M136: isyarat batal pada buka (peraturan kaedah); NEOG M153: isyarat batal pada buka (peraturan kaedah); CSGP M156: isyarat batal pada buka (peraturan kaedah).
+- Tiada order. Tiada wang sebenar.
