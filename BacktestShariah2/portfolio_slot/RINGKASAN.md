@@ -11,6 +11,7 @@ Tempoh: 2026-10-16 hingga 2026-10-27 (8 sesi). SPY dalam tempoh sama: -0.46%.
 | GABUNGAN_10 — Gabungan kaedah beku | -0.05 | -1.44 | 6 | 11 | 0 | -1.75 |
 | TOP1_10 — Kaedah #1 sahaja | -0.43 | -0.43 | 8 | 11 | 0 | -1.49 |
 | RAWAK_KAEDAH_10 — Kaedah rawak (kawalan gabungan) | -0.57 | -1.07 | 10 | 0 | – | – |
+| RISIKO_10 — RS pasaran tertinggi, saiz berskala risiko | -0.38 | -2.10 | 10 | 0 | – | – |
 
 ## RS_10 — posisi dipegang
 
@@ -81,6 +82,21 @@ Tempoh: 2026-10-16 hingga 2026-10-27 (8 sesi). SPY dalam tempoh sama: -0.46%.
 | TT | M148 | 52 | 2026-10-22 | 467.06 | 461.07 | -1.28 |
 | UNF | M111 | 76 | 2026-10-22 | 275.85 | 250.40 | -9.23 |
 
+## RISIKO_10 — posisi dipegang
+
+| Saham | Kaedah | RS | Beli | Harga beli | Terkini | Untung % |
+|---|---|---|---|---|---|---|
+| AGL | M125 | 98 | 2026-10-16 | 88.90 | 90.65 | +1.97 |
+| ANL | M73 | 99 | 2026-10-16 | 11.89 | 10.71 | -9.92 |
+| AUGO | M14 | 98 | 2026-10-16 | 85.17 | 81.23 | -4.63 |
+| AXTI | M81 | 99 | 2026-10-16 | 56.23 | 58.23 | +3.56 |
+| BAND | M81 | 98 | 2026-10-16 | 49.04 | 49.27 | +0.47 |
+| GRAL | M14 | 98 | 2026-10-16 | 134.02 | 150.61 | +12.38 |
+| IOVA | M102 | 99 | 2026-10-16 | 14.65 | 14.58 | -0.48 |
+| MU | M76 | 98 | 2026-10-16 | 905.49 | 928.76 | +2.57 |
+| SNDK | M81 | 99 | 2026-10-16 | 1348.82 | 1304.84 | -3.26 |
+| SVRN | M08 | 99 | 2026-10-16 | 41.01 | 31.12 | -24.12 |
+
 ## Gabungan beku (jejak hadapan sejak 2026-10-22; data/analisis/gabungan_beku.json)
 
 | Portfolio | Kaedah (slot, lorong) | Sesi | Pulangan % | SPY tempoh sama % |
@@ -90,3 +106,7 @@ Tempoh: 2026-10-16 hingga 2026-10-27 (8 sesi). SPY dalam tempoh sama: -0.46%.
 | RAWAK_KAEDAH_10 | M11 (4, henti), M111 (3, henti), M148 (3, henti) | 4 | -0.57 | +0.43 |
 
 Penilaian adil memerlukan sekurang-kurangnya 6–12 bulan (KAJIAN_PORTFOLIO.md). Kelebihan yang dicari: RS_10 mengatasi RAWAK_10 dan SPY dengan MDD yang setanding; GABUNGAN_10 mengatasi TOP1_10, RAWAK_KAEDAH_10 dan SPY.
+
+RISIKO_10 dipasangkan dengan RS_10: susunan calon SAMA, hanya saiz berbeza (risiko 1% ekuiti / 4×ATR14%, dihadkan 2%–25%). Yang dicari di sini ialah MDD lebih baik pada pulangan yang setanding — bukan pulangan lebih tinggi. Idea saiz itu datang daripada REVERSE/KEPUTUSAN_1B.md (MDD bertambah baik 6/6 tahun, pulangan tidak), tetapi lorong ini **bukan** ujian ke hadapan dapatan itu: ia membeli daripada Lejar = isyarat kaedah Mxx, bukan signal REVERSE (lihat REVERSE/SPEC_FASA2.md §9.2). Yang diuji di sini ialah saiz atas isyarat Mxx.
+
+**Baca MDD RISIKO_10 bersama lajur `tunai`.** Kerana saham momentum Shariah kebanyakannya ber-ATR tinggi, saiznya kecil (2%–5%) dan 10 slot tidak menghabiskan tunai: sebahagian daripada MDD yang lebih baik datang daripada **pendedahan yang lebih rendah**, bukan daripada saiz yang lebih bijak. Perbandingan yang adil ialah MDD bagi setiap unit pendedahan; lihat `RISIKO_10_ekuiti.csv` lajur `tunai`.
