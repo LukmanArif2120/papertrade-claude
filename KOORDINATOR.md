@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 13:46 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 14:07 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,13 +12,14 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 13:46 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (3)
+## 1. Perlu keputusan anda (4)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
 | 2026-10-28 | Fasa 2: guna alphalens-reloaded (sudah dalam requirements-kajian.txt) atau tulis sendiri | alphalens memberi rank-IC + pulangan kuintil + turnover terus. REVERSE/ujian_pangkat.py ialah versi tangan. |
-| 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. |
+| 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. | 28 Okt: ini universe HARGA REVERSE (2000 teratas ikut nilai dagangan). Berasingan daripada universe SEC yang sudah dilebarkan ke 3260 (data/univ_sec.txt) pada 28 Okt. |
 | 2026-10-28 | Nilai semula sasaran pulangan | +10%/bulan = 78% daripada siling pandangan sempurna (12.89%/bulan). 0 daripada 36 sistem-tahun mencapainya. Siling dikira REVERSE/siling_pandangan_sempurna.py. |
+| 2026-10-28 | Jalankan penilaian leg SEC fasa 2 (SUE, pecutan hasil, jarak ke earnings) 2009-2026 | Menunggu isian awal SEC 3335 ticker siap (semak data/sec/status.json: belum_diisi -> 0). Ambang SPEC_FASA2 §4 kekal: >= 3000 peristiwa sah dengan nilai tidak kosong, >= 250 hari bertindih. Keluarga FDR berasingan daripada leg RS/gred (yang masih menunggu ~Okt 2027). |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
@@ -35,11 +36,14 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 |---|---|---|---|---|---|---|
 | RS pasaran | 30 | 2026-09-16 | 2026-10-27 | 0.5 |  | tidak |
 | Gred kumpulan | 23 | 2026-09-25 | 2026-10-27 | 0.4 |  | tidak |
-| SEC EPS/hasil |  |  |  |  | 80575 | tidak |
-| SEC earnings 8-K |  |  |  |  | 54109 | tidak |
+| SEC EPS/hasil | 3668 | 2009-04-30 | 2026-10-28 | 58.2 | 80575 | ya |
+| SEC earnings 8-K | 5109 | 2004-08-23 | 2026-10-28 | 81.1 | 54109 | ya |
 
 
-Terbaik setakat ini: **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
+Leg **RS/gred**: terbaik **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
+
+
+Leg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 (`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: 777 daripada 911 ticker universe ada data EPS/hasil, 2 belum diisi. Universe REVERSE kira-kira 2,300 setahun.
 
 
 ## 3. Operasi repo — 134 kaedah Mxx dan papertrade C
@@ -118,7 +122,8 @@ Workflow berjadual baharu **mesti** ditambah ke `JAGA` dalam `standard/penjaga_j
 | AUTOTUNE A02 (penalaan Optuna) | DITUTUP | 38400 konfigurasi diuji -> LULUS 0, CALON 0, TIDAK LULUS 40 |
 | REVERSE fasa 1 (2020–2025) | DITUTUP — DITOLAK | DITERIMA 0, CALON 11, DITOLAK 110; sasaran +10%/bulan 0 daripada 36 sistem-tahun |
 | REVERSE fasa 1b (saiz berskala risiko) | DITUTUP — DITOLAK | pulangan ditolak; MDD bertambah baik 6/6 tahun -> diuji hadapan sebagai lorong RISIKO_10 |
-| REVERSE fasa 2 (data titik-masa) | SPEC DIKUNCI — menunggu data | lihat jadual ambang di atas |
+| REVERSE fasa 2 leg RS/gred | SPEC DIKUNCI — menunggu masa | RS/gred dikira harian, tiada sejarah; anggaran ~Okt 2027 |
+| REVERSE fasa 2 leg SEC | SPEC DIKUNCI — menunggu liputan ticker | data titik-masa sejak 2009 (§4.1); menunggu isian awal 3,335 ticker, bukan masa |
 
 
 ## 7. Jangan ulangi — sudah diukur, ruang kosong

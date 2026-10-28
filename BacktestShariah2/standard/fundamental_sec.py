@@ -22,7 +22,11 @@
 #                   tumbuh_hasil = hasil_t / hasil_t−4 − 1; pecutan_hasil = tumbuh_t − tumbuh_t−1.
 #   status.json     akses terakhir setiap CIK (larian tambahan: companyfacts hanya diambil semula jika ada 10-Q/10-K baharu)
 #
-#   python3 standard/fundamental_sec.py jalan [--maks-fakta 300] [--saham AAPL,MSFT]
+#   python3 standard/fundamental_sec.py jalan [--maks-fakta 300] [--maks-saham 0] [--saham AAPL,MSFT]
+#
+# Universe (28 Okt 2026): data/univ_sec.txt (3260 ticker A02) U tawaran_edgar.universe(). Dilebarkan daripada 911
+# supaya leg fundamental REVERSE fasa 2 diuji atas populasi yang sama dengan fasa 1 (SEC XBRL nilai pertama difail
+# = titik-masa secara retrospektif sejak 2009, jadi leg ini tidak perlu menunggu Okt 2027).
 import argparse, json, os, sys
 from datetime import date, datetime, timezone
 
@@ -35,6 +39,7 @@ import tawaran_edgar as TE  # noqa: E402  (ua, ambil, peta_ticker, universe, mua
 
 BS2 = os.path.dirname(HERE)
 SEC = os.path.join(BS2, 'data', 'sec')
+UNIV_SEC = os.path.join(BS2, 'data', 'univ_sec.txt')
 SUBMISSIONS = 'https://data.sec.gov/submissions/CIK{cik:010d}.json'
 SUBMISSIONS_LAMA = 'https://data.sec.gov/submissions/{nama}'
 FAKTA = 'https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json'
@@ -50,6 +55,29 @@ LAJUR_EH = ['saham', 'cik', 'metrik', 'mula', 'akhir', 'nilai', 'tarikh_fail', '
 LAJUR_8K = ['saham', 'cik', 'tarikh_fail', 'masa_terima', 'akses', 'items']
 LAJUR_SUE = ['saham', 'akhir', 'eps', 'eps_lalu', 'sue', 'hasil', 'tumbuh_hasil', 'pecutan_hasil', 'tarikh_umum',
              'sumber_tarikh']
+
+
+def univ_sec():
+    """Universe SEC = data/univ_sec.txt (3260 ticker A02, untuk leg fundamental REVERSE fasa 2) DALAM KESATUAN
+    dengan tawaran_edgar.universe() (univ.txt + posisi claude*.csv). Kesatuan supaya liputan tidak susut dan
+    edgar.yml (pengesan ambil alih) kekal pada universe-nya sendiri."""
+    u = set(TE.universe())
+    if os.path.exists(UNIV_SEC):
+        with open(UNIV_SEC, encoding='utf-8') as f:
+            u |= {x.strip().replace('US.', '') for x in f if x.strip() and not x.lstrip().startswith('#')}
+    return u
+
+
+def putaran(pasangan, kursor, maks):
+    """Sublist `maks` pasangan (cik, ticker) bermula selepas `kursor` (ticker), berputar. maks <= 0 = semua.
+
+    Larian terhad masih menulis kemajuan (`_ganti` hanya menggantikan baris ticker yang disentuh), jadi isian
+    awal 3260 ticker boleh dipecahkan merentas beberapa larian tanpa melebihi had masa workflow."""
+    if maks <= 0 or maks >= len(pasangan):
+        return pasangan, ''
+    mula = next((i for i, (_, t) in enumerate(pasangan) if t > kursor), 0) if kursor else 0
+    pilih = [pasangan[(mula + i) % len(pasangan)] for i in range(maks)]
+    return pilih, pilih[-1][1]
 
 
 # ---------------------------------------------------------------- penghurai (diuji tanpa rangkaian)
@@ -209,7 +237,7 @@ def jalan(a):
         print(json.dumps(dict(langkau='rahsia SEC_USER_AGENT belum ditetapkan (nama + e-mel hubungan; SEC wajibkan)'), ensure_ascii=False))
         return 0
     peta = TE.muat_peta()
-    univ = set(a.saham.split(',')) if a.saham else TE.universe()
+    univ = set(a.saham.split(',')) if a.saham else univ_sec()
     cik_saham = {}
     for c, ts in peta.items():
         for t in ts:
@@ -221,7 +249,8 @@ def jalan(a):
     if st.get('versi') != VERSI:                # tiada campuran baris kiraan lama dan baharu
         eh, sue = pd.DataFrame(columns=LAJUR_EH), pd.DataFrame(columns=LAJUR_SUE)
     baru_eh, baru_k8, baru_sue, dikemas, gagal, fakta_n = [], [], [], [], [], 0
-    for cik, t in sorted(cik_saham.items(), key=lambda kv: kv[1]):
+    pilih, kursor = putaran(sorted(cik_saham.items(), key=lambda kv: kv[1]), st.get('kursor', ''), a.maks_saham)
+    for cik, t in pilih:
         try:
             sub = json.loads(TE.ambil(SUBMISSIONS.format(cik=cik)) or '{}')
         except Exception as e:
@@ -271,9 +300,10 @@ def jalan(a):
     sue.sort_values(['saham', 'akhir']).to_csv(os.path.join(SEC, 'sue.csv'), index=False, float_format='%.6g')
     baki = sum(1 for c in cik_saham if str(c) not in akses)
     st.update(versi=VERSI, akses=akses, sejarah_8k=sorted(sej8k), dijana=datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC'), saham_universe=len(cik_saham),
-              companyfacts_diambil=fakta_n, belum_diisi=baki, gagal=gagal[:20])
+              companyfacts_diambil=fakta_n, belum_diisi=baki, gagal=gagal[:20], kursor=kursor,
+              saham_disentuh=len(pilih))
     json.dump(st, open(stp, 'w'), ensure_ascii=False, indent=1, sort_keys=True)
-    print(json.dumps(dict(saham=len(cik_saham), companyfacts=fakta_n, belum_diisi=baki, baris_sue=len(sue),
+    print(json.dumps(dict(saham=len(cik_saham), disentuh=len(pilih), kursor=kursor, companyfacts=fakta_n, belum_diisi=baki, baris_sue=len(sue),
                           baris_8k=len(k8), gagal=len(gagal), contoh_gagal=gagal[:3]), ensure_ascii=False))
     return 1 if gagal and not dikemas and not baru_k8 else 0
 
@@ -282,6 +312,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('perintah', choices=['jalan'])
     ap.add_argument('--maks-fakta', type=int, default=300, help='companyfacts maksimum setiap larian (isian awal berperingkat)')
+    ap.add_argument('--maks-saham', type=int, default=0, help='ticker maksimum disentuh setiap larian (0 = semua; berputar ikut kursor status.json)')
     ap.add_argument('--saham', default='', help='senarai ticker (ujian); kosong = universe')
     a = ap.parse_args(argv)
     return jalan(a)

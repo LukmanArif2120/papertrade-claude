@@ -127,5 +127,45 @@ class TestSUE(unittest.TestCase):
         self.assertTrue(np.isnan(s.tumbuh_hasil.iloc[0]))
 
 
+class TestUniverse(unittest.TestCase):
+    def test_univ_sec_kesatuan_tidak_susut(self):
+        # Universe SEC = data/univ_sec.txt U tawaran_edgar.universe(); liputan lama tidak boleh hilang.
+        import tawaran_edgar as TE
+        u, lama = F.univ_sec(), set(TE.universe())
+        self.assertTrue(lama <= u)
+        self.assertGreaterEqual(len(u), 3260)       # 3260 ticker A02
+
+    def test_univ_sec_langkau_komen(self):
+        with open(F.UNIV_SEC, encoding='utf-8') as f:
+            baris = [x.strip() for x in f if x.strip()]
+        self.assertTrue(baris[0].startswith('#'))   # kepala penerangan ada
+        self.assertFalse(any(t.startswith('#') for t in F.univ_sec()))
+
+    def test_putaran_semua_bila_maks_sifar(self):
+        p = [(i, t) for i, t in enumerate('abcdef')]
+        self.assertEqual(F.putaran(p, '', 0), (p, ''))
+        self.assertEqual(F.putaran(p, 'c', 99), (p, ''))
+
+    def test_putaran_sambung_selepas_kursor(self):
+        p = [(i, t) for i, t in enumerate('abcdef')]
+        pilih, kursor = F.putaran(p, 'b', 2)
+        self.assertEqual([t for _, t in pilih], ['c', 'd'])
+        self.assertEqual(kursor, 'd')
+
+    def test_putaran_berputar_di_hujung(self):
+        p = [(i, t) for i, t in enumerate('abcdef')]
+        pilih, kursor = F.putaran(p, 'e', 3)
+        self.assertEqual([t for _, t in pilih], ['f', 'a', 'b'])
+        self.assertEqual(kursor, 'b')
+
+    def test_putaran_meliputi_semua_selepas_cukup_larian(self):
+        p = [(i, t) for i, t in enumerate('abcdefghij')]
+        k, dilihat = '', set()
+        for _ in range(4):                          # 4 x 3 >= 10
+            pilih, k = F.putaran(p, k, 3)
+            dilihat |= {t for _, t in pilih}
+        self.assertEqual(dilihat, {t for _, t in p})
+
+
 if __name__ == '__main__':
     unittest.main()

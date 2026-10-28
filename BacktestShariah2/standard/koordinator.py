@@ -140,18 +140,33 @@ def ambang_fasa2():
         n, a, b = _tarikh_csv(p, kol)
         rows.append(dict(sumber=nama, hari=n, mula=a, akhir=b,
                          suku=round(n / 63.0, 1), sedia='ya' if n >= F2_HARI else 'tidak'))
+    # SEC = nilai pertama difail -> titik-masa retrospektif (SPEC_FASA2.md §4.1), jadi `tarikh_fail`
+    # memang mengukur liputan. Halangan sebenar leg ini ialah liputan ticker, bukan bilangan hari.
     for nama, p in (('SEC EPS/hasil', os.path.join(BS2, 'data', 'sec', 'eps_hasil.csv')),
                     ('SEC earnings 8-K', os.path.join(BS2, 'data', 'sec', 'earnings_8k.csv'))):
-        n = 0
+        n, a, b = _tarikh_csv(p, 'tarikh_fail')
+        baris = 0
         if os.path.exists(p):
             try:
                 with open(p, encoding='utf-8') as f:
-                    n = max(sum(1 for _ in f) - 1, 0)
+                    baris = max(sum(1 for _ in f) - 1, 0)
             except OSError:
-                n = 0
-        rows.append(dict(sumber=nama, hari=None, mula=None, akhir=None, suku=None,
-                         sedia='tidak', baris=n))
+                baris = 0
+        rows.append(dict(sumber=nama, hari=n, mula=a, akhir=b, suku=round(n / 63.0, 1),
+                         sedia='ya' if n >= F2_HARI else 'tidak', baris=baris, sec=True))
     return rows
+
+
+def liputan_sec():
+    """(ticker ada data, ticker universe, belum_diisi) - halangan sebenar leg SEC fasa 2."""
+    st = _json(os.path.join(BS2, 'data', 'sec', 'status.json'), {}) or {}
+    ada = 0
+    try:
+        import pandas as pd
+        ada = pd.read_csv(os.path.join(BS2, 'data', 'sec', 'eps_hasil.csv'), usecols=['saham']).saham.nunique()
+    except Exception:
+        pass
+    return ada, st.get('saham_universe'), st.get('belum_diisi')
 
 
 def kajian():
@@ -189,8 +204,10 @@ def kajian():
                     'pulangan ditolak; MDD bertambah baik 6/6 tahun -> diuji hadapan '
                     'sebagai lorong RISIKO_10'))
     if os.path.exists(os.path.join(AKAR, 'REVERSE', 'SPEC_FASA2.md')):
-        out.append(('REVERSE fasa 2 (data titik-masa)', 'SPEC DIKUNCI — menunggu data',
-                    'lihat jadual ambang di atas'))
+        out.append(('REVERSE fasa 2 leg RS/gred', 'SPEC DIKUNCI — menunggu masa',
+                    'RS/gred dikira harian, tiada sejarah; anggaran ~Okt 2027'))
+        out.append(('REVERSE fasa 2 leg SEC', 'SPEC DIKUNCI — menunggu liputan ticker',
+                    'data titik-masa sejak 2009 (§4.1); menunggu isian awal 3,335 ticker, bukan masa'))
     return out
 
 
@@ -289,10 +306,14 @@ def main():
     A(jadual_md([(r['sumber'], r.get('hari'), r.get('mula'), r.get('akhir'), r.get('suku'),
                   r.get('baris', ''), r['sedia']) for r in f2],
                 ['Sumber', 'Hari dagangan', 'Mula', 'Akhir', 'Suku (anggaran)', 'Baris', 'Cukup?']))
-    hari_maks = max([r['hari'] for r in f2 if r.get('hari')] or [0])
-    A(f'\nTerbaik setakat ini: **{hari_maks} / {F2_HARI}** hari dagangan. Peristiwa sah ialah '
+    rs = [r['hari'] for r in f2 if r.get('hari') and not r.get('sec')]
+    A(f'\nLeg **RS/gred**: terbaik **{max(rs or [0])} / {F2_HARI}** hari dagangan. Peristiwa sah ialah '
       'fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat '
       '**retrospektif** — yang perlu ditunggu ialah masa, bukan kod.\n')
+    ada, univ, baki = liputan_sec()
+    A(f'\nLeg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 '
+      f'(`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: {ada} daripada {univ} ticker '
+      f'universe ada data EPS/hasil, {baki} belum diisi. Universe REVERSE kira-kira 2,300 setahun.\n')
 
     A('\n## 3. Operasi repo — 134 kaedah Mxx dan papertrade C\n')
     A('Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **Mxx** '
@@ -348,7 +369,8 @@ def main():
     with open(KELUAR, 'w', encoding='utf-8') as f:
         f.write('\n'.join(L))
     print(f'KOORDINATOR.md: {len("".join(L)):,} aksara | keputusan terbuka {len(kt)} | '
-          f'fasa 2 terbaik {hari_maks}/{F2_HARI} hari | lorong {len(sl)} | '
+          f'fasa 2 RS/gred {max(rs or [0])}/{F2_HARI} hari | SEC {ada}/{univ} ticker | '
+          f'lorong {len(sl)} | '
           f'di belakang origin/main: {blkg}')
     return 0
 

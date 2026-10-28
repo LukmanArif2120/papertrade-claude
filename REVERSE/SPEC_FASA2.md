@@ -17,12 +17,12 @@ pemangkatan yang indikator harga tidak ada.**
 
 ## 2. Lajur yang diuji (dikunci; tiada tambahan separuh jalan)
 
-| Kumpulan | Sumber | Liputan bermula |
+| Kumpulan | Sumber | Liputan data (bukan tarikh mula ambil) |
 |---|---|---|
-| RS rating lawan seluruh pasaran AS | `BacktestShariah2/data/rs/rs_pasaran.csv` | 2026-09-15 |
-| Gred sektor dan industri v2 | `BacktestShariah2/data/kumpulan/gred_kumpulan_sejarah.csv` | 2026-09-25 |
-| EPS/hasil suku point-in-time, SUE, pecutan hasil | `BacktestShariah2/data/sec/eps_hasil.csv`, `sue.csv` | 2026-10-27 |
-| Tarikh earnings 8-K Item 2.02 (jarak ke earnings, ±5 hari) | `BacktestShariah2/data/sec/earnings_8k.csv` | 2026-10-27 |
+| RS rating lawan seluruh pasaran AS | `BacktestShariah2/data/rs/rs_pasaran.csv` | sejak 2026-09-15 (terkumpul harian) |
+| Gred sektor dan industri v2 | `BacktestShariah2/data/kumpulan/gred_kumpulan_sejarah.csv` | sejak 2026-09-25 (terkumpul harian) |
+| EPS/hasil suku point-in-time, SUE, pecutan hasil | `BacktestShariah2/data/sec/eps_hasil.csv`, `sue.csv` | **sejak 2009** (`tarikh_fail`; lihat §4.1) |
+| Tarikh earnings 8-K Item 2.02 (jarak ke earnings, ±5 hari) | `BacktestShariah2/data/sec/earnings_8k.csv` | **sejak 2004** (`tarikh_fail`; lihat §4.1) |
 
 Tetapan standard sahaja. **Tiada penalaan parameter. Tiada Optuna.** Indikator berterusan diuji
 pada dua hujung kuintil, atas populasi kuintil yang dibekukan pada larian pertama, seperti fasa 1.
@@ -44,8 +44,41 @@ Penilaian **tidak boleh** dijalankan sebelum **kesemua** dipenuhi:
 - **≥ 3,000 peristiwa sah** dengan nilai lajur itu tidak kosong
 - **≥ 2 suku kalendar penuh** data
 
-Pada 28 Okt 2026: RS ≈ 30 hari dagangan, gred ≈ 23, SEC ≈ 1. **Belum cukup.** Anggaran penilaian
-pertama: sekitar **Okt 2027**.
+Pada 28 Okt 2026: RS ≈ 30 hari dagangan, gred ≈ 23. **Belum cukup.** Anggaran penilaian pertama
+bagi kedua-dua lajur itu: sekitar **Okt 2027**.
+
+### 4.1 Pembetulan 28 Okt 2026 — leg SEC TIDAK perlu menunggu
+
+Versi asal spec ini menulis "SEC ≈ 1 hari" dan meletakkan leg SEC dalam kumpulan yang menunggu
+Okt 2027. **Itu salah.** Lajur "2026-10-27" dalam §2 ialah tarikh kita **mula mengambil** data, bukan
+tarikh liputannya. SEC XBRL `companyfacts` menyimpan **nilai pertama difail**, dan
+`standard/fundamental_sec.py` memang mengambil nilai pertama itu (pernyataan semula diabaikan,
+lihat komen kepala skrip). Maka data itu **titik-masa secara retrospektif**:
+
+| Fail | Medan masa | Liputan (petikan 28 Okt 2026) | Baris |
+|---|---|---|---|
+| `data/sec/eps_hasil.csv` | `tarikh_fail` | 2009-04-30 → 2026-10-28 | 80,575 |
+| `data/sec/sue.csv` | `tarikh_umum` | 2007-10-25 → 2026-10-28 | 41,179 |
+| `data/sec/earnings_8k.csv` | `tarikh_fail` | 2004-08-23 → 2026-10-28 | 54,109 |
+
+Perbezaannya dengan RS/gred: RS dan gred **dikira** oleh kita setiap hari dan tidak boleh dibina
+semula ke belakang (input harian tidak disimpan); SEC **diterbitkan** dengan cap masa pemfailan,
+jadi sejarahnya memang ada.
+
+Maka leg SEC fasa 2 (SUE, pecutan hasil, jarak ke earnings) boleh dinilai atas 2009–2026 sebaik
+liputan ticker cukup, **tanpa menunggu**. Ia juga leg yang paling tidak bertindih dengan fasa 1:
+SUE dan pecutan hasil bukan indikator harga, jadi ia bukan ruang yang sudah diukur dan kosong.
+
+**Halangan yang tinggal ialah liputan ticker, bukan masa.** Pada 28 Okt 2026 liputan = 777 ticker
+daripada universe `tawaran_edgar.universe()` (911), sedangkan universe REVERSE ≈ 2,300 setahun.
+Keputusan pengguna 28 Okt 2026: lebarkan ke **3,260 ticker Release `autotune-data-a02`**
+(`BacktestShariah2/data/univ_sec.txt`; kesatuan dengan universe lama = 3,335). Isian awal melalui
+`fundamental_sec.yml` (`--maks-fakta`, `--maks-saham`); SEC had 10 permintaan/saat, jeda 0.15s.
+
+Ambang §4 kekal terpakai kepada leg SEC seperti juga RS/gred: ≥ 3,000 peristiwa sah dengan nilai
+lajur tidak kosong, dan ≥ 250 hari dagangan bertindih. Bezanya, bagi SEC ambang itu dipenuhi oleh
+sejarah, bukan oleh menunggu. Penilaian leg SEC dijalankan **berasingan** daripada leg RS/gred,
+dan keluarga FDR-nya dikira berasingan (tiada penggabungan kiraan ujian antara dua leg).
 
 ## 5. Ujian (dipradaftar)
 

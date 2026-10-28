@@ -74,5 +74,21 @@ class TestKoordinator(unittest.TestCase):
         self.assertIn('bukan Lejar Penuh', t)
 
 
+    def test_sec_titik_masa_retrospektif(self):
+        # SPEC_FASA2.md §4.1: SEC = nilai pertama difail, jadi liputannya sejarah (bukan ~1 hari seperti RS/gred).
+        # Pernah tersalah dilaporkan "tidak cukup" dan menyebabkan leg SEC ditangguh ke Okt 2027.
+        f2 = {r['sumber']: r for r in ko.ambang_fasa2()}
+        for nama in ('SEC EPS/hasil', 'SEC earnings 8-K'):
+            self.assertTrue(f2[nama].get('sec'), nama)
+            self.assertGreater(f2[nama]['hari'], ko.F2_HARI, nama)
+            self.assertEqual(f2[nama]['sedia'], 'ya', nama)
+            self.assertLess(f2[nama]['mula'], '2010-01-01', nama)
+
+    def test_liputan_sec_dilapor(self):
+        ada, univ, _ = ko.liputan_sec()
+        self.assertGreater(ada, 0)
+        self.assertTrue(univ is None or univ >= ada)
+
+
 if __name__ == '__main__':
     unittest.main()

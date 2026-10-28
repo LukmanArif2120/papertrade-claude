@@ -3,6 +3,9 @@
 # runner GitHub boleh. Rahsia repo SEC_USER_AGENT (nama + e-mel) wajib oleh SEC.
 # Isian awal berperingkat: companyfacts maksimum 300 saham setiap larian; larian seterusnya hanya ambil semula
 # saham yang ada 10-Q/10-K baharu. Masa (UTC): 23:41 Isn–Jum dan sandaran 04:11 Sel–Sab.
+# Universe dilebarkan 911 -> 3335 pada 28 Okt 2026 (data/univ_sec.txt = 3260 ticker A02). Sapuan submissions
+# penuh ~3335 x 0.15s jeda ~ 20 min, maka had masa 60 -> 120 min. Input maks_saham mengehadkan bilangan ticker
+# disentuh setiap larian (berputar ikut kursor status.json) jika isian awal perlu dipecahkan.
 name: Fundamental SEC
 
 on:
@@ -15,6 +18,10 @@ on:
         description: 'companyfacts maksimum setiap larian'
         required: false
         default: '300'
+      maks_saham:
+        description: 'ticker maksimum disentuh setiap larian (0 = semua)'
+        required: false
+        default: '0'
 
 permissions:
   contents: write
@@ -26,7 +33,7 @@ concurrency:
 jobs:
   sec:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,14 +45,16 @@ jobs:
         env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
           MAKS: ${{ github.event.inputs.maks_fakta }}
+          MAKS_SAHAM: ${{ github.event.inputs.maks_saham }}
         run: |
           [ -n "$SEC_USER_AGENT" ] || echo "::warning::Rahsia SEC_USER_AGENT belum ditetapkan; data SEC tidak diambil"
-          python3 BacktestShariah2/standard/fundamental_sec.py jalan --maks-fakta "${MAKS:-300}"
+          python3 BacktestShariah2/standard/fundamental_sec.py jalan --maks-fakta "${MAKS:-300}" --maks-saham "${MAKS_SAHAM:-0}"
       - name: Commit dan push
         run: |
           git config user.name "sec[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add BacktestShariah2/data/sec 2>/dev/null || true
+          git add BacktestShariah2/data/univ_sec.txt 2>/dev/null || true
           git add BacktestShariah2/data/edgar/company_tickers.json 2>/dev/null || true
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "Fundamental SEC: $(date -u +%F)"
