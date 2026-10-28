@@ -378,3 +378,5 @@ akibat pecahan yang sama (dicatat dalam log 27 Okt); baris itu tidak disentuh.
 
 **Dashboard v105 (artifact versi 114).** Mod Padat: lencana Pegang/Keluar/Tunggu kembali di bawah peratus untung dalam
 lajur dua lorong (`body.padat td.lrg .lrk` kolum, bukan baris) — permintaan pengguna. Tiada perubahan data atau db.
+
+**Dashboard v106 (artifact versi 115).** Permintaan pengguna ("saya tidak nampak industri dan RS"): pada 1900px pun `muatLajur` menyembunyikan Kewangan, Pemangkin, QR, RS dan Industri kerana ia menyembunyikan dari kanan sehingga jadual muat. `grCols` disusun semula mengikut keutamaan — Industri · RS · QR · Sektor · Pemangkin · Kewangan · Gred — supaya Sektor (kajian: paparan sahaja, tidak membantu memilih saham) hilang dahulu dan Industri (A kuat) serta RS (A +1.5% dalam 63 hari) kekal. Nota "Lajur disembunyi kerana skrin tidak cukup lebar" di bawah jadual kekal.
