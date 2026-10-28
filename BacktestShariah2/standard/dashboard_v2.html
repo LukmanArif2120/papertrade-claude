@@ -620,6 +620,9 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat .tablewrap td .grt .pill{margin-top:0!important}
   body.padat .tablewrap td .kskor{display:none}
   body.padat .tablewrap td .grt>.pill{overflow:hidden;text-overflow:ellipsis;max-width:110px}
+  /* 28 Okt 2026 (permintaan pengguna): pil "Selamat", "Syariah …" dll. duduk DI BAWAH nilai dalam sel gred */
+  body.padat td.grd .grt{flex-direction:column;align-items:flex-start;gap:1px}
+  body.padat td.grd .grt>.pill{max-width:none}
   body.padat .tablewrap td ul,body.padat .tablewrap td .kring{display:none}
 }
 #popsel .kskor{display:flex!important}#popsel ul{display:block!important;margin:4px 0 0;padding-left:16px}#popsel .kring{display:block!important}
@@ -1469,7 +1472,10 @@ function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
   const tk=r.tarikh_earnings?new Date(r.tarikh_earnings+'T00:00:00Z').toLocaleDateString('ms-MY',{day:'numeric',month:'short',timeZone:'UTC'}):'';
   const pl=q?`<span class="pill ${q[1]}" style="padding:0 6px;margin-top:3px">${q[0]}</span>`:'';
   const sb=String(r.sumber_earnings||''),ps=/QR lalu (\d+) hari/.exec(sb),pq=ps?`<span class="vv nw">QR lalu ${ps[1]} hari</span>`:'';
-  const txt=h!=null?`<b class="nw">${fx(h,0)} hari lagi</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}${pl}`:`<b class="nw">${sb==='tiada data'?'Tiada data':'Tiada laporan'}</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}${pl}`;
+  /* 28 Okt 2026 (permintaan pengguna): nombor sahaja dalam sel; "hari lagi", tarikh dan sebab dalam tooltip hover */
+  const ttQR=h!=null?`${fx(h,0)} hari dagangan lagi ke laporan suku${tk?' ('+tk+')':''}${sb.startsWith('anggaran')?' — tarikh anggaran':''}${q?'. '+q[0]:''}`
+    :(sb==='tiada data'?'Tiada tarikh earnings dalam sumber data pada hari isyarat.':'Tiada laporan suku dalam 30 hari dagangan selepas isyarat.');
+  const txt=h!=null?`<b class="nw" title="${esc(ttQR)}">${fx(h,0)}</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}${pl}`:`<b class="nw" title="${esc(ttQR)}">${sb==='tiada data'?'Tiada data':'Tiada'}</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}${pl}`;
   return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt+qrSeb(r)):`<span class="mut" title="${esc(/^tidak diketahui/.test(r.sumber_earnings||'')?'Tarikh earnings '+r.sumber_earnings+'. Gred QR tidak dikira.':'Tarikh earnings tiada dalam sumber data (Nasdaq/SST/yfinance/Moomoo) pada hari isyarat; gred QR tidak dikira.')}">Tiada data</span>${qrSeb(r)}`;}
 /* gred kewangan v7 (standard/gred_kewangan.py): ringkasan "B (K:A U:B T:C S:B) · peringkat · F:n · keyakinan … · Syariah …" */
 const SYLBL={'lulus':'p-buy','hampir had':'p-warn','gagal sebahagian':'p-warn','gagal':'p-exit'};
