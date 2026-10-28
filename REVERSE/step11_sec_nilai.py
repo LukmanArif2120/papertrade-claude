@@ -35,6 +35,7 @@ UFUK = 63                  # ufuk label fasa 1 (SPEC §2)
 HENTI_ATR = 2.0            # henti keras fasa 1
 LAJUR = ['sue', 'tumbuh_hasil', 'pecutan_hasil']
 TINGKAP = 5                # hari dagangan: tingkap PEAD dan tingkap pra-earnings (§9.4)
+BASI_MAKS = 120            # §9.6: lajur SEC lebih lama daripada ini = kosong (sama SELANG_MAKS step10)
 KELUARGA = 'FASA2_SEC'
 MIN_N = 200                # minimum baris untuk Spearman (sama seperti ujian_pangkat.py)
 PECAHAN_KONSISTEN = 0.71   # §9.5: ceil(0.71 x 14) = 10, sama dengan §9.3 asal
@@ -116,6 +117,13 @@ def muat(tahun):
     d = pd.concat(bhg, ignore_index=True)
     d['bulan'] = d.tarikh.dt.strftime('%Y-%m')
     d['minggu'] = d.tarikh.dt.strftime('%G-W%V')
+    # §9.6: pengumuman terakhir lebih lama daripada BASI_MAKS hari -> lajur SEC dianggap kosong.
+    # Taburan: p95 = 97 hari (kitaran suku normal), p99 = 952 (saham yang berhenti memfail).
+    basi = (d.hari_sejak_earnings > BASI_MAKS) | d.hari_sejak_earnings.isna()
+    d['basi'] = basi
+    d.loc[basi, LAJUR] = np.nan
+    print(f'  §9.6 kebasian: {int(basi.sum())} daripada {len(d)} baris'
+          f' ({basi.mean() * 100:.2f}%) lajur SEC dikosongkan')
     return d
 
 

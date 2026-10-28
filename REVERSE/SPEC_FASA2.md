@@ -378,3 +378,35 @@ Dinyatakan semula sebagai pecahan yang sama, supaya ia terdefinisi bagi apa-apa 
 Pada 14 tahun: ceil(0.71 × 14) = 10 — **sama** dengan §9.3 asal. Ini penyataan semula, bukan
 pelonggaran: pecahannya tidak berubah, dan syarat minimum 10 tahun dinilai menghalang keputusan
 daripada sampel pendek. Dikunci sebelum sebarang keputusan §5.1 dilihat.
+
+### 9.6 — 28 Okt 2026: had kebasian lajur SEC dikunci (sebelum keputusan dilihat)
+
+`merge_asof` arah ke belakang melekatkan pengumuman **terakhir yang tersedia**, tanpa had berapa
+lama dahulu. Taburan `hari_sejak_earnings` dalam `sec_join.csv` (24,871 baris) menunjukkan ia
+masalah sebenar walaupun kecil:
+
+| Kuantil | Hari |
+|---|---|
+| p50 | 47 |
+| p75 | 70 |
+| p90 | 87 |
+| p95 | 97 |
+| p99 | **952** |
+| maks | **5,241** |
+
+Kitaran suku normal berakhir sekitar p95 = 97 hari. Lonjakan ke 952 pada p99 ialah saham yang
+**berhenti memfail** (delist, diambil alih, atau hanya pernah memfail sekali dahulu). SUE dari
+14 tahun lalu yang dilekatkan pada peristiwa 2025 ialah hingar, bukan maklumat titik-masa, dan ia
+akan masuk ke dalam kuintil seolah-olah ia nilai sah.
+
+**Peraturan dikunci.** Lajur SEC (`sue`, `tumbuh_hasil`, `pecutan_hasil`) digunakan hanya jika
+pengumuman terakhir yang tersedia berada dalam **120 hari kalendar**. Lebih lama daripada itu,
+ketiga-tiga lajur dianggap **kosong** bagi baris itu (dikecualikan, bukan diisi sifar — §9.3).
+
+- 120 hari = satu kitaran suku + tempoh tenggang, dan ia nilai yang **sama** dengan `SELANG_MAKS`
+  yang sudah digunakan untuk jangkaan kitaran dalam `step10_sec.py` (§4.3). Satu ambang, bukan dua.
+- Ia menyentuh **585 baris (2.35%)**, jadi ia tidak boleh mengubah kesimpulan secara material. Ia
+  dikunci kerana ia betul, bukan kerana ia besar.
+- `hari_sejak_earnings` **mentah** kekal dalam `sec_join.csv` supaya penapis ini boleh diaudit.
+  Penapis dikenakan dalam `step11_sec_nilai.py`, bukan dalam join.
+- Signal `sejak_earnings_le5` (tingkap PEAD, ≤ 5 hari) tidak terjejas: ia sudah lebih ketat.

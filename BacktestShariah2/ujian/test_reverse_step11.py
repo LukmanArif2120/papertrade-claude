@@ -119,5 +119,16 @@ class TestSetSignalDikunci(unittest.TestCase):
         self.assertEqual(T.LAJUR, ['sue', 'tumbuh_hasil', 'pecutan_hasil'])
 
 
+class TestKebasian(unittest.TestCase):
+    def test_ambang_sama_dengan_selang_maks_step10(self):
+        """§9.6: satu ambang, bukan dua — sama dengan SELANG_MAKS jangkaan kitaran step10."""
+        import step10_sec as T10
+        self.assertEqual(T.BASI_MAKS, T10.SELANG_MAKS)
+        self.assertEqual(T.BASI_MAKS, 120)
+
+    def test_tingkap_pead_lebih_ketat_daripada_basi(self):
+        self.assertLess(T.TINGKAP, T.BASI_MAKS)
+
+
 if __name__ == '__main__':
     unittest.main()
