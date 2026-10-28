@@ -576,7 +576,15 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
 }
 /* lajur yang tidak muat lebar skrin disembunyi (muatLajur); nota menamakannya */
 .tablewrap .sbn{display:none!important}
-.sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted)}
+.sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.sbn-nota .more{padding:4px 10px;font-size:.78rem}
+/* 28 Okt 2026 (permintaan pengguna): mod "papar semua lajur" — jadual kembali boleh diskrol mendatar, tiada lajur disembunyi */
+.tablewrap.skrolx,.tablewrap.tw-grd.skrolx{overflow-x:auto}
+.tablewrap.skrolx>table{width:max-content;min-width:100%}
+.tablewrap.skrolx th,.tablewrap.skrolx td{white-space:nowrap}
+.tablewrap.skrolx td.wrap,.tablewrap.skrolx td.grp,.tablewrap.skrolx td.grk,.tablewrap.skrolx td.syr,.tablewrap.skrolx td.name{white-space:normal}
+.tablewrap.skrolx .frz{position:sticky;left:0;z-index:2;box-shadow:1px 0 0 var(--line)}
+.tablewrap.skrolx th.frz{z-index:3}
 /* ================= v103 (23 Okt 2026): mod Padat, pop timbul, gerakan, ulang tayang lorong 2, makmal ================= */
 /* Padat (desktop): satu barisan setiap baris; butiran .vv dalam pop timbul bila hover. Telefon tidak berubah (kad lipat). */
 @media (min-width:761px){
@@ -1460,12 +1468,12 @@ function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:
    berguna diletak di kiri. 28 Okt 2026 (permintaan pengguna: "saya tidak nampak industri dan RS"): Industri dan RS
    (kajian 2019–2026: Industri A kuat, RS A disahkan +1.5% dalam 63 hari) mendahului Sektor, yang paparan sahaja. */
 const grCols=()=>[
-  {k:'gred_industri',t:'Industri',tip:'g_i',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??null,f:r=>grKump(r,'Industri')},
-  {k:'rs_rating',t:'RS',tip:'g_r',l:1,c:()=>'grd',v:r=>grNil(r.rs_rating),f:grRS},
-  {k:'hari_ke_earnings',t:'QR',tip:'g_q',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??null,f:grQR},
-  {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
-  {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??null,f:grPem,c:()=>'grd grp'},
-  {k:'gred_kewangan',t:'Kewangan',tip:'g_k',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??null,f:grKew},
+  {k:'gred_industri',t:'Industri',tip:'g_i',hc:'kp-hi',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??null,f:r=>grKump(r,'Industri')},
+  {k:'rs_rating',t:'RS',tip:'g_r',hc:'kp-hi',l:1,c:()=>'grd',v:r=>grNil(r.rs_rating),f:grRS},
+  {k:'hari_ke_earnings',t:'QR',tip:'g_q',hc:'kp-lo',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??null,f:grQR},
+  {k:'gred_sektor',t:'Sektor',tip:'g_s',hc:'kp-lo',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
+  {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',hc:'kp-lo',l:1,v:r=>GORD[r.gred_pemangkin]??null,f:grPem,c:()=>'grd grp'},
+  {k:'gred_kewangan',t:'Kewangan',tip:'g_k',hc:'kp-lo',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??null,f:grKew},
   {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m0'}];
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.tutup_semua?'exit':'')+' '+jalurPT(r);
 function ptCols(akaun){return [
@@ -1475,11 +1483,11 @@ function ptCols(akaun){return [
   TRCA,STC,
   ...(padatDesk()?[]:[{k:'harga_beli',t:'Harga beli',tip:'harga_beli',f:r=>fx(r.harga_beli,2)},{k:'unit',t:'Unit',tip:'unit',f:r=>fx(r.unit,0)},{k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)}]),
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${padatDesk()?`<span class="vv nw">beli ${fx(r.harga_beli,2)} → ${r.keluar?'keluar':'kini'} ${fx(r.harga_terkini,2)}</span>`:''}${spyCip(r)}`,c:()=>'utg m0'},
-  {k:'_r',t:'R',tip:'r_multiple',v:rOf,f:rSel},
-  {k:'_spark',t:'Sejak beli',tip:'carta_kecil',ns:1,l:1,f:r=>sparkPos(r)},
+  {k:'_r',t:'R',tip:'r_multiple',hc:'kp-lo',v:rOf,f:rSel},
+  {k:'_spark',t:'Sejak beli',tip:'carta_kecil',hc:'kp-lo',ns:1,l:1,f:r=>sparkPos(r)},
   {k:'hari',t:'Hari dipegang',tip:'hari_pt',f:hariSel,c:()=>'ctr m0'},
   {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}${selLorong(r,'kaedah')}${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`,c:()=>'wrap lrg lk m0'},
-  {k:'untung_henti_pct',t:'Pegang selagi naik',tip:'keluar_henti',l:1,v:r=>hasilL(r,'henti'),f:r=>selLorong(r,'henti'),c:()=>'wrap lrg'},
+  {k:'untung_henti_pct',t:'Pegang selagi naik',tip:'keluar_henti',hc:'kp-hi',l:1,v:r=>hasilL(r,'henti'),f:r=>selLorong(r,'henti'),c:()=>'wrap lrg'},
   ...grCols(),MKAD(r=>kadPos(r,akaun)),BTN_PENUH];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
   const up=rows.filter(r=>r.untung_pct>0).length,ex=rows.filter(r=>r.keluar).length;const a=avgOf(rows.map(r=>r.keluar?r.untung_akhir_pct:r.untung_pct));
@@ -3531,12 +3539,16 @@ function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const e
 /* tiada skrol mendatar: jika jadual lebih lebar daripada bekasnya, sembunyi lajur dari kanan ke kiri (untung bulanan: bulan
    terlama dahulu), kecuali lajur utama: lajur pertama, Saham/Kaedah, lajur ringkas telefon m0, Untung %; nota di bawah jadual
    menamakannya. Kad telefon (tw-lp, tw-grd ≤ 760px) tidak disentuh. Dipanggil selepas setiap lukisan (topScrolls) dan ubah saiz. */
+let LJS=false;try{LJS=localStorage.getItem('pbs3_lajur_semua')==='1';}catch(e){}
+const NOTA_LJS='<p class="sbn-nota">Semua lajur dipapar — skrol jadual ke kanan untuk melihatnya. <button type="button" class="more" data-ljs="0">Muat ikut lebar skrin</button></p>';
 function muatLajur(){
   document.querySelectorAll('.tablewrap').forEach(w=>{
     const t=w.querySelector(':scope>table');if(!t)return;
     w.querySelectorAll('.sbn').forEach(x=>x.classList.remove('sbn'));
     const nt=w.nextElementSibling;if(nt&&nt.classList.contains('sbn-nota'))nt.remove();
     if(!w.offsetParent||(skrinKecil()&&/\btw-(lp|grd)\b/.test(w.className)))return;
+    w.classList.toggle('skrolx',LJS&&!skrinKecil());
+    if(LJS&&!skrinKecil()){if(w.scrollWidth>w.clientWidth+1)w.insertAdjacentHTML('afterend',NOTA_LJS);return;}
     const hr=t.tHead&&t.tHead.rows.length===1?t.tHead.rows[0]:null;if(!hr)return;
     const ths=[...hr.cells];if(ths.some(h=>h.colSpan>1))return;
     const lebih=()=>t.offsetWidth>w.clientWidth+1;if(!lebih())return;
@@ -3544,14 +3556,21 @@ function muatLajur(){
     const utama=i=>i===0||ths[i].classList.contains('frz')||ths[i].offsetWidth===0||/\b(m0|tk|utg|name|mline|mkad|mbtn)\b/.test((td1[i]&&td1[i].className)||ths[i].className);
     const rows=[...t.querySelectorAll('tbody tr')].filter(tr=>tr.cells.length===ths.length),sor=[];
     const urut=ths.map((_,i)=>i).slice(1);if(!t.classList.contains('hmt'))urut.reverse();
+    /* keutamaan lajur (28 Okt 2026, permintaan pengguna): kp-lo disembunyi dahulu, kp-hi paling akhir; susunan
+       kiri/kanan dikekalkan dalam setiap peringkat (Array.sort stabil) */
+    const kp=i=>ths[i].classList.contains('kp-lo')?0:ths[i].classList.contains('kp-hi')?2:1;
+    urut.sort((a,b)=>kp(a)-kp(b));
     for(const i of urut){if(!lebih())break;if(utama(i))continue;
       ths[i].classList.add('sbn');rows.forEach(tr=>tr.cells[i].classList.add('sbn'));sor.push((ths[i].textContent||'').replace(/[↕↓↑]/g,'').trim());}
     if(!t.classList.contains('hmt'))sor.reverse();
-    if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'}</p>`);
+    if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'} <button type="button" class="more" data-ljs="1">Papar semua lajur</button></p>`);
   });
 }
 {const hd=document.querySelector('header.top');const set=()=>document.documentElement.style.setProperty('--hdr',(hd?hd.offsetHeight:0)+'px');set();
   try{new ResizeObserver(set).observe(hd);}catch(e){}}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-ljs]');if(!b)return;
+  LJS=b.dataset.ljs==='1';try{localStorage.setItem('pbs3_lajur_semua',LJS?'1':'0');}catch(x){}muatLajur();
+  toast(LJS?'Semua lajur dipapar (skrol mendatar)':'Lajur dimuatkan ikut lebar skrin');});
 let rzm;window.addEventListener('resize',()=>{clearTimeout(rzm);rzm=setTimeout(muatLajur,150);});
 let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(window.innerWidth-lw)<40)return;lw=window.innerWidth;clearTimeout(rz);rz=setTimeout(renderAll,200);});
 
