@@ -321,3 +321,60 @@ Had tambahan leg SEC yang diakui sekarang, bukan selepas keputusan:
 - **Lajur SEC hadir pada kira-kira 27–30% peristiwa sah** (§4.4) walaupun selepas liputan ticker
   dilebarkan, kerana SUE memerlukan sejarah suku yang cukup. Peristiwa tanpa lajur SEC dikecualikan
   daripada ujian pemangkatan lajur itu, bukan diisi sifar.
+
+### 9.4 — 28 Okt 2026: set signal leg SEC dikunci (sebelum sebarang keputusan dilihat)
+
+§5.2 merujuk "metrik Step 4 fasa 1" tetapi tidak menyatakan bagaimana lajur berterusan SEC ditukar
+kepada signal binari. Dibiarkan terbuka, pilihan itu boleh dibuat selepas melihat keputusan. Dikunci
+sekarang.
+
+**Sasaran (satu sahaja).** Pulangan boleh didagangkan `pul_henti2atr` seperti fasa 1: masuk pada
+buka esok dengan kos satu sisi, henti keras −2×ATR14, ufuk 63 hari, kos keluar. Tiada sasaran
+hindsight. Bagi 2020–2025 ia dibaca terus daripada `.cache/hadapan_<tahun>.parquet` fasa 1; bagi
+tahun lain ia dikira dengan formula yang **sama** dan disahkan mengeluarkan nombor serupa atas
+tahun bertindih.
+
+**Set signal (20 ujian, dikunci; had corong fasa 1 = 30).**
+
+Lajur berterusan → dua hujung kuintil, sempadan daripada **populasi kuintil yang dibekukan** pada
+larian pertama (peristiwa sah dengan lajur itu tidak kosong), seperti fasa 1:
+
+| # | Signal |
+|---|---|
+| 1–2 | `q5:sue`, `q1:sue` |
+| 3–4 | `q5:tumbuh_hasil`, `q1:tumbuh_hasil` |
+| 5–6 | `q5:pecutan_hasil`, `q1:pecutan_hasil` |
+| 7 | `sejak_earnings_le5` — peristiwa dalam 5 hari dagangan **selepas** pengumuman tersedia (tingkap PEAD) |
+| 8 | `jangka_earnings_le5` — jangkaan pengumuman berikut dalam 5 hari (§4.3; jangkaan, bukan tarikh sebenar) |
+| 9–20 | enam signal kuintil × dua signal tingkap earnings (silang, seperti pemicu × konteks fasa 1) |
+
+**Tiada signal ditambah selepas larian pertama.** Jika lajur lain kelihatan menarik selepas melihat
+keputusan, ia bukan penemuan kajian ini.
+
+**Populasi.** Peristiwa sah REVERSE (§9.1) yang lajur berkenaan **tidak kosong**. Peristiwa tanpa
+lajur SEC dikecualikan daripada ujian lajur itu, tidak diisi sifar (§9.3). Kadar asas dan kawalan
+rawak dikira atas populasi yang sama supaya lift tidak dicemari perbezaan liputan.
+
+**Keluarga FDR.** Satu keluarga `FASA2_SEC`, 20 ujian, BH-FDR q ≤ 0.01 (§5.3). Berasingan daripada
+leg RS/gred dan daripada kelima-lima keluarga fasa 1 — tiada penggabungan kiraan ujian.
+
+**Keputusan.** Lajur diterima hanya jika §6 (1)–(4) dipenuhi, termasuk syarat §9.3 bahawa ia lulus
+gerbang keras dalam ≥ 2 tahun selain tahun ia ditemui. Jika tidak: **DITOLAK**, dilaporkan sebagai
+ditolak.
+
+### 9.5 — 28 Okt 2026: §9.3 ambang pemangkatan dinyatakan sebagai PECAHAN (sebelum keputusan dilihat)
+
+§9.3 menulis "konsisten dalam ≥ 10 daripada **14** tahun". Itu mengandaikan kesemua 14 tahun
+2012–2025 tersedia. `step1_run.py` sedang dijalankan untuk 2012–2019 dan mungkin tidak semuanya
+siap; dengan 12 tahun, peraturan seperti ditulis **tidak boleh dinilai sama sekali**.
+
+Dinyatakan semula sebagai pecahan yang sama, supaya ia terdefinisi bagi apa-apa bilangan tahun:
+
+- tanda konsisten dalam **≥ 71% tahun yang dinilai** (pembundaran ke atas), **dan**
+- **≥ 10 tahun dinilai** (jika kurang, lajur itu dilapor **BELUM BOLEH DINILAI**, bukan lulus dan
+  bukan gagal), **dan**
+- |rho| purata ≥ 0.05.
+
+Pada 14 tahun: ceil(0.71 × 14) = 10 — **sama** dengan §9.3 asal. Ini penyataan semula, bukan
+pelonggaran: pecahannya tidak berubah, dan syarat minimum 10 tahun dinilai menghalang keputusan
+daripada sampel pendek. Dikunci sebelum sebarang keputusan §5.1 dilihat.
