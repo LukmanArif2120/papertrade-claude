@@ -641,6 +641,10 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
      gred tanpa trik grid — lebar sel dikira biasa, tiada lajur bertindih */
   body.padat td.grd .grt{flex-direction:column;align-items:flex-start;gap:1px}
   body.padat td.grd>.pill{max-width:none}
+  /* teks ganti (tiada gred: "Tiada data", ringkasan kewangan panjang) dipotong satu baris supaya tinggi baris
+     seragam; teks penuh kekal dalam tooltip */
+  body.padat td.grd>.mut,body.padat td.grd>.grt,body.padat td.grd .grt>:not(.pill):not(.vv):not(.kskor){display:inline-block;max-width:150px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:top}
   /* semua sel berlabuh pada baris PERTAMA supaya cip gred dan nilai sebaris merentas lajur (sel 1 baris lawan 2 baris) */
   body.padat .tablewrap tbody td{vertical-align:top}
   body.padat .tablewrap tbody td .grc,body.padat .tablewrap tbody td .grc.lr{align-items:flex-start}
@@ -1479,7 +1483,7 @@ function skPerf(jenis,nama){const sk=S.sektor;if(!nama||!sk||!Array.isArray(sk.r
   return m[jenis+'|'+nama]||null;}
 function grKump(r,jenis){const g=r[jenis==='Sektor'?'gred_sektor':'gred_industri'],sk=grNil(r[jenis==='Sektor'?'skor_sektor':'skor_industri']);
   const asal=jenis==='Sektor'?r.sektor:r.industri,us=jenis==='Sektor'?r.sektor_us:r.industri_us;const x=skPerf(jenis,us||asal);
-  if(GORD[g]==null)return asal?`<span class="grt">${esc(asal)}</span>`:'<span class="mut">belum</span>';
+  if(GORD[g]==null)return asal?`<span class="grt" title="${esc(asal)}">${esc(asal)}</span>`:'<span class="mut">belum</span>';
   return grSel1(g,`<span class="nw" title="Skor ${jenis.toLowerCase()} daripada 100"><b>${sk==null?'–':fx(sk,0)}</b></span><span class="vv nm1" title="${esc(asal||us||'')}">${esc(asal||us||'')}</span>${x&&x.prestasi_1m!=null?`<span class="vv">1B kini <span class="${cls(x.prestasi_1m)}">${sg2(x.prestasi_1m)}</span></span>`:''}`);}
 /* skema RS 18 Okt 2026: A/B hanya jika disahkan (saham naik 12 bulan, SPY > SMA200, Mansfield > 0); rs_tanda = sebab/risiko */
 function grRS(r){const v=grNil(r.rs_rating),ri=grNil(r.rs_industri),t=String(r.rs_tanda||'');
@@ -1506,8 +1510,8 @@ function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
 /* gred kewangan v7 (standard/gred_kewangan.py): ringkasan "B (K:A U:B T:C S:B) · peringkat · F:n · keyakinan … · Syariah …" */
 const SYLBL={'lulus':'p-buy','hampir had':'p-warn','gagal sebahagian':'p-warn','gagal':'p-exit'};
 function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:(\S+) S:(\S+)\) · ([^·]+?) · F:(\d+) · keyakinan (\S+)(?: · Syariah (.+))?$/.exec(s);
-  if(GORD[r.gred_kewangan]==null){const x=/^– \((.*)\)$/.exec(s);return `<span class="mut">${esc(x?x[1]:'Belum dikira')}</span>`;}
-  if(!m)return grSel1(r.gred_kewangan,`<span>${esc(s)}</span>`);
+  if(GORD[r.gred_kewangan]==null){const x=/^– \((.*)\)$/.exec(s);const tx=x?x[1]:'Belum dikira';return `<span class="mut" title="${esc(tx)}">${esc(tx)}</span>`;}
+  if(!m)return grSel1(r.gred_kewangan,`<span title="${esc(s)}">${esc(s)}</span>`);
   const sub=[['K',m[1],'Kekukuhan'],['U',m[2],'Keuntungan'],['T',m[3],'Pertumbuhan'],['S',m[4],'Arah suku terkini']].map(([l,g,n])=>`<span title="${n}"><small>${l}</small>${grB(g,'',n)}</span>`).join('');
   const f=+m[6],sy=m[8];
   return grSel1(r.gred_kewangan,`<span class="kskor">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`,sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:'');}
