@@ -1,0 +1,10 @@
+{
+ "signal": [
+  "q5:pecutan_hasil&sejak_earnings_le5"
+ ],
+ "slot": 8,
+ "bahagian": 0.125,
+ "risiko": 0.01,
+ "k_atr": 4.0,
+ "n_baris": 168
+}

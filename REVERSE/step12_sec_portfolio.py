@@ -94,7 +94,7 @@ def metrik_siri(nama, siri, dag, info):
     tahun = len(e) / 252.0
     pul = (float(e.iloc[-1]) ** (1 / tahun) - 1) * 100 if tahun > 0 and e.iloc[-1] > 0 else np.nan
     return dict(sistem=nama, n_masuk=info['n_masuk'], slot_purata=info['purata_slot_terisi'],
-                pulangan_tahunan=round(pul, 2), mdd=round(T.mdd(e.to_numpy()) * 100, 2),
+                pulangan_tahunan=round(pul, 2), mdd=round(T.mdd(e.to_numpy()), 2),
                 median_bulanan=round(float(bulanan.median()), 2) if len(bulanan) else np.nan,
                 pct_bulan_ge10=round(float((bulanan >= 10).mean() * 100), 1) if len(bulanan) else np.nan,
                 bulan_terburuk=round(float(bulanan.min()), 2) if len(bulanan) else np.nan,

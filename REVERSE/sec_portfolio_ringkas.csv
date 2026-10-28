@@ -1,0 +1,13 @@
+signal,jenis,keluar,saiz,pulangan_tahunan,mdd,median_bulanan,pct_bulan_ge10,bulan_terburuk
+q5:pecutan_hasil&sejak_earnings_le5,RAWAK,REF_chandelier_4atr,risiko,0.72,-8.7,0.53,0.0,-4.82
+q5:pecutan_hasil&sejak_earnings_le5,RAWAK,REF_chandelier_4atr,tetap,9.16,-14.66,1.0,0.0,-7.6
+q5:pecutan_hasil&sejak_earnings_le5,RAWAK,REF_jual_hari63,risiko,2.7,-9.41,0.88,0.0,-4.76
+q5:pecutan_hasil&sejak_earnings_le5,RAWAK,REF_jual_hari63,tetap,4.33,-14.84,0.98,0.0,-7.34
+q5:pecutan_hasil&sejak_earnings_le5,RAWAK,REF_pegang_252,risiko,9.86,-10.7,1.15,0.0,-5.12
+q5:pecutan_hasil&sejak_earnings_le5,RAWAK,REF_pegang_252,tetap,15.3,-15.76,1.37,0.0,-8.66
+q5:pecutan_hasil&sejak_earnings_le5,signal,REF_chandelier_4atr,risiko,2.97,-8.56,0.72,0.0,-4.62
+q5:pecutan_hasil&sejak_earnings_le5,signal,REF_chandelier_4atr,tetap,3.0,-13.98,0.58,0.0,-8.38
+q5:pecutan_hasil&sejak_earnings_le5,signal,REF_jual_hari63,risiko,9.87,-9.5,0.9,0.0,-4.22
+q5:pecutan_hasil&sejak_earnings_le5,signal,REF_jual_hari63,tetap,17.65,-14.55,1.46,0.0,-6.85
+q5:pecutan_hasil&sejak_earnings_le5,signal,REF_pegang_252,risiko,3.68,-11.4,0.78,0.0,-5.65
+q5:pecutan_hasil&sejak_earnings_le5,signal,REF_pegang_252,tetap,4.95,-20.36,1.07,0.0,-10.98

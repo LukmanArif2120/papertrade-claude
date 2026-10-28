@@ -303,14 +303,31 @@ def main(argv=None):
         print(f'\nAMARAN §9.5: hanya {int(r51.n_tahun.max())} tahun dinilai (minimum 10).'
               ' Lajur dengan tahun < 10 ialah BELUM BOLEH DINILAI, bukan lulus dan bukan gagal.')
     n51, n53 = int(r51.lulus_51.sum()), int(r.lulus_53.sum())
+    # §6 syarat 1 menuntut LAJUR YANG SAMA lulus §5.1 DAN §5.3 -- bukan sekadar "ada yang lulus
+    # §5.1" dan "ada yang lulus §5.3". Signal gabungan dikaitkan kembali ke lajur induknya.
+    lajur_51 = set(r51.loc[r51.lulus_51, 'lajur'])
+    lajur_53 = set()
+    for nm in r.loc[r.lulus_53.fillna(False), 'signal']:
+        for bhg in nm.split('&'):
+            k = bhg.split(':')[-1]
+            if k in LAJUR:
+                lajur_53.add(k)
+    kedua = sorted(lajur_51 & lajur_53)
     print(f'\n§5.1 lulus: {n51}/{len(r51)} lajur | §5.3 lulus: {n53}/{len(r)} signal')
-    if n51 == 0 or n53 == 0:
-        print('\nKEPUTUSAN: leg SEC fasa 2 DITOLAK (§6 syarat 1 tidak dipenuhi).')
-        print('§5.4 portfolio tidak dijalankan: §6 menuntut §5.1 DAN §5.3 lulus dahulu.')
+    print(f'\nlajur lulus §5.1: {sorted(lajur_51) or "tiada"}')
+    print(f'lajur (induk) lulus §5.3: {sorted(lajur_53) or "tiada"}')
+    if kedua:
+        print(f'\n§6 SYARAT 1 DIPENUHI oleh {kedua} -> syarat 2-4 masih perlu disahkan.')
     else:
-        print('\n§6 syarat 1 DIPENUHI -> jalankan §5.4 (portfolio 8 slot x 12.5%, dua saiz)'
-              ' dan §9.3 syarat 4 (gerbang keras >= 2 tahun lain).')
+        print('\n§6 SYARAT 1 TIDAK DIPENUHI: tiada lajur lulus §5.1 DAN §5.3.')
+        print('KEPUTUSAN: leg SEC fasa 2 DITOLAK.')
+        if n53:
+            print('§5.4 tetap dijalankan sebagai maklumat magnitud, kerana signal yang bertahan')
+            print('tidak gagal ujian kebetulan -- ia gagal ujian pemangkatan lajur induknya.')
+            print('Nombornya TIDAK mengubah keputusan §6.')
     json.dump(dict(tahun=tahun, n_peristiwa=int(len(d)), n_lulus_51=n51, n_lulus_53=n53,
+                   lajur_lulus_51=sorted(lajur_51), lajur_induk_lulus_53=sorted(lajur_53),
+                   lajur_lulus_kedua=kedua, s6_syarat1=bool(kedua),
                    keluarga=KELUARGA, n_ujian=int(len(r))),
               open(KELUAR / 'sec_keputusan.json', 'w'), indent=1)
     return 0

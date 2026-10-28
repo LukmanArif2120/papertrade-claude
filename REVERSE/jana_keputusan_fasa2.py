@@ -41,12 +41,23 @@ def main():
     n51 = int(r51.lulus_51.sum()) if 'lulus_51' in r51 else 0
     n53 = int(r53.lulus_53.sum()) if 'lulus_53' in r53 else 0
     boleh = bool(r51.boleh_dinilai.all()) if 'boleh_dinilai' in r51 else False
-    diterima = n51 > 0 and n53 > 0
+    LAJ = ('sue', 'tumbuh_hasil', 'pecutan_hasil')
+    l51 = sorted(set(r51.loc[r51.lulus_51, 'lajur'])) if 'lulus_51' in r51 else []
+    l53 = set()
+    for nm in (r53.loc[r53.lulus_53.fillna(False), 'signal'] if 'lulus_53' in r53 else []):
+        for b in str(nm).split('&'):
+            k = b.split(':')[-1]
+            if k in LAJ:
+                l53.add(k)
+    l53 = sorted(l53)
+    kedua = sorted(set(l51) & set(l53))
+    diterima = bool(kedua)
     status = ('DITERIMA (tertakluk §6 syarat 2-4)' if diterima
               else 'BELUM BOLEH DINILAI' if not boleh else 'DITOLAK')
 
+    kini = pd.Timestamp.now(tz='UTC')
     L = [f'# KEPUTUSAN FASA 2 — LEG SEC: **{status}**', '']
-    L.append(f'Dijana {pd.Timestamp.utcnow():%Y-%m-%d %H:%M} UTC daripada output `step10_sec.py` dan '
+    L.append(f'Dijana {kini:%Y-%m-%d %H:%M} UTC daripada output `step10_sec.py` dan '
              '`step11_sec_nilai.py`. Spec dipradaftar: `REVERSE/SPEC_FASA2.md` §4.1–§4.4 (data dan '
              'masa ketersediaan), §5 (ujian), §6 (ambang penerimaan), §9.3–§9.5 (ufuk, set signal, '
              'ambang pecahan). Semua pilihan dikunci sebelum keputusan dilihat.')
@@ -115,7 +126,8 @@ def main():
     L.append('## 5. Keputusan')
     L.append('')
     if diterima:
-        L.append(f'§6 syarat 1 **dipenuhi**: {n51} lajur lulus §5.1 dan {n53} signal lulus §5.3.')
+        L.append(f'§6 syarat 1 **dipenuhi** oleh lajur `{"`, `".join(kedua)}` — lajur yang sama '
+                 f'lulus §5.1 dan §5.3.')
         L.append('')
         L.append('Syarat §6 (2)–(4) yang masih perlu disahkan sebelum ini menjadi penemuan: '
                  'mengalahkan asas harga-sahaja; mengalahkan kawalan rawak dalam portfolio 8 slot × '
@@ -127,13 +139,17 @@ def main():
                  'Tiada keputusan diisytiharkan. Melonggarkan ambang selepas melihat keputusan akan '
                  'memusnahkan nilai pradaftar, jadi ia tidak dilonggarkan.')
     else:
-        L.append(f'**Leg SEC fasa 2 DITOLAK.** §6 syarat 1 tidak dipenuhi: '
-                 f'{n51} lajur lulus §5.1 dan {n53} signal lulus §5.3 — sekurang-kurangnya satu '
-                 'daripada kedua-duanya sifar.')
+        L.append('**Leg SEC fasa 2 DITOLAK.**')
         L.append('')
-        L.append('§5.4 (portfolio) **tidak dijalankan**, kerana §6 menuntut §5.1 dan §5.3 lulus '
-                 'dahulu. Menjalankannya tetap bermakna mencari portfolio yang kelihatan baik '
-                 'daripada signal yang sudah gagal ujian kebetulan.')
+        L.append(f'§6 syarat 1 menuntut **lajur yang sama** lulus §5.1 **dan** §5.3. Itu tidak '
+                 f'berlaku: lajur lulus §5.1 = **{", ".join(l51) or "tiada"}**, '
+                 f'lajur induk lulus §5.3 = **{", ".join(l53) or "tiada"}**. '
+                 'Persilangannya kosong.')
+        L.append('')
+        L.append(f'{n51} daripada {len(r51)} lajur lulus §5.1 dan {n53} daripada {len(r53)} signal '
+                 'lulus §5.3, tetapi bukan lajur yang sama — jadi tiada penemuan yang lulus '
+                 'kedua-dua ujian. Membaca "satu lulus di sini, satu lulus di sana" sebagai '
+                 'penemuan ialah tepat kesilapan yang §6 ditulis untuk menghalang.')
         L.append('')
         L.append('Ini **dijangka**, dan dinyatakan sebelum ujian dijalankan (§9.3): PEAD sudah susut '
                  'sejak ia diketahui umum, dan baki kesannya tertumpu pada saham kecil berspread '
@@ -142,8 +158,16 @@ def main():
     L.append('')
     pf = _baca('sec_portfolio_ringkas.csv')
     if pf is not None and not pf.empty:
-        L.append('## 5b. §5.4 Portfolio 8 slot × 12.5% (kriteria akhir)')
+        L.append('## 5b. §5.4 Portfolio 8 slot × 12.5%')
         L.append('')
+        if not diterima:
+            L.append('**Keputusan §6 sudah ditentukan oleh syarat 1 (lihat §5 di bawah). Nombor di '
+                     'sini ialah maklumat magnitud, bukan kriteria penerimaan.** Ia dijalankan '
+                     'kerana signal yang bertahan §5.3 tidak gagal ujian kebetulan — ia bertahan '
+                     '1000 permutasi label dan kedua-dua skema bootstrap blok — tetapi lajur '
+                     'induknya gagal ujian pemangkatan §5.1. Nombor ini **tidak** mengubah '
+                     'keputusan DITOLAK.')
+            L.append('')
         L.append('Kos penuh, tiga rujukan keluar fasa 1, dua saiz (tetap 12.5% dan berskala risiko '
                  'SPEC_1B k = 4 risiko 1.0%). Nilai di bawah ialah **median merentas tahun**. '
                  '§6 syarat 3: signal mesti mengalahkan KAWALAN RAWAK pada pulangan **dan** MDD.')
