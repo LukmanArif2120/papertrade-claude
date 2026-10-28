@@ -583,6 +583,9 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
 }
 /* lajur yang tidak muat lebar skrin disembunyi (muatLajur); nota menamakannya */
 .tablewrap .sbn{display:none!important}
+/* lajur pengisi: menyerap lebar baki; tiada di telefon (jadual jadi kad) */
+th.isi,td.isi{width:100%;padding:0;min-width:0}
+@media (max-width:760px){th.isi,td.isi{display:none!important}}
 .sbn-nota{margin:6px 2px 0;font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .sbn-nota .more{padding:4px 10px;font-size:.78rem}
 /* 28 Okt 2026 (permintaan pengguna): mod "Semua lajur" — tiada lajur disembunyi dan TIADA skrol mendatar; jadual
@@ -608,19 +611,27 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat .tablewrap.tw-grd td.grp,body.padat .tablewrap.tw-grd td.grk{width:150px;min-width:150px;max-width:150px}
   body.padat td.grd .vv.nm1{display:none}
   /* 28 Okt 2026 (permintaan pengguna): cip gred A-E lebih kecil dan sel lebih rapat supaya semua lajur muat */
-  body.padat .tablewrap tbody td,body.padat .tablewrap thead th{padding-inline:3px}
+  body.padat .tablewrap tbody td,body.padat .tablewrap thead th{padding-inline:5px}
   body.padat td.grd .grc,body.padat td.gks .grc{gap:5px}
   body.padat td.grd .grc>.gr,body.padat td.gks .grc>.gr{min-width:1.55em;height:1.7em;padding:0 4px;font-size:.86rem}
   body.padat td.grd .grt b{font-size:.8rem}
   body.padat td.utg,body.padat td.ctr{padding-inline:2px}
   body.padat td.kdh{max-width:none;white-space:nowrap}
+  /* 28 Okt 2026: lebar minimum lajur teks tidak diperlukan dalam mod Padat (butiran .vv disembunyi, teks dipotong
+     satu baris) — ia hanya meninggalkan ruang kosong */
+  body.padat .tablewrap td.name,body.padat .tablewrap td.wrap,body.padat .tablewrap td.syr,
+  body.padat .tablewrap.tw-grd td.wrap,body.padat .tablewrap.tw-grd td.syr{min-width:0}
+  body.padat .tablewrap td.wrap.lrg{min-width:104px}
+  /* sebab label (jadual Prestasi/Analisis) dipotong satu baris dalam mod Padat supaya tinggi baris seragam */
+  body.padat .tablewrap td .sbk{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
   body.padat .tablewrap td .l2bar{vertical-align:middle}
   /* 28 Okt 2026 (permintaan pengguna "saya takmau scroll ke kanan … boleh jadikan 2 line sahaja"): sel dibenarkan
      membalut sehingga 2 baris supaya lajur jadi sempit dan semua lajur muat tanpa skrol mendatar */
   body.padat .tablewrap tbody td{white-space:nowrap}
   /* hanya sel teks panjang dibenarkan membalut; Saham, Kaedah, tarikh dan nombor kekal satu baris supaya mudah dibaca */
-  body.padat .tablewrap tbody td.grd,body.padat .tablewrap tbody td.grp,body.padat .tablewrap tbody td.grk,
-  body.padat .tablewrap tbody td.wrap,body.padat .tablewrap tbody td.syr,body.padat .tablewrap tbody td.name{white-space:normal;overflow-wrap:break-word}
+  body.padat .tablewrap tbody td.grd,body.padat .tablewrap tbody td.grp,body.padat .tablewrap tbody td.grk{white-space:normal;overflow-wrap:break-word}
+  /* nama panjang (kaedah, industri) dipotong satu baris dalam mod Padat: tanpa ini baris jadi 28px lawan 45px */
+  body.padat .tablewrap td.name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:230px}
   body.padat .tablewrap tbody td .nw{white-space:nowrap}
   body.padat .tablewrap thead th{white-space:normal}
   /* 28 Okt 2026 (permintaan pengguna): lencana Pegang/Keluar/Tunggu kekal DI BAWAH peratus untung walaupun mod Padat */
@@ -872,6 +883,9 @@ function sortTable(o){
   /* kad lipat telefon (o.lp: line, kad, key, btn, cls): baris tertutup satu baris (.mline), dibuka = kad (.mkad) */
   const lp=o.lp&&Object.assign({},o.lp);if(lp&&!lp.kad)lp.kad=kadUmum(o.cols);if(lp)o=Object.assign({},o,{cols:[...o.cols,{k:'_ml',t:'',ns:1,l:1,hc:'mline',c:()=>'mline',f:lp.line},{k:'_mk',t:'',ns:1,l:1,hc:'mkad',c:()=>'mkad',f:lp.kad},...(lp.btn?[BTN_PENUH]:[])]});
   const lpK=r=>o.id+'|'+lp.key(r);
+  /* lajur pengisi (28 Okt 2026): tanpa ini, lebar baki jadual 100% diagihkan kepada lajur teks terlebar, jadi
+     satu lajur boleh jadi 400px untuk kandungan 40px. Pengisi menyerap baki itu di hujung kanan. */
+  o=Object.assign({},o,{cols:[...o.cols,{k:'_isi',t:'',ns:1,hc:'isi',c:()=>'isi',f:()=>''}]});
   const th=o.cols.map(c=>`<th class="${c.l?'l':''} ${c.frz?'frz':''} ${c.hc||''}"${c.ns?'':` data-k="${c.k}" data-d="${c.l?'asc':'desc'}" aria-sort="${st.k===c.k?(st.dir<0?'descending':'ascending'):'none'}"`}${c.tip?` data-tip="${c.tip}"`:''}><span>${c.t}</span></th>`).join('');
   const tb=rows.map((r,i)=>`<tr${o.attr?' '+o.attr(r):''}${lp?` data-lp="${esc(lpK(r))}"`:''} class="${o.rcls?o.rcls(r):''}${lp?(lp.cls?' '+lp.cls(r):'')+bukaC(lpK(r)):''}">${o.cols.map(c=>`<td class="${c.l?'l':''} ${c.frz?'frz':''} ${c.c?c.c(r):''}">${c.f?c.f(r,i):esc(isNil(r[c.k])?'–':r[c.k])}</td>`).join('')}</tr>`).join('');
   const grd=o.cols.some(c=>c.c&&/\bgrd\b/.test(c.c({})||''));
@@ -2611,7 +2625,7 @@ function prBulanan(src){const ex=src.filter(r=>r.keluar&&r.untung_akhir_pct!=nul
   const sm={};ex.forEach(r=>{const m=r.tarikh_keluar.slice(0,7);(sm[m]=sm[m]||[]).push(r.untung_akhir_pct);});
   const nmB=m=>BLN[+m.slice(5,7)-1]+' '+m.slice(2,4);
   return `<div class="panel"><div class="panel-h"><h2 data-tip="peta_bulanan">Untung bulanan setiap kaedah</h2><span class="sub">Dagangan selesai ikut bulan keluar · kaedah ≥ ${PR_MIN_N} selesai</span></div>
-    <div class="tablewrap"><table class="hmt"><thead><tr><th class="l">Kaedah</th>${bl.map(m=>`<th>${nmB(m)}</th>`).join('')}</tr></thead><tbody>
+    <div class="tablewrap"><table class="hmt"><thead><tr><th class="l">Kaedah</th>${bl.map(m=>`<th class="ctr">${nmB(m)}</th>`).join('')}</tr></thead><tbody>
     <tr class="hmall"><td class="l"><b>Semua</b></td>${bl.map(m=>sel(sm[m])).join('')}</tr>
     ${tunjuk.map(x=>`<tr><td class="l"><button type="button" class="lnk" data-kd="${esc(x.k)}">${esc(x.k)}</button> <span class="mut">${x.n}</span></td>${bl.map(m=>sel(by[x.k][m])).join('')}</tr>`).join('')}</tbody></table></div>
     ${ks.length>15?`<div class="tablefoot"><span>${tunjuk.length} daripada ${ks.length} kaedah</span><button type="button" class="more" id="blnTogol">${pen?'Papar 15 teratas':'Papar semua'}</button></div>`:''}
@@ -3619,7 +3633,7 @@ function muatLajur(){
     const kp=i=>ths[i].classList.contains('kp-lo')?0:ths[i].classList.contains('kp-hi')?2:1;
     urut.sort((a,b)=>kp(a)-kp(b));
     for(const i of urut){if(!lebih())break;if(utama(i))continue;
-      ths[i].classList.add('sbn');rows.forEach(tr=>tr.cells[i].classList.add('sbn'));sor.push((ths[i].textContent||'').replace(/[↕↓↑]/g,'').trim());}
+      ths[i].classList.add('sbn');rows.forEach(tr=>tr.cells[i].classList.add('sbn'));const nm=(ths[i].textContent||'').replace(/[↕↓↑]/g,'').trim();if(nm)sor.push(nm);}
     if(!t.classList.contains('hmt'))sor.reverse();
     if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'}${/\btw-grd\b/.test(w.className)?' <button type="button" class="more" data-ljs="1">Papar semua lajur</button>':''}</p>`);
   });
