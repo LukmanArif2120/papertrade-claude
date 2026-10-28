@@ -78,16 +78,15 @@ let gagal=0;
           return {id:k.slice(c.length+1),exists:true,data:function(){return window.__D[k];}};});
         cb({docs:ds});return function(){};}};}};},
       doc:function(q){return {onSnapshot:function(cb){cb({exists:!!window.__D[q],data:function(){return window.__D[q];}});return function(){};}};}};}};},D);
-    await p.goto('file://'+S+'/live.html');await p.waitForTimeout(2500);
+    await p.goto('file://'+S+'/live.html');await p.waitForTimeout(2000);
     const tabs=await p.$$eval('#mainTabs button',bs=>bs.map(b=>b.dataset.tab));
     for(const tab of tabs){
       const btn=await p.$(`#mainTabs button[data-tab="${tab}"]`);if(!btn)continue;
-      await btn.click();await p.waitForTimeout(1200);
-      const pand=await p.$$('[data-pand] button, [data-lajur] button');
-      const sub=await p.$$('.pnav-in button');
-      const kump=[...(sub.length?sub:[null])];
+      await btn.click();await p.waitForTimeout(800);
+        const sub=await p.$$('.pnav-in button');
+      const kump=[...(sub.length?sub.slice(0,6):[null])];
       for(const s of kump){
-        if(s){try{await s.click();await p.waitForTimeout(700);}catch(e){continue;}}
+        if(s){try{await s.click();await p.waitForTimeout(450);}catch(e){continue;}}
         const nama=s?await s.evaluate(e=>e.textContent.trim().slice(0,22)):'';
         const hasil=await p.evaluate(AUDIT);
         hasil.forEach(h=>{
@@ -99,7 +98,7 @@ let gagal=0;
               kosong:h.kosong.slice(0,4),sempit:h.sempit.slice(0,4),tinggi:h.tinggi,sbn:h.sbn}));});
       }
       if(tab==='posisi')for(const v of ['ringkas','risiko','gred']){
-        const vb=await p.$(`[data-pand] button[data-v="${v}"]`);if(!vb)continue;await vb.click();await p.waitForTimeout(800);
+        const vb=await p.$(`[data-pand] button[data-v="${v}"]`);if(!vb)continue;await vb.click();await p.waitForTimeout(600);
         const hasil=await p.evaluate(AUDIT);
         hasil.forEach(h=>{const berat=h.bertindih.length||h.tajuk.length||h.keluar||h.tepi.length;if(berat)gagal++;
           const ringan=h.kosong.length||h.sempit.length||h.valign.length||(h.tinggi[1]-h.tinggi[0]>30);

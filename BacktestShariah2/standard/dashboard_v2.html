@@ -608,7 +608,7 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat .tablewrap.tw-grd td.grp,body.padat .tablewrap.tw-grd td.grk{width:150px;min-width:150px;max-width:150px}
   body.padat td.grd .vv.nm1{display:none}
   /* 28 Okt 2026 (permintaan pengguna): cip gred A-E lebih kecil dan sel lebih rapat supaya semua lajur muat */
-  body.padat .tablewrap tbody td,body.padat .tablewrap thead th{padding-inline:3px}
+  body.padat .tablewrap tbody td,body.padat .tablewrap thead th{padding-inline:5px}
   body.padat td.grd .grc,body.padat td.gks .grc{gap:5px}
   body.padat td.grd .grc>.gr,body.padat td.gks .grc>.gr{min-width:1.55em;height:1.7em;padding:0 4px;font-size:.86rem}
   body.padat td.grd .grt b{font-size:.8rem}
@@ -620,7 +620,7 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat .tablewrap tbody td{white-space:nowrap}
   /* hanya sel teks panjang dibenarkan membalut; Saham, Kaedah, tarikh dan nombor kekal satu baris supaya mudah dibaca */
   body.padat .tablewrap tbody td.grd,body.padat .tablewrap tbody td.grp,body.padat .tablewrap tbody td.grk,
-  body.padat .tablewrap tbody td.wrap,body.padat .tablewrap tbody td.syr,body.padat .tablewrap tbody td.name{white-space:normal;overflow-wrap:break-word}
+  body.padat .tablewrap tbody td.name{white-space:normal;overflow-wrap:break-word}
   body.padat .tablewrap tbody td .nw{white-space:nowrap}
   body.padat .tablewrap thead th{white-space:normal}
   /* 28 Okt 2026 (permintaan pengguna): lencana Pegang/Keluar/Tunggu kekal DI BAWAH peratus untung walaupun mod Padat */
@@ -2611,7 +2611,7 @@ function prBulanan(src){const ex=src.filter(r=>r.keluar&&r.untung_akhir_pct!=nul
   const sm={};ex.forEach(r=>{const m=r.tarikh_keluar.slice(0,7);(sm[m]=sm[m]||[]).push(r.untung_akhir_pct);});
   const nmB=m=>BLN[+m.slice(5,7)-1]+' '+m.slice(2,4);
   return `<div class="panel"><div class="panel-h"><h2 data-tip="peta_bulanan">Untung bulanan setiap kaedah</h2><span class="sub">Dagangan selesai ikut bulan keluar · kaedah ≥ ${PR_MIN_N} selesai</span></div>
-    <div class="tablewrap"><table class="hmt"><thead><tr><th class="l">Kaedah</th>${bl.map(m=>`<th>${nmB(m)}</th>`).join('')}</tr></thead><tbody>
+    <div class="tablewrap"><table class="hmt"><thead><tr><th class="l">Kaedah</th>${bl.map(m=>`<th class="ctr">${nmB(m)}</th>`).join('')}</tr></thead><tbody>
     <tr class="hmall"><td class="l"><b>Semua</b></td>${bl.map(m=>sel(sm[m])).join('')}</tr>
     ${tunjuk.map(x=>`<tr><td class="l"><button type="button" class="lnk" data-kd="${esc(x.k)}">${esc(x.k)}</button> <span class="mut">${x.n}</span></td>${bl.map(m=>sel(by[x.k][m])).join('')}</tr>`).join('')}</tbody></table></div>
     ${ks.length>15?`<div class="tablefoot"><span>${tunjuk.length} daripada ${ks.length} kaedah</span><button type="button" class="more" id="blnTogol">${pen?'Papar 15 teratas':'Papar semua'}</button></div>`:''}
