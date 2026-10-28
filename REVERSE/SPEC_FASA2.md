@@ -126,6 +126,64 @@ peraturan pra-2007, cuti, dan sifat "hari tersedia tidak pernah mendahului tarik
 data sebenar). Penilaian leg SEC **tidak boleh** menggunakan `tarikh_fail` secara terus.
 
 
+### 4.3 "Jarak ke earnings" (dikunci 28 Okt 2026, sebelum sebarang keputusan dilihat)
+
+§2 menulis lajur "Tarikh earnings 8-K Item 2.02 (jarak ke earnings, ±5 hari)" tanpa menyatakan
+arah. Keadaan itu tidak boleh dibiar: `data/sec/earnings_8k.csv` hanya mengandungi pemfailan yang
+**sudah berlaku**, jadi "jarak ke pengumuman berikut" yang diambil daripada tarikh 8-K berikut
+bermakna mengetahui tarikh pemfailan masa hadapan. Itu lookahead, dan ia akan kelihatan sebagai
+kesan yang kuat sekitar earnings.
+
+**Peraturan dikunci — dua lajur, bukan satu:**
+
+- `hari_sejak_earnings` — hari dari pengumuman terakhir yang **sudah tersedia** (§4.2) ke hari
+  peristiwa. Tepat dan ke belakang sepenuhnya. Ini juga pemboleh ubah yang betul untuk PEAD, kerana
+  PEAD ialah drift **selepas** pengumuman.
+- `hari_ke_earnings_jangka` — **jangkaan**, dikira daripada median selang pengumuman yang sudah
+  tersedia pada masa itu (median bergulir yang hanya melihat ke belakang; selang > 120 hari tidak
+  dipercayai dan memberi kosong). Ia menganggarkan apa yang pelabur pada hari itu boleh jangka,
+  bukan apa yang sebenarnya berlaku.
+
+**Tarikh pemfailan 8-K yang sebenarnya berikut TIDAK boleh digunakan, dalam apa-apa bentuk.**
+
+Pelaksanaan: `REVERSE/step10_sec.py`. Jangkaan dikira pada jadual SEC (bukan pada jadual peristiwa)
+supaya ia mengalir melalui `merge_asof(direction='backward')` dan tidak boleh tersilap mengambil
+baris masa hadapan. Ujian `BacktestShariah2/ujian/test_reverse_step10.py` mengunci sifat ini secara
+struktur: jangkaan bagi k pengumuman pertama mesti **sama** sama ada baris kemudian ada atau tidak
+(`test_hirisan_tidak_berubah_oleh_masa_hadapan`), dan kod tidak boleh mengandungi merge arah
+`forward` atau `nearest`.
+
+### 4.4 Status gerbang ambang §4 (28 Okt 2026, kiraan sahaja)
+
+`REVERSE/step10_sec.py` dijalankan atas cache peristiwa sah yang ada (2020–2025). **Kiraan liputan
+sahaja; tiada statistik hasil dikira atau dilihat pada peringkat ini.**
+
+| Tahun | Peristiwa sah | Saham | Saham ada SEC | SUE tidak kosong | % |
+|---|---|---|---|---|---|
+| 2020 | 12,858 | 2,045 | 525 | 3,517 | 27.4 |
+| 2021 | 15,259 | 2,283 | 567 | 4,157 | 27.2 |
+| 2022 | 15,440 | 2,255 | 572 | 4,221 | 27.3 |
+| 2023 | 13,642 | 2,202 | 598 | 3,991 | 29.3 |
+| 2024 | 14,151 | 2,191 | 605 | 4,186 | 29.6 |
+| 2025 | 13,998 | 2,237 | 615 | 3,996 | 28.5 |
+
+Ambang **≥ 3,000 peristiwa sah dengan lajur tidak kosong: LULUS setiap tahun**, walaupun dengan
+liputan 777 ticker yang lama. Ambang ≥ 250 hari dagangan dan ≥ 2 suku: lulus (§4.1).
+
+Tetapi **gerbang ini belum boleh dianggap memuaskan**, dan penilaian §5 belum dijalankan, kerana
+dua sebab:
+
+1. **Kecenderungan pemilihan.** Hanya 525–615 daripada ~2,200 saham (≈ 27%) ada data SEC, dan
+   universe lama ialah watchlist + posisi C — iaitu nama yang lebih besar dan lebih cair. Sampel itu
+   bukan keratan-rentas universe REVERSE. Isian awal 3,335 ticker membetulkannya; itulah sebab
+   sebenar melebarkan universe, bukan bilangan baris.
+2. **Sejarah masih 6 tahun, bukan 14.** Cache peristiwa sah hanya ada untuk 2020–2025. Liputan SUE
+   yang boleh diguna bermula 2012 (§4.1), jadi `step1_run.py` perlu dijalankan untuk 2012–2019
+   sebelum kelebihan sejarah panjang itu benar-benar diperoleh.
+
+Penilaian §5 dijalankan selepas (1) dan (2) selesai, atas populasi penuh, sekali sahaja.
+
+
 ## 5. Ujian (dipradaftar)
 
 1. **Pemangkatan** — Spearman antara setiap lajur dan pulangan boleh didagangkan, dikira

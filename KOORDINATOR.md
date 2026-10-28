@@ -1,25 +1,26 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 14:15 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 14:34 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| claude/wizardly-mendel-qr6j64 | 2026-10-28 | 0 | 2026-10-28 |
+| claude/wizardly-mendel-qr6j64 | 2026-10-28 | 1 | 2026-10-28 |
 
 
-Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
+> **AMARAN: salinan kerja 1 commit di belakang `origin/main`.** Seksyen "Kesegaran data" di bawah menerangkan **salinan ini**, bukan keadaan repo sebenar. Jalankan `git pull --rebase origin main` dahulu, kemudian jana semula halaman ini, sebelum melaporkan apa-apa sebagai LEWAT.
 
 
-## 1. Perlu keputusan anda (4)
+## 1. Perlu keputusan anda (5)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
 | 2026-10-28 | Fasa 2: guna alphalens-reloaded (sudah dalam requirements-kajian.txt) atau tulis sendiri | alphalens memberi rank-IC + pulangan kuintil + turnover terus. REVERSE/ujian_pangkat.py ialah versi tangan. |
 | 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. | 28 Okt: ini universe HARGA REVERSE (2000 teratas ikut nilai dagangan). Berasingan daripada universe SEC yang sudah dilebarkan ke 3260 (data/univ_sec.txt) pada 28 Okt. |
 | 2026-10-28 | Nilai semula sasaran pulangan | +10%/bulan = 78% daripada siling pandangan sempurna (12.89%/bulan). 0 daripada 36 sistem-tahun mencapainya. Siling dikira REVERSE/siling_pandangan_sempurna.py. |
-| 2026-10-28 | Jalankan penilaian leg SEC fasa 2 (SUE, pecutan hasil, jarak ke earnings) 2009-2026 | Menunggu isian awal SEC 3335 ticker siap (semak data/sec/status.json: belum_diisi -> 0). Ambang SPEC_FASA2 §4 kekal: >= 3000 peristiwa sah dengan nilai tidak kosong, >= 250 hari bertindih. Keluarga FDR berasingan daripada leg RS/gred (yang masih menunggu ~Okt 2027). |
+| 2026-10-28 | Jalankan penilaian leg SEC fasa 2 (SUE, pecutan hasil, jarak ke earnings) 2009-2026 | Peringkat 2 (join) SIAP: REVERSE/step10_sec.py -> sec_join.csv + sec_liputan.csv. Gerbang ambang SPEC_FASA2 §4.4 LULUS setiap tahun 2020-2025 (3,517-4,221 peristiwa dengan SUE tidak kosong, ambang 3,000). Tetapi penilaian §5 BELUM dijalankan: (1) liputan hanya 27% saham dan cenderung ke nama besar/cair, perlu isian awal 3,335 ticker; (2) cache peristiwa sah hanya 2020-2025, perlu step1_run.py untuk 2012-2019 bagi sejarah 14 tahun. |
+| 2026-10-28 | Jalankan step1_run.py untuk 2012-2019 (sejarah peristiwa sah leg SEC) | Cache signals_*.parquet hanya ada 2020-2025. Liputan SUE boleh diguna bermula 2012 (mandat XBRL berperingkat 2009-2011: 89 ticker 2009, 253 pada 2010, 482 pada 2011). 8 tahun tambahan = compute besar (~150MB parquet setiap tahun). Tanpa ini, leg SEC kekal 6 tahun sahaja dan kelebihan sejarah panjang tidak diperoleh. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
