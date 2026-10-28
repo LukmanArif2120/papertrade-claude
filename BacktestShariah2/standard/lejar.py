@@ -52,6 +52,7 @@ LEJAR = os.environ.get('LEJAR_DIR', os.path.join(BS2, 'lejar'))
 HARGA_MIN = 10.0
 TAMAT_TUNGGU = 5      # sesi maksimum isyarat menunggu bar masuk (saham digantung / data lewat)
 TOLERANSI_LARAS = 0.003
+TOL_SKALA = 0.5       # buka Moomoo lawan buka stor: beza lebih ini = skala tidak sepadan (pecahan), entri dilangkau
 LIPUTAN_MIN = 0.99   # pecahan saham layak (ada bar sesi sebelum) yang mesti ada bar sesi S sebelum diproses
 # Dua lorong keluar (keputusan pengguna 17 Okt 2026; standard/keluar_lorong.py): lorong 1 = peraturan kaedah (enjin, lajur
 # tarikh_keluar …), lorong 2 = pegang selagi naik (Chandelier tutup 4×ATR14 sejak 19 Okt 2026). Posisi kekal dalam terbuka.csv
@@ -164,7 +165,10 @@ def tampal_moomoo(stor):
     'buka rasmi') menggantikan buka yfinance jika beza > 0.5%. Entri baharu hanya bagi tarikh selepas sesi terakhir lejar
     (posisi yang sudah direkod tidak berubah); semua entri dalam buka_moomoo.csv dipakai semula setiap larian supaya tidak
     ditimpa yfinance. Sejak 22 Okt 2026 (kajian/KAJIAN_DATA_TERCEMAR.md R1): nota 'buka sementara … (sahkan kline …)' TIDAK
-    diterima (buka 9:35 NY belum rasmi), dan nilai disahkan terkini menggantikan entri lama bagi saham+tarikh sama."""
+    diterima (buka 9:35 NY belum rasmi), dan nilai disahkan terkini menggantikan entri lama bagi saham+tarikh sama.
+    Sejak 28 Okt 2026 (ralat BUUU 19-22 Okt): entri yang berbeza > TOL_SKALA daripada buka stor DILANGKAU, bukan ditampal —
+    beza sebesar itu bermakna skala tidak sepadan (buka sebelum pecahan lawan stor yang sudah dilaras), bukan pembetulan
+    buka. Tanpa ini, laras pecahan pada bar stor ditimpa semula setiap malam dan ATR/lorong 2 tercemar."""
     p = os.path.join(STOR, 'buka_moomoo.csv')
     T = pd.read_csv(p, dtype={'ticker': str}) if os.path.exists(p) else pd.DataFrame(columns=['ticker', 'date', 'open'])
     stp = os.path.join(LEJAR, 'status.json')
@@ -178,9 +182,14 @@ def tampal_moomoo(stor):
         T = pd.concat([C, T]).drop_duplicates(['ticker', 'date'], keep='first')   # nilai disahkan terkini menang
     T = T.assign(date=T.date.astype('int64'), open=pd.to_numeric(T.open, errors='coerce').astype(float)).dropna(subset=['open'])
     n = 0
+    langkau = []
     for nm, d in stor.items():
         m = d.reset_index().merge(T, on=['ticker', 'date'], suffixes=('', '_mm'))
-        m = m[(m.open_mm / m.open - 1).abs() > 0.005]
+        r = m.open_mm / m.open
+        skala = m[(r > 1 + TOL_SKALA) | (r < 1 / (1 + TOL_SKALA))]
+        langkau += [f'{t} {int(dt)}: buka_moomoo {o:g} lawan stor {s:g}'
+                    for t, dt, o, s in zip(skala.ticker, skala.date, skala.open_mm, skala.open)]
+        m = m[((r - 1).abs() > 0.005) & (r <= 1 + TOL_SKALA) & (r >= 1 / (1 + TOL_SKALA))]
         if len(m):
             i = m['index'].values
             d.loc[i, 'open'] = m.open_mm.values
@@ -188,7 +197,7 @@ def tampal_moomoo(stor):
             d.loc[i, 'low'] = np.minimum(d.loc[i, 'low'].values, m.open_mm.values)
             n += len(m)
     T.sort_values(['date', 'ticker']).to_csv(p, index=False)
-    return n
+    return dict(ditampal=n, langkau_skala=sorted(set(langkau))) if langkau else n
 
 
 def cmd_stor(a):

@@ -152,6 +152,27 @@ class UjiLejar(unittest.TestCase):
             M = pd.read_csv(os.path.join(stor, 'buka_moomoo.csv')).set_index('ticker').open.to_dict()
             self.assertEqual(M, {'AAA': 10.5, 'CCC': 30.0})
 
+    def test_tampal_moomoo_langkau_skala_tidak_sepadan(self):
+        # 28 Okt 2026 (ralat BUUU): buka sebelum pecahan dalam buka_moomoo.csv tidak boleh menimpa bar stor yang
+        # sudah dilaras — beza > TOL_SKALA dilangkau dan dilaporkan, bar stor kekal.
+        with tempfile.TemporaryDirectory() as d:
+            stor = os.path.join(d, 'stor'); pt = os.path.join(d, 'papertrade'); lj = os.path.join(d, 'lejar')
+            for x in (stor, pt, lj): os.makedirs(x)
+            pd.DataFrame(dict(ticker=['AAA'], date=[20261019], open=[42.67])).to_csv(os.path.join(stor, 'buka_moomoo.csv'), index=False)
+            json.dump({'sesi_terakhir': '2026-10-19'}, open(os.path.join(lj, 'status.json'), 'w'))
+            S = {'harga_A.csv': pd.DataFrame(dict(ticker=['AAA'], date=[20261019], open=[4.267], high=[4.349],
+                                                  low=[4.083], close=[4.328], volume=[1e6]))}
+            lama = lejar.STOR, lejar.LEJAR, lejar.BS2
+            lejar.STOR, lejar.LEJAR, lejar.BS2 = stor, lj, d
+            try:
+                hasil = lejar.tampal_moomoo(S)
+            finally:
+                lejar.STOR, lejar.LEJAR, lejar.BS2 = lama
+            self.assertEqual(list(S['harga_A.csv'].open), [4.267])
+            self.assertEqual(list(S['harga_A.csv'].high), [4.349])
+            self.assertEqual(hasil['ditampal'], 0)
+            self.assertEqual(len(hasil['langkau_skala']), 1)
+
     def test_modul_replika_keluar_dagangan_sendiri(self):
         # 22 Okt 2026 (R10): exitc modul replika = bendera dagangan replika (bermula WARM). Lejar bermula di tengah: posisi yang
         # isyaratnya jatuh semasa replika memegang dagangan lain mesti keluar ikut dagangan SENDIRI (kod/dagangan.py)

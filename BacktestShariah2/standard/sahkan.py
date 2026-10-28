@@ -7,6 +7,13 @@ import sys, os, csv, glob, re, argparse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PT = os.path.join(os.path.dirname(HERE), 'papertrade')
+STOR = os.path.join(os.path.dirname(HERE), 'data', 'harga', 'stor')
+FAIL_STOR = ('harga_A.csv', 'harga_B.csv', 'harga_idx.csv')
+# Bar skala bercampur (ralat BUUU 19-22 Okt 2026): buka sebelum pecahan ditampal pada bar yang sudah dilaras, jadi buka
+# melompat >= 3x tutup sebelum sedangkan tutup bar itu sendiri hampir tidak berubah. Pecahan sebenar menggerakkan
+# tutup sama banyak, jadi ia tidak tertangkap di sini.
+JURANG_SKALA = 3.0
+BAND_TUTUP = (0.8, 1.25)
 
 # Susunan lajur rasmi fail posisi (moomoo.csv, claude.csv, claude_N.csv)
 POSISI = ['tarikh_beli', 'saham', 'kaedah', 'id_kaedah', 'sektor', 'industri', 'harga_beli', 'unit',
@@ -176,6 +183,34 @@ def semak_lorong(t, r, hb, ralat, amaran):
         ralat.append(f'{t}: tutup_semua {r.get("tutup_semua")} != keluar & keluar_henti ({jangka})')
 
 
+def semak_stor(folder, ralat):
+    """Stor harga: cari bar dengan buka tersasar skala (lihat JURANG_SKALA). Satu bar begitu mencemarkan ATR14, jadi
+    paras lorong 2 dan henti kaedah; ia pernah berlaku apabila buka_moomoo.csv sebelum pecahan ditampal semula pada bar
+    yang sudah dilaras (BUUU 19-22 Okt 2026)."""
+    for nm in FAIL_STOR:
+        p = os.path.join(folder, nm)
+        if not os.path.exists(p):
+            continue
+        with open(p, newline='', encoding='utf-8') as f:
+            next(f, None)
+            tkr, tutup = None, None
+            for baris in f:
+                b = baris.rstrip('\n').split(',')
+                if len(b) < 6:
+                    continue
+                t, tarikh = b[0], b[1]
+                buka, tutup_kini = nombor(b[2]), nombor(b[5])
+                if t != tkr:
+                    tkr, tutup = t, tutup_kini
+                    continue
+                if buka and tutup_kini and tutup:
+                    jurang, ubah = buka / tutup, tutup_kini / tutup
+                    if (jurang >= JURANG_SKALA or jurang <= 1 / JURANG_SKALA) and BAND_TUTUP[0] <= ubah <= BAND_TUTUP[1]:
+                        ralat.append(f'{nm}: {t} {tarikh} buka {buka:g} tersasar skala (tutup sebelum {tutup:g}, '
+                                     f'tutup {tutup_kini:g}) — bar mencemar ATR14')
+                tutup = tutup_kini
+
+
 def semak_senarai(p, ralat, amaran):
     nama = os.path.basename(p)
     lajur, rows = baca(p)
@@ -229,6 +264,7 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description='Semak data papertrade ikut SKEMA.md')
     ap.add_argument('--betulkan', action='store_true', help='susun lajur fail posisi ikut skema sebelum semak')
     ap.add_argument('--folder', default=PT, help='folder papertrade (lalai: BacktestShariah2/papertrade)')
+    ap.add_argument('--stor', default=STOR, help='folder stor harga disemak (kosong = langkau semakan bar)')
     a = ap.parse_args(argv)
     PT = a.folder
     ralat, amaran, kunci = [], [], {}
@@ -250,6 +286,8 @@ def main(argv=None):
         if os.path.exists(p):
             fn(p, ralat, amaran)
             semak_gred(nm, baca(p)[1], ralat)
+    if a.stor and os.path.isdir(a.stor):
+        semak_stor(a.stor, ralat)
     for x in amaran[:40]:
         print('AMARAN', x)
     if len(amaran) > 40:
