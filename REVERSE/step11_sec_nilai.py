@@ -227,9 +227,10 @@ def ujian_52_53(d):
         pul = d.pul_henti2atr.to_numpy('float64')[ada]
         bt_t = ST.bootstrap_blok(pul, d.saham.to_numpy()[ada], n=1000)
         bt_w = ST.bootstrap_blok(pul, d.minggu.to_numpy()[ada], n=1000)
-        jang = ST.jangkaan(pul)
+        jang = ST.jangkaan(pul)[0]
         urut = np.sort(pul)[::-1]
-        tanpa5 = ST.jangkaan(urut[int(np.ceil(0.05 * urut.size)):]) if urut.size > 20 else np.nan
+        tanpa5 = (ST.jangkaan(urut[int(np.ceil(0.05 * urut.size)):])[0]
+                  if urut.size > 20 else np.nan)
         rows.append(dict(signal=nama, n=int(ada.sum()), K_padu=round(m['K_padu'], 2),
                          lift=round(m['lift'], 3), presisi=round(m['presisi'], 2),
                          lift_presisi=round(m['lift_presisi'], 3), p_permutasi=p,
