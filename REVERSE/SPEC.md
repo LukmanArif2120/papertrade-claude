@@ -623,3 +623,23 @@ Pembetulan ini **mengetatkan** gate, bukan melonggarkannya, jadi ia tidak memiha
 hasil. Ia juga tidak menjawab soalan berasingan yang masih terbuka kepada pengguna: sama ada gate
 8.1 patut menuntut **keputusan** CALON dalam ≥ 2 tahun lain, bukan sekadar kelas yang sama. Soalan
 itu kekal keputusan pengguna.
+
+### 13.12 — 28 Okt 2026: gate 8.1 diketatkan atas keputusan pengguna
+
+**Keputusan pengguna 28 Okt 2026, selepas enam tahun siap.** Gate 8.1 seperti ditulis dalam arahan
+v10 hanya memerlukan **kelas Step 4 yang sama** dalam ≥ 2 tahun lain. Itu menghasilkan 7 label
+DITERIMA yang bercanggah dengan datanya sendiri: setiap satu daripadanya **DITOLAK** pada beberapa
+tahun lain kerana gagal G4 (bootstrap) atau G5 (outlier). Kelas Step 4 ialah lift atas populasi
+peristiwa; ia konsisten merentas tahun sedangkan kelebihan dagangan tidak.
+
+Dikunci: naik taraf ke **DITERIMA** memerlukan signal **LULUS GATE KERAS** (step7 + G1 + G3 + G4 +
+G5, iaitu layak berstatus CALON) dalam **≥ 2 tahun LAIN** — bukan sekadar kelas yang sama. Kelas
+setiap tahun tetap dilaporkan dalam lajur `G2_merentas_tahun` untuk ketelusan, dan lajur baharu
+`lulus_gate_keras` ditulis dalam `keputusan_<TAHUN>.csv` supaya tahun lain boleh membacanya.
+
+Step 8 dijalankan **dua laluan** atas semua tahun: laluan pertama menulis `lulus_gate_keras`,
+laluan kedua menilai G2 terhadap lajur itu.
+
+Pindaan ini dibuat **selepas** melihat hasil, atas permintaan eksplisit pengguna, dan ia
+**mengetatkan** gate. Ia direkod di sini supaya jelas bahawa keputusan asal (7 DITERIMA di bawah
+gate v10) kekal dalam sejarah git dan tidak dipadamkan.
