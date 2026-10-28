@@ -614,7 +614,7 @@ th.isi,td.isi{width:100%;padding:0;min-width:0}
   body.padat .tablewrap tbody td,body.padat .tablewrap thead th{padding-inline:5px}
   body.padat td.grd .grc,body.padat td.gks .grc{gap:5px}
   body.padat td.grd .grc>.gr,body.padat td.gks .grc>.gr{min-width:1.55em;height:1.7em;padding:0 4px;font-size:.86rem}
-  body.padat td.grd .grt b{font-size:.8rem}
+  body.padat td.grd .grt b{font-size:inherit}   /* nombor sama saiz dengan huruf gred (28 Okt 2026) */
   body.padat td.utg,body.padat td.ctr{padding-inline:2px}
   body.padat td.kdh{max-width:none;white-space:nowrap}
   /* 28 Okt 2026: lebar minimum lajur teks tidak diperlukan dalam mod Padat (butiran .vv disembunyi, teks dipotong
@@ -657,8 +657,10 @@ th.isi,td.isi{width:100%;padding:0;min-width:0}
   /* 28 Okt 2026 (permintaan pengguna): pil status (Selamat/Berhati-hati/Elak, Syariah …) tidak dipapar dalam
      mod Padat — cip gred sudah membawa maksud yang sama; teks penuh kekal dalam tooltip dan helaian butiran */
   body.padat td.grd>.pill{display:none}
-  body.padat td.grd .grc{align-items:center}
-  body.padat td.grd .grt{min-height:1.7em;justify-content:center}
+  /* huruf gred dan nombor berkongsi GARIS DASAR yang sama supaya betul-betul sebaris (28 Okt 2026) */
+  body.padat td.grd .grc{align-items:baseline}
+  body.padat td.grd .grc>.gr{height:auto;min-height:1.7em;padding-block:1px}
+  body.padat td.grd .grt{min-height:0;justify-content:center}
   /* teks ganti (tiada gred: "Tiada data", ringkasan kewangan panjang) dipotong satu baris supaya tinggi baris
      seragam; teks penuh kekal dalam tooltip */
   body.padat td.grd>.mut,body.padat td.grd>.grt,body.padat td.grd .grt>:not(.pill):not(.vv):not(.kskor){display:inline-block;max-width:150px;
@@ -1536,14 +1538,13 @@ function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:
   const sub=[['K',m[1],'Kekukuhan'],['U',m[2],'Keuntungan'],['T',m[3],'Pertumbuhan'],['S',m[4],'Arah suku terkini']].map(([l,g,n])=>`<span title="${n}"><small>${l}</small>${grB(g,'',n)}</span>`).join('');
   const f=+m[6],sy=m[8];
   return grSel1(r.gred_kewangan,`<span class="kskor" title="${esc(s)}">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`,sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:'');}
-/* Susunan = keutamaan: muatLajur menyembunyikan dari KANAN apabila tetingkap tidak cukup lebar, jadi lajur yang paling
-   berguna diletak di kiri. 28 Okt 2026 (permintaan pengguna: "saya tidak nampak industri dan RS"): Industri dan RS
-   (kajian 2019–2026: Industri A kuat, RS A disahkan +1.5% dalam 63 hari) mendahului Sektor, yang paparan sahaja. */
+/* Susunan lajur gred mengikut permintaan pengguna (28 Okt 2026): Sektor → Industri → RS → QR → Gred.
+   Keutamaan SEMBUNYI pula melalui kelas tajuk: kp-lo (Sektor, QR) hilang dahulu, kp-hi (Industri, RS) paling akhir. */
 const grCols=()=>[
+  {k:'gred_sektor',t:'Sektor',tip:'g_s',hc:'kp-lo',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
   {k:'gred_industri',t:'Industri',tip:'g_i',hc:'kp-hi',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??null,f:r=>grKump(r,'Industri')},
   {k:'rs_rating',t:'RS',tip:'g_r',hc:'kp-hi',l:1,c:()=>'grd',v:r=>grNil(r.rs_rating),f:grRS},
   {k:'hari_ke_earnings',t:'QR',tip:'g_q',hc:'kp-lo',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??null,f:grQR},
-  {k:'gred_sektor',t:'Sektor',tip:'g_s',hc:'kp-lo',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
   /* Pemangkin dan Kewangan dibuang daripada jadual 28 Okt 2026 (permintaan pengguna); kekal dalam helaian butiran */
   {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m0'}];
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.tutup_semua?'exit':'')+' '+jalurPT(r);
