@@ -74,6 +74,12 @@ class TestHariTersedia(unittest.TestCase):
     def test_sesi_tidak_tersusun_tetap_betul(self):
         self.assertEqual(satu('2026-10-20T10:00:00Z', list(reversed(SESI))), pd.Timestamp('2026-10-20'))
 
+    def test_tidak_mendahului_tarikh_fail_cuti_edgar(self):
+        """28 Okt 2026: 8-K diterima Ahad, filingDate Selasa (EDGAR tutup Isnin, NYSE buka) -> Selasa, bukan Isnin."""
+        self.assertEqual(satu('2026-10-25T22:00:00Z', sandaran='2026-10-27'), pd.Timestamp('2026-10-27'))
+        # pra-buka pada filingDate kekal sesi sama
+        self.assertEqual(satu('2026-10-27T12:00:00Z', sandaran='2026-10-27'), pd.Timestamp('2026-10-27'))
+
     def test_tidak_pernah_mendahului_pemfailan(self):
         """Sifat utama: hari tersedia mesti >= tarikh ET pemfailan, bagi setiap baris data sebenar."""
         p = os.path.join(AKAR, 'BacktestShariah2', 'data', 'sec', 'earnings_8k.csv')

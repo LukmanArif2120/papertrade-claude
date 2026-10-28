@@ -51,6 +51,13 @@ def hari_tersedia(masa, sesi, tarikh_sandaran=None):
         sd = pd.to_datetime(pd.Series(tarikh_sandaran).reset_index(drop=True), errors='coerce')
         guna = calon.isna() & sd.notna()
         calon[guna] = sd[guna].dt.normalize() + pd.Timedelta(days=1)   # waktu tidak diketahui = selepas tutup
+    if tarikh_sandaran is not None:
+        # Tidak lebih awal daripada tarikh pemfailan rasmi: EDGAR tutup pada cuti persekutuan yang NYSE buka (Columbus
+        # Day, Veterans Day), jadi 8-K diterima hujung minggu/cuti tersebar pada filingDate, bukan sesi pertama
+        # selepas cap masa (28 Okt 2026: LRN 2011-10-10, MIDD 2015-11-11 mendahului tarikh_umum sehari).
+        lantai = sd.dt.normalize()
+        lebih_awal = calon.notna() & lantai.notna() & (calon < lantai)
+        calon[lebih_awal] = lantai[lebih_awal]
     s = np.sort(pd.to_datetime(pd.Series(list(sesi))).values.astype('datetime64[ns]'))
     ix = np.searchsorted(s, calon.values.astype('datetime64[ns]'), side='left')
     hasil = pd.Series(pd.NaT, index=calon.index, dtype='datetime64[ns]')
