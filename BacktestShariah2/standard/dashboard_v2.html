@@ -1554,9 +1554,8 @@ function ptCols(akaun){return [
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>{const kk=kongsiOf(r);return `${esc(r.kaedah)}${kk.length?`<span class="kng" aria-label="Isyarat sama daripada ${kk.length} kaedah lain">+${kk.length}</span><span class="vv kng-l">kongsi: ${esc(kk.join(' '))}</span><span class="kgd"><span class="kgh">Isyarat sama juga daripada ${kk.length} kaedah:</span>${kk.map(id=>`<span class="kgi"><b>${esc(id)}</b> ${esc(katNama(id))}${katMasuk(id)?`<span class="kgm">Masuk: ${esc(katMasuk(id))}</span>`:''}</span>`).join('')}</span>`:''}`;},c:()=>'kdh m0'},
   TRCA,STC,
   ...(padatDesk()?[]:[{k:'harga_beli',t:'Harga beli',tip:'harga_beli',f:r=>fx(r.harga_beli,2)},{k:'unit',t:'Unit',tip:'unit',f:r=>fx(r.unit,0)},{k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)}]),
-  /* Untung % telefon sahaja (permintaan pengguna 28 Okt 2026): di desktop peratus yang sama sudah ada dalam
-     "Keluar kaedah" dan "Pegang selagi naik", jadi lajur ini hanya memakan lebar */
-  ...(skrinKecil()?[{k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${spyCip(r)}`,c:()=>'utg m0'}]:[]),
+  /* Untung % dikembalikan 28 Okt 2026 (permintaan pengguna) selepas sempat dibuang di desktop */
+  {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${padatDesk()?'':`<span class="vv nw">beli ${fx(r.harga_beli,2)} → ${r.keluar?'keluar':'kini'} ${fx(r.harga_terkini,2)}</span>`}${spyCip(r)}`,c:()=>'utg m0'},
   {k:'_r',t:'R',tip:'r_multiple',hc:'kp-lo',v:rOf,f:rSel},
   {k:'_spark',t:'Sejak beli',tip:'carta_kecil',hc:'kp-lo',ns:1,l:1,f:r=>sparkPos(r)},
   {k:'hari',t:'Hari dipegang',tip:'hari_pt',hc:'ctr',f:hariSel,c:()=>'ctr m0'},
