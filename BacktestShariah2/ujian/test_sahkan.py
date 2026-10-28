@@ -34,7 +34,7 @@ class UjiSahkan(unittest.TestCase):
     def jalan(self, *arg):
         out = io.StringIO()
         with redirect_stdout(out):
-            kod = sahkan.main(['--folder', self.d, *arg])
+            kod = sahkan.main(['--folder', self.d, *(arg or ()), *(() if '--stor' in arg else ('--stor', ''))])
         return kod, out.getvalue()
 
     def test_dua_lorong(self):
@@ -126,6 +126,35 @@ class UjiSahkan(unittest.TestCase):
             row = next(r)
         self.assertEqual(row['harga_beli'], '100')
         self.assertEqual(row['lajur_lain'], 'x')
+
+    def stor(self, baris):
+        """Stor harga sementara: senarai (ticker, date, open, high, low, close)."""
+        f = os.path.join(self.d, 'stor')
+        os.makedirs(f, exist_ok=True)
+        with open(os.path.join(f, 'harga_B.csv'), 'w', newline='') as h:
+            h.write('ticker,date,open,high,low,close,volume\n')
+            for b in baris:
+                h.write(','.join(str(x) for x in b) + ',1000\n')
+        return f
+
+    def test_stor_bar_skala_salah(self):
+        """Buka sebelum pecahan pada bar yang sudah dilaras (ralat BUUU 19 Okt 2026) = RALAT."""
+        f = self.stor([('BUUU', 20261016, 4.337, 4.5, 4, 4.131),
+                       ('BUUU', 20261019, 42.67, 42.67, 4.083, 4.328)])
+        kod, keluaran = self.jalan('--stor', f)
+        self.assertEqual(kod, 1)
+        self.assertIn('BUUU 20261019 buka 42.67 tersasar skala', keluaran)
+
+    def test_stor_pecahan_sebenar_bukan_ralat(self):
+        """Pecahan sebenar menggerakkan buka DAN tutup, jadi ia tidak dibenderakan."""
+        f = self.stor([('AAA', 20261016, 4.3, 4.5, 4.0, 4.1),
+                       ('AAA', 20261019, 41.0, 43.0, 40.5, 42.0)])
+        self.assertEqual(self.jalan('--stor', f)[0], 0)
+
+    def test_stor_bar_biasa_bukan_ralat(self):
+        f = self.stor([('AAA', 20261016, 100, 102, 99, 101),
+                       ('AAA', 20261019, 101.5, 104, 100, 103)])
+        self.assertEqual(self.jalan('--stor', f)[0], 0)
 
 
 if __name__ == '__main__':

@@ -590,7 +590,9 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat td.kdh{max-width:none;white-space:nowrap}
   body.padat .tablewrap td .l2bar{vertical-align:middle}
   body.padat .tablewrap tbody td{white-space:nowrap}
-  body.padat td.lrg .lrk{display:flex;flex-direction:row;align-items:center;gap:6px}
+  /* 28 Okt 2026 (permintaan pengguna): lencana Pegang/Keluar/Tunggu kekal DI BAWAH peratus untung walaupun mod Padat */
+  body.padat td.lrg .lrk{display:flex;flex-direction:column;align-items:center;gap:1px}
+  body.padat td.lrg .lrb{height:1.5em;font-size:.66rem}
   body.padat .tablewrap td .grt{display:flex;flex-direction:row;align-items:center;gap:6px;min-width:0}
   body.padat .tablewrap td .grt .pill{margin-top:0!important}
   body.padat .tablewrap td .kskor{display:none}
@@ -1454,11 +1456,14 @@ function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:
   const sub=[['K',m[1],'Kekukuhan'],['U',m[2],'Keuntungan'],['T',m[3],'Pertumbuhan'],['S',m[4],'Arah suku terkini']].map(([l,g,n])=>`<span title="${n}"><small>${l}</small>${grB(g,'',n)}</span>`).join('');
   const f=+m[6],sy=m[8];
   return grSel1(r.gred_kewangan,`<span class="kskor">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:''}${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`);}
+/* Susunan = keutamaan: muatLajur menyembunyikan dari KANAN apabila tetingkap tidak cukup lebar, jadi lajur yang paling
+   berguna diletak di kiri. 28 Okt 2026 (permintaan pengguna: "saya tidak nampak industri dan RS"): Industri dan RS
+   (kajian 2019–2026: Industri A kuat, RS A disahkan +1.5% dalam 63 hari) mendahului Sektor, yang paparan sahaja. */
 const grCols=()=>[
-  {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
   {k:'gred_industri',t:'Industri',tip:'g_i',l:1,c:()=>'grd',v:r=>GORD[r.gred_industri]??null,f:r=>grKump(r,'Industri')},
   {k:'rs_rating',t:'RS',tip:'g_r',l:1,c:()=>'grd',v:r=>grNil(r.rs_rating),f:grRS},
   {k:'hari_ke_earnings',t:'QR',tip:'g_q',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??null,f:grQR},
+  {k:'gred_sektor',t:'Sektor',tip:'g_s',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
   {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',l:1,v:r=>GORD[r.gred_pemangkin]??null,f:grPem,c:()=>'grd grp'},
   {k:'gred_kewangan',t:'Kewangan',tip:'g_k',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??null,f:grKew},
   {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m0'}];

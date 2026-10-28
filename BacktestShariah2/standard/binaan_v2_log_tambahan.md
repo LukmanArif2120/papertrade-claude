@@ -345,3 +345,38 @@
 - Direkod 602 (290 saham; belian semula 43; fail claude_82.csv); dilangkau 16. Harga: buka sementara yfinance 10:29 NY.
 - Dilangkau: XNCR M06: buka 29.74 > buka_maks 27.43; TENB M06: buka 48.18 > buka_maks 46.96; EXE M08: buka 94.24 > buka_maks 94.22; HPE M13: buka 60.27 <= henti 87.42; RGEN M13: buka 168.34 <= henti 176.85; AMD M13: buka 539.49 <= henti 827.55; RGEN M20: buka 168.34 <= henti 174.04; ASC M23: buka 20.55 <= henti 20.60; PBF M49: buka 79.80 <= henti 80.43; RGEN M49: buka 168.34 <= henti 178.16; RGEN M66: buka 168.34 <= henti 172.00; ALKS M74: buka 44.34 <= henti 44.40; RGEN M136: isyarat batal pada buka (peraturan kaedah); DT M153: isyarat batal pada buka (peraturan kaedah); XNCR M153: isyarat batal pada buka (peraturan kaedah); PSX M153: isyarat batal pada buka (peraturan kaedah).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-28 — Ralat skala BUUU (bar stor tercemar) + dashboard v105
+
+Soalan pengguna tentang dashboard membongkar satu ralat data sebenar (sel lorong 2 kosong bagi BUUU).
+
+**Punca.** `lejar.tampal_moomoo` memakai SEMUA entri `data/harga/stor/buka_moomoo.csv` setiap larian. Pecahan BUUU 1→10
+(ex 26 Okt) melaras bar stor ×0,1 pada 27 Okt, tetapi entri buka Moomoo 19–22 Okt (42.67, 42.57, 42.59, 41.91 — harga
+sebelum pecahan) ditampal semula ke atas bar yang sudah dilaras, dan `high` dinaikkan kepada nilai yang sama. Empat bar
+jadi buka/tinggi ≈ 42 dengan rendah/tutup ≈ 4,2 → ATR14 tercemar → paras lorong 2 BUUU negatif (−39,90) → `l2Info`
+dashboard menolaknya dan sel lorong 2 dipapar kosong. Kesan lain: posisi C M151 keluar pada "buka" 42,57 (untung palsu
++881%).
+
+**Baikan (bukan sahaja gejala).**
+- Bar stor 19–22 Okt dibetulkan kepada kline Moomoo `US.BUUU` autype=1 (buka 4.267/4.257/4.259/4.191; tinggi
+  4.349/4.3329/4.301/4.99995). Rendah, tutup dan volum stor memang sudah betul.
+- `buka_moomoo.csv`: empat entri BUUU dilaras ×0,1 supaya nilai rasmi kekal berguna.
+- `lejar.tampal_moomoo`: entri yang berbeza > `TOL_SKALA` (0,5) daripada buka stor DILANGKAU dan dilaporkan
+  (`nota['moomoo'] = {ditampal, langkau_skala}`) — beza sebesar itu = skala tidak sepadan, bukan pembetulan buka.
+- `sahkan.py semak_stor` (baharu, lalai `--stor data/harga/stor`): RALAT jika buka melompat ≥ 3× (atau ≤ ⅓) tutup
+  sebelum sedangkan tutup bar itu hampir tidak berubah (pecahan sebenar menggerakkan tutup sama banyak, jadi tidak
+  tertangkap). Imbasan 418,065 bar: hanya 4 bar BUUU itu, tiada positif palsu.
+- Posisi C BUUU: M151 harga keluar 42,57 → 4,257 (untung +881,55% → −1,84%); M73, M20, M70 (keluar sebelum rutin laras
+  27 Okt, jadi seluruh baris pada skala lama) dilaras ×0,1 — peratus tidak berubah. Keluar setiap satu disahkan masih
+  sah dengan bar betul (sasaran M20 4,8997 ≤ tinggi 4,99995; henti M70 4,17 ≥ rendah 4,151).
+- `keluar_lorong.py`: paras lorong 2 BUUU dikira semula (−39,90 / 1,95 / 2,23 → 3,46).
+- Ujian baharu: `test_sahkan` (3: bar skala salah = ralat, pecahan sebenar dan bar biasa = bukan ralat),
+  `test_lejar.test_tampal_moomoo_langkau_skala_tidak_sepadan`.
+
+**Belum selesai (perlu keputusan pengguna).** Belian Actions 26 Okt melangkau 9 kaedah BUUU dengan sebab "buka ≤ henti"
+akibat pecahan yang sama (dicatat dalam log 27 Okt); baris itu tidak disentuh.
+
+**Dashboard v105 (artifact versi 114).** Mod Padat: lencana Pegang/Keluar/Tunggu kembali di bawah peratus untung dalam
+lajur dua lorong (`body.padat td.lrg .lrk` kolum, bukan baris) — permintaan pengguna. Tiada perubahan data atau db.
+
+**Dashboard v106 (artifact versi 115).** Permintaan pengguna ("saya tidak nampak industri dan RS"): pada 1900px pun `muatLajur` menyembunyikan Kewangan, Pemangkin, QR, RS dan Industri kerana ia menyembunyikan dari kanan sehingga jadual muat. `grCols` disusun semula mengikut keutamaan — Industri · RS · QR · Sektor · Pemangkin · Kewangan · Gred — supaya Sektor (kajian: paparan sahaja, tidak membantu memilih saham) hilang dahulu dan Industri (A kuat) serta RS (A +1.5% dalam 63 hari) kekal. Nota "Lajur disembunyi kerana skrin tidak cukup lebar" di bawah jadual kekal.
