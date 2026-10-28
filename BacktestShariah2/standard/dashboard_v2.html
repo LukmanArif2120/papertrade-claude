@@ -580,9 +580,7 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
 .sbn-nota .more{padding:4px 10px;font-size:.78rem}
 /* 28 Okt 2026 (permintaan pengguna): mod "papar semua lajur" — jadual kembali boleh diskrol mendatar, tiada lajur disembunyi */
 .tablewrap.skrolx,.tablewrap.tw-grd.skrolx{overflow-x:auto}
-.tablewrap.skrolx>table{width:max-content;min-width:100%}
-.tablewrap.skrolx th,.tablewrap.skrolx td{white-space:nowrap}
-.tablewrap.skrolx td.wrap,.tablewrap.skrolx td.grp,.tablewrap.skrolx td.grk,.tablewrap.skrolx td.syr,.tablewrap.skrolx td.name{white-space:normal}
+.tablewrap.skrolx>table{width:auto;min-width:100%}
 .tablewrap.skrolx .frz{position:sticky;left:0;z-index:2;box-shadow:1px 0 0 var(--line)}
 .tablewrap.skrolx th.frz{z-index:3}
 /* ================= v103 (23 Okt 2026): mod Padat, pop timbul, gerakan, ulang tayang lorong 2, makmal ================= */
@@ -603,7 +601,11 @@ table.hmt{width:auto;min-width:0}.hmt td.hm,.hmt td.hm0{text-align:center;white-
   body.padat td.utg,body.padat td.ctr{padding-inline:2px}
   body.padat td.kdh{max-width:none;white-space:nowrap}
   body.padat .tablewrap td .l2bar{vertical-align:middle}
-  body.padat .tablewrap tbody td{white-space:nowrap}
+  /* 28 Okt 2026 (permintaan pengguna "saya takmau scroll ke kanan … boleh jadikan 2 line sahaja"): sel dibenarkan
+     membalut sehingga 2 baris supaya lajur jadi sempit dan semua lajur muat tanpa skrol mendatar */
+  body.padat .tablewrap tbody td{white-space:normal;overflow-wrap:break-word}
+  body.padat .tablewrap tbody td .nw,body.padat .tablewrap tbody td .vv.nw{white-space:nowrap}
+  body.padat .tablewrap thead th{white-space:normal}
   /* 28 Okt 2026 (permintaan pengguna): lencana Pegang/Keluar/Tunggu kekal DI BAWAH peratus untung walaupun mod Padat */
   body.padat td.lrg .lrk{display:flex;flex-direction:column;align-items:center;gap:1px}
   body.padat td.lrg .lrb{height:1.5em;font-size:.66rem}
@@ -1442,13 +1444,13 @@ function skPerf(jenis,nama){const sk=S.sektor;if(!nama||!sk||!Array.isArray(sk.r
 function grKump(r,jenis){const g=r[jenis==='Sektor'?'gred_sektor':'gred_industri'],sk=grNil(r[jenis==='Sektor'?'skor_sektor':'skor_industri']);
   const asal=jenis==='Sektor'?r.sektor:r.industri,us=jenis==='Sektor'?r.sektor_us:r.industri_us;const x=skPerf(jenis,us||asal);
   if(GORD[g]==null)return asal?`<span class="grt">${esc(asal)}</span>`:'<span class="mut">belum</span>';
-  return grSel1(g,`<span class="nw"><b>${sk==null?'–':fx(sk,0)}</b><span class="mut">/100</span></span><span class="vv nm1" title="${esc(asal||us||'')}">${esc(asal||us||'')}</span>${x&&x.prestasi_1m!=null?`<span class="vv">1B kini <span class="${cls(x.prestasi_1m)}">${sg2(x.prestasi_1m)}</span></span>`:''}`);}
+  return grSel1(g,`<span class="nw" title="Skor ${jenis.toLowerCase()} daripada 100"><b>${sk==null?'–':fx(sk,0)}</b></span><span class="vv nm1" title="${esc(asal||us||'')}">${esc(asal||us||'')}</span>${x&&x.prestasi_1m!=null?`<span class="vv">1B kini <span class="${cls(x.prestasi_1m)}">${sg2(x.prestasi_1m)}</span></span>`:''}`);}
 /* skema RS 18 Okt 2026: A/B hanya jika disahkan (saham naik 12 bulan, SPY > SMA200, Mansfield > 0); rs_tanda = sebab/risiko */
 function grRS(r){const v=grNil(r.rs_rating),ri=grNil(r.rs_industri),t=String(r.rs_tanda||'');
   if(v==null)return grSel1(r.gred_rs,'<span class="mut">tiada data</span>');
   const sah=v>=80&&r.rs_sah==='ya'?'<span class="vv nw pos">disahkan</span>':v>=80&&r.rs_sah==='tidak'?'<span class="vv nw" style="color:var(--warn)">tidak disahkan</span>':'';
   const tt=t?`<span class="vv" style="color:var(--warn)" title="${esc(t)}">${esc(t.replace(/^tidak disahkan: /,''))}</span>`:'';
-  return grSel1(r.gred_rs,`<b class="nw">RS ${fx(v,0)}</b><span class="vv nw">atasi ${fx(v,0)}% ${r.rs_sumber==='stor'?'stor harga':'pasaran'}</span>${sah}${tt}${ri!=null?`<span class="vv nw">RS industri ${fx(ri,0)}</span>`:''}`);}
+  return grSel1(r.gred_rs,`<b class="nw" title="RS rating ${fx(v,0)} daripada 100">${fx(v,0)}</b><span class="vv nw">atasi ${fx(v,0)}% ${r.rs_sumber==='stor'?'stor harga':'pasaran'}</span>${sah}${tt}${ri!=null?`<span class="vv nw">industri ${fx(ri,0)}</span>`:''}`);}
 function grPem(r){if(GORD[r.gred_pemangkin]==null)return `<span class="mut">${r.pemangkin&&r.pemangkin!=='belum dikumpul'?esc(r.pemangkin):'Belum dikumpul'}</span>`;
   let u=[];try{u=r.pemangkin_url?(typeof r.pemangkin_url==='string'?JSON.parse(r.pemangkin_url):r.pemangkin_url):[];}catch(e){u=[];}
   const ln=(Array.isArray(u)?u:[]).filter(x=>x&&/^https:\/\//.test(x.url||'')).slice(0,2).map(x=>`<a class="vv berita" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer" title="${esc(x.tajuk||'Berita')}">↗ ${esc(x.tajuk||'Berita')}</a>`).join('');
