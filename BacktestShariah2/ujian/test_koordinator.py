@@ -65,10 +65,13 @@ class TestKoordinator(unittest.TestCase):
                 ko.KELUAR = asal
                 os.environ.pop('KOORDINATOR_OUT', None)
         for tajuk in ('## 0. Salinan kerja', '## 1. Perlu keputusan anda',
-                      '## 2. Menunggu masa', '## 3. Kesegaran data', '## 4. Workflow berjadual',
-                      '## 5. Status kajian', '## 6. Jangan ulangi'):
+                      '## 2. Kajian REVERSE', '## 3. Operasi repo', '## 4. Kesegaran data',
+                      '## 5. Workflow berjadual', '## 6. Status kajian', '## 7. Jangan ulangi'):
             self.assertIn(tajuk, t)
         self.assertIn('Jangan ubah manual', t)
+        # Dua jejak mesti dipisahkan secara eksplisit (kesilapan 28 Okt 2026).
+        self.assertIn('BUKAN kaedah Mxx', t)
+        self.assertIn('bukan Lejar Penuh', t)
 
 
 if __name__ == '__main__':

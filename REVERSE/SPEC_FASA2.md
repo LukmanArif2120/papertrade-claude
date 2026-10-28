@@ -40,7 +40,7 @@ tidak mengulangi kesilapan itu: setiap keputusan dibuat atas pulangan selepas ko
 
 Penilaian **tidak boleh** dijalankan sebelum **kesemua** dipenuhi:
 
-- **≥ 250 hari dagangan** liputan bertindih antara lajur yang diuji dan Lejar Penuh
+- **≥ 250 hari dagangan** liputan bertindih antara lajur yang diuji dan populasi peristiwa sah ~~dan Lejar Penuh~~ (**dibetulkan §9.1**)
 - **≥ 3,000 peristiwa sah** dengan nilai lajur itu tidak kosong
 - **≥ 2 suku kalendar penuh** data
 
@@ -57,8 +57,9 @@ pertama: sekitar **Okt 2027**.
 3. **Kawalan kebetulan** — label rawak 1000×, bootstrap blok 1000× (blok ticker **dan** blok
    minggu), BH-FDR q ≤ 0.01 dalam keluarga **`FASA2`** sendiri. Tolak jika had bawah 95% jangkaan
    ≤ 0 dalam mana-mana skema blok, atau jika jangkaan ≤ 0 tanpa 5% pemenang teratas.
-4. **Portfolio** — 10 slot (selari `portfolio_slot/`), kos penuh, dua saiz: tetap 10% dan berskala
-   risiko (SPEC_1B, k = 4, risiko 1.0%).
+4. **Portfolio** — **8 slot × 12.5%** seperti REVERSE Step 9 ~~10 slot (selari `portfolio_slot/`)~~
+   (**dibetulkan §9.1**), kos penuh, dua saiz: tetap 12.5% dan berskala risiko (SPEC_1B, k = 4,
+   risiko 1.0%).
 
 ## 6. Ambang penerimaan (dikunci sekarang, tidak boleh diubah selepas melihat hasil)
 
@@ -84,3 +85,55 @@ Jika tidak: fasa 2 **DITOLAK** dan dilaporkan sebagai ditolak, sama seperti fasa
 Bukan percubaan kedua pada indikator harga. Jika seseorang mahu menguji indikator harga lagi,
 `KEPUTUSAN_FASA1.md` dan `DIAGNOSIS_FASA1.md` ialah jawapannya: enam tahun, empat rejim,
 20,640 ujian ENTRY, 108 ujian 1b — ruang itu kosong.
+
+
+---
+
+## 9. Pindaan bertarikh
+
+### 9.1 — 28 Okt 2026: populasi peristiwa dan saiz portfolio dibetulkan (bukan Lejar, bukan 10 slot)
+
+**Kesilapan penulis spec, ditemui oleh pengguna.** Draf pertama SPEC_FASA2 menetapkan populasi
+ujian sebagai **Lejar Penuh** (§4) dan portfolio **10 slot selari `portfolio_slot/`** (§5.4).
+Kedua-duanya salah: Lejar Penuh dan `portfolio_slot/` ialah rekod isyarat **134 kaedah Mxx**.
+
+Arahan asal kajian ini menyatakannya tanpa kekaburan:
+
+> *"Kajian ini menguji signal dan indikator sahaja — BUKAN kaedah Mxx dalam repo, dan BUKAN
+> penalaan parameter."*
+
+Menguji RS/gred/earnings atas belian Mxx menjawab soalan yang **berbeza** — sama ada data itu
+menambah kuasa pemangkatan **dalam kalangan isyarat kaedah Mxx** — bukan soalan kajian ini, iaitu
+sama ada data itu menambah kuasa yang indikator harga tidak ada, atas populasi peristiwa yang sama
+seperti fasa 1.
+
+**Dibetulkan:**
+
+| Perkara | Draf pertama (salah) | Dikunci sekarang |
+|---|---|---|
+| Populasi ujian | belian Lejar Penuh (isyarat Mxx) | **peristiwa sah `SPEC.md` §7**: tutup ≥ 5% di atas rendah terendah 20 hari DAN tutup > EMA21, hari pertama dalam ≤ 10 hari dagangan — kausal, bebas kaedah |
+| Portfolio §5.4 | 10 slot × 10% (`portfolio_slot/`) | **8 slot × 12.5%** seperti REVERSE Step 9, supaya setanding fasa 1 |
+| Universe | tidak dinyatakan | universe A02 titik-masa, sama seperti fasa 1 |
+| Kawalan | tidak dinyatakan | KAWALAN RAWAK dan asas harga-sahaja, sama seperti fasa 1 |
+
+**Mengapa pembetulan ini sah:** pada tarikh ini fasa 2 berada pada **30 / 250** hari dagangan —
+**tiada data dinilai, tiada hasil dilihat**. Itulah satu-satunya keadaan di mana spec yang dikunci
+boleh dibetulkan tanpa menjejaskan integriti pradaftar. Draf pertama dikekalkan dalam sejarah git.
+
+**Tiada infrastruktur baharu diperlukan.** Peristiwa sah ialah fungsi deterministik stor harga
+(`BacktestShariah2/data/harga/stor/`), yang dipelihara setiap hari, dan RS/gred/SEC direkod setiap
+hari. Maka join peristiwa × data titik-masa boleh dibuat **secara retrospektif** pada Okt 2027
+dengan menjalankan semula pengesan peristiwa REVERSE atas stor. Yang perlu ditunggu ialah **masa**,
+bukan kod.
+
+### 9.2 — 28 Okt 2026: lorong `RISIKO_10` bukan ujian ke hadapan fasa 1b
+
+Lorong `RISIKO_10` yang ditambah ke `standard/portfolio_slot.py` pada 28 Okt 2026 pada mulanya
+diterangkan sebagai "ujian ke hadapan bagi dapatan fasa 1b". **Itu terlebih-dakwa.**
+`portfolio_slot/` membeli daripada Lejar Penuh, iaitu isyarat **kaedah Mxx** — populasi kemasukan
+yang sama sekali berbeza daripada signal REVERSE yang menghasilkan dapatan 1b.
+
+Apa yang `RISIKO_10` sebenarnya uji: sama ada saiz berskala risiko memperbaiki drawdown **atas
+isyarat Mxx**. Mekanisme saiz itu umum, jadi hasilnya tetap bermaklumat — tetapi ia **bukan**
+pengesahan atau penafian dapatan 1b. Ujian ke hadapan yang betul bagi 1b memerlukan lorong yang
+kemasukannya daripada peristiwa sah REVERSE, bukan daripada Lejar.

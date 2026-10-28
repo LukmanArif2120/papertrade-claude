@@ -277,17 +277,26 @@ def main():
     else:
         A('Tiada. (`BacktestShariah2/koordinator/keputusan.csv` tiada baris `terbuka`.)\n')
 
-    A('\n## 2. Menunggu masa — ambang yang belum dicapai\n')
-    A(f'\n### Fasa 2 REVERSE (ambang `SPEC_FASA2.md` §4: ≥ {F2_HARI} hari dagangan bertindih, '
+    A('\n## 2. Kajian REVERSE — signal dan indikator (BUKAN kaedah Mxx)\n')
+    A('REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** menguji 134 '
+      'kaedah Mxx repo dan tidak menala parameter. Populasi ujiannya ialah **peristiwa sah** '
+      '(`REVERSE/SPEC.md` §7: tutup ≥ 5% di atas rendah terendah 20 hari DAN tutup > EMA21, '
+      'kausal) atas universe A02 — bukan Lejar Penuh, bukan `portfolio_slot/`. Jangan campurkan '
+      'kedua-dua jejak (`REVERSE/SPEC_FASA2.md` §9).\n')
+    A(f'\n### Ambang fasa 2 (`SPEC_FASA2.md` §4: ≥ {F2_HARI} hari dagangan liputan bertindih, '
       f'≥ 3,000 peristiwa sah, ≥ {F2_SUKU} suku penuh)\n')
     f2 = ambang_fasa2()
     A(jadual_md([(r['sumber'], r.get('hari'), r.get('mula'), r.get('akhir'), r.get('suku'),
                   r.get('baris', ''), r['sedia']) for r in f2],
                 ['Sumber', 'Hari dagangan', 'Mula', 'Akhir', 'Suku (anggaran)', 'Baris', 'Cukup?']))
     hari_maks = max([r['hari'] for r in f2 if r.get('hari')] or [0])
-    A(f'\nTerbaik setakat ini: **{hari_maks} / {F2_HARI}** hari dagangan. Kiraan peristiwa sah '
-      'memerlukan join dengan Lejar Penuh — itu langkah pertama fasa 2, bukan kerja koordinator.\n')
+    A(f'\nTerbaik setakat ini: **{hari_maks} / {F2_HARI}** hari dagangan. Peristiwa sah ialah '
+      'fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat '
+      '**retrospektif** — yang perlu ditunggu ialah masa, bukan kod.\n')
 
+    A('\n## 3. Operasi repo — 134 kaedah Mxx dan papertrade C\n')
+    A('Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **Mxx** '
+      'melalui Lejar Penuh.\n')
     A(f'\n### Lorong portfolio_slot (bacaan adil ≥ {SLOT_BULAN_ADIL} bulan, '
       '`kajian/KAJIAN_PORTFOLIO.md`)\n')
     sl = slot()
@@ -296,35 +305,37 @@ def main():
                      for r in sl], ['Lorong', 'Ekuiti', 'Dipegang', 'Keluar', 'Sesi terakhir']))
         A('\n`RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya '
           'saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih '
-          'rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz.\n')
+          'rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz. Ia '
+          'menguji saiz atas **isyarat Mxx** dan bukan ujian ke hadapan dapatan REVERSE fasa 1b '
+          '(`REVERSE/SPEC_FASA2.md` §9.2).\n')
     else:
         A('Tiada `portfolio_slot/status.json`.\n')
 
     n_p, kira = papan()
-    A(f'\n### Papan Penganalisis — {n_p} kaedah\n')
+    A(f'\n### Papan Penganalisis — {n_p} kaedah Mxx\n')
     A(jadual_md(sorted(kira.items()), ['Status pantau', 'Bilangan']))
     if kira.get('BELUM CUKUP') == n_p and n_p:
         A('\nSemua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh '
           'dinilai ke hadapan lagi; penilaian penuh dijangka 15 Jan 2027 (`WFO/README.md`).\n')
 
-    A('\n## 3. Kesegaran data\n')
+    A('\n## 4. Kesegaran data\n')
     A(jadual_md([(a, b, c, d) for a, b, c, d in kesegaran()],
                 ['Sumber', 'Terakhir', 'Umur (hari)', 'Status']))
     A(f'\nAmbang LEWAT: > {LEWAT_HARI} hari. Dua sebab biasa **bukan** kerosakan: hujung minggu '
       'atau cuti pasaran, dan salinan kerja yang lama (lihat §0). Periksa kedua-duanya, kemudian '
       '`penjaga_jadual` dan log workflow, sebelum menganggap saluran rosak.\n')
 
-    A('\n## 4. Workflow berjadual\n')
+    A('\n## 5. Workflow berjadual\n')
     A(jadual_md(jadual(), ['Workflow', 'Cron', 'Dijaga penjaga_jadual?']))
     A('\nWorkflow berjadual baharu **mesti** ditambah ke `JAGA` dalam '
       '`standard/penjaga_jadual.py`; lajur "tidak" di atas bermakna cetusan yang hilang tidak '
       'akan dipulihkan.\n')
 
-    A('\n## 5. Status kajian\n')
+    A('\n## 6. Status kajian\n')
     kj = kajian()
     A(jadual_md(kj, ['Kajian', 'Status', 'Hasil']) if kj else 'Tiada.\n')
 
-    A('\n## 6. Jangan ulangi — sudah diukur, ruang kosong\n')
+    A('\n## 7. Jangan ulangi — sudah diukur, ruang kosong\n')
     A('- **Penalaan parameter indikator.** AUTOTUNE A02: 38,400 konfigurasi dengan Optuna TPE, '
       'walk-forward, DSR dan PBO → LULUS 0, CALON 0. Setiap konfigurasi tambahan menaikkan '
       'ambang yang hasilnya mesti lepasi, bukan peluang menemui sesuatu.\n'

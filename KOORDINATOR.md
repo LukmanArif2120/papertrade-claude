@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 12:58 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 13:09 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,7 +12,7 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 12:58 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (4)
+## 1. Perlu keputusan anda (5)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
@@ -20,15 +20,18 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 | 2026-10-28 | Fasa 2: guna alphalens-reloaded (sudah dalam requirements-kajian.txt) atau tulis sendiri | alphalens memberi rank-IC + pulangan kuintil + turnover terus. REVERSE/ujian_pangkat.py ialah versi tangan. |
 | 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. |
 | 2026-10-28 | Nilai semula sasaran pulangan | +10%/bulan = 78% daripada siling pandangan sempurna (12.89%/bulan). 0 daripada 36 sistem-tahun mencapainya. Siling dikira REVERSE/siling_pandangan_sempurna.py. |
+| 2026-10-28 | Tambah autotune_suku.yml ke senarai JAGA penjaga_jadual.py | Ia ada cron (17 3 1-7 1,4,7,10 6) tetapi tiada dalam JAGA, jadi cetusan yang hilang tidak dipulihkan. Peraturan CLAUDE.md sendiri menuntut ia ditambah. Ditemui oleh koordinator 28 Okt 2026. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
 
 
-## 2. Menunggu masa — ambang yang belum dicapai
+## 2. Kajian REVERSE — signal dan indikator (BUKAN kaedah Mxx)
+
+REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** menguji 134 kaedah Mxx repo dan tidak menala parameter. Populasi ujiannya ialah **peristiwa sah** (`REVERSE/SPEC.md` §7: tutup ≥ 5% di atas rendah terendah 20 hari DAN tutup > EMA21, kausal) atas universe A02 — bukan Lejar Penuh, bukan `portfolio_slot/`. Jangan campurkan kedua-dua jejak (`REVERSE/SPEC_FASA2.md` §9).
 
 
-### Fasa 2 REVERSE (ambang `SPEC_FASA2.md` §4: ≥ 250 hari dagangan bertindih, ≥ 3,000 peristiwa sah, ≥ 2 suku penuh)
+### Ambang fasa 2 (`SPEC_FASA2.md` §4: ≥ 250 hari dagangan liputan bertindih, ≥ 3,000 peristiwa sah, ≥ 2 suku penuh)
 
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
@@ -38,7 +41,12 @@ Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `sele
 | SEC earnings 8-K |  |  |  |  | 54109 | tidak |
 
 
-Terbaik setakat ini: **30 / 250** hari dagangan. Kiraan peristiwa sah memerlukan join dengan Lejar Penuh — itu langkah pertama fasa 2, bukan kerja koordinator.
+Terbaik setakat ini: **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
+
+
+## 3. Operasi repo — 134 kaedah Mxx dan papertrade C
+
+Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **Mxx** melalui Lejar Penuh.
 
 
 ### Lorong portfolio_slot (bacaan adil ≥ 6 bulan, `kajian/KAJIAN_PORTFOLIO.md`)
@@ -52,10 +60,10 @@ Terbaik setakat ini: **30 / 250** hari dagangan. Kiraan peristiwa sah memerlukan
 | RAWAK_KAEDAH_10 | 0.994292 | 10 | 0 | 2026-10-27 |
 
 
-`RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz.
+`RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz. Ia menguji saiz atas **isyarat Mxx** dan bukan ujian ke hadapan dapatan REVERSE fasa 1b (`REVERSE/SPEC_FASA2.md` §9.2).
 
 
-### Papan Penganalisis — 134 kaedah
+### Papan Penganalisis — 134 kaedah Mxx
 
 | Status pantau | Bilangan |
 |---|---|
@@ -65,7 +73,7 @@ Terbaik setakat ini: **30 / 250** hari dagangan. Kiraan peristiwa sah memerlukan
 Semua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh dinilai ke hadapan lagi; penilaian penuh dijangka 15 Jan 2027 (`WFO/README.md`).
 
 
-## 3. Kesegaran data
+## 4. Kesegaran data
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
@@ -83,7 +91,7 @@ Semua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh 
 Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau cuti pasaran, dan salinan kerja yang lama (lihat §0). Periksa kedua-duanya, kemudian `penjaga_jadual` dan log workflow, sebelum menganggap saluran rosak.
 
 
-## 4. Workflow berjadual
+## 5. Workflow berjadual
 
 | Workflow | Cron | Dijaga penjaga_jadual? |
 |---|---|---|
@@ -105,7 +113,7 @@ Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau 
 Workflow berjadual baharu **mesti** ditambah ke `JAGA` dalam `standard/penjaga_jadual.py`; lajur "tidak" di atas bermakna cetusan yang hilang tidak akan dipulihkan.
 
 
-## 5. Status kajian
+## 6. Status kajian
 
 | Kajian | Status | Hasil |
 |---|---|---|
@@ -115,7 +123,7 @@ Workflow berjadual baharu **mesti** ditambah ke `JAGA` dalam `standard/penjaga_j
 | REVERSE fasa 2 (data titik-masa) | SPEC DIKUNCI — menunggu data | lihat jadual ambang di atas |
 
 
-## 6. Jangan ulangi — sudah diukur, ruang kosong
+## 7. Jangan ulangi — sudah diukur, ruang kosong
 
 - **Penalaan parameter indikator.** AUTOTUNE A02: 38,400 konfigurasi dengan Optuna TPE, walk-forward, DSR dan PBO → LULUS 0, CALON 0. Setiap konfigurasi tambahan menaikkan ambang yang hasilnya mesti lepasi, bukan peluang menemui sesuatu.
 - **Signal entry berasaskan indikator harga.** REVERSE fasa 1: 6 tahun, 4 rejim, 20,640 ujian ENTRY → tiada signal lulus gate keras dalam lebih daripada satu tahun; portfolio signal kalah kepada entri rawak pada 3 daripada 5 tahun yang diuji.

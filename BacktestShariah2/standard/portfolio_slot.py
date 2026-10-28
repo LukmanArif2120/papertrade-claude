@@ -6,8 +6,10 @@ tiada wang sebenar. Dibina semula sepenuhnya daripada Lejar Penuh pada setiap la
   RISIKO_10 — susunan SAMA seperti RS_10, tetapi saiz berskala kemeruapan: saiz = risiko 1% ekuiti / (4 x ATR14%),
              dihadkan 2%-25%. Dipasangkan dengan RS_10 supaya satu-satunya perbezaan ialah SAIZ (A/B bersih).
              Asal: REVERSE/KEPUTUSAN_1B.md - dalam enam tahun data A02, saiz berskala risiko memperbaiki MDD
-             terbaik 6/6 tahun (-27%..-17% -> -10%..-6%) tetapi TIDAK memperbaiki pulangan. Lorong ini menguji
-             dapatan kawalan risiko itu ke hadapan. Nota: jika tunai tidak cukup, saiz dikecilkan ke tunai
+             terbaik 6/6 tahun (-27%..-17% -> -10%..-6%) tetapi TIDAK memperbaiki pulangan.
+             BUKAN ujian ke hadapan bagi dapatan 1b itu (REVERSE/SPEC_FASA2.md §9.2): lorong ini membeli
+             daripada Lejar = isyarat kaedah Mxx, populasi kemasukan yang berbeza sama sekali daripada signal
+             REVERSE. Yang diuji di sini: adakah saiz berskala risiko memperbaiki drawdown ATAS ISYARAT Mxx. Nota: jika tunai tidak cukup, saiz dikecilkan ke tunai
              (konvensyen portfolio_slot), bukan dilangkau seperti REVERSE/SPEC_1B.md §2. Kerana saiznya kecil,
              10 slot tidak menghabiskan tunai: lorong ini berpendedahan LEBIH RENDAH daripada RS_10, jadi MDD-nya
              mesti dibaca bersama lajur `tunai`, bukan sebagai perbandingan setara.
@@ -237,8 +239,9 @@ def ringkasan(hasil, spy_mula, spy_akhir, hari, CFG=None):
           'RAWAK_10 dan SPY dengan MDD yang setanding; GABUNGAN_10 mengatasi TOP1_10, RAWAK_KAEDAH_10 dan SPY.',
           '', 'RISIKO_10 dipasangkan dengan RS_10: susunan calon SAMA, hanya saiz berbeza (risiko 1% ekuiti / 4×ATR14%, '
           'dihadkan 2%–25%). Yang dicari di sini ialah MDD lebih baik pada pulangan yang setanding — bukan pulangan lebih '
-          'tinggi. Dalam enam tahun data A02 (REVERSE/KEPUTUSAN_1B.md) saiz berskala risiko memperbaiki MDD 6/6 tahun '
-          'tetapi memburukkan pulangan; jika pola itu berulang ke hadapan, ia pengesahan, bukan kegagalan.',
+          'tinggi. Idea saiz itu datang daripada REVERSE/KEPUTUSAN_1B.md (MDD bertambah baik 6/6 tahun, pulangan tidak), '
+          'tetapi lorong ini **bukan** ujian ke hadapan dapatan itu: ia membeli daripada Lejar = isyarat kaedah Mxx, '
+          'bukan signal REVERSE (lihat REVERSE/SPEC_FASA2.md §9.2). Yang diuji di sini ialah saiz atas isyarat Mxx.',
           '', '**Baca MDD RISIKO_10 bersama lajur `tunai`.** Kerana saham momentum Shariah kebanyakannya ber-ATR tinggi, '
           'saiznya kecil (2%–5%) dan 10 slot tidak menghabiskan tunai: sebahagian daripada MDD yang lebih baik datang '
           'daripada **pendedahan yang lebih rendah**, bukan daripada saiz yang lebih bijak. Perbandingan yang adil ialah '
