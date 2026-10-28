@@ -59,6 +59,15 @@ done
 
 LOG "step11_sec_nilai.py (penilaian §5; sekali sahaja)"
 python3 REVERSE/step11_sec_nilai.py > /tmp/claude-0/step11.log 2>&1 || { LOG "GAGAL step11"; exit 1; }
+# §5.4 hanya jika §5.1 dan §5.3 lulus (§6 syarat 1). step12 sendiri menolak untuk berjalan jika
+# tiada signal lulus, jadi keluar bukan-sifar di sini BUKAN kegagalan rantaian.
+LOG "step12_sec_portfolio.py (§5.4; hanya jika §5 lulus)"
+if python3 REVERSE/step12_sec_portfolio.py >> /tmp/claude-0/step11.log 2>&1; then
+  LOG "§5.4 dijalankan"
+else
+  LOG "§5.4 dilangkau (tiada signal lulus §5.3, atau §5 belum ada) — lihat step11.log"
+fi
+
 LOG "jana_keputusan_fasa2.py"
 python3 REVERSE/jana_keputusan_fasa2.py >> /tmp/claude-0/step11.log 2>&1 || { LOG "GAGAL laporan"; exit 1; }
 LOG "RANTAIAN SIAP"

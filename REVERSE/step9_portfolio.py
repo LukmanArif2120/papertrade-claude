@@ -61,8 +61,14 @@ def exit_hari(pra, asas, lv, c, o, i, exit_nama, hold, n):
     return b, 'had_252'
 
 
-def jalankan(nama, entri, fr, pra_all, c_all, o_all, to_all, kal, exit_nama, hold, pilihan):
-    """Simulasi portfolio 8 slot. entri: DataFrame ticker, tarikh, skor1, skor2."""
+def jalankan(nama, entri, fr, pra_all, c_all, o_all, to_all, kal, exit_nama, hold, pilihan,
+             saiz=None):
+    """Simulasi portfolio 8 slot. entri: DataFrame ticker, tarikh, skor1, skor2.
+
+    saiz: None = bahagian tetap BAHAGIAN (12.5%), tingkah laku asal fasa 1 tidak berubah.
+    Jika diberi, saiz(ticker, i) -> pecahan ekuiti bagi posisi itu (SPEC_FASA2 §5.4 menuntut dua
+    saiz: tetap dan berskala risiko SPEC_1B). Had slot, susunan pilihan dan kos tidak berubah.
+    """
     ekuiti = 1.0
     posisi = []            # dict(ticker, i_keluar, unit, kos_jual, tarikh_keluar)
     tunai = 1.0
@@ -123,7 +129,10 @@ def jalankan(nama, entri, fr, pra_all, c_all, o_all, to_all, kal, exit_nama, hol
             harga = o_all[t][k] * (1 + ks)
             if not np.isfinite(harga) or harga <= 0:
                 continue
-            nilai_pos = ekuiti * BAHAGIAN
+            bhg = BAHAGIAN if saiz is None else saiz(t, i)
+            if not (np.isfinite(bhg) and bhg > 0):
+                continue
+            nilai_pos = ekuiti * bhg
             if nilai_pos > tunai:
                 nilai_pos = tunai
             if nilai_pos <= 0:
