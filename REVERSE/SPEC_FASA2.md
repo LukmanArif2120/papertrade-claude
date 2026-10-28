@@ -449,3 +449,23 @@ gagal.
 Ini **tidak** melonggarkan apa-apa: dengan 11 tahun layak, pecahan 71% menuntut 8 tahun konsisten,
 dan minimum 10-tahun §9.5 masih terpakai. Ia menutup kekaburan, dan ia dikunci sebelum sebarang
 rho pernah dikira.
+
+### 9.8 — 28 Okt 2026: pelaksanaan §5.4 (portfolio) dan dua saiz
+
+`REVERSE/step12_sec_portfolio.py`. Dijalankan **hanya** jika §5.1 dan §5.3 lulus (§6 syarat 1);
+jika tidak ia menolak untuk berjalan dan mencetak sebabnya, kerana mencari portfolio daripada signal
+yang sudah gagal ujian kebetulan hanya mencari kebetulan yang lebih besar.
+
+- **8 slot × 12.5%**, kos penuh, tiga rujukan keluar fasa 1 (`REF_pegang_252`,
+  `REF_chandelier_4atr`, `REF_jual_hari63`).
+- **Dua saiz** seperti §5.4 menuntut: tetap 12.5%, dan berskala risiko SPEC_1B —
+  (RISIKO × ekuiti) / (k × ATR%), had 2–25%, k = 4, risiko 1.0%. Apabila ATR tidak diketahui, ia
+  jatuh balik ke saiz tetap (bukan dilangkau), supaya bilangan posisi kekal setanding.
+- **Kawalan rawak** (§6 syarat 3): entri rawak, bilangan sama **setiap bulan**, benih 42 — sama
+  seperti fasa 1. Signal mesti mengalahkannya pada pulangan **dan** MDD.
+- **Metrik dilaporkan** ialah yang menjadi soalan sebenar pengguna, bukan lift: pulangan tahunan
+  terkompaun, MDD, median bulanan, % bulan ≥ +10%, bulan terburuk, median pulangan dagangan.
+
+`step9_portfolio.jalankan()` fasa 1 **diguna semula, bukan difork**, supaya nombor setanding. Satu
+parameter `saiz` ditambah padanya; apabila ia tidak diberi, `bhg == BAHAGIAN` dan pemeriksaan
+`isfinite` mustahil menolaknya, jadi tingkah laku fasa 1 tidak berubah sama sekali.
