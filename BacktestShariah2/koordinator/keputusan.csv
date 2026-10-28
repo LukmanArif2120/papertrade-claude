@@ -1,0 +1,5 @@
+tarikh,perkara,status,catatan
+2026-10-28,Wayar standard/koordinator.py ke satu workflow supaya KOORDINATOR.md segar sendiri,terbuka,"Cadangan: langkah tambahan dalam semak_data.yml (setiap push) atau harian.yml (sekali sehari). Sekarang dijalankan manual."
+2026-10-28,Fasa 2: guna alphalens-reloaded (sudah dalam requirements-kajian.txt) atau tulis sendiri,terbuka,"alphalens memberi rank-IC + pulangan kuintil + turnover terus. REVERSE/ujian_pangkat.py ialah versi tangan."
+2026-10-28,Uji perluasan universe dalam 3260 ticker Release A02,terbuka,"Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker."
+2026-10-28,Nilai semula sasaran pulangan,terbuka,"+10%/bulan = 78% daripada siling pandangan sempurna (12.89%/bulan). 0 daripada 36 sistem-tahun mencapainya. Siling dikira REVERSE/siling_pandangan_sempurna.py."
