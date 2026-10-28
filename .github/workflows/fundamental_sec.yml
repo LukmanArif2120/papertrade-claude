@@ -41,25 +41,37 @@ jobs:
           python-version: '3.11'
       - name: Pasang pakej
         run: pip install -q -c kekangan.txt pandas numpy requests
-      - name: Ambil data SEC
+      # Ambil DAN tolak dalam satu langkah, dengan setiap percubaan bermula daripada origin/main
+      # terkini. Sebabnya (28 Okt 2026, larian 11 gagal): langkah lama mengira data daripada
+      # checkout, kemudian `git pull --rebase` pada hujungnya. Apabila dua larian bertindih, larian
+      # kedua mengira daripada data/sec yang LAPUK dan rebase berkonflik. Lebih buruk: jika git
+      # berjaya auto-merge CSV itu, ia menyilangkan baris daripada dua penulisan penuh fail yang
+      # berbeza dan commit CSV ROSAK ke main. Konflik itu yang menyelamatkan data.
+      #
+      # fundamental_sec.py membaca CSV yang ada dan menggabungkan baris barunya (`_ganti`), dan
+      # `akses` dalam status.json menandakan apa yang sudah diambil. Maka `reset --hard origin/main`
+      # diikuti larian semula adalah selamat DAN murah: ia tidak mengulang kerja yang sudah ada
+      # dalam main. Tiada konflik mungkin berlaku, kerana tiada rebase.
+      - name: Ambil data SEC dan tolak
         env:
           SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
           MAKS: ${{ github.event.inputs.maks_fakta }}
           MAKS_SAHAM: ${{ github.event.inputs.maks_saham }}
         run: |
           [ -n "$SEC_USER_AGENT" ] || echo "::warning::Rahsia SEC_USER_AGENT belum ditetapkan; data SEC tidak diambil"
-          python3 BacktestShariah2/standard/fundamental_sec.py jalan --maks-fakta "${MAKS:-300}" --maks-saham "${MAKS_SAHAM:-0}"
-      - name: Commit dan push
-        run: |
           git config user.name "sec[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add BacktestShariah2/data/sec 2>/dev/null || true
-          git add BacktestShariah2/data/univ_sec.txt 2>/dev/null || true
-          git add BacktestShariah2/data/edgar/company_tickers.json 2>/dev/null || true
-          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
-          git commit -q -m "Fundamental SEC: $(date -u +%F)"
-          for n in 1 2 3; do
-            git pull -q --rebase origin main && git push -q origin HEAD:main && exit 0
-            sleep $((n * 10))
+          for n in 1 2 3 4; do
+            git fetch -q origin main
+            git reset -q --hard origin/main
+            python3 BacktestShariah2/standard/fundamental_sec.py jalan \
+              --maks-fakta "${MAKS:-300}" --maks-saham "${MAKS_SAHAM:-0}" || exit 1
+            git add BacktestShariah2/data/sec BacktestShariah2/data/univ_sec.txt 2>/dev/null || true
+            git add BacktestShariah2/data/edgar/company_tickers.json 2>/dev/null || true
+            if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+            git commit -q -m "Fundamental SEC: $(date -u +%F)"
+            if git push -q origin HEAD:main; then exit 0; fi
+            echo "::warning::push gagal (main bergerak); jalankan semula atas main terkini (cuba $n)"
+            sleep $((n * 15))
           done
           exit 1
