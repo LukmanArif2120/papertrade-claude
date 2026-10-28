@@ -40,6 +40,7 @@ KELUARGA = 'FASA2_SEC'
 MIN_N = 200                # minimum baris untuk Spearman (sama seperti ujian_pangkat.py)
 PECAHAN_KONSISTEN = 0.71   # §9.5: ceil(0.71 x 14) = 10, sama dengan §9.3 asal
 MIN_TAHUN = 10             # §9.5: kurang daripada ini -> BELUM BOLEH DINILAI
+AMBANG_TAHUN = 3000        # §9.7: ambang §4 dikenakan SETIAP TAHUN; tahun di bawahnya dikecualikan
 
 
 def pulangan_dagang(th, ev):
@@ -168,15 +169,21 @@ def ujian_51(d):
     rows = []
     th = sorted(d.tahun.unique())
     for k in LAJUR:
-        r = []
+        r, kecuali = [], []
         for y in th:
             g = d[d.tahun == y]
             x, v = g[k].to_numpy('float64'), g.pul_henti2atr.to_numpy('float64')
             m = np.isfinite(x) & np.isfinite(v)
+            # §9.7: ambang 3,000 setiap tahun; tahun di bawahnya dikecualikan sepenuhnya.
+            if m.sum() < AMBANG_TAHUN:
+                kecuali.append(y)
+                r.append(np.nan)
+                continue
             r.append(spearmanr(x[m], v[m])[0] if m.sum() > MIN_N else np.nan)
         ada = [x for x in r if np.isfinite(x)]
         pos, neg = sum(x > 0 for x in ada), sum(x < 0 for x in ada)
         rows.append(dict(lajur=k, n_tahun=len(ada), konsisten=max(pos, neg),
+                         tahun_dikecualikan=','.join(str(y) for y in kecuali),
                          rho_purata=round(float(np.mean(ada)), 4) if ada else np.nan,
                          rho_min=round(min(ada), 4) if ada else np.nan,
                          rho_maks=round(max(ada), 4) if ada else np.nan,

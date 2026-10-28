@@ -18,7 +18,7 @@ def rangka(rho_ikut_tahun, lajur='sue'):
     bhg = []
     rng = np.random.default_rng(0)
     for i, tanda in enumerate(rho_ikut_tahun):
-        n = 400
+        n = 4000                      # > AMBANG_TAHUN (§9.7), jika tidak tahun itu dikecualikan
         x = rng.normal(size=n)
         v = tanda * x * 0.5 + rng.normal(size=n) * 0.1
         bhg.append(pd.DataFrame({'tahun': 2012 + i, lajur: x, 'pul_henti2atr': v}))
@@ -71,7 +71,7 @@ class TestAmbangPemangkatan(unittest.TestCase):
         rng = np.random.default_rng(1)
         bhg = []
         for i in range(14):
-            n = 400
+            n = 4000                  # > AMBANG_TAHUN (§9.7)
             x = rng.normal(size=n)
             v = x * 0.002 + rng.normal(size=n)    # korelasi hampir sifar
             bhg.append(pd.DataFrame({'tahun': 2012 + i, 'sue': x, 'pul_henti2atr': v}))
@@ -82,6 +82,51 @@ class TestAmbangPemangkatan(unittest.TestCase):
         b = T.ujian_51(d)
         b = b[b.lajur == 'sue'].iloc[0]
         self.assertLess(b.rho_abs, 0.05)
+        self.assertFalse(b.lulus_51)
+
+
+class TestAmbangSetiapTahun(unittest.TestCase):
+    def test_ambang_dikunci_3000(self):
+        self.assertEqual(T.AMBANG_TAHUN, 3000)
+
+    def test_tahun_bawah_ambang_dikecualikan(self):
+        """§9.7: tahun di bawah 3,000 tidak dikira dalam pembilang MAHUPUN penyebut."""
+        rng = np.random.default_rng(2)
+        bhg = []
+        for i in range(14):
+            n = 500 if i < 3 else 4000          # 3 tahun pertama di bawah ambang
+            x = rng.normal(size=n)
+            v = x * 0.5 + rng.normal(size=n) * 0.1
+            bhg.append(pd.DataFrame({'tahun': 2012 + i, 'sue': x, 'pul_henti2atr': v}))
+        d = pd.concat(bhg, ignore_index=True)
+        for k in T.LAJUR:
+            if k not in d:
+                d[k] = np.nan
+        b = T.ujian_51(d)
+        b = b[b.lajur == 'sue'].iloc[0]
+        self.assertEqual(b.n_tahun, 11)                        # 14 - 3
+        self.assertEqual(b.tahun_dikecualikan, '2012,2013,2014')
+        self.assertTrue(b.boleh_dinilai)                       # 11 >= 10
+        self.assertEqual(b.perlu_konsisten, int(np.ceil(0.71 * 11)))
+
+    def test_kurang_10_tahun_layak_belum_boleh_dinilai(self):
+        """Lima tahun di bawah ambang -> 9 layak -> BELUM BOLEH DINILAI, walaupun konsisten penuh."""
+        rng = np.random.default_rng(3)
+        bhg = []
+        for i in range(14):
+            n = 500 if i < 5 else 4000
+            x = rng.normal(size=n)
+            v = x * 0.5 + rng.normal(size=n) * 0.1
+            bhg.append(pd.DataFrame({'tahun': 2012 + i, 'sue': x, 'pul_henti2atr': v}))
+        d = pd.concat(bhg, ignore_index=True)
+        for k in T.LAJUR:
+            if k not in d:
+                d[k] = np.nan
+        b = T.ujian_51(d)
+        b = b[b.lajur == 'sue'].iloc[0]
+        self.assertEqual(b.n_tahun, 9)
+        self.assertEqual(b.konsisten, 9)
+        self.assertFalse(b.boleh_dinilai)
         self.assertFalse(b.lulus_51)
 
 

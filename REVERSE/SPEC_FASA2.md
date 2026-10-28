@@ -410,3 +410,42 @@ ketiga-tiga lajur dianggap **kosong** bagi baris itu (dikecualikan, bukan diisi 
 - `hari_sejak_earnings` **mentah** kekal dalam `sec_join.csv` supaya penapis ini boleh diaudit.
   Penapis dikenakan dalam `step11_sec_nilai.py`, bukan dalam join.
 - Signal `sejak_earnings_le5` (tingkap PEAD, ≤ 5 hari) tidak terjejas: ia sudah lebih ketat.
+
+### 9.7 — 28 Okt 2026: ambang 3,000 dikenakan SETIAP TAHUN (sebelum keputusan dilihat)
+
+§4 menulis "≥ 3,000 peristiwa sah dengan nilai lajur itu tidak kosong" tanpa menyatakan sama ada ia
+setahun atau keseluruhan 14 tahun. §4.4 melaporkannya setiap tahun dan menulis "LULUS setiap
+tahun", jadi niatnya setahun — tetapi ia tidak pernah dinyatakan sebagai peraturan. Dibiarkan
+kabur, pilihan itu boleh dibuat selepas melihat tahun mana yang menyebelahi keputusan.
+
+Liputan selepas `step1` 14 tahun siap dan satu larian isian awal (28 Okt 2026, kiraan sahaja):
+
+| Tahun | Peristiwa | Saham | Ada SEC | SUE tidak kosong | % |
+|---|---|---|---|---|---|
+| 2012 | 7,028 | 1,205 | 383 | **2,065** | 29.4 |
+| 2013 | 7,946 | 1,361 | 456 | **2,895** | 36.4 |
+| 2014 | 8,271 | 1,487 | 499 | **2,968** | 35.9 |
+| 2015 | 9,497 | 1,591 | 531 | 3,403 | 35.8 |
+| 2016 | 9,715 | 1,624 | 544 | 3,413 | 35.1 |
+| 2017 | 9,530 | 1,745 | 576 | 3,314 | 34.8 |
+| 2018 | 12,030 | 1,873 | 615 | 4,145 | 34.5 |
+| 2019 | 11,839 | 1,907 | 630 | 4,072 | 34.4 |
+| 2020 | 12,858 | 2,045 | 657 | 4,266 | 33.2 |
+| 2021 | 15,259 | 2,283 | 704 | 5,082 | 33.3 |
+| 2022 | 15,440 | 2,255 | 714 | 5,167 | 33.5 |
+| 2023 | 13,642 | 2,202 | 739 | 4,739 | 34.7 |
+| 2024 | 14,151 | 2,191 | 737 | 5,037 | 35.6 |
+| 2025 | 13,998 | 2,237 | 752 | 4,832 | 34.5 |
+
+Jumlah: **161,204** peristiwa sah, **55,398** dengan SUE tidak kosong. Tiga tahun pertama berada di
+bawah 3,000, kerana mandat XBRL berperingkat 2009–2011 (§9.3) — isian awal yang sedang berjalan
+akan menaikkannya, tetapi ia mungkin tidak cukup.
+
+**Peraturan dikunci.** Ambang 3,000 dikenakan **setiap tahun**. Tahun di bawahnya **dikecualikan**
+daripada §5.1, dan tidak dikira dalam pembilang mahupun penyebut pecahan §9.5. Jika tahun yang
+layak kurang daripada 10, keputusan ialah **BELUM BOLEH DINILAI** (§9.5), bukan lulus dan bukan
+gagal.
+
+Ini **tidak** melonggarkan apa-apa: dengan 11 tahun layak, pecahan 71% menuntut 8 tahun konsisten,
+dan minimum 10-tahun §9.5 masih terpakai. Ia menutup kekaburan, dan ia dikunci sebelum sebarang
+rho pernah dikira.
