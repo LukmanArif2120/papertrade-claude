@@ -27,6 +27,9 @@ on:
       simpan:
         description: "commit hasil/suku ke main (ya/tidak)"
         default: 'ya'
+      paksa:
+        description: "jalankan walaupun bukan hari 1-7 bulan suku (ya/tidak)"
+        default: 'tidak'
 
 permissions:
   contents: read
@@ -53,11 +56,13 @@ jobs:
           python-version: '3.11'
       - id: p
         env:
-          ACARA: ${{ github.event_name }}
           SUKU_IN: ${{ inputs.suku }}
+          PAKSA: ${{ inputs.paksa }}
         run: |
-          if [ "$ACARA" = "schedule" ] && [ "$(date -u +%-d)" -gt 7 ]; then
-            echo "bukan Sabtu pertama bulan: langkau"
+          # Cron dom+dow ialah ATAU, dan penjaga_jadual.yml mencetus workflow_dispatch bagi cetusan yang hilang:
+          # pintu tarikh terpakai pada kedua-dua schedule dan dispatch. Dispatch manual pada hari lain: paksa=ya.
+          if [ "$PAKSA" != "ya" ] && [ "$(date -u +%-d)" -gt 7 ]; then
+            echo "bukan hari 1-7 bulan suku: langkau (guna paksa=ya untuk memaksa)"
             echo "jalan=tidak" >> "$GITHUB_OUTPUT"; exit 0
           fi
           echo "jalan=ya" >> "$GITHUB_OUTPUT"

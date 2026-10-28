@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 13:09 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 13:46 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,15 +12,13 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 13:09 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (5)
+## 1. Perlu keputusan anda (3)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
-| 2026-10-28 | Wayar standard/koordinator.py ke satu workflow supaya KOORDINATOR.md segar sendiri | Cadangan: langkah tambahan dalam semak_data.yml (setiap push) atau harian.yml (sekali sehari). Sekarang dijalankan manual. |
 | 2026-10-28 | Fasa 2: guna alphalens-reloaded (sudah dalam requirements-kajian.txt) atau tulis sendiri | alphalens memberi rank-IC + pulangan kuintil + turnover terus. REVERSE/ujian_pangkat.py ialah versi tangan. |
 | 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. |
 | 2026-10-28 | Nilai semula sasaran pulangan | +10%/bulan = 78% daripada siling pandangan sempurna (12.89%/bulan). 0 daripada 36 sistem-tahun mencapainya. Siling dikira REVERSE/siling_pandangan_sempurna.py. |
-| 2026-10-28 | Tambah autotune_suku.yml ke senarai JAGA penjaga_jadual.py | Ia ada cron (17 3 1-7 1,4,7,10 6) tetapi tiada dalam JAGA, jadi cetusan yang hilang tidak dipulihkan. Peraturan CLAUDE.md sendiri menuntut ia ditambah. Ditemui oleh koordinator 28 Okt 2026. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
@@ -95,7 +93,7 @@ Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau 
 
 | Workflow | Cron | Dijaga penjaga_jadual? |
 |---|---|---|
-| autotune_suku.yml | 17 3 1-7 1,4,7,10 6 | **tidak** |
+| autotune_suku.yml | 17 3 1-7 1,4,7,10 6 | ya |
 | beli.yml | 40 13 * * 1-5, 40 14 * * 1-5, 25 16 * * 1-5, 25 19 * * 1-5 | ya |
 | edgar.yml | 17 23 * * 1-5, 47 3 * * 2-6 | ya |
 | fundamental_sec.yml | 41 23 * * 1-5, 11 4 * * 2-6 | ya |

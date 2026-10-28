@@ -22,6 +22,7 @@ JAGA = {
     'harga_harian.yml': 'buka', 'skrin_tv.yml': 'buka', 'rs_pasaran.yml': 'buka', 'gred_kumpulan.yml': 'buka',
     'lejar.yml': 'buka', 'harian.yml': 'buka', 'petang.yml': ('ny', 9, 15), 'beli.yml': ('ny', 16, 45),
     'edgar.yml': 'buka', 'fundamental_sec.yml': 'buka', 'senarai_bursa.yml': 'buka',
+    'autotune_suku.yml': 'buka',   # suku-tahunan; pintu workflow menapis hari > 7 (termasuk dispatch penjaga)
 }
 
 
@@ -74,7 +75,8 @@ def had_masa(jenis, t):
 
 
 def baca_cron(laluan):
-    return re.findall(r"""^\s*-\s*cron:\s*['"]([^'"]+)['"]""", open(laluan).read(), re.M)
+    with open(laluan, encoding='utf-8') as f:
+        return re.findall(r"""^\s*-\s*cron:\s*['"]([^'"]+)['"]""", f.read(), re.M)
 
 
 def sasaran(crons, jenis, kini):

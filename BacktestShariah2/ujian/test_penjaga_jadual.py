@@ -61,6 +61,16 @@ class TestPenjagaJadual(unittest.TestCase):
             for c in crons:
                 pj.cetusan(c, utc(2026, 10, 19), utc(2026, 10, 20))
 
+    def test_semua_workflow_berjadual_dijaga(self):
+        # Peraturan CLAUDE.md: setiap workflow berjadual mesti ada dalam JAGA. penjaga_jadual.yml menjaga dirinya
+        # (cron sendiri setiap jam), jadi ia dikecualikan.
+        folder = os.path.join(AKAR, '.github', 'workflows')
+        berjadual = {f for f in sorted(os.listdir(folder)) if f.endswith('.yml') and pj.baca_cron(os.path.join(folder, f))}
+        self.assertEqual(berjadual - {'penjaga_jadual.yml'} - set(pj.JAGA), set())
+
+    def test_autotune_suku_dalam_jaga(self):
+        self.assertIn('autotune_suku.yml', pj.JAGA)
+
 
 if __name__ == '__main__':
     unittest.main()
