@@ -642,8 +642,10 @@ th.isi,td.isi{width:100%;padding:0;min-width:0}
   body.padat td.lrg .lrk,body.padat .tablewrap td.lrg .grt{display:contents}
   body.padat td.lrg .lrp{grid-column:1;grid-row:1}
   body.padat td.lrg .lrb{grid-column:1;grid-row:2}
-  body.padat td.lrg .l2bar{grid-column:2;grid-row:1}
-  body.padat td.lrg .l2j{grid-column:2;grid-row:2}
+  body.padat td.lrg .l2bar{grid-column:2;grid-row:1;margin-top:0;margin-left:9px;align-self:center}
+  /* 28 Okt 2026: cip jarak ATR berlabuh pada tepi KIRI bar (margin-left 6px asalnya untuk susun atur sebaris) */
+  body.padat td.lrg .l2j{grid-column:2;grid-row:2;margin-left:9px}
+  body.padat td.lrg .l2bar{margin-top:0;align-self:center}
   body.padat td.lrg .lrb{height:1.5em;font-size:.66rem}
   body.padat .tablewrap td .grt{display:flex;flex-direction:row;align-items:center;gap:6px;min-width:0}
   body.padat .tablewrap td .grt .pill{margin-top:0!important}
@@ -652,7 +654,11 @@ th.isi,td.isi{width:100%;padding:0;min-width:0}
   /* 28 Okt 2026: pil "Selamat"/"Syariah …" ialah ADIK .grc (lihat grSel1 `bawah`), jadi ia bermula di bawah cip
      gred tanpa trik grid — lebar sel dikira biasa, tiada lajur bertindih */
   body.padat td.grd .grt{flex-direction:column;align-items:flex-start;gap:1px}
-  body.padat td.grd>.pill{max-width:none}
+  /* 28 Okt 2026 (permintaan pengguna): pil status (Selamat/Berhati-hati/Elak, Syariah …) tidak dipapar dalam
+     mod Padat — cip gred sudah membawa maksud yang sama; teks penuh kekal dalam tooltip dan helaian butiran */
+  body.padat td.grd>.pill{display:none}
+  body.padat td.grd .grc{align-items:center}
+  body.padat td.grd .grt{min-height:1.7em;justify-content:center}
   /* teks ganti (tiada gred: "Tiada data", ringkasan kewangan panjang) dipotong satu baris supaya tinggi baris
      seragam; teks penuh kekal dalam tooltip */
   body.padat td.grd>.mut,body.padat td.grd>.grt,body.padat td.grd .grt>:not(.pill):not(.vv):not(.kskor){display:inline-block;max-width:150px;
@@ -1520,8 +1526,8 @@ function grQR(r){const h=grNil(r.hari_ke_earnings),q=QLBL[r.gred_qr];
   /* 28 Okt 2026 (permintaan pengguna): nombor sahaja dalam sel; "hari lagi", tarikh dan sebab dalam tooltip hover */
   const ttQR=h!=null?`${fx(h,0)} hari dagangan lagi ke laporan suku${tk?' ('+tk+')':''}${sb.startsWith('anggaran')?' — tarikh anggaran':''}${q?'. '+q[0]:''}`
     :(sb==='tiada data'?'Tiada tarikh earnings dalam sumber data pada hari isyarat.':'Tiada laporan suku dalam 30 hari dagangan selepas isyarat.');
-  const txt=h!=null?`<b class="nw" title="${esc(ttQR)}">${fx(h,0)}</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}`:`<b class="nw" title="${esc(ttQR)}">${sb==='tiada data'?'Tiada data':'Tiada'}</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}`;
-  return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt+qrSeb(r),pl):`<span class="mut" title="${esc(/^tidak diketahui/.test(r.sumber_earnings||'')?'Tarikh earnings '+r.sumber_earnings+'. Gred QR tidak dikira.':'Tarikh earnings tiada dalam sumber data (Nasdaq/SST/yfinance/Moomoo) pada hari isyarat; gred QR tidak dikira.')}">Tiada data</span>${qrSeb(r)}`;}
+  const txt=h!=null?`<b class="nw" title="${esc(ttQR)}">${fx(h,0)}</b><span class="vv nw">${esc(tk)}${sb.startsWith('anggaran')?' (anggaran)':''}</span>${pq}`:`<b class="nw" title="${esc(ttQR)}">–</b>${sb==='tiada data'?'':'<span class="vv nw">30 hari</span>'}${pq}`;
+  return GORD[r.gred_qr]!=null?grSel1(r.gred_qr,txt+qrSeb(r),pl):`<span class="mut nw" title="${esc(/^tidak diketahui/.test(r.sumber_earnings||'')?'Tarikh earnings '+r.sumber_earnings+'. Gred QR tidak dikira.':'Tarikh earnings tiada dalam sumber data (Nasdaq/SST/yfinance/Moomoo) pada hari isyarat; gred QR tidak dikira.')}">–</span>${qrSeb(r)}`;}
 /* gred kewangan v7 (standard/gred_kewangan.py): ringkasan "B (K:A U:B T:C S:B) · peringkat · F:n · keyakinan … · Syariah …" */
 const SYLBL={'lulus':'p-buy','hampir had':'p-warn','gagal sebahagian':'p-warn','gagal':'p-exit'};
 function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:(\S+) S:(\S+)\) · ([^·]+?) · F:(\d+) · keyakinan (\S+)(?: · Syariah (.+))?$/.exec(s);
@@ -1529,7 +1535,7 @@ function grKew(r){const s=String(r.kewangan_ringkas||''),m=/\(K:(\S+) U:(\S+) T:
   if(!m)return grSel1(r.gred_kewangan,`<span title="${esc(s)}">${esc(s)}</span>`);
   const sub=[['K',m[1],'Kekukuhan'],['U',m[2],'Keuntungan'],['T',m[3],'Pertumbuhan'],['S',m[4],'Arah suku terkini']].map(([l,g,n])=>`<span title="${n}"><small>${l}</small>${grB(g,'',n)}</span>`).join('');
   const f=+m[6],sy=m[8];
-  return grSel1(r.gred_kewangan,`<span class="kskor">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`,sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:'');}
+  return grSel1(r.gred_kewangan,`<span class="kskor" title="${esc(s)}">${sub}</span><span class="vv">${esc(m[5])} · keyakinan ${esc(m[7])}${f?` · <span style="color:var(--warn)">${f} bendera</span>`:''}</span>${r.kewangan_tempoh?`<span class="vv nw">penyata ${esc(r.kewangan_tempoh)}</span>`:''}`,sy?`<span class="pill ${SYLBL[sy]||'p-mute'} nw" style="padding:0 6px;margin-top:3px">Syariah ${esc(sy)}</span>`:'');}
 /* Susunan = keutamaan: muatLajur menyembunyikan dari KANAN apabila tetingkap tidak cukup lebar, jadi lajur yang paling
    berguna diletak di kiri. 28 Okt 2026 (permintaan pengguna: "saya tidak nampak industri dan RS"): Industri dan RS
    (kajian 2019–2026: Industri A kuat, RS A disahkan +1.5% dalam 63 hari) mendahului Sektor, yang paparan sahaja. */
@@ -1538,8 +1544,7 @@ const grCols=()=>[
   {k:'rs_rating',t:'RS',tip:'g_r',hc:'kp-hi',l:1,c:()=>'grd',v:r=>grNil(r.rs_rating),f:grRS},
   {k:'hari_ke_earnings',t:'QR',tip:'g_q',hc:'kp-lo',l:1,c:()=>'grd hk',v:r=>GORD[r.gred_qr]??null,f:grQR},
   {k:'gred_sektor',t:'Sektor',tip:'g_s',hc:'kp-lo',l:1,c:()=>'grd',v:r=>GORD[r.gred_sektor]??null,f:r=>grKump(r,'Sektor')},
-  {k:'gred_pemangkin',t:'Pemangkin',tip:'g_p',hc:'kp-lo',l:1,v:r=>GORD[r.gred_pemangkin]??null,f:grPem,c:()=>'grd grp'},
-  {k:'gred_kewangan',t:'Kewangan',tip:'g_k',hc:'kp-lo',l:1,c:()=>'grd grk',v:r=>GORD[r.gred_kewangan]??null,f:grKew},
+  /* Pemangkin dan Kewangan dibuang daripada jadual 28 Okt 2026 (permintaan pengguna); kekal dalam helaian butiran */
   {k:'gred_keseluruhan',t:'Gred',tip:'gred',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:r=>grSel1(r.gred_keseluruhan,''),c:()=>'gks m0'}];
 const rclsPT=r=>(r.tidak_sah?'void ':'')+(r.tutup_semua?'exit':'')+' '+jalurPT(r);
 function ptCols(akaun){return [
