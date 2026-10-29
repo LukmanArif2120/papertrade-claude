@@ -62,13 +62,19 @@ def exit_hari(pra, asas, lv, c, o, i, exit_nama, hold, n):
 
 
 def jalankan(nama, entri, fr, pra_all, c_all, o_all, to_all, kal, exit_nama, hold, pilihan,
-             saiz=None):
+             saiz=None, slot=None):
     """Simulasi portfolio 8 slot. entri: DataFrame ticker, tarikh, skor1, skor2.
 
     saiz: None = bahagian tetap BAHAGIAN (12.5%), tingkah laku asal fasa 1 tidak berubah.
+    slot: None = SLOT (8), tingkah laku asal fasa 1 tidak berubah. Jika diberi, bilangan slot itu
+    diguna dan bahagian lalai menjadi 1/slot (ekuiti dibahagi sama rata), supaya pendedahan penuh
+    kekal 100% dan hanya KEPEKATAN berubah. SPEC §3 menetapkan 8 slot secara fiat; ia tidak pernah
+    divariasikan, sedangkan ia paksi di mana sistem kalah kepada indeks (MDD).
     Jika diberi, saiz(ticker, i) -> pecahan ekuiti bagi posisi itu (SPEC_FASA2 §5.4 menuntut dua
     saiz: tetap dan berskala risiko SPEC_1B). Had slot, susunan pilihan dan kos tidak berubah.
     """
+    n_slot = SLOT if slot is None else int(slot)
+    bhg_lalai = BAHAGIAN if slot is None else 1.0 / n_slot
     ekuiti = 1.0
     posisi = []            # dict(ticker, i_keluar, unit, kos_jual, tarikh_keluar)
     tunai = 1.0
@@ -118,7 +124,7 @@ def jalankan(nama, entri, fr, pra_all, c_all, o_all, to_all, kal, exit_nama, hol
             continue
         calon.sort(key=lambda t: pilihan.get((t, semalam), (0.0, 0.0, t)), reverse=True)
         for t in calon:
-            if len(posisi) >= SLOT:
+            if len(posisi) >= n_slot:
                 break
             g = fr[t]
             i = g.index.get_loc(semalam)
@@ -129,7 +135,7 @@ def jalankan(nama, entri, fr, pra_all, c_all, o_all, to_all, kal, exit_nama, hol
             harga = o_all[t][k] * (1 + ks)
             if not np.isfinite(harga) or harga <= 0:
                 continue
-            bhg = BAHAGIAN if saiz is None else saiz(t, i)
+            bhg = bhg_lalai if saiz is None else saiz(t, i)
             if not (np.isfinite(bhg) and bhg > 0):
                 continue
             nilai_pos = ekuiti * bhg
