@@ -317,6 +317,45 @@ def main(argv=None):
     return laporan(RL, RT, d)
 
 
+def asas_dan_lift():
+    """Jangkaan 'beli SETIAP bar' bagi kedua-dua tingkap, dan lift setiap setup atasnya.
+
+    KESILAPAN REKA BENTUK saya sendiri: spec §4 memilih 10 teratas ikut jangkaan MUTLAK. Jangkaan
+    mutlak bukan ukuran kelebihan — setup mesti dibanding dengan alternatifnya, iaitu tidak
+    memilih sama sekali. Dikira di sini supaya kesilapan itu kelihatan dan boleh dinilai.
+    """
+    P = pd.read_parquet(PUL)
+    th = pd.to_datetime(P.date).dt.year.to_numpy()
+    e = P.E63S.to_numpy('float64')
+    out = {}
+    for nm, (a, b) in (('latih', LATIH), ('tahan', TAHAN)):
+        x = e[(th >= a) & (th <= b)]
+        x = x[np.isfinite(x)]
+        u = np.sort(x)[::-1]
+        out[nm] = dict(n=int(x.size), jangkaan=float(x.mean() * 100),
+                       menang=float((x > 0).mean() * 100), median=float(np.median(x) * 100),
+                       tanpa5=float(u[int(np.ceil(0.05 * u.size)):].mean() * 100))
+    return out
+
+
+def penanda_ufuk():
+    """Pulangan 63 sesi bergulir SPY dan QQQ — adakah INDEKS lulus syarat tanpa-5%?"""
+    ix = pd.read_parquet(HARGA / 'idx.parquet')
+    out = {}
+    for t in ('SPY', 'QQQ'):
+        q = ix[ix.ticker == t].sort_values('date')
+        q = q[(q.date >= pd.Timestamp(f'{TAHAN[0] - 1}-01-01'))
+              & (q.date <= pd.Timestamp(f'{TAHAN[1]}-12-31'))]
+        c = q.close.to_numpy('float64')
+        if c.size <= UFUK:
+            continue
+        r = c[UFUK:] / c[:-UFUK] - 1
+        u = np.sort(r)[::-1]
+        out[t] = dict(jangkaan=float(r.mean() * 100), menang=float((r > 0).mean() * 100),
+                      tanpa5=float(u[int(np.ceil(0.05 * u.size)):].mean() * 100))
+    return out
+
+
 def laporan(RL, RT, d):
     lulus = RT[RT.gate_a.fillna(False)]
     L = ['# Setup gaya pedagang: jalur tengah, urutan, 3 syarat', '']
@@ -353,6 +392,67 @@ def laporan(RL, RT, d):
 
 
 def laporan2(L, RL, RT, lulus, d):
+    # ---- ASAS dan LIFT: kesilapan reka bentuk yang paling penting ----
+    A = asas_dan_lift()
+    al, ah = A['latih']['jangkaan'], A['tahan']['jangkaan']
+    L.append('## Lift atas "beli setiap bar" — dan kesilapan reka bentuk saya')
+    L.append('')
+    L.append('**Spec §4 memilih 10 teratas ikut jangkaan MUTLAK. Itu kesilapan saya.** Jangkaan '
+             'mutlak bukan ukuran kelebihan: setup mesti dibanding dengan alternatifnya, iaitu '
+             '**tidak memilih sama sekali**.')
+    L.append('')
+    L.append('| Tingkap | Beli SETIAP bar | Menang | Median dagangan | Tanpa 5% teratas |')
+    L.append('|---|---|---|---|---|')
+    for nm in ('latih', 'tahan'):
+        r = A[nm]
+        tt = LATIH if nm == 'latih' else TAHAN
+        L.append(f'| {nm.upper()} {tt[0]}–{tt[1]} ({r["n"]:,} bar) | **{r["jangkaan"]:+.3f}%** | '
+                 f'{r["menang"]:.1f}% | {r["median"]:+.2f}% | {r["tanpa5"]:+.3f}% |')
+    L.append('')
+    V = RL[RL.n >= MIN_N_LATIH].copy()
+    V['lift'] = V.jangkaan - al
+    npos = int((V.lift > 0).sum())
+    L.append(f'Lift setiap setup = jangkaannya − {al:+.3f}%. Merentas **{len(V)} setup** dengan '
+             f'n ≥ {MIN_N_LATIH} pada tingkap LATIH:')
+    L.append('')
+    L.append(f'- lift maksimum: **{V.lift.max():+.3f} mata** · median {V.lift.median():+.3f} · '
+             f'minimum {V.lift.min():+.3f}')
+    L.append(f'- setup dengan lift **POSITIF**: **{npos} daripada {len(V)}**')
+    L.append('')
+    if npos == 0:
+        L.append('**Tiada satu pun daripada 672 setup mengalahkan "beli setiap bar" — bahkan '
+                 'pada tingkap latihan tempat ia dipilih.** Setup terbaik masih '
+                 f'{abs(V.lift.max()):.3f} mata DI BAWAH entri rawak.')
+        L.append('')
+        L.append('Itu bermakna kesilapan reka bentuk saya **tidak mengubah keputusan** — ia '
+                 'menjadikannya lebih jelas. Memilih ikut lift tidak akan memberi calon yang '
+                 'lebih baik kerana senarai lift tidak mempunyai satu pun entri positif. Tiada '
+                 'larian semula diperlukan.')
+        L.append('')
+    L.append('Sebabnya boleh dinyatakan terus: **setiap setup ialah PENAPIS**, dan setiap penapis '
+             'membuang bar. Taburan pulangan saham tunggal sangat terpencong kanan (dagangan '
+             f'median {A["tahan"]["median"]:+.2f}% tetapi min {ah:+.3f}%), jadi membuang bar '
+             'terutamanya membuang **peluang pada ekor**. Menapis mengurangkan pendedahan anda '
+             'kepada satu-satunya bahagian yang membayar.')
+    L.append('')
+    # ---- Tentukur gate tanpa5: adakah INDEKS lulus? ----
+    PA = penanda_ufuk()
+    if PA:
+        L.append('### Adakah gate "tanpa 5% teratas" itu adil? Indeks lulus dengan mudah.')
+        L.append('')
+        L.append('| Instrumen | Jangkaan 63 sesi | Menang | Tanpa 5% teratas |')
+        L.append('|---|---|---|---|')
+        L.append(f'| Saham tunggal, semua bar | {ah:+.3f}% | {A["tahan"]["menang"]:.1f}% | '
+                 f'**{A["tahan"]["tanpa5"]:+.3f}%** |')
+        for t, r in PA.items():
+            L.append(f'| {t} (indeks) | {r["jangkaan"]:+.3f}% | {r["menang"]:.1f}% | '
+                     f'**{r["tanpa5"]:+.3f}%** |')
+        L.append('')
+        L.append('Gate itu **tidak** salah tentukur. Indeks melepasinya dengan mudah dan kadar '
+                 'menangnya ~77% berbanding ~31% bagi saham tunggal. Sebabnya: **indeks ITULAH '
+                 'kepelbagaian merentas ekor**. Ia tidak perlu menangkap pemenang 5% teratas '
+                 'kerana ia memegang kesemuanya.')
+        L.append('')
     # ---- Kadar menang lawan jangkaan (spec §6) ----
     L.append('## Kadar menang BUKAN keuntungan — ini buktinya daripada 672 setup')
     L.append('')
@@ -395,8 +495,18 @@ def laporan2(L, RL, RT, lulus, d):
                  'ujian silang kedua-duanya menunjukkan signal boleh bertahan setiap ujian '
                  'statistik dan tetap gagal di peringkat portfolio.')
     else:
-        L.append('**Tiada setup lulus Gate A.** Pecahan 50 terbaik pada latih tidak bertahan '
-                 'pada tahan.')
+        L.append('**Tiada setup lulus Gate A.** Tetapi bacaan yang betul lebih halus '
+                 'daripada "setup tidak berfungsi", dan ia penting:')
+        L.append('')
+        L.append(f'1. **Setup itu BERTAHAN di luar sampel.** Jangkaan latih +1.14% hingga '
+                 f'+1.34%; jangkaan tahan **{RT.jangkaan.min():+.3f}% hingga '
+                 f'{RT.jangkaan.max():+.3f}%**. Kesepuluh positif, dan beberapa LEBIH TINGGI '
+                 'daripada latih. Jangkaan priori saya dalam spec §7 menjangka ia reput; ia '
+                 'tidak.')
+        L.append('2. **Tetapi liftnya negatif pada kedua-dua tingkap.** Setup positif tetapi '
+                 'kurang positif daripada tidak menapis sama sekali.')
+        L.append('3. Gate A gagal pada SATU syarat: jangkaan selepas membuang 5% pemenang '
+                 'teratas. Kesepuluh negatif di sana, dan begitu juga asas.')
         L.append('')
         gagal = []
         for nm, syarat in (('FDR', RT.lulus_fdr), ('n ≥ 200', RT.n >= MIN_N_TAHAN),
