@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 00:23 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 01:48 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| claude/wizardly-mendel-qr6j64 | 2026-10-28 | 0 | 2026-10-28 |
+| claude/wizardly-mendel-qr6j64 | 2026-10-29 | 0 | 2026-10-29 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -35,10 +35,10 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
-| RS pasaran | 30 | 2026-09-16 | 2026-10-27 | 0.5 |  | tidak |
+| RS pasaran | 30 | 2026-09-17 | 2026-10-28 | 0.5 |  | tidak |
 | Gred kumpulan | 23 | 2026-09-25 | 2026-10-27 | 0.4 |  | tidak |
-| SEC EPS/hasil | 4094 | 2009-04-15 | 2026-10-28 | 65.0 | 267767 | ya |
-| SEC earnings 8-K | 5447 | 2004-08-23 | 2026-10-28 | 86.5 | 178316 | ya |
+| SEC EPS/hasil | 4094 | 2009-04-15 | 2026-10-28 | 65.0 | 267951 | ya |
+| SEC earnings 8-K | 5447 | 2004-08-23 | 2026-10-28 | 86.5 | 178433 | ya |
 
 
 Leg **RS/gred**: terbaik **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
@@ -86,9 +86,9 @@ Semua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh 
 | Lejar Penuh | 2026-10-27 | 2 | OK |
 | portfolio_slot | 2026-10-27 | 2 | OK |
 | Papan Penganalisis | 2026-10-29 | 0 | OK |
-| RS pasaran | 2026-10-27 | 2 | OK |
+| RS pasaran | 2026-10-28 | 1 | OK |
 | Gred kumpulan | 2026-10-27 | 2 | OK |
-| SEC fundamental | fail diubah | 1 | OK |
+| SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 1 | OK |
 
 

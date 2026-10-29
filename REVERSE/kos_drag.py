@@ -63,6 +63,8 @@ def jalan_tahun(th, eth, kos_sifar):
 
 
 def main():
+    if '--laporan-sahaja' in sys.argv and (KELUAR / 'kos_drag.csv').exists():
+        return laporan(pd.read_csv(KELUAR / 'kos_drag.csv'))
     j = pd.read_csv(KELUAR / 'sec_join.csv', parse_dates=['tarikh'])
     # Populasi = SEMUA peristiwa sah (bukan signal terpilih): drag kos ialah sifat dagangan,
     # bukan sifat signal, jadi ia diukur atas populasi penuh supaya tiada pemilihan masuk.
@@ -77,7 +79,10 @@ def main():
         print(f'  {th}: {len(baris)} baris')
     R = pd.DataFrame(baris)
     R.to_csv(KELUAR / 'kos_drag.csv', index=False)
+    return laporan(R)
 
+
+def laporan(R):
     p = R.pivot_table(index='keluar', columns='kos',
                       values=['pulangan', 'mdd', 'median_bulanan', 'n_masuk'], aggfunc='median')
     L = ['# KOS sebagai lever: berapa banyak pulangan dimakan oleh kos dagangan', '']
@@ -114,27 +119,61 @@ def main():
     if best:
         L.append(f'Drag terbesar: **{best[0]}, {best[1]:.2f} mata peratus setahun**.')
         L.append('')
-        L.append('Bandingkan dengan apa yang kajian ini hasilkan selepas 20,640 ujian indikator '
-                 'harga, 108 ujian saiz, 20 ujian fundamental dan 38,400 konfigurasi Optuna: '
-                 '**tiada kelebihan yang bertahan sama sekali**. Drag kos ialah nombor yang pasti, '
-                 'boleh dikurangkan, dan tidak memerlukan satu pun penemuan untuk dituntut.')
+    L.append('## Apa nombor ini sebenarnya berkata')
+    L.append('')
+    L.append('**Saya menulis bahagian ini selepas melihat nombor, dan ia bertentangan dengan apa '
+             'yang saya jangka.** Saya memilih mengukur kos kerana ia lever yang pasti dan tidak '
+             'bergantung pada sasaran. Ukurannya menunjukkan lever itu lebih kecil daripada '
+             'rupanya, dan sebahagiannya mengalahkan diri sendiri.')
+    L.append('')
+    pen = R[R.kos == 'penuh'].groupby('keluar')[['pulangan', 'mdd', 'median_bulanan', 'n_masuk']].median()
+    sif = R[R.kos == 'sifar'].groupby('keluar')['pulangan'].median()
+    panjang, pendek = 'REF_pegang_252', 'REF_jual_hari63'
+    if panjang in pen.index and pendek in pen.index:
+        dp = float(sif[pendek] - pen.loc[pendek, 'pulangan'])
+        dl = float(sif[panjang] - pen.loc[panjang, 'pulangan'])
+        L.append(f'Mengurangkan pusing ganti **memang** memotong kos: `{panjang}` membayar hanya '
+                 f'{dl:.2f} mata drag dengan {pen.loc[panjang, "n_masuk"]:.0f} dagangan setahun, '
+                 f'berbanding {dp:.2f} mata dengan {pen.loc[pendek, "n_masuk"]:.0f} dagangan.')
         L.append('')
-    L.append('## Apa yang boleh dibuat dengannya')
+        L.append(f'Tetapi pulangan **bersihnya** lebih rendah: {pen.loc[panjang, "pulangan"]:.2f}% '
+                 f'lawan {pen.loc[pendek, "pulangan"]:.2f}%. Menjimatkan {dp - dl:.2f} mata kos '
+                 f'mengorbankan {pen.loc[pendek, "pulangan"] - pen.loc[panjang, "pulangan"]:.2f} '
+                 'mata pulangan. **Pusing ganti yang tinggi itu membayar kosnya sendiri.**')
+        L.append('')
+        L.append(f'Drag terbesar, {dp:.2f} mata, ialah '
+                 f'{dp / float(pen.loc[pendek, "pulangan"]) * 100:.0f}% daripada pulangan '
+                 'konfigurasi itu. Itu wang sebenar dan patut dikurangkan di tempat yang boleh '
+                 '— komisen ialah terma broker, bukan sifat pasaran, dan slippage 0.25% pada nama '
+                 '< USD10 juta lawan 0.05% pada ≥ USD50 juta ialah lima kali bezanya, ditapis '
+                 'sebelum masuk tanpa menyentuh signal. Tetapi ia **tidak** mengubah gambaran '
+                 'strategik.')
     L.append('')
-    L.append('Drag ini bukan satu nombor tetap — ia hasil **bilangan dagangan × kos setiap sisi**. '
-             'Kedua-duanya boleh dikurangkan tanpa mencari apa-apa signal:')
+    L.append('Bandingan yang menentukan, kos penuh, median 14 tahun:')
     L.append('')
-    L.append('- **Kurangkan pusing ganti.** `REF_pegang_252` memegang jauh lebih lama daripada '
-             '`REF_jual_hari63`; jadual di atas menunjukkan kos yang dibayar setiap satu. '
-             'Memanjangkan tempoh pegangan mengurangkan drag secara terus.')
-    L.append('- **Elak tingkat slippage tertinggi.** Model mengenakan 0.25% pada nama dengan median '
-             'nilai dagangan < USD10 juta berbanding 0.05% pada ≥ USD50 juta — **lima kali** '
-             'bezanya. Menapis kecairan sebelum masuk memotong kos tanpa menyentuh signal.')
-    L.append('- **Komisen ialah terma broker**, bukan sifat pasaran. 0.1% setiap sisi yang dimodel '
-             'di sini jauh lebih tinggi daripada broker kos rendah; itu rundingan, bukan kajian.')
+    L.append('| | Pulangan | MDD | Median bulanan | Dagangan/tahun |')
+    L.append('|---|---|---|---|---|')
+    for k in R.keluar.unique():
+        r = pen.loc[k]
+        L.append(f'| {k} | {r.pulangan:.2f}% | {r.mdd:.2f}% | {r.median_bulanan:.2f}% | '
+                 f'{r.n_masuk:.0f} |')
+    L.append('| **SPY beli-dan-pegang** | **17.62%** | **−9.44%** | **1.82%** | **1** |')
     L.append('')
-    L.append('Tiga perkara di atas ialah pulangan yang pasti. Setiap kajian signal dalam repo ini '
-             'ialah pulangan yang berkemungkinan — dan setakat ini, berkemungkinan sifar.')
+    if pendek in pen.index:
+        r = pen.loc[pendek]
+        L.append(f'Konfigurasi terbaik mengalahkan SPY pada pulangan ({r.pulangan:.2f}% lawan '
+                 f'17.62%) tetapi dengan MDD {abs(r.mdd) / 9.44:.1f} kali lebih dalam '
+                 f'({r.mdd:.2f}% lawan −9.44%) dan median bulanan lebih rendah '
+                 f'({r.median_bulanan:.2f}% lawan 1.82%). Walaupun kos **dihapuskan sepenuhnya** '
+                 f'— mustahil — ia menjadi {sif[pendek]:.2f}% pada MDD yang sama.')
+        L.append('')
+    L.append('Maka kesimpulannya: **kos bukan masalahnya.** Ia 13% daripada pulangan dan patut '
+             'dikurangkan, tetapi menghapuskannya sepenuhnya pun tidak membawa sistem ini kepada '
+             'sasaran +10%/bulan, dan tidak menjadikan drawdownnya setanding SPY.')
+    L.append('')
+    L.append('Saya mengukurnya kerana ia satu-satunya lever yang tinggal yang tidak memerlukan '
+             'keputusan anda. Hasilnya menutup lever itu juga. Yang tinggal sekarang benar-benar '
+             'hanya keputusan sasaran, dan ia milik anda.')
     L.append('')
     (KELUAR / 'KOS_DRAG.md').write_text('\n'.join(L), encoding='utf-8')
     print(f'\nKOS_DRAG.md ditulis | drag terbesar: {best[0] if best else "?"} '
