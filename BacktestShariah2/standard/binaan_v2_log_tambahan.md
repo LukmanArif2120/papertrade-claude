@@ -464,3 +464,11 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Tooltip bar membezakan dua kes dengan jelas: had masa (kaedah menjual pada hari ke-N walaupun sasaran belum dicapai; bar kuning ≥ 80%) lawan purata backtest (rujukan sahaja, bukan had).
 - Tooltip tajuk lajur `hari_pt` menyenaraikan had sebenar: 33 daripada 134 kaedah ada had masa — 10 hari (5 kaedah), 20 (4), 21 (5), 42 (9), 63 (8), 126 (2); 101 kaedah tiada had masa.
 - Tiada perubahan susun atur: label itu disembunyi dalam sel jadual bergred (`tr:not(.buka) td.m0 .vv`) dan hanya dipapar dalam pop timbul hover mod Padat.
+
+## 2026-10-29 13:46 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-10-28)
+- Keluar baharu 278 (C {'isyarat': 69, 'henti': 181, 'sasaran': 26}, M {'isyarat': 2}); menunggu buka sesi seterusnya: 114.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 87 (beza > 0.5%: 11). Tidak dibeli baharu: AUPH M117.
+- Senarai beli 632 baris (295 saham, 99 kaedah; 65 daripada watchlist; belian semula 54). Ditolak: {'dipegang': 518, 'had': 1889, 'tidak_cair': 45, 'ambil_alih': 30, 'kelas_berganda': 8, 'mingguan': 90}.
+- Watchlist 296 (baharu 181, dibuang 102, ke senarai beli 65). Isyarat direkod: 3212 (data/isyarat/2026-10-28_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: C ACA M95: tiada bar 2026-10-28 (harga terkini 2026-10-22); C ACA M54: tiada bar 2026-10-28 (harga terkini 2026-10-22); C ACA M06: tiada bar 2026-10-28 (harga terkini 2026-10-22); C ACA M23: tiada bar 2026-10-28 (harga terkini 2026-10-22); C ACA M46: tiada bar 2026-10-28 (harga terkini 2026-10-22); C ACA M100: tiada bar 2026-10-28 (harga terkini 2026-10-22); C ACA M101: tiada bar 2026-10-28 (harga terkini 2026-10-22); C ACA M120: tiada bar 2026-10-28 (harga terkini 2026-10-22).
+- Tiada order. Tiada wang sebenar.

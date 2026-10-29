@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 05:51 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 06:06 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| claude/wizardly-mendel-qr6j64 | 2026-10-29 | 0 | 2026-10-29 |
+| main | 2026-10-29 | 0 | 2026-10-29 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -80,15 +80,15 @@ Semua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh 
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261027 | 2 | OK |
-| Trend D10H2-r2 | 20261027 | 2 | OK |
+| Stor harga | 20261028 | 1 | OK |
+| Trend D10H2-r2 | 20261028 | 1 | OK |
 | Lejar Penuh | 2026-10-27 | 2 | OK |
 | portfolio_slot | 2026-10-27 | 2 | OK |
 | Papan Penganalisis | 2026-10-29 | 0 | OK |
 | RS pasaran | 2026-10-28 | 1 | OK |
 | Gred kumpulan | 2026-10-27 | 2 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
-| Senarai bursa | fail diubah | 1 | OK |
+| Senarai bursa | fail diubah | 0 | OK |
 
 
 Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau cuti pasaran, dan salinan kerja yang lama (lihat §0). Periksa kedua-duanya, kemudian `penjaga_jadual` dan log workflow, sebelum menganggap saluran rosak.
