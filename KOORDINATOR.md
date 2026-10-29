@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 06:06 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 07:50 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,7 +12,7 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 06:06 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (4)
+## 1. Perlu keputusan anda (7)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
@@ -20,6 +20,9 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 | 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. | 28 Okt: ini universe HARGA REVERSE (2000 teratas ikut nilai dagangan). Berasingan daripada universe SEC yang sudah dilebarkan ke 3260 (data/univ_sec.txt) pada 28 Okt. |
 | 2026-10-28 | Jalankan step1_run.py untuk 2012-2019 (sejarah peristiwa sah leg SEC) | Cache signals_*.parquet hanya ada 2020-2025. Liputan SUE boleh diguna bermula 2012 (mandat XBRL berperingkat 2009-2011: 89 ticker 2009, 253 pada 2010, 482 pada 2011). 8 tahun tambahan = compute besar (~150MB parquet setiap tahun). Tanpa ini, leg SEC kekal 6 tahun sahaja dan kelebihan sejarah panjang tidak diperoleh. |
 | 2026-10-29 | Uji signal PEAD yang bertahan atas universe lebih luas (saham kecil) | Satu lever yang dituju oleh keputusan itu sendiri: q5:pecutan_hasil & sejak_earnings_le5 bertahan SETIAP ujian statistik tetapi magnitudnya ~1.5% median bulanan. Kesusasteraan PEAD menyatakan kesan tertumpu pada saham kecil berspread lebar, dan universe REVERSE (2,000 teratas ikut nilai dagangan) dengan sengaja membuangnya. Data SEC kini meliputi 83% daripada 3,302 ticker. PERLU pradaftar baharu (tembakan §5 untuk universe top-2000 sudah terbelanja) DAN model kos jujur untuk nama tidak cair: slippage di sana melebihi 0.25% tier tertinggi sekarang. Jangkaan priori: kesan lebih kuat, kos lebih tinggi, net tidak pasti. |
+| 2026-10-29 | Pembinaan yang menerima ekor kanan, tanpa pemicu — satu-satunya arah yang tinggal | Daripada KOLAM_EKOR.md §5. Soalan: bolehkah pembinaan (kolam lebih baik, slot lebih banyak, tiada henti keras, biarkan pemenang berjalan) mengalahkan penanda aras TANPA pemicu sama sekali? Ia mungkin kalah: membuang henti memperdalam persentil 5 daripada -15.58% ke -54.67% setiap saham-tahun, dan KEPEKATAN.md menunjukkan 8->60 slot membeli MDD 3.48 mata dengan pulangan -5.97 mata. PERLU pradaftar baharu. Penanda aras WAJIB SPUS (26.09%/tahun, MDD -10.14%), bukan SPY. Apa-apa jurang < 17.3 mata/tahun adalah hingar pemilihan (KEPEKATAN_BENIH.md) jadi ia MESTI diukur dengan jalur benih, bukan satu lorong. JANGAN jalankan sebagai penalaan parameter. |
+| 2026-10-29 | Kecacatan mekanikal: 421 posisi C dihentikan pada hari masuk, kadar menang 0.00% | KOLAM_EKOR.md §4a. 421 daripada 1,770 posisi C ditutup (23.8%) dibeli dan dihentikan pada hari yang sama, purata -2.47%, kadar menang 0.00% merentas 421 dagangan — mekanikal, bukan hasil pasaran: paras henti kaedah terletak DALAM julat intrabar hari masuk (jarak henti median 1.93% lawan 5.33% bagi yang terselamat). Membetulkannya (jangan masuk bila henti < ~2% daripada harga masuk dirancang) mengurangkan jumlah kerugian direalisasi 19.5%. TETAPI purata baki 1,349 posisi ialah -3.18%, LEBIH BURUK daripada -3.01% keseluruhan: ia tidak menukar tanda. §4b: jangkaan negatif pada SETIAP lebar henti dan makin negatif bila dilebarkan (kadar menang naik 5.9x, kerugian purata naik 8.8x) = masuk tanpa kelebihan, mengesahkan fasa 1 pada data HADAPAN. Keputusan pengguna diperlukan: betulkan sebagai kebersihan sistem atau biarkan. |
+| 2026-10-29 | Sambung spus_harian.csv ke lejar.yml supaya RINGKASAN.md melapor SPUS setiap malam | data/penanda_aras/spus_harian.csv kini disegarkan MANUAL (banding_spus.py --kemas-kini, guna yfinance). Ia TIDAK dipasang ke workflow malam dengan sengaja: yfinance tiada dalam sesi ini jadi laluan kemas kini belum diuji, dan kod belum diuji dalam kerja berjadual adalah liabiliti. portfolio_slot/RINGKASAN.md masih melapor SPY sahaja kerana hanya SPY+QQQ ada dalam harga_idx.csv. Pilihan: (a) tambah SPUS ke stor indeks (kod/stor.py, pengambil idx) supaya portfolio_slot.py boleh membacanya terus - paling bersih; (b) jalankan banding_spus.py dalam lejar.yml selepas portfolio_slot; (c) biar manual. Keputusan pengguna diperlukan kerana (a) dan (b) mengubah aliran data malam. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
@@ -35,7 +38,7 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
 | RS pasaran | 30 | 2026-09-17 | 2026-10-28 | 0.5 |  | tidak |
-| Gred kumpulan | 23 | 2026-09-25 | 2026-10-27 | 0.4 |  | tidak |
+| Gred kumpulan | 24 | 2026-09-25 | 2026-10-28 | 0.4 |  | tidak |
 | SEC EPS/hasil | 4094 | 2009-04-15 | 2026-10-28 | 65.0 | 267951 | ya |
 | SEC earnings 8-K | 5447 | 2004-08-23 | 2026-10-28 | 86.5 | 178433 | ya |
 
@@ -55,12 +58,12 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Lorong | Ekuiti | Dipegang | Keluar | Sesi terakhir |
 |---|---|---|---|---|
-| RS_10 | 0.978538 | 10 | 0 | 2026-10-27 |
-| RAWAK_10 | 1.003345 | 10 | 0 | 2026-10-27 |
-| GABUNGAN_10 | 0.999547 | 6 | 11 | 2026-10-27 |
-| TOP1_10 | 0.995651 | 8 | 11 | 2026-10-27 |
-| RAWAK_KAEDAH_10 | 0.994292 | 10 | 0 | 2026-10-27 |
-| RISIKO_10 | 0.996214 | 10 | 0 | 2026-10-27 |
+| RS_10 | 1.003605 | 10 | 0 | 2026-10-28 |
+| RAWAK_10 | 0.998871 | 10 | 1 | 2026-10-28 |
+| GABUNGAN_10 | 1.000688 | 8 | 13 | 2026-10-28 |
+| TOP1_10 | 0.993348 | 6 | 15 | 2026-10-28 |
+| RAWAK_KAEDAH_10 | 1.01581 | 10 | 1 | 2026-10-28 |
+| RISIKO_10 | 1.004692 | 10 | 0 | 2026-10-28 |
 
 
 `RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz. Ia menguji saiz atas **isyarat Mxx** dan bukan ujian ke hadapan dapatan REVERSE fasa 1b (`REVERSE/SPEC_FASA2.md` §9.2).
@@ -70,10 +73,8 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Status pantau | Bilangan |
 |---|---|
-| BELUM CUKUP | 134 |
-
-
-Semua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh dinilai ke hadapan lagi; penilaian penuh dijangka 15 Jan 2027 (`WFO/README.md`).
+| BELUM CUKUP | 132 |
+| OK | 2 |
 
 
 ## 4. Kesegaran data
@@ -82,11 +83,11 @@ Semua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh 
 |---|---|---|---|
 | Stor harga | 20261028 | 1 | OK |
 | Trend D10H2-r2 | 20261028 | 1 | OK |
-| Lejar Penuh | 2026-10-27 | 2 | OK |
-| portfolio_slot | 2026-10-27 | 2 | OK |
+| Lejar Penuh | 2026-10-28 | 1 | OK |
+| portfolio_slot | 2026-10-28 | 1 | OK |
 | Papan Penganalisis | 2026-10-29 | 0 | OK |
 | RS pasaran | 2026-10-28 | 1 | OK |
-| Gred kumpulan | 2026-10-27 | 2 | OK |
+| Gred kumpulan | 2026-10-28 | 1 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
 
