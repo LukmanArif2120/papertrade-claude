@@ -248,6 +248,32 @@ def laporan2(L, R, G, lulus, sp):
         if gagal:
             L.append('Gagal pada: ' + ', '.join(gagal) + '.')
             L.append('')
+    L.append('## Mengapa signal yang nyata tetap tidak cukup')
+    L.append('')
+    r13 = pd.read_csv(KELUAR / 'silang_ujian.csv')
+    r13 = r13.set_index('signal')
+    L.append('Pulangan SETIAP PERISTIWA bagi keempat-empat kombinasi kuat, tetapi jangkaan '
+             'selepas membuang 5% pemenang teratas hampir hilang:')
+    L.append('')
+    L.append('| Kombinasi | Pulangan purata/peristiwa | Jangkaan tanpa 5% teratas |')
+    L.append('|---|---|---|')
+    for nm in G.signal:
+        if nm in r13.index:
+            L.append(f'| `{nm}` | {float(r13.loc[nm, "pul_purata"]):+.2f}% | '
+                     f'{float(r13.loc[nm, "jangkaan_tanpa_5pct"]):+.2f}% |')
+    L.append('')
+    L.append(f'Itu jawapannya. Dengan {SLOT} slot dan ufuk 63 sesi, portfolio memerlukan '
+             f'~{SLOT * 252 // 63} masuk/tahun untuk kekal penuh, dan signal ini membekalkan '
+             f'{G.masuk.min():.0f}–{G.masuk.max():.0f} — jadi **kapasiti BUKAN pengikat utama '
+             'di sini**, tidak seperti fasa 1. Yang mengikat ialah **bentuk taburan**: '
+             'kelebihan signal hidup dalam ekor kanan yang nipis, dan 8 posisi tidak cukup '
+             'untuk menangkapnya dengan boleh harap.')
+    L.append('')
+    L.append('Itu dapatan yang sama seperti `KOLAM_EKOR.md` §2 (5% teratas = 63.7% daripada '
+             'jumlah pulangan kolam), kini dilihat pada signal yang BETUL-BETUL mempunyai '
+             'kelebihan. Signal yang sah tidak menyelesaikan masalah bentuk taburan; ia '
+             'mewarisinya.')
+    L.append('')
     L.append('## Mengapa kesemua empat berkongsi induk SEC yang sama')
     L.append('')
     L.append('Kesemua empat kombinasi yang lulus Gate A + B ialah konteks harga × '
