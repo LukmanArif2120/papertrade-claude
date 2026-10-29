@@ -1576,8 +1576,9 @@ function ptCols(akaun){return [
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${padatDesk()?'':`<span class="vv nw">beli ${fx(r.harga_beli,2)} → ${r.keluar?'keluar':'kini'} ${fx(r.harga_terkini,2)}</span>`}${spyCip(r)}`,c:()=>'utg m0'},
   {k:'_r',t:'R',tip:'r_multiple',hc:'kp-lo',v:rOf,f:rSel},
   {k:'_spark',t:'Sejak beli',tip:'carta_kecil',hc:'kp-lo',ns:1,l:1,f:r=>sparkPos(r)},
-  {k:'hari',t:'Hari dipegang',tip:'hari_pt',hc:'ctr',f:hariSel,c:()=>'ctr m0'},
+  {k:'hari',t:'Hari pegang (KK)',tip:'hari_pt',hc:'ctr',f:hariSel,c:()=>'ctr m0'},
   {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?`<span class="pill p-warn" title="${esc(r.sebab_tidak_sah||'')}">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> `:''}${selLorong(r,'kaedah')}${r.tidak_sah&&r.sebab_tidak_sah?`<span class="vv">${esc(r.sebab_tidak_sah)}</span>`:''}`,c:()=>'wrap lrg lk m0'},
+  {k:'_hari2',t:'Hari pegang (PSN)',tip:'hari_psn',hc:'ctr kp-hi',v:r=>hariL(r,'henti'),f:hariSel2,c:()=>'ctr'},
   {k:'untung_henti_pct',t:'Pegang selagi naik',tip:'keluar_henti',hc:'kp-hi',l:1,v:r=>hasilL(r,'henti'),f:r=>selLorong(r,'henti'),c:()=>'wrap lrg'},
   ...grCols(),MKAD(r=>kadPos(r,akaun)),BTN_PENUH];}
 function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.length;
@@ -2490,7 +2491,10 @@ function sparkPos(r,W=84,H=24,besar){const s=siriPos(r);if(!s)return '<span clas
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="${besar?'100%':W}" height="${H}" role="img" aria-label="${esc(lbl)}"><title>${esc(lbl)}</title>${hb?hl(hb,'--muted','2 2'):''}${pr?hl(pr,'--warn','1 2'):''}${ln}<circle cx="${X(n-1).toFixed(1)}" cy="${Y(last).toFixed(1)}" r="${besar?3:2}" fill="var(${col})"/>${ax}</svg>`;}
 /* hari dipegang lawan had masa kaedah (katalog "Maks N hari"), atau purata pegang backtest jika tiada had */
 const hadMasaM=memo(kat=>{const m={};(kat&&kat.rows||[]).forEach(k=>{const p=String(k.pegang||'');if(/^tiada had masa/i.test(p))return;const x=/(\d+)\s*hari/.exec(p);if(x)m[k.id]=+x[1];});return m;});
-function hariSel(r){const h=r.keluar?hariAntara(r.tarikh_beli,r.tarikh_keluar):r.hari;if(h==null)return '–';if(r.tutup_semua||r.tidak_dibeli)return fx(h,0);
+/* hari dipegang ikut lorong (guna hariL sedia ada): satu lajur hari bagi setiap lorong keluar (28 Okt 2026) */
+function hariSel2(r){const h=hariL(r,'henti');if(h==null)return '<span class="mut">–</span>';
+  return `<span class="nw" title="Hari dagangan dalam lorong 2 (pegang selagi naik)${r.keluar_henti&&r.tarikh_keluar_henti?` hingga keluar ${esc(tkO(r.tarikh_keluar_henti))}`:' setakat ini'}">${fx(h,0)}</span>`;}
+function hariSel(r){const h=hariL(r,'kaedah');if(h==null)return '–';if(r.tutup_semua||r.tidak_dibeli)return fx(h,0);
   const had=hadMasaM(S.kat)[r.kaedah],b=had?null:btOf(r.kaedah),ruj=had||(b&&b.r.days);if(!ruj)return fx(h,0);
   const hmp=had&&h/had>=0.8;
   return `${fx(h,0)}<span class="hbar${had?'':' bt'}${hmp?' hmp':''}" title="${h} hari dipegang ${had?`daripada had masa ${had} hari kaedah`:`· purata pegang backtest ${fx(ruj,1)} hari`}"><i style="width:${(Math.min(1,h/ruj)*100).toFixed(0)}%"></i></span><span class="vv">${had?`had ${had}`:`bt ${fx(ruj,0)}`}</span>`;}
@@ -3851,7 +3855,8 @@ const TIPS={
   harga_terkini_pt:{t:'Harga terkini',d:'Harga tutup sesi AS terakhir (bar harian muktamad; harga beli hari ini = harga buka sementara sehingga disahkan selepas tutup). Selepas isyarat keluar, harga dibekukan pada harga keluar dan tidak dikemas kini lagi.',e:''},
   harga_terkini:{t:'Harga terkini',d:'Harga tutup terkini dalam data imbasan.',e:''},
   untung_pct:{t:'Untung %',d:'Harga terkini ÷ harga beli − 1. Bagi posisi yang sudah keluar, ini untung pada harga keluar.',e:'+5.0% = RM100 kini bernilai RM105.'},
-  hari_pt:{t:'Hari dipegang',d:'Bilangan hari dagangan sejak tarikh beli (hingga tarikh keluar jika sudah keluar).',e:''},
+  hari_pt:{t:'Hari pegang (KK)',d:'Bilangan hari dagangan sejak tarikh beli hingga keluar lorong kaedah (atau hingga kini jika masih dipegang). Bar menunjukkan kedudukan berbanding had masa kaedah, atau purata pegang backtest jika kaedah tiada had masa.',e:''},
+  hari_psn:{t:'Hari pegang (PSN)',d:'Bilangan hari dagangan sejak tarikh beli hingga keluar lorong 2 “pegang selagi naik” (atau hingga kini jika lorong itu masih terbuka). Lorong 2 tiada had masa, jadi tiada bar.',e:'Berbeza daripada Hari pegang (KK) apabila satu lorong sudah keluar dan satu lagi masih terbuka.'},
   isyarat_keluar:{t:'Keluar kaedah (lorong 1)',d:'Status mengikut peraturan keluar penuh kaedah itu: Pegang, atau Keluar (henti rugi, sasaran, isyarat jual, had masa). Keputusan rasmi papertrade. Baris ditanda merah hanya apabila kedua-dua lorong sudah keluar. Susun ikut untung lorong ini (akhir jika keluar, semasa jika dipegang).',e:'Keluar 15 Okt · @ 20.50 · +4.91% · capai sasaran.'},
   keluar_henti:{t:'Pegang selagi naik (lorong 2)',d:'Pegang selagi trend naik (sejak 19 Okt 2026). Paras keluar = tutup tertinggi sejak beli tolak 4 × ATR14 (purata julat harian 14 hari); paras hanya naik, tidak pernah turun. Jual pada buka esok apabila harga tutup di bawah paras keluar. Saham yang lebih bergoyang diberi ruang lebih luas, jadi satu dua hari turun tidak menjual. Henti kaedah tidak dipakai dalam lorong ini (kekal dalam lorong Kaedah). Untuk melihat berapa lama trend naik dan berapa hari dipegang. Susun ikut untung lorong ini.',e:'Pegang · paras keluar 102.00; puncak 110.00; 12 hari = jual pada buka esok jika tutup bawah 102.00; paras naik apabila puncak naik.'},
   portfolio_slot:{t:'Portfolio maya 10 slot',d:'Eksperimen (sejak 16 Okt 2026): daripada semua posisi Lejar Penuh, dua portfolio maya 10 slot (10% ekuiti setiap satu, satu posisi setiap saham, keluar ikut lorong 2 Chandelier) dibina semula setiap malam. RS_10 mengisi slot kosong dengan RS pasaran tertinggi; RAWAK_10 memilih secara rawak sebagai kawalan. Kajian backtest (KAJIAN_PORTFOLIO.md) mendapati RS + Chandelier satu-satunya peraturan yang kekal di atas rawak selepas bias set 431 dikurangkan. Rekod sahaja; tiada wang sebenar.'},
