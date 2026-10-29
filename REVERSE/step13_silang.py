@@ -323,10 +323,17 @@ def laporan2(L, R, X, a, ab, bz):
                  'kawalan kebetulan yang sama yang dipakai fasa 2.')
     L.append('')
     if len(bz) and bz.median() < 0:
-        L.append(f'Dapatan struktur yang menjelaskan sebabnya: beza lift median **'
-                 f'{bz.median():+.3f}** — interaksi di sini **subaditif**. Mensyaratkan dua '
-                 'keadaan mengecilkan `n` sementara keadaan itu sendiri berkorelasi, jadi lift '
-                 'jatuh di bawah syarat terkuat. Itu sebab 4 dalam spec §7, dan ia diukur.')
+        L.append(f'Dapatan struktur: beza lift median **{bz.median():+.3f}** — interaksi di '
+                 f'sini **subaditif secara majoriti** ({int((~X.gate_b).sum())} daripada '
+                 f'{len(X)}). Mensyaratkan dua keadaan mengecilkan `n` sementara keadaan itu '
+                 'sendiri berkorelasi, jadi lift biasanya jatuh di bawah syarat terkuat.')
+        L.append('')
+        L.append(f'**Rujukan antara dua kenyataan di atas:** sebab 4 dalam spec §7 betul sebagai '
+                 f'**kecenderungan** — majoriti kombinasi memang subaditif. Ia salah sebagai '
+                 f'**dakwaan menyeluruh**: {int(X.gate_b.sum())} daripada {len(X)} superaditif, '
+                 f'dan {len(ab)} daripadanya juga bertahan setiap kawalan kebetulan. Saya '
+                 'menggunakan kecenderungan itu untuk meramal tiada pengecualian, dan itu '
+                 'kesilapan penaakulan, bukan kesilapan ukuran.')
         L.append('')
     if not len(ab):
         L.append('## Ruang signal ditutup')
