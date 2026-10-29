@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 07:50 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 10:15 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,7 +12,7 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 07:50 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (7)
+## 1. Perlu keputusan anda (8)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
@@ -23,6 +23,7 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 | 2026-10-29 | Pembinaan yang menerima ekor kanan, tanpa pemicu — satu-satunya arah yang tinggal | Daripada KOLAM_EKOR.md §5. Soalan: bolehkah pembinaan (kolam lebih baik, slot lebih banyak, tiada henti keras, biarkan pemenang berjalan) mengalahkan penanda aras TANPA pemicu sama sekali? Ia mungkin kalah: membuang henti memperdalam persentil 5 daripada -15.58% ke -54.67% setiap saham-tahun, dan KEPEKATAN.md menunjukkan 8->60 slot membeli MDD 3.48 mata dengan pulangan -5.97 mata. PERLU pradaftar baharu. Penanda aras WAJIB SPUS (26.09%/tahun, MDD -10.14%), bukan SPY. Apa-apa jurang < 17.3 mata/tahun adalah hingar pemilihan (KEPEKATAN_BENIH.md) jadi ia MESTI diukur dengan jalur benih, bukan satu lorong. JANGAN jalankan sebagai penalaan parameter. |
 | 2026-10-29 | Kecacatan mekanikal: 421 posisi C dihentikan pada hari masuk, kadar menang 0.00% | KOLAM_EKOR.md §4a. 421 daripada 1,770 posisi C ditutup (23.8%) dibeli dan dihentikan pada hari yang sama, purata -2.47%, kadar menang 0.00% merentas 421 dagangan — mekanikal, bukan hasil pasaran: paras henti kaedah terletak DALAM julat intrabar hari masuk (jarak henti median 1.93% lawan 5.33% bagi yang terselamat). Membetulkannya (jangan masuk bila henti < ~2% daripada harga masuk dirancang) mengurangkan jumlah kerugian direalisasi 19.5%. TETAPI purata baki 1,349 posisi ialah -3.18%, LEBIH BURUK daripada -3.01% keseluruhan: ia tidak menukar tanda. §4b: jangkaan negatif pada SETIAP lebar henti dan makin negatif bila dilebarkan (kadar menang naik 5.9x, kerugian purata naik 8.8x) = masuk tanpa kelebihan, mengesahkan fasa 1 pada data HADAPAN. Keputusan pengguna diperlukan: betulkan sebagai kebersihan sistem atau biarkan. |
 | 2026-10-29 | Sambung spus_harian.csv ke lejar.yml supaya RINGKASAN.md melapor SPUS setiap malam | data/penanda_aras/spus_harian.csv kini disegarkan MANUAL (banding_spus.py --kemas-kini, guna yfinance). Ia TIDAK dipasang ke workflow malam dengan sengaja: yfinance tiada dalam sesi ini jadi laluan kemas kini belum diuji, dan kod belum diuji dalam kerja berjadual adalah liabiliti. portfolio_slot/RINGKASAN.md masih melapor SPY sahaja kerana hanya SPY+QQQ ada dalam harga_idx.csv. Pilihan: (a) tambah SPUS ke stor indeks (kod/stor.py, pengambil idx) supaya portfolio_slot.py boleh membacanya terus - paling bersih; (b) jalankan banding_spus.py dalam lejar.yml selepas portfolio_slot; (c) biar manual. Keputusan pengguna diperlukan kerana (a) dan (b) mengubah aliran data malam. |
+| 2026-10-29 | Uji PEAD x konteks harga pada alam lebih luas ATAU slot lebih banyak | Daripada SILANG_GATE_C.md. Dapatan silang adalah NYATA (Gate A+B lulus, p=0.0010, bertahan FDR + dua bootstrap blok + 1000 permutasi) tetapi gagal portfolio kerana bentuk taburan: kelebihan hidup dalam ekor kanan nipis dan 8 posisi tidak cukup menangkapnya. Dua lever yang dituju oleh diagnosis itu sendiri: (a) lebih banyak slot - tetapi KEPEKATAN.md menunjukkan 8->60 slot mengorbankan pulangan 5.97 mata pada entri DIPILIH, walaupun PEMBINAAN.md menunjukkan ia MEMBANTU pada entri rawak, jadi arahnya tidak diketahui untuk entri signal; (b) alam lebih luas supaya n naik daripada 541-751 - bergabung dengan keputusan terbuka PEAD saham kecil, dan PERLU model kos saham tidak cair (slippage melebihi tier 0.25% tertinggi sekarang). PERLU pradaftar baharu; tembakan SPEC_SILANG sudah terbelanja. JANGAN jalankan sebagai penalaan parameter atau pelebaran grid 48. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
