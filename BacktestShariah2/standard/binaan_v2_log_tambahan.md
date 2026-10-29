@@ -448,3 +448,19 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Direkod 600 (277 saham; belian semula 51; fail claude_87.csv); dilangkau 13. Harga: buka sementara yfinance 10:31 NY.
 - Dilangkau: NVDA M13: buka 219.88 <= henti 256.05; BTU M13: buka 23.33 <= henti 25.25; OLLI M14: buka 83.51 <= henti 83.64; ABT M18: buka 101.82 <= henti 101.91; CHD M18: buka 103.98 <= henti 104.19; PFE M18: buka 29.49 <= henti 29.51; GEF M49: buka 82.13 <= henti 82.89; ULTA M70: buka 620.43 <= henti 620.68; NRP M128: isyarat batal pada buka (peraturan kaedah); NRP M129: isyarat batal pada buka (peraturan kaedah); RXO M136: isyarat batal pada buka (peraturan kaedah); NEOG M153: isyarat batal pada buka (peraturan kaedah); CSGP M156: isyarat batal pada buka (peraturan kaedah).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-29 — Dashboard v130: hari dipegang dipecah ikut lorong keluar
+- Permintaan pengguna: "hari pegang tu, patut ada hari pegang utk keluar kaedah, dah hari pegang, pegang selagi naik, susun kejap, Hari Pegang(KK), Keluar Kaedah, Hari Pegang(PSN), Pegang selagi naik."
+- Posisi (pandangan Penuh) kini: Hari pegang (KK) · Keluar kaedah · Hari pegang (PSN) · Pegang selagi naik.
+- `hariSel` dikira dengan `hariL(r,'kaedah')` (dahulu `r.hari` = hingga keluar mana-mana lorong), `hariSel2` baharu dengan `hariL(r,'henti')`; pembantu sama dengan yang digunakan lajur lorong, jadi nombor dan status sepadan.
+- Lajur PSN tiada bar had masa kerana lorong 2 tiada had masa; keutamaan sembunyi `kp-hi` (hilang paling akhir).
+- Tooltip `hari_psn` baharu; `hari_pt` dinamakan "Hari pegang (KK)" dan menerangkan bar had masa.
+- Digabung di atas v127–v129 sesi lain (kad hover Stage/Trend, `tipPotong`, panel pemilihan kaedah dipindah ke tab Analisis) supaya halaman terbit tidak berundur.
+- Tiada data baharu; tiada order; tiada wang sebenar.
+
+## 2026-10-29 — Dashboard v131: label "bt 62" diganti teks penuh
+- Soalan pengguna: "bt 62 tu apa benda ya? boleh bagi description yang mudah difahami? ada had apa semua".
+- Label di bawah Hari pegang (KK): `bt 62` → `purata backtest 62 hari`; `had 20` → `had 20 hari`.
+- Tooltip bar membezakan dua kes dengan jelas: had masa (kaedah menjual pada hari ke-N walaupun sasaran belum dicapai; bar kuning ≥ 80%) lawan purata backtest (rujukan sahaja, bukan had).
+- Tooltip tajuk lajur `hari_pt` menyenaraikan had sebenar: 33 daripada 134 kaedah ada had masa — 10 hari (5 kaedah), 20 (4), 21 (5), 42 (9), 63 (8), 126 (2); 101 kaedah tiada had masa.
+- Tiada perubahan susun atur: label itu disembunyi dalam sel jadual bergred (`tr:not(.buka) td.m0 .vv`) dan hanya dipapar dalam pop timbul hover mod Padat.
