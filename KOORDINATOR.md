@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 01:48 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 02:27 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,13 +12,12 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 01:48 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (5)
+## 1. Perlu keputusan anda (4)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
 | 2026-10-28 | Fasa 2: guna alphalens-reloaded (sudah dalam requirements-kajian.txt) atau tulis sendiri | alphalens memberi rank-IC + pulangan kuintil + turnover terus. REVERSE/ujian_pangkat.py ialah versi tangan. |
 | 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. | 28 Okt: ini universe HARGA REVERSE (2000 teratas ikut nilai dagangan). Berasingan daripada universe SEC yang sudah dilebarkan ke 3260 (data/univ_sec.txt) pada 28 Okt. |
-| 2026-10-28 | Nilai semula sasaran pulangan | REVERSE/SASARAN.md (29 Okt 2026) memberi aritmetiknya: +10%/bulan = 3.14x/tahun = 8,994,377x atas 14 tahun (USD 10k -> USD 89.9 bilion). SPY beli-dan-pegang 2012-2025: median 17.62%/tahun, MDD -9.44%, bulanan 1.82%, dan 0% bulan capai +10% dalam 13 daripada 14 tahun. Sasaran = 5.5x median bulanan indeks. Konfigurasi terbaik kajian 17.65%/tahun tetapi MDD -14.55% = TIDAK mengalahkan SPY pada kedua-dua paksi. Keputusan ini bukan teknikal: ia bergantung pada berapa modal boleh hilang. |
 | 2026-10-28 | Jalankan step1_run.py untuk 2012-2019 (sejarah peristiwa sah leg SEC) | Cache signals_*.parquet hanya ada 2020-2025. Liputan SUE boleh diguna bermula 2012 (mandat XBRL berperingkat 2009-2011: 89 ticker 2009, 253 pada 2010, 482 pada 2011). 8 tahun tambahan = compute besar (~150MB parquet setiap tahun). Tanpa ini, leg SEC kekal 6 tahun sahaja dan kelebihan sejarah panjang tidak diperoleh. |
 | 2026-10-29 | Uji signal PEAD yang bertahan atas universe lebih luas (saham kecil) | Satu lever yang dituju oleh keputusan itu sendiri: q5:pecutan_hasil & sejak_earnings_le5 bertahan SETIAP ujian statistik tetapi magnitudnya ~1.5% median bulanan. Kesusasteraan PEAD menyatakan kesan tertumpu pada saham kecil berspread lebar, dan universe REVERSE (2,000 teratas ikut nilai dagangan) dengan sengaja membuangnya. Data SEC kini meliputi 83% daripada 3,302 ticker. PERLU pradaftar baharu (tembakan §5 untuk universe top-2000 sudah terbelanja) DAN model kos jujur untuk nama tidak cair: slippage di sana melebihi 0.25% tier tertinggi sekarang. Jangkaan priori: kesan lebih kuat, kos lebih tinggi, net tidak pasti. |
 
