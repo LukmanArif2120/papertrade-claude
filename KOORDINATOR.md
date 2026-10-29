@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-28 17:11 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-29 00:23 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| main | 2026-10-28 | 0 | 2026-10-28 |
+| claude/wizardly-mendel-qr6j64 | 2026-10-28 | 0 | 2026-10-28 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -18,9 +18,9 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 |---|---|---|
 | 2026-10-28 | Fasa 2: guna alphalens-reloaded (sudah dalam requirements-kajian.txt) atau tulis sendiri | alphalens memberi rank-IC + pulangan kuintil + turnover terus. REVERSE/ujian_pangkat.py ialah versi tangan. |
 | 2026-10-28 | Uji perluasan universe dalam 3260 ticker Release A02 | Lever belum diuji (DIAGNOSIS_FASA1.md §3 item 1). Universe sekarang 2000 teratas ikut nilai dagangan; saham +100% cenderung lebih kecil. Had: A02 hanya simpan 3260 ticker. | 28 Okt: ini universe HARGA REVERSE (2000 teratas ikut nilai dagangan). Berasingan daripada universe SEC yang sudah dilebarkan ke 3260 (data/univ_sec.txt) pada 28 Okt. |
-| 2026-10-28 | Nilai semula sasaran pulangan | +10%/bulan = 78% daripada siling pandangan sempurna (12.89%/bulan). 0 daripada 36 sistem-tahun mencapainya. Siling dikira REVERSE/siling_pandangan_sempurna.py. |
-| 2026-10-28 | Jalankan penilaian leg SEC fasa 2 (SUE, pecutan hasil, jarak ke earnings) 2009-2026 | Peringkat 2 (join) SIAP: REVERSE/step10_sec.py -> sec_join.csv + sec_liputan.csv. Gerbang ambang SPEC_FASA2 §4.4 LULUS setiap tahun 2020-2025 (3,517-4,221 peristiwa dengan SUE tidak kosong, ambang 3,000). Tetapi penilaian §5 BELUM dijalankan: (1) liputan hanya 27% saham dan cenderung ke nama besar/cair, perlu isian awal 3,335 ticker; (2) cache peristiwa sah hanya 2020-2025, perlu step1_run.py untuk 2012-2019 bagi sejarah 14 tahun. |
+| 2026-10-28 | Nilai semula sasaran pulangan | REVERSE/SASARAN.md (29 Okt 2026) memberi aritmetiknya: +10%/bulan = 3.14x/tahun = 8,994,377x atas 14 tahun (USD 10k -> USD 89.9 bilion). SPY beli-dan-pegang 2012-2025: median 17.62%/tahun, MDD -9.44%, bulanan 1.82%, dan 0% bulan capai +10% dalam 13 daripada 14 tahun. Sasaran = 5.5x median bulanan indeks. Konfigurasi terbaik kajian 17.65%/tahun tetapi MDD -14.55% = TIDAK mengalahkan SPY pada kedua-dua paksi. Keputusan ini bukan teknikal: ia bergantung pada berapa modal boleh hilang. |
 | 2026-10-28 | Jalankan step1_run.py untuk 2012-2019 (sejarah peristiwa sah leg SEC) | Cache signals_*.parquet hanya ada 2020-2025. Liputan SUE boleh diguna bermula 2012 (mandat XBRL berperingkat 2009-2011: 89 ticker 2009, 253 pada 2010, 482 pada 2011). 8 tahun tambahan = compute besar (~150MB parquet setiap tahun). Tanpa ini, leg SEC kekal 6 tahun sahaja dan kelebihan sejarah panjang tidak diperoleh. |
+| 2026-10-29 | Uji signal PEAD yang bertahan atas universe lebih luas (saham kecil) | Satu lever yang dituju oleh keputusan itu sendiri: q5:pecutan_hasil & sejak_earnings_le5 bertahan SETIAP ujian statistik tetapi magnitudnya ~1.5% median bulanan. Kesusasteraan PEAD menyatakan kesan tertumpu pada saham kecil berspread lebar, dan universe REVERSE (2,000 teratas ikut nilai dagangan) dengan sengaja membuangnya. Data SEC kini meliputi 83% daripada 3,302 ticker. PERLU pradaftar baharu (tembakan §5 untuk universe top-2000 sudah terbelanja) DAN model kos jujur untuk nama tidak cair: slippage di sana melebihi 0.25% tier tertinggi sekarang. Jangkaan priori: kesan lebih kuat, kos lebih tinggi, net tidak pasti. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
@@ -37,14 +37,14 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 |---|---|---|---|---|---|---|
 | RS pasaran | 30 | 2026-09-16 | 2026-10-27 | 0.5 |  | tidak |
 | Gred kumpulan | 23 | 2026-09-25 | 2026-10-27 | 0.4 |  | tidak |
-| SEC EPS/hasil | 3919 | 2009-04-15 | 2026-10-28 | 62.2 | 148200 | ya |
-| SEC earnings 8-K | 5447 | 2004-08-23 | 2026-10-28 | 86.5 | 178315 | ya |
+| SEC EPS/hasil | 4094 | 2009-04-15 | 2026-10-28 | 65.0 | 267767 | ya |
+| SEC earnings 8-K | 5447 | 2004-08-23 | 2026-10-28 | 86.5 | 178316 | ya |
 
 
 Leg **RS/gred**: terbaik **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
 
 
-Leg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 (`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: 1532 daripada 3302 ticker universe ada data EPS/hasil, 1530 belum diisi. Universe REVERSE kira-kira 2,300 setahun.
+Leg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 (`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: 2846 daripada 3302 ticker universe ada data EPS/hasil, 0 belum diisi. Universe REVERSE kira-kira 2,300 setahun.
 
 
 ## 3. Operasi repo — 134 kaedah Mxx dan papertrade C
@@ -81,15 +81,15 @@ Semua kaedah masih **BELUM CUKUP** (< 10 hari beli berbeza). Tiada kaedah boleh 
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261027 | 1 | OK |
-| Trend D10H2-r2 | 20261027 | 1 | OK |
-| Lejar Penuh | 2026-10-27 | 1 | OK |
-| portfolio_slot | 2026-10-27 | 1 | OK |
-| Papan Penganalisis | 2026-10-29 | -1 | OK |
-| RS pasaran | 2026-10-27 | 1 | OK |
-| Gred kumpulan | 2026-10-27 | 1 | OK |
-| SEC fundamental | fail diubah | 0 | OK |
-| Senarai bursa | fail diubah | 0 | OK |
+| Stor harga | 20261027 | 2 | OK |
+| Trend D10H2-r2 | 20261027 | 2 | OK |
+| Lejar Penuh | 2026-10-27 | 2 | OK |
+| portfolio_slot | 2026-10-27 | 2 | OK |
+| Papan Penganalisis | 2026-10-29 | 0 | OK |
+| RS pasaran | 2026-10-27 | 2 | OK |
+| Gred kumpulan | 2026-10-27 | 2 | OK |
+| SEC fundamental | fail diubah | 1 | OK |
+| Senarai bursa | fail diubah | 1 | OK |
 
 
 Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau cuti pasaran, dan salinan kerja yang lama (lihat §0). Periksa kedua-duanya, kemudian `penjaga_jadual` dan log workflow, sebelum menganggap saluran rosak.
