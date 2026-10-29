@@ -12908,3 +12908,10 @@ tarikh,simbol,peristiwa,nama,bursa,etf,biasa
 2026-10-28,MSGY,buang,Masonglory Limited - Class A Ordinary Shares,NASDAQ,0,1
 2026-10-28,MULT,buang,Franklin Multisector Income ETF,NASDAQ,1,0
 2026-10-28,USFI,buang,BrandywineGLOBAL - U.S. Fixed Income ETF,NASDAQ,1,0
+2026-10-29,AZR,tambah,"Azora Therapeutics, Inc. - Common Stock",NASDAQ,0,1
+2026-10-29,ELCF,tambah,Eventide Large Cap Focus ETF,NYSE Arca,1,0
+2026-10-29,ETDG,tambah,Eventide Dividend Growth ETF,NYSE Arca,1,0
+2026-10-29,ADIL,buang,"Adial Pharmaceuticals, Inc - Common Stock",NASDAQ,0,1
+2026-10-29,JSM,tukar_nama,"Navient LLC - 6% Senior Notes due December 15, 2043",NASDAQ,0,0
+2026-10-29,NAVI,tukar_nama,"Navient Holdings, Inc. - Common Stock",NASDAQ,0,1
+2026-10-29,SLMT,tukar_nama,Solmate Infrastructure Public Limited Company - Class B Ordinary Shares,NASDAQ,0,1
