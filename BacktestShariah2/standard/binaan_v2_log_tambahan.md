@@ -457,3 +457,10 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Tooltip `hari_psn` baharu; `hari_pt` dinamakan "Hari pegang (KK)" dan menerangkan bar had masa.
 - Digabung di atas v127–v129 sesi lain (kad hover Stage/Trend, `tipPotong`, panel pemilihan kaedah dipindah ke tab Analisis) supaya halaman terbit tidak berundur.
 - Tiada data baharu; tiada order; tiada wang sebenar.
+
+## 2026-10-29 — Dashboard v131: label "bt 62" diganti teks penuh
+- Soalan pengguna: "bt 62 tu apa benda ya? boleh bagi description yang mudah difahami? ada had apa semua".
+- Label di bawah Hari pegang (KK): `bt 62` → `purata backtest 62 hari`; `had 20` → `had 20 hari`.
+- Tooltip bar membezakan dua kes dengan jelas: had masa (kaedah menjual pada hari ke-N walaupun sasaran belum dicapai; bar kuning ≥ 80%) lawan purata backtest (rujukan sahaja, bukan had).
+- Tooltip tajuk lajur `hari_pt` menyenaraikan had sebenar: 33 daripada 134 kaedah ada had masa — 10 hari (5 kaedah), 20 (4), 21 (5), 42 (9), 63 (8), 126 (2); 101 kaedah tiada had masa.
+- Tiada perubahan susun atur: label itu disembunyi dalam sel jadual bergred (`tr:not(.buka) td.m0 .vv`) dan hanya dipapar dalam pop timbul hover mod Padat.
