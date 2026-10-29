@@ -448,3 +448,12 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Direkod 600 (277 saham; belian semula 51; fail claude_87.csv); dilangkau 13. Harga: buka sementara yfinance 10:31 NY.
 - Dilangkau: NVDA M13: buka 219.88 <= henti 256.05; BTU M13: buka 23.33 <= henti 25.25; OLLI M14: buka 83.51 <= henti 83.64; ABT M18: buka 101.82 <= henti 101.91; CHD M18: buka 103.98 <= henti 104.19; PFE M18: buka 29.49 <= henti 29.51; GEF M49: buka 82.13 <= henti 82.89; ULTA M70: buka 620.43 <= henti 620.68; NRP M128: isyarat batal pada buka (peraturan kaedah); NRP M129: isyarat batal pada buka (peraturan kaedah); RXO M136: isyarat batal pada buka (peraturan kaedah); NEOG M153: isyarat batal pada buka (peraturan kaedah); CSGP M156: isyarat batal pada buka (peraturan kaedah).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-10-29 — Dashboard v130: hari dipegang dipecah ikut lorong keluar
+- Permintaan pengguna: "hari pegang tu, patut ada hari pegang utk keluar kaedah, dah hari pegang, pegang selagi naik, susun kejap, Hari Pegang(KK), Keluar Kaedah, Hari Pegang(PSN), Pegang selagi naik."
+- Posisi (pandangan Penuh) kini: Hari pegang (KK) · Keluar kaedah · Hari pegang (PSN) · Pegang selagi naik.
+- `hariSel` dikira dengan `hariL(r,'kaedah')` (dahulu `r.hari` = hingga keluar mana-mana lorong), `hariSel2` baharu dengan `hariL(r,'henti')`; pembantu sama dengan yang digunakan lajur lorong, jadi nombor dan status sepadan.
+- Lajur PSN tiada bar had masa kerana lorong 2 tiada had masa; keutamaan sembunyi `kp-hi` (hilang paling akhir).
+- Tooltip `hari_psn` baharu; `hari_pt` dinamakan "Hari pegang (KK)" dan menerangkan bar had masa.
+- Digabung di atas v127–v129 sesi lain (kad hover Stage/Trend, `tipPotong`, panel pemilihan kaedah dipindah ke tab Analisis) supaya halaman terbit tidak berundur.
+- Tiada data baharu; tiada order; tiada wang sebenar.
