@@ -3,3 +3,5 @@ __pycache__/
 BacktestShariah2/kod/data/
 .claude/worktrees/
 REVERSE/.cache/
+REVERSE/kolam_ekor_bulanan.csv
+REVERSE/kolam_ekor_tahunan.csv
