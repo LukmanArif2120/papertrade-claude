@@ -1,8 +1,12 @@
 {
- "hari_terakhir": "2026-10-27",
- "dijana": "2026-10-29 00:25 UTC",
- "hari": [],
- "ditambah": [],
+ "hari_terakhir": "2026-10-28",
+ "dijana": "2026-10-29 02:28 UTC",
+ "hari": [
+  "2026-10-28"
+ ],
+ "ditambah": [
+  "RXO"
+ ],
  "ditamatkan": [],
  "calon": 0,
  "gagal": [],
