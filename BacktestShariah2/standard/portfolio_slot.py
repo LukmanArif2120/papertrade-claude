@@ -72,11 +72,14 @@ def calon_lejar():
     return P.sort_values(['tarikh_beli', 'saham', 'id_kaedah']).reset_index(drop=True)
 
 
-def susun(G, jenis, tarikh):
-    """Susunan calon satu sesi beli. G diisih saham, id_kaedah (tetap)."""
+def susun(G, jenis, tarikh, benih=0):
+    """Susunan calon satu sesi beli. G diisih saham, id_kaedah (tetap).
+
+    benih: offset benih bagi lorong rawak. 0 = tingkah laku asal (RAWAK_10 tunggal). Nilai lain
+    memberi cabutan rawak yang berbeza, diguna untuk JALUR rawak (lihat jalur_rawak)."""
     if jenis in ('RS_10', 'RISIKO_10'):
         return G.assign(_k=G.rs.fillna(-1.0)).sort_values('_k', ascending=False, kind='stable')
-    rng = np.random.default_rng(int(tarikh.replace('-', '')))
+    rng = np.random.default_rng(int(tarikh.replace('-', '')) + int(benih) * 1_000_003)
     return G.iloc[rng.permutation(len(G))]
 
 
@@ -110,7 +113,7 @@ def keluar_pada(p, d, sebelum_beli):
     return None
 
 
-def bina(P, jenis, hari, tutup, cfg=None, gantung=None, atrp=None):
+def bina(P, jenis, hari, tutup, cfg=None, gantung=None, atrp=None, benih=0):
     """hari: senarai tarikh 'YYYY-MM-DD' (sesi dagangan); tutup(saham, tarikh) -> harga tutup atau None. cfg (portfolio beku):
     dict(mula, kuota, lorong); gantung: {id_kaedah: tarikh mula tiada belian}; atrp(saham, tarikh) -> ATR14% (RISIKO_10
     sahaja). Pulang (posisi DataFrame, ekuiti DataFrame)."""
@@ -152,7 +155,7 @@ def bina(P, jenis, hari, tutup, cfg=None, gantung=None, atrp=None):
     for d in hari:
         realisasi(True)
         if d in ikut_beli:
-            G = susun(ikut_beli[d], 'RAWAK_10' if cfg else jenis, d).to_dict('records')
+            G = susun(ikut_beli[d], 'RAWAK_10' if cfg else jenis, d, benih).to_dict('records')
             if cfg:
                 G = [r for r in G if not (r['id_kaedah'] in gantung and gantung[r['id_kaedah']] <= d)]
                 kini = {}
@@ -209,7 +212,54 @@ def mdd(x):
     x = pd.Series(np.r_[1.0, np.asarray(x, float)]); return float((x / x.cummax() - 1).min())   # ekuiti mula = 1 (buka hari pertama)
 
 
-def ringkasan(hasil, spy_mula, spy_akhir, hari, CFG=None):
+N_JALUR = 20     # cabutan rawak dalam jalur kawalan
+
+
+def jalur_rawak(P, hari, tutup, atrp, n=N_JALUR):
+    """Jalur kawalan: n cabutan RAWAK_10 dengan benih berbeza, bukan satu.
+
+    Sebabnya (REVERSE/KEPEKATAN_BENIH.md, 29 Okt 2026): pada 8 slot, hingar pemilihan merentas
+    susunan sewenang-wenang ialah 17.3 mata peratus setahun (20 benih: median 9.93%, julat
+    2.57%-19.90%). Satu lorong rawak tunggal ialah SATU cabutan daripada taburan itu, jadi
+    "RS_10 mengalahkan RAWAK_10" tidak bermakna apa-apa melainkan jurangnya melebihi jalur.
+    Dengan jalur, perbandingan menjadi ujian: adakah RS_10 di atas persentil jalur?
+
+    Pulang DataFrame (benih, tarikh, ekuiti) — satu fail padat, bukan n fail lorong."""
+    bhg = []
+    for b in range(1, n + 1):
+        _, E = bina(P, 'RAWAK_10', hari, tutup, None, None, atrp, benih=b)
+        if len(E):
+            bhg.append(E[['tarikh', 'ekuiti']].assign(benih=b))
+    return (pd.concat(bhg, ignore_index=True)[['benih', 'tarikh', 'ekuiti']]
+            if bhg else pd.DataFrame(columns=['benih', 'tarikh', 'ekuiti']))
+
+
+def banding_jalur(hasil, J):
+    """Baris Markdown: kedudukan setiap lorong dalam jalur rawak pada sesi terakhir."""
+    if J.empty:
+        return ['_(jalur rawak tidak tersedia)_', '']
+    akhir = J[J.tarikh == J.tarikh.max()].ekuiti.to_numpy()
+    L = ['', f'### Jalur kawalan rawak ({len(akhir)} cabutan, sesi {J.tarikh.max()})', '',
+         f'Jalur: min {akhir.min():.4f} | p10 {np.quantile(akhir, 0.10):.4f} | '
+         f'median {np.median(akhir):.4f} | p90 {np.quantile(akhir, 0.90):.4f} | maks {akhir.max():.4f}',
+         '']
+    L.append('| Lorong | Ekuiti | Persentil dalam jalur | Di luar jalur? |')
+    L.append('|---|---|---|---|')
+    for k, (_, E) in sorted(hasil.items()):
+        if not len(E):
+            continue
+        e = float(E.ekuiti.iloc[-1])
+        pct = 100.0 * float((akhir < e).mean())
+        luar = 'YA (atas)' if e > akhir.max() else ('YA (bawah)' if e < akhir.min() else 'tidak')
+        L.append(f'| {k} | {e:.4f} | {pct:.0f} | {luar} |')
+    L += ['', '**Cara membaca:** lorong yang berada DALAM jalur tidak dapat dibezakan daripada '
+          'pemilihan rawak — jurangnya hingar, bukan dapatan. Hanya lorong di luar jalur (dan '
+          'kekal di luar apabila jalur memanjang) bermakna apa-apa. Pada 10 slot hingar pemilihan '
+          'besar: `REVERSE/KEPEKATAN_BENIH.md` mengukurnya 17.3 mata peratus setahun pada 8 slot.', '']
+    return L
+
+
+def ringkasan(hasil, spy_mula, spy_akhir, hari, CFG=None, J=None):
     L = [f'# Portfolio maya 10 slot (jejak hadapan; rekod sahaja)', '',
          'Dibina semula daripada Lejar Penuh oleh `standard/portfolio_slot.py`; kajian `kajian/KAJIAN_PORTFOLIO.md`. '
          'Tiada order, tiada wang sebenar. Jangan ubah secara manual.', '',
@@ -246,6 +296,8 @@ def ringkasan(hasil, spy_mula, spy_akhir, hari, CFG=None):
           'saiznya kecil (2%–5%) dan 10 slot tidak menghabiskan tunai: sebahagian daripada MDD yang lebih baik datang '
           'daripada **pendedahan yang lebih rendah**, bukan daripada saiz yang lebih bijak. Perbandingan yang adil ialah '
           'MDD bagi setiap unit pendedahan; lihat `RISIKO_10_ekuiti.csv` lajur `tunai`.']
+    if J is not None:
+        L += banding_jalur(hasil, J)
     return '\n'.join(L) + '\n'
 
 
@@ -292,7 +344,9 @@ def main():
         E.to_csv(os.path.join(KELUAR, f'{k}_ekuiti.csv'), index=False, float_format='%.6f')
         hasil[k] = (R, E)
     s1 = float(spy.asof(pd.Timestamp(hari[-1]))) if hari else None
-    open(os.path.join(KELUAR, 'RINGKASAN.md'), 'w').write(ringkasan(hasil, s0, s1, hari, CFG))
+    J = jalur_rawak(P, hari, tutup, atrp)
+    J.to_csv(os.path.join(KELUAR, 'rawak_jalur_ekuiti.csv'), index=False, float_format='%.6f')
+    open(os.path.join(KELUAR, 'RINGKASAN.md'), 'w').write(ringkasan(hasil, s0, s1, hari, CFG, J))
     json.dump({k: dict(sesi_terakhir=E.tarikh.iloc[-1] if len(E) else None, ekuiti=round(float(E.ekuiti.iloc[-1]), 6) if len(E) else 1.0,
                        dipegang=int((R.status == 'Pegang').sum()), keluar=int((R.status == 'Keluar').sum()))
                for k, (R, E) in hasil.items()}, open(os.path.join(KELUAR, 'status.json'), 'w'), indent=1)

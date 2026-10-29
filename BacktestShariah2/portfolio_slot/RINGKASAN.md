@@ -40,7 +40,7 @@ Tempoh: 2026-10-16 hingga 2026-10-27 (8 sesi). SPY dalam tempoh sama: -0.46%.
 | PSIX | M18 | 84 | 2026-10-16 | 50.00 | 48.58 | -2.84 |
 | SGU | M161 | 51 | 2026-10-16 | 13.17 | 12.89 | -2.13 |
 | TENB | M161 | 85 | 2026-10-16 | 39.24 | 48.65 | +23.98 |
-| UNF | M159 | 77 | 2026-10-16 | 265.83 | 250.40 | -5.80 |
+| UNF | M159 | 76 | 2026-10-16 | 265.83 | 250.40 | -5.80 |
 | USPH | M14 | 54 | 2026-10-16 | 86.37 | 87.34 | +1.12 |
 
 ## GABUNGAN_10 — posisi dipegang
@@ -58,7 +58,7 @@ Tempoh: 2026-10-16 hingga 2026-10-27 (8 sesi). SPY dalam tempoh sama: -0.46%.
 
 | Saham | Kaedah | RS | Beli | Harga beli | Terkini | Untung % |
 |---|---|---|---|---|---|---|
-| KVUE | M70 | 63 | 2026-10-22 | 19.18 | 19.43 | +1.30 |
+| KVUE | M70 | 62 | 2026-10-22 | 19.18 | 19.43 | +1.30 |
 | OTTR | M70 | 53 | 2026-10-22 | 90.20 | 90.47 | +0.30 |
 | QGEN | M70 | 66 | 2026-10-22 | 50.50 | 50.17 | -0.65 |
 | HAFN | M70 | 92 | 2026-10-23 | 10.38 | 10.61 | +2.17 |
@@ -110,3 +110,19 @@ Penilaian adil memerlukan sekurang-kurangnya 6–12 bulan (KAJIAN_PORTFOLIO.md).
 RISIKO_10 dipasangkan dengan RS_10: susunan calon SAMA, hanya saiz berbeza (risiko 1% ekuiti / 4×ATR14%, dihadkan 2%–25%). Yang dicari di sini ialah MDD lebih baik pada pulangan yang setanding — bukan pulangan lebih tinggi. Idea saiz itu datang daripada REVERSE/KEPUTUSAN_1B.md (MDD bertambah baik 6/6 tahun, pulangan tidak), tetapi lorong ini **bukan** ujian ke hadapan dapatan itu: ia membeli daripada Lejar = isyarat kaedah Mxx, bukan signal REVERSE (lihat REVERSE/SPEC_FASA2.md §9.2). Yang diuji di sini ialah saiz atas isyarat Mxx.
 
 **Baca MDD RISIKO_10 bersama lajur `tunai`.** Kerana saham momentum Shariah kebanyakannya ber-ATR tinggi, saiznya kecil (2%–5%) dan 10 slot tidak menghabiskan tunai: sebahagian daripada MDD yang lebih baik datang daripada **pendedahan yang lebih rendah**, bukan daripada saiz yang lebih bijak. Perbandingan yang adil ialah MDD bagi setiap unit pendedahan; lihat `RISIKO_10_ekuiti.csv` lajur `tunai`.
+
+### Jalur kawalan rawak (20 cabutan, sesi 2026-10-27)
+
+Jalur: min 0.9830 | p10 0.9945 | median 1.0140 | p90 1.0325 | maks 1.0368
+
+| Lorong | Ekuiti | Persentil dalam jalur | Di luar jalur? |
+|---|---|---|---|
+| GABUNGAN_10 | 0.9995 | 25 | tidak |
+| RAWAK_10 | 1.0033 | 30 | tidak |
+| RAWAK_KAEDAH_10 | 0.9943 | 10 | tidak |
+| RISIKO_10 | 0.9962 | 15 | tidak |
+| RS_10 | 0.9785 | 0 | YA (bawah) |
+| TOP1_10 | 0.9957 | 15 | tidak |
+
+**Cara membaca:** lorong yang berada DALAM jalur tidak dapat dibezakan daripada pemilihan rawak — jurangnya hingar, bukan dapatan. Hanya lorong di luar jalur (dan kekal di luar apabila jalur memanjang) bermakna apa-apa. Pada 10 slot hingar pemilihan besar: `REVERSE/KEPEKATAN_BENIH.md` mengukurnya 17.3 mata peratus setahun pada 8 slot.
+

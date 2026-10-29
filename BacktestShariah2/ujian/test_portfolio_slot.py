@@ -132,5 +132,48 @@ class TestPortfolioSlot(unittest.TestCase):
         self.assertAlmostEqual(ps.mdd([0.94]), -0.06)
 
 
+class TestJalurRawak(unittest.TestCase):
+    """Jalur kawalan rawak (29 Okt 2026). Lorong sedia ada TIDAK boleh berubah."""
+
+    def _G(self):
+        return pd.DataFrame({'saham': list('ABCDEFGH'), 'id_kaedah': ['M01'] * 8,
+                             'rs': [50, 90, 70, None, 60, 80, 55, 95]})
+
+    def test_benih_lalai_sama_dengan_sebelum(self):
+        G = self._G()
+        self.assertEqual(list(ps.susun(G, 'RAWAK_10', '2026-10-27').saham),
+                         list(ps.susun(G, 'RAWAK_10', '2026-10-27', 0).saham))
+
+    def test_benih_lain_memberi_susunan_lain(self):
+        G = self._G()
+        self.assertNotEqual(list(ps.susun(G, 'RAWAK_10', '2026-10-27', 0).saham),
+                            list(ps.susun(G, 'RAWAK_10', '2026-10-27', 7).saham))
+
+    def test_lorong_rs_tidak_terjejas_benih(self):
+        """RS_10 dan RISIKO_10 menyusun ikut RS; benih tidak boleh menyentuhnya."""
+        G = self._G()
+        for jenis in ('RS_10', 'RISIKO_10'):
+            self.assertEqual(list(ps.susun(G, jenis, '2026-10-27').saham),
+                             list(ps.susun(G, jenis, '2026-10-27', 9).saham), jenis)
+
+    def test_n_jalur_dikunci(self):
+        self.assertEqual(ps.N_JALUR, 20)
+
+    def test_banding_jalur_jalur_kosong(self):
+        b = ps.banding_jalur({}, pd.DataFrame(columns=['benih', 'tarikh', 'ekuiti']))
+        self.assertTrue(any('tidak tersedia' in x for x in b))
+
+    def test_banding_jalur_menanda_luar_jalur(self):
+        J = pd.DataFrame({'benih': [1, 2, 3], 'tarikh': ['2026-10-27'] * 3,
+                          'ekuiti': [0.98, 1.00, 1.02]})
+        E_atas = pd.DataFrame({'tarikh': ['2026-10-27'], 'ekuiti': [1.50]})
+        E_dalam = pd.DataFrame({'tarikh': ['2026-10-27'], 'ekuiti': [1.00]})
+        R = pd.DataFrame({'status': ['Pegang']})
+        t = '\n'.join(ps.banding_jalur({'ATAS': (R, E_atas), 'DALAM': (R, E_dalam)}, J))
+        self.assertIn('YA (atas)', t)
+        self.assertIn('| DALAM | 1.0000 |', t)
+        self.assertIn('tidak dapat dibezakan', t)
+
+
 if __name__ == '__main__':
     unittest.main()
