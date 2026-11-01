@@ -150,16 +150,27 @@ def main():
             r['untung'] = a[3] / a[2] * 100 if a[2] else np.nan
             r['rugi'] = a[4] / (a[1] - a[2]) * 100 if a[1] - a[2] else np.nan
             r['asas_latih'], r['asas_tahan'] = asas[(k, 'latih')], asas[(k, 'tahan')]
+            # SALINAN VERBATIM ujian step19_nxx_keluar.py:233-240. Versi pertama saya
+            # menguji H0: jangkaan MUTLAK = 0 dengan ttest_1samp dua-hujung; step19 menguji
+            # H0: LIFT = 0 (purata harian TOLAK asas) satu-hujung dengan ddof=1 dan ambang
+            # 20 hari. Itu hipotesis BERBEZA, dan kawalan regresi menangkapnya: kesemua 46
+            # sel bertindih terpesong pada p sementara setiap metrik lain sepadan 5e-07.
+            # `p` mesti menguji LIFT supaya gate FDR setara dengan step18/step19, dan kerana
+            # syarat 1 dan 2 pradaftar sudah mengendalikan jangkaan mutlak dan tanda lift.
             ci = IDX_SEL[(nm, k)]
             cnt = DCNT[ci]
             ada_h = cnt > 0
-            if int(ada_h.sum()) >= 30:
-                v = DSUM[ci][ada_h] / cnt[ada_h] * 100
-                r['n_hari'] = int(ada_h.sum())
-                r['t'], pp = sps.ttest_1samp(v, 0.0)
-                r['p'] = pp / 2 if r['t'] > 0 else 1 - pp / 2
+            nh = int(ada_h.sum())
+            r['n_hari'] = nh
+            if nh >= 20:
+                km = DSUM[ci][ada_h] / cnt[ada_h] - asas[(k, 'tahan')] / 100
+                se = km.std(ddof=1) / np.sqrt(km.size)
+                t = float(km.mean() / se) if se > 0 else np.nan
+                r['t'] = t
+                r['p'] = (float(sps.t.sf(t, df=km.size - 1))
+                          if np.isfinite(t) else np.nan)
             else:
-                r['n_hari'] = int(ada_h.sum()); r['t'] = r['p'] = np.nan
+                r['t'] = r['p'] = np.nan
             baris.append(r)
 
     H = pd.DataFrame(baris)
