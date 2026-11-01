@@ -1,6 +1,9 @@
-# L99 — Pattern saham high-momentum bawah lorong 2 (pegang selagi naik)
+# MOMENTUM_PEGANG — Pattern saham high-momentum bawah lorong 2 (pegang selagi naik)
 
-Dijalankan 1 Nov 2026. Pradaftar: `REVERSE/SPEC_L99.md` (ditulis sebelum keputusan dilihat).
+Dijalankan 1 Nov 2026. Pradaftar: `REVERSE/SPEC_MOMENTUM_PEGANG.md`.
+Nama asal fail ini ialah `L99` (label daripada salah taip dalam permintaan pengguna); dinamakan semula
+1 Nov 2026 mengikut konvensyen REVERSE (nama deskriptif, bukan ID bernombor). `L99` BUKAN ID yang
+pernah wujud dalam repo; keluarga `L01`–`L03` ialah ID kaedah, bukan ID kajian (ditulis sebelum keputusan dilihat).
 Soalan pengguna: saham yang boleh dipegang 3 hari ke atas atau dipegang selagi naik; pattern apa yang
 memaksimumkan keuntungan; khususnya pattern **high momentum**.
 
@@ -11,10 +14,10 @@ alam = **763k dagangan enjin + A02**; keluaran = pradaftar + laporan dalam repo.
 
 ## 0. Semakan pemalsuan — LULUS 13/13
 
-Simulator lorong 2 L99 menghasilkan semula setiap nombor terbitan `KAJIAN_LORONG2.md` pada 763,327
+Simulator lorong 2 MOMENTUM_PEGANG menghasilkan semula setiap nombor terbitan `KAJIAN_LORONG2.md` pada 763,327
 dagangan enjin, dalam toleransi pradaftar:
 
-| Ukuran | L99 | Terbitan |
+| Ukuran | MOMENTUM_PEGANG | Terbitan |
 |---|---|---|
 | Lorong 2 purata | **5.10%** | 5.1% |
 | Lorong 2 median | −2.75% | −2.8% |
@@ -28,7 +31,7 @@ dagangan enjin, dalam toleransi pradaftar:
 | Hari p25/50/75 | 20 / 34 / 58 | 20 / 34 / 58 |
 | Hari trend besar p25/50/75 | 31 / 54 / 85 | 31 / 54 / 85 |
 
-ATR L99 dibuktikan sepadan `enjin.atr` dengan `np.allclose`.
+ATR MOMENTUM_PEGANG dibuktikan sepadan `enjin.atr` dengan `np.allclose`.
 
 **Tetapi semakan pemalsuan ini TIDAK memadai, dan audit kod bebas membuktikannya (§8):**
 - Ujian asap SPEC §5 **menyala** (15 ralat dalam P1, 75 dalam P2) dan pipeline **tidak berhenti**, bertentangan
@@ -89,7 +92,7 @@ Tanpa 15 ticker ekstrem (§1b) kedua-dua jawapan bertambah ketat terhadap lorong
 | **TANGKAP setiap bulan** | 6.36% | **6.81%** (1.07×) |
 | **Lebih SPY setiap bulan** | — | **0.327%** (daripada 1.152%) |
 
-**Ini dapatan L99 yang paling penting untuk repo, bukan untuk pengguna:** dakwaan teras `KAJIAN_LORONG2.md`
+**Ini dapatan MOMENTUM_PEGANG yang paling penting untuk repo, bukan untuk pengguna:** dakwaan teras `KAJIAN_LORONG2.md`
 ("lebihan SPY sebulan tertinggi = pilihan, 1.2%") jatuh kepada **0.33%** apabila 15 ticker (2.3% dagangan)
 dibuang. Pilihan lorong 2 masih boleh dipertahankan — ia menang pada trend besar per unit masa, dan
 `KAJIAN_LORONG2.md` §Batasan sudah menyatakan kelebihan tertumpu pada 2020 dan 2025 — tetapi margin
@@ -117,7 +120,7 @@ Teguh terhadap pemotongan hujung data:
   sendiri — bersetuju pada julat 2025 (1.16–16.38). Dua dataset repo memang **bercanggah** pada tahap harga
   (`data_mentah` dilaras hadapan **termasuk dividen**, A02 pecahan sahaja), dan `data_mentah` mengandungi
   jurang yang kelihatan seperti pecahan songsang tidak dilaras (FCEL 2.27× pada 2019-07-02, ASST 5.56× pada
-  2025-05-07; A02 merekod `faktor_split` 0.05 untuk ASST). Arm utama L99 (§3) menggunakan A02.
+  2025-05-07; A02 merekod `faktor_split` 0.05 untuk ASST). Arm utama MOMENTUM_PEGANG (§3) menggunakan A02.
 
 ### 1c. Data forward (Papertrade C, 8,748 posisi, 8–30 Okt 2026)
 
@@ -246,7 +249,7 @@ Purata lift pulangan pada TAHAN: **urutan D10 +0.520** · penapis +0.034 · kesa
 terbetul; arahnya tidak berubah dalam larian terbetul kerana pembetulan menjejaskan semua jenis sama rata).
 Ini mengesahkan mekanisme yang `SETUP.md` dan `SISTEM.md` ukur: menapis membuang bar pada ekor, menyusun tidak
 membuang apa-apa. Berbeza dengan `GABUNGAN.md`, **kesatuan tidak membantu di sini** — `GABUNGAN.md` menyatukan
-12 signal yang sudah terbukti ada lift, manakala kesatuan L99 dibentuk daripada keluarga pattern mentah.
+12 signal yang sudah terbukti ada lift, manakala kesatuan MOMENTUM_PEGANG dibentuk daripada keluarga pattern mentah.
 
 ### 2e. Bentuk desil — di mana wang sebenarnya berada
 
@@ -326,7 +329,7 @@ sendiri dalam 3 hari pertama selepas masuk.** +5% dalam 3 hari menaikkan P(TB) d
 lorong 2 daripada 5.26% ke 21.07%. Kelebihan ini **bertahan normalisasi pendedahan**, yang membezakannya daripada
 kelebihan per-dagangan lorong 2 (§1a): 8.997%/bulan lawan 2.477%/bulan = **3.6×**, dan 12.591% lawan 2.477% =
 **5.1×** bagi peraturan 10 hari. Tiada pattern masuk yang pernah diukur dalam repo ini (598 setup, 280 NXX,
-48 kombinasi silang, 86 L99) menghampiri magnitud ini.
+48 kombinasi silang, 86 MOMENTUM_PEGANG) menghampiri magnitud ini.
 
 Ini **bukan** penapis masuk dan tidak boleh digunakan untuk memilih belian. Ia peraturan **paksi PEGANG**
 (`PG01–PG06` dalam registry, belum pernah diuji): tambah kepada yang berfungsi, potong yang tidak. Ia memerlukan
@@ -334,7 +337,7 @@ pradaftar sendiri — khususnya (a) ia dikira pada populasi dagangan kaedah Mxx 
 (b) sebahagian daripadanya mungkin momentum jangka pendek yang dilabel semula; (c) kos tambahan daripada
 menambah saiz posisi di tengah dagangan belum dimodelkan.
 
-## 4. Diagnostik portfolio (pradaftar SPEC_L99 §8) — 8 dan 40 slot lawan SPUS
+## 4. Diagnostik portfolio (pradaftar SPEC_MOMENTUM_PEGANG §8) — 8 dan 40 slot lawan SPUS
 
 Alam A02, 2020-01 – 2026-10, keluar lorong 2, berat sama rata, satu posisi setiap ticker.
 Penanda aras: **SPUS 17.95%/tahun** (CAGR seluruh tingkap, `PEMBINAAN.md`).
@@ -356,7 +359,7 @@ dan tidak dilaporkan. Hanya CAGR dilapor. Pembetulan yang diperlukan: nilai posi
 
 ---
 
-## 5. Jangkaan priori saya (pradaftar SPEC_L99 §9) — 3 betul, 2 salah
+## 5. Jangkaan priori saya (pradaftar SPEC_MOMENTUM_PEGANG §9) — 3 betul, 2 salah
 
 | # | Jangkaan | Keputusan |
 |---|---|---|
@@ -398,7 +401,7 @@ isyarat daripada slot, lorong 1 memutar modal 1.93× lebih cepat dan jurangnya h
 P(trend besar) 34.1% → **60.2%** dan pulangan lorong 2 5.26% → **21.07%** (**8.997%/bulan lawan 2.477%**).
 +10% dalam 10 hari → 73.7% dan 33.3% (12.591%/bulan). Ia **bertahan normalisasi pendedahan**, yang
 membezakannya daripada kelebihan per-dagangan lorong 2. Tiada pattern masuk yang pernah diukur dalam repo
-(598 setup, 280 NXX, 48 silang, 86 L99) menghampiri magnitud ini. **Belum dipradaftar.**
+(598 setup, 280 NXX, 48 silang, 86 MOMENTUM_PEGANG) menghampiri magnitud ini. **Belum dipradaftar.**
 
 **5. Satu pattern masuk sahaja bertahan setiap ujian: desil teratas kekuatan relatif 6 bulan lawan SPY.**
 Pulangan 3.04% lawan asas 1.88% (**+62%**), 1.484%/bulan lawan 0.900% (**+65%**), n 441,412, ΔP(trend besar)
@@ -459,7 +462,7 @@ dan **anda perlu banyak slot** kerana pada 8 slot pemilihan momentum kalah kepad
 - Tingkap LATIH/TAHAN memisahkan tarikh MASUK tetapi bukan tarikh HASIL, jadi ia bukan dua replikasi bebas
   sepenuhnya (tindihan maksimum 120 bar + tempoh pegangan).
 - `G1 sektor atas MA50` dan `G2 rejim SPY` tidak diuji dalam larian terbetul (§8b pepijat 6).
-- Enam pepijat dalam kod L99 sendiri ditemui dan dibetulkan; dua daripadanya hanya ditemui oleh audit bebas,
+- Enam pepijat dalam kod MOMENTUM_PEGANG sendiri ditemui dan dibetulkan; dua daripadanya hanya ditemui oleh audit bebas,
   bukan oleh ujian asap saya (§8).
 - Peta sektor bukan titik-masa.
 - Ambang dinormal (10×ATR) dipilih supaya kadar asas sepadan sasaran mutlak; ia pilihan, bukan terbitan.
@@ -467,9 +470,9 @@ dan **anda perlu banyak slot** kerana pada 8 slot pemilihan momentum kalah kepad
 
 ---
 
-## 8. Audit kod bebas — enam agen, enam pepijat dalam kod L99 sendiri
+## 8. Audit kod bebas — enam agen, enam pepijat dalam kod MOMENTUM_PEGANG sendiri
 
-Enam agen bebas mengaudit L99 tanpa melihat keputusan satu sama lain: tiga lensa kod (pandang ke hadapan ·
+Enam agen bebas mengaudit MOMENTUM_PEGANG tanpa melihat keputusan satu sama lain: tiga lensa kod (pandang ke hadapan ·
 pengindeksan dan bias penyintas · statistik), satu penerbitan bebas, satu semakan integriti data luaran, dan
 satu kritik kelengkapan. 1.28 juta token, 217 panggilan alat. **Setiap dakwaan disahkan sendiri sebelum
 diterima; tiga dakwaan ditolak atau dikecilkan.**
@@ -567,7 +570,7 @@ yang betul untuk dibaca.
 
 ### 8d. SAPUAN PARAMETER KELUAR — kritik kelengkapan menemui yang paling berguna
 
-L99 membelanjakan 258 ujian pada paksi **MASUK** (yang `NXX.md`, `SETUP.md` dan `SILANG.md` ukur hampir kosong)
+MOMENTUM_PEGANG membelanjakan 258 ujian pada paksi **MASUK** (yang `NXX.md`, `SETUP.md` dan `SILANG.md` ukur hampir kosong)
 sambil **membekukan** paksi KELUAR pada satu nilai (`ganda = 4`) tanpa mengukurnya. Saya sapu sendiri pada
 763,327 dagangan, **tanpa apa-apa pattern masuk**:
 
@@ -603,7 +606,7 @@ plato rata (2.28–2.45%), jadi 4× ialah pilihan yang betul tetapi bukan puncak
   Cameron-Gelbach-Miller kedua-duanya **disahkan BETUL** oleh audit, begitu juga `bh_fdr` dalam
   `REVERSE/teras/stat.py`.
 
-### 8f. Jurang yang audit namakan dan L99 TIDAK tutup
+### 8f. Jurang yang audit namakan dan MOMENTUM_PEGANG TIDAK tutup
 
 | Keutamaan | Jurang | Ujian yang akan menyelesaikannya |
 |---|---|---|

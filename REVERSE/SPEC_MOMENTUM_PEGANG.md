@@ -1,6 +1,6 @@
-# SPEC L99 — Pradaftar: pattern MASUK yang memaksimumkan tangkapan bawah lorong 2
+# SPEC MOMENTUM_PEGANG — Pradaftar: pattern MASUK yang memaksimumkan tangkapan bawah lorong 2
 
-Ditulis 1 Nov 2026, **sebelum** apa-apa keputusan L99 dilihat. Permintaan pengguna: "saham yang boleh pegang 3 hari
+Ditulis 1 Nov 2026, **sebelum** apa-apa keputusan MOMENTUM_PEGANG dilihat. Permintaan pengguna: "saham yang boleh pegang 3 hari
 dan ke atas, atau pegang selagi naik; pattern saham macam mana yang memaksimumkan keuntungan; high momentum stocks
 pattern". Empat keputusan pengguna dalam sesi ini: sasaran = **peluang jadi trend besar**; keluar = **lorong 2 sahaja**;
 alam = **763k dagangan enjin + A02**; keluaran = **pradaftar + laporan dalam repo**.
@@ -8,7 +8,7 @@ alam = **763k dagangan enjin + A02**; keluaran = **pradaftar + laporan dalam rep
 ## 1. Mengapa soalan ini BUKAN ulangan ruang yang sudah ditutup
 
 `SETUP.md` (0/598 penapis lift positif), `NXX.md` (gate3 0/280) dan `SILANG.md` mengukur **lift pada PURATA pulangan**.
-L99 mengukur **fungsi berbeza**: `P(dagangan menjadi ekor kanan)`. `KOLAM_EKOR.md` ukur 5% teratas = 63.7% jumlah
+MOMENTUM_PEGANG mengukur **fungsi berbeza**: `P(dagangan menjadi ekor kanan)`. `KOLAM_EKOR.md` ukur 5% teratas = 63.7% jumlah
 pulangan, dan `SETUP.md` menjelaskan mengapa penapis gagal — ia membuang bar pada ekor. Jika itu mekanismenya, maka
 pemboleh ubah sasaran yang betul ialah **keahlian ekor**, bukan min. Hubungan antara kedua-duanya tidak tertutup oleh
 mana-mana ujian terdahulu: satu pattern boleh menaikkan `P(ekor)` dan tetap menurunkan min (lebih banyak kalah kecil),
@@ -16,14 +16,14 @@ atau sebaliknya. Ini paksi sasaran, bukan paksi signal.
 
 Kedua: lorong 2 **imun** kepada kecacatan henti hari-0 (`KOLAM_EKOR.md` §4a) kerana ia tidak memakai henti kaedah dan
 parasnya pada hari masuk ialah `tutup[k] − 4×ATR < tutup[k]`, jadi tidak boleh tercetus hari masuk. Setiap nombor
-dalam kajian Mxx tercemar oleh kecacatan itu; L99 tidak.
+dalam kajian Mxx tercemar oleh kecacatan itu; MOMENTUM_PEGANG tidak.
 
 ## 2. Takrif sasaran (dibekukan)
 
 Masuk: isyarat pada tutup bar `t` → beli pada **buka bar t+1** (= paksi `C01`, sama seperti seluruh repo).
 
 - **TB (utama)** = `1` jika `max(tutup[k .. k+119]) / buka[k] − 1 >= 0.30`, di mana `k` = bar masuk.
-  Takrif ini **sama tepat** dengan `kajian/lorong2/kaji_lorong2.py` (`mx120`, `besar = mx120 >= 0.30`) supaya L99
+  Takrif ini **sama tepat** dengan `kajian/lorong2/kaji_lorong2.py` (`mx120`, `besar = mx120 >= 0.30`) supaya MOMENTUM_PEGANG
   boleh dibanding terus dengan `KAJIAN_LORONG2.md`. Guna **tutup tertinggi**, bukan tinggi tertinggi.
 - **R2 (sekunder)** = pulangan lorong 2 terealisasi: Chandelier tutup, paras keluar = `max(tutup sejak masuk) − 4×ATR14`,
   paras hanya naik, tiada henti kaedah, `tutup < paras` → jual pada **buka esok**; posisi belum keluar pada bar akhir
@@ -111,7 +111,7 @@ Papertrade C/Lejar **tidak boleh** menjawab soalan TB dan tidak akan digunakan u
   −13.97%, menang 2.0%), manakala 8,452 masih terbuka pada purata +1.50%. Mengira prestasi lorong 2 daripada 296
   baris itu ialah kesilapan bentuk yang sama seperti melaporkan kaedah pegang-panjang daripada posisi yang
   dihentikan awal (`KAEDAH_TERBAIK.md` §3).
-- Peranan P3 dalam L99: **(i)** senarai dua lorong seperti yang pengguna minta, dengan had dinyatakan; **(ii)** taburan
+- Peranan P3 dalam MOMENTUM_PEGANG: **(i)** senarai dua lorong seperti yang pengguna minta, dengan had dinyatakan; **(ii)** taburan
   feature pada isyarat sebenar (RS, gred sektor/industri, pemangkin, ATR%) supaya pattern yang menang dalam P2 boleh
   diterjemah kepada skrin yang benar-benar boleh dijalankan; **(iii)** semakan kewarasan arah, bukan bukti.
 
@@ -145,7 +145,7 @@ dan memandang **tinggi** keupayaannya bertahan syarat ekor. Maka:
 4. **Tiada pattern akan memberi portfolio yang mengalahkan SPUS pada KEDUA-DUA pulangan dan MDD.** Saya menjangka
    diagnostik portfolio gagal walaupun gate 1–4 lulus, kerana `PEMBINAAN.md` dan `SISTEM.md` kedua-duanya mendarat
    di bawah garis SPUS+tunai dan nisbah `CAGR÷|MDD|` campuran hampir pemalar 0.642–0.669.
-5. Nombor tunggal yang paling berguna daripada L99 dijangka ialah **TANGKAP**, bukan pattern: 25.1% lawan 12.0%
+5. Nombor tunggal yang paling berguna daripada MOMENTUM_PEGANG dijangka ialah **TANGKAP**, bukan pattern: 25.1% lawan 12.0%
    bermakna pilihan keluar sudah menggandakan tangkapan pada dagangan yang penting, dan itu diperoleh **tanpa**
    apa-apa pattern masuk.
 
