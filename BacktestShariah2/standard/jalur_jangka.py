@@ -1,0 +1,223 @@
+# jalur_jangka.py — jalur jangkaan ke hadapan setiap saham untuk carta kedua helaian posisi.
+#
+# BUKAN ramalan arah. `REVERSE/SILING_ARAH.md` mengukur siling ramalan arah 5 hari: 51.55% tepat
+# luar sampel lawan asas 50.50%, dan pilihan paling yakin memperoleh KURANG (+0.3105%) daripada
+# membeli semua bar (+0.3118%). Yang boleh diramal dengan teguh ialah LEBAR, bukan arah:
+# atr_pct lawan MFE 21 hari rho +0.270 (positif pada 95.5% daripada 3,499 tarikh) dan lawan |MAE|
+# rho +0.346 (98.5%), manakala lawan pulangan terminal rho hanya -0.043 (41.8%).
+#
+# Maka carta ini memaparkan satu kekerapan bersyarat, bukan satu ramalan:
+#   "saham dalam keadaan turun naik yang sama secara sejarah berada antara X% dan Y% selepas N hari"
+# dan satu nombor keputusan:
+#   P(paras lorong 2 disentuh dalam N hari) daripada taburan MAE kumpulan yang sama.
+#
+# Dua peringkat:
+#   bina_jadual()  — sekali, daripada panel REVERSE (8.5 juta bar, 2012-2025). Keluaran kecil:
+#                    data/jalur/jadual.json. Ditanam pada DESIL atr_pct KERATAN RENTAS dalam tarikh,
+#                    kerana taburan atr_pct hanyut merentas masa; desil mutlak akan condong ikut era.
+#   dokumen()      — setiap malam, daripada stor harga repo: desil semasa setiap posisi -> jalur.
+#
+# Guna: python3 BacktestShariah2/standard/jalur_jangka.py --bina-jadual
+import json
+import os
+import sys
+
+import numpy as np
+
+AKAR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+BS2 = os.path.join(AKAR, 'BacktestShariah2')
+JADUAL = os.path.join(BS2, 'data', 'jalur', 'jadual.json')
+
+UFUK = (5, 21)
+NDESIL = 10
+KUANTIL = (10, 25, 50, 75, 90)
+# grid MAE untuk menyongsang P(sentuh) pada sebarang jarak paras; dalam PERATUS, menurun
+GRID_MAE = [-1, -2, -3, -4, -5, -6, -8, -10, -12, -15, -18, -21, -25, -30, -35, -40, -50]
+MIN_SEL = 2000          # minimum bar setiap sel sebelum kuantil dipercayai
+
+
+# ---------------------------------------------------------------- peringkat 1
+def bina_jadual(panel=None, keluar=JADUAL):
+    """Kira jadual kuantil daripada panel REVERSE. Perlu REVERSE/.cache/panel_ekor.parquet."""
+    import pandas as pd
+    import pyarrow.parquet as pq
+
+    panel = panel or os.path.join(AKAR, 'REVERSE', '.cache', 'panel_ekor.parquet')
+    if not os.path.exists(panel):
+        raise SystemExit(f'panel tiada: {panel}\nbina dengan: python3 REVERSE/step22_ekor.py --panel')
+
+    print('muat panel...', flush=True)
+    P = pq.read_table(panel, columns=['ticker', 'date', 'nilai20', 'atr_pct',
+                                      'mfe_cl21', 'mae_cl21', 'term21']).to_pandas()
+    P = P[P.nilai20.to_numpy() >= 100_000.0]
+    th = P.date.dt.year.to_numpy()
+    P = P[(th >= 2012) & (th <= 2025)].dropna(subset=['atr_pct'])
+
+    print('kira sasaran 5 hari...', flush=True)
+    H5 = _sasaran5(sorted(set(P.ticker)), P)
+    P = P.merge(H5, on=['ticker', 'date'], how='left')
+
+    print('desil atr_pct keratan rentas dalam tarikh...', flush=True)
+    P['desil'] = (P.groupby('date', observed=True).atr_pct
+                  .rank(pct=True, method='first').mul(NDESIL).clip(upper=NDESIL - 1e-9)
+                  .astype('int8'))
+
+    jad = {'nota': ('Kuantil pulangan hadapan bersyarat desil atr_pct keratan rentas. '
+                    'Bukan ramalan arah; lihat REVERSE/SILING_ARAH.md.'),
+           'alam': 'autotune-data-a02 2012-2025, bar cair nilai20 >= USD100k',
+           'ndesil': NDESIL, 'kuantil': list(KUANTIL), 'grid_mae': list(GRID_MAE),
+           'ufuk': list(UFUK), 'sel': {}}
+
+    for H in UFUK:
+        kt, km, kx = (f'term{H}', f'mae{H}', f'mfe{H}') if H == 5 else ('term21', 'mae_cl21', 'mfe_cl21')
+        for d in range(NDESIL):
+            s = P[P.desil == d]
+            t = s[kt].to_numpy('float64'); t = t[np.isfinite(t)]
+            m = s[km].to_numpy('float64'); m = m[np.isfinite(m)]
+            x = s[kx].to_numpy('float64'); x = x[np.isfinite(x)]
+            if t.size < MIN_SEL or m.size < MIN_SEL:
+                continue
+            jad['sel'][f'{H}|{d}'] = {
+                'n': int(t.size),
+                'atr_pct_median': round(float(np.median(s.atr_pct)), 3),
+                'term': [round(float(np.percentile(t, q) * 100), 3) for q in KUANTIL],
+                'mfe50': round(float(np.median(x) * 100), 3),
+                'mae50': round(float(np.median(m) * 100), 3),
+                # P(MAE <= ambang) bagi setiap ambang grid -> boleh disongsang untuk sebarang jarak
+                'p_sentuh': [round(float((m * 100 <= g).mean() * 100), 2) for g in GRID_MAE],
+            }
+        print(f'  H={H}: {sum(1 for k in jad["sel"] if k.startswith(f"{H}|"))} desil', flush=True)
+
+    os.makedirs(os.path.dirname(keluar), exist_ok=True)
+    with open(keluar, 'w') as f:
+        json.dump(jad, f, separators=(',', ':'), sort_keys=True)
+    print(f'ditulis {keluar} ({os.path.getsize(keluar):,} bait)')
+    return jad
+
+
+def _sasaran5(tickers, P):
+    """term5/mae5/mfe5 daripada stor A02; masuk buka t+1, tetingkap [t+1, t+5] PENUH."""
+    import pandas as pd
+    cache = os.path.join(AKAR, 'REVERSE', '.cache', 'sasaran5.parquet')
+    if os.path.exists(cache):
+        return pd.read_parquet(cache)
+    H = 5
+    src = os.path.join(AKAR, 'AUTOTUNE', '.cache_autotune-data-a02')
+    bhg = [pd.read_parquet(os.path.join(src, f'harga_{y}.parquet'),
+                           columns=['ticker', 'date', 'open', 'high', 'low', 'close'])
+           for y in range(2012, 2026) if os.path.exists(os.path.join(src, f'harga_{y}.parquet'))]
+    df = pd.concat(bhg, ignore_index=True).sort_values(['ticker', 'date'])
+    del bhg
+    o, hi, lo, c = (df[k].to_numpy('float64') for k in ('open', 'high', 'low', 'close'))
+    tk = df['ticker'].to_numpy()
+    n = o.size
+    sw = np.lib.stride_tricks.sliding_window_view
+    term = np.full(n, np.nan); mae = np.full(n, np.nan); mfe = np.full(n, np.nan)
+    if n >= H + 1:
+        wl, wc = sw(lo, H), sw(c, H)
+        i = np.arange(0, n - H)
+        j = i + 1
+        sama = tk[j + H - 1] == tk[i]
+        masuk = o[j]
+        ok = sama & np.isfinite(masuk) & (masuk > 0)
+        with np.errstate(invalid='ignore', divide='ignore'):
+            term[i] = np.where(ok, c[j + H - 1] / masuk - 1.0, np.nan)
+            mae[i] = np.where(ok, wl[j].min(axis=1) / masuk - 1.0, np.nan)
+            mfe[i] = np.where(ok, wc[j].max(axis=1) / masuk - 1.0, np.nan)
+    out = pd.DataFrame({'ticker': df.ticker.to_numpy(), 'date': df.date.to_numpy(),
+                        'term5': term.astype('float32'), 'mae5': mae.astype('float32'),
+                        'mfe5': mfe.astype('float32')})
+    out.to_parquet(cache, index=False)
+    return out
+
+
+# ---------------------------------------------------------------- peringkat 2
+def muat_jadual(p=JADUAL):
+    with open(p) as f:
+        return json.load(f)
+
+
+def p_sentuh(sel, jarak_pct, grid):
+    """Songsang linear P(MAE <= jarak) daripada grid. jarak_pct negatif (cth -16.40)."""
+    if jarak_pct is None or not np.isfinite(jarak_pct) or jarak_pct >= 0:
+        return None
+    g = np.asarray(grid, dtype='float64')       # menurun: -1, -2, ...
+    p = np.asarray(sel['p_sentuh'], dtype='float64')
+    if jarak_pct >= g[0]:
+        return round(float(p[0]), 1)
+    if jarak_pct <= g[-1]:
+        return round(float(p[-1]), 1)
+    # g menurun -> balikkan untuk np.interp
+    return round(float(np.interp(jarak_pct, g[::-1], p[::-1])), 1)
+
+
+def _atr_pct(h, l, c, n=14):
+    """ATR14 Wilder dalam % harga; sama konvensyen dengan keluar_lorong.atr."""
+    import keluar_lorong as KL
+    a = KL.atr(h, l, c)
+    with np.errstate(invalid='ignore', divide='ignore'):
+        return a / np.where(c == 0, np.nan, c) * 100.0
+
+
+def dokumen(H, folder=None, jadual=None):
+    """Dokumen db posisi/jalur.
+
+    rows: ["saham|tarikh_beli", {d:desil, atr:atr_pct, u:{"5":[...],"21":[...]}, ps:{"5":p,"21":p}}]
+    Jalur `u` ialah kuantil pulangan terminal (%) ikut KUANTIL; `ps` ialah P(paras lorong 2
+    disentuh) pada jarak semasa. Desil dikira merentas keratan rentas posisi HARI INI, bukan
+    merentas sejarah, supaya ia sepadan dengan cara jadual ditanam.
+    """
+    import lorong2_siri as L2
+    from trend_status import PT
+    jad = jadual or muat_jadual()
+    folder = folder or PT
+    P = L2.posisi(folder)
+    # atr_pct semasa + jarak ke paras bagi setiap siri unik saham|tarikh_beli
+    keadaan = {}
+    for kunci, A in (L2.dokumen(H, folder).get('rows') or []):
+        if not A:
+            continue
+        saham = kunci.split('|')[0]
+        g = H.get(saham) if hasattr(H, 'get') else None
+        if g is None or not len(g):
+            continue
+        hh, ll, cc = (g[k].to_numpy(float) for k in ('high', 'low', 'close'))
+        ap = _atr_pct(hh, ll, cc)
+        if not len(ap) or not np.isfinite(ap[-1]):
+            continue
+        b = A[-1]
+        jarak = ((b[2] / b[1] - 1.0) * 100.0) if (b[2] and b[1]) else None
+        keadaan[kunci] = (float(ap[-1]), jarak)
+    if not keadaan:
+        return dict(rows=[], ndesil=NDESIL, kuantil=list(KUANTIL), ufuk=list(UFUK))
+    # desil keratan rentas antara posisi semasa
+    nilai = sorted(v[0] for v in keadaan.values())
+    rows = []
+    for kunci, (ap, jarak) in sorted(keadaan.items()):
+        pangkat = sum(1 for x in nilai if x <= ap) / len(nilai)
+        d = min(NDESIL - 1, int(pangkat * NDESIL))
+        u, ps = {}, {}
+        for Hf in UFUK:
+            sel = jad['sel'].get(f'{Hf}|{d}')
+            if not sel:
+                continue
+            u[str(Hf)] = sel['term']
+            p = p_sentuh(sel, jarak, jad['grid_mae'])
+            if p is not None:
+                ps[str(Hf)] = p
+        if u:
+            rows.append([kunci, {'d': d, 'atr': round(ap, 2), 'u': u, 'ps': ps,
+                                 'jarak': None if jarak is None else round(jarak, 2)}])
+    return dict(rows=rows, ndesil=NDESIL, kuantil=list(KUANTIL), ufuk=list(UFUK),
+                alam=jad.get('alam', ''))
+
+
+if __name__ == '__main__':
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--bina-jadual', action='store_true')
+    a = ap.parse_args()
+    if a.bina_jadual:
+        bina_jadual()
+    else:
+        ap.print_help()
