@@ -173,6 +173,7 @@ def main(argv=None):
                                 had='tiada' if had is None else str(had), benih=bn,
                                 cagr=PB.cagr(ek[m0:], hari[m0:]), mdd=PB.mdd(ek[m0:]),
                                 cagr_latih=PB.cagr(ek[l0:l1], hari[l0:l1]),
+                                mdd_latih=PB.mdd(ek[l0:l1]),
                                 n_dagangan=nd,
                                 kos_tahun=dg['kos_wang'] / max(pe, 1e-9) * 100 / tahun,
                                 **{k: v for k, v in dg.items() if k != 'kos_wang'}))
