@@ -121,6 +121,37 @@ didokumenkan** — ia sepadan ambang ≈0.6 (55 kelompok, bukan 52).
 - Kebanyakan transkripsi terus CSV tepat, termasuk kesemua 10 metrik §3, kesemua 36 nilai §9,
   "598/598 setup negatif", dan "52/65 · 42/65".
 
+## Dapatan lensa `proses` yang saya SAHKAN SENDIRI (1 Nov 2026)
+
+Empat daripada 16 dapatan `proses` yang tiada penyangkalan agen ialah **fakta mekanikal**,
+jadi saya semak sendiri dan bukan dengan agen. Kesemua **empat DISAHKAN**:
+
+**P08 DISAHKAN — penjaga hanyutan CI buta sepenuhnya kepada jejak ini.** `strategi.py` ada
+**0** rujukan kepada `step30`, `step31`, `nxx_x13`, `bertindih`, `SPEC_JEJAK_N`, `GB02` dan
+`N115`, dan `--semak` keluar **0**. `CLAUDE.md` mengisytiharkan `strategi.py` sebagai
+"satu-satunya sumber kebenaran keadaan" dan penjaga CI terhadap hanyutan registry. Ia tidak
+tahu 20 kohort ada.
+
+**P14 DISAHKAN — "kawalan regresi |Δ| = 0.00e+00" tidak boleh dihasilkan daripada artifak
+yang dikomit.** Delta sebenar antara `nxx_x13.csv` dan `nxx_keluar.csv`: 1.02e-06 hingga
+2.16e-05, kerana `nxx_x13.csv` ditulis `float_format='%.4f'`. Perbandingan 0.00e+00 saya
+dibuat pada nilai dalam ingatan, bukan pada fail. Deltanya **tidak material** (pembundaran
+4-desimal), tetapi **dakwaan seperti ditulis adalah salah** dan hanya boleh disemak kalau
+pembaca menjalankan semula skrip itu.
+
+**N-03/P11 DISAHKAN, dan ia lebih buruk daripada sekadar nombor salah.** Julat 24 baris GB02
+ialah **+2.76% hingga +29.28%**, bukan "9.3–16.1%" yang spec dakwa. Dan **DUA konfigurasi
+melepasi CAGR SPUS 17.95%**: `GB02_atau4/40/X15/U02` **+29.28%** dan `GB02_atau3/40/X15/U02`
+**+25.89%**. Kedua-duanya gagal `P2` (MDD −56.51%, −55.82%), jadi kesimpulan bersama
+"portfolio tidak mengalahkan SPUS pada KEDUA-DUA paksi" **kekal betul** — tetapi julat yang
+saya tulis **menyembunyikan** bahawa keluar yang saya **tidak** pilih (`X15`) menghasilkan
+CAGR tertinggi dalam keseluruhan set.
+
+**M4/N-19 DISAHKAN — justifikasi pemeringkat `U14` salah.** 19 pemenang `E6a`: **U14 = 11,
+U01 = 8**, U02 = 0. Dakwaan "setiap pemenang E6a memakai U14" (dalam `HIERARKI.md`,
+`SPEC_JEJAK_N.md` dan docstring `_nxx.u14`) adalah salah, dan **8 daripada 19 pemenang
+memakai `U01` yang RAWAK**.
+
 ## Had audit ini
 
 61 daripada 119 agen gagal pada had penggunaan. Lensa `proses` (16 dapatan), `tolak` dan
