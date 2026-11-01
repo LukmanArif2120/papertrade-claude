@@ -361,3 +361,31 @@ pendua (Jaccard ≥ 0.5), kesemuanya dalam keluarga yang gagal.
 
 ~20 kohort × 7.3 isyarat/sesi × 126 sesi ≈ **18,400 posisi baharu**, ~**+31 MB**. Boleh
 dibaca dalam ~3–4 bulan (≥ 77 posisi ditutup setiap kohort untuk membezakan 1 mata).
+
+
+### 12d. Pengesahan hujung-ke-hujung 20 kohort (sebelum larian sebenar)
+
+Larian `harian_c.py malam` penuh ke folder **sandbox**, bukan `papertrade/`:
+
+```
+ralat_kaedah: TIADA
+senarai_beli 641 baris · isyarat 5,069 · watchlist 352
+Nxx: 20/20 kaedah menghasilkan isyarat, 188 jumlah
+  18 kohort pada had MAKS_KAEDAH=10 · N20 5 · N124 3
+watchlist Nxx: 11/20 kaedah, 55 calon
+baris Nxx dengan `henti` bukan kosong: 0
+sahkan.py pada sandbox: 0 ralat, 0 amaran
+```
+
+Tiga perkara yang pengesahan ini tunjukkan:
+
+1. **18 daripada 20 kohort mencapai had 10 isyarat/sesi**, jadi had itu **mengikat** pada
+   hampir setiap kohort dan pemeringkat `U14` menentukan apa yang dibeli. Itu mengesahkan
+   keputusan §2a bukan teori: dengan `rank = 0` pemilihan 18 kohort akan sewenang-wenang.
+2. **`N124` memberi 3 isyarat sahaja** — paling sedikit, sejajar jangkaan priori #5 (n tahan
+   12,728 = paling jarang antara 65).
+3. **`henti` kosong pada setiap baris Nxx**, jadi kecacatan hari-0 tidak boleh berlaku.
+
+`watchlist` hanya 11/20 kerana `hampir_syarat` memulangkan `None` apabila **semua** syarat
+dipenuhi (= isyarat) atau **semua** belum (terlalu jauh); peraturan satu-syarat seperti `N75`
+dan `N76` tidak boleh ada keadaan "separuh dipenuhi". Itu tingkah laku betul, bukan kecacatan.
