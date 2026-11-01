@@ -31,7 +31,10 @@ dalam E4/E5 khusus kepada keluar X15/X32, bukan X13.
 Alam kajian = a02 tanpa saham delist; kolam signal dipilih daripada data yang sama,
 jadi keputusannya BERSYARAT.
 """
-import _nxx as NX
+try:                                  # pemuat produksi letak kod/ pada path,
+    from kaedah import _nxx as NX     # bukan kod/kaedah/ — ikut preseden _k145
+except ImportError:
+    import _nxx as NX
 
 ID = 'GB02'
 NAMA = 'Kesatuan N19 u N37 u N115 (GB02_atau3)'

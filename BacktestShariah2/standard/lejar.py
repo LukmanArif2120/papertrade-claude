@@ -92,9 +92,29 @@ def r4(x):
     return None if x is None or (isinstance(x, float) and not np.isfinite(x)) else round(float(x), 4)
 
 
+POLA_KAEDAH = ('M*.py', 'N*.py', 'GB*.py')
+KELUARGA = {'M': 0, 'N': 1, 'GB': 2}     # Mxx pedagang · Nxx kombinasi REVERSE · GBxx gabungan
+
+
+def nombor_kaedah(mid):
+    """Kunci susunan merentas keluarga: Mxx dahulu, kemudian Nxx, kemudian GBxx.
+    `int(mid[1:])` akan gagal pada awalan dua aksara seperti 'GB02', jadi awalan dan
+    nombor dipisah dan awalan diberi pangkat tetap."""
+    s = str(mid)
+    i = 0
+    while i < len(s) and not s[i].isdigit():
+        i += 1
+    awalan = s[:i]
+    try:
+        n = int(s[i:])
+    except ValueError:
+        n = 10 ** 6
+    return (KELUARGA.get(awalan, 9), n)
+
+
 def senarai_kaedah():
-    f = glob.glob(os.path.join(KOD, 'kaedah', 'M*.py'))
-    return sorted((os.path.basename(x)[:-3] for x in f), key=lambda x: int(x[1:]))
+    f = [x for pola in POLA_KAEDAH for x in glob.glob(os.path.join(KOD, 'kaedah', pola))]
+    return sorted((os.path.basename(x)[:-3] for x in f), key=nombor_kaedah)
 
 
 def baca(p, lajur):

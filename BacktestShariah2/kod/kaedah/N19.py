@@ -20,7 +20,10 @@ dan kerana `NXX.md` mendapati ia memperbaiki jangkaan terpangkas-ekor +1.08 mata
 atas asasnya — satu daripada dua kes dalam kajian yang kelebihannya TIDAK hidup
 sepenuhnya dalam ekor kanan.
 """
-import _nxx as NX
+try:                                  # pemuat produksi letak kod/ pada path,
+    from kaedah import _nxx as NX     # bukan kod/kaedah/ — ikut preseden _k145
+except ImportError:
+    import _nxx as NX
 
 ID = 'N19'
 NAMA = 'Bawah jalur BB + RSI<30'

@@ -96,9 +96,9 @@ Indikator baharu yang diperlukan: `adr_pct`, `alligator`, `alphatrend`, `arxiv`,
 
 ### BB
 
-**N19 Bawah jalur BB + RSI<30** — `bb_pctb < 0 DAN rsi14 < 30` · LuxAlgo (LuxAlgo) · DIUJI · keluar asal rsi14 > 70 | DIUJI (NXX.md): lift terbaik X3 +0.873 latih / +3.618 tahan, n 73,769, gate1 LULUS, gate2 gagal, gate3 gagal
+**N19 Bawah jalur BB + RSI<30** — `bb_pctb < 0 DAN rsi14 < 30` · LuxAlgo (LuxAlgo) · DIUJI · keluar asal rsi14 > 70 | DIUJI (NXX.md): lift terbaik X3 +0.873 latih / +3.618 tahan, n 73,769, gate1 LULUS, gate2 gagal, gate3 gagal. Satu daripada DUA kes dalam kajian yang memperbaiki jangkaan terpangkas-ekor (+1.08 mata atas asasnya), jadi kelebihannya tidak hidup sepenuhnya dalam ekor kanan. Kaki pembalikan min dalam GB02_atau3 | PRODUKSI 1 Nov 2026: modul kod/kaedah/N19.py berjalan setiap malam dalam Papertrade C; pradaftar jejak REVERSE/SPEC_JEJAK_N.md
 
-**N20 Kembali masuk jalur + RSI silang 30** — `bb_pctb[-1] < 0 DAN bb_pctb > 0 DAN rsi14 silang naik 30` · therighttrader (blog) · DIUJI · henti pada ekstrem luar; keluar jalur tengah | DIUJI (NXX.md): lift terbaik X3 +0.936 latih / +1.614 tahan, n 19,208, gate1 LULUS, gate2 gagal, gate3 gagal
+**N20 Kembali masuk jalur + RSI silang 30** — `bb_pctb[-1] < 0 DAN bb_pctb > 0 DAN rsi14 silang naik 30` · therighttrader (blog) · DIUJI · henti pada ekstrem luar; keluar jalur tengah | DIUJI (NXX.md): lift terbaik X3 +0.936 latih / +1.614 tahan, n 19,208, gate1 LULUS, gate2 gagal, gate3 gagal. Kaki KEEMPAT GB02_atau4; atau4 dan atau3 hampir sama (jangkaan +4.944% lawan +5.025%) | PRODUKSI 1 Nov 2026: modul kod/kaedah/N20.py berjalan setiap malam dalam Papertrade C; pradaftar jejak REVERSE/SPEC_JEJAK_N.md
 
 **N21 BB + RSI 40/60** — `bb_pctb < 20 DAN rsi14 > 40` · Fmz (Fmz) · DIUJI · sasaran untung 2% tetap | DIUJI (NXX.md): lift terbaik X1 +0.040 latih / -0.053 tahan, n 266,924, gate1 gagal, gate2 gagal, gate3 gagal
 
@@ -156,7 +156,7 @@ Indikator baharu yang diperlukan: `adr_pct`, `alligator`, `alphatrend`, `arxiv`,
 
 **N36 Pocket pivot** — `pocket_pivot` · Morales/Kacher (buku) · DIUJI · juga M35 dalam keluarga Mxx | DIUJI (NXX.md): lift terbaik X1 -0.143 latih / -0.228 tahan, n 386,797, gate1 gagal, gate2 gagal, gate3 gagal
 
-**N37 Gap and go** — `gap_and_go` · klasik intraday (umum) · DIUJI · DIUJI (NXX.md): lift terbaik X3 +0.323 latih / +2.099 tahan, n 19,652, gate1 LULUS, gate2 gagal, gate3 gagal
+**N37 Gap and go** — `gap_and_go` · klasik intraday (umum) · DIUJI · DIUJI (NXX.md): lift terbaik X3 +0.323 latih / +2.099 tahan, n 19,652, gate1 LULUS, gate2 gagal, gate3 gagal. Kaki MOMENTUM dalam GB02_atau3; pegang median 4 hari jadi kohort ini matang jauh lebih awal daripada tiga kaki yang lain | PRODUKSI 1 Nov 2026: modul kod/kaedah/N37.py berjalan setiap malam dalam Papertrade C; pradaftar jejak REVERSE/SPEC_JEJAK_N.md
 
 **N38 VCP pecah** — `vcp` · Minervini (buku) · DIUJI · juga M06 | DIUJI (NXX.md): lift terbaik X3 -0.289 latih / +0.234 tahan, n 452,952, gate1 gagal, gate2 gagal, gate3 gagal
 
@@ -224,7 +224,7 @@ Indikator baharu yang diperlukan: `adr_pct`, `alligator`, `alphatrend`, `arxiv`,
 
 **N58 DI+ silang DI- + ADX>20** — `pdi silang naik mdi DAN adx14 > 20` · Wilder (buku) · DIUJI · DIUJI (NXX.md): lift terbaik X2 -0.053 latih / +0.190 tahan, n 62,725, gate1 gagal, gate2 gagal, gate3 gagal
 
-**N115 Holy Grail (Raschke)** — `adx14 > 30 DAN undur menyentuh ema20 DAN tutup > tinggi bar sebelum` · Linda Raschke (buku/blog) · DIUJI · repo ada adx14 dan ema21; ema20 tepat perlu dikira | DIUJI (NXX.md): lift terbaik X3 +0.452 latih / +1.750 tahan, n 104,014, gate1 LULUS, gate2 LULUS, gate3 gagal
+**N115 Holy Grail (Raschke)** — `adx14 > 30 DAN undur menyentuh ema20 DAN tutup > tinggi bar sebelum` · Linda Raschke (buku/blog) · DIUJI · repo ada adx14 dan ema21; ema20 tepat perlu dikira | DIUJI (NXX.md): lift terbaik X3 +0.452 latih / +1.750 tahan, n 104,014, gate1 LULUS, gate2 LULUS, gate3 gagal. SATU-SATUNYA peraturan MASUK Nxx yang melepasi gate1 DAN gate2 (bertahan BH-FDR), dan memperbaiki jangkaan terpangkas-ekor +0.70 mata. Kaki momentum kedua GB02_atau3 | PRODUKSI 1 Nov 2026: modul kod/kaedah/N115.py berjalan setiap malam dalam Papertrade C; pradaftar jejak REVERSE/SPEC_JEJAK_N.md
 
 ### VWAP
 
@@ -551,7 +551,7 @@ Awalan dua aksara supaya tiada kolisi dengan M, N, K, X, C, U, S, P, L, I, A dan
 
 **GB01** — `DAN (persilangan): semua syarat mesti benar` · asas semua 147 MASUK (repo) · DIUJI · INI yang SETUP.md ukur: 0 daripada 598 lift positif, sebab STRUKTUR bukan pemilihan. Setiap syarat tambahan membuang lebih banyak bar, dan bar yang dibuang termasuk ekor kanan.
 
-**GB02** — `ATAU (kesatuan): mana-mana satu syarat benar` · akibat logik SETUP.md (repo) · DIUJI · BELUM PERNAH DIUJI, dan ia secara struktur BERTENTANGAN dengan kegagalan yang diukur: kesatuan MENAMBAH bar, bukan membuang. Jika masalahnya "menapis membuang ekor", maka operasi yang betul ialah kesatuan, bukan persilangan. Ini teknik yang saya tertinggal. | DIUJI: terbaik GB02_atau2: lift +0.793 latih / +3.299 tahan, jangkaan +5.893%, n 93,416; 2/6 lulus gate3
+**GB02** — `ATAU (kesatuan): mana-mana satu syarat benar` · akibat logik SETUP.md (repo) · DIUJI · BELUM PERNAH DIUJI, dan ia secara struktur BERTENTANGAN dengan kegagalan yang diukur: kesatuan MENAMBAH bar, bukan membuang. Jika masalahnya "menapis membuang ekor", maka operasi yang betul ialah kesatuan, bukan persilangan. Ini teknik yang saya tertinggal. | DIUJI: terbaik GB02_atau2: lift +0.793 latih / +3.299 tahan, jangkaan +5.893%, n 93,416; 2/6 lulus gate3. KONFIGURASI UTAMA JEJAK HADAPAN: GB02_atau3 = N19 u N37 u N115 dengan keluar X13 memberi jangkaan tahan +8.541%, lift +4.191 tahan / +1.818 latih, menang 64.2%, untung +25.68%, rugi -22.14%, n 195,681, p 0.0068, dan tanpa5 = +2.858% iaitu POSITIF SECARA MUTLAK lawan asas X13 +0.912% - satu-satunya konfigurasi dalam seluruh kajian yang kelebihannya BERTAHAN selepas buang 5% pemenang teratas, halangan yang SETUP.md dapati 598/598 setup gagal. Gate0-gate3 LULUS kesemuanya (REVERSE/silang_akhir.csv). Dengan keluar X13 ia juga MENGALAHKAN kawalan RAWAK pada peringkat portfolio (16.12 lawan 14.23 pada 8 slot; 14.74 lawan 4.30 pada 40 slot), jadi dapatan "isyarat memusnahkan pemeringkat" E4/E5 khusus kepada keluar X15/X32, bukan am. HAD: portfolio TIDAK mengalahkan SPUS (CAGR 9.3-16.1%, MDD -22% hingga -63% lawan +17.95%/-26.82%, 0/36 lulus), jadi ia kohort setiap dagangan bukan peruntukan modal | PRODUKSI 1 Nov 2026: modul kod/kaedah/GB02.py berjalan setiap malam dalam Papertrade C; pradaftar jejak REVERSE/SPEC_JEJAK_N.md
 
 **GB03** — `Undi k-daripada-n syarat benar` · ensemble klasik (umum) · DIUJI · k=1 ialah GB02, k=n ialah GB01; k di antaranya belum pernah diuji | DIUJI: terbaik GB03_undi4: lift +0.858 latih / +3.036 tahan, jangkaan +5.630%, n 85,575; 0/3 lulus gate3
 

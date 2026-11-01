@@ -122,6 +122,56 @@ class TestNxxSepadan(unittest.TestCase):
             self.assertGreater(int(sum(g.sig.sum() for g in fr.values())), 0,
                                f'{mid}: tiada isyarat sama sekali')
 
+    def test_import_seperti_produksi(self):
+        """Modul mesti boleh diimport TEPAT seperti pemuat produksi melakukannya.
+
+        `harian_c.py` dan `lejar.py` meletakkan `kod/` pada sys.path dan memanggil
+        `importlib.import_module('kaedah.N19')` — `kod/kaedah/` TIDAK pada path. Jadi
+        `import _nxx` gagal dengan ModuleNotFoundError walaupun ia berjalan dalam ujian yang
+        meletakkan `kod/kaedah/` pada path sendiri. Pepijat itu BERLAKU pada 1 Nov 2026 dan
+        hanya larian hujung-ke-hujung menangkapnya; ujian ini menggantikan larian itu.
+        """
+        import subprocess
+        kod = AKAR / 'BacktestShariah2' / 'kod'
+        skrip = ('import sys, importlib; sys.path.insert(0, %r);'
+                 'ms=["N19","N20","N37","N115","GB02"];'
+                 '[importlib.import_module("kaedah."+m) for m in ms];'
+                 'print("OK")' % str(kod))
+        r = subprocess.run([sys.executable, '-c', skrip], capture_output=True, text=True,
+                           cwd=str(AKAR))
+        self.assertEqual(r.returncode, 0, f'import gaya produksi gagal:\n{r.stderr[-1500:]}')
+        self.assertIn('OK', r.stdout)
+
+    def test_rank_berterusan_bukan_sifar(self):
+        """`rank` mesti skor BERTERUSAN, bukan 0.0.
+
+        `harian_c.MAKS_KAEDAH` mengehadkan 10 isyarat baharu setiap kaedah setiap imbasan dan
+        memilih ikut `rank`. Dengan `rank = 0` pemilihan jadi sewenang-wenang, dan
+        `KEPEKATAN_BENIH.md` mengukur hingar pemilihan susunan sewenang-wenang pada 17.3 mata
+        peratus setahun. Ujian ini gagal jika sesiapa menetapkan semula rank kepada pemalar.
+        """
+        import importlib
+        for mid in ('N19', 'N20', 'N37', 'N115', 'GB02'):
+            m = importlib.import_module(f'kaedah.{mid}')
+            fr = {t: g.copy() for t, g in self.H}
+            m.sedia(fr, None)
+            akhir = np.array([float(g['rank'].iloc[-1]) for g in fr.values()])
+            sah = akhir[akhir > -1e8]
+            self.assertGreater(len(sah), 5, f'{mid}: terlalu sedikit rank sah')
+            self.assertGreater(len(np.unique(sah)), len(sah) * 0.9,
+                               f'{mid}: rank banyak seri — pemilihan jadi sewenang-wenang')
+            self.assertGreater(float(np.ptp(sah)), 1e-6, f'{mid}: rank pemalar')
+
+    def test_u14_sepadan_kajian(self):
+        """`u14` mesti formula `step27_keluar_portfolio.skor_pangkat` tepat: C[-21]/C[-252]-1."""
+        for t, g in self.H:
+            r = NX.u14(g)
+            ref = g.close.shift(21) / g.close.shift(252) - 1.0
+            ok = np.isfinite(ref)
+            self.assertGreater(int(ok.sum()), 10, t)
+            self.assertLess(float((r[ok] - ref[ok]).abs().max()), 1e-12, t)
+            self.assertTrue(bool((r[~ok] == -9e9).all()), f'{t}: NaN bukan -9e9')
+
     def test_tiada_henti_hari_0(self):
         """Lalu enjin produksi: sebab keluar 'henti' mesti SIFAR (KOLAM_EKOR.md §4a)."""
         import importlib

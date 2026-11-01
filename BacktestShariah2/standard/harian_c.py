@@ -120,15 +120,31 @@ def akhir_minggu(S):
     return tuple(n.isocalendar()[:2]) != tuple(S.isocalendar()[:2])
 
 
+# Tiga keluarga kaedah (30 Okt / 1 Nov 2026): Mxx = kaedah pedagang bernama; Nxx = kombinasi
+# indikator REVERSE; GBxx = gabungan merentas paksi. Awalan boleh > 1 aksara, jadi kunci
+# susunan mesti memisahkan awalan daripada nombor — `int(mid[1:])` akan gagal pada 'GB02'.
+POLA_KAEDAH = ('M*.py', 'N*.py', 'GB*.py')
+KELUARGA = {'M': 0, 'N': 1, 'GB': 2}
+
+
 def nombor_kaedah(mid):
+    """Kunci susunan merentas keluarga: Mxx dahulu, kemudian Nxx, kemudian GBxx.
+    `int(mid[1:])` akan gagal pada awalan dua aksara seperti 'GB02', jadi awalan dan
+    nombor dipisah dan awalan diberi pangkat tetap."""
+    s = str(mid)
+    i = 0
+    while i < len(s) and not s[i].isdigit():
+        i += 1
+    awalan = s[:i]
     try:
-        return int(str(mid)[1:])
+        n = int(s[i:])
     except ValueError:
-        return 10 ** 6
+        n = 10 ** 6
+    return (KELUARGA.get(awalan, 9), n)
 
 
 def senarai_kaedah():
-    f = glob.glob(os.path.join(KOD, 'kaedah', 'M*.py'))
+    f = [x for pola in POLA_KAEDAH for x in glob.glob(os.path.join(KOD, 'kaedah', pola))]
     return sorted((os.path.basename(x)[:-3] for x in f), key=nombor_kaedah)
 
 

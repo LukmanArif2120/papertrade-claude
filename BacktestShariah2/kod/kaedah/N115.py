@@ -18,7 +18,10 @@ SATU-SATUNYA peraturan MASUK Nxx yang melepasi gate1 DAN gate2: lift +0.452 lati
 memperbaiki jangkaan terpangkas-ekor +0.70 mata atas asasnya. Teks buku BELUM
 dibaca; peraturan ini daripada ringkasan pihak ketiga, jadi ia SATU versi.
 """
-import _nxx as NX
+try:                                  # pemuat produksi letak kod/ pada path,
+    from kaedah import _nxx as NX     # bukan kod/kaedah/ — ikut preseden _k145
+except ImportError:
+    import _nxx as NX
 
 ID = 'N115'
 NAMA = 'Holy Grail (Raschke)'

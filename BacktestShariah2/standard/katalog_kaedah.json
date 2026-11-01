@@ -1,6 +1,6 @@
 {
  "dibina": "2026-10-17",
- "nota": "Satu baris setiap modul kod/kaedah/Mxx.py (varian aktif; varian_kod = VARIAN dalam kod, kunci padanan registry set 431). Sumber: kod, SPEC_SEMUA_KAEDAH.md, KATALOG_K145.md. Tulis ke db kaedah/katalog.",
+ "nota": "Satu baris setiap modul kod/kaedah/Mxx.py (varian aktif; varian_kod = VARIAN dalam kod, kunci padanan registry set 431). Sumber: kod, SPEC_SEMUA_KAEDAH.md, KATALOG_K145.md. Tulis ke db kaedah/katalog. Tiga keluarga sejak 1 Nov 2026: Mxx kaedah pedagang bernama; Nxx kombinasi indikator REVERSE; GBxx gabungan merentas paksi. Nxx/GBxx TIADA baris registry_M_gabung (tiada backtest set 431), jadi lajur backtest Papan Penganalisis kosong dengan sengaja — bukti mereka ialah REVERSE/silang_akhir.csv.",
  "rows": [
   {
    "id": "M01",
@@ -1609,6 +1609,66 @@
    "pegang": "Tiada had masa; pegang sehingga isyarat keluar atau henti",
    "henti": "Tetap 15% bawah harga tutup hari isyarat",
    "varian_kod": "V1 WFO beku: henti PCT15, keluar ASAL, tmax tiada"
+  },
+  {
+   "id": "N19",
+   "nama": "Bawah jalur BB + RSI<30",
+   "varian": "V1 Nxx pradaftar",
+   "pencipta": "LuxAlgo (ringkasan platform)",
+   "sumber": "LuxAlgo; didaftar dalam standard/registry_n.py, pradaftar REVERSE/SPEC_NXX.md",
+   "masuk": "bb_pctb < 0 (tutup di bawah jalur bawah BB 20,2) DAN rsi14 < 30; beli pada buka esok.",
+   "keluar": "Lorong 1 = X13: jual pada buka esok apabila rsi14 > 70. Lorong 2 = X15 Chandelier tutup 4xATR14 (automatik, semua posisi). Tiada sasaran untung — KOMBINASI.md mengukur sasaran 1xATR menukar asas +2.595% menjadi -0.281%.",
+   "pegang": "Had 126 bar (= ufuk IMBAS kajian REVERSE). Pegang median yang diukur: 50-64 hari bagi N19/N20/N115, 4 hari bagi N37, 36 hari bagi GB02.",
+   "henti": "Tiada henti dengan sengaja. KOLAM_EKOR.md §4a mengukur henti ketat menghasilkan 421 daripada 1,770 posisi C yang dibeli DAN dihentikan pada hari masuk dengan kadar menang 0.00%; stop = NaN menjadikan kecacatan itu mustahil secara struktur.",
+   "varian_kod": "V1 Nxx pradaftar"
+  },
+  {
+   "id": "N20",
+   "nama": "Kembali masuk jalur BB + RSI silang 30",
+   "varian": "V1 Nxx pradaftar",
+   "pencipta": "therighttrader (blog)",
+   "sumber": "therighttrader; didaftar dalam standard/registry_n.py",
+   "masuk": "bb_pctb semalam < 0 DAN bb_pctb hari ini > 0 DAN rsi14 silang naik 30; beli pada buka esok.",
+   "keluar": "Lorong 1 = X13: jual pada buka esok apabila rsi14 > 70. Lorong 2 = X15 Chandelier tutup 4xATR14 (automatik, semua posisi). Tiada sasaran untung — KOMBINASI.md mengukur sasaran 1xATR menukar asas +2.595% menjadi -0.281%.",
+   "pegang": "Had 126 bar (= ufuk IMBAS kajian REVERSE). Pegang median yang diukur: 50-64 hari bagi N19/N20/N115, 4 hari bagi N37, 36 hari bagi GB02.",
+   "henti": "Tiada henti dengan sengaja. KOLAM_EKOR.md §4a mengukur henti ketat menghasilkan 421 daripada 1,770 posisi C yang dibeli DAN dihentikan pada hari masuk dengan kadar menang 0.00%; stop = NaN menjadikan kecacatan itu mustahil secara struktur.",
+   "varian_kod": "V1 Nxx pradaftar"
+  },
+  {
+   "id": "N37",
+   "nama": "Gap and go",
+   "varian": "V1 Nxx pradaftar",
+   "pencipta": "Klasik intraday (tiada pencipta tunggal)",
+   "sumber": "amalan umum; versi ambang daripada registry_n.py (gap 2%, volum 1.5x)",
+   "masuk": "buka > tinggi semalam x 1.02 DAN tutup > buka DAN vol_n50 >= 1.5; beli pada buka esok.",
+   "keluar": "Lorong 1 = X13: jual pada buka esok apabila rsi14 > 70. Lorong 2 = X15 Chandelier tutup 4xATR14 (automatik, semua posisi). Tiada sasaran untung — KOMBINASI.md mengukur sasaran 1xATR menukar asas +2.595% menjadi -0.281%.",
+   "pegang": "Had 126 bar (= ufuk IMBAS kajian REVERSE). Pegang median yang diukur: 50-64 hari bagi N19/N20/N115, 4 hari bagi N37, 36 hari bagi GB02.",
+   "henti": "Tiada henti dengan sengaja. KOLAM_EKOR.md §4a mengukur henti ketat menghasilkan 421 daripada 1,770 posisi C yang dibeli DAN dihentikan pada hari masuk dengan kadar menang 0.00%; stop = NaN menjadikan kecacatan itu mustahil secara struktur.",
+   "varian_kod": "V1 Nxx pradaftar"
+  },
+  {
+   "id": "N115",
+   "nama": "Holy Grail (Raschke)",
+   "varian": "V1 Nxx pradaftar",
+   "pencipta": "Linda Raschke",
+   "sumber": "Street Smarts (Connors & Raschke 1995) melalui ringkasan pihak ketiga — teks buku BELUM dibaca, jadi ini SATU versi",
+   "masuk": "adx14 > 30 DAN rendah menyentuh ema20 DAN tutup > tinggi semalam; beli pada buka esok.",
+   "keluar": "Lorong 1 = X13: jual pada buka esok apabila rsi14 > 70. Lorong 2 = X15 Chandelier tutup 4xATR14 (automatik, semua posisi). Tiada sasaran untung — KOMBINASI.md mengukur sasaran 1xATR menukar asas +2.595% menjadi -0.281%.",
+   "pegang": "Had 126 bar (= ufuk IMBAS kajian REVERSE). Pegang median yang diukur: 50-64 hari bagi N19/N20/N115, 4 hari bagi N37, 36 hari bagi GB02.",
+   "henti": "Tiada henti dengan sengaja. KOLAM_EKOR.md §4a mengukur henti ketat menghasilkan 421 daripada 1,770 posisi C yang dibeli DAN dihentikan pada hari masuk dengan kadar menang 0.00%; stop = NaN menjadikan kecacatan itu mustahil secara struktur.",
+   "varian_kod": "V1 Nxx pradaftar"
+  },
+  {
+   "id": "GB02",
+   "nama": "Kesatuan N19 u N37 u N115 (GB02_atau3)",
+   "varian": "V1 Nxx pradaftar",
+   "pencipta": "Gabungan repo (paksi GABUNGAN)",
+   "sumber": "REVERSE/GABUNGAN.md + REVERSE/silang_akhir.csv; pradaftar REVERSE/SPEC_JEJAK_N.md",
+   "masuk": "MANA-MANA SATU daripada N19, N37, N115 benar — KESATUAN (ATAU), bukan penapis (DAN). Isyarat dipilih ikut rank = U14 momentum 12-1 bulan kerana MAKS_KAEDAH mengehadkan 10 isyarat/kaedah/imbasan dan susunan sewenang-wenang menyuntik hingar pemilihan 17.3 mata peratus setahun (KEPEKATAN_BENIH.md).",
+   "keluar": "Lorong 1 = X13: jual pada buka esok apabila rsi14 > 70. Lorong 2 = X15 Chandelier tutup 4xATR14 (automatik, semua posisi). Tiada sasaran untung — KOMBINASI.md mengukur sasaran 1xATR menukar asas +2.595% menjadi -0.281%.",
+   "pegang": "Had 126 bar (= ufuk IMBAS kajian REVERSE). Pegang median yang diukur: 50-64 hari bagi N19/N20/N115, 4 hari bagi N37, 36 hari bagi GB02.",
+   "henti": "Tiada henti dengan sengaja. KOLAM_EKOR.md §4a mengukur henti ketat menghasilkan 421 daripada 1,770 posisi C yang dibeli DAN dihentikan pada hari masuk dengan kadar menang 0.00%; stop = NaN menjadikan kecacatan itu mustahil secara struktur.",
+   "varian_kod": "V1 Nxx pradaftar"
   }
  ]
 }

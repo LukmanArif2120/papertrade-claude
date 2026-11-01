@@ -18,7 +18,10 @@ Kaki MOMENTUM dalam GB02 — `GABUNGAN.md` mendapati yang lulus kesemua gate ial
 KESATUAN merentas keluarga signal (dua momentum + dua pembalikan min), bukan
 persilangan, jadi kaki ini perlu dijejak sendiri untuk mengenal sumbangannya.
 """
-import _nxx as NX
+try:                                  # pemuat produksi letak kod/ pada path,
+    from kaedah import _nxx as NX     # bukan kod/kaedah/ — ikut preseden _k145
+except ImportError:
+    import _nxx as NX
 
 ID = 'N37'
 NAMA = 'Gap and go'

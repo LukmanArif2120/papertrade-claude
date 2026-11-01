@@ -18,7 +18,10 @@ Ia kaki KEEMPAT `GB02_atau4`; `GABUNGAN.md` mengukur `atau4` dan `atau3` hampir
 sama (jangkaan +4.944% lawan +5.025%), jadi ia dijejak berasingan untuk melihat
 sama ada menambahnya membantu ke hadapan.
 """
-import _nxx as NX
+try:                                  # pemuat produksi letak kod/ pada path,
+    from kaedah import _nxx as NX     # bukan kod/kaedah/ — ikut preseden _k145
+except ImportError:
+    import _nxx as NX
 
 ID = 'N20'
 NAMA = 'Kembali masuk jalur BB + RSI silang 30'

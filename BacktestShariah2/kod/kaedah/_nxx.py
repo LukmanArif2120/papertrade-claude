@@ -123,6 +123,27 @@ def x13(f):
     return f.rsi14 > 70
 
 
+def u14(g):
+    """`U14` momentum 12-1 bulan = C[-21] / C[-252] - 1. step27_keluar_portfolio.py:56.
+
+    Dipakai sebagai `rank` kerana `harian_c.MAKS_KAEDAH` mengehadkan 10 isyarat baharu
+    setiap kaedah setiap imbasan dan memilih ikut `rank`. Dengan `rank = 0` pemilihan
+    antara isyarat menjadi **sewenang-wenang**, dan `KEPEKATAN_BENIH.md` mengukur hingar
+    pemilihan susunan sewenang-wenang pada **17.3 mata peratus setahun** pada 8 slot.
+    `SISTEM.md` mengukur bahawa memeringkat ikut skor objektif BERTERUSAN memberi sebaran
+    benih **0.00**, jadi pemeringkat berterusan menghapuskan hingar itu.
+
+    `U14` dipilih kerana (a) ia pemeringkat terbaik dalam E6 (`HIERARKI.md`: setiap pemenang
+    `E6a` memakai U14) dan (b) ia boleh dikira daripada harga sahaja. `U02` (RS pasaran)
+    memberi CAGR lebih tinggi bagi `GB02 x X13` dalam `portfolio_n_ringkas.csv` (16.12 lawan
+    11.93 pada 8 slot) tetapi RS tidak tersedia dalam `sedia(fr, idx)` yang hanya menerima
+    harga, jadi U14 ialah pilihan terbaik yang boleh dilaksanakan di sini.
+    """
+    c = g.close
+    s = c.shift(21) / c.shift(252) - 1.0
+    return s.replace([np.inf, -np.inf], np.nan).fillna(-9e9)
+
+
 def pasang(g, masuk, nama_rank=None):
     """Tulis lajur enjin v1.2. TIADA henti dan TIADA sasaran dengan sengaja:
 
@@ -133,13 +154,16 @@ def pasang(g, masuk, nama_rank=None):
 
     Lorong 2 repo (Chandelier tutup 4xATR14) = `X15` kajian dan berjalan automatik pada
     setiap posisi, jadi X13 dan X15 terukur BERSEBELAHAN tanpa kod tambahan.
+
+    `rank` = `u14()` dan BUKAN 0.0 — lihat `u14` untuk sebabnya (hingar pemilihan 17.3
+    mata/tahun kalau susunan sewenang-wenang).
     """
     f = indikator(g)
     g['sig'] = masuk.fillna(False).astype(bool)
     g['stop'] = np.nan
     g['tgt'] = np.nan
     g['exitc'] = x13(f).fillna(False).astype(bool)
-    g['rank'] = 0.0 if nama_rank is None else f[nama_rank].fillna(0.0).astype('float64')
+    g['rank'] = u14(g) if nama_rank is None else f[nama_rank].fillna(-9e9).astype('float64')
     return f
 
 

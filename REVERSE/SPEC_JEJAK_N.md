@@ -26,9 +26,31 @@ yang rawak tulen sebagai kawalan. Bar kemasukan ke Papertrade C dalam repo ini i
 | HENTI | **tiada** (`stop = NaN`) | kecacatan hari-0 mustahil secara struktur |
 | SASARAN | **tiada** (`tgt = NaN`) | sasaran 1×ATR menukar asas +2.595% → −0.281% |
 | TMAX | 126 bar | = `IMBAS` kajian; tiada dagangan melebihi yang diukur |
+| URUTAN | `U14` momentum 12−1 bulan sebagai `rank` | lihat §2a |
 
 Empat kaki dijejak **berasingan** juga (`N19`, `N20`, `N37`, `N115`) supaya sumbangan setiap
 satu boleh dibaca, dan kerana `N20` ialah kaki keempat `GB02_atau4` yang hampir sama baik.
+
+### 2a. Mengapa `rank` bukan 0
+
+`harian_c.MAKS_KAEDAH = 10` mengehadkan **10 isyarat baharu setiap kaedah setiap imbasan**
+dan memilih antara isyarat ikut lajur `rank`. Ujian asap mengukur `GB02` memberi ~30
+isyarat/sesi, jadi had itu **mengikat**. Dengan `rank = 0` pemilihan antara 30 isyarat
+menjadi **sewenang-wenang**, dan `KEPEKATAN_BENIH.md` mengukur hingar pemilihan merentas
+susunan sewenang-wenang pada **17.3 mata peratus setahun** pada 8 slot. Itu lebih besar
+daripada apa-apa kelebihan yang kajian ini pernah ukur, jadi `rank = 0` akan menenggelamkan
+isyarat dalam hingar pelaksanaan.
+
+`SISTEM.md` mengukur penyelesaiannya: sistem yang memeringkat ikut **skor objektif
+berterusan** mempunyai sebaran benih **0.00 mata**. Jadi `rank` = `U14` momentum 12−1 bulan
+(`C[-21] / C[-252] − 1`, formula `step27_keluar_portfolio.skor_pangkat` verbatim).
+
+`U14` dipilih kerana ia pemeringkat terbaik dalam E6 (setiap pemenang `E6a` memakainya) DAN
+boleh dikira daripada harga sahaja. `U02` (RS pasaran) sebenarnya lebih baik untuk
+`GB02 × X13` dalam `portfolio_n_ringkas.csv` (CAGR 16.12 lawan 11.93 pada 8 slot), tetapi
+`sedia(fr, idx)` hanya menerima harga — RS ditulis oleh workflow berasingan dan tidak
+tersedia di dalam modul. Jadi ini pilihan **terbaik yang boleh dilaksanakan**, bukan
+terbaik mutlak, dan itu had yang direkod.
 
 **Dua lorong keluar repo memberi `X13` dan `X15` terukur bersebelahan tanpa kod tambahan.**
 Itu kebetulan yang berguna: lorong 2 repo *ialah* `X15` kajian, bit untuk bit.
@@ -96,8 +118,11 @@ Lulus **tidak** bermakna sedia untuk wang sebenar; ia bermakna layak untuk ujian
 - Kolam 12 signal `GABUNGAN.md` dipilih daripada data yang sama, jadi `GB02` **bersyarat**.
 - Teks `Street Smarts` belum dibaca; `N115` daripada ringkasan pihak ketiga = SATU versi.
 - `TMAX = 126` mengikat 4–15% dagangan dalam ujian asap, jadi ia bukan kekangan kosong.
-- Jejak ini tidak menguji **saiz**, **slot**, **urutan** atau **imbang**. Ia menguji
-  masuk+pegang+keluar sahaja.
+- Jejak ini tidak menguji **saiz**, **slot** atau **imbang**. Paksi **urutan** dikunci
+  `U14` (§2a) dan tidak diuji — ia dipilih untuk menghapuskan hingar pemilihan, bukan
+  untuk diukur.
+- `U02` (RS) lebih baik tetapi tidak boleh dicapai dari dalam `sedia()`. Kalau RS
+  disediakan kepada modul kemudian, `U14` patut ditukar dan jejak dimulakan semula.
 
 ## 7. Pengesahan yang SUDAH dibuat sebelum spec ini dikomit
 
@@ -116,3 +141,17 @@ Lulus **tidak** bermakna sedia untuk wang sebenar; ia bermakna layak untuk ujian
    `N115` 67.1% / +6.21%.
 4. **Henti hari-0 = 0 pada setiap modul**, dan dagangan ≤ 1 hari = 0.0–1.2%. Kecacatan
    `KOLAM_EKOR.md` §4a tidak hadir, mengikut binaan.
+5. **Larian hujung-ke-hujung saluran produksi ke folder sandbox**, bukan ke
+   `papertrade/`. Larian pertama mendedahkan pepijat yang kesemua ujian unit saya
+   **terlepas**: pemuat produksi meletakkan `kod/` pada `sys.path` dan memanggil
+   `importlib.import_module('kaedah.N19')`, jadi `kod/kaedah/` **tidak** pada path dan
+   `import _nxx` gagal dengan `ModuleNotFoundError` pada kesemua lima kaedah — ujian saya
+   lulus kerana ia meletakkan `kod/kaedah/` pada path sendiri. Dibetulkan dengan pola
+   `try: from kaedah import _nxx / except ImportError: import _nxx` (preseden `_k145.py`),
+   dan `test_import_seperti_produksi` kini mengimport melalui subproses dengan path yang
+   **tepat** seperti produksi supaya kelas pepijat itu tidak boleh kembali.
+
+   **Pelajaran kaedah, kedua dalam kajian ini:** `GABUNGAN.md` sudah menetapkan "ujian asap
+   mesti merangkumi KOMBINASI masuk+keluar, bukan komponen". Tambahan sekarang: **ujian mesti
+   merangkumi LALUAN IMPORT produksi, bukan laluan import ujian.** Ujian yang menyiapkan
+   persekitarannya sendiri boleh lulus sambil produksi gagal sepenuhnya.
