@@ -47,7 +47,7 @@ def bina_jadual(panel=None, keluar=JADUAL):
         raise SystemExit(f'panel tiada: {panel}\nbina dengan: python3 REVERSE/step22_ekor.py --panel')
 
     print('muat panel...', flush=True)
-    P = pq.read_table(panel, columns=['ticker', 'date', 'nilai20', 'atr_pct',
+    P = pq.read_table(panel, columns=['ticker', 'date', 'nilai20', 'atr_pct', 'atr14',
                                       'mfe_cl21', 'mae_cl21', 'term21']).to_pandas()
     P = P[P.nilai20.to_numpy() >= 100_000.0]
     th = P.date.dt.year.to_numpy()
@@ -56,6 +56,24 @@ def bina_jadual(panel=None, keluar=JADUAL):
     print('kira sasaran 5 hari...', flush=True)
     H5 = _sasaran5(sorted(set(P.ticker)), P)
     P = P.merge(H5, on=['ticker', 'date'], how='left')
+
+    print('simulasi paras MENAIK (lorong 2) setiap ufuk...', flush=True)
+    R = P.sort_values(['ticker', 'date']).reset_index(drop=True)
+    _tk = R.ticker.to_numpy()
+    _o = R.get('buka_mentah')
+    if _o is None:
+        RAW = _harga_mentah()
+        R = R.merge(RAW, on=['ticker', 'date'], how='left')
+    _o = R.buka_mentah.to_numpy('float64')
+    _c = R.tutup_mentah.to_numpy('float64')
+    _a = R.atr14.to_numpy('float64')
+    PT_ = {}
+    for Hf in UFUK:
+        PT_[Hf] = _p_tercetus(R.ticker.to_numpy(), _o, _c, _a, Hf, GRID_MAE)
+        print(f'  H={Hf} siap', flush=True)
+    R['desil_'] = (R.groupby('date', observed=True).atr_pct
+                   .rank(pct=True, method='first').mul(NDESIL).clip(upper=NDESIL - 1e-9)
+                   .astype('int8'))
 
     print('desil atr_pct keratan rentas dalam tarikh...', flush=True)
     P['desil'] = (P.groupby('date', observed=True).atr_pct
@@ -91,7 +109,10 @@ def bina_jadual(panel=None, keluar=JADUAL):
                 'mfe50': round(float(np.median(x) * 100), 3),
                 'mae50': round(float(np.median(m) * 100), 3),
                 # P(MAE <= ambang) bagi setiap ambang grid -> boleh disongsang untuk sebarang jarak
-                'p_sentuh': [round(float((m * 100 <= g).mean() * 100), 2) for g in GRID_MAE],
+                # P(paras MENAIK tercetus) — peristiwa sebenar lorong 2, bukan halangan tetap
+                'p_sentuh': [round(float(PT_[H][gi][(R.desil_ == d).to_numpy()].mean() * 100), 2)
+                             for gi in range(len(GRID_MAE))],
+                'p_tetap': [round(float((m * 100 <= g).mean() * 100), 2) for g in GRID_MAE],
             }
         print(f'  H={H}: {sum(1 for k in jad["sel"] if k.startswith(f"{H}|"))} desil', flush=True)
 
@@ -100,6 +121,47 @@ def bina_jadual(panel=None, keluar=JADUAL):
         json.dump(jad, f, separators=(',', ':'), sort_keys=True)
     print(f'ditulis {keluar} ({os.path.getsize(keluar):,} bait)')
     return jad
+
+
+def _p_tercetus(tk, o, c, atr, H, grid):
+    """P(paras lorong 2 tercetus dalam H hari) bagi setiap bar, setiap ambang grid.
+
+    Paras lorong 2 MENAIK: paras_j = max(paras_{j-1}, puncak_j - 4 x ATR14_j), puncak = tutup
+    tertinggi sejak masuk; tercetus bila tutup < paras. Halangan tetap (P(MAE <= g)) menilai
+    peristiwa yang SALAH dan memberi had bawah — diukur 1.68x terlalu rendah pada keadaan
+    median posisi langsung, 2.70x pada desil 9.
+
+    Masuk buka t+1; paras awal = buka(t+1) x (1 + g/100) supaya ia sepadan dengan `jarak` langsung.
+    Pulangkan array (len(grid), n) boolean.
+    """
+    n = c.size
+    GANDA = 4.0
+    out = np.zeros((len(grid), n), dtype=bool)
+    if n < H + 1:
+        return out
+    idx = np.arange(0, n - H)
+    j0 = idx + 1
+    sah = (tk[j0 + H - 1] == tk[idx]) & np.isfinite(o[j0]) & (o[j0] > 0)
+    masuk = np.where(sah, o[j0], np.nan)
+    puncak = np.full(idx.size, -np.inf)
+    M = np.full(idx.size, -np.inf)           # max sejauh ini bagi (puncak - 4 x ATR)
+    paras0 = [masuk * (1.0 + g / 100.0) for g in grid]
+    hidup = [sah.copy() for _ in grid]
+    tercetus = [np.zeros(idx.size, dtype=bool) for _ in grid]
+    for step in range(H):
+        jj = j0 + step
+        cj, aj = c[jj], atr[jj]
+        puncak = np.maximum(puncak, np.where(np.isfinite(cj), cj, -np.inf))
+        with np.errstate(invalid='ignore'):
+            cand = puncak - GANDA * np.where(np.isfinite(aj), aj, np.inf)
+        M = np.maximum(M, cand)
+        for gi in range(len(grid)):
+            lvl = np.maximum(paras0[gi], M)
+            kena = hidup[gi] & ~tercetus[gi] & np.isfinite(cj) & (cj < lvl)
+            tercetus[gi] |= kena
+    for gi in range(len(grid)):
+        out[gi, idx] = tercetus[gi] & sah
+    return out
 
 
 def _sasaran5(tickers, P):
@@ -142,6 +204,16 @@ def _sasaran5(tickers, P):
 
 
 # ---------------------------------------------------------------- peringkat 2
+def _harga_mentah():
+    """buka/tutup mentah A02 2012-2025 untuk simulasi paras (panel tidak menyimpannya)."""
+    import pandas as pd
+    src = os.path.join(AKAR, 'AUTOTUNE', '.cache_autotune-data-a02')
+    bhg = [pd.read_parquet(os.path.join(src, f'harga_{y}.parquet'), columns=['ticker', 'date', 'open', 'close'])
+           for y in range(2012, 2026) if os.path.exists(os.path.join(src, f'harga_{y}.parquet'))]
+    df = pd.concat(bhg, ignore_index=True)
+    return df.rename(columns={'open': 'buka_mentah', 'close': 'tutup_mentah'})
+
+
 def muat_jadual(p=JADUAL):
     with open(p) as f:
         return json.load(f)
@@ -200,12 +272,25 @@ def dokumen(H, l2rows, folder=None, jadual=None):
         keadaan[kunci] = (float(ap[-1]), (b[2] / b[1] - 1.0) * 100.0)
     if not keadaan:
         return dict(rows=[], ndesil=NDESIL, kuantil=list(KUANTIL), ufuk=list(UFUK))
+    # Desil mesti dikira dengan cara yang SAMA seperti jadual dibina: pangkat keratan rentas
+    # dalam tarikh merentas ALAM, bukan nilai mutlak terhadap tepi (persetujuan hanya 33.3%;
+    # pada Mac-April 2020, 96% bar memetakan ke desil 8/9 secara mutlak) dan bukan pangkat
+    # antara POSISI (set papertrade condong ke nama bergolak).
+    AP = []
+    for g in H.values():
+        if g is None or len(g) < 20:
+            continue
+        a = _atr_pct(*(g[k].to_numpy(float) for k in ('high', 'low', 'close')))
+        if len(a) and np.isfinite(a[-1]):
+            AP.append(float(a[-1]))
+    AP = np.sort(np.asarray(AP, dtype='float64'))
     tepi = jad.get('atr_pct_tepi') or []
     rows = []
     for kunci, (ap, jarak) in sorted(keadaan.items()):
-        # desil ikut NILAI atr_pct terhadap tepi alam A02 — bukan pangkat antara posisi hari ini,
-        # kerana set papertrade condong ke nama bergolak dan pangkat tempatan akan salah petak
-        d = int(np.searchsorted(np.asarray(tepi, dtype='float64'), ap, side='right')) if tepi else 0
+        if AP.size:
+            d = int(np.searchsorted(AP, ap, side='right') / AP.size * NDESIL)
+        else:
+            d = int(np.searchsorted(np.asarray(tepi, dtype='float64'), ap, side='right')) if tepi else 0
         d = max(0, min(NDESIL - 1, d))
         u, ps = {}, {}
         for Hf in UFUK:

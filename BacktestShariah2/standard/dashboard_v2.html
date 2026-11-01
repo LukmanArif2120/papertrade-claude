@@ -3365,13 +3365,15 @@ function jlSvg(v,harga,W){const H=168,ml=46,mr=58,mt=12,mb=22,UF=[5,21];
   return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img">${g}</svg>`;}
 function jlPos(r){const m=jlMap(),v=m&&m.get(l2Key(r));if(!v)return '';
   const p5=v.ps&&v.ps['5'],p21=v.ps&&v.ps['21'],q=v.u['21']||v.u['5'];
-  const kuat=p21!=null&&p21>=50?'neg-tx':p21!=null&&p21<=20?'pos':'';
+  /* tiada baldi 'hijau/selamat': dengan paras MENAIK tiada keadaan langsung mencapai <=20%
+     (diukur 0 daripada 3,883 posisi), jadi warna hijau akan menjanjikan sesuatu yang mustahil */
+  const kuat=p21!=null&&p21>=50?'neg-tx':'';
   return `<div class="sec"><h4>Jalur jangkaan ke hadapan</h4>
   <div class="jlw" data-k="${esc(l2Key(r))}"></div>
   <div class="lgl"><span><i class="lg-j8"></i>p25–p75 (separuh tengah)</span><span><i class="lg-j5"></i>p10–p90</span><span><i class="lg-l2"></i>Paras lorong 2</span></div>
   <p class="mut">Saham dalam desil turun naik yang sama (ATR14 ${fx(v.atr,2)}%, desil ${v.d+1}/10) secara sejarah berada antara
   <b>${q[0].toFixed(1)}%</b> dan <b>${q[4].toFixed(1)}%</b> selepas 21 hari, median <b>${q[2]>0?'+':''}${q[2].toFixed(1)}%</b>.
-  ${p21!=null?`Pada jarak semasa ${v.jarak.toFixed(2)}%, paras lorong 2 disentuh dalam <b class="${kuat}">${p21.toFixed(0)}%</b> kes dalam 21 hari${p5!=null?` (${p5.toFixed(0)}% dalam 5 hari)`:''}.`:''}</p>
+  ${v.jarak>=0?`Tutup sudah di bawah paras — <b class="neg-tx">jual pada buka esok</b>.`:p21!=null?`Pada jarak semasa ${v.jarak.toFixed(2)}%, paras lorong 2 tercetus dalam <b class="${kuat}">${p21.toFixed(0)}%</b> kes dalam 21 hari${p5!=null?` (${p5.toFixed(0)}% dalam 5 hari)`:''} — paras yang <b>menaik</b> disimulasikan, bukan halangan tetap.`:''}</p>
   <p class="mut sm">Kekerapan bersyarat daripada 8.5 juta bar 2012–2025, <b>bukan ramalan arah</b>: siling ketepatan arah 5 hari diukur 51.55% lawan asas 50.50% (<code>REVERSE/SILING_ARAH.md</code>). Yang diramal ialah lebar, bukan arah.</p></div>`;}
 function rpPos(r){const m=l2Map(),A=m&&m.get(l2Key(r));if(!A||!A.length)return '';const Sr=rpHad(A);
   return `<div class="sec"><h4 data-tip="keluar_henti">Ulang tayang lorong 2</h4><div class="rpw" id="rpPos" data-k="${esc(l2Key(r))}" data-hb="${nomb(r.harga_beli)||''}"><div class="rpsvg"></div><div class="lgl">${LGL}<span><i class="lg-pk"></i>Tutup tertinggi sejak beli</span></div><p class="rpcap"></p>
