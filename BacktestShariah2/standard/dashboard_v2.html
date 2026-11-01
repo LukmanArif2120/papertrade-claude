@@ -752,7 +752,7 @@ body.padat .tablewrap td .l2bar{display:inline-block;margin-top:0}
 /* petunjuk carta candlestick */
 .lgl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:.7rem;color:var(--muted);margin:2px 0 4px}.lgl span{display:inline-flex;align-items:center;gap:5px}
 .lgl i{display:inline-block;width:14px;height:0;border-top:2px solid}.lgl .lg-c{width:10px;height:10px;border:0;background:linear-gradient(90deg,var(--pos) 0 50%,var(--neg) 50%);border-radius:1px}
-.lgl .lg-l2{border-color:#fb923c;border-top-width:2.5px}.lgl .lg-pk{border-top:1.5px dashed var(--fg-2)}.lgl .lg-hb{border-top:1.5px dashed var(--muted)}
+.lgl .lg-l2{border-color:#fb923c;border-top-width:2.5px}.lgl .lg-j5{width:10px;height:10px;border:0;background:var(--accent-soft);border-radius:1px}.lgl .lg-j8{width:10px;height:10px;border:0;background:var(--accent);opacity:.35;border-radius:1px}.lgl .lg-pk{border-top:1.5px dashed var(--fg-2)}.lgl .lg-hb{border-top:1.5px dashed var(--muted)}
 /* status trend v103: Bearish lama diisi penuh (satu-satunya amaran pada pill); tiada status / diambil alih kelabu */
 .tr-dn.tr-isi{background:var(--neg);color:#fff;border-color:var(--neg)}
 .tr-x{color:var(--muted);background:transparent;border-color:var(--line-2)}
@@ -2401,10 +2401,12 @@ function openPos(id){const r=posRows('gab').find(x=>x._p===id);if(!r)return;cons
     ${trSec(r.saham)}
     ${stSec(r.saham)}
     ${rpPos(r)}
+    ${jlPos(r)}
     <div class="sec"><h4 data-tip="gred">Gred pada hari isyarat</h4>${gredList(r)}</div>
     <div class="acts"><button type="button" class="btn" data-kd="${esc(r.kaedah)}">Lihat kaedah ${esc(r.kaedah)}</button><button type="button" class="btn ghost" data-tutup>Tutup</button></div>`);
   {const bx=$('#posSpark');if(bx){const W=Math.max(260,bx.clientWidth||340);if(!lilinPos(bx,r,W)){bx.innerHTML=sparkPos(r,W,120,1);silangSpark(bx,r,W);}}}
-  {const rp=$('#rpPos'),m=l2Map();if(rp&&m&&m.get(rp.dataset.k))initRp(rp,m.get(rp.dataset.k));}}
+  {const rp=$('#rpPos'),m=l2Map();if(rp&&m&&m.get(rp.dataset.k))initRp(rp,m.get(rp.dataset.k));}
+  {const jw=document.querySelector('.jlw'),jm=jlMap();if(jw&&jm&&jm.get(jw.dataset.k)){const W=Math.max(260,jw.clientWidth||340);jw.innerHTML=jlSvg(jm.get(jw.dataset.k),null,W);}}}
 function openWatch(i){const r=watchRows()[i];if(!r)return;const lk=wLengkap(r)?wBeli(r):null;
   sheet(`<div class="lbl">Watchlist · Hampir Signal${r.sektor?' · '+esc(r.sektor):''}${r.industri?' · '+esc(r.industri):''}</div>
     <h3 id="shTitle">${esc(r.saham)} · ${esc(r.kaedah)}</h3><p class="sub" style="margin-top:2px">${esc(r.nama||'')}</p>
@@ -3326,6 +3328,51 @@ function lilinPos(bx,r,W){const m=l2Map(),A=m&&m.get(l2Key(r)),ib=A?A.findIndex(
   return true;}
 let L2M=null,L2R=null;const l2Map=()=>{if(!S.l2s)return null;if(L2R!==S.l2s){L2R=S.l2s;L2M=new Map((S.l2s.rows||[]).map(x=>[x[0],x[1]]));}return L2M;};
 const l2Key=r=>`${r.saham}|${r.tarikh_beli}`;
+/* --- jalur jangkaan ke hadapan (carta kedua helaian posisi); posisi/jalur daripada standard/jalur_jangka.py
+   {rows:[["saham|tarikh_beli",{d,atr,jarak,u:{"5":[q10,q25,q50,q75,q90],"21":[...]},ps:{"5":p,"21":p}}]]}
+   BUKAN ramalan arah: REVERSE/SILING_ARAH.md ukur siling ketepatan arah 5 hari 51.55% lawan asas 50.50%,
+   dan pilihan paling yakin memperoleh KURANG daripada membeli semua bar. Yang diramal ialah LEBAR. */
+let JLM=null,JLR=null;const jlMap=()=>{if(!S.jlr)return null;if(JLR!==S.jlr){JLR=S.jlr;JLM=new Map((S.jlr.rows||[]).map(x=>[x[0],x[1]]));}return JLM;};
+function jlSvg(v,harga,W){const H=168,ml=46,mr=58,mt=12,mb=22,UF=[5,21];
+  const qs=UF.map(h=>v.u[String(h)]).filter(Boolean);if(!qs.length)return '';
+  const jar=v.jarak;
+  let lo=Math.min(...qs.flat(),jar!=null?jar:0),hi=Math.max(...qs.flat(),0);const pad=(hi-lo)*0.10||1;lo-=pad;hi+=pad;
+  const pw=W-ml-mr,y=p=>mt+(H-mt-mb)*(hi-p)/(hi-lo),x=i=>ml+pw*(i+1)/(UF.length+ (0));
+  /* paksi: hari 0 di kiri, ufuk tersusun ke kanan */
+  /* paksi masa LINEAR: 5 dan 21 hari diletak berkadar, bukan jarak sama */
+  const mx=UF[UF.length-1],X=[ml].concat(UF.map(h=>ml+pw*h/mx));
+  let g='';
+  for(let k=0;k<=4;k++){const p=lo+pad+(hi-lo-2*pad)*k/4;g+=`<line x1="${ml}" x2="${W-mr}" y1="${y(p).toFixed(1)}" y2="${y(p).toFixed(1)}" stroke="var(--line)"/><text x="${ml-5}" y="${(y(p)+4).toFixed(1)}" text-anchor="end" class="skt">${p>0?'+':''}${p.toFixed(0)}%</text>`;}
+  /* kipas: p10-p90 luar, p25-p75 dalam; bermula dari 0% pada hari 0 */
+  const band=(a,b,op)=>{let d=`M${X[0]},${y(0).toFixed(1)}`;UF.forEach((h,i)=>{const q=v.u[String(h)];if(q)d+=`L${X[i+1].toFixed(1)},${y(q[a]).toFixed(1)}`;});
+    for(let i=UF.length-1;i>=0;i--){const q=v.u[String(UF[i])];if(q)d+=`L${X[i+1].toFixed(1)},${y(q[b]).toFixed(1)}`;}
+    d+='Z';return `<path d="${d}" fill="var(--accent)" opacity="${op}"/>`;};
+  g+=band(0,4,.16)+band(1,3,.30);
+  /* median */
+  let md=`M${X[0]},${y(0).toFixed(1)}`;UF.forEach((h,i)=>{const q=v.u[String(h)];if(q)md+=`L${X[i+1].toFixed(1)},${y(q[2]).toFixed(1)}`;});
+  g+=`<path d="${md}" fill="none" stroke="var(--bg)" stroke-width="4.5" opacity=".7"/><path d="${md}" fill="none" stroke="var(--accent)" stroke-width="2.2"/>`;
+  g+=`<line x1="${ml}" x2="${W-mr}" y1="${y(0).toFixed(1)}" y2="${y(0).toFixed(1)}" stroke="var(--muted)" stroke-dasharray="3 3"/>`;
+  /* paras lorong 2 */
+  if(jar!=null){g+=`<line x1="${ml}" x2="${W-mr}" y1="${y(jar).toFixed(1)}" y2="${y(jar).toFixed(1)}" stroke="#fb923c" stroke-width="2"/>`
+    +`<text x="${ml+6}" y="${Math.min(H-mb-3,y(jar)+13).toFixed(1)}" class="skt" fill="#fb923c">paras lorong 2 ${jar.toFixed(1)}%</text>`;}
+  UF.forEach((h,i)=>{const q=v.u[String(h)];if(!q)return;const akhir=i===UF.length-1;
+    g+=`<text x="${X[i+1].toFixed(1)}" y="${H-6}" text-anchor="${akhir?'end':'middle'}" class="skt">${h} hari</text>`;
+    if(!akhir){g+=`<line x1="${X[i+1].toFixed(1)}" x2="${X[i+1].toFixed(1)}" y1="${y(q[4]).toFixed(1)}" y2="${y(q[0]).toFixed(1)}" stroke="var(--muted)" stroke-dasharray="2 3" opacity=".7"/>`;return;}
+    g+=`<text x="${W-mr+4}" y="${(y(q[4])+4).toFixed(1)}" class="skt">p90 ${q[4]>0?'+':''}${q[4].toFixed(0)}%</text>`
+     +`<text x="${W-mr+4}" y="${(y(q[0])+4).toFixed(1)}" class="skt">p10 ${q[0].toFixed(0)}%</text>`
+     +`<text x="${W-mr+4}" y="${(y(q[2])+4).toFixed(1)}" class="skt" fill="var(--accent)">p50 ${q[2]>0?'+':''}${q[2].toFixed(1)}%</text>`;});
+  g+=`<text x="${ml}" y="${H-6}" class="skt">hari 0</text>`;
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img">${g}</svg>`;}
+function jlPos(r){const m=jlMap(),v=m&&m.get(l2Key(r));if(!v)return '';
+  const p5=v.ps&&v.ps['5'],p21=v.ps&&v.ps['21'],q=v.u['21']||v.u['5'];
+  const kuat=p21!=null&&p21>=50?'neg-tx':p21!=null&&p21<=20?'pos':'';
+  return `<div class="sec"><h4>Jalur jangkaan ke hadapan</h4>
+  <div class="jlw" data-k="${esc(l2Key(r))}"></div>
+  <div class="lgl"><span><i class="lg-j8"></i>p25–p75 (separuh tengah)</span><span><i class="lg-j5"></i>p10–p90</span><span><i class="lg-l2"></i>Paras lorong 2</span></div>
+  <p class="mut">Saham dalam desil turun naik yang sama (ATR14 ${fx(v.atr,2)}%, desil ${v.d+1}/10) secara sejarah berada antara
+  <b>${q[0].toFixed(1)}%</b> dan <b>${q[4].toFixed(1)}%</b> selepas 21 hari, median <b>${q[2]>0?'+':''}${q[2].toFixed(1)}%</b>.
+  ${p21!=null?`Pada jarak semasa ${v.jarak.toFixed(2)}%, paras lorong 2 disentuh dalam <b class="${kuat}">${p21.toFixed(0)}%</b> kes dalam 21 hari${p5!=null?` (${p5.toFixed(0)}% dalam 5 hari)`:''}.`:''}</p>
+  <p class="mut sm">Kekerapan bersyarat daripada 8.5 juta bar 2012–2025, <b>bukan ramalan arah</b>: siling ketepatan arah 5 hari diukur 51.55% lawan asas 50.50% (<code>REVERSE/SILING_ARAH.md</code>). Yang diramal ialah lebar, bukan arah.</p></div>`;}
 function rpPos(r){const m=l2Map(),A=m&&m.get(l2Key(r));if(!A||!A.length)return '';const Sr=rpHad(A);
   return `<div class="sec"><h4 data-tip="keluar_henti">Ulang tayang lorong 2</h4><div class="rpw" id="rpPos" data-k="${esc(l2Key(r))}" data-hb="${nomb(r.harga_beli)||''}"><div class="rpsvg"></div><div class="lgl">${LGL}<span><i class="lg-pk"></i>Tutup tertinggi sejak beli</span></div><p class="rpcap"></p>
   <div class="rpk"><button type="button" class="btn ghost" data-rpa="main">▶ Main</button><button type="button" class="btn ghost" data-rpa="kiri" aria-label="Sesi sebelum">◀</button><input type="range" min="0" max="${Sr.length-1}" value="${Sr.length-1}" aria-label="Pilih sesi"><button type="button" class="btn ghost" data-rpa="kanan" aria-label="Sesi seterusnya">▶</button></div></div></div>`;}
@@ -4174,7 +4221,7 @@ renderNav();renderAll();
   sub('sektor/snapshot','sektor',['sektor']);
   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
   sub('prestasi/mae','mae',['prestasi']);subBhg('prestasi/mae_atr','maeAtr',['prestasi']);
-  subBhg('prestasi/garis','garis',['utama','ptc','prestasi']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['prestasi']);subBhg('posisi/lorong2','l2s',['ptc']);subBhg('harian/trend','trend',['ptc','watch']);subBhg('harian/stage','stage',['ptc','watch']);
+  subBhg('prestasi/garis','garis',['utama','ptc','prestasi']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['prestasi']);subBhg('posisi/lorong2','l2s',['ptc']);subBhg('posisi/jalur','jlr',['ptc']);subBhg('harian/trend','trend',['ptc','watch']);subBhg('harian/stage','stage',['ptc','watch']);
   sub('prestasi/portfolio_slot','pslot',['utama','prestasi']);
   sub('analisis/papan','anl',['analisis']);
   sub('kaedah_n/papan','kn',['kaedahn']);

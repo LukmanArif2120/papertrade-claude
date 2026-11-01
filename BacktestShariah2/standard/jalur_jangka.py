@@ -62,10 +62,17 @@ def bina_jadual(panel=None, keluar=JADUAL):
                   .rank(pct=True, method='first').mul(NDESIL).clip(upper=NDESIL - 1e-9)
                   .astype('int8'))
 
+    # tepi desil atr_pct: dikira setiap tarikh kemudian dipuratakan (median) merentas tarikh,
+    # supaya padanan masa-larian boleh ikut NILAI atr_pct dan bukan pangkat tempatan
+    tepi_hari = (P.groupby('date', observed=True).atr_pct
+                 .quantile([i / NDESIL for i in range(1, NDESIL)]).unstack())
+    tepi = [round(float(v), 4) for v in tepi_hari.median().to_numpy()]
+
     jad = {'nota': ('Kuantil pulangan hadapan bersyarat desil atr_pct keratan rentas. '
                     'Bukan ramalan arah; lihat REVERSE/SILING_ARAH.md.'),
            'alam': 'autotune-data-a02 2012-2025, bar cair nilai20 >= USD100k',
            'ndesil': NDESIL, 'kuantil': list(KUANTIL), 'grid_mae': list(GRID_MAE),
+           'atr_pct_tepi': tepi,
            'ufuk': list(UFUK), 'sel': {}}
 
     for H in UFUK:
@@ -159,57 +166,62 @@ def _atr_pct(h, l, c, n=14):
         return a / np.where(c == 0, np.nan, c) * 100.0
 
 
-def dokumen(H, folder=None, jadual=None):
-    """Dokumen db posisi/jalur.
+def dokumen(H, l2rows, folder=None, jadual=None):
+    """Dokumen db posisi/jalur. Hanya posisi yang MASIH DIPEGANG (jalur ke hadapan).
 
-    rows: ["saham|tarikh_beli", {d:desil, atr:atr_pct, u:{"5":[...],"21":[...]}, ps:{"5":p,"21":p}}]
-    Jalur `u` ialah kuantil pulangan terminal (%) ikut KUANTIL; `ps` ialah P(paras lorong 2
-    disentuh) pada jarak semasa. Desil dikira merentas keratan rentas posisi HARI INI, bukan
-    merentas sejarah, supaya ia sepadan dengan cara jadual ditanam.
+    H       : {saham: DataFrame date/open/high/low/close} seperti trend_status.muat_harga
+    l2rows  : rows daripada lorong2_siri.dokumen() — siri digunakan semula, tidak dikira semula
+
+    rows: ["saham|tarikh_beli", {d, atr, jarak, u:{"5":[q10..q90],"21":[...]}, ps:{"5":p,"21":p}}]
+    `u`  = kuantil pulangan terminal (%) bagi desil atr_pct yang sama — kekerapan bersyarat.
+    `ps` = P(paras lorong 2 disentuh dalam ufuk itu) pada jarak semasa, daripada taburan MAE.
+    Desil dikira merentas keratan rentas posisi HARI INI, sepadan dengan cara jadual ditanam.
     """
-    import lorong2_siri as L2
-    from trend_status import PT
     jad = jadual or muat_jadual()
-    folder = folder or PT
-    P = L2.posisi(folder)
-    # atr_pct semasa + jarak ke paras bagi setiap siri unik saham|tarikh_beli
     keadaan = {}
-    for kunci, A in (L2.dokumen(H, folder).get('rows') or []):
+    for kunci, A in (l2rows or []):
         if not A:
             continue
-        saham = kunci.split('|')[0]
-        g = H.get(saham) if hasattr(H, 'get') else None
+        b = A[-1]
+        if b[4] in ('jual', 'lepas'):      # sudah keluar lorong 2
+            continue
+        if b[2] is None or not b[1]:       # belum ada paras (sebelum beli)
+            continue
+        g = H.get(kunci.split('|')[0])
         if g is None or not len(g):
             continue
         hh, ll, cc = (g[k].to_numpy(float) for k in ('high', 'low', 'close'))
         ap = _atr_pct(hh, ll, cc)
         if not len(ap) or not np.isfinite(ap[-1]):
             continue
-        b = A[-1]
-        jarak = ((b[2] / b[1] - 1.0) * 100.0) if (b[2] and b[1]) else None
-        keadaan[kunci] = (float(ap[-1]), jarak)
+        keadaan[kunci] = (float(ap[-1]), (b[2] / b[1] - 1.0) * 100.0)
     if not keadaan:
         return dict(rows=[], ndesil=NDESIL, kuantil=list(KUANTIL), ufuk=list(UFUK))
-    # desil keratan rentas antara posisi semasa
-    nilai = sorted(v[0] for v in keadaan.values())
+    tepi = jad.get('atr_pct_tepi') or []
     rows = []
     for kunci, (ap, jarak) in sorted(keadaan.items()):
-        pangkat = sum(1 for x in nilai if x <= ap) / len(nilai)
-        d = min(NDESIL - 1, int(pangkat * NDESIL))
+        # desil ikut NILAI atr_pct terhadap tepi alam A02 — bukan pangkat antara posisi hari ini,
+        # kerana set papertrade condong ke nama bergolak dan pangkat tempatan akan salah petak
+        d = int(np.searchsorted(np.asarray(tepi, dtype='float64'), ap, side='right')) if tepi else 0
+        d = max(0, min(NDESIL - 1, d))
         u, ps = {}, {}
         for Hf in UFUK:
             sel = jad['sel'].get(f'{Hf}|{d}')
             if not sel:
                 continue
             u[str(Hf)] = sel['term']
-            p = p_sentuh(sel, jarak, jad['grid_mae'])
-            if p is not None:
-                ps[str(Hf)] = p
+            pv = p_sentuh(sel, jarak, jad['grid_mae'])
+            if pv is not None:
+                ps[str(Hf)] = pv
         if u:
-            rows.append([kunci, {'d': d, 'atr': round(ap, 2), 'u': u, 'ps': ps,
-                                 'jarak': None if jarak is None else round(jarak, 2)}])
+            rows.append([kunci, {'d': d, 'atr': round(ap, 2), 'jarak': round(jarak, 2),
+                                 'u': u, 'ps': ps}])
     return dict(rows=rows, ndesil=NDESIL, kuantil=list(KUANTIL), ufuk=list(UFUK),
-                alam=jad.get('alam', ''))
+                alam=jad.get('alam', ''),
+                definisi=('Kekerapan bersyarat, BUKAN ramalan arah (REVERSE/SILING_ARAH.md: siling '
+                          'ketepatan arah 5 hari 51.55% lawan asas 50.50%). u = kuantil '
+                          'p10/p25/p50/p75/p90 pulangan terminal bagi bar sejarah dalam desil '
+                          'atr_pct keratan rentas yang sama; ps = P(paras lorong 2 disentuh).'))
 
 
 if __name__ == '__main__':

@@ -635,6 +635,12 @@ def main(argv=None):
         docs['harian/trend'] = dict(TS.bawa_semalam(TS.dokumen(H, TS.alam(a.folder, H), nota_h, I), lama), dibina=dibina)
         docs['posisi/lorong2'] = dict(L2.dokumen(H, a.folder), dibina=dibina, harga_hingga=f'{S} tutup')
         docs['harian/stage'] = dict(ST.dokumen(H, TS.alam(a.folder, H), I), dibina=dibina)
+        try:  # posisi/jalur: jalur jangkaan ke hadapan (carta kedua helaian posisi)
+            import jalur_jangka as JJ
+            docs['posisi/jalur'] = dict(JJ.dokumen(H, docs['posisi/lorong2'].get('rows')),
+                                        dibina=dibina, harga_hingga=f'{S} tutup')
+        except Exception as e2:  # noqa: BLE001
+            print(f'amaran: posisi/jalur gagal: {e2!r}', file=sys.stderr)
     except Exception as e:  # noqa: BLE001
         print(f'amaran: harian/trend / harian/stage / posisi/lorong2 gagal: {e!r}', file=sys.stderr)
     ps = portfolio_slot(dibina)
@@ -666,7 +672,7 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     versi = json.load(open(a.versi)) if a.versi else {}
     tulis = []
-    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'stage', 'lorong2')
+    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'stage', 'lorong2', 'jalur')
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
     semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
     for kol, bahagian in semua:
