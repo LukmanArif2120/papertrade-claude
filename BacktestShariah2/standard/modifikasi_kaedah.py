@@ -123,9 +123,19 @@ def lengkung_pegang(reg, struktur):
                'bt_cagr': float(a.cagr) * 100, 'bt_menang': float(a.win) * 100}
         for h in HARI:
             rec[f'pegang{h}'] = pg.get(h, np.nan)
-        rec['pegang_sepadan'] = float(np.interp(min(max(hari, xs[0]), xs[-1]), xs, ys))
-        rec['kos_mesin_keluar'] = rec['bt_avg'] - rec['pegang_sepadan']
-        rec['pegang60_lebih'] = pg.get(60, np.nan) - rec['bt_avg']
+        # Lengkung pegang hanya sampai 60 hari. Bagi kaedah yang memegang LEBIH daripada
+        # itu (kaedah kedudukan, bukan swing), tiada titik sepadan untuk dibanding, jadi
+        # perbandingan ditanda tidak sah daripada memberi nombor yang menyesatkan.
+        dlm_grid = xs[0] <= hari <= xs[-1]
+        rec['dlm_grid'] = dlm_grid
+        if dlm_grid:
+            rec['pegang_sepadan'] = float(np.interp(hari, xs, ys))
+            rec['kos_mesin_keluar'] = rec['bt_avg'] - rec['pegang_sepadan']
+            rec['pegang60_lebih'] = pg.get(60, np.nan) - rec['bt_avg']
+        else:
+            rec['pegang_sepadan'] = np.nan
+            rec['kos_mesin_keluar'] = np.nan
+            rec['pegang60_lebih'] = np.nan
         rec['kadar_kaedah'] = rec['bt_avg'] / hari if hari else np.nan
         rec['kadar60'] = pg.get(60, np.nan) / 60
         rows[mid] = rec
@@ -398,7 +408,7 @@ def fmt(v, p=2, suf=''):
 
 def tulis(D, jum):
     from datetime import datetime, timezone
-    S = D[D.bt_hari <= 30] if 'bt_hari' in D else D
+    S = D[(D.bt_hari <= 30) & D.dlm_grid.fillna(False)] if 'bt_hari' in D else D
     n_sas = int(D.ada_sasaran.sum())
     n_jarak = int((D.jenis_sasaran == 'JARAK').sum())
     n_cap = int(D.tmax.astype(str).isin(['None', 'nan']).eq(False).sum())

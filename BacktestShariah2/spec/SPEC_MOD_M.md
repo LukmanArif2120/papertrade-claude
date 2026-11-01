@@ -27,7 +27,7 @@ Arah setiap varian datang daripada tiga ukuran bebas yang **semuanya menunjuk ar
 |---|---|---|
 | W01 WFO pilihan luar sampel, 2,096 pilihan | 423 saham, 2023–2026 | henti lebih LEBAR (ATR 2.887x lawan 2.75x seragam, p 2.0e-06; PCT 10.84% lawan 10.2%, p 7.5e-08); ekori longgar (CHAN4 2.32x terlebih pilih, CHAN2/EMA10 0.13x/0.11x); tmax lebih PANJANG (pangkat 3.681 lawan 3.0, p 4.6e-128) |
 | `REVERSE/NXX_KELUAR.md` | 4,420,650 bar, 2020–2025 | tiga keluar terbaik daripada 23 semuanya "pegang sampai momentum habis": `X13` RSI>70 +4.350%, `X15` Chandelier 4xATR +3.706%, `X17` ADX<20 +1.855%; dua terburuk kedua-duanya memotong awal |
-| lengkung `pegang` registry | 619,786 dagangan backtest | pegang 60 hari mengalahkan mesin keluar kaedah pada **75/75** kaedah swing, +4.37 mata setiap dagangan |
+| lengkung `pegang` registry | 589,187 dagangan backtest | pegang 60 hari mengalahkan mesin keluar kaedah pada **74/74** kaedah swing, +4.36 mata setiap dagangan |
 
 ---
 

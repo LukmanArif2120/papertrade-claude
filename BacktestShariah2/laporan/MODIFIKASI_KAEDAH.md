@@ -1,6 +1,6 @@
 # Perlukah kaedah M diubah? — paksi MASUK · PEGANG · KELUAR, setiap kaedah
 
-Dijana 2026-11-01 00:58 UTC oleh `standard/modifikasi_kaedah.py`. Rekod analisis sahaja: tiada order, tiada wang sebenar, tiada varian aktif ditukar.
+Dijana 2026-11-01 01:01 UTC oleh `standard/modifikasi_kaedah.py`. Rekod analisis sahaja: tiada order, tiada wang sebenar, tiada varian aktif ditukar.
 
 Soalan pengguna: semua kaedah M datang daripada dapatan internet dan laman web; sepanjang papertrade berjalan, ada paksi yang perlu diubah untuk untung maksimum?
 
@@ -11,8 +11,8 @@ Soalan pengguna: semua kaedah M datang daripada dapatan internet dan laman web; 
 | Paksi | Perlu diubah? | Kesan terukur setiap dagangan | Sumber |
 |---|---|---|---|
 | **MASUK** | **Tidak** | lift maksimum pernah diukur +0.392 mata, dan 0/598 penapis ada lift positif | `REVERSE/SETUP.md`, `REVERSE/NXX.md`, `REVERSE/KOMBINASI.md` |
-| **PEGANG** | **Ya — satu-satunya paksi dengan kesan besar** | **+4.37 mata** (pegang 60 hari lawan mesin kaedah), menang **75/75** kaedah swing | lengkung `pegang` registry, 619,786 dagangan backtest |
-| **KELUAR** | **Arah ya, penalaan tidak** | pilihan keluar bernilai 4.997 mata (~12x paksi masuk), tetapi mesin keluar setiap kaedah hanya **+0.07 mata** median lawan pegang pasif | `REVERSE/NXX_KELUAR.md` + lengkung `pegang` |
+| **PEGANG** | **Ya — satu-satunya paksi dengan kesan besar** | **+4.36 mata** (pegang 60 hari lawan mesin kaedah), menang **74/74** kaedah swing | lengkung `pegang` registry, 589,187 dagangan backtest |
+| **KELUAR** | **Arah ya, penalaan tidak** | pilihan keluar bernilai 4.997 mata (~12x paksi masuk), tetapi mesin keluar setiap kaedah hanya **+0.05 mata** median lawan pegang pasif | `REVERSE/NXX_KELUAR.md` + lengkung `pegang` |
 
 Kiraan verdict merentas 134 kaedah:
 
@@ -20,29 +20,29 @@ Kiraan verdict merentas 134 kaedah:
 |---|---|---|---|---|
 | MASUK | 0 | 17 | 117 | 0 |
 | PEGANG | 18 | 9 | 107 | 0 |
-| KELUAR | 60 | 21 | 24 | 29 |
+| KELUAR | 60 | 24 | 29 | 21 |
 
 ## 2. Ukuran yang menjawab soalan: mesin keluar lawan pegang pasif
 
-Lajur `pegang` registry memberi, bagi SETIAP dagangan varian aktif, pulangan beli-dan-pegang N hari dari entry YANG SAMA — mengabaikan henti, syarat keluar dan sasaran kaedah. Jadi perbezaan antara `avg` kaedah dan lengkung itu ialah nilai mesin keluar, diukur pada entry yang sama. Kaedah swing (hari pegang ≤ 30, n=75):
+Lajur `pegang` registry memberi, bagi SETIAP dagangan varian aktif, pulangan beli-dan-pegang N hari dari entry YANG SAMA — mengabaikan henti, syarat keluar dan sasaran kaedah. Jadi perbezaan antara `avg` kaedah dan lengkung itu ialah nilai mesin keluar, diukur pada entry yang sama. Kaedah swing (hari pegang ≤ 30, n=74):
 
 | Ufuk pegang | Jangkaan setiap dagangan | Setiap hari | Kaedah yang pegang pasif KALAHKAN |
 |---|---|---|---|
-| 5 hari | +0.36% | +0.0725% | 2 / 75 |
-| 10 hari | +0.93% | +0.0932% | 21 / 75 |
-| 15 hari | +1.43% | +0.0950% | 31 / 75 |
-| 20 hari | +1.97% | +0.0984% | 46 / 75 |
-| 30 hari | +2.86% | +0.0954% | 57 / 75 |
-| 40 hari | +3.96% | +0.0991% | 69 / 75 |
-| 60 hari | +6.13% | +0.1021% | 75 / 75 |
-| **mesin kaedah sendiri** | **+1.75%** dalam 17.0 hari | **+0.1047%** | — |
+| 5 hari | +0.36% | +0.0727% | 2 / 74 |
+| 10 hari | +0.93% | +0.0934% | 20 / 74 |
+| 15 hari | +1.43% | +0.0950% | 30 / 74 |
+| 20 hari | +1.97% | +0.0984% | 45 / 74 |
+| 30 hari | +2.86% | +0.0955% | 56 / 74 |
+| 40 hari | +3.97% | +0.0992% | 68 / 74 |
+| 60 hari | +6.14% | +0.1023% | 74 / 74 |
+| **mesin kaedah sendiri** | **+1.77%** dalam 17.2 hari | **+0.1051%** | — |
 
 Dua nombor yang mesti dibaca bersama:
 
-1. **Jangkaan setiap dagangan: pegang 60 hari mengalahkan mesin kaedah pada 75 daripada 75 kaedah swing** (+4.37 mata purata). Tiada pengecualian.
-2. **Kadar setiap hari hampir sama** (+0.1021% pegang-60 lawan +0.1047% mesin kaedah). Jadi keseluruhan kelebihan itu datang daripada memegang 3.5x lebih lama, **bukan** daripada apa-apa kelebihan.
+1. **Jangkaan setiap dagangan: pegang 60 hari mengalahkan mesin kaedah pada 74 daripada 74 kaedah swing** (+4.36 mata purata). Tiada pengecualian.
+2. **Kadar setiap hari hampir sama** (+0.1023% pegang-60 lawan +0.1051% mesin kaedah). Jadi keseluruhan kelebihan itu datang daripada memegang 3.5x lebih lama, **bukan** daripada apa-apa kelebihan.
 
-Itu bermakna: jika ukuran anda ialah untung setiap dagangan, memanjangkan pegangan ialah lever terbesar yang ada dan ia berfungsi pada setiap kaedah tanpa pengecualian. Jika ukuran anda ialah pulangan atas modal, ia hampir tiada kesan: pulangan naik 3.49x (+1.75% -> +6.13%) sementara masa modal terikat naik 3.53x (17.0 -> 60 hari). Nisbah yang hampir SAMA itulah sebabnya kadar setiap hari tidak berubah. Bahagian 7.
+Itu bermakna: jika ukuran anda ialah untung setiap dagangan, memanjangkan pegangan ialah lever terbesar yang ada dan ia berfungsi pada setiap kaedah tanpa pengecualian. Jika ukuran anda ialah pulangan atas modal, ia hampir tiada kesan: pulangan naik 3.46x (+1.77% -> +6.14%) sementara masa modal terikat naik 3.50x (17.2 -> 60 hari). Nisbah yang hampir SAMA itulah sebabnya kadar setiap hari tidak berubah. Bahagian 7.
 
 ## 3. Apa yang pengoptimum luar sampel pilih (W01 WFO, 2,096 pilihan)
 
@@ -98,7 +98,7 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M02` | MACD + SMA200 | PENUH | ADA | 20 | -0.22 | +5.3 | 30% | +0.6 | TIADA 7/16 | tiada | KEKAL | UBAH | UBAH |
 | `M03` | BB Break + Divergence RSI | PENUH | ADA | – | +0.33 | +5.6 | 3% | +0.7 | TIADA 11/16 | 42 | KEKAL | KEKAL | UBAH |
 | `M04` | BB Squeeze Breakout | PENUH | – | – | +1.76 | +1.6 | 0% | -0.7 | ASAL 6/16 | 63 | PERTIMBANG | KEKAL | KEKAL (disahkan) |
-| `M05` | MACD Divergence + Pengesahan | WFO | – | – | +4.55 | -4.5 | 0% | +0.3 | ASAL 4/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M05` | MACD Divergence + Pengesahan | WFO | – | – | – | – | 0% | +0.3 | ASAL 4/16 | tiada | KEKAL | KEKAL | KEKAL |
 | `M06` | Minervini VCP Breakout | WFO | – | – | -0.06 | +3.3 | 0% | +0.1 | TIADA 5/16 | tiada | KEKAL | KEKAL | KEKAL |
 | `M07` | Qullamaggie Breakout | WFO | – | – | -0.91 | +8.9 | – | +0.4 | CHAN4 11/16 | tiada | PERTIMBANG | KEKAL | UBAH |
 | `M08` | SMA20 + SMA200 | PENUH | – | – | -0.35 | +5.4 | 16% | +0.2 | CHAN3 6/16 | tiada | KEKAL | KEKAL | UBAH |
@@ -115,7 +115,7 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M21` | Marius 3 Persediaan (Pecahan+Jurang+Kesinamb | WFO | – | – | +1.07 | +12.2 | – | -0.1 | TIADA 6/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M22` | Qullamaggie Episodic Pivot | TIADA | – | – | +2.00 | +17.4 | – | – | – | – | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M23` | Breitstein Kapitulasi + Kesinambungan | PENUH | – | – | -0.06 | +4.7 | 64% | -0.1 | EMA21 4/16 | 21 | KEKAL | KEKAL | UBAH |
-| `M24` | Rotasi Momentum ROC12 + SMA200 | WFO | – | – | +2.68 | -2.7 | – | -0.8 | EMA21 4/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M24` | Rotasi Momentum ROC12 + SMA200 | WFO | – | – | – | – | – | -0.8 | EMA21 4/16 | tiada | KEKAL | KEKAL | KEKAL |
 | `M25` | VWAP Wave (proksi harian) | PENUH | – | 20 | -0.24 | +4.6 | 46% | +0.2 | CHAN4 6/16 | 63 | KEKAL | UBAH | UBAH |
 | `M26` | Garis Trend Undur 3 Sentuhan + Pecahan | PENUH | ADA | – | +2.33 | -0.1 | 22% | +0.4 | ASAL 6/16 | 63 | KEKAL | KEKAL | UBAH |
 | `M27` | Price Action 4 Tiang | PENUH | – | – | -0.11 | +5.1 | 7% | +0.1 | EMA10 7/16 | 63 | PERTIMBANG | KEKAL | KEKAL |
@@ -129,12 +129,12 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M35` | Pocket Pivot Morales & Kacher | PENUH | – | – | -0.17 | +4.0 | 38% | +0.6 | CHAN4 5/16 | 63 | KEKAL | KEKAL | UBAH |
 | `M36` | Turtle 55/20 | PENUH | – | – | +1.07 | +1.9 | 6% | +0.7 | TIADA 7/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M37` | Weinstein Peringkat 2 | WFO | – | – | +1.53 | +1.1 | – | +0.1 | CHAN4 7/16 | 63 | KEKAL | KEKAL | KEKAL |
-| `M38` | Darvas Kotak | WFO | – | – | +10.79 | -10.8 | – | +0.3 | ASAL 3/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
-| `M39` | Radge Pecahan Bollinger 100 hari | WFO | – | – | +3.51 | -3.5 | 17% | +0.7 | CHAN4 8/16 | tiada | KEKAL | KEKAL | UBAH |
+| `M38` | Darvas Kotak | WFO | – | – | – | – | – | +0.3 | ASAL 3/16 | tiada | KEKAL | KEKAL | KEKAL |
+| `M39` | Radge Pecahan Bollinger 100 hari | WFO | – | – | – | – | 17% | +0.7 | CHAN4 8/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M40` | Clenow Stocks on the Move | TIADA | – | – | -1.05 | +7.3 | – | – | – | – | KEKAL | KEKAL | PERTIMBANG |
-| `M41` | FW Penyatuan Mingguan | WFO | – | – | +10.53 | -10.5 | – | +0.2 | CHAN4 8/16 | tiada | KEKAL | KEKAL | KEKAL |
+| `M41` | FW Penyatuan Mingguan | WFO | – | – | – | – | – | +0.2 | CHAN4 8/16 | tiada | KEKAL | KEKAL | PERTIMBANG |
 | `M44` | Tapak Rata IBD | WFO | – | – | -0.27 | +1.2 | 0% | +0.2 | CHAN4 9/16 | tiada | PERTIMBANG | KEKAL | UBAH |
-| `M45` | High 52 Minggu (George & Hwang) | TIADA | – | 126 | +5.81 | -5.8 | – | – | – | – | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M45` | High 52 Minggu (George & Hwang) | TIADA | – | 126 | – | – | – | – | – | – | KEKAL | KEKAL | KEKAL |
 | `M46` | Jurang Naik Boleh Beli (Buyable Gap Up) | WFO | – | – | +0.82 | +2.6 | 75% | -0.5 | TIADA 7/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M47` | Holy Grail Raschke | WFO | ADA | – | -0.00 | +5.5 | 0% | -0.2 | ASAL 6/16 | 63 | PERTIMBANG | KEKAL | UBAH |
 | `M48` | Cooper 1-2-3-4 | WFO | – | – | +0.35 | +2.6 | 0% | +0.7 | CHAN3 6/16 | 42 | KEKAL | KEKAL | PERTIMBANG |
@@ -144,7 +144,7 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M52` | Radge Weekend Trend Trader | WFO | – | – | +1.33 | +0.9 | – | -0.3 | CHAN4 5/16 | 42 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M54` | IBD Power Trend | PENUH | – | – | +0.79 | +0.7 | 3% | -0.0 | ASAL 8/16 | tiada | PERTIMBANG | KEKAL | KEKAL (disahkan) |
 | `M55` | Guppy GMMA | PENUH | – | – | +0.82 | +1.7 | 29% | +0.1 | CHAN4 8/16 | 42 | PERTIMBANG | KEKAL | UBAH |
-| `M56` | Gray & Vogel Momentum Lancar (FIP) | WFO | – | – | +3.43 | -3.4 | – | +0.1 | EMA21 7/16 | 63 | KEKAL | KEKAL | KEKAL |
+| `M56` | Gray & Vogel Momentum Lancar (FIP) | WFO | – | – | – | – | – | +0.1 | EMA21 7/16 | 63 | KEKAL | KEKAL | KEKAL |
 | `M57` | Landry Trend Knockout (TKO) | PENUH | – | – | +0.33 | +4.2 | 42% | -0.4 | CHAN4 8/16 | 42 | KEKAL | KEKAL | UBAH |
 | `M59` | Anjakan Julat RSI | WFO | – | – | -0.34 | +1.7 | 0% | +0.0 | TIADA 7/16 | 21 | KEKAL | KEKAL | UBAH |
 | `M64` | O'Neil Tiga Minggu Ketat | WFO | – | – | +0.01 | +2.6 | 0% | +0.2 | TIADA 8/16 | 63 | KEKAL | KEKAL | PERTIMBANG |
@@ -152,14 +152,14 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M67` | Rayner Teo: Ujian Ketiga pada Purata 50 | WFO | – | – | -0.05 | +2.8 | 20% | +0.7 | CHAN4 6/16 | 63 | KEKAL | KEKAL | UBAH |
 | `M68` | Kell Base n' Break | WFO | – | – | -0.13 | +1.4 | 100% | -0.1 | CHAN4 8/16 | 42 | KEKAL | KEKAL | UBAH |
 | `M70` | Pecahan Hari Dalam | PENUH | – | – | +0.42 | +3.6 | 66% | +0.7 | CHAN4 10/16 | tiada | PERTIMBANG | KEKAL | UBAH |
-| `M73` | ADX(5) > 40 + Julat Terkecil 6 Hari | PENUH | – | – | +0.08 | +5.1 | 0% | +0.1 | CHAN4 8/16 | 21 | PERTIMBANG | KEKAL | PERTIMBANG |
+| `M73` | ADX(5) > 40 + Julat Terkecil 6 Hari | PENUH | – | – | – | – | 0% | +0.1 | CHAN4 8/16 | 21 | PERTIMBANG | KEKAL | PERTIMBANG |
 | `M74` | Lulus Baharu Trend Template Minervini | PENUH | – | – | +0.58 | +4.7 | 52% | -0.1 | ASAL 6/16 | 42 | KEKAL | KEKAL | UBAH |
 | `M76` | Undercut & Rally pada Low Penting | PENUH | – | – | +0.11 | +7.0 | 19% | -0.3 | TIADA 8/16 | 63 | KEKAL | KEKAL | UBAH |
 | `M77` | Undercut & Rally pada Purata Bergerak (MAU&R | PENUH | – | – | +1.70 | +2.3 | 29% | +0.7 | CHAN4 9/16 | 42 | KEKAL | KEKAL | UBAH |
 | `M78` | Alvarez Pecahan Mingguan DTAYS | PENUH | – | – | -1.90 | +3.9 | 0% | +0.4 | SMA50 4/16 | tiada | KEKAL | KEKAL | PERTIMBANG |
 | `M79` | Radge: 20% Flipper | PENUH | – | – | -7.10 | +7.1 | 11% | -0.0 | CHAN4 7/16 | 10 | KEKAL | KEKAL | UBAH |
-| `M80` | Radge Saluran Purata Bergerak (MAC) | PENUH | – | – | +4.21 | -4.2 | 0% | -0.2 | CHAN4 7/16 | tiada | KEKAL | KEKAL | KEKAL |
-| `M81` | Bensdorp Long Trend High Momentum | PENUH | – | – | +3.16 | -3.2 | 0% | -0.2 | ASAL 6/16 | 42 | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M80` | Radge Saluran Purata Bergerak (MAC) | PENUH | – | – | – | – | 0% | -0.2 | CHAN4 7/16 | tiada | KEKAL | KEKAL | PERTIMBANG |
+| `M81` | Bensdorp Long Trend High Momentum | PENUH | – | – | – | – | 0% | -0.2 | ASAL 6/16 | 42 | KEKAL | KEKAL | KEKAL |
 | `M82` | Arthur Hill Rotasi Sasaran 10% | PENUH | – | – | -0.41 | +1.6 | 0% | +0.1 | SMA50 6/16 | 21 | PERTIMBANG | KEKAL | PERTIMBANG |
 | `M84` | Jarak purata bergerak MAD 21/200 | WFO | – | – | +0.07 | +4.7 | – | +0.3 | TIADA 7/16 | 63 | KEKAL | KEKAL | PERTIMBANG |
 | `M87` | IBD Tapak Menaik | WFO | – | – | +1.27 | +2.1 | 0% | +0.4 | CHAN4 5/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
@@ -168,8 +168,8 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M90` | Pring KST | PENUH | – | – | +0.50 | +2.1 | 12% | -0.6 | CHAN3 9/16 | tiada | PERTIMBANG | KEKAL | UBAH |
 | `M91` | Stochastic Pop (Bernstein/Steckler) | WFO | – | – | +0.03 | +5.0 | 0% | -0.4 | ASAL 9/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M92` | CCI-50 | PENUH | – | – | +0.08 | +4.7 | 6% | -0.1 | CHAN4 5/16 | 21 | KEKAL | KEKAL | KEKAL |
-| `M93` | Bollinger Kaedah II: %b + MFI | PENUH | – | – | +3.30 | -3.3 | 14% | -0.1 | CHAN3 10/16 | 42 | KEKAL | KEKAL | UBAH |
-| `M94` | Pecutan Momentum (Chen, Yu & Wang) | WFO | – | 126 | +14.84 | -14.8 | – | +0.4 | CHAN4 14/16 | 63 | KEKAL | UBAH | KEKAL |
+| `M93` | Bollinger Kaedah II: %b + MFI | PENUH | – | – | – | – | 14% | -0.1 | CHAN3 10/16 | 42 | KEKAL | KEKAL | UBAH |
+| `M94` | Pecutan Momentum (Chen, Yu & Wang) | WFO | – | 126 | – | – | – | +0.4 | CHAN4 14/16 | 63 | KEKAL | UBAH | PERTIMBANG |
 | `M95` | Nisbah Kebaharuan High 52 Minggu (Bhootra &  | PENUH | – | – | +0.93 | +2.5 | 0% | -0.3 | CHAN4 5/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M96` | Momo India: Ranking Sharpe 3/6/12 bulan | WFO | – | – | +0.07 | +1.4 | – | +0.5 | ASAL 7/16 | 42 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M99` | Three Line Break | PENUH | – | – | +0.18 | +3.9 | 24% | -0.6 | CHAN4 6/16 | 63 | PERTIMBANG | KEKAL | UBAH |
@@ -179,11 +179,11 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M104` | High Tight Flag / Power Play | WFO | – | – | +2.07 | +6.8 | – | -0.3 | CHAN4 9/16 | tiada | KEKAL | KEKAL | KEKAL |
 | `M105` | Supertrend tulen | PENUH | – | – | -0.20 | +2.8 | 0% | +0.6 | ASAL 5/16 | 42 | KEKAL | KEKAL | UBAH |
 | `M106` | DMI Wilder | PENUH | – | – | +0.32 | +4.6 | 0% | -0.2 | TIADA 7/16 | 63 | KEKAL | KEKAL | PERTIMBANG |
-| `M107` | Golden Cross SMA50/200 | WFO | – | – | +10.63 | -10.6 | 0% | -0.1 | ASAL 12/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M107` | Golden Cross SMA50/200 | WFO | – | – | – | – | 0% | -0.1 | ASAL 12/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M111` | Sistem Volatiliti Wilder | PENUH | – | – | +0.10 | +2.7 | 18% | +0.0 | ASAL 8/16 | tiada | KEKAL | KEKAL | KEKAL |
 | `M115` | Bow Tie (Landry) | WFO | – | 42 | -0.12 | +3.9 | 14% | +1.2 | ASAL 7/16 | 42 | KEKAL | PERTIMBANG | UBAH |
 | `M116` | 2/20 EMA Breakout (Landry) | PENUH | – | 10 | -0.11 | +4.3 | 1% | -0.3 | CHAN4 7/16 | tiada | KEKAL | UBAH | PERTIMBANG |
-| `M117` | Landry Pullback (high 2 bulan) | WFO | – | – | +40.42 | -40.4 | 0% | +0.3 | ASAL 7/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M117` | Landry Pullback (high 2 bulan) | WFO | – | – | – | – | 0% | +0.3 | ASAL 7/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M118` | Expansion Pivot (Cooper) | WFO | – | – | -0.60 | +2.8 | 11% | +0.8 | CHAN4 6/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M119` | 180 Bullish (Cooper) | PENUH | – | 42 | -0.03 | +3.2 | 18% | +0.8 | ASAL 5/16 | 63 | KEKAL | UBAH | UBAH |
 | `M120` | Reversal New Highs | WFO | – | – | +1.48 | +0.6 | 0% | +0.2 | ASAL 6/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
@@ -191,18 +191,18 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M122` | Moving Momentum (ChartSchool) | PENUH | – | 42 | +0.61 | +3.4 | 19% | -0.8 | EMA10 4/16 | 21 | KEKAL | KEKAL | KEKAL |
 | `M123` | CCI Correction (Lambert, ChartSchool) | PENUH | – | – | +0.44 | +4.5 | 37% | -0.2 | CHAN3 7/16 | 63 | KEKAL | KEKAL | UBAH |
 | `M124` | Last' Stochastic Technique (ChartSchool) | PENUH | – | 63 | -0.37 | +3.8 | 12% | +0.2 | CHAN3 5/16 | 10 | KEKAL | KEKAL | UBAH |
-| `M125` | 2-Bar Breakout | PENUH | – | – | +142.16 | -142.2 | 5% | +0.1 | CHAN4 6/16 | 42 | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M125` | 2-Bar Breakout | PENUH | – | – | – | – | 5% | +0.1 | CHAN4 6/16 | 42 | KEKAL | KEKAL | KEKAL |
 | `M126` | Hidden Smash Day (beli, Larry Williams) | WFO | – | – | +2.81 | -1.2 | 0% | +1.0 | SMA50 7/16 | tiada | KEKAL | KEKAL | PERTIMBANG |
 | `M127` | Slingshot Bullish | PENUH | – | – | +2.04 | +1.3 | 25% | -1.0 | ASAL 6/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M128` | Inventory Retracement Bar (IRB, Rob Hoffman) | PENUH | – | 42 | +0.00 | +4.5 | 5% | +0.6 | CHAN3 7/16 | 42 | KEKAL | PERTIMBANG | UBAH |
 | `M129` | Wick Play | WFO | – | 63 | -0.44 | +2.0 | – | +0.5 | ASAL 7/16 | tiada | KEKAL | UBAH | KEKAL |
-| `M130` | 多方炮 (dua lilin hijau mengapit satu merah) | WFO | – | – | +85.22 | -85.2 | – | +0.3 | ASAL 10/16 | 42 | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M130` | 多方炮 (dua lilin hijau mengapit satu merah) | WFO | – | – | – | – | – | +0.3 | ASAL 10/16 | 42 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M131` | Ross Hook (Joe Ross) | PENUH | – | 63 | +0.02 | +2.4 | 14% | +0.7 | ASAL 5/16 | 63 | KEKAL | UBAH | UBAH |
 | `M132` | Ascending Scallop (Bulkowski) | WFO | – | 42 | +0.42 | +1.5 | 0% | +0.2 | ASAL 6/16 | 63 | KEKAL | UBAH | KEKAL |
 | `M133` | Bull Hook (Crabel) | PENUH | – | 21 | -0.33 | +4.0 | 8% | +0.1 | SMA50 7/16 | tiada | KEKAL | UBAH | UBAH |
 | `M134` | First Kiss After Daylight (Landry) | WFO | – | – | +1.94 | +0.4 | 20% | +0.4 | CHAN4 10/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M135` | 3rd Watch | WFO | – | 63 | +0.05 | +2.4 | – | +0.6 | EMA21 5/16 | 21 | KEKAL | KEKAL | PERTIMBANG |
-| `M136` | Short/Intermediate-term Low (Larry Williams) | PENUH | – | – | +83.70 | -83.7 | 17% | -0.1 | CHAN3 8/16 | tiada | KEKAL | KEKAL | UBAH |
+| `M136` | Short/Intermediate-term Low (Larry Williams) | PENUH | – | – | – | – | 17% | -0.1 | CHAN3 8/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M137` | Livermore System | WFO | – | – | +1.48 | +0.5 | 11% | -0.4 | ASAL 7/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M138` | 直升机空中加油 (Helikopter isi minyak di udara) | WFO | – | 63 | -1.18 | +1.9 | – | -0.0 | CHAN3 5/16 | 42 | KEKAL | PERTIMBANG | PERTIMBANG |
 | `M139` | 均线首次粘合向上发散 (MA berhimpun kali pertama, berki | WFO | – | 21 | -0.00 | +3.2 | 0% | +1.0 | ASAL 7/16 | 42 | KEKAL | PERTIMBANG | KEKAL |
@@ -211,11 +211,11 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M142` | Pecahan volum dari dasar (底部放量) | WFO | – | – | +0.93 | +0.7 | – | +0.7 | ASAL 5/16 | 63 | KEKAL | KEKAL | KEKAL |
 | `M143` | 장대양봉 이후 눌림목 / 5일선 매매 (Undur ke MA5 selepas l | WFO | – | 21 | +0.23 | +2.6 | 0% | +0.2 | TIADA 10/16 | 42 | KEKAL | PERTIMBANG | KEKAL |
 | `M144` | Screw Bar | WFO | – | – | +2.93 | +7.0 | 0% | -0.2 | CHAN4 11/16 | tiada | KEKAL | KEKAL | KEKAL |
-| `M145` | Yum-Yum Continuation | PENUH | – | – | +72.68 | -72.7 | 0% | -0.2 | ASAL 9/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M145` | Yum-Yum Continuation | PENUH | – | – | – | – | 0% | -0.2 | ASAL 9/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M146` | 3-Bar Momentum Pattern | WFO | – | – | +1.32 | +2.0 | 43% | -0.1 | ASAL 5/16 | tiada | KEKAL | KEKAL | UBAH |
-| `M147` | Improved Three-Bar Pullback | WFO | – | – | +76.51 | -76.5 | 0% | +0.9 | ASAL 8/16 | 63 | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M147` | Improved Three-Bar Pullback | WFO | – | – | – | – | 0% | +0.9 | ASAL 8/16 | 63 | KEKAL | KEKAL | KEKAL |
 | `M148` | Natural Number Method | PENUH | – | 42 | -0.17 | +5.3 | 14% | -0.2 | ASAL 4/16 | 42 | KEKAL | PERTIMBANG | PERTIMBANG |
-| `M149` | 3-Step Pullback | PENUH | – | – | +53.07 | -53.1 | 9% | +0.9 | ASAL 7/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M149` | 3-Step Pullback | PENUH | – | – | – | – | 9% | +0.9 | ASAL 7/16 | tiada | KEKAL | KEKAL | KEKAL |
 | `M150` | Trend Bar Failure (Brooks) | WFO | – | 21 | -0.41 | +4.7 | 0% | +0.7 | CHAN3 8/16 | tiada | KEKAL | UBAH | UBAH |
 | `M151` | Outside Bar Failure | PENUH | – | – | +0.24 | +2.0 | 21% | +0.3 | CHAN4 7/16 | tiada | KEKAL | KEKAL | UBAH |
 | `M152` | Spike & Ledge | WFO | – | 42 | -0.17 | +1.6 | – | -0.0 | ASAL 8/16 | 63 | KEKAL | UBAH | KEKAL (disahkan) |
@@ -223,7 +223,7 @@ Namun semakan luar sampel ke atas varian terpilih: lulus S1–S4 6, lulus WFO 22
 | `M154` | HOLP (High of Low Period) | PENUH | – | 42 | -0.22 | +4.3 | 15% | +0.4 | ASAL 8/16 | 63 | KEKAL | UBAH | PERTIMBANG |
 | `M155` | Market Cycle Strategy | PENUH | – | 21 | -0.10 | +5.9 | 4% | -0.2 | CHAN4 8/16 | 42 | KEKAL | PERTIMBANG | PERTIMBANG |
 | `M156` | Single Penetration (DiNapoli) | PENUH | – | 10 | -0.05 | +3.8 | 0% | +0.1 | SMA50 9/16 | 10 | KEKAL | PERTIMBANG | KEKAL |
-| `M157` | Consolidation Pivot Breakout (versi angka) | WFO | – | – | +28.55 | -28.6 | – | +0.2 | ASAL 7/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
+| `M157` | Consolidation Pivot Breakout (versi angka) | WFO | – | – | – | – | – | +0.2 | ASAL 7/16 | tiada | KEKAL | KEKAL | KEKAL (disahkan) |
 | `M158` | Doubly Adaptive Profit Targets | PENUH | – | – | +0.36 | +2.5 | 0% | +0.4 | ASAL 6/16 | tiada | KEKAL | KEKAL | KEKAL |
 | `M159` | Heikin-Ashi Trend | PENUH | – | 10 | -0.05 | +5.8 | 1% | +1.0 | CHAN3 4/16 | 10 | KEKAL | PERTIMBANG | PERTIMBANG |
 | `M160` | Measured Move Up | PENUH | – | 42 | +0.10 | +5.2 | 36% | +0.1 | ASAL 6/16 | 63 | KEKAL | UBAH | UBAH |
@@ -275,16 +275,16 @@ Dalam keluarga ATR dan PCT, henti yang dipilih luar sampel bagi kaedah ini berad
 
 `M02`, `M10`, `M13`, `M14`, `M18`, `M20`, `M23`, `M25`, `M26`, `M29`, `M32`, `M35`, `M46`, `M49`, `M50`, `M55`, `M57`, `M67`, `M68`, `M70`, `M74`, `M77`, `M89`, `M99`, `M102`, `M123`, `M127`, `M134`, `M140`, `M146`, `M151`, `M160`
 
-### Keluar asal DISAHKAN — jangan ubah — 29 kaedah
+### Keluar asal DISAHKAN — jangan ubah — 21 kaedah
 
 Pengoptimum luar sampel memilih peraturan keluar asal kaedah ini pada >= 7 suku, atau mesin keluarnya menambah > +0.50 mata lawan pegang pasif.
 
-`M04`, `M05`, `M21`, `M22`, `M24`, `M30`, `M31`, `M33`, `M34`, `M38`, `M45`, `M52`, `M54`, `M81`, `M87`, `M91`, `M95`, `M96`, `M107`, `M117`, `M120`, `M125`, `M130`, `M137`, `M145`, `M147`, `M149`, `M152`, `M157`
+`M04`, `M21`, `M22`, `M30`, `M31`, `M33`, `M34`, `M52`, `M54`, `M87`, `M91`, `M95`, `M96`, `M107`, `M117`, `M120`, `M130`, `M137`, `M145`, `M152`, `M157`
 
 
 ## 7. Had wajib — baca sebelum bertindak
 
-1. **Kelebihan pegang-lebih-lama ialah masa, bukan alfa.** Kadar setiap hari sama (+0.1021% lawan +0.1047%, ujian-t berpasangan p 0.50, dan mesin kaedah sebenarnya sedikit di HADAPAN). Memegang 60 hari dan bukan 17 hari memberi 3.49x untung setiap dagangan atas modal yang terikat 3.53x lebih lama — nisbah sama. Pada 8–10 slot itu bermakna 3.5x lebih SEDIKIT dagangan setahun. `REVERSE/SISTEM.md` sudah mengukur bentuk sama: CAGR setiap unit pendedahan Clenow 18.01% lawan SPUS 17.95% — praktiknya sama.
+1. **Kelebihan pegang-lebih-lama ialah masa, bukan alfa.** Kadar setiap hari sama (+0.1023% lawan +0.1051%, ujian-t berpasangan p 0.50, dan mesin kaedah sebenarnya sedikit di HADAPAN). Memegang 60 hari dan bukan 17 hari memberi 3.46x untung setiap dagangan atas modal yang terikat 3.50x lebih lama — nisbah sama. Pada 8–10 slot itu bermakna 3.5x lebih SEDIKIT dagangan setahun. `REVERSE/SISTEM.md` sudah mengukur bentuk sama: CAGR setiap unit pendedahan Clenow 18.01% lawan SPUS 17.95% — praktiknya sama.
 2. **Membuang henti menaikkan MDD.** Lengkung `pegang` tiada henti sama sekali. `REVERSE/KOLAM_EKOR.md` §2 mengukur arah bertentangan pada asas tanpa signal: henti −2xATR mengurangkan min 9.79 mata setahun, jadi henti yang lebih LEBAR memang menolong pulangan — tetapi tiada henti bermakna tiada had kerugian setiap posisi.
 3. **Lajur `pegang` dalam sampel** (2019–2026, alam 431). Ia bukan luar sampel. Yang luar sampel ialah W01 (bahagian 3), dan di situ penalaan per-kaedah KALAH 52/131.
 4. **Lejar hadapan masih muda**: 10550 daripada 16629 posisi masih terbuka. Jangan baca lajur `H0/1` sebagai prestasi; ia sifat mekanikal.
