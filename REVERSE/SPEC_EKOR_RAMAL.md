@@ -1,23 +1,23 @@
 # SPEC — Bolehkah "sejauh mana saham akan naik" diramal? (paksi EKOR)
 
-## STATUS: DITARIK BALIK 1 Nov 2026, SEBELUM DIJALANKAN — PENDUA `L99`
+## STATUS: DITARIK BALIK 1 Nov 2026, SEBELUM DIJALANKAN — PENDUA `MOMENTUM_PEGANG`
 
 Pradaftar ini ditulis pada 1 Nov 2026 sebagai jawapan kepada soalan pengguna: "boleh tak
 [jalur] digunakan utk predict momentum, sejauh mana saham akan naik, possible tak? utk
 setiap saham."
 
-Ia **ditarik balik sebelum sebarang keputusan dijana**. Sebabnya: `REVERSE/L99.md` +
-`REVERSE/SPEC_L99.md` dikomit ke `main` pada hari yang sama (`e897a8a`) dan sudah menjawab
+Ia **ditarik balik sebelum sebarang keputusan dijana**. Sebabnya: `REVERSE/MOMENTUM_PEGANG.md` +
+`REVERSE/SPEC_MOMENTUM_PEGANG.md` dikomit ke `main` pada hari yang sama (`e897a8a`) dan sudah menjawab
 soalan teras ini dengan reka bentuk yang **lebih baik** daripada yang di bawah. Sesi ini
-bermula daripada HEAD terpisah sebelum komit itu, jadi L99 tiada dalam pokok kerja dan
+bermula daripada HEAD terpisah sebelum komit itu, jadi kajian itu tiada dalam pokok kerja dan
 tidak kelihatan semasa pradaftar ini ditulis.
 
 Fail ini dikekalkan sebagai rekod "jangan ulangi", bukan sebagai rancangan.
 
-### Apa yang L99 sudah ukur, yang menjadikan spec ini pendua
+### Apa yang MOMENTUM_PEGANG sudah ukur, yang menjadikan spec ini pendua
 
 Hipotesis utama di bawah ialah: peramal skala akan meramal MFE **dan** MAE hampir simetri,
-jadi ia mengukur volatiliti dan bukan arah (gate3). **L99 §2c sudah mengukur tepat itu dan
+jadi ia mengukur volatiliti dan bukan arah (gate3). **MOMENTUM_PEGANG §2c sudah mengukur tepat itu dan
 keputusannya muktamad:**
 
 - `C1 ATR% tertile teratas` memberi ΔP(trend besar) **+23.72 mata** — kesan terbesar dalam
@@ -25,9 +25,9 @@ keputusannya muktamad:**
   simetri sempurna.
 - Dengan sasaran dinormal volatiliti (`mx120 ÷ ATR%`), **8 daripada 8** pattern menukar tanda
   atau berubah besar; kesan runtuh kepada ±3–6 mata.
-- Ayat L99: **"Volatiliti mentah bukan pattern; ia unit ukuran."**
+- Ayat MOMENTUM_PEGANG: **"Volatiliti mentah bukan pattern; ia unit ukuran."**
 
-L99 juga sudah menjalankan, pada 763,327 dagangan enjin + alam A02 penuh:
+MOMENTUM_PEGANG juga sudah menjalankan, pada 763,327 dagangan enjin + alam A02 penuh:
 - sasaran "keahlian ekor" (`mx120/buka − 1 ≥ 0.30`) = MFE berambang — kuantiti yang sama;
 - urutan lawan penapis lawan kesatuan (urutan +0.520 · penapis +0.034 · kesatuan +0.015);
 - diagnostik portfolio 8/40 slot lawan SPUS;
@@ -37,7 +37,7 @@ L99 juga sudah menjalankan, pada 763,327 dagangan enjin + alam A02 penuh:
 ### Apa yang spec ini akan tambah, dan mengapa ia tidak berbaloi
 
 Bezanya hanya **penghuraian**: spec ini mengukur MFE dan MAE sebagai dua sasaran berterusan
-berasingan dan menguji asimetri secara langsung, manakala L99 **menormalkan** dengan ATR%
+berasingan dan menguji asimetri secara langsung, manakala MOMENTUM_PEGANG **menormalkan** dengan ATR%
 dan menyimpulkan daripada keruntuhan kesan. Kedua-duanya sampai ke jawapan yang sama melalui
 jalan berbeza. Penghuraian akan memperhalusi mekanisme; ia **tidak** akan menukar kesimpulan,
 kerana kesimpulan itu sudah ±23.7 mata simetri dan runtuh ke ±3 selepas normalisasi.
@@ -46,25 +46,25 @@ Menjalankannya bermakna membelanjakan beberapa jam untuk menghasilkan semula dap
 sudah ada dengan jentera berbeza. Itu bukan pengesahan bebas — ia alam yang sama, konvensyen
 yang sama dan pengarang yang sama.
 
-### Yang BELUM dijawab oleh L99 (jika hendak diteruskan, pradaftar semula)
+### Yang BELUM dijawab oleh MOMENTUM_PEGANG (jika hendak diteruskan, pradaftar semula)
 
-1. **Lebar jalur, bukan pusat jalur.** L99 menjawab "boleh tak ramal arah/magnitud" = tidak.
+1. **Lebar jalur, bukan pusat jalur.** MOMENTUM_PEGANG menjawab "boleh tak ramal arah/magnitud" = tidak.
    Ia tidak menanya "boleh tak ramal **ketidakpastian**". Pengelompokan volatiliti bermakna
    lebar taburan hadapan memang boleh diramal — itu sebenarnya sebab `C1`/`C2` memberi
    ±23.7 mata. Itu bukan alfa dan tidak boleh didagangkan, tetapi ia **paparan jujur**
    setiap saham.
 2. Penguraian MFE/MAE eksplisit (di bawah, §4–§5) sebagai semakan bahawa normalisasi ATR%
    ialah pelarasan yang betul — nilai metodologi, bukan nilai dagangan.
-3. L99 §2f "perangkap pangkat #1" diukur pada tiga skor sahaja; sama ada ia am belum diuji.
+3. MOMENTUM_PEGANG §2f "perangkap pangkat #1" diukur pada tiga skor sahaja; sama ada ia am belum diuji.
 
 ### Apa yang KEKAL berguna daripada kerja ini
 
 `REVERSE/step22_ekor.py` dikekalkan. Ia membina panel setiap bar dengan **MFE, MAE dan
-pulangan terminal berterusan** pada ufuk 21 dan 63 hari (L99 hanya ada sasaran berambang
+pulangan terminal berterusan** pada ufuk 21 dan 63 hari (MOMENTUM_PEGANG hanya ada sasaran berambang
 120 bar). Panel itu ialah input yang betul bagi perkara (1) di atas — jalur ketidakpastian
 setiap saham untuk dashboard — dan bagi apa-apa kerja MFE/MAE kemudian. `gate0()` di dalamnya
-melaksanakan ujian asap **kombinasi** yang `L99 §8a` dapati hilang daripada L99 sendiri
-(dua daripada lima ujian asap L99 adalah vakum: `hari < 1` dan `(j_keluar == k) & (kod == 1)`
+melaksanakan ujian asap **kombinasi** yang `MOMENTUM_PEGANG §8a` dapati hilang daripada MOMENTUM_PEGANG sendiri
+(dua daripada lima ujian asap MOMENTUM_PEGANG adalah vakum: `hari < 1` dan `(j_keluar == k) & (kod == 1)`
 kedua-duanya mustahil mengikut pembinaan).
 
 ---
@@ -85,9 +85,9 @@ difikirkan, dan nampak mengapa ia tidak dijalankan.
 gate3 bukan-sekadar-volatiliti · gate3b cabang keluar · gate4 jangkaan mutlak > 0 + BH-FDR ·
 gate5 portfolio lawan SPUS, nisbah `CAGR ÷ abs(MDD)` > 0.669.
 
-**Jangkaan priori §7 (direkod sebelum penarikan balik, dan kini boleh dinilai terhadap L99):**
+**Jangkaan priori §7 (direkod sebelum penarikan balik, dan kini boleh dinilai terhadap MOMENTUM_PEGANG):**
 saya meramalkan keluarga SKALA lulus gate1 dengan kuat lalu **gagal gate3 kerana ia volatiliti
-tulen**, dan 0 daripada semua lulus kelima-lima gate. **L99 §2c mengesahkan ramalan itu** —
+tulen**, dan 0 daripada semua lulus kelima-lima gate. **MOMENTUM_PEGANG §2c mengesahkan ramalan itu** —
 ±23.72 lawan −23.90 mata ialah definisi simetri. Jadi untuk kali pertama dalam empat pradaftar
 jangkaan priori saya betul pada perkara utama; tetapi ia betul tentang ujian yang **sudah
 dijalankan oleh orang lain**, jadi ia bukan ramalan yang disahkan secara bebas.
