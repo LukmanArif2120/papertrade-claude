@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793457029-3412",
-  "nombor": 161,
-  "sha256": "d69f1246bb2bc599e5f1e196b11effa44ddfb20cf5165d36246331090cf90f9c",
-  "bait": 629246,
-  "dikemas": "2026-10-31 14:30 UTC",
+  "versi_artifact": "1793495792-6a86",
+  "nombor": 162,
+  "sha256": "2fcd54e430380a255c8f9d13e489eb3913eeccb0c64b9de378d5a658fc883ab4",
+  "bait": 629301,
+  "dikemas": "2026-11-01 01:16 UTC",
   "nota": "Kaedah N: keputusan akhir E1-E6 BERHENTI-TUTUP + baris gilir"
 }

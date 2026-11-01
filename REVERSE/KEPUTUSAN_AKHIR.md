@@ -62,7 +62,9 @@ itu menapis membunuh pemeringkat; di atas itu menapis membantu. Itu merekonsilia
 kedua-dua paksi~~ — **DITARIK BALIK 1 Nov 2026** oleh semakan luar sampel
 (`SEMAKAN_LATIH.md`): kaki CAGR **tidak bertahan** dalam latih 2012–2019 (+1.65 → **−0.19**),
 jadi +1.65 itu artifak tingkap. Kaki MDD **bertahan kukuh**: +1.60 (tahan) dan **+1.12**
-(latih), mencetek pada **83.3%** sel latih. Rumusan yang betul: **had 1 pegangan setiap
+(latih), mencetek pada **83.3%** sel latih, dan ia **melepasi BH-FDR** (20/23 sel,
+p = 0.0005). Semakan semula 1 Nov 2026 menambah: **+1.65 itu tidak pernah signifikan walaupun
+dalam tingkapnya sendiri** (16/24 sel, p = 0.152). Rumusan yang betul: **had 1 pegangan setiap
 industri membeli MDD lebih cetek pada kos CAGR hampir sifar.** Mekanismenya tetap diukur:
 tanpa had, **6 daripada 8 slot** boleh berada dalam satu industri — "8 slot" sebenarnya ~3
 taruhan.
@@ -78,7 +80,15 @@ Saringan separuh berkevolatilan rendah memberi **+22.09 mata** MDD lebih cetek p
 **−17.47 mata** CAGR dalam 2020–2025 (E6). **PEMBETULAN 1 Nov 2026** (`SEMAKAN_LATIH.md`,
 post-hoc): dalam latih 2012–2019 ia memberi **+18.62 mata MDD pada kos +0.16 mata CAGR** —
 hampir percuma, pada **100%** sel. Jadi "pertukaran tulen" ialah sifat **2020–2025**, bukan
-sifat umum: tingkap itu mempunyai kepimpinan berkevolatilan tinggi yang luar biasa.
+sifat umum: tingkap itu mempunyai kepimpinan berkevolatilan tinggi yang luar biasa. Ujian
+tanda mengesahkannya: MDD mencetek pada **12/12 sel dalam kedua-dua tingkap** (p = 0.0005
+setiap satu, melepasi FDR) manakala kos CAGR latih ialah **6/12 sel, p = 1.000** — tepat nol.
+
+**Satu ayat yang merangkum kesemua lima selepas semakan luar sampel:** daripada **28** kesan
+pembinaan yang diuji dengan ujian tanda berpasangan, **8 melepasi BH-FDR; 3 daripadanya luar
+sampel; kesemua 3 ialah kesan MDD. SIFAR kesan CAGR luar sampel melepasi FDR**
+(`SEMAKAN_LATIH.md`). Lever pembinaan menggerakkan **risiko**, bukan **pulangan** — dan itu
+kini benar pada dua tingkap dengan kawalan pelbagai ujian, bukan satu.
 
 ## 4. Apa yang perlu dibuat sekarang: `T4`
 

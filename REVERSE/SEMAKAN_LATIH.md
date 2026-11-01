@@ -47,9 +47,17 @@ daripada setiap lever lain yang diukur, tetapi ia **bukan** makan tengah hari pe
 Jadual keputusan: **DISAHKAN.**
 
 **Tetapi magnitudnya mesti dibetulkan.** `A2` jatuh daripada **+4.26** kepada **+0.64** mata
-CAGR — kira-kira **satu perlima**. `A3`, saringan paling ketat, **hilang sepenuhnya**
-(0.00 / 0.00). Itu konsisten dengan mekanisme yang E4/E6 sudah ukur: menapis lebih ketat
-membuang calon yang pemeringkat perlukan, dan `A3` hanya mengekalkan 102 nama daripada 500.
+CAGR — kira-kira **satu perlima**. Itu konsisten dengan mekanisme yang E4/E6 sudah ukur:
+menapis lebih ketat membuang calon yang pemeringkat perlukan, dan `A3` hanya mengekalkan
+102 nama daripada 500.
+
+`A3` dilaporkan **0.00 / 0.00** di atas, dan semakan semula (§ di bawah) mendapati nombor itu
+**artifak pencairan**, bukan ukuran: 4 daripada 12 sel `A3` ialah `A3`×`U02` yang **degenerat
+ikut binaan** (spec §4.1) dan memberi Δ = 0.00 **tepat**, jadi median mendarat di dalam blok
+sifar itu. Pada 8 sel bukan-degenerat `A3` memberi **+1.33** CAGR tetapi **−1.74** MDD.
+Kesimpulannya **tidak berubah** — `A3` masih gagal R1 — tetapi sebabnya **tanda bertentangan**,
+bukan "hilang". Jadual di atas dikekalkan seperti dilaporkan; angka bukan-degenerat ada dalam
+`semak_latih.py` bahagian 3.
 
 Dapatan yang bertahan ialah **arah dan peraturan kolam**, bukan nombor: saringan berdiri
 yang **longgar** (mengekalkan ~300 daripada 500) membantu sedikit pada kedua-dua paksi;
@@ -97,6 +105,61 @@ sepatutnya merugikan pulangan di sana. Ia memang artifak tingkap.
    dipadam.
 4. Registry `KR03` dan `GB07` dikemas dengan nombor latih.
 5. `CLAUDE.md` dan dashboard dikemas.
+
+## Semakan semula bebas (1 Nov 2026, permintaan pengguna "recheck sekali lagi")
+
+Skrip: `REVERSE/semak_latih.py` — **tanpa pandas**, hanya `csv` + `statistics` pustaka
+standard, supaya ia bukan `groupby` yang sama mengesahkan dirinya sendiri. Empat semakan:
+
+**(1) Keutuhan tingkap — LULUS.** `latih` idx 252–2263 = 2012-01-03…2019-12-30 (2,011 sesi),
+`tahan` idx 2264–akhir = 2020-01-02…2025-12-31 (1,508 sesi); bertindih **tiada**. Dagangan
+bermula tepat pada idx 252, jadi tingkap latih tidak mengandungi tempoh pemanasan momentum.
+
+**(2) Saiz alam dalam kedua-dua tingkap — LULUS, tiada perancu.** Nama LAYAK: 1,682 (2012) ·
+2,082 (2016) · 2,507 (2020) · 3,123 (2025). `AL04`-500 **tidak pernah** terikat pada
+ketersediaan, jadi alam berwatak sama pada kedua-dua tingkap.
+
+**(3) Pengiraan semula bebas — LULUS, kesemua 28 nombor identik** (toleransi 0.01 mata).
+Sebaran setiap sel juga disemak: bagi dakwaan utama (had 1, CAGR latih) median **−0.19**
+bersamaan **min −0.19** dengan **58.3%** daripada 24 sel negatif. **Jadi `DIPALSUKAN` bukan
+didorong oleh beberapa sel terpencil** — ia majoriti sel, dan min bersetuju dengan median.
+
+**(4) Ujian tanda berpasangan + BH-FDR merentas kesemua 28 kesan** — bahagian paling berguna,
+dan ia **mengubah tafsiran dua kali**:
+
+| | median | sel + | p | FDR |
+|---|---:|---:|---:|---|
+| `had 1` CAGR **tahan** (dakwaan asal) | +1.65 | 16/24 | **0.152** | gagal |
+| `had 1` CAGR **latih** | −0.19 | 10/24 | 0.541 | gagal |
+| `had 1` MDD **latih** | +1.12 | 20/23 | **0.0005** | **LULUS** |
+| `A2` MDD **latih** | +0.64 | 8/8 | **0.0078** | **LULUS** |
+| `A4` MDD **latih** | +18.62 | 12/12 | **0.0005** | **LULUS** |
+| `A4` CAGR **latih** | +0.16 | 6/12 | **1.000** | gagal |
+
+Pertama: **dakwaan +1.65 itu tidak pernah boleh dibezakan daripada sifar walaupun dalam
+tingkap ia diukur** (16/24 sel, p = 0.152). Jadi penarikan balik lebih kukuh daripada yang
+laporan ini mula-mula nyatakan — ia bukan kes "kesan nyata yang hilang di luar sampel", ia
+kes **kesan yang tidak pernah ada**. Yang bertahan ialah kaki MDD, dan ia bertahan dengan
+p = 0.0005 **dalam tingkap luar sampel**.
+
+Kedua: **8 daripada 28 kesan melepasi BH-FDR; 3 daripadanya luar sampel; kesemua 3 ialah
+MDD. SIFAR kesan CAGR luar sampel melepasi FDR.** Itu ayat tunggal yang paling padat dalam
+semakan ini: lever pembinaan menggerakkan **risiko**, bukan **pulangan**, dan kini itu benar
+pada dua tingkap dengan kawalan pelbagai ujian. Ia sejajar sepenuhnya dengan
+`KEPUTUSAN_AKHIR.md` §2 (set risiko-boleh-terima dan set pulangan-mencukupi tidak bertindih).
+
+Ketiga: `A4` ialah lever paling kukuh yang pernah diukur dalam baris gilir — MDD mencetek
+pada **12/12 sel dalam KEDUA-DUA tingkap** (p = 0.0005 setiap satu) — dan kos CAGR-nya
+signifikan **hanya** dalam tahan (0/12, p = 0.0005), **tepat nol** dalam latih (6/12,
+p = 1.000). Pembetulan dapatan kelima `KEPUTUSAN_AKHIR.md` disahkan dengan ujian, bukan
+sekadar median.
+
+**Keputusan semakan semula: Dakwaan A kekal `DIPALSUKAN` (lebih kukuh); Dakwaan B kekal
+`DISAHKAN` (perihalan `A3` dibetulkan, verdict tidak berubah — `A1` +0.54/+1.92 dan `A2`
++1.30/+1.78 pada sel bukan-degenerat, kedua-dua paksi positif, jadi R1 masih lulus).**
+
+`python3 REVERSE/semak_latih.py --semak` keluar 1 jika mana-mana nombor di atas tidak
+dihasilkan semula, atau jika mana-mana kesan CAGR luar sampel mula melepasi FDR.
 
 ## Had
 

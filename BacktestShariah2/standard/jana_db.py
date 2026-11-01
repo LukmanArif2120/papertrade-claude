@@ -589,19 +589,30 @@ def kaedah_n(dibina):
                 'Had industri ialah lever RISIKO yang hampir percuma. Dakwaan dwi-arah '
                 'asal DITARIK BALIK 1 Nov 2026 oleh semakan luar sampel: kaki CAGR tidak '
                 'bertahan (+1.65 pada 2020-2025 menjadi -0.19 pada 2012-2019) tetapi kaki '
-                'MDD bertahan (+1.60 dan +1.12, mencetek pada 83.3% sel latih). Tanpa had, '
-                '6 daripada 8 slot boleh berada dalam satu industri.',
+                'MDD bertahan (+1.60 dan +1.12, mencetek pada 83.3% sel latih). Semakan '
+                'semula dengan ujian tanda berpasangan menajamkannya: +1.65 itu TIDAK '
+                'PERNAH signifikan walaupun dalam tingkapnya sendiri (16/24 sel, p=0.152), '
+                'manakala kaki MDD MELEPASI BH-FDR luar sampel (20/23 sel, p=0.0005). '
+                'Tanpa had, 6 daripada 8 slot boleh berada dalam satu industri.',
                 'Masalah ekor ialah sifat ALAM, bukan hukum pasaran: 5% teratas membawa '
                 '101.67% jumlah pulangan pada alam 3,260 nama, 47.92% pada 214 nama, dan '
                 'tanpa5 POSITIF pada 8/8 sel bakul sektor.',
-                'Volatiliti rendah ialah lever MDD terbesar (+22.09 mata) dan harganya '
-                'bergantung TINGKAP: dalam 2012-2019 ia memberi +18.62 mata MDD pada kos '
-                '+0.16 mata CAGR pada 100% sel, jadi "pertukaran tulen -17.47 mata" ialah '
-                'sifat 2020-2025 sahaja.',
+                'Volatiliti rendah ialah lever MDD terbesar dan paling KUKUH dalam '
+                'kajian: MDD mencetek pada 12/12 sel dalam KEDUA-DUA tingkap (p=0.0005 '
+                'setiap satu, melepasi FDR), +22.09 mata dalam tahan dan +18.62 dalam '
+                'latih. Harganya bergantung TINGKAP: kos CAGR -17.47 mata dalam 2020-2025 '
+                'tetapi TEPAT NOL dalam 2012-2019 (6/12 sel, p=1.000), jadi "pertukaran '
+                'tulen" ialah sifat 2020-2025 sahaja.',
                 'SEMAKAN LUAR SAMPEL 1 Nov 2026: saringan berdiri DISAHKAN tetapi '
-                'magnitudnya runtuh (A2 +4.26 menjadi +0.64 mata CAGR; A3 hilang '
-                'sepenuhnya). Yang bertahan ialah ARAH dan peraturan kolam, bukan nombor. '
-                'Setiap kesan MDD dalam E1-E4 masih tingkap TAHAN sahaja.'],
+                'magnitudnya runtuh (A2 +4.26 menjadi +0.64 mata CAGR). Yang bertahan '
+                'ialah ARAH dan peraturan kolam, bukan nombor. Setiap kesan MDD dalam '
+                'E1-E4 masih tingkap TAHAN sahaja.',
+                'AYAT TUNGGAL SELEPAS SEMAKAN LUAR SAMPEL: daripada 28 kesan pembinaan '
+                'yang diuji dengan ujian tanda berpasangan, 8 melepasi BH-FDR, 3 '
+                'daripadanya luar sampel, dan KESEMUA 3 ialah kesan MDD. SIFAR kesan CAGR '
+                'luar sampel melepasi FDR. Lever pembinaan menggerakkan RISIKO, bukan '
+                'PULANGAN - dan itu kini benar pada dua tingkap dengan kawalan pelbagai '
+                'ujian, bukan satu.'],
             t4=[dict(berat=100, cagr=17.95, mdd=-26.82),
                 dict(berat=60, cagr=10.87, mdd=-16.62),
                 dict(berat=40, cagr=7.27, mdd=-11.25),

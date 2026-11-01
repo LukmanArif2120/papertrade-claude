@@ -4,8 +4,14 @@
 > industri memperbaiki **kedua-dua** paksi, **DIPALSUKAN** oleh semakan luar sampel. Kaki
 > CAGR tidak bertahan dalam latih 2012–2019: had 1 memberi **−0.19** mata, bukan +1.65. Kaki
 > MDD **bertahan** (+1.12, 83.3% sel). Baca laporan ini sebagai: **had industri ialah lever
-> RISIKO yang hampir percuma, bukan lever dwi-arah.** Laporan asal dikekalkan tanpa diubah
-> di bawah supaya rekodnya utuh.
+> RISIKO yang hampir percuma, bukan lever dwi-arah.**
+>
+> **Semakan semula 1 Nov 2026 (`semak_latih.py`, ujian tanda berpasangan) menajamkannya
+> lagi: +1.65 itu tidak pernah boleh dibezakan daripada sifar walaupun dalam tingkap ia
+> diukur** — 16 daripada 24 sel positif, p = **0.152**. Jadi ia bukan kesan yang hilang di
+> luar sampel; ia kesan yang tidak pernah ada. Kaki MDD sebaliknya **melepasi BH-FDR** pada
+> tingkap luar sampel: +1.12 mata, 20/23 sel, p = **0.0005**. Laporan asal dikekalkan tanpa
+> diubah di bawah supaya rekodnya utuh.
 
 Pradaftar: `REVERSE/SPEC_KORELASI.md` (komit `26c135b`, sebelum larian).
 Skrip: `REVERSE/step28_korelasi.py` · Data: `REVERSE/korelasi.csv`,
