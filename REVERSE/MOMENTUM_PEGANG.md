@@ -470,6 +470,22 @@ dan **anda perlu banyak slot** kerana pada 8 slot pemilihan momentum kalah kepad
 
 ---
 
+## 7b. FASA 2 — tiga jurang ditutup (1 Nov 2026)
+
+Jurang **A**, **C** dan **D** dalam §8f telah ditutup: `REVERSE/SPEC_MOMENTUM_PEGANG_2.md` (pradaftar) dan
+`REVERSE/MOMENTUM_PEGANG_2.md` (keputusan). Ringkasan yang mengubah syor fasa 1:
+
+| Leg | Keputusan | Kesan pada §6 |
+|---|---|---|
+| **A** top-N bukan desil | **0 / 28 lulus.** `S3` RS 6b runtuh pada 8 slot (0.090%/bulan lawan rawak 0.934%); hanya pakej `Minervini` dan `Qullamaggie` melepasi jalur rawak pada setiap N dalam kedua-dua tingkap; **tiada** lorong boleh dibezakan daripada rawak (CI95 0/28). Risiko ekor kiri pemilihan momentum **8–20× lebih tinggi** daripada rawak | §6 butir 5 **DIPINDA**: jangan guna RS 6 bulan tunggal pada 8–10 slot |
+| **C** paksi PEGANG | **0 / 4 lulus; signifikan MERUGIKAN dalam LATIH** (CI95 mengecualikan sifar pada sisi negatif). Statistik bersyarat §3 betul tetapi bukan strategi: cabang pegang +9.807% hanya 6.7% dagangan, cabang potong 93.3% pada −0.617% | §6 butir 4 **DITOLAK** |
+| **D** grid pattern × keluar | D1 lulus pada anggaran titik, **D2 dan D3 gagal**. Tiada interaksi: pilih pattern dan ganda secara berasingan. Pada A02 ganda 4× dan 6× **tidak boleh dibezakan**; yang pasti ialah jangan ke bawah 3× | §8d **DIBETULKAN**: 4× ialah plato, bukan puncak |
+
+Satu kesan pattern signifikan dalam seluruh fasa 2: `S3` RS 6 bulan pada ganda 4, TAHAN,
+**+0.627 mata/bulan, CI95 [+0.140, +1.121]** — tidak berulang dalam LATIH dan runtuh pada slot kecil.
+
+---
+
 ## 8. Audit kod bebas — enam agen, enam pepijat dalam kod MOMENTUM_PEGANG sendiri
 
 Enam agen bebas mengaudit MOMENTUM_PEGANG tanpa melihat keputusan satu sama lain: tiga lensa kod (pandang ke hadapan ·
