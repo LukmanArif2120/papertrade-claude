@@ -34,6 +34,9 @@ KUANTIL = (10, 25, 50, 75, 90)
 # grid MAE untuk menyongsang P(sentuh) pada sebarang jarak paras; dalam PERATUS, menurun
 GRID_MAE = [-1, -2, -3, -4, -5, -6, -8, -10, -12, -15, -18, -21, -25, -30, -35, -40, -50]
 MIN_SEL = 2000          # minimum bar setiap sel sebelum kuantil dipercayai
+# VERSI: naikkan apabila takrif sasaran/p_sentuh berubah supaya cache lama tidak diguna semula.
+#   1 = asal · 2 = mae5 asas tutup (fe822a2) · 3 = paras MENAIK + desil pangkat-alam (f637922)
+VERSI = 3
 
 
 # ---------------------------------------------------------------- peringkat 1
@@ -89,6 +92,7 @@ def bina_jadual(panel=None, keluar=JADUAL):
     jad = {'nota': ('Kuantil pulangan hadapan bersyarat desil atr_pct keratan rentas. '
                     'Bukan ramalan arah; lihat REVERSE/SILING_ARAH.md.'),
            'alam': 'autotune-data-a02 2012-2025, bar cair nilai20 >= USD100k',
+           'versi': VERSI,
            'ndesil': NDESIL, 'kuantil': list(KUANTIL), 'grid_mae': list(GRID_MAE),
            'atr_pct_tepi': tepi,
            'ufuk': list(UFUK), 'sel': {}}
@@ -167,7 +171,9 @@ def _p_tercetus(tk, o, c, atr, H, grid):
 def _sasaran5(tickers, P):
     """term5/mae5/mfe5 daripada stor A02; masuk buka t+1, tetingkap [t+1, t+5] PENUH."""
     import pandas as pd
-    cache = os.path.join(AKAR, 'REVERSE', '.cache', 'sasaran5.parquet')
+    # cache dicap VERSI: tanpa cap, larian semula pada checkout lama memulihkan diam-diam
+    # nombor asas-rendah yang salah (lihat komit fe822a2)
+    cache = os.path.join(AKAR, 'REVERSE', '.cache', f'sasaran5_v{VERSI}.parquet')
     if os.path.exists(cache):
         return pd.read_parquet(cache)
     H = 5
@@ -221,8 +227,10 @@ def muat_jadual(p=JADUAL):
 
 def p_sentuh(sel, jarak_pct, grid):
     """Songsang linear P(MAE <= jarak) daripada grid. jarak_pct negatif (cth -16.40)."""
-    if jarak_pct is None or not np.isfinite(jarak_pct) or jarak_pct >= 0:
+    if jarak_pct is None or not np.isfinite(jarak_pct):
         return None
+    if jarak_pct >= 0:
+        return 100.0            # tutup sudah di bawah paras: sudah tercetus, bukan 'tidak diketahui'
     g = np.asarray(grid, dtype='float64')       # menurun: -1, -2, ...
     p = np.asarray(sel['p_sentuh'], dtype='float64')
     if jarak_pct >= g[0]:
@@ -234,9 +242,21 @@ def p_sentuh(sel, jarak_pct, grid):
 
 
 def _atr_pct(h, l, c, n=14):
-    """ATR14 Wilder dalam % harga; sama konvensyen dengan keluar_lorong.atr."""
-    import keluar_lorong as KL
-    a = KL.atr(h, l, c)
+    """atr_pct seperti REVERSE/teras/ind.py (ATR14 Wilder/RMA) dalam % harga.
+
+    SENGAJA berbeza daripada keluar_lorong.atr, yang purata MUDAH 14 bar dan menetapkan paras
+    lorong 2 itu sendiri. Padanan desil wajib guna penganggar yang menanam tepi jadual: nisbah
+    purata-mudah/Wilder median 1.034 pada posisi langsung, cukup untuk menukar desil 28% baris
+    dan menganjak p21 median 4.6 mata. Jangan "selaraskan" dengan keluar_lorong.atr.
+    """
+    import pandas as pd
+    jalan = os.path.join(AKAR, 'REVERSE', 'teras')
+    if jalan not in sys.path:
+        sys.path.insert(0, jalan)
+    from ind import _wilder
+    pc = np.r_[np.nan, c[:-1]]
+    tr = np.fmax(h - l, np.fmax(np.abs(h - pc), np.abs(l - pc)))
+    a = _wilder(pd.Series(tr), n).to_numpy()
     with np.errstate(invalid='ignore', divide='ignore'):
         return a / np.where(c == 0, np.nan, c) * 100.0
 
@@ -258,7 +278,7 @@ def dokumen(H, l2rows, folder=None, jadual=None):
         if not A:
             continue
         b = A[-1]
-        if b[4] in ('jual', 'lepas'):      # sudah keluar lorong 2
+        if b[4] in ('jual', 'lepas', 'bawah'):   # sudah keluar, atau isyarat jual sudah tercetus
             continue
         if b[2] is None or not b[1]:       # belum ada paras (sebelum beli)
             continue

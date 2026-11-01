@@ -3336,7 +3336,9 @@ let JLM=null,JLR=null;const jlMap=()=>{if(!S.jlr)return null;if(JLR!==S.jlr){JLR
 function jlSvg(v,harga,W){const H=168,ml=46,mr=58,mt=12,mb=22,UF=[5,21];
   const qs=UF.map(h=>v.u[String(h)]).filter(Boolean);if(!qs.length)return '';
   const jar=v.jarak;
-  let lo=Math.min(...qs.flat(),jar!=null?jar:0),hi=Math.max(...qs.flat(),0);const pad=(hi-lo)*0.10||1;lo-=pad;hi+=pad;
+  /* jar mesti masuk KEDUA lo dan hi: paras boleh berada DI ATAS 0% bila tutup sudah di bawahnya,
+     dan jika hi mengabaikannya garis itu terkeluar viewBox sementara labelnya masih dirender */
+  const vals=qs.flat().concat(jar!=null?[jar,0]:[0]);let lo=Math.min(...vals),hi=Math.max(...vals);const pad=(hi-lo)*0.10||1;lo-=pad;hi+=pad;
   const pw=W-ml-mr,y=p=>mt+(H-mt-mb)*(hi-p)/(hi-lo),x=i=>ml+pw*(i+1)/(UF.length+ (0));
   /* paksi: hari 0 di kiri, ufuk tersusun ke kanan */
   /* paksi masa LINEAR: 5 dan 21 hari diletak berkadar, bukan jarak sama */
