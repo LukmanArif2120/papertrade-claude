@@ -295,3 +295,69 @@ menguatkan ujian itu.
 
 Kos terukur: 1.67 KB/posisi · 7.3 isyarat/kaedah/sesi · 126 sesi →
 ~+70 MB bagi 20 kohort, ~215 MB bagi 52, ~267 MB bagi 65. `.git` sudah 484 MB.
+
+
+## 12. KEPUTUSAN SKALA: 20 kohort (1 Nov 2026)
+
+Pengguna menyerahkan keputusan ini kepada saya selepas membaca senarai 65. Saya pilih **20**,
+bukan 8 dan bukan 65. Komposisinya direka supaya keputusan jejak **boleh dibaca**, bukan
+supaya ia maksimum:
+
+**(a) Empat yang melepasi BH-FDR** — `N75` `N17` `N16` `N115`. Bukti terkuat yang ada.
+
+**(b) Empat lagi dengan bukti lain** — `N19` (satu daripada dua kes yang memperbaiki jangkaan
+terpangkas-ekor), `N37` dan `N20` (kaki `GB02`), `GB02` sendiri (satu-satunya dengan `tanpa5`
+positif mutlak).
+
+**(c) Tujuh yang melepasi gate1 tetapi gagal FDR** — `N42` `N73` `N119` `N49` `N118` `N46`
+`N15`. Pendua dibuang (`N64` Jaccard 0.733 dengan `N37`; `N116` 0.643 dengan `N49`). Dua
+daripadanya ialah **pasangan A/B penapis yang eksplisit**: `N73` = `N19` tanpa penapis
+`rsi14 < 30` (superset tepat), dan `N15` = `N16` dengan penapis `ma200` ditambah. Kajian
+mengukur penapis `ma200` **merugikan** di sini (lift +0.449 → −0.393); jejak hadapan menguji
+sama ada itu replikasi.
+
+**(d) EMPAT KAWALAN NEGATIF** — `N76` (MA, lift −0.641), `N24` (TREND, −0.161), `N31` (PECAH,
+−1.590), `N62` (POLA, **−2.651**, paling buruk antara 65 dan satu-satunya dengan jangkaan
+mutlak negatif). **Ini bahagian terpenting reka bentuk.** Tanpa kawalan negatif, kohort yang
+berbukti tidak boleh ditafsir: setiap kohort akan kelihatan menguntungkan kerana asas `X13`
+sendiri +4.350%. Dengan kawalan, soalannya menjadi **boleh dijawab**: adakah 16 yang berbukti
+mengalahkan 4 yang diukur gagal? Kalau ya, dapatan peringkat keluarga direplikasi pada sampel
+bebas. Kalau tidak, ia tidak.
+
+`N120` (Minervini Trend Template) **tidak boleh** dikod sebagai kawalan `KEKUATAN` kerana ia
+perlukan `rs_pst` yang tidak tersedia dalam `sedia(fr, idx)` — masalah sama seperti `U02`.
+Kesemua tiga baris `KEKUATAN` perlukan RS, jadi keluarga itu tiada wakil. `N62` (POLA)
+diambil sebagai gantinya dan ia kawalan yang **lebih kuat**.
+
+**(e) Satu kes soalan rejim** — `N124` (`gap ≥ 8% DAN vol_n50 ≥ 2.0`), lift tahan **+7.066**
+= tertinggi antara 65, tetapi lift **latih negatif** jadi ia **GAGAL gate1**. Dijejak dengan
+mata terbuka bahawa ia gagal gate, kerana jejak hadapan boleh membezakan dua tafsiran yang
+kajian tidak boleh: peraturan gagal yang bernasib baik dalam 2020–2025, atau peraturan yang
+hanya berfungsi dalam rejim selepas 2020. **Tiada dakwaan dibuat atasnya.**
+
+### 12a. Mengapa bukan 65
+
+44 daripada 65 ada lift tahan **negatif** — kajian mengukur ia lebih buruk daripada beli
+setiap bar. Menjejak kesemuanya berharga ~267 MB dan ~160,000 posisi untuk menjawab "ya, ia
+memang gagal". Empat wakil memberi jawapan yang sama pada 1/11 kos. Dan 10 daripada 65 ialah
+pendua (Jaccard ≥ 0.5), kesemuanya dalam keluarga yang gagal.
+
+### 12b. Jangkaan priori bagi 20 kohort
+
+1. **16 yang berbukti akan mengalahkan 4 kawalan** pada purata, tetapi jurangnya akan
+   **lebih kecil** daripada jurang kajian (lift +1.5 hingga +4.0 mata), kerana alam jejak
+   ditapis SPUS dan bukan alam `a02` kajian.
+2. `N62` akan menjadi **terburuk** antara 20. Kalau tidak, pemetaan keluarga tidak replikasi.
+3. `GB02` (kesatuan) akan mengalahkan **purata** tiga kakinya tetapi **bukan** kaki terbaik —
+   kesatuan menambah bar dan mencairkan, seperti `GABUNGAN.md` ukur.
+4. `N73` akan **mengalahkan** `N19`, dan `N16` akan mengalahkan `N15` — iaitu kedua-dua
+   pasangan A/B akan menunjukkan penapis MERUGIKAN, sejajar `SETUP.md`.
+5. `N124` akan ada **paling sedikit** isyarat (n tahan 12,728 = paling jarang) dan jangkaannya
+   akan jatuh di bawah +7.066 secara ketara.
+6. **Tiada satu pun daripada 20 akan mencapai jangkaan portfolio yang mengalahkan SPUS.**
+   Jejak ini menguji jangkaan setiap dagangan, bukan peruntukan modal.
+
+### 12c. Kos yang diterima
+
+~20 kohort × 7.3 isyarat/sesi × 126 sesi ≈ **18,400 posisi baharu**, ~**+31 MB**. Boleh
+dibaca dalam ~3–4 bulan (≥ 77 posisi ditutup setiap kohort untuk membezakan 1 mata).

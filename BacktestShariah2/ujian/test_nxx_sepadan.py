@@ -24,6 +24,10 @@ import kaedah._nxx as NX                       # noqa: E402
 import REVERSE.teras.ind as IND                # noqa: E402
 
 STOR = AKAR / 'BacktestShariah2' / 'data' / 'harga' / 'stor' / 'harga_A.csv'
+# 20 kohort jejak hadapan (SPEC_JEJAK_N.md). Senarai ini ialah kontrak: kalau modul
+# ditambah atau dibuang tanpa mengemas spec, ujian ini gagal.
+NXX = ('N15', 'N16', 'N17', 'N19', 'N20', 'N24', 'N31', 'N37', 'N42', 'N46', 'N49',
+       'N62', 'N73', 'N75', 'N76', 'N115', 'N118', 'N119', 'N124', 'GB02')
 N_TICKER = 25
 MIN_BAR = 300
 
@@ -109,7 +113,7 @@ class TestNxxSepadan(unittest.TestCase):
     def test_modul_tiada_henti_tiada_sasaran(self):
         """Setiap modul Nxx: ADA_HENTI False, stop/tgt NaN -> kecacatan hari-0 mustahil."""
         import importlib
-        for mid in ('N19', 'N20', 'N37', 'N115', 'GB02'):
+        for mid in NXX:
             m = importlib.import_module(f'kaedah.{mid}')
             self.assertFalse(m.ADA_HENTI, mid)
             self.assertEqual(m.TMAX, NX.IMBAS, f'{mid}: TMAX mesti = IMBAS kajian 126')
@@ -134,9 +138,9 @@ class TestNxxSepadan(unittest.TestCase):
         import subprocess
         kod = AKAR / 'BacktestShariah2' / 'kod'
         skrip = ('import sys, importlib; sys.path.insert(0, %r);'
-                 'ms=["N19","N20","N37","N115","GB02"];'
+                 'ms=%r;' % (str(kod), list(NXX)) + (''
                  '[importlib.import_module("kaedah."+m) for m in ms];'
-                 'print("OK")' % str(kod))
+                 'print("OK")'))
         r = subprocess.run([sys.executable, '-c', skrip], capture_output=True, text=True,
                            cwd=str(AKAR))
         self.assertEqual(r.returncode, 0, f'import gaya produksi gagal:\n{r.stderr[-1500:]}')
@@ -151,7 +155,7 @@ class TestNxxSepadan(unittest.TestCase):
         peratus setahun. Ujian ini gagal jika sesiapa menetapkan semula rank kepada pemalar.
         """
         import importlib
-        for mid in ('N19', 'N20', 'N37', 'N115', 'GB02'):
+        for mid in NXX:
             m = importlib.import_module(f'kaedah.{mid}')
             fr = {t: g.copy() for t, g in self.H}
             m.sedia(fr, None)
@@ -188,3 +192,24 @@ class TestNxxSepadan(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestKohortLengkap(unittest.TestCase):
+    """Senarai 20 kohort ialah kontrak antara kod dan `REVERSE/SPEC_JEJAK_N.md`."""
+
+    def test_modul_sepadan_senarai(self):
+        import glob
+        import os
+        pola = ('N*.py', 'GB*.py')
+        ada = {os.path.basename(p)[:-3]
+               for q in pola
+               for p in glob.glob(str(AKAR / 'BacktestShariah2' / 'kod' / 'kaedah' / q))}
+        self.assertEqual(ada, set(NXX),
+                         f'modul tanpa dalam senarai: {sorted(ada - set(NXX))}; '
+                         f'dalam senarai tanpa modul: {sorted(set(NXX) - ada)}')
+        self.assertEqual(len(NXX), 20)
+
+    def test_kawalan_negatif_ada(self):
+        """Jejak mesti mengandungi kawalan negatif, jika tidak keputusannya tidak boleh dibaca."""
+        for mid in ('N76', 'N24', 'N31', 'N62'):
+            self.assertIn(mid, NXX, f'{mid} ialah kawalan negatif dan mesti dijejak')

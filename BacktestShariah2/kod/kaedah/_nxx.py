@@ -42,6 +42,33 @@ def _ema(s, n):
     return s.ewm(span=n, adjust=False, min_periods=n).mean()
 
 
+def _supertrend(h, l, c, atr, mult=3.0):
+    """Arah Supertrend(10,3): +1 menaik, -1 menurun. ind.py:_supertrend verbatim."""
+    hl2 = ((h + l) / 2.0).to_numpy('float64')
+    a = atr.to_numpy('float64')
+    cc = c.to_numpy('float64')
+    n = cc.size
+    arah = np.full(n, np.nan)
+    atas = hl2 + mult * a
+    bawah = hl2 - mult * a
+    fa, fb, d = np.nan, np.nan, 1
+    for i in range(n):
+        if not np.isfinite(a[i]):
+            continue
+        if not np.isfinite(fa):
+            fa, fb, d = atas[i], bawah[i], 1
+            arah[i] = d
+            continue
+        fa = min(atas[i], fa) if cc[i - 1] <= fa else atas[i]
+        fb = max(bawah[i], fb) if cc[i - 1] >= fb else bawah[i]
+        if d == 1 and cc[i] < fb:
+            d = -1
+        elif d == -1 and cc[i] > fa:
+            d = 1
+        arah[i] = d
+    return pd.Series(arah, index=c.index)
+
+
 def indikator(g):
     """Lajur yang N19/N20/N37/N115 dan keluar X13 perlukan, formula kajian verbatim."""
     o, h, l, c, v = g.open, g.high, g.low, g.close, g.volume
@@ -87,6 +114,35 @@ def indikator(g):
     d['gap_and_go'] = gg.astype('float64')
     d.loc[v50.isna(), 'gap_and_go'] = np.nan
 
+    # purata bergerak - ind.py:124-127
+    d['ema21'] = _ema(c, 21)
+    d['ma20'], d['sd20'] = m20, s20
+    for n in (50, 150, 200):
+        d[f'ma{n}'] = c.rolling(n, min_periods=n).mean()
+
+    # supertrend(10,3) - ind.py:222
+    d['supertrend'] = _supertrend(h, l, c, atr14)
+
+    # donchian55 - ind.py:233-237
+    dc55 = h.rolling(55, min_periods=55).max().shift(1)
+    d['donchian55'] = (c > dc55).astype('float64')
+    d.loc[dc55.isna(), 'donchian55'] = np.nan
+
+    # inside_day + nr7 - ind.py:240-243
+    d['inside_day'] = ((h < h.shift(1)) & (l > l.shift(1))).astype('float64')
+    jr = h - l
+    d['nr7'] = (jr <= jr.rolling(7, min_periods=7).min() + EPS).astype('float64')
+    d.loc[jr.rolling(7, min_periods=7).min().isna(), 'nr7'] = np.nan
+
+    # julat20 - ind.py:199
+    d['julat20'] = ((h.rolling(20, min_periods=20).max()
+                     - l.rolling(20, min_periods=20).min()) / (c + EPS) * 100.0)
+
+    # step18_nxx.tambahan: tinggi20, gap, turun_4d5
+    d['tinggi20'] = h.rolling(20).max().shift(1)
+    d['gap'] = o / c.shift(1) - 1.0
+    d['turun_4d5'] = (c < c.shift(1)).rolling(5).sum() >= 4
+
     return d
 
 
@@ -130,6 +186,79 @@ def n75(f):
     """RSI14 < 40 tanpa penapis. `nxx.csv`: gate2 LULUS pada TIGA keluar (X2/X3/X4),
     dan jangkaan mutlak tertinggi antara semua topeng MASUK tunggal (+4.181% pada X3)."""
     return f.rsi14 < 40
+
+
+# ---------- 7 topeng yang melepasi gate1 (lift positif dua tingkap) ----------
+def n42(f, g):
+    """Lonjakan volum + tutup naik. `vol_n50 >= 2.0 DAN tutup > tutup[-1]`."""
+    return (f.vol_n50 >= 2.0) & (g.close > g.close.shift(1))
+
+
+def n73(f, g):
+    """Bawah jalur BB tanpa penapis RSI. SUPERSET tepat `N19` — menguji sama ada
+    penapis `rsi14 < 30` menambah apa-apa (Jaccard N19/N73 ~0.30 = N19 subset N73)."""
+    return g.close < (f.ma20 - 2.0 * f.sd20)
+
+
+def n119(g):
+    """Tiga tutup menurun berturut. `tutup[-2] > tutup[-1] DAN tutup[-1] > tutup`."""
+    c = g.close
+    return (c.shift(2) > c.shift(1)) & (c.shift(1) > c)
+
+
+def n49(f):
+    """Julat tersempit 7 hari DAN hari dalam. `nr7 DAN inside_day`."""
+    return (f.nr7 > 0) & (f.inside_day > 0)
+
+
+def n118(f, g):
+    """Atas MA200 tetapi 4 daripada 5 sesi terakhir menurun."""
+    return (g.close > f.ma200) & f.turun_4d5
+
+
+def n46(f, g):
+    """Undur ke EMA21 lalu pecah tinggi semalam."""
+    return (g.low.shift(1) <= f.ema21.shift(1)) & (g.close > g.high.shift(1))
+
+
+def n15(f, g):
+    """RSI2 < 10 DAN atas MA200 (Connors dengan penapis trend)."""
+    return (f.rsi2 < 10) & (g.close > f.ma200)
+
+
+# ---------- 4 KAWALAN NEGATIF: lift tahan diukur NEGATIF, satu setiap keluarga gagal ----------
+def n76(f, g):
+    """KAWALAN `MA` (lift tahan −0.641). `tutup > ma50`."""
+    return g.close > f.ma50
+
+
+def n24(f):
+    """KAWALAN `TREND` (lift tahan −0.161). `supertrend > 0 DAN adx14 > 20`."""
+    return (f.supertrend > 0) & (f.adx14 > 20)
+
+
+def n31(f):
+    """KAWALAN `PECAH` (lift tahan −1.590). Pecah Donchian 55 hari."""
+    return f.donchian55 > 0
+
+
+def n62(f, g):
+    """KAWALAN `POLA` (lift tahan −2.651, PALING BURUK dalam 65 dan satu-satunya dengan
+    jangkaan mutlak negatif). `julat20 <= 0.08 x tutup DAN tutup > tinggi20[-1]`."""
+    return (f.julat20 <= 0.08 * g.close) & (g.close > f.tinggi20)
+
+
+# ---------- kes SOALAN REJIM: gagal gate1, dijejak dengan sengaja ----------
+def n124(f):
+    """Gap 8% + volum 2x. Lift tahan **+7.066** = TERTINGGI antara 65 topeng, hampir 2x
+    `N19` — tetapi lift LATIH negatif, jadi ia GAGAL gate1 pradaftar.
+
+    Dijejak bukan kerana ia dijangka berjaya, tetapi kerana jejak hadapan boleh membezakan
+    dua tafsiran yang kajian tidak boleh: (a) peraturan gagal yang bernasib baik dalam
+    2020-2025, atau (b) peraturan yang hanya berfungsi dalam rejim selepas 2020. Keputusan
+    memasukkannya dibuat dengan mata terbuka bahawa ia gagal gate.
+    """
+    return (f.gap >= 0.08) & (f.vol_n50 >= 2.0)
 
 
 def gb02_atau3(f, g):
