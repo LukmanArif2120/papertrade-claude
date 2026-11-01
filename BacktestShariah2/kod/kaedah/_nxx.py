@@ -53,6 +53,11 @@ def indikator(g):
     turun_w = _wilder((-delta).clip(lower=0), 14)
     d['rsi14'] = 100.0 - 100.0 / (1.0 + naik_w / (turun_w + EPS))
 
+    # rsi2 - ind.py:148-150 (Connors; N16 memerlukannya)
+    n2 = _wilder(delta.clip(lower=0), 2)
+    t2 = _wilder((-delta).clip(lower=0), 2)
+    d['rsi2'] = 100.0 - 100.0 / (1.0 + n2 / (t2 + EPS))
+
     # adx14 - ind.py:168-178
     up, dn = h.diff(), -l.diff()
     pdm = pd.Series(np.where((up > dn) & (up > 0), up, 0.0), index=c.index)
@@ -109,6 +114,22 @@ def n37(f):
 def n115(f, g):
     """Holy Grail (Raschke). adx14 > 30 DAN rendah menyentuh ema20 DAN tutup > tinggi[-1]."""
     return (f.adx14 > 30) & f.sentuh_ema20 & (g.close > g.high.shift(1))
+
+
+def n16(f):
+    """RSI2 < 10 tanpa penapis (Connors). `nxx.csv`: gate2 LULUS pada X2."""
+    return f.rsi2 < 10
+
+
+def n17(f):
+    """RSI14 silang naik 30. `nxx.csv`: gate2 LULUS pada X2, lift +0.870/+1.264."""
+    return (f.rsi14 > 30) & (f.rsi14.shift(1) <= 30)
+
+
+def n75(f):
+    """RSI14 < 40 tanpa penapis. `nxx.csv`: gate2 LULUS pada TIGA keluar (X2/X3/X4),
+    dan jangkaan mutlak tertinggi antara semua topeng MASUK tunggal (+4.181% pada X3)."""
+    return f.rsi14 < 40
 
 
 def gb02_atau3(f, g):
