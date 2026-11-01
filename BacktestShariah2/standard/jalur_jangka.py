@@ -121,7 +121,7 @@ def _sasaran5(tickers, P):
     sw = np.lib.stride_tricks.sliding_window_view
     term = np.full(n, np.nan); mae = np.full(n, np.nan); mfe = np.full(n, np.nan)
     if n >= H + 1:
-        wl, wc = sw(lo, H), sw(c, H)
+        wc = sw(c, H)
         i = np.arange(0, n - H)
         j = i + 1
         sama = tk[j + H - 1] == tk[i]
@@ -129,7 +129,10 @@ def _sasaran5(tickers, P):
         ok = sama & np.isfinite(masuk) & (masuk > 0)
         with np.errstate(invalid='ignore', divide='ignore'):
             term[i] = np.where(ok, c[j + H - 1] / masuk - 1.0, np.nan)
-            mae[i] = np.where(ok, wl[j].min(axis=1) / masuk - 1.0, np.nan)
+            # TUTUP, bukan rendah intrabar: peraturan lorong 2 ialah `tutup < paras -> jual buka
+            # esok`, jadi MAE mesti sepadan. mae_cl21 dalam panel juga berasaskan tutup; guna
+            # rendah di sini akan melambungkan P(sentuh) 5 hari berbanding angka 21 hari.
+            mae[i] = np.where(ok, wc[j].min(axis=1) / masuk - 1.0, np.nan)
             mfe[i] = np.where(ok, wc[j].max(axis=1) / masuk - 1.0, np.nan)
     out = pd.DataFrame({'ticker': df.ticker.to_numpy(), 'date': df.date.to_numpy(),
                         'term5': term.astype('float32'), 'mae5': mae.astype('float32'),
