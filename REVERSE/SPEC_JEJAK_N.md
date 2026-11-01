@@ -155,3 +155,70 @@ Lulus **tidak** bermakna sedia untuk wang sebenar; ia bermakna layak untuk ujian
    mesti merangkumi KOMBINASI masuk+keluar, bukan komponen". Tambahan sekarang: **ujian mesti
    merangkumi LALUAN IMPORT produksi, bukan laluan import ujian.** Ujian yang menyiapkan
    persekitarannya sendiri boleh lulus sambil produksi gagal sepenuhnya.
+
+---
+
+## 8. TAMBAHAN 1 Nov 2026 — tiga peraturan yang saya terlepas pandang
+
+Pengguna bertanya mengapa hanya 5 daripada 147 boleh diguna. Semakan menunjukkan **pilihan
+saya terlalu konservatif, bukan data yang terhad.** `REVERSE/nxx.csv` mengandungi **empat**
+topeng MASUK yang melepasi gate2 (BH-FDR) DAN mempunyai jangkaan mutlak positif pada
+kedua-dua tingkap — dan saya hanya mengodkan satu daripadanya (`N115`):
+
+| topeng | peraturan | keluar | lift latih/tahan | jangkaan latih/tahan | n tahan |
+|---|---|---|---:|---:|---:|
+| `N75` | `rsi14 < 40` | `X3` | +0.647 / +1.587 | +1.851 / **+4.181** | 861,071 |
+| `N17` | `rsi14` silang naik 30 | `X2` | +0.870 / +1.264 | +1.351 / +2.216 | 54,073 |
+| `N16` | `rsi2 < 10` | `X2` | +0.211 / +0.305 | +0.692 / +1.257 | 567,422 |
+| `N115` | Holy Grail | `X2` | +0.590 / +1.464 | +1.071 / +2.416 | 104,014 |
+
+`N75` melepasi FDR pada **tiga** keluar (`X2`, `X3`, `X4`) dan mempunyai jangkaan mutlak
+tertinggi antara kesemua topeng MASUK tunggal. Ketiga-tiga yang tertinggal ialah keluarga
+**RSI** — sejajar dengan dapatan `NXX.md` bahawa `RSI` 18/28 dan `BB` 12/24 berbanding `MA`
+0/20 dan `TREND` 0/24, iaitu pembalikan min berfungsi dan ikut-trend tidak.
+
+Satu-satunya yang kekal **dikecualikan** ialah `N16 × X1`: lift +0.193 dan menang 62.4%
+tetapi jangkaan mutlak **−0.088%** kerana asas `X1` sendiri −0.281%. Lift positif atas asas
+negatif masih rugi; itu perangkap yang `CLAUDE.md` sudah catat.
+
+### 8a. Masalah: ketiga-tiganya TIDAK pernah diuji terhadap `X13`
+
+`nxx_keluar.csv` hanya menguji `ASAS`, `N19` dan `N115` terhadap 23 keluar. Jadi nombor
+`N75`/`N17`/`N16` di atas ialah keluar `X2`/`X3`, bukan `X13` yang jejak ini gunakan.
+
+Bukti bahawa `X13` mendominasi memang kukuh — pada **setiap** masuk yang pernah diukur
+dengannya, `X13` memberi jangkaan tertinggi (`N19`: X13 **+11.285** lawan X15 +8.459 lawan
+X17 +7.561; `N115`: X13 **+7.509** lawan X15 +6.060 lawan X17 +5.826; asas X13 +4.350 lawan
+X15 +3.706 lawan X17 +1.855) — tetapi itu **ekstrapolasi**, bukan ukuran.
+
+### 8b. Peraturan keputusan, dikomit SEBELUM mengukur
+
+Saya akan mengukur `N16 × X13`, `N17 × X13`, `N75 × X13` pada panel, tingkap dan model kos
+yang **sama**, kemudian:
+
+**KODKAN** peraturan itu jika dan hanya jika **kesemua empat** benar:
+1. `jangkaan_latih > 0`
+2. `jangkaan_tahan > 0`
+3. `lift_latih > 0`
+4. `lift_tahan > 0`
+
+**JANGAN kodkan** jika mana-mana satu gagal, tidak kira betapa baik nombor lain kelihatan.
+Tiada kesatuan baharu dibina (itu akan menjadi eksperimen ke-7, yang dilarang). Ukuran ini
+untuk menetapkan **jangkaan priori jejak**, bukan sebagai gate kajian baharu — ruang MASUK
+kekal DITUTUP.
+
+**Jangkaan priori saya: ketiga-tiganya LULUS**, kerana (a) ketiga-tiganya sudah mempunyai
+jangkaan mutlak positif pada keluar yang lebih lemah, dan (b) `X13` mendominasi setiap keluar
+lain pada setiap masuk yang diukur. Kalau mana-mana satu GAGAL, itu bermakna `X13` berinteraksi
+dengan pembalikan min secara berbeza daripada yang saya jangka, dan itu dapatan yang lebih
+berguna daripada tiga kohort tambahan.
+
+### 8c. Had yang kekal
+
+Mengodkan 8 daripada 147 **bukan** bermakna 139 yang lain belum sempat. 69 daripadanya
+berstatus `PERLU` — ia memerlukan ~56 indikator atau sumber data berbeza yang repo tiada
+(`harmonik`, `td_seq`, `talib_cdl`, `strat_bar`, `gmma`, `data_putcall`, `data_13f` …), jadi
+ia **belum pernah diuji**. Mengodkannya bermakna meletakkan peraturan **tidak diuji** ke dalam
+produksi, yang berbeza secara jenis daripada melaksanakan peraturan yang sudah diukur. Itu
+keputusan pengguna, bukan keputusan saya. Baki ~70 diuji dan **gagal** — ia tidak patut
+dikodkan.
