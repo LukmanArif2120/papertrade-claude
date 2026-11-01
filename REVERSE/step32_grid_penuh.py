@@ -47,10 +47,26 @@ def main():
     rsf = S18.rs_persentil()
     kel = S18.kelompok_ticker()
 
-    AK, PERHARI = {}, {}
-    nama = None
+    CKPT = KELUAR / '.cache' / 'grid_ckpt.npz'
+    CKPT.parent.mkdir(exist_ok=True)
+    AK = {}
+    nama, IDX_SEL, DSUM, DCNT, HARI0, NHARI = None, None, None, None, None, None
+    mula = 0
+    if CKPT.exists():                                  # sambung selepas dibunuh
+        z = np.load(CKPT, allow_pickle=True)
+        mula = int(z['kelompok'])
+        nama = list(z['nama'])
+        HARI0, NHARI = int(z['hari0']), int(z['nhari'])
+        DSUM, DCNT = z['dsum'], z['dcnt']
+        AK = {tuple(k): list(v) for k, v in zip(z['ak_k'], z['ak_v'])}
+        IDX_SEL = {(nm, k): i for i, (nm, k) in enumerate(
+            (nm, k) for nm in nama if nm != 'ASAS' for k in kod)}
+        print(f'SAMBUNG daripada checkpoint: {mula}/{len(kel)} kelompok sudah siap',
+              flush=True)
     print(f'1/3 {len(kel)} kelompok x {len(kod)} keluar x ~{len(KELG)} masuk...', flush=True)
     for i, bk in enumerate(kel):
+        if i < mula:
+            continue
         P = S18._sedia(bk, S18.PUL, rsf)
         T = S18.topeng(P)
         PU = S19.pulangan_keluar(P)
@@ -61,8 +77,16 @@ def main():
              'tahan': (th >= S19.TAHAN[0]) & (th <= S19.TAHAN[1]) & cair}
         if nama is None:
             nama = ['ASAS'] + sorted((k for k in KELG if k in T), key=lambda x: int(x[1:]))
+            IDX_SEL = {(nm, k): j for j, (nm, k) in enumerate(
+                (nm, k) for nm in nama if nm != 'ASAS' for k in kod)}
+            HARI0 = int(np.datetime64(f'{S19.TAHAN[0]}-01-01', 'D').astype('int64'))
+            NHARI = int(np.datetime64(f'{S19.TAHAN[1] + 1}-01-01', 'D')
+                        .astype('int64')) - HARI0
+            DSUM = np.zeros((len(IDX_SEL), NHARI), 'float64')
+            DCNT = np.zeros((len(IDX_SEL), NHARI), 'int32')
             print(f'  {len(nama) - 1} topeng DIUJI hadir dalam panel '
-                  f'-> {(len(nama) - 1) * len(kod):,} sel', flush=True)
+                  f'-> {len(IDX_SEL):,} sel · matriks hari {DSUM.nbytes / 1e6:.0f} MB',
+                  flush=True)
         msk = {nm: (np.ones(len(P), bool) if nm == 'ASAS' else np.asarray(T[nm], bool))
                for nm in nama}
         for k in kod:
@@ -81,21 +105,22 @@ def main():
                     ak[2] += int(pos.sum()); ak[3] += float(x[pos].sum())
                     ak[4] += float(x[~pos].sum())
                     if w == 'tahan':                     # SE berkelompok ikut hari beli
-                        ph = PERHARI.setdefault((nm, k), {})
-                        hh = hari[sel]
-                        o = np.argsort(hh, kind='stable')
-                        hs, xs = hh[o], x[o]
-                        b = np.flatnonzero(np.concatenate(
-                            [[True], hs[1:] != hs[:-1], [True]]))
-                        sm, cn = np.add.reduceat(xs, b[:-1]), np.diff(b)
-                        for d, sv, cv in zip(hs[b[:-1]], sm, cn):
-                            e = ph.get(d)
-                            if e is None:
-                                ph[d] = [sv, int(cv)]
-                            else:
-                                e[0] += sv; e[1] += int(cv)
+                        # Tatasusunan PADAT, bukan dict. Versi pertama saya membina
+                        # 1,495 sel x ~1,500 hari = 2.2 JUTA entri dict melalui gelung
+                        # Python setiap kelompok, dan larian itu dibunuh. Di sini
+                        # (sel, hari) ialah matriks 1495x1508 float64 + int32 = ~27 MB,
+                        # dikemas dengan np.add.at tanpa gelung Python.
+                        ci = IDX_SEL[(nm, k)]
+                        di = hari[sel] - HARI0
+                        np.add.at(DSUM[ci], di, x)
+                        np.add.at(DCNT[ci], di, 1)
         del P, T, PU
-        print(f'    [{time.time() - t0:.0f}s] kelompok {i + 1}/{len(kel)}', flush=True)
+        np.savez_compressed(CKPT, kelompok=i + 1, nama=np.array(nama, object),
+                            hari0=HARI0, nhari=NHARI, dsum=DSUM, dcnt=DCNT,
+                            ak_k=np.array(list(AK.keys()), object),
+                            ak_v=np.array(list(AK.values()), object))
+        print(f'    [{time.time() - t0:.0f}s] kelompok {i + 1}/{len(kel)} '
+              f'(checkpoint disimpan)', flush=True)
 
     from scipy import stats as sps
     asas = {(k, w): AK[('ASAS', k, w)][0] / AK[('ASAS', k, w)][1] * 100
@@ -124,14 +149,16 @@ def main():
             r['untung'] = a[3] / a[2] * 100 if a[2] else np.nan
             r['rugi'] = a[4] / (a[1] - a[2]) * 100 if a[1] - a[2] else np.nan
             r['asas_latih'], r['asas_tahan'] = asas[(k, 'latih')], asas[(k, 'tahan')]
-            ph = PERHARI.get((nm, k), {})
-            if len(ph) >= 30:
-                v = np.array([s / c for s, c in ph.values()]) * 100
-                r['n_hari'] = len(v)
+            ci = IDX_SEL[(nm, k)]
+            cnt = DCNT[ci]
+            ada_h = cnt > 0
+            if int(ada_h.sum()) >= 30:
+                v = DSUM[ci][ada_h] / cnt[ada_h] * 100
+                r['n_hari'] = int(ada_h.sum())
                 r['t'], pp = sps.ttest_1samp(v, 0.0)
                 r['p'] = pp / 2 if r['t'] > 0 else 1 - pp / 2
             else:
-                r['n_hari'] = len(ph); r['t'] = r['p'] = np.nan
+                r['n_hari'] = int(ada_h.sum()); r['t'] = r['p'] = np.nan
             baris.append(r)
 
     H = pd.DataFrame(baris)
@@ -240,6 +267,30 @@ def main():
     if t5:
         print(f'tanpa5 dalam senarai: {sum(1 for x in t5 if x > 0)}/{len(t5)} POSITIF · '
               f'median {np.median(t5):+.3f}')
+    print()
+    print('KAWALAN REGRESI — sel yang bertindih dengan nxx_keluar.csv mesti sepadan.')
+    print('Penting kerana SE berkelompok-hari ditulis semula daripada dict kepada')
+    print('tatasusunan padat selepas larian pertama dibunuh; semantiknya mesti identik.')
+    ref = pd.read_csv(KELUAR / 'nxx_keluar.csv')
+    gagal_reg = 0
+    for _, b in ref[ref.masuk != 'ASAS'].iterrows():
+        sub = H[(H.masuk == b.masuk) & (H.keluar == b.keluar)]
+        if not len(sub):
+            continue
+        a = sub.iloc[0]
+        for kk in ('jangkaan_latih', 'jangkaan_tahan', 'lift_latih', 'lift_tahan',
+                   'menang', 'p'):
+            d = abs(float(a[kk]) - float(b[kk]))
+            if d > 1e-6:
+                gagal_reg += 1
+                print(f'  <<< TERPESONG {b.masuk} x {b.keluar} {kk}: '
+                      f'kini {float(a[kk]):+.6f} lawan terbitan {float(b[kk]):+.6f} '
+                      f'|d| {d:.2e}')
+    n_reg = len(ref[(ref.masuk != 'ASAS')
+                    & ref.set_index(['masuk', 'keluar']).index.isin(
+                        H.set_index(['masuk', 'keluar']).index)])
+    print(f'  {n_reg} sel bertindih · {gagal_reg} metrik terpesong -> '
+          f'{"LULUS" if gagal_reg == 0 else "GAGAL — JANGAN percaya keputusan"}')
     print()
     print('Semakan jangkaan priori spec §5:')
     for nm, k, apa in (('N19', 'X13', 'priori 3: N19xX13 tempat 1 atau 2'),):
