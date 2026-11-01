@@ -70,9 +70,9 @@ def bina_jadual(panel=None, keluar=JADUAL):
     _o = R.buka_mentah.to_numpy('float64')
     _c = R.tutup_mentah.to_numpy('float64')
     _a = R.atr14.to_numpy('float64')
-    PT_ = {}
+    PT_, SAH_ = {}, {}
     for Hf in UFUK:
-        PT_[Hf] = _p_tercetus(R.ticker.to_numpy(), _o, _c, _a, Hf, GRID_MAE)
+        PT_[Hf], SAH_[Hf] = _p_tercetus(R.ticker.to_numpy(), _o, _c, _a, Hf, GRID_MAE)
         print(f'  H={Hf} siap', flush=True)
     R['desil_'] = (R.groupby('date', observed=True).atr_pct
                    .rank(pct=True, method='first').mul(NDESIL).clip(upper=NDESIL - 1e-9)
@@ -106,6 +106,7 @@ def bina_jadual(panel=None, keluar=JADUAL):
             x = s[kx].to_numpy('float64'); x = x[np.isfinite(x)]
             if t.size < MIN_SEL or m.size < MIN_SEL:
                 continue
+            _sel_d = ((R.desil_ == d).to_numpy() & SAH_[H])
             jad['sel'][f'{H}|{d}'] = {
                 'n': int(t.size),
                 'atr_pct_median': round(float(np.median(s.atr_pct)), 3),
@@ -114,7 +115,8 @@ def bina_jadual(panel=None, keluar=JADUAL):
                 'mae50': round(float(np.median(m) * 100), 3),
                 # P(MAE <= ambang) bagi setiap ambang grid -> boleh disongsang untuk sebarang jarak
                 # P(paras MENAIK tercetus) — peristiwa sebenar lorong 2, bukan halangan tetap
-                'p_sentuh': [round(float(PT_[H][gi][(R.desil_ == d).to_numpy()].mean() * 100), 2)
+                # penyebut = bar dengan tetingkap LENGKAP dalam desil ini, sama seperti p_tetap
+                'p_sentuh': [round(float(PT_[H][gi][_sel_d].mean() * 100), 2)
                              for gi in range(len(GRID_MAE))],
                 'p_tetap': [round(float((m * 100 <= g).mean() * 100), 2) for g in GRID_MAE],
             }
@@ -136,13 +138,17 @@ def _p_tercetus(tk, o, c, atr, H, grid):
     median posisi langsung, 2.70x pada desil 9.
 
     Masuk buka t+1; paras awal = buka(t+1) x (1 + g/100) supaya ia sepadan dengan `jarak` langsung.
-    Pulangkan array (len(grid), n) boolean.
+    Pulangkan (out, sah_penuh): out array (len(grid), n) boolean, sah_penuh array (n,) boolean
+    menandakan bar yang tetingkapnya LENGKAP. Penyebut mesti guna sah_penuh, bukan n — jika
+    tidak, bar hujung data dikira sebagai 'tidak tercetus' dan kadar dilaporkan terlalu rendah
+    (ujian test_paras_menaik_sekurang_kurangnya_halangan_tetap menangkap ini).
     """
     n = c.size
     GANDA = 4.0
     out = np.zeros((len(grid), n), dtype=bool)
+    sah_penuh = np.zeros(n, dtype=bool)
     if n < H + 1:
-        return out
+        return out, sah_penuh
     idx = np.arange(0, n - H)
     j0 = idx + 1
     sah = (tk[j0 + H - 1] == tk[idx]) & np.isfinite(o[j0]) & (o[j0] > 0)
@@ -165,7 +171,8 @@ def _p_tercetus(tk, o, c, atr, H, grid):
             tercetus[gi] |= kena
     for gi in range(len(grid)):
         out[gi, idx] = tercetus[gi] & sah
-    return out
+    sah_penuh[idx] = sah
+    return out, sah_penuh
 
 
 def _sasaran5(tickers, P):

@@ -19,7 +19,7 @@ Maka menambah baris MASUK ke-148 ialah variasi ke-148 bagi sesuatu yang **sudah 
 Pembetulannya bukan signal lain. Ia **operasi lain**:
 
 - `GB02` **ATAU (kesatuan)** — menambah bar, bukan membuang. Jika masalahnya "menapis membuang ekor", maka operasi yang betul ialah kesatuan. **Belum pernah diuji.**
-- `GB04` **agregat pangkat** — menukar n penapis menjadi satu skor berterusan, dan `SISTEM.md` mengukur urutan skor berterusan mempunyai sebaran benih **0.00** lawan 17.3 mata/tahun.
+- `GB04` **agregat pangkat** — menukar n penapis menjadi satu skor berterusan, dan `SISTEM.md` mengukur urutan skor berterusan mempunyai sebaran benih **0.00** lawan SD 4.15 mata/tahun (ambang 95% 9.7 mata).
 - `GB08` **penapis terbalik** — buang yang terbukti rugi. Pada taburan terpencong kanan, membuang ekor KIRI tidak menyentuh ekor KANAN. `KAEDAH_TERBAIK.md` sudah mengenal pasti **25 kaedah Mxx terbukti NEGATIF** pada BH-FDR q ≤ 0.05 — senarai buang itu sudah ada dan belum pernah diguna.
 - `SZ10` **berat sama rata atas kolam PENUH** — `KOLAM_EKOR.md` sudah mengukur kolam penuh +1.64%/bulan lawan saham median +0.82%. Memegang **semua** mengalahkan memilih 10 dengan 0.82 mata sebulan, **tanpa apa-apa signal**.
 - `IS02` **putaran ETF sektor** — `SETUP.md` mendapati SPY +3.356% dan QQQ +4.419% melepasi syarat ekor dengan mudah kerana **indeks itulah kepelbagaian merentas ekor**. ETF sektor ialah titik tengah antara saham tunggal dan SPUS, dan belum diuji.
@@ -494,7 +494,7 @@ Bila isyarat melebihi slot, sesuatu mesti menentukan siapa dibeli. Itu **bukan**
 
 Dan `SISTEM.md` mengukur sesuatu yang lebih kuat: urutan ikut **skor berterusan** mempunyai sebaran 20 benih **0.00 mata**, manakala susunan sewenang-wenang mempunyai hingar pemilihan **17.3 mata peratus setahun** (`KEPEKATAN_BENIH.md`). Jadi keputusan atas skor berterusan boleh dipercayai pada sampel jauh lebih kecil. Itu satu-satunya struktur dalam seluruh kajian yang mempunyai sifat itu.
 
-**U01** — `rawak berbenih` · kawalan repo (repo) · DIUJI · hingar pemilihan 17.3 mata peratus/tahun pada 8 slot (KEPEKATAN_BENIH.md); jalur 20 cabutan dalam portfolio_slot/rawak_jalur_ekuiti.csv
+**U01** — `rawak berbenih` · kawalan repo (repo) · DIUJI · hingar pemilihan SD 4.15 mata/tahun pada 8 slot, ambang 95% 9.7 mata (KEPEKATAN_BENIH.md); jalur 20 cabutan dalam portfolio_slot/rawak_jalur_ekuiti.csv
 
 **U02** — `RS pasaran tertinggi` · repo (repo) · DIUJI · lorong RS_10; 29 Okt 2026 -2.15%, persentil 0 dalam jalur rawak (BANDING_SPUS.md)
 
@@ -553,7 +553,7 @@ Awalan dua aksara supaya tiada kolisi dengan M, N, K, X, C, U, S, P, L, I, A dan
 
 **GB03** — `Undi k-daripada-n syarat benar` · ensemble klasik (umum) · SEDIA · k=1 ialah GB02, k=n ialah GB01; k di antaranya belum pernah diuji
 
-**GB04** — `Agregat pangkat: purata pangkat merentas n signal -> satu skor` · ensemble klasik (umum) · SEDIA · menukar penapis menjadi URUTAN. SISTEM.md ukur urutan skor BERTERUSAN mempunyai sebaran benih 0.00 lawan 17.3 mata/tahun bagi susunan sewenang-wenang - jadi ini juga membaiki kebolehpercayaan keputusan, bukan hanya pulangan.
+**GB04** — `Agregat pangkat: purata pangkat merentas n signal -> satu skor` · ensemble klasik (umum) · SEDIA · menukar penapis menjadi URUTAN. SISTEM.md ukur urutan skor BERTERUSAN mempunyai sebaran benih 0.00 lawan SD 4.15 mata/tahun bagi susunan sewenang-wenang - jadi ini juga membaiki kebolehpercayaan keputusan, bukan hanya pulangan.
 
 **GB05** — `Jumlah berpemberat sama bagi skor ternormal` · ensemble klasik (umum) · SEDIA
 

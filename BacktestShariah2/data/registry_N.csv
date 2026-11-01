@@ -203,7 +203,7 @@ C09,CARA,buy-stop sedikit atas rendah 20 hari (5-10 tik atau 1/8 mata),,Connors 
 C10,CARA,masuk pada buka lilin kedua selepas lilin 5 minit pertama,,"Zarattini, Barbon & Aziz",SSRN/akademik,PERLU:intraday,
 C11,CARA,"beli-stop 1 mata atas tinggi bar isyarat, dipindah naik setiap bar",,Elder (trailing buy stop),buku,SEDIA,"jika tidak tercetus dalam bar semasa, pindahkan ke tinggi berikut"
 C12,CARA,beli-stop atas tinggi inside bar,,Rob Smith (The Strat),TradingView/X,PERLU:strat_bar,henti di sisi bertentangan inside bar; sasaran pertama ekstrem bar sebelum
-U01,URUTAN,rawak berbenih,,kawalan repo,repo,DIUJI,hingar pemilihan 17.3 mata peratus/tahun pada 8 slot (KEPEKATAN_BENIH.md); jalur 20 cabutan dalam portfolio_slot/rawak_jalur_ekuiti.csv
+U01,URUTAN,rawak berbenih,,kawalan repo,repo,DIUJI,"hingar pemilihan SD 4.15 mata/tahun pada 8 slot, ambang 95% 9.7 mata (KEPEKATAN_BENIH.md); jalur 20 cabutan dalam portfolio_slot/rawak_jalur_ekuiti.csv"
 U02,URUTAN,RS pasaran tertinggi,,repo,repo,DIUJI,"lorong RS_10; 29 Okt 2026 -2.15%, persentil 0 dalam jalur rawak (BANDING_SPUS.md)"
 U03,URUTAN,skor momentum Clenow: (exp(cerun regresi log 90 hari x 252) - 1) x R^2,,Clenow,buku,DIUJI,Sistem B; sebaran 20 benih 0.00 = TIADA hingar pemilihan (SISTEM.md). Ini satu-satunya struktur dalam seluruh kajian yang keputusannya boleh dipercayai pada sampel kecil.
 U04,URUTAN,gabungan kaedah beku dengan kuota slot,,repo,repo,DIUJI,lorong GABUNGAN_10 / TOP1_10 / RAWAK_KAEDAH_10
@@ -219,7 +219,7 @@ U13,URUTAN,skor keluasan semakan analis,,konsensus praktisi,blog/FMP,PERLU:data_
 GB01,GABUNGAN,DAN (persilangan): semua syarat mesti benar,,asas semua 147 MASUK,repo,DIUJI,"INI yang SETUP.md ukur: 0 daripada 598 lift positif, sebab STRUKTUR bukan pemilihan. Setiap syarat tambahan membuang lebih banyak bar, dan bar yang dibuang termasuk ekor kanan."
 GB02,GABUNGAN,ATAU (kesatuan): mana-mana satu syarat benar,,akibat logik SETUP.md,repo,SEDIA,"BELUM PERNAH DIUJI, dan ia secara struktur BERTENTANGAN dengan kegagalan yang diukur: kesatuan MENAMBAH bar, bukan membuang. Jika masalahnya ""menapis membuang ekor"", maka operasi yang betul ialah kesatuan, bukan persilangan. Ini teknik yang saya tertinggal."
 GB03,GABUNGAN,Undi k-daripada-n syarat benar,,ensemble klasik,umum,SEDIA,"k=1 ialah GB02, k=n ialah GB01; k di antaranya belum pernah diuji"
-GB04,GABUNGAN,Agregat pangkat: purata pangkat merentas n signal -> satu skor,,ensemble klasik,umum,SEDIA,"menukar penapis menjadi URUTAN. SISTEM.md ukur urutan skor BERTERUSAN mempunyai sebaran benih 0.00 lawan 17.3 mata/tahun bagi susunan sewenang-wenang - jadi ini juga membaiki kebolehpercayaan keputusan, bukan hanya pulangan."
+GB04,GABUNGAN,Agregat pangkat: purata pangkat merentas n signal -> satu skor,,ensemble klasik,umum,SEDIA,"menukar penapis menjadi URUTAN. SISTEM.md ukur urutan skor BERTERUSAN mempunyai sebaran benih 0.00 lawan SD 4.15 mata/tahun bagi susunan sewenang-wenang - jadi ini juga membaiki kebolehpercayaan keputusan, bukan hanya pulangan."
 GB05,GABUNGAN,Jumlah berpemberat sama bagi skor ternormal,,ensemble klasik,umum,SEDIA,
 GB06,GABUNGAN,Berat songsang-korelasi antara signal,,ensemble klasik,umum,PERLU:korelasi_signal,
 GB07,GABUNGAN,"Hierarki: signal A tentukan ALAM, signal B tentukan URUTAN",,struktur,repo,SEDIA,"bukan penapis bertindan - setiap signal buat kerja BERBEZA, jadi ia tidak menambah pembuangan bar"

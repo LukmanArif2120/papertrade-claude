@@ -592,10 +592,11 @@ CARA = [
 # PAKSI KEEMPAT (30 Okt 2026): bila isyarat melebihi slot, APA yang menentukan siapa dibeli.
 # Ini BUKAN penapis. Penapis membuang bar; urutan menyusunnya. SISTEM.md mengukur bahawa
 # urutan skor BERTERUSAN tiada hingar pemilihan (sebaran benih 0.00) manakala susunan
-# sewenang-wenang ada 17.3 mata peratus setahun (KEPEKATAN_BENIH.md).
+# sewenang-wenang ada SD 4.15 mata (ambang 95%: 9.7 mata antara dua susunan tunggal;
+# 7.0 mata lawan median jalur). KEPEKATAN_BENIH.md. Angka 17.3 lama ialah JULAT, bukan ambang.
 URUTAN = [
  ('U01', 'rawak berbenih', 'kawalan repo', 'repo', 'DIUJI',
-  'hingar pemilihan 17.3 mata peratus/tahun pada 8 slot (KEPEKATAN_BENIH.md); jalur 20 cabutan '
+  'hingar pemilihan SD 4.15 mata/tahun pada 8 slot, ambang 95% 9.7 mata (KEPEKATAN_BENIH.md); jalur 20 cabutan '
   'dalam portfolio_slot/rawak_jalur_ekuiti.csv'),
  ('U02', 'RS pasaran tertinggi', 'repo', 'repo', 'DIUJI',
   'lorong RS_10; 29 Okt 2026 -2.15%, persentil 0 dalam jalur rawak (BANDING_SPUS.md)'),
@@ -665,7 +666,7 @@ GABUNGAN = [
  ('GB04', 'Agregat pangkat: purata pangkat merentas n signal -> satu skor', 'ensemble klasik',
   'umum', 'SEDIA',
   'menukar penapis menjadi URUTAN. SISTEM.md ukur urutan skor BERTERUSAN mempunyai sebaran '
-  'benih 0.00 lawan 17.3 mata/tahun bagi susunan sewenang-wenang - jadi ini juga membaiki '
+  'benih 0.00 lawan SD 4.15 mata/tahun bagi susunan sewenang-wenang - jadi ini juga membaiki '
   'kebolehpercayaan keputusan, bukan hanya pulangan.'),
  ('GB05', 'Jumlah berpemberat sama bagi skor ternormal', 'ensemble klasik', 'umum', 'SEDIA',
   ''),
@@ -992,7 +993,7 @@ def tulis_spec():
       'diuji.**')
     A('- `GB04` **agregat pangkat** — menukar n penapis menjadi satu skor berterusan, '
       'dan `SISTEM.md` mengukur urutan skor berterusan mempunyai sebaran benih **0.00** '
-      'lawan 17.3 mata/tahun.')
+      'lawan SD 4.15 mata/tahun (ambang 95% 9.7 mata).')
     A('- `GB08` **penapis terbalik** — buang yang terbukti rugi. Pada taburan terpencong '
       'kanan, membuang ekor KIRI tidak menyentuh ekor KANAN. `KAEDAH_TERBAIK.md` sudah '
       'mengenal pasti **25 kaedah Mxx terbukti NEGATIF** pada BH-FDR q ≤ 0.05 — senarai '

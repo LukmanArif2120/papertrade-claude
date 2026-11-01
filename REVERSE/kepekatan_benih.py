@@ -135,8 +135,23 @@ def laporan(R):
         L.append(f'- Median susunan neutral: **{md:.2f}%/tahun** — ini anggaran pusat yang betul '
                  f'bagi sistem pada 8 slot, bukan {ab:.2f}%.')
         L.append(f'- Julat: {lo:.2f}% hingga {hi:.2f}%, sisihan piawai **{sd:.2f} mata**.')
-        L.append(f'- Maka apa-apa perbandingan sistem yang bezanya lebih kecil daripada kira-kira '
-                 f'**{hi - lo:.1f} mata** adalah dalam hingar pemilihan, bukan dapatan.')
+        # PEMBETULAN 1 Nov 2026: versi terdahulu menggunakan JULAT (hi - lo) sebagai ambang
+        # hingar. Julat bukan ambang — ia berkembang dengan bilangan cabutan (simulasi: 15.6
+        # mata pada n=20, 18.7 pada n=50, 25.2 pada n=500), jadi ambang berasaskan julat
+        # MEMBESAR apabila lebih banyak data dikumpul, iaitu songsang. Ambang yang betul
+        # datang daripada sisihan piawai.
+        se_med = sd / (len(rw) ** 0.5)
+        amb2 = 1.645 * sd * (2 ** 0.5)                 # dua susunan tunggal sewenang-wenang
+        amb1 = 1.645 * ((sd ** 2 + se_med ** 2) ** 0.5)  # satu susunan lawan median jalur
+        L.append(f'- Ralat standard median {len(rw)} cabutan: **{se_med:.2f} mata**.')
+        L.append(f'- Ambang 95% satu-hujung: **{amb2:.1f} mata** untuk membanding DUA susunan '
+                 f'tunggal sewenang-wenang, **{amb1:.1f} mata** untuk membanding satu susunan '
+                 f'dengan median jalur.')
+        L.append(f'- **Julat {hi - lo:.1f} mata BUKAN ambang.** Ia span {len(rw)} cabutan dan ia '
+                 f'berkembang dengan bilangan cabutan, jadi menggunakannya sebagai ambang '
+                 f'bermakna "hingar" bertambah apabila data bertambah. Versi fail ini sebelum '
+                 f'1 Nov 2026 membuat kesilapan itu dan angka {hi - lo:.1f} tersebar ke '
+                 f'CLAUDE.md, registry_n.py dan portfolio_slot.py.')
         L.append('')
         L.append(f'Nombor {ab:.2f}% yang dilaporkan sepanjang kajian ialah **satu cabutan** '
                  f'daripada taburan ini, dan cabutan itu berada di hujung tinggi (persentil '
