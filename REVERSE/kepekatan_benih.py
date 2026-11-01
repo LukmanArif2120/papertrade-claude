@@ -12,7 +12,8 @@ cabutan bertuah — dan jika benar, setiap angka 8-slot dalam kajian ini melambu
 Ujian: 8 slot, populasi/keluar/kos SAMA, hanya susunan pemilihan ditukar kepada rawak dengan
 beberapa benih. Jika sebarannya luas, angka 8-slot ialah hingar.
 
-Guna: python3 REVERSE/kepekatan_benih.py [--benih 1,2,3,4,5]
+Guna: python3 REVERSE/kepekatan_benih.py [--benih 1,...,20]   (lalai = 20 benih, seperti yang dikomit)
+      python3 REVERSE/kepekatan_benih.py --laporan-sahaja      (jana semula .md daripada csv sedia ada)
 Output: REVERSE/KEPEKATAN_BENIH.md, REVERSE/kepekatan_benih.csv
 """
 import argparse
@@ -58,7 +59,10 @@ def jalan_tahun(th, eth, benih):
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
-    ap.add_argument('--benih', default='1,2,3,4,5')
+    # LALAI MESTI menghasilkan semula keluaran yang DIKOMIT. Lalai lama '1,2,3,4,5' menjana
+    # kajian 5-benih (SD 2.34, julat 6.1) yang menggantikan kajian 20-benih yang dikomit
+    # (SD 4.15, julat 17.33) — regresi senyap, hampir dikomit pada 1 Nov 2026.
+    ap.add_argument('--benih', default=','.join(str(i) for i in range(1, 21)))
     ap.add_argument('--laporan-sahaja', action='store_true',
                     help='jana laporan daripada kepekatan_benih.csv tanpa mengira ulang')
     a = ap.parse_args(argv)

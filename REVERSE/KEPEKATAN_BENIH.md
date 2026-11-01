@@ -1,6 +1,6 @@
 # Adakah angka 8-slot kajian ini cabutan bertuah?
 
-Dijana 2026-10-29 05:42 UTC oleh `REVERSE/kepekatan_benih.py`.
+Dijana 2026-11-01 23:02 UTC oleh `REVERSE/kepekatan_benih.py`.
 
 `step9_portfolio.jalankan()` menyusun calon dengan tuple `(0.0, 0.0, ticker)` dan `reverse=True`. Tanpa pemeringkatan signal, tuple itu **pemalar**, jadi susunan menjadi **ticker menurun ikut abjad**. "8 slot" bermakna 8 calon terakhir ikut abjad setiap hari — subset sewenang-wenang yang TETAP, bukan sampel neutral.
 
@@ -42,6 +42,8 @@ Itu **tidak** melepasi ambang kelaziman (p = 0.095 > 0.05). Susunan abjad berada
 
 - Median susunan neutral: **9.93%/tahun** — ini anggaran pusat yang betul bagi sistem pada 8 slot, bukan 19.31%.
 - Julat: 2.57% hingga 19.90%, sisihan piawai **4.15 mata**.
-- Maka apa-apa perbandingan sistem yang bezanya lebih kecil daripada kira-kira **17.3 mata** adalah dalam hingar pemilihan, bukan dapatan.
+- Ralat standard median 20 cabutan: **0.93 mata**.
+- Ambang 95% satu-hujung: **9.7 mata** untuk membanding DUA susunan tunggal sewenang-wenang, **7.0 mata** untuk membanding satu susunan dengan median jalur.
+- **Julat 17.3 mata BUKAN ambang.** Ia span 20 cabutan dan ia berkembang dengan bilangan cabutan, jadi menggunakannya sebagai ambang bermakna "hingar" bertambah apabila data bertambah. Versi fail ini sebelum 1 Nov 2026 membuat kesilapan itu dan angka 17.3 tersebar ke CLAUDE.md, registry_n.py dan portfolio_slot.py.
 
 Nombor 19.31% yang dilaporkan sepanjang kajian ialah **satu cabutan** daripada taburan ini, dan cabutan itu berada di hujung tinggi (persentil 95). Anggaran yang betul ialah medianya, 9.93%/tahun pada MDD -17.72%.
