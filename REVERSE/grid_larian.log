@@ -1,0 +1,79 @@
+SAMBUNG daripada checkpoint: 8/8 kelompok sudah siap
+1/3 8 kelompok x 23 keluar x ~78 masuk...
+
+2/3 pas ekor bagi 313 sel yang lulus syarat 1-3...
+    [44s] ekor kelompok 1/8
+    [84s] ekor kelompok 2/8
+    [124s] ekor kelompok 3/8
+    [165s] ekor kelompok 4/8
+    [207s] ekor kelompok 5/8
+    [249s] ekor kelompok 6/8
+    [290s] ekor kelompok 7/8
+    [331s] ekor kelompok 8/8
+
+======================================================================================================================
+GRID PENUH: 1,495 sel diukur · penyebut BH-FDR JUJUR m = 1,495 (ambang 4.556e-03 kalau ada)
+  syarat 1 jangkaan mutlak > 0 dua tingkap :   688/1495
+  syarat 2 lift > 0 dua tingkap            :   461/1495
+  syarat 1+2+3 (n >= 200)                  :   313/1495
+  syarat 4 BH-FDR pada m=1495              :   139/1495
+======================================================================================================================
+
+SENARAI UNTUK PAPERTRADE — 40 kombinasi (maks 3 keluar setiap masuk)
+  # masuk  kelg     keluar jang_lat jang_tah lift_lat lift_tah menang  untung    rugi  n_tahan        p  tanpa5  label     peraturan keluar
+  1 N124   POLA     X15      +3.064  +16.127   +1.016  +12.421   44.2  +64.23  -21.92   12,728  0.00367  +0.396  FDR       ekori Chandelier 4 x ATR14
+  2 N19    BB       X13      +5.597  +11.285   +2.892   +6.935   63.8  +30.53  -22.57   73,769  0.00358  +4.262  FDR       keluar bila rsi14 > 70
+  3 N124   POLA     X12      +0.633   +9.275   +0.552   +8.314   36.7  +56.11  -17.87   12,334  0.00284  -4.794  FDR       henti pada jalur bawah BB(20,2)
+  4 N75    RSI      X13      +4.748   +7.468   +2.043   +3.118   62.6  +26.22  -23.96  861,071  0.00000  +1.752  FDR       keluar bila rsi14 > 70
+  5 N73    BB       X13      +4.523   +6.892   +1.818   +2.542   63.8  +23.11  -21.75  240,838  0.00103  +2.311  FDR       keluar bila rsi14 > 70
+  6 N124   POLA     X36      +1.508   +5.906   +1.097   +5.014   36.8  +41.40  -14.73   12,728  0.00011  -4.022  FDR       keluar selepas DUA tutup bawah ma5
+  7 N16    RSI      X13      +3.875   +5.857   +1.170   +1.506   63.4  +22.30  -22.64  567,422  0.00013  +1.222  FDR       keluar bila rsi14 > 70
+  8 N75    RSI      X15      +2.913   +5.608   +0.865   +1.902   41.3  +35.88  -15.68  861,071  0.00000  -2.432  FDR       ekori Chandelier 4 x ATR14
+  9 N42    VOLUM    X15      +2.723   +5.461   +0.675   +1.755   41.6  +34.64  -15.35  130,675  0.00010  -1.915  FDR       ekori Chandelier 4 x ATR14
+ 10 N119   RSI      X13      +3.319   +5.090   +0.614   +0.740   64.9  +19.62  -21.741,051,604  0.00011  +1.176  FDR       keluar bila rsi14 > 70
+ 11 N37    PECAH    X17      +1.402   +4.868   +0.664   +3.013   42.9  +26.71  -11.54   19,652  0.00077  -2.895  FDR       keluar bila adx14 < 20
+ 12 N64    POLA     X17      +1.582   +4.815   +0.845   +2.960   41.7  +29.30  -12.72   13,667  0.00151  -3.363  FDR       keluar bila adx14 < 20
+ 13 N37    PECAH    X12      +1.141   +4.749   +1.060   +3.787   38.7  +33.93  -13.64   19,578  0.00017  -3.426  FDR       henti pada jalur bawah BB(20,2)
+ 14 N28    TREND    X17      +1.742   +4.586   +1.004   +2.731   45.9  +23.16  -11.181,404,045  0.00000  -2.259  FDR       keluar bila adx14 < 20
+ 15 N75    RSI      X17      +1.973   +4.526   +1.235   +2.670   56.0  +16.69  -10.93  861,071  0.00001  -1.484  FDR       keluar bila adx14 < 20
+ 16 N55    ADX      X13      +3.475   +4.449   +0.770   +0.098   64.6  +18.54  -21.29  113,407  0.00251  +1.115  FDR       keluar bila rsi14 > 70
+ 17 N64    POLA     X12      +1.179   +4.409   +1.098   +3.447   37.9  +35.41  -14.49   13,623  0.00066  -4.203  FDR       henti pada jalur bawah BB(20,2)
+ 18 N16    RSI      X15      +2.603   +4.352   +0.555   +0.646   41.2  +31.09  -14.36  567,422  0.00043  -2.373  FDR       ekori Chandelier 4 x ATR14
+ 19 N37    PECAH    X36      +1.839   +4.145   +1.429   +3.253   36.9  +31.39  -11.76   19,652  0.00000  -3.114  FDR       keluar selepas DUA tutup bawah ma5
+ 20 N64    POLA     X36      +1.907   +4.115   +1.496   +3.222   36.1  +33.91  -12.75   13,667  0.00000  -3.531  FDR       keluar selepas DUA tutup bawah ma5
+ 21 N50    KETAT    X17      +1.152   +3.977   +0.414   +2.121   45.1  +20.33   -9.48   14,857  0.00351  -2.114  FDR       keluar bila adx14 < 20
+ 22 N42    VOLUM    X17      +1.397   +3.929   +0.659   +2.073   43.2  +23.23  -10.74  130,675  0.00005  -3.052  FDR       keluar bila adx14 < 20
+ 23 N119   RSI      X15      +2.262   +3.927   +0.214   +0.221   41.2  +29.00  -13.651,051,604  0.00026  -2.125  FDR       ekori Chandelier 4 x ATR14
+ 24 N53    ADX      X17      +1.516   +3.814   +0.779   +1.958   41.9  +23.40  -10.33  913,085  0.00000  -2.446  FDR       keluar bila adx14 < 20
+ 25 N65    POLA     X36      +2.927   +3.736   +2.516   +2.844   37.3  +30.87  -12.42    6,537  0.00001  -3.140  FDR       keluar selepas DUA tutup bawah ma5
+ 26 N50    KETAT    X12      +0.083   +3.576   +0.002   +2.615   31.9  +30.93   -9.23   14,817  0.00377  -3.317  FDR       henti pada jalur bawah BB(20,2)
+ 27 N65    POLA     X14      +2.151   +3.230   +1.532   +2.239   42.7  +22.34  -11.01    6,537  0.00012  -2.185  FDR       keluar bila rsi14 silang naik 50
+ 28 N42    VOLUM    X12      +0.714   +3.134   +0.632   +2.172   32.9  +32.11  -11.05  125,341  0.00000  -4.085  FDR       henti pada jalur bawah BB(20,2)
+ 29 N06    MA       X36      +0.721   +2.904   +0.310   +2.012   33.7  +24.09   -7.86   13,422  0.00205  -2.270  FDR       keluar selepas DUA tutup bawah ma5
+ 30 N69    KEKUATAN X36      +1.140   +2.860   +0.730   +1.967   33.9  +25.87   -8.96  582,620  0.00000  -2.786  FDR       keluar selepas DUA tutup bawah ma5
+ 31 N24    TREND    X17      +1.231   +2.847   +0.493   +0.991   40.7  +19.95   -8.881,359,653  0.00035  -2.438  FDR       keluar bila adx14 < 20
+ 32 N25    TREND    X17      +1.423   +2.730   +0.685   +0.874   40.8  +21.06   -9.91  948,243  0.00007  -2.451  FDR       keluar bila adx14 < 20
+ 33 N53    ADX      X36      +1.025   +2.417   +0.614   +1.525   34.4  +24.13   -8.99  913,085  0.00000  -2.750  FDR       keluar selepas DUA tutup bawah ma5
+ 34 N56    ADX      X17      +1.161   +2.373   +0.423   +0.517   39.7  +19.39   -8.831,384,407  0.00065  -2.544  FDR       keluar bila adx14 < 20
+ 35 N25    TREND    X36      +1.067   +2.308   +0.656   +1.416   34.5  +23.98   -9.11  948,243  0.00000  -2.717  FDR       keluar selepas DUA tutup bawah ma5
+ 36 N38    PECAH    X36      +0.619   +2.292   +0.209   +1.400   31.1  +22.57   -6.86  452,952  0.00092  -2.226  FDR       keluar selepas DUA tutup bawah ma5
+ 37 N70    KEKUATAN X17      +1.859   +2.220   +1.121   +0.365   42.8  +18.16   -9.70   98,946  0.00038  -2.325  FDR       keluar bila adx14 < 20
+ 38 N50    KETAT    X14      +0.733   +2.201   +0.114   +1.210   52.1  +12.70   -9.21   14,857  0.00055  -1.318  FDR       keluar bila rsi14 silang naik 50
+ 39 N56    ADX      X36      +0.960   +2.167   +0.549   +1.275   33.3  +23.31   -8.411,384,407  0.00000  -2.741  FDR       keluar selepas DUA tutup bawah ma5
+ 40 N53    ADX      X16      +0.894   +2.163   +0.526   +1.445   34.1  +22.95   -8.58  913,085  0.00000  -2.569  FDR       keluar bila supertrend berbalik
+
+Pecahan KELUAR dalam senarai:
+  X17 11 · X36 10 · X13 6 · X15 5 · X12 5 · X14 2 · X16 1
+Pecahan KELUARGA masuk dalam senarai:
+  POLA 8 · RSI 7 · ADX 6 · PECAH 4 · TREND 4 · VOLUM 3 · KETAT 3 · BB 2 · KEKUATAN 2 · MA 1
+Masuk berbeza: 21
+tanpa5 dalam senarai: 7/40 POSITIF · median -2.442
+
+KAWALAN REGRESI — sel yang bertindih dengan nxx_keluar.csv mesti sepadan.
+Penting kerana SE berkelompok-hari ditulis semula daripada dict kepada
+tatasusunan padat selepas larian pertama dibunuh; semantiknya mesti identik.
+  46 sel bertindih · 0 metrik terpesong -> LULUS
+
+Semakan jangkaan priori spec §5:
+  priori 3: N19xX13 tempat 1 atau 2 -> pangkat 4 (+11.2855%)
+  -> grid_penuh.csv (1,495 baris) · grid_top40.csv  [333s]
