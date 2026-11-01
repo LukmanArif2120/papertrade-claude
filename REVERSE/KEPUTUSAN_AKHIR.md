@@ -58,9 +58,14 @@ Peraturan berangka: **kekalkan kolam calon sekurang-kurangnya ~10× bilangan slo
 itu menapis membunuh pemeringkat; di atas itu menapis membantu. Itu merekonsiliasi
 `SETUP.md` (598/598 penapis merugikan — kesemuanya pencetus **jarang**) dengan E6.
 
-**(3) Had industri ialah kekangan yang MEMBAYAR.** Had 1 pegangan setiap industri memperbaiki
-**kedua-dua** paksi: **+1.65 mata CAGR dan +1.60 mata MDD** (E5). Mekanismenya diukur: tanpa
-had, **6 daripada 8 slot** boleh berada dalam satu industri — "8 slot" sebenarnya ~3 taruhan.
+**(3) Had industri ialah lever RISIKO yang hampir percuma.** ~~Kekangan yang memperbaiki
+kedua-dua paksi~~ — **DITARIK BALIK 1 Nov 2026** oleh semakan luar sampel
+(`SEMAKAN_LATIH.md`): kaki CAGR **tidak bertahan** dalam latih 2012–2019 (+1.65 → **−0.19**),
+jadi +1.65 itu artifak tingkap. Kaki MDD **bertahan kukuh**: +1.60 (tahan) dan **+1.12**
+(latih), mencetek pada **83.3%** sel latih. Rumusan yang betul: **had 1 pegangan setiap
+industri membeli MDD lebih cetek pada kos CAGR hampir sifar.** Mekanismenya tetap diukur:
+tanpa had, **6 daripada 8 slot** boleh berada dalam satu industri — "8 slot" sebenarnya ~3
+taruhan.
 
 **(4) Masalah ekor ialah sifat ALAM, bukan hukum pasaran.** 5% dagangan teratas membawa
 **101.67%** jumlah pulangan pada alam 3,260 nama (95% yang lain negatif bersih), **47.92%**
@@ -68,10 +73,12 @@ pada 214 nama, dan **30.8–66.5%** pada bakul sektor — dengan `tanpa5` **posi
 sel bakul (E2, E3). Kesimpulan lama "kelebihan hidup sepenuhnya dalam ekor kanan" adalah
 khusus kepada alam luas yang mengandungi ekor mikro-kapitalisasi.
 
-**(5) Volatiliti rendah ialah lever MDD terbesar — dan ia pertukaran tulen.** Saringan
-separuh berkevolatilan rendah memberi **+22.09 mata** MDD lebih cetek tetapi **−17.47 mata**
-CAGR (E6). Berbeza daripada had industri, ia tidak memperbaiki kedua-dua paksi. Itu tepat
-corak "peruntukan tunai dalam samaran" yang `SISTEM.md` jangkakan.
+**(5) Volatiliti rendah ialah lever MDD terbesar — dan harganya bergantung TINGKAP.**
+Saringan separuh berkevolatilan rendah memberi **+22.09 mata** MDD lebih cetek pada kos
+**−17.47 mata** CAGR dalam 2020–2025 (E6). **PEMBETULAN 1 Nov 2026** (`SEMAKAN_LATIH.md`,
+post-hoc): dalam latih 2012–2019 ia memberi **+18.62 mata MDD pada kos +0.16 mata CAGR** —
+hampir percuma, pada **100%** sel. Jadi "pertukaran tulen" ialah sifat **2020–2025**, bukan
+sifat umum: tingkap itu mempunyai kepimpinan berkevolatilan tinggi yang luar biasa.
 
 ## 4. Apa yang perlu dibuat sekarang: `T4`
 

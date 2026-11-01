@@ -1,5 +1,13 @@
 # HIERARKI — `GB07`: signal A tentukan ALAM, signal B tentukan URUTAN
 
+> **PEMBETULAN 1 Nov 2026 — `SEMAKAN_LATIH.md`.** Dakwaan laporan ini **DISAHKAN** luar
+> sampel tetapi **magnitudnya runtuh**: `A2` jatuh daripada +4.26 kepada **+0.64** mata CAGR
+> dalam latih 2012–2019, dan `A3` hilang sepenuhnya (**0.00 / 0.00**). Yang bertahan ialah
+> **arah** dan peraturan kolam, bukan nombor: saringan berdiri yang **longgar** membantu
+> sedikit pada kedua-dua paksi; saringan **ketat** tidak. Juga: `A4` **bukan** pertukaran
+> tulen di luar 2020–2025 — dalam latih ia memberi +18.62 mata MDD pada kos +0.16 mata CAGR.
+> Laporan asal dikekalkan tanpa diubah di bawah.
+
 Pradaftar: `REVERSE/SPEC_HIERARKI.md` (komit `b30b2a0`, sebelum larian).
 Skrip: `REVERSE/step29_hierarki.py` · Data: `REVERSE/hierarki.csv`,
 `REVERSE/hierarki_ringkas.csv`

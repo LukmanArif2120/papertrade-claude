@@ -924,16 +924,23 @@ HASIL_PAKSI = {
             'KEKERAPAN bukan jenis: pintu harian beri 7.7-21.8 calon/sesi (kolam < slot), '
             'saringan berdiri beri 102-326 (kolam 13-41x slot). PERATURAN: kekalkan kolam '
             'calon >= ~10x bilangan slot. A4 (separuh ATR% rendah) beri lever MDD TERBESAR '
-            'dalam kajian, +22.09 mata lebih cetek, tetapi -17.47 mata CAGR = pertukaran '
-            'tulen. Terbaik A2 x U14 x 8 slot x had 2: +53.15%/-57.56%, satu cabutan, '
-            'BUKAN boleh didagang',
+            'dalam kajian, +22.09 mata lebih cetek, tetapi -17.47 mata CAGR. Terbaik A2 x '
+            'U14 x 8 slot x had 2: +53.15%/-57.56%, satu cabutan, BUKAN boleh didagang. '
+            'SEMAKAN LUAR SAMPEL 1 Nov 2026 (SEMAKAN_LATIH.md): DISAHKAN tetapi magnitud '
+            'RUNTUH - A2 +4.26 -> +0.64 mata CAGR dalam latih, A3 hilang sepenuhnya '
+            '(0.00/0.00); yang bertahan ialah ARAH dan peraturan kolam, bukan nombor. '
+            'A4 BUKAN pertukaran tulen di luar 2020-2025: dalam latih ia beri +18.62 mata '
+            'MDD pada kos +0.16 mata CAGR, pada 100% sel',
 
     # KORELASI: pradaftar SPEC_KORELASI.md, larian step28 (REVERSE/KORELASI.md).
     'KR03': 'had bilangan pegangan setiap industri, alam AL04 TITIK-MASA: T1 0, T3 0, '
             'P2 0/96 - tetapi E5a LULUS kedua-dua bahagian. Had 1 memperbaiki KEDUA-DUA '
             'paksi serentak: median +1.65 mata CAGR DAN +1.60 mata MDD lebih cetek lawan '
-            'tiada had (had 2: +0.76/+0.02; had 3: +0.47/+0.00). Bukan pertukaran - '
-            'kekangan yang membayar, yang pertama dalam kajian. Mekanisme: tanpa had, 6 '
+            'tiada had (had 2: +0.76/+0.02; had 3: +0.47/+0.00). DIPALSUKAN SEPARA 1 Nov '
+            '2026 oleh SEMAKAN_LATIH.md: kaki CAGR TIDAK bertahan dalam latih 2012-2019 '
+            '(+1.65 -> -0.19) jadi ia artifak tingkap; kaki MDD BERTAHAN (+1.12, mencetek '
+            'pada 83.3% sel latih). Rumusan betul: had industri ialah lever RISIKO yang '
+            'hampir percuma, bukan lever dwi-arah. Mekanisme: tanpa had, 6 '
             'daripada 8 slot boleh berada dalam SATU industri, jadi "8 slot" sebenarnya ~3 '
             'taruhan. Saiznya kecil jadi ia komponen bukan penyelesaian. MDD paling cetek '
             'dalam baris gilir muncul di sini: -28.97%, 2.15 mata daripada SPUS, tetapi '

@@ -1,5 +1,12 @@
 # KORELASI — `KR03`: had bilangan pegangan setiap industri
 
+> **PEMBETULAN 1 Nov 2026 — `SEMAKAN_LATIH.md`.** Dakwaan utama laporan ini, bahawa had
+> industri memperbaiki **kedua-dua** paksi, **DIPALSUKAN** oleh semakan luar sampel. Kaki
+> CAGR tidak bertahan dalam latih 2012–2019: had 1 memberi **−0.19** mata, bukan +1.65. Kaki
+> MDD **bertahan** (+1.12, 83.3% sel). Baca laporan ini sebagai: **had industri ialah lever
+> RISIKO yang hampir percuma, bukan lever dwi-arah.** Laporan asal dikekalkan tanpa diubah
+> di bawah supaya rekodnya utuh.
+
 Pradaftar: `REVERSE/SPEC_KORELASI.md` (komit `26c135b`, sebelum larian).
 Skrip: `REVERSE/step28_korelasi.py` · Data: `REVERSE/korelasi.csv`,
 `REVERSE/korelasi_ringkas.csv`

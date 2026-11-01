@@ -4350,7 +4350,7 @@ function renderKaedahN(){
     </div>
     <p class="kesimpulan">${esc(AK.ayat)}</p>
     <p class="note"><b>Sebabnya struktur, bukan nasib.</b> ${esc(AK.sebab)}</p>
-    <div class="crg-h" style="margin-top:14px">Lima dapatan yang BERTAHAN — gate gagal, dapatan ini tidak</div>
+    <div class="crg-h" style="margin-top:14px">${(AK.dapatan||[]).length} dapatan yang bertahan — gate gagal, dapatan ini tidak (disemak luar sampel 1 Nov 2026)</div>
     <ol class="utama3" style="margin:6px 0 0">${(AK.dapatan||[]).map(x=>`<li>${esc(x)}</li>`).join('')}</ol>
     <div class="crg-h" style="margin-top:14px">Apa yang perlu dibuat sekarang: T4 — SPUS + tunai</div>
     <div class="tablewrap"><table data-st="kn-t4"><thead><tr><th class="l">Berat SPUS</th><th>CAGR/tahun</th><th>MDD</th><th>Nisbah</th></tr></thead><tbody>

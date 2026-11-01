@@ -586,14 +586,22 @@ def kaedah_n(dibina):
                 'membantu. Pintu harian (7.7-21.8 calon/sesi) memusnahkan pemeringkat '
                 '(jurang 37.6 mata); saringan berdiri (102-326) memperbaiki kedua-dua '
                 'paksi. Peraturan: kolam calon >= ~10x bilangan slot.',
-                'Had industri ialah kekangan yang MEMBAYAR: had 1 memperbaiki kedua-dua '
-                'paksi (+1.65 mata CAGR DAN +1.60 mata MDD). Tanpa had, 6 daripada 8 slot '
-                'boleh berada dalam satu industri.',
+                'Had industri ialah lever RISIKO yang hampir percuma. Dakwaan dwi-arah '
+                'asal DITARIK BALIK 1 Nov 2026 oleh semakan luar sampel: kaki CAGR tidak '
+                'bertahan (+1.65 pada 2020-2025 menjadi -0.19 pada 2012-2019) tetapi kaki '
+                'MDD bertahan (+1.60 dan +1.12, mencetek pada 83.3% sel latih). Tanpa had, '
+                '6 daripada 8 slot boleh berada dalam satu industri.',
                 'Masalah ekor ialah sifat ALAM, bukan hukum pasaran: 5% teratas membawa '
                 '101.67% jumlah pulangan pada alam 3,260 nama, 47.92% pada 214 nama, dan '
                 'tanpa5 POSITIF pada 8/8 sel bakul sektor.',
-                'Volatiliti rendah ialah lever MDD terbesar (+22.09 mata) tetapi '
-                'pertukaran TULEN (-17.47 mata CAGR) - berbeza daripada had industri.'],
+                'Volatiliti rendah ialah lever MDD terbesar (+22.09 mata) dan harganya '
+                'bergantung TINGKAP: dalam 2012-2019 ia memberi +18.62 mata MDD pada kos '
+                '+0.16 mata CAGR pada 100% sel, jadi "pertukaran tulen -17.47 mata" ialah '
+                'sifat 2020-2025 sahaja.',
+                'SEMAKAN LUAR SAMPEL 1 Nov 2026: saringan berdiri DISAHKAN tetapi '
+                'magnitudnya runtuh (A2 +4.26 menjadi +0.64 mata CAGR; A3 hilang '
+                'sepenuhnya). Yang bertahan ialah ARAH dan peraturan kolam, bukan nombor. '
+                'Setiap kesan MDD dalam E1-E4 masih tingkap TAHAN sahaja.'],
             t4=[dict(berat=100, cagr=17.95, mdd=-26.82),
                 dict(berat=60, cagr=10.87, mdd=-16.62),
                 dict(berat=40, cagr=7.27, mdd=-11.25),
