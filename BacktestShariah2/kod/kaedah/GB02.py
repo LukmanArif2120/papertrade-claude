@@ -49,7 +49,7 @@ PERLU_BAR = 240
 def sedia(fr, idx):
     for g in fr.values():
         f = NX.indikator(g)
-        NX.pasang(g, NX.gb02_atau3(f, g))
+        NX.pasang(g, NX.gb02_atau3(f, g), f)
         g['_rsi14'] = f.rsi14
         g['_bb'] = f.bb_pctb
         g['_adx'] = f.adx14

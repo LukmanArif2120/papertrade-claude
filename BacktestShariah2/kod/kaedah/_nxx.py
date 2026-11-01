@@ -294,7 +294,7 @@ def u14(g):
     return s.replace([np.inf, -np.inf], np.nan).fillna(-9e9)
 
 
-def pasang(g, masuk, nama_rank=None):
+def pasang(g, masuk, f=None, nama_rank=None):
     """Tulis lajur enjin v1.2. TIADA henti dan TIADA sasaran dengan sengaja:
 
     * `stop = NaN` -> `enjin.trades` guna `sp = -inf`, jadi kecacatan henti hari-0
@@ -308,12 +308,14 @@ def pasang(g, masuk, nama_rank=None):
     `rank` = `u14()` dan BUKAN 0.0 — lihat `u14` untuk sebabnya (hingar pemilihan 17.3
     mata/tahun kalau susunan sewenang-wenang).
     """
-    f = indikator(g)
+    if f is None:                      # pemanggil biasanya sudah mengiranya;
+        f = indikator(g)               # `indikator()` ialah kos CPU termahal saluran
     g['sig'] = masuk.fillna(False).astype(bool)
     g['stop'] = np.nan
     g['tgt'] = np.nan
     g['exitc'] = x13(f).fillna(False).astype(bool)
     g['rank'] = u14(g) if nama_rank is None else f[nama_rank].fillna(-9e9).astype('float64')
+    return f
     return f
 
 

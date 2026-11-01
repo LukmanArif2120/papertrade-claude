@@ -1,5 +1,58 @@
 # SPEC_JEJAK_N — pradaftar JEJAK HADAPAN kaedah Nxx dalam Papertrade C
 
+> # ⚠ PENARIKAN BALIK 1 Nov 2026 — BACA DAHULU SEBELUM APA-APA DI BAWAH
+>
+> Audit bebas (6 lensa, agen membaca CSV sumber bukan dokumen ini; 17 dapatan bertahan
+> penyangkalan 3-undi) mendedahkan bahawa **hujah utama dokumen ini untuk meletakkan Nxx ke
+> dalam produksi adalah SALAH**. Disahkan sendiri terhadap fail sumber:
+>
+> **(1) "gate2 LULUS (BH-FDR)" ialah artifak penyebut.** `M_PRADAFTAR` ialah 358 (step18),
+> 349 (step19), 14 (step20) — tetapi **8** dalam `step21_silang_akhir.py:24`, ujian yang
+> memutuskan. Dengan 8 baris dan m=8, ambang BH pada pangkat 8 ialah 0.05×8/8 = **0.05**,
+> jadi gate2 di langkah itu **setara aritmetik dengan p < 0.05 TANPA pembetulan**, dan 8/8
+> lulus. Ia tidak membetulkan apa-apa.
+>
+> **(2) Asimetri yang memusnahkan dakwaan itu:** pada panel, tingkap, keluar dan penganggar
+> yang **sama** — `N19 × X13` p = **0.003576** direkod `gate2 = False` (m=349), sementara
+> `GB02_atau3 × X13` p = **0.006803** direkod `gate2 = True` (m=8). **p yang lebih KECIL
+> gagal; yang lebih BESAR lulus.** Semata-mata kerana penyebut.
+>
+> **(3) gate3 juga dilonggarkan pada langkah yang sama:** step18 dan step19 guna
+> `tanpa5 > 0` (mutlak); step21 guna `tanpa5 > asas5` (relatif).
+>
+> **(4) "satu-satunya yang lulus gate0–gate3" SALAH: 8 daripada 12** baris
+> `silang_akhir.csv` lulus keempat-empat gate.
+>
+> **(5) "satu-satunya konfigurasi dalam SELURUH kajian yang kelebihannya bertahan selepas
+> buang 5% teratas" SALAH tiga kali:** `GB02_atau4 × X13` tanpa5 = **+2.8825** (LEBIH TINGGI
+> daripada +2.8577 yang saya petik); dan `ASAS × X13` sendiri = **+0.9118**, iaitu positif.
+> Tambahan, `tanpa5` pada X13 hanya pernah dikira untuk 3 baris, jadi dakwaan "seluruh
+> kajian" tidak boleh diuji daripada keluaran kajian sendiri — **`N19 × X13`, jangkaan
+> +11.2855% dan p 0.003576 (kedua-duanya LEBIH BAIK daripada konfigurasi yang saya pilih),
+> tidak pernah diukur untuk kemandirian ekor.**
+>
+> **(6) Konfigurasi yang saya pilih lebih buruk daripada kakinya sendiri:** `GB02_atau3 × X13`
+> +8.5413% < purata `N19`/`N115` pada X13 (+11.2855, +7.5094 → 9.3975). Jangkaan priori #3
+> saya sudah dipalsukan oleh data yang dikomit sebelum saya menulisnya.
+>
+> ## Pernyataan yang menggantikan hujah lama
+>
+> **Kajian ruang MASUK tidak memberi sokongan yang bertahan BH-FDR kepada mana-mana
+> konfigurasi apabila penyebut merangkumi carian yang menghasilkannya.** Maka jejak 20 kohort
+> ini **BUKAN** pengesahan ke hadapan bagi kelebihan yang sudah diukur. Ia **ujian pertama
+> yang jujur**, dan kawalan negatif ialah satu-satunya sebab ia boleh ditafsir.
+>
+> Itu menjadikan jejak ini **lebih** perlu, bukan kurang — tetapi setiap dakwaan "terbukti",
+> "melepasi FDR" dan "satu-satunya" dalam dokumen ini, dalam docstring `kod/kaedah/*.py`, dan
+> dalam `CLAUDE.md` **ditarik balik**. Dapatan lain audit (kecacatan kod, nombor tidak
+> sepadan) disenaraikan dalam `REVERSE/AUDIT_JEJAK_N.md`.
+>
+> Lapisan terjemahan kekal **BERSIH**: audit mengesahkan sendiri kesemua 22 lajur indikator
+> dan kesemua 20 topeng bit-identik dengan kajian (maks |Δ| < 1e-9, 0 bar berbeza), tiada
+> kebocoran masa hadapan, `stop = NaN` benar-benar bermakna tiada henti, dan `hampir()` selamat
+> pada setiap panjang bingkai 1–253. Yang rosak ialah **keputusan**, bukan pelaksanaan.
+
+
 **Dikomit SEBELUM mana-mana isyarat Nxx dibeli.** Ini bukan eksperimen ketujuh: baris gilir
 E1–E6 ditutup (`KEPUTUSAN_AKHIR.md`) dan tiada gate baharu dibuka. Ini **pelaksanaan** —
 memindahkan konfigurasi yang sudah diukur ke dalam saluran produksi supaya ia menghasilkan

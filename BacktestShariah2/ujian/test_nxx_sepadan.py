@@ -190,8 +190,6 @@ class TestNxxSepadan(unittest.TestCase):
         self.assertGreater(int((T.why == 'isyarat keluar').sum()), 0, 'X13 tidak pernah cetus')
 
 
-if __name__ == '__main__':
-    unittest.main()
 
 
 class TestKohortLengkap(unittest.TestCase):
@@ -213,3 +211,7 @@ class TestKohortLengkap(unittest.TestCase):
         """Jejak mesti mengandungi kawalan negatif, jika tidak keputusannya tidak boleh dibaca."""
         for mid in ('N76', 'N24', 'N31', 'N62'):
             self.assertIn(mid, NXX, f'{mid} ialah kawalan negatif dan mesti dijejak')
+
+
+if __name__ == '__main__':
+    unittest.main()
