@@ -222,3 +222,76 @@ ia **belum pernah diuji**. Mengodkannya bermakna meletakkan peraturan **tidak di
 produksi, yang berbeza secara jenis daripada melaksanakan peraturan yang sudah diukur. Itu
 keputusan pengguna, bukan keputusan saya. Baki ~70 diuji dan **gagal** — ia tidak patut
 dikodkan.
+
+
+## 9. KEPUTUSAN ukuran §8b — ketiga-tiganya KODKAN
+
+Skrip: `REVERSE/step30_nxx_x13.py` · Data: `REVERSE/nxx_x13.csv`
+
+**Kawalan regresi LULUS identik.** `N115 × X13` dihasilkan semula daripada
+`nxx_keluar.csv` pada kelima-lima metrik dengan |Δ| = **0.00e+00**, jadi laluan kod ini
+sama dengan yang menghasilkan nombor terbitan.
+
+Asas `X13`: latih **+2.705%** · tahan **+4.350%**.
+
+| masuk | jangkaan latih | jangkaan tahan | lift latih | lift tahan | menang | untung | rugi | n tahan | lulus |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| `N17` | +5.004 | **+8.320** | +2.299 | **+3.970** | 63.5% | +26.54 | −23.44 | 54,073 | ya |
+| `N115` | +4.211 | +7.509 | +1.506 | +3.159 | 64.5% | +24.34 | −23.08 | 104,014 | ya |
+| `N75` | +4.748 | +7.468 | +2.043 | +3.118 | 62.6% | +26.22 | −23.96 | 861,071 | ya |
+| `N16` | +3.875 | +5.857 | +1.170 | +1.506 | 63.4% | +22.30 | −22.64 | 567,422 | ya |
+
+Peraturan §8b (keempat-empat syarat) dipenuhi oleh ketiga-tiganya → **`N16`, `N17`, `N75`
+DIKODKAN**. Jangkaan priori saya ("ketiga-tiganya LULUS") **betul**.
+
+**Dapatan tambahan: pilihan keluar menukar SUSUNAN masuk.** Pada `X2`, `N17` kelihatan lebih
+lemah daripada `N115` (lift +1.264 lawan +1.464); pada `X13` ia lebih KUAT (+3.970 lawan
++3.159). Jadi "peraturan masuk mana terbaik" tidak bermakna tanpa menyebut keluar — sejajar
+dengan `NXX_KELUAR.md` yang mengukur keluar ~12× lebih berpengaruh daripada masuk.
+
+## 10. Ukuran BERTINDIH — andaian saya DISANGKAL
+
+Skrip: `REVERSE/step31_bertindih.py` · Data: `REVERSE/bertindih_nxx.csv`,
+`REVERSE/bertindih_kelompok.csv`
+
+Saya menulis kepada pengguna bahawa `N16`/`N75`/`N17`/`N19` "mencetus pada bar terlebih jual
+yang bertindih", jadi 78 kohort hanya mewakili 5–10 ujian bebas. **Itu salah, dan saya
+menulisnya tanpa mengukur.** Jaccard berpasangan pada 1,206,512 bar cair:
+
+- Antara lapan yang dikodkan: **maksimum 0.349** (`N17`/`N20`), `N16`/`N75` 0.300, selebihnya
+  < 0.12. Praktiknya bebas.
+- Merentas 65 topeng: median **dalam** keluarga **0.032**, **antara** keluarga **0.014**.
+- Pada ambang Jaccard ≥ 0.5 (pautan lengkap): **52 daripada 65** memberi maklumat berbeza.
+  Pada ambang ketat 0.3: 42 daripada 65.
+
+**Pendua tertumpu dalam keluarga yang GAGAL**, bukan yang berjaya: bertindih median `TREND`
+**0.435**, `ADX` 0.013 tetapi maks 0.611, `PECAH` maks 0.667 — dan `TREND` memberi 0/24,
+`KEKUATAN` 0/12 dalam `NXX.md`. Keluarga yang melepasi FDR (`RSI` median 0.161, `BB` median
+**0.000**) hampir tidak bertindih.
+
+Jadi hujah "jangan test kesemuanya kerana ia pendua" **tidak sah**. Hujah yang sah ialah
+**kos cakera dan 44 topeng yang liftnya sudah diukur NEGATIF**, bukan kependuaan.
+
+## 11. Keadaan keputusan skala (menunggu pengguna)
+
+Senarai penuh 65 topeng dengan keluarga, kiraan gate, lift, jangkaan, `n` dan kelompok
+bertindih sudah dibentangkan kepada pengguna. Keadaan terukur:
+
+- **4** topeng melepasi gate2 (BH-FDR): `N75`, `N16`, `N115`, `N17`
+- **16** melepasi gate1 (lift positif dua tingkap)
+- **21** ada lift tahan positif; **44 ada lift NEGATIF**
+- **10** ialah pendua (Jaccard ≥ 0.5 dengan topeng lain), kesemuanya `TREND`/`ADX`/`PECAH`/`KETAT`
+- `N124` (`gap ≥ 8% DAN vol_n50 ≥ 2.0`) ada **lift tahan +7.066** — tertinggi dalam senarai,
+  hampir 2× `N19` — tetapi **gagal gate1** kerana liftnya negatif dalam latih. Ia mungkin
+  peraturan gagal, atau peraturan yang hanya berfungsi selepas 2020. Jejak hadapan boleh
+  membezakan; kajian tidak boleh. **Keputusan memasukkannya diserahkan kepada pengguna**
+  kerana ia bermakna menjejak peraturan yang gagal pradaftar.
+
+Syor saya kepada pengguna: **20 kohort** — 8 berbukti FDR + 8 gate1 + **4 kawalan negatif**
+(`N76` MA, `N24` TREND, `N31` PECAH, `N120` KEKUATAN). Kawalan negatif itulah yang menjadikan
+keputusan boleh dibaca: kalau 16 yang berbukti mengalahkan 4 kawalan ke hadapan, dapatan
+peringkat keluarga direplikasi pada sampel bebas. Menambah 45 kohort gagal yang lain tidak
+menguatkan ujian itu.
+
+Kos terukur: 1.67 KB/posisi · 7.3 isyarat/kaedah/sesi · 126 sesi →
+~+70 MB bagi 20 kohort, ~215 MB bagi 52, ~267 MB bagi 65. `.git` sudah 484 MB.
