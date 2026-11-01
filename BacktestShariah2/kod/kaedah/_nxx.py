@@ -283,11 +283,26 @@ def u14(g):
     `SISTEM.md` mengukur bahawa memeringkat ikut skor objektif BERTERUSAN memberi sebaran
     benih **0.00**, jadi pemeringkat berterusan menghapuskan hingar itu.
 
-    `U14` dipilih kerana (a) ia pemeringkat terbaik dalam E6 (`HIERARKI.md`: setiap pemenang
-    `E6a` memakai U14) dan (b) ia boleh dikira daripada harga sahaja. `U02` (RS pasaran)
-    memberi CAGR lebih tinggi bagi `GB02 x X13` dalam `portfolio_n_ringkas.csv` (16.12 lawan
-    11.93 pada 8 slot) tetapi RS tidak tersedia dalam `sedia(fr, idx)` yang hanya menerima
-    harga, jadi U14 ialah pilihan terbaik yang boleh dilaksanakan di sini.
+    `U14` dipilih kerana (a) ia pemeringkat paling KERAP antara pemenang `E6a` dan (b) ia
+    boleh dikira daripada harga sahaja.
+
+    **DUA PEMBETULAN 1 Nov 2026** (`REVERSE/AUDIT_JEJAK_N.md`), kedua-duanya disahkan terhadap
+    CSV sumber:
+
+    1. Dakwaan asal "setiap pemenang `E6a` memakai U14" (dalam `HIERARKI.md` dan
+       `SPEC_JEJAK_N.md`) **SALAH**. 19 pemenang terbahagi **U14 11 · U01 8 · U02 0** — jadi
+       **8 daripada 19 memakai `U01` yang RAWAK**, dan kelebihan U14 atas susunan rawak dalam
+       E6 jauh lebih kecil daripada yang dinyatakan.
+    2. Perbandingan "`U02` ... 16.12 lawan 11.93 pada 8 slot" membandingkan **DUA MASUK
+       BERBEZA** (16.12 = `GB02_atau3,8,X13,U02`; 11.93 = `GB02_atau4,8,X13,U01`). Bagi masuk
+       yang SAMA (`GB02_atau3,8,X13`): U02 16.12 · U01 9.40 · U08 8.83. Dan `U14` **tiada
+       dalam `portfolio_n_ringkas.csv` sama sekali** — lajur urutan hanya U01/U02/U08, jadi
+       pemeringkat yang sebenarnya dipasang di sini **tidak pernah diuji pada peringkat
+       portfolio bagi mana-mana masuk Nxx**.
+
+    Sebab tinggal untuk memakai U14 kekal sah tetapi lebih sempit: ia skor BERTERUSAN (jadi ia
+    menghapuskan hingar pemilihan 17.3 mata/tahun yang susunan sewenang-wenang suntik) dan ia
+    boleh dikira daripada harga sahaja. Itu sahaja. Ia BUKAN "pemeringkat terbaik yang diukur".
     """
     c = g.close
     s = c.shift(21) / c.shift(252) - 1.0
