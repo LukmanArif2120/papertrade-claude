@@ -104,7 +104,8 @@ def main():
                     pos = x > 0
                     ak[2] += int(pos.sum()); ak[3] += float(x[pos].sum())
                     ak[4] += float(x[~pos].sum())
-                    if w == 'tahan':                     # SE berkelompok ikut hari beli
+                    if w == 'tahan' and nm != 'ASAS':   # SE berkelompok ikut hari beli
+                        # ASAS tiada baris keputusan jadi tiada ruang dalam IDX_SEL
                         # Tatasusunan PADAT, bukan dict. Versi pertama saya membina
                         # 1,495 sel x ~1,500 hari = 2.2 JUTA entri dict melalui gelung
                         # Python setiap kelompok, dan larian itu dibunuh. Di sini
