@@ -596,7 +596,10 @@ def main(argv=None):
         tarikh_data=wl[0]['tarikh_data'] if wl else S, rows=[earn_sebenar(baris_db(r, PETA_WATCH), r, KAL) for r in wl])
     # prestasi
     mae = penurunan_maks(M, C, a.stor)
-    docs['prestasi/mae'] = dict(rows=mae, dibina=dibina, harga_hingga=f'{S} tutup',
+    # 2 Nov 2026: rows ditukar daripada peta kepada senarai pasangan tersusun supaya dokumen
+    # boleh DIBAHAGI (ia melebihi had 262,144 bait). Bentuk sama seperti prestasi/mae_atr.
+    docs['prestasi/mae'] = dict(rows=sorted([k, v] for k, v in mae.items()), dibina=dibina,
+                                harga_hingga=f'{S} tutup',
                                 definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude). ATR isyarat: prestasi/mae_atr.')
     # 23 Okt 2026: atr dipindah ke dokumen sendiri (dibahagi) kerana mae + atr melebihi had satu dokumen
     docs['prestasi/mae_atr'] = dict(rows=sorted([k, v] for k, v in atr_isyarat(M, C, a.stor).items()), dibina=dibina,
@@ -672,7 +675,7 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     versi = json.load(open(a.versi)) if a.versi else {}
     tulis = []
-    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'stage', 'lorong2', 'jalur')
+    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'stage', 'lorong2', 'jalur', 'mae')
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
     semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
     for kol, bahagian in semua:
