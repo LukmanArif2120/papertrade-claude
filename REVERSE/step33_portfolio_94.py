@@ -96,7 +96,10 @@ def matriks():
         del x
         print(f'    [{time.time() - t0:.0f}s] matriks kelompok {i + 1}', flush=True)
     M['O'], M['C'], M['A'], M['N'] = P.O, P.C, P.A, P.N
-    M['tarikh'] = np.asarray([str(d) for d in P.tarikh])
+    # Tarikh dinormalkan ke datetime64[D]. Pepijat yang ini betulkan: str(Timestamp) beri
+    # '2011-01-03 00:00:00' manakala str(numpy.datetime64) beri
+    # '2009-01-02T00:00:00.000000000', jadi TIADA satu pun kunci sepadan dan calon = 0 hari.
+    M['tarikh'] = np.asarray(pd.to_datetime(list(P.tarikh)).values, dtype='datetime64[D]')
     M['tick'] = np.asarray(list(P.tick))
     CACHE.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(MAT, **M)
@@ -137,7 +140,7 @@ def calon(p94):
         P = S18._sedia(bk, S18.PUL, rsf)
         T = S18.topeng(P)
         tk = P.ticker.to_numpy()
-        dt = np.asarray([str(d) for d in P.date.to_numpy()])
+        dt = P.date.to_numpy().astype('datetime64[D]')
         for m_, kods in masuk_ke_keluar.items():
             if m_ not in T:
                 continue
@@ -152,6 +155,8 @@ def calon(p94):
                     bucket.setdefault(int(a), set()).add((int(ti), kc))
         del P, T
         print(f'    [{time.time() - t0:.0f}s] calon kelompok {i + 1}', flush=True)
+    if not bucket:
+        raise SystemExit('calon KOSONG — kunci ticker/tarikh tidak sepadan; jangan cache ini')
     out, simpan = {}, {'hari': np.asarray(sorted(bucket), 'int64')}
     for a, s in bucket.items():
         arr = np.array(sorted(s), 'int32')
@@ -272,17 +277,21 @@ def simulasi(M, U, CAL, slot, urut, benih, had_slot=True):
 
 # ---------------------------------------------------------------- larian
 def tingkap(M, ek, dz):
+    """Metrik tingkap TAHAN. PB.cagr mahu ARRAY tarikh (ia buat hari[ok] dan
+    (n[-1]-n[0]).days), BUKAN kiraan hari — itu pepijat kedua yang larian pertama dedahkan."""
     t = pd.to_datetime(M['tarikh'])
-    sel = (t >= UJI0) & (t <= UJI1)
-    e = ek[sel]
-    e = e[np.isfinite(e)]
-    if e.size < 50:
+    sel = np.asarray((t >= UJI0) & (t <= UJI1))
+    e = np.asarray(ek)[sel]
+    hari = t[sel]
+    ok = np.isfinite(e)
+    if ok.sum() < 50:
         return dict(cagr=np.nan, mdd=np.nan, nisbah=np.nan, dedah=np.nan)
-    e = e / e[0]
-    hari = int(sel.sum())
-    cg = PB.cagr(e, hari)
-    md = PB.mdd(np.concatenate([[1.0], e]))
-    return dict(cagr=cg, mdd=md, nisbah=cg / abs(md) if md else np.nan,
+    e0 = e[ok][0]
+    if not (e0 > 0):
+        return dict(cagr=np.nan, mdd=np.nan, nisbah=np.nan, dedah=np.nan)
+    cg = PB.cagr(e / e0, hari)
+    md = PB.mdd(np.concatenate([[1.0], e[ok] / e0]))
+    return dict(cagr=cg, mdd=md, nisbah=cg / abs(md) if md and np.isfinite(md) else np.nan,
                 dedah=float(np.nanmean(dz[sel]) * 100))
 
 
