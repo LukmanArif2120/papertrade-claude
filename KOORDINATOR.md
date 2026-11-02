@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-02 14:08 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-02 23:44 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| claude/wizardly-mendel-qr6j64 | 2026-11-02 | 0 | 2026-11-02 |
+| main | 2026-11-02 | 0 | 2026-11-02 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -84,8 +84,8 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261030 | 3 | OK |
-| Trend D10H2-r2 | 20261029 | 4 | **LEWAT 4 hari** |
+| Stor harga | 20261102 | 0 | OK |
+| Trend D10H2-r2 | 20261102 | 0 | OK |
 | Lejar Penuh | 2026-10-30 | 3 | OK |
 | portfolio_slot | 2026-10-30 | 3 | OK |
 | Papan Penganalisis | 2026-11-02 | 0 | OK |
