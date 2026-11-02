@@ -98,15 +98,38 @@ jobs:
           mkdir -p "${{ steps.mod.outputs.pemangkin }}"
           python3 BacktestShariah2/standard/harian_c.py gred --folder "${{ steps.mod.outputs.folder }}" --pemangkin "${{ steps.mod.outputs.pemangkin }}" \
             || echo "::warning::gred gagal (senarai beli tetap sah; gred kosong)"
-      - name: Semak data (sahkan.py --betulkan, pecah_claude.py, saiz db)
+      - name: Semak data (sahkan.py --betulkan, pecah_claude.py)
         continue-on-error: ${{ steps.mod.outputs.mod == 'bayang' }}   # mod selari: jangan halang push Lejar/harga
         if: steps.malam.outputs.baru == 'ya'
         run: |
           F="${{ steps.mod.outputs.folder }}"
           python3 BacktestShariah2/standard/pecah_claude.py --pecah --folder "$F"
           python3 BacktestShariah2/standard/sahkan.py --betulkan --folder "$F"
-          python3 BacktestShariah2/standard/jana_db.py --folder "$F" --keluar /tmp/db_semak > /dev/null
           python3 BacktestShariah2/standard/harian_c.py log --folder "$F" --peringkat malam --log "${{ steps.mod.outputs.log }}"
+      # Semakan saiz db DIASINGKAN daripada laluan commit (2 Nov 2026). Sebabnya diukur, bukan
+      # teori: pada 31 Okt 2026 `prestasi/mae` membesar kepada 269,864 bait > had 262,144, jana_db.py
+      # SystemExit, dan kerana ia berada dalam langkah yang SAMA dengan sahkan.py langkah itu gagal
+      # sebelum "Commit dan push" -> isyarat dan senarai_beli sesi 2026-10-30 TIDAK PERNAH dikomit,
+      # enam larian berturut gagal, dan beli.yml 2 Nov menolak beli kerana senarai_beli basi.
+      # Satu dokumen db terlalu besar ialah masalah DASHBOARD; ia tidak menjadikan posisi atau
+      # senarai beli salah, jadi ia tidak boleh menahan data papertrade daripada masuk repo.
+      # Gate yang KEKAL menghalang push ialah sahkan.py (0 ralat), seperti sebelum ini.
+      - name: Saiz db (amaran sahaja; TIDAK menghalang commit)
+        id: db
+        if: steps.malam.outputs.baru == 'ya'
+        continue-on-error: true
+        run: |
+          F="${{ steps.mod.outputs.folder }}"
+          if python3 BacktestShariah2/standard/jana_db.py --folder "$F" --keluar /tmp/db_semak > /dev/null 2> /tmp/db_semak.err; then
+            if grep -q 'AMARAN' /tmp/db_semak.err; then
+              A=$(grep 'AMARAN' /tmp/db_semak.err | tr -s ' \n' ' ' | cut -c1-170)
+              echo "::warning::$A"
+            fi
+          else
+            A="jana_db GAGAL (commit papertrade diteruskan): $(tail -2 /tmp/db_semak.err | tr -s ' \n' ' ' | cut -c1-150)"
+            echo "::error::$A"
+          fi
+          { echo "amaran<<EOF"; echo "$A"; echo "EOF"; } >> "$GITHUB_OUTPUT"
       - name: Banding mod selari (Actions lawan rutin Claude, tarikh MYT semalam)
         if: steps.mod.outputs.mod == 'bayang'
         run: |
@@ -147,4 +170,14 @@ jobs:
           M=$(python3 BacktestShariah2/standard/notifikasi.py malam --folder "${{ steps.mod.outputs.folder }}")
           echo "$M"
           curl -sS -m 20 -H "Title: Papertrade: kemas kini + imbas" -H "Tags: chart_with_upwards_trend" -d "$M" \
+            "https://ntfy.sh/$TOPIK" > /dev/null || echo "::warning::ntfy gagal"
+      # Amaran saiz db melalui ntfy. `always()` kerana langkah ini mesti berjalan walaupun commit
+      # gagal: had db yang dilanggar ialah tepat keadaan yang dahulu senyap selama enam larian.
+      - name: Notifikasi ntfy (saiz db)
+        if: always() && steps.mod.outputs.mod == 'rasmi' && steps.db.outputs.amaran != ''
+        env:
+          TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
+          PESAN: ${{ steps.db.outputs.amaran }}
+        run: |
+          curl -sS -m 20 -H "Title: Papertrade: saiz db" -H "Tags: warning" -d "$PESAN" \
             "https://ntfy.sh/$TOPIK" > /dev/null || echo "::warning::ntfy gagal"
