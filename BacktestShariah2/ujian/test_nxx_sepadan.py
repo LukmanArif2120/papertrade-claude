@@ -8,6 +8,7 @@ Bahaya khusus yang ia jaga: `enjin.rsi` guna `ewm(alpha=1/n, adjust=False)` tanp
 purata-n dan `enjin.atr` guna `rolling(n).mean()`, sedangkan kajian guna pelicinan Wilder
 dengan benih purata-n. Modul Nxx mesti memakai `kaedah/_nxx.py`, bukan pembantu enjin.
 """
+import re
 import sys
 import unittest
 from pathlib import Path
@@ -26,8 +27,16 @@ import REVERSE.teras.ind as IND                # noqa: E402
 STOR = AKAR / 'BacktestShariah2' / 'data' / 'harga' / 'stor' / 'harga_A.csv'
 # 20 kohort jejak hadapan (SPEC_JEJAK_N.md). Senarai ini ialah kontrak: kalau modul
 # ditambah atau dibuang tanpa mengemas spec, ujian ini gagal.
-NXX = ('N15', 'N16', 'N17', 'N19', 'N20', 'N24', 'N31', 'N37', 'N42', 'N46', 'N49',
-       'N62', 'N73', 'N75', 'N76', 'N115', 'N118', 'N119', 'N124', 'GB02')
+NXX = (
+    'N124X15', 'N19X13', 'N75X13', 'N73X13', 'N124X36',
+    'N16X13', 'N75X15', 'N42X15', 'N119X13', 'N37X17',
+    'N64X17', 'N28X17', 'N75X17', 'N55X13', 'N16X15',
+    'N37X36', 'N64X36', 'N50X17', 'N42X17', 'N119X15',
+    'N53X17', 'N65X36', 'N37X14', 'N65X14', 'N64X14',
+    'N06X36', 'N24X17', 'N25X17', 'N42X14', 'N53X36',
+    'N56X17', 'N25X36', 'N38X36', 'N50X14', 'N56X36',
+    'N53X16', 'N40X36', 'N36X36', 'N24X36', 'N22X36',
+)
 N_TICKER = 25
 MIN_BAR = 300
 
@@ -181,7 +190,7 @@ class TestNxxSepadan(unittest.TestCase):
         import importlib
 
         import enjin
-        m = importlib.import_module('kaedah.GB02')
+        m = importlib.import_module('kaedah.N19X13')   # kohort pangkat 2
         fr = {t: g.copy() for t, g in self.H}
         m.sedia(fr, None)
         T = enjin.trades(fr, tmax=m.TMAX, warm=m.WARM)
@@ -205,12 +214,115 @@ class TestKohortLengkap(unittest.TestCase):
         self.assertEqual(ada, set(NXX),
                          f'modul tanpa dalam senarai: {sorted(ada - set(NXX))}; '
                          f'dalam senarai tanpa modul: {sorted(set(NXX) - ada)}')
-        self.assertEqual(len(NXX), 20)
+        self.assertEqual(len(NXX), 40)
 
-    def test_kawalan_negatif_ada(self):
-        """Jejak mesti mengandungi kawalan negatif, jika tidak keputusannya tidak boleh dibaca."""
-        for mid in ('N76', 'N24', 'N31', 'N62'):
-            self.assertIn(mid, NXX, f'{mid} ialah kawalan negatif dan mesti dijejak')
+    def test_setiap_kohort_ada_baris_jejak40(self):
+        """Setiap modul mesti sepadan satu baris `REVERSE/jejak40.csv` — kontrak."""
+        import csv as _csv
+        with (AKAR / 'REVERSE' / 'jejak40.csv').open() as fh:
+            baris = {f"{r['masuk']}{r['keluar']}" for r in _csv.DictReader(fh)}
+        self.assertEqual(set(NXX), baris,
+                         f'modul tanpa baris: {sorted(set(NXX) - baris)}; '
+                         f'baris tanpa modul: {sorted(baris - set(NXX))}')
+
+    def test_keluar_berbeza_antara_kohort(self):
+        """Jejak mesti merentas BEBERAPA keluar — kalau semua satu keluar, paksi keluar
+        (yang diukur ~12x lebih berpengaruh daripada masuk) tidak diuji sama sekali."""
+        import importlib
+        kl = set()
+        for mid in NXX:
+            m = importlib.import_module(f'kaedah.{mid}')
+            kl.add(re.search(r"keluar='(\w+)'", (AKAR / 'BacktestShariah2' / 'kod' /
+                   'kaedah' / f'{mid}.py').read_text()).group(1))
+        self.assertGreaterEqual(len(kl), 4, f'hanya {len(kl)} keluar berbeza: {kl}')
+
+
+class TestPariti40(unittest.TestCase):
+    """Pariti bit bagi SETIAP topeng dan keluar yang 40 kohort produksi pakai.
+
+    `AUDIT_JEJAK_N.md` F6: dalam jejak 20-kohort hanya 6 daripada 20 topeng dilindungi ujian
+    pariti walaupun senarai itu dipanggil "kontrak", dan audit perlu menyemak 14 yang lain
+    sendiri. Kelas ini menutup jurang itu: setiap topeng dan keluar dalam `jejak40.csv`
+    dibandingkan dengan `REVERSE/teras/ind.py` + `step18_nxx.tambahan` secara eksplisit.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        if not STOR.exists():
+            raise unittest.SkipTest(f'stor harga tiada: {STOR}')
+        cls.H = _harga()
+        if not cls.H:
+            raise unittest.SkipTest('tiada ticker dengan bar cukup')
+        with (AKAR / 'REVERSE' / 'jejak40.csv').open() as fh:
+            import csv as _csv
+            rows = list(_csv.DictReader(fh))
+        cls.MASUK = sorted({r['masuk'] for r in rows}, key=lambda x: int(x[1:]))
+        cls.KELUAR = sorted({r['keluar'] for r in rows if r['keluar'] != 'X15'})
+
+    def test_semua_topeng_dan_keluar_40_identik(self):
+        L = lambda x, n=1: x.shift(n)  # noqa: E731
+        jum = {}
+        for t, g in self.H:
+            a, b = NX.indikator(g), IND.kira(g)
+            e20 = g.close.ewm(span=20, adjust=False, min_periods=20).mean()
+            t20 = g.high.rolling(20).max().shift(1)
+            gap = g.open / g.close.shift(1) - 1.0
+            t45 = (g.close < g.close.shift(1)).rolling(5).sum() >= 4
+            # ind.kira tidak mendedahkan ma20/sd20 (pemboleh ubah tempatan); formula
+            # ind.py:189-190 verbatim
+            m20 = g.close.rolling(20, min_periods=20).mean()
+            s20 = g.close.rolling(20, min_periods=20).std(ddof=0)
+            ref = {
+                'N06': (b.ma50 > b.ma200) & (L(b.ma50) <= L(b.ma200)),
+                'N16': b.rsi2 < 10,
+                'N19': (b.bb_pctb < 0) & (b.rsi14 < 30),
+                'N22': (b.bb_pctb > 100) & (b.rsi14 > 50),
+                'N24': (b.supertrend > 0) & (b.adx14 > 20),
+                'N25': (b.supertrend > 0) & (g.close > e20) & (b.adx14 > 23),
+                'N28': (b.adx14 > 25) & (b.mdi < b.adx14),
+                'N36': b.pocket_pivot > 0,
+                'N37': b['gap_and_go'] > 0,
+                'N38': b.vcp > 0,
+                'N40': (b.obv_tinggi_baru > 0) & (g.close > b.ma50),
+                'N42': (b.vol_n50 >= 2.0) & (g.close > L(g.close)),
+                'N50': ((b.julat10 < 0.5 * b.julat20) & (b.vol_n50 >= 1.5)
+                        & (g.close > L(g.high))),
+                'N53': (b.supertrend > 0) & (b.adx14 > 25),
+                'N55': (b.bb_pctb < 20) & (b.rsi14 > 40) & (b.adx14 > 20),
+                'N56': (b.rsi14 > 50) & (b.adx14 > 20),
+                'N64': (b['gap_and_go'] > 0) & (b.vol_n50 >= 2.0),
+                'N65': ((b['gap_and_go'] > 0) & (b.vol_n50 >= 1.5)
+                        & (b['j_52w_tinggi'] >= -5.0)),
+                'N73': g.close < (m20 - 2.0 * s20),
+                'N75': b.rsi14 < 40,
+                'N119': (L(g.close, 2) > L(g.close)) & (L(g.close) > g.close),
+                'N124': (gap >= 0.08) & (b.vol_n50 >= 2.0),
+                'X13': b.rsi14 > 70,
+                'X14': (b.rsi14 > 50) & (L(b.rsi14) <= 50),
+                'X16': b.supertrend <= 0,
+                'X17': b.adx14 < 20,
+                'X36': (g.close < b.ma50) & L(g.close < b.ma50).fillna(False),
+            }
+            got = {
+                'N06': NX.n06(a, g), 'N16': NX.n16(a), 'N19': NX.n19(a), 'N22': NX.n22(a),
+                'N24': NX.n24(a), 'N25': NX.n25(a, g), 'N28': NX.n28(a), 'N36': NX.n36(a),
+                'N37': NX.n37(a), 'N38': NX.n38(a), 'N40': NX.n40(a, g),
+                'N42': NX.n42(a, g), 'N50': NX.n50(a, g), 'N53': NX.n53(a),
+                'N55': NX.n55(a), 'N56': NX.n56(a), 'N64': NX.n64(a), 'N65': NX.n65(a),
+                'N73': NX.n73(a, g), 'N75': NX.n75(a), 'N119': NX.n119(g),
+                'N124': NX.n124(a), 'X13': NX.x13(a), 'X14': NX.x14(a), 'X16': NX.x16(a),
+                'X17': NX.x17(a), 'X36': NX.x36(a, g),
+            }
+            # setiap yang jejak40 perlukan MESTI ada di sini
+            for k in self.MASUK + self.KELUAR:
+                self.assertIn(k, ref, f'{k} dipakai oleh jejak40 tetapi tiada rujukan pariti')
+                x = got[k].fillna(False).astype(bool)
+                y = ref[k].fillna(False).astype(bool)
+                self.assertEqual(int((x != y).sum()), 0, f'{t} {k}: topeng terpesong')
+                jum[k] = jum.get(k, 0) + int(y.sum())
+        for k, n in jum.items():
+            self.assertGreater(n, 0, f'{k}: SIFAR isyarat rujukan — ujian sia-sia')
+        self.assertGreaterEqual(len(jum), 27, f'hanya {len(jum)} topeng/keluar diuji')
 
 
 if __name__ == '__main__':

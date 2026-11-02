@@ -138,6 +138,36 @@ def indikator(g):
     d['julat20'] = ((h.rolling(20, min_periods=20).max()
                      - l.rolling(20, min_periods=20).min()) / (c + EPS) * 100.0)
 
+    # mdi - ind.py:177 (N28)
+    d['mdi'] = mdi
+
+    # julat10 - ind.py:198
+    d['julat10'] = ((h.rolling(10, min_periods=10).max()
+                     - l.rolling(10, min_periods=10).min()) / (c + EPS) * 100.0)
+
+    # obv_tinggi_baru - ind.py:205-208
+    arah = np.sign(c.diff().fillna(0.0))
+    obv = (arah * v).cumsum()
+    d['obv_tinggi_baru'] = ((obv >= obv.rolling(50, min_periods=50).max() - EPS)
+                            & (c < c.rolling(50, min_periods=50).max() - EPS)
+                            ).astype('float64')
+
+    # pocket_pivot - ind.py:250-253
+    turun_v = pd.Series(np.where(c.diff() < 0, v, np.nan), index=c.index)
+    maks_turun10 = turun_v.rolling(10, min_periods=1).max()
+    d['pocket_pivot'] = ((c > c.shift(1)) & (v >= maks_turun10)
+                         & (c > d['ema21'])).astype('float64')
+    d.loc[d['ema21'].isna(), 'pocket_pivot'] = np.nan
+
+    # vcp - ind.py:254-255
+    d['vcp'] = ((d['julat20'] <= 0.6 * d['julat20'].shift(40))
+                & (c > d['ma50'])).astype('float64')
+    d.loc[d['ma50'].isna() | d['julat20'].shift(40).isna(), 'vcp'] = np.nan
+
+    # j_52w_tinggi - ind.py:258,270
+    t52 = c.rolling(252, min_periods=252).max()
+    d['j_52w_tinggi'] = (c / t52.replace(0, np.nan) - 1.0) * 100.0
+
     # step18_nxx.tambahan: tinggi20, gap, turun_4d5
     d['tinggi20'] = h.rolling(20).max().shift(1)
     d['gap'] = o / c.shift(1) - 1.0
@@ -232,6 +262,11 @@ def n76(f, g):
     return g.close > f.ma50
 
 
+def n22(f):
+    """`bb_pctb > 100 DAN rsi14 > 50` — tutup di ATAS jalur atas BB dengan momentum."""
+    return (f.bb_pctb > 100) & (f.rsi14 > 50)
+
+
 def n24(f):
     """KAWALAN `TREND` (lift tahan −0.161). `supertrend > 0 DAN adx14 > 20`."""
     return (f.supertrend > 0) & (f.adx14 > 20)
@@ -264,6 +299,68 @@ def n124(f):
 def gb02_atau3(f, g):
     """KESATUAN N19 u N37 u N115 - konfigurasi yang melepasi KESEMUA empat gate."""
     return n19(f) | n37(f) | n115(f, g)
+
+
+# ---------- 12 topeng tambahan bagi senarai grid penuh (step18_nxx.topeng verbatim) ----------
+def n06(f, g):
+    """`ma50` silang naik `ma200`."""
+    return (f.ma50 > f.ma200) & (f.ma50.shift(1) <= f.ma200.shift(1))
+
+
+def n25(f, g):
+    """`supertrend > 0 DAN tutup > ema20 DAN adx14 > 23`."""
+    return (f.supertrend > 0) & (g.close > f.ema20) & (f.adx14 > 23)
+
+
+def n28(f):
+    """`adx14 > 25 DAN mdi < adx14`."""
+    return (f.adx14 > 25) & (f.mdi < f.adx14)
+
+
+def n36(f):
+    """`pocket_pivot` (volum > volum turun maks 10 hari, tutup naik, atas ema21)."""
+    return f.pocket_pivot > 0
+
+
+def n38(f):
+    """`vcp` — julat20 <= 0.6x julat20[-40] DAN tutup > ma50."""
+    return f.vcp > 0
+
+
+def n40(f, g):
+    """`obv_tinggi_baru DAN tutup > ma50`."""
+    return (f.obv_tinggi_baru > 0) & (g.close > f.ma50)
+
+
+def n50(f, g):
+    """`julat10 < 0.5 x julat20 DAN vol_n50 >= 1.5 DAN tutup > tinggi[-1]`."""
+    return ((f.julat10 < 0.5 * f.julat20) & (f.vol_n50 >= 1.5)
+            & (g.close > g.high.shift(1)))
+
+
+def n53(f):
+    """`supertrend > 0 DAN adx14 > 25`."""
+    return (f.supertrend > 0) & (f.adx14 > 25)
+
+
+def n55(f):
+    """`bb_pctb < 20 DAN rsi14 > 40 DAN adx14 > 20`."""
+    return (f.bb_pctb < 20) & (f.rsi14 > 40) & (f.adx14 > 20)
+
+
+def n56(f):
+    """`rsi14 > 50 DAN adx14 > 20`."""
+    return (f.rsi14 > 50) & (f.adx14 > 20)
+
+
+def n64(f):
+    """`gap_and_go DAN vol_n50 >= 2.0`."""
+    return (f.gap_and_go > 0) & (f.vol_n50 >= 2.0)
+
+
+def n65(f):
+    """`gap_and_go DAN vol_n50 >= 1.5 DAN j_52w_tinggi >= -5%`."""
+    return (f.gap_and_go > 0) & (f.vol_n50 >= 1.5) & (f.j_52w_tinggi >= -5.0)
 
 
 # ---------- keluar (lorong 1) ----------
@@ -309,7 +406,39 @@ def u14(g):
     return s.replace([np.inf, -np.inf], np.nan).fillna(-9e9)
 
 
-def pasang(g, masuk, f=None, nama_rank=None):
+def x14(f):
+    """`X14` — keluar bila `rsi14` silang naik 50. step19:124 verbatim."""
+    return (f.rsi14 > 50) & (f.rsi14.shift(1) <= 50)
+
+
+def x16(f):
+    """`X16` — keluar bila supertrend berbalik (`supertrend <= 0`). step19:127."""
+    return f.supertrend <= 0
+
+
+def x17(f):
+    """`X17` — keluar bila `adx14 < 20`. step19:128."""
+    return f.adx14 < 20
+
+
+def x36(f, g):
+    """`X36` — keluar selepas DUA tutup berturut di bawah `ma50`. step19:142-143."""
+    b = g.close < f.ma50
+    return b & b.shift(1).fillna(False)
+
+
+KELUAR_FN = {'X13': lambda f, g: x13(f), 'X14': lambda f, g: x14(f),
+             'X16': lambda f, g: x16(f), 'X17': lambda f, g: x17(f),
+             'X36': lambda f, g: x36(f, g),
+             # X15 = Chandelier mengekor. Enjin v1.2 membaca `stop` SEKALI pada bar
+             # isyarat (enjin.py:31 `sp = st[i]`), jadi henti MENGEKOR tidak boleh
+             # dilaksanakan sebagai lorong 1 — diuji dan disahkan. Tetapi lorong 2 repo
+             # IALAH X15, dan ia berjalan automatik pada setiap posisi. Jadi kohort X15
+             # dikod TANPA keluar kaedah dan lorong 2 ialah keluarnya.
+             'X15': None}
+
+
+def pasang(g, masuk, f=None, nama_rank=None, keluar='X13'):
     """Tulis lajur enjin v1.2. TIADA henti dan TIADA sasaran dengan sengaja:
 
     * `stop = NaN` -> `enjin.trades` guna `sp = -inf`, jadi kecacatan henti hari-0
@@ -328,7 +457,9 @@ def pasang(g, masuk, f=None, nama_rank=None):
     g['sig'] = masuk.fillna(False).astype(bool)
     g['stop'] = np.nan
     g['tgt'] = np.nan
-    g['exitc'] = x13(f).fillna(False).astype(bool)
+    fn = KELUAR_FN[keluar]
+    g['exitc'] = (pd.Series(False, index=g.index) if fn is None
+                  else fn(f, g).fillna(False).astype(bool))
     g['rank'] = u14(g) if nama_rank is None else f[nama_rank].fillna(-9e9).astype('float64')
     return f
     return f
