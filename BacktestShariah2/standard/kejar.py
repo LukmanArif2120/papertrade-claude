@@ -56,6 +56,31 @@ def sesi_stor(stor):
     return [str(pd.Timestamp(str(int(x))).date()) for x in sorted(set(d.date))]
 
 
+def baca_json(teks):
+    """Rekod larian daripada stdout harian_c.py, atau {} jika tiada.
+
+    `cmd_malam` mencetak dengan `indent=1`, jadi rekodnya MERENTAS banyak baris. Versi pertama
+    skrip ini membaca baris terakhir yang boleh di-parse JSON, dan itu gagal dengan cara yang
+    paling buruk: ia tidak mengembalikan ralat, ia mengembalikan baris dalaman seperti
+    `  "2026-10-30",` yang di-parse menjadi RENTETAN, kemudian `.get` padanya membuang
+    AttributeError selepas imbasan 15 minit selesai. Ditangkap oleh ujian hujung-ke-hujung,
+    bukan oleh ujian unit — sebab itu ujian hujung-ke-hujung dijalankan.
+    """
+    teks = (teks or '').strip()
+    calon = [teks]
+    if '{' in teks:
+        calon.append(teks[teks.index('{'):])
+    calon += [b for b in reversed(teks.splitlines()) if b.strip().startswith('{')]
+    for c in calon:
+        try:
+            v = json.loads(c)
+        except ValueError:
+            continue
+        if isinstance(v, dict):
+            return v
+    return {}
+
+
 def jalan(arg, kering):
     """Jalankan harian_c.py dalam SUBPROSES dengan laluan import yang sama seperti produksi.
     Pelajaran 1 Nov 2026 (CLAUDE.md): ujian yang mengimport modul terus boleh lulus sambil
@@ -64,14 +89,7 @@ def jalan(arg, kering):
     if kering:
         return dict(kering=True, cmd=' '.join(arg))
     p = subprocess.run(cmd, capture_output=True, text=True)
-    keluar = (p.stdout or '').strip().splitlines()
-    out = {}
-    for baris in reversed(keluar):          # baris JSON terakhir ialah rekod larian
-        try:
-            out = json.loads(baris)
-            break
-        except ValueError:
-            continue
+    out = baca_json(p.stdout)
     if p.returncode:
         out = dict(out, ralat=(p.stderr or '').strip()[-400:] or f'kod keluar {p.returncode}')
     return out

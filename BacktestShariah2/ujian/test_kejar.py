@@ -133,6 +133,31 @@ class TestBukaLampau(unittest.TestCase):
             self.assertEqual(list(d.ticker), ['BBB'])
 
 
+class TestBacaJson(unittest.TestCase):
+    """cmd_malam mencetak JSON `indent=1`, jadi rekodnya merentas banyak baris. Versi pertama
+    kejar.py membaca baris terakhir yang boleh di-parse dan mendapat RENTETAN dalaman, bukan
+    rekod — gagal dengan AttributeError selepas imbasan 15 minit. Ini ujian regresi bagi itu."""
+
+    def test_json_berbilang_baris(self):
+        teks = json.dumps(dict(sesi='2026-10-30', nota=['a', 'b'], isyarat=7), indent=1)
+        self.assertEqual(K.baca_json(teks)['sesi'], '2026-10-30')
+
+    def test_baris_dalaman_bukan_rekod(self):
+        """Baris seperti `  "2026-10-30",` ialah JSON yang SAH (rentetan) — ia tidak boleh
+        diterima sebagai rekod larian."""
+        teks = 'sedang imbas\n{\n "sesi": "2026-10-30",\n "nota": [\n  "2026-10-30"\n ]\n}'
+        d = K.baca_json(teks)
+        self.assertIsInstance(d, dict)
+        self.assertEqual(d['sesi'], '2026-10-30')
+
+    def test_teks_bising_sebelum_json(self):
+        self.assertEqual(K.baca_json('amaran: x\n{"sesi": "2026-11-02"}')['sesi'], '2026-11-02')
+
+    def test_tiada_json(self):
+        self.assertEqual(K.baca_json('Traceback (most recent call last)'), {})
+        self.assertEqual(K.baca_json(''), {})
+
+
 class TestLaluanProduksi(unittest.TestCase):
     def test_subproses_produksi(self):
         """kejar.py mesti boleh dijalankan sebagai skrip, cara harian.yml menjalankannya."""
