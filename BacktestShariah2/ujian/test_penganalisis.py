@@ -5,6 +5,8 @@ import pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'standard'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'kod'))
+import bahagi_db as BD
+import jana_db as JD
 import penganalisis as pg
 import enjin
 
@@ -174,7 +176,24 @@ class TestPenganalisis(unittest.TestCase):
             doc = json.load(open(js, encoding='utf-8'))
             kat = json.load(open(pg.KATALOG, encoding='utf-8'))['rows']
             self.assertEqual(len(doc['rows']), len(kat))
-            self.assertLess(os.path.getsize(js), 250_000)                  # had dokumen db dashboard
+            # Had dokumen db dipakai pada SETIAP BAHAGIAN, bukan pada fail. Ambang 250,000
+            # lama mengukur fail penuh, yang tidak pernah ditolak sebagai satu dokumen sejak
+            # `analisis/papan` masuk jana_db.PECAH (2 Nov 2026) — fail 274,573 bait itu sah,
+            # dan yang mesti di bawah had ialah papan.json + papan_2.json yang ditolak.
+            bhg = BD.bahagi(doc, 'papan', 200_000)
+            self.assertGreaterEqual(len(bhg), 1)
+            for doc_id, dd in bhg:
+                self.assertLess(BD.bait(dd), BD.HAD_DB, f'{doc_id} melebihi had dokumen db')
+            # gabungan semula mesti memberi dokumen asal: tiada baris hilang, meta utuh
+            gab = list(bhg[0][1]['rows'])
+            for _, dd in bhg[1:]:
+                self.assertEqual(dd['induk'], bhg[0][1]['bahagian']['id'])
+                gab += dd['rows']
+            self.assertEqual(gab, doc['rows'])
+            for k, v in doc.items():
+                if k != 'rows':
+                    self.assertEqual(bhg[0][1].get(k), v, f'meta {k} hilang daripada bahagian asas')
+            self.assertIn('analisis/papan', JD.PECAH)      # jika tidak, jana_db menolak dokumen penuh
             self.assertEqual(len(doc['penemuan']), 3)
             self.assertTrue(set(r['status'] for r in doc['rows']) <= set(pg.STATUS))
             k = [r['kedudukan'] for r in doc['rows'] if r['kedudukan']]

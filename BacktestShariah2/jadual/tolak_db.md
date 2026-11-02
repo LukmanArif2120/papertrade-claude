@@ -20,7 +20,14 @@ Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e
    `prestasi`, `harian`, `sektor`, `analisis` dan `posisi`, dengan `out_dir` <scratchpad>/lama (kandungan tidak perlu dibaca).
    Tulis `<scratchpad>/versi.json` = {"papertrade/claude": versi, …} untuk SEMUA dokumen yang disenaraikan.
 4. `python3 BacktestShariah2/standard/jana_db.py --keluar <scratchpad>/db --versi <scratchpad>/versi.json`
-   (pecah_claude/bahagi_db sudah dijalankan oleh Actions; skrip gagal jika mana-mana dokumen melebihi had 262,144 bait).
+   (`pecah_claude.py` dijalankan oleh Actions; `bahagi_db` **tidak** — ia diimport DALAM PROSES
+   oleh `jana_db.py`, yang memecah sendiri setiap dokumen dalam `jana_db.PECAH`. Tiada workflow
+   pernah menjalankan `bahagi_db.py` sebagai CLI. Skrip gagal jika mana-mana dokumen melebihi had
+   262,144 bait; jika itu berlaku, dokumen itu perlu DITAMBAH ke `jana_db.PECAH` **dan** pembacanya
+   dalam `dashboard_v2.html` ditukar kepada `subBhg` — itu perubahan kod, bukan sesuatu yang sesi ini
+   boleh buat. Hentikan pada langkah 6 dan laporkan nama dokumen itu.)
+   Nota: kegagalan had berlaku SEBELUM medan `pengawas` dihasilkan, jadi langkah 2 juga tidak dapat
+   dipenuhi — jangan anggap `harian.yml`/`beli.yml` tidak perlu ditembak; nyatakan ia tidak diketahui.
 5. Bagi setiap fail `batch_N.json` yang dicetak: `ArtifactData` `batch`, `writes` = kandungan fail itu (setiap entri sudah
    ada `file_path` dan `if_version`). Ditolak kerana versi berubah → ulang langkah 3–5 sekali.
 6. Amaran (hanya jika langkah 2–5 gagal atau db tidak ditolak): `mcp__github__actions_run_trigger` (method `run_workflow`,

@@ -1073,6 +1073,26 @@ def _skor_n(U):
 
 
 # ---------------------------------------------------------------- utama
+# Dokumen yang dipecah dengan bahagi_db.bahagi() kerana ia melebihi had dokumen db.
+# NAMA PENUH `koleksi/doc_id`, BUKAN doc_id. Sebelum 2 Nov 2026 padanan dibuat atas
+# `nama.split('/')[1]` sahaja, dan itu pepijat yang menunggu: doc_id `papan` dikongsi oleh
+# `analisis/papan` DAN `kaedah_n/papan`. Memecah atas doc_id akan memecah kedua-duanya,
+# sedangkan dashboard membaca `kaedah_n/papan` dengan sub() biasa — jadi tab Kombinasi N
+# akan kehilangan baris secara SENYAP (KPI "Baris registry 200" sebelah teks "263 baris").
+# Setiap nama di sini MESTI dibaca dengan subBhg() dalam dashboard_v2.html.
+# SEMBILAN nama pertama ialah terjemahan satu-ke-satu tuple doc_id yang lama; `prestasi/mae`
+# dengan SENGAJA TIADA di sini walaupun dashboard membacanya dengan subBhg(), kerana
+# `mae.rows` ialah OBJEK (peta kunci->nilai), bukan senarai, jadi bahagi() menolaknya.
+PECAH = frozenset((
+    'papertrade/senarai_beli', 'papertrade/watchlist', 'prestasi/garis', 'prestasi/mfe',
+    'prestasi/mae_atr', 'prestasi/harian_kaedah', 'harian/trend',
+    'harian/stage', 'posisi/lorong2',
+    # 2 Nov 2026: 274,573 bait pada 228 kaedah (134 Mxx + 94 kombinasi Nxx) = 12,429
+    # melebihi HAD_DB. Tanpa pemecahan, jana_db.py SystemExit pada langkah 4 tolak_db.md.
+    'analisis/papan',
+))
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('--keluar', required=True); ap.add_argument('--folder', default=PT); ap.add_argument('--stor', default=STOR)
@@ -1214,10 +1234,16 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     versi = json.load(open(a.versi)) if a.versi else {}
     tulis = []
-    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama.split('/')[1] in ('senarai_beli', 'watchlist', 'garis', 'mfe', 'mae_atr', 'harian_kaedah', 'trend', 'stage', 'lorong2')
+    semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama in PECAH
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
     semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
     for kol, bahagian in semua:
+        # `kump_id` = kumpulan keatoman: satu bagi setiap operasi bahagi(), supaya SEMUA
+        # bahagiannya ditolak dalam satu panggilan. Ia datang daripada operasi pecahan itu
+        # sendiri, BUKAN daripada bentuk nama: `papertrade/claude_7` nampak seperti bahagian
+        # tetapi ialah dokumen BEBAS daripada pecah_claude.py, dan mengumpulkannya dengan
+        # `claude` memaksa 13.6 MB ke satu batch (diuji; ia gagal).
+        kump_id = f'{kol}/{bahagian[0][0]}' if len(bahagian) > 1 else None
         for doc_id, dd in bahagian:
             sz = bait(dd)
             if sz >= HAD_DB:
@@ -1228,18 +1254,42 @@ def main(argv=None):
             v = versi.get(f'{kol}/{doc_id}')
             if v:
                 w['if_version'] = int(v)
-            tulis.append((w, sz))
-    batches, cur, size = [], [], 0
-    for w, sz in tulis:
-        if cur and (size + sz > HAD_BATCH or len(cur) >= 50):
+            tulis.append((w, sz, kump_id or f'{kol}/{doc_id}'))
+    # Pembatchan SEDAR-BAHAGIAN. bahagi_db.py mewajibkan semua bahagian satu dokumen
+    # ditolak dalam SATU batch, tetapi tolak_db.md langkah 5 membuat satu panggilan
+    # ArtifactData bagi SETIAP batch_N.json — jadi bahagian yang jatuh ke fail berbeza
+    # ditolak dalam panggilan berbeza, dan antara keduanya halaman melihat dokumen asas
+    # yang mengisytiharkan n bahagian sementara bahagian itu belum ada. Kumpulan ialah
+    # dokumen asas + semua bahagiannya; ia tidak boleh dipecahkan merentas batch.
+    kump, idx = [], {}
+    for w, sz, k in tulis:
+        if k not in idx:
+            idx[k] = len(kump); kump.append([])
+        kump[idx[k]].append((w, sz))
+    # Satu kumpulan disimpan utuh apabila ia MUAT dalam satu batch. Apabila ia tidak muat
+    # (posisi/lorong2 ialah 3.1 MB merentas bahagian, lawan had batch 900 KB), ia dipecahkan
+    # seperti dahulu dan DIREKOD dalam ringkas.json, bukan menyebabkan SystemExit: keadaan
+    # itu sudah berlaku setiap malam sebelum perubahan ini dan tiada apa yang rosak. Yang
+    # membuatnya selamat ialah pengawal kelengkapan dalam subBhg (dashboard_v2.html):
+    # halaman tidak merender sehingga setiap bahagian dengan `induk` sepadan tiba, jadi
+    # tingkap antara dua panggilan tolakan memapar "Memuatkan…", bukan jadual separa.
+    batches, cur, size, terpecah = [], [], 0, []
+    for g in kump:
+        gs = sum(sz for _, sz in g)
+        if gs > HAD_BATCH and len(g) > 1:
+            terpecah.append(f'{g[0][0]["collection"]}/{g[0][0]["doc_id"]} ({len(g)} bahagian, {gs} bait)')
+        if cur and (size + gs > HAD_BATCH or len(cur) + len(g) > 50):
             batches.append(cur); cur, size = [], 0
-        cur.append(w); size += sz
+        for w, sz in g:
+            if cur and (size + sz > HAD_BATCH or len(cur) >= 50):
+                batches.append(cur); cur, size = [], 0
+            cur.append(w); size += sz
     if cur:
         batches.append(cur)
     fail = []
     for i, bt in enumerate(batches):
         p = os.path.join(a.keluar, f'batch_{i}.json'); json.dump(bt, open(p, 'w'), indent=1); fail.append(p)
-    ring = dict(dibina=dibina, sesi=S, dokumen=len(tulis), batch=fail, tanpa_versi=[f"{w['collection']}/{w['doc_id']}" for w, _ in tulis if 'if_version' not in w],
+    ring = dict(dibina=dibina, sesi=S, dokumen=len(tulis), batch=fail, kumpulan_terpecah=terpecah, tanpa_versi=[f"{w['collection']}/{w['doc_id']}" for w, _, _ in tulis if 'if_version' not in w],
                 pengawas=pengawas(st, masa))
     json.dump(ring, open(os.path.join(a.keluar, 'ringkas.json'), 'w'), ensure_ascii=False, indent=1)
     print(json.dumps(ring, ensure_ascii=False, indent=1))

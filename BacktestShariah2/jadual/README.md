@@ -29,7 +29,7 @@ Kerana rutin boleh ditembak dua kali, setiap prosedur bermula dengan "Semak pend
 ## Peralihan ke GitHub Actions (sejak 17 Okt 2026; mod selari 3 hari dagangan)
 Keputusan pengguna 17 Okt 2026 (jimat token): kerja harian dipindah ke GitHub Actions tanpa LLM — `.github/workflows/harian.yml`
 (kemas kini + imbas + gred, 05:07 UTC Sel–Sab), `beli.yml` (9:40 NY), `petang.yml` (gred P sebelum buka); skrip `standard/harian_c.py`. Papan Penganalisis (20 Okt 2026):
-`analisis.yml` dicetus sebaik `lejar.yml` siap (`standard/penganalisis.py`); rutin 6:02 menolak `analisis/papan` ke db.
+`analisis.yml` dicetus sebaik `lejar.yml` siap (`standard/penganalisis.py`). Dokumen `analisis/papan` ditolak ke db oleh sesi `tolak_db.md` (10:20 NY Isn–Sab) — **bukan** rutin 6:02, yang dimatikan 27 Okt 2026. Sejak 2 Nov 2026 ia dipecah (`jana_db.PECAH`) kerana 228 kaedah memberi 274,573 bait > had 262,144, dan dibaca dengan `subBhg`.
 Mod dalam `BacktestShariah2/MOD_ACTIONS`: `rasmi` sejak 27 Okt 2026 (dahulu `bayang`) = Actions menulis ke `BacktestShariah2/bayang/` dan membanding setiap
 hari dengan rutin Claude (`bayang/BANDING_<tarikh>.md`, 16–23 Okt; kekal sebagai bukti).
 Selepas peralihan (27 Okt 2026, `PERALIHAN.md`): rutin di atas dan pengawas dimatikan; sesi Claude hanya `tolak_db.md` (Isn–Sab 10:20 NY)

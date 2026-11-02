@@ -4969,9 +4969,17 @@ renderNav();renderAll();
     const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
     subPtc(2);subPtc(3);});
   /* dokumen besar dibahagi (standard/bahagi_db.py): asas {bahagian:{id,n}} + <nama>_2… {induk,bahagian,rows}; bahagian lama (induk lain) diabaikan */
+  /* 2 Nov 2026: PENGAWAL KELENGKAPAN. Tanpa ia, gabung() menerbitkan keadaan SEPARA pada
+     setiap snapshot — dokumen asas tiba dahulu, jadi halaman memapar bahagian 1 sahaja
+     sebagai jadual yang kelihatan LENGKAP dan SAH (cth. 161 daripada 228 baris, tiada
+     ralat, tiada petunjuk). Itu kegagalan senyap, bukan kegagalan yang nampak. subRingkas
+     sudah menunggu setiap anak sebelum menerbit; subBhg tidak, dan 11 dokumen memakainya.
+     Sekarang ia menunggu juga: jika mana-mana bahagian belum tiba atau `induk`-nya tidak
+     sepadan, tiada apa diterbitkan dan tab kekal pada keadaan "Memuatkan…". */
   const subBhg=(path,keyName,tabs)=>{let asas=null;const ch={},dah=new Set();
     const gabung=()=>{let d=null;if(asas){const b=asas.bahagian;let rows=asas.rows||[];
-        if(b&&b.n>1)for(let i=2;i<=b.n;i++){const c=ch[i];if(c&&c.induk===b.id)rows=rows.concat(c.rows||[]);}
+        if(b&&b.n>1){for(let i=2;i<=b.n;i++)if(!ch[i]||ch[i].induk!==b.id)return;
+          for(let i=2;i<=b.n;i++)rows=rows.concat(ch[i].rows||[]);}
         d=Object.assign({},asas,{rows});}
       S[keyName]=d;S.live=true;re(...tabs);};
     db.doc(path).onSnapshot(s=>{asas=s.exists?s.data():null;const n=asas&&asas.bahagian?asas.bahagian.n:1;
@@ -4983,7 +4991,11 @@ renderNav();renderAll();
   subBhg('prestasi/mae','mae',['prestasi']);subBhg('prestasi/mae_atr','maeAtr',['prestasi']);
   subBhg('prestasi/garis','garis',['utama','ptc','prestasi','watch']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['utama','prestasi','analisis']);subBhg('posisi/lorong2','l2s',['ptc']);subBhg('posisi/jalur','jlr',['ptc']);subBhg('harian/trend','trend',['ptc','watch']);subBhg('harian/stage','stage',['ptc','watch']);subBhg('kumpulan/siri','ksiri',['sektor']);
   sub('prestasi/portfolio_slot','pslot',['utama','prestasi']);
-  sub('analisis/papan','anl',['analisis']);
+  /* 274,573 bait pada 228 kaedah = 12,429 MELEBIHI had dokumen db 262,144, jadi dokumen
+     ini mesti dipecah. subBhg serasi ke belakang (laluan n=1 membaca dokumen yang belum
+     dipecah seperti biasa), jadi baris ini selamat diterbitkan SEBELUM jana_db.py mula
+     memecahnya — dan ia MESTI diterbitkan dahulu, bukan selepas. */
+  subBhg('analisis/papan','anl',['analisis']);
   sub('kaedah/katalog','kat',['kaedah']);
   sub('kaedah_n/papan','kn',['kaedahn']);
   /* AUTOTUNE: semua dokumen koleksi autotune (status, ringkasan, gabungan, kaedah_<ID>) */
