@@ -1,0 +1,32 @@
+larian,alam,lengan,slot,urutan,cagr,mdd,cagr_p5,cagr_p95,mdd_p5,nisbah,dedah,n_dag,nb,ctl,ctl_p95,P1,P2,P3,P4,T1,T3,lulus,cacat
+A,AL01,P36,40,U14,18.2572,-73.2238,18.2572,18.2572,-73.2238,0.2493,96.5304,10297,1,RAWAK,25.6153,True,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,P36,8,U14,2.5803,-73.4738,2.5803,2.5803,-73.4738,0.0351,91.6249,1379,1,RAWAK,20.3010,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,P94,40,U14,16.4567,-75.6905,16.4567,16.4567,-75.6905,0.2174,96.0585,10064,1,RAWAK,25.6153,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,P94,8,U14,11.6520,-69.4084,11.6520,11.6520,-69.4084,0.1679,89.9608,1337,1,RAWAK,20.3010,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,PENUH,penuh,U14,2.9932,-41.0380,2.9932,2.9932,-41.0380,0.0729,99.9337,2991935,1,,,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,RAWAK,40,U01,10.0204,-45.8331,5.0718,25.6153,-55.4774,0.2106,98.1995,4502,20,RAWAK,25.6153,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,RAWAK,8,U01,7.7210,-55.7497,-10.0094,20.3010,-71.0041,0.1540,97.0665,906,20,RAWAK,20.3010,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,UKAWAL,8,U01,9.1117,-46.5376,9.1117,9.1117,-46.5376,0.1958,97.5733,915,1,RAWAK,20.3010,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,UKAWAL,8,U02,11.6520,-69.4084,11.6520,11.6520,-69.4084,0.1679,89.9608,1337,1,RAWAK,20.3010,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+A,AL01,UKAWAL,8,U08,12.1706,-39.3093,12.1706,12.1706,-39.3093,0.3096,98.4680,1061,1,RAWAK,20.3010,False,False,False,False,False,False,False,U02 pendua bit-identik U14; kawalan RAWAK uji SUSUNAN bukan isyarat; saiz PENUH berayun 2.7x dengan kepadatan isyarat
+B,AL01,P94,40,U01,10.0204,-45.8331,5.0718,25.6153,-55.4774,0.2106,98.1995,4502,20,RAWAKALAM,22.8786,False,False,False,False,False,False,False,
+B,AL01,P94,40,U02,-3.8514,-86.6926,-3.8514,-3.8514,-86.6926,-0.0444,95.5361,8723,20,RAWAKALAM,22.8786,False,False,False,False,False,False,False,
+B,AL01,P94,40,U08,6.8767,-36.2049,6.8767,6.8767,-36.2049,0.1899,99.1099,7450,20,RAWAKALAM,22.8786,False,False,False,False,False,False,False,
+B,AL01,P94,40,U14,16.4567,-75.6905,16.4567,16.4567,-75.6905,0.2174,96.0585,10067,20,RAWAKALAM,22.8786,False,False,False,False,False,False,False,
+B,AL01,P94,8,U01,7.7210,-55.7497,-10.0094,20.3010,-71.0041,0.1540,97.0665,906,20,RAWAKALAM,10.6396,False,False,False,False,False,False,False,
+B,AL01,P94,8,U02,19.8007,-83.2476,19.8007,19.8007,-83.2476,0.2379,92.2688,1321,20,RAWAKALAM,10.6396,True,False,True,False,False,False,False,
+B,AL01,P94,8,U08,12.1706,-39.3093,12.1706,12.1706,-39.3093,0.3096,98.4680,1061,20,RAWAKALAM,10.6396,False,False,True,False,False,False,False,
+B,AL01,P94,8,U14,11.6520,-69.4084,11.6520,11.6520,-69.4084,0.1679,89.9608,1338,20,RAWAKALAM,10.6396,False,False,True,False,False,False,False,
+B,AL01,PENUH,penuh,U14,16.0006,-68.4198,16.0006,16.0006,-68.4198,0.2339,99.9337,62266,1,,,False,False,False,False,False,False,False,
+B,AL01,RAWAKALAM,40,U14,18.7711,-71.9071,9.5137,22.8786,-76.8478,0.2555,96.3175,8195,20,RAWAKALAM,22.8786,True,False,False,False,False,False,False,
+B,AL01,RAWAKALAM,8,U14,2.7047,-78.3813,-5.5234,10.6396,-82.7952,0.0348,94.0268,1356,20,RAWAKALAM,10.6396,False,False,False,False,False,False,False,
+B8,AL02,P94,40,U01,17.2677,-35.6269,12.7804,19.7397,-37.7640,0.4862,99.2144,4486,20,RAWAKALAM,37.9784,False,False,False,False,False,False,False,
+B8,AL02,P94,40,U02,42.6467,-39.4657,42.6467,42.6467,-39.4657,1.0806,98.8632,7839,20,RAWAKALAM,37.9784,True,False,True,True,False,False,False,
+B8,AL02,P94,40,U08,7.4879,-32.0655,7.4879,7.4879,-32.0655,0.2335,99.5636,7527,20,RAWAKALAM,37.9784,False,False,False,False,False,False,False,
+B8,AL02,P94,40,U14,38.4308,-42.1284,38.4308,38.4308,-42.1284,0.9122,99.1733,9132,20,RAWAKALAM,37.9784,True,False,True,True,False,False,False,
+B8,AL02,P94,8,U01,15.6558,-36.8148,11.4917,21.7788,-45.6279,0.4501,98.4342,890,20,RAWAKALAM,52.7831,False,False,False,False,False,False,False,
+B8,AL02,P94,8,U02,79.9461,-48.0755,79.9461,79.9461,-48.0755,1.6629,97.2439,1191,20,RAWAKALAM,52.7831,True,False,True,True,False,False,False,
+B8,AL02,P94,8,U08,2.3978,-35.4542,2.3978,2.3978,-35.4542,0.0676,99.2910,1179,20,RAWAKALAM,52.7831,False,False,False,False,False,False,False,
+B8,AL02,P94,8,U14,56.8452,-41.3837,56.8452,56.8452,-41.3837,1.3736,98.1553,1481,20,RAWAKALAM,52.7831,True,False,True,True,False,False,False,
+B8,AL02,RAWAKALAM,40,U14,34.8530,-38.4699,32.0332,37.9784,-39.9580,0.9026,99.0803,7722,20,RAWAKALAM,37.9784,True,False,False,True,False,False,False,
+B8,AL02,RAWAKALAM,8,U14,46.1741,-43.9252,40.3822,52.7831,-50.0421,1.0160,98.3392,1340,20,RAWAKALAM,52.7831,True,False,False,True,False,False,False,

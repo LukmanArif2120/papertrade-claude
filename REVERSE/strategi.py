@@ -45,6 +45,24 @@ EKSPERIMEN = [
     dict(id='PORT', nama='Portfolio lawan SPUS (36 konfigurasi)',
          fail='portfolio_n_ringkas.csv', gate='lulus', pf=True),
     dict(id='CARA', nama='Paksi CARA (6 ujian)', fail='cara.csv', gate='CARA1'),
+    # Kohort 94 kombinasi produksi — pradaftar SPEC_PORTFOLIO_94.md + 94B.md, dijana
+    # oleh step37_daftar_94.py daripada fail mentah. BUKAN eksperimen ke-7: ia mengukur
+    # kohort yang SUDAH dipilih untuk produksi, bukan mencari pembinaan baharu.
+    dict(id='P94', nama='Portfolio kohort 94 kombinasi, alam AL01 (249 larian)',
+         fail='portfolio_94_ringkas.csv', gate='T1', pf=True,
+         tapis=('alam', 'AL01'),
+         amaran='Larian A cacat (U02 pendua U14; kawalan RAWAK uji susunan bukan isyarat) '
+                '- baca lajur `cacat`. P3 LULUS pada 8 slot dalam larian B: ujian isyarat '
+                'pertama dalam repo dengan kawalan benar-benar dipadankan.'),
+    dict(id='P94AL', nama='Portfolio kohort 94, alam AL02 (SPUS) - syarat 94B §8',
+         fail='portfolio_94_ringkas.csv', gate='T1', pf=True,
+         tapis=('alam', 'AL02'),
+         amaran='SETIAP nombor pulangan di sini ARTIFAK ALAM: masuk RAWAK pada AL02 beri '
+                'median +46.17% (AL01: +2.70%). Keahlian SPUS ialah petikan semasa ditolak '
+                'ke belakang; E4 mengukur ia menyanjung MDD 30.9 mata. T2 yang lulus di '
+                'sini BUKAN lorong risiko-rendah.'),
+    dict(id='CARA94', nama='Paksi CARA pada 45 masuk produksi (6 cara)',
+         fail='cara_94.csv', gate='CARA1'),
     dict(id='E1', nama='PEGANG x SLOT (320 konfigurasi)',
          fail='pegang_slot_ringkas.csv', gate='lulus', pf=True, giliran=True),
     # `tapis`: alam_ringkas.csv membawa KEDUA-DUA alam (AL01 rujukan + AL02 ujian), jadi
@@ -94,23 +112,36 @@ def nilai_tingkat(R):
     return t1, t2, t3, terbaik
 
 
+def baris(e):
+    """Baris yang eksperimen `e` MILIKI — satu laluan pemilihan, bukan dua.
+
+    Dahulu `keadaan()` mengenakan `tapis` tetapi jumlah T1/T2/T3 dalam `main()` memanggil
+    `baca()` terus tanpanya, jadi kad E2 melapor AL02 sementara jumlah global mengandungi
+    baris AL01 yang tiada kad melaporkannya. Kedua-dua laluan kini melalui sini.
+    """
+    if e['fail'] is None:
+        return None
+    p = RV / e['fail']
+    if not p.exists():
+        return None
+    R = baca(p)
+    if e['fail'].startswith('cara'):
+        R = [r for r in R if r.get('tingkap') == 'tahan']
+    if e.get('tapis'):
+        k_, v_ = e['tapis']
+        R = [r for r in R if str(r.get(k_)) == v_]
+    return R
+
+
 def keadaan():
     """Senarai (eksperimen, status, ringkasan) mengikut urutan baris gilir."""
     out = []
     for e in EKSPERIMEN:
-        if e['fail'] is None:
-            out.append((e, 'BELUM', 'belum dijalankan'))
+        R = baris(e)
+        if R is None:
+            out.append((e, 'BELUM', 'belum dijalankan' if e['fail'] is None
+                        else f'tiada {e["fail"]}'))
             continue
-        p = RV / e['fail']
-        if not p.exists():
-            out.append((e, 'BELUM', f'tiada {e["fail"]}'))
-            continue
-        R = baca(p)
-        if e['fail'] == 'cara.csv':
-            R = [r for r in R if r.get('tingkap') == 'tahan']
-        if e.get('tapis'):
-            k_, v_ = e['tapis']
-            R = [r for r in R if str(r.get(k_)) == v_]
         n = len(R)
         lulus = sum(1 for r in R if str(r.get(e['gate'])) == 'True')
         if e.get('pf'):
@@ -119,9 +150,12 @@ def keadaan():
                  f'T1 {t1} · T2 {t2} · T3 {t3}')
             if tb:
                 r, c, m, nis = tb
+                # `larian`/`lengan` WAJIB di sini: tanpa nama lengan, baris kawalan
+                # (RAWAK/RAWAKALAM) boleh dicetak sebagai "terbaik" tanpa menyatakan ia
+                # kawalan, bukan konfigurasi isyarat.
                 nm = ' '.join(str(r.get(k, '')) for k in
-                              ('alam', 'masuk', 'slot', 'k', 'imbang', 'keluar', 'pegang',
-                               'urutan') if r.get(k))
+                              ('alam', 'larian', 'lengan', 'masuk', 'slot', 'k', 'imbang',
+                               'keluar', 'pegang', 'urutan') if r.get(k))
                 s += f'\n        terbaik CAGR: {nm} -> {c:+.2f}% / MDD {m:.2f}% / nisbah {nis:.2f}'
         else:
             s = f'{n} baris · lulus gate akhir {lulus}'
@@ -169,16 +203,17 @@ def main(argv=None):
             tanda = 'v' if st == 'SELESAI' else '.'
             print(f'  [{tanda}] {e["id"]:5s} {e["nama"]}')
             print(f'        {s}')
+            if e.get('amaran'):
+                print(f'        AMARAN: {e["amaran"]}')
         print()
 
     gil = [(e, st) for e, st, _ in K if e.get('giliran')]
     belum = [e for e, st in gil if st == 'BELUM']
-    t1 = sum(nilai_tingkat(baca(RV / e['fail']))[0]
-             for e, st, _ in K if e.get('pf') and st == 'SELESAI')
-    t2 = sum(nilai_tingkat(baca(RV / e['fail']))[1]
-             for e, st, _ in K if e.get('pf') and st == 'SELESAI')
-    t3 = sum(nilai_tingkat(baca(RV / e['fail']))[2]
-             for e, st, _ in K if e.get('pf') and st == 'SELESAI')
+    PF = [(e, nilai_tingkat(baris(e)))
+          for e, st, _ in K if e.get('pf') and st == 'SELESAI']
+    t1 = sum(v[0] for _, v in PF)
+    t2 = sum(v[1] for _, v in PF)
+    t3 = sum(v[2] for _, v in PF)
 
     if not a.semak:
         if t1 or t3:
@@ -195,8 +230,13 @@ def main(argv=None):
                   f'{", ".join(e["id"] for e in belum)}  '
                   f'(selepas E6 tanpa T1/T3 -> BERHENTI–TUTUP)')
             if t2:
-                print(f'  BERHENTI–SEPARA: {t2} konfigurasi melepasi T2 (nisbah) sahaja — '
-                      'dilapor sebagai lorong risiko-rendah, baris gilir diteruskan.')
+                pec = ', '.join(f'{e["id"]} {v[1]}' for e, v in PF if v[1])
+                print(f'  BERHENTI–SEPARA: {t2} konfigurasi melepasi T2 (nisbah) sahaja '
+                      f'[{pec}] — dilapor sebagai lorong risiko-rendah, baris gilir '
+                      'diteruskan.')
+                for e, v in PF:
+                    if v[1] and e.get('amaran'):
+                        print(f'    {e["id"]}: {e["amaran"]}')
         print()
 
     if bad:

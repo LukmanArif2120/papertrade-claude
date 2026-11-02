@@ -27,6 +27,14 @@ M_PRADAFTAR = 6                      # spec §4.3 CARA2
 RSI_KELUAR = 70.0
 KOLAM3 = ['N19', 'N37', 'N115']
 
+# Paksi KELUAR boleh ditukar oleh pemanggil (`step38_cara_94.py`) supaya kajian CARA boleh
+# dijalankan pada keluar yang 94 kombinasi produksi SEBENARNYA pakai, bukan `X13` sahaja.
+# Lalai `X13` = tingkah laku asal, bit-identik (disemak dengan md5 cara.csv).
+# Peraturan sama seperti `step33_portfolio_94.hari_keluar()` — satu definisi, bukan dua.
+KELUAR_ID = 'X13'
+KELUAR_SAH = ('X13', 'X14', 'X15', 'X16', 'X17', 'X36')
+TRAIL_ATR = 4.0                      # X15 Chandelier, sama seperti step33
+
 # (id, had bar pengisian, penerangan)
 CSPEC = [
     ('C01', 1, 'pasaran pada buka esok (asas repo)'),
@@ -48,6 +56,13 @@ def pulangan_cara(P):
     c = P.tutup.to_numpy('float64')
     rsi = P.rsi14.to_numpy('float64')
     t20 = P.tinggi20.to_numpy('float64')
+    # Array yang hanya keluar bukan-X13 perlukan. ATR diambil pada bar ISYARAT (bukan bar
+    # pengisian) supaya lebar ekor X15 SAMA merentas enam cara — jika tidak, paksi CARA dan
+    # lebar henti bergerak serentak dan keputusan mengelirukan kedua-duanya.
+    ma50 = P.ma50.to_numpy('float64')
+    adx = P.adx14.to_numpy('float64')
+    sup = P.supertrend.to_numpy('float64')
+    atr_sig = P.atr14.to_numpy('float64')
     tk = P.ticker.to_numpy()
     m = len(c)
     idx = np.arange(m)
@@ -91,15 +106,41 @@ def pulangan_cara(P):
     pxk = {k: np.full(m, np.nan) for k in KOD}
     hari0 = np.zeros(m, bool)                    # C06 dihentikan pada bar masuk
     hidup = idx.copy()
+    # X15 ialah satu-satunya peraturan dengan KEADAAN setiap posisi (puncak bergerak), dan
+    # puncak mesti bermula pada bar PENGISIAN yang berbeza setiap cara — jadi ia per-cara.
+    puncak = {k: np.full(m, -np.inf) for k in KOD}
     for j in range(1, IMBAS + 1):
         kk = np.minimum(idx + j, m - 1)
         sah = ((idx + j) < m) & (tk[kk] == tk)
         rk = np.where(sah, rsi[kk], np.nan)
         hk, lk = np.where(sah, h[kk], np.nan), np.where(sah, lo[kk], np.nan)
         bk = buka_next[kk]
+        ck = np.where(sah, c[kk], np.nan)
+        kp = np.maximum(kk - 1, 0)               # bar sebelum; sah sudah jamin ticker sama
+        if KELUAR_ID == 'X13':
+            cet = rk > RSI_KELUAR
+        elif KELUAR_ID == 'X14':
+            cet = (rk > 50.0) & (np.where(sah, rsi[kp], np.nan) <= 50.0)
+        elif KELUAR_ID == 'X16':
+            cet = np.where(sah, sup[kk], np.nan) <= 0.0
+        elif KELUAR_ID == 'X17':
+            cet = np.where(sah, adx[kk], np.nan) < 20.0
+        elif KELUAR_ID == 'X36':                 # DUA tutup berturut bawah ma50
+            cet = ((ck < np.where(sah, ma50[kk], np.nan))
+                   & (np.where(sah, c[kp], np.nan) < np.where(sah, ma50[kp], np.nan)))
+        elif KELUAR_ID == 'X15':
+            cet = None                           # per-cara, dikira dalam gelung di bawah
+        else:
+            raise SystemExit(f'KELUAR_ID tidak dikenali: {KELUAR_ID}')
         for k in KOD:
             a, p = bar[k], pxk[k]
             hidup_k = sah & (fo[k] > 0) & (j >= fo[k]) & (a < 0)
+            if cet is None:                      # X15 Chandelier tutup, puncak per cara
+                pk = puncak[k]
+                np.maximum(pk, np.where(hidup_k, ck, -np.inf), out=pk)
+                cetk = hidup_k & np.isfinite(ck) & (ck < pk - TRAIL_ATR * atr_sig)
+            else:
+                cetk = cet
             if k == 'C06':
                 sas = fpx[k] * BRAKET_SASARAN
                 hen = fpx[k] * BRAKET_HENTI
@@ -108,10 +149,10 @@ def pulangan_cara(P):
                 a[kena_h], p[kena_h] = kk[kena_h], np.minimum(hen, o[kk])[kena_h]
                 hari0 |= kena_h & (j == fo[k])
                 a[kena_s], p[kena_s] = kk[kena_s], np.maximum(sas, o[kk])[kena_s]
-                sisa = hidup_k & (a < 0) & (rk > RSI_KELUAR)
+                sisa = hidup_k & (a < 0) & cetk
                 a[sisa], p[sisa] = kk[sisa], bk[sisa]
             else:
-                kena = hidup_k & (rk > RSI_KELUAR)
+                kena = hidup_k & cetk
                 a[kena], p[kena] = kk[kena], bk[kena]
         hidup = np.where(sah, kk, hidup)
 
