@@ -155,3 +155,25 @@ menganggapnya sebagai kekangan. Had 40 dan had 3-keluar-setiap-masuk **dibuang s
 - `p` menguji **lift**, bukan jangkaan mutlak (salinan verbatim `step19`).
 - Paksi **PEGANG** belum diuji sebagai paksi berasingan; `TMAX` dikunci 126 pada semua.
 - Keputusan **bersyarat**: 65 topeng dipilih daripada 147 oleh `status = DIUJI`.
+
+## Pengesahan hujung-ke-hujung (sebelum larian sebenar)
+
+`harian_c.py malam` penuh ke folder **sandbox**, bukan `papertrade/`:
+
+```
+ralat_kaedah: TIADA
+senarai_beli 1,333 baris · isyarat 16,841 · watchlist 297
+kombinasi: 93/94 hasilkan isyarat, 880 jumlah
+pecahan keluar: X36 36 · X16 26 · X17 10 · X14 10 · X13 6 · X15 5
+baris dengan `henti` bukan kosong: 0
+sahkan.py pada sandbox: 0 ralat, 0 amaran
+```
+
+`N06X36` sifar isyarat — `N06` ialah golden cross `ma50` silang `ma200`, yang ujian pariti
+ukur mencetus pada **0.17% bar** (53 dalam 30,828). Sifar pada satu sesi dijangka; modulnya
+berfungsi.
+
+**880 isyarat Nxx setiap sesi** berbanding 345 dengan 40 kombinasi. Pada 1.67 KB/posisi dan
+126 sesi itu ~**185 MB**, dan `.git` sudah 484 MB. Kalau saiz repo menjadi masalah, pilihan
+yang betul ialah **memangkas 87 kombinasi yang `tanpa5` negatif**, bukan memangkas secara
+rawak — tujuh yang tahan pemangkasan ekor ialah maklumat yang 87 itu tidak beri.
