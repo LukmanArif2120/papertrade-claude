@@ -4394,7 +4394,19 @@ document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.tar
    _pangkat_n), supaya peratus pada kad tidak boleh menyimpang daripada jadual.
    Rekod kajian sahaja; bukan isyarat beli. */
 const KN_ST={'DIUJI':'k-GUNA','SEDIA':'k-UJI'};
-const knPill=s=>`<span class="pill ${String(s||'').startsWith('PERLU')?'p-mute':(KN_ST[s]||'p-mute')}">${esc(s||'–')}</span>`;
+/* Lencana `PERLU:<x>` membaca seperti "belum sempat diuji" sedangkan ia bermaksud
+   ujian itu TIDAK BOLEH dijalankan. Audit 2 Nov 2026 (REVERSE/AUDIT_PERLU.md) mengasingkan
+   empat perkara berbeza yang satu label itu campurkan, jadi baris kedua menyatakan YANG MANA.
+   Warna membawa maknanya: merah = benar-benar disekat data luar (tiada jalan keluar dalam
+   repo), ambar = hanya kod yang belum ditulis, biru = label SALAH (data sudah ada),
+   kelabu = bukan indikator masuk langsung. */
+const KN_PK={KOD_SAHAJA:['kod belum ditulis','p-warn'],SUDAH_ADA:['data ADA, paip tiada','p-hold'],
+  DATA_LUAR:['disekat data luar','p-exit'],BUKAN_INDIKATOR:['paksi lain','p-mute']};
+const knPill=(s,PK)=>{const t=String(s||''),p=t.startsWith('PERLU:')&&PK?PK[t.slice(6)]:null,
+    L=p&&KN_PK[p[0]];
+  return `<span class="pill ${t.startsWith('PERLU')?'p-mute':(KN_ST[t]||'p-mute')}">${esc(t||'–')}</span>`
+    +(L?`<span class="vv nw"><span class="pill ${L[1]}" style="font-size:.64rem;padding:1px 6px">`
+        +`${L[0]}</span>${p[1]?' ~'+p[1]+' baris':''}</span>`:'');};
 const KN_PRA=[['semua','Semua'],['A','A masuk'],['B','B keluar'],['GAB','Gabungan'],['SX','Silang akhir'],['PORT','Portfolio'],['CARA','Cara']];
 const knGate=g=>String(g||'').split(' ').filter(Boolean).map(t=>{const y=t.slice(-1)==='Y';return `<span class="gate ${y?'ok':'no'}" style="padding:1px 5px;font-size:.7rem;margin-right:3px">${esc(t.slice(0,-1))}${y?'\u2713':'\u2717'}</span>`;}).join('')||'<span class="mut">\u2013</span>';
 /* Label gate bagi corong kad skor. Token datang daripada rentetan `gate` setiap baris,
@@ -4433,7 +4445,7 @@ function renderKaedahN(){
        jadi baris begitu mencetak rentetan yang SAMA dua kali; baris kedua ditinggalkan. */
     {k:'nama',t:'Nama',l:1,c:()=>'wrap',f:r=>`${esc(r.nama)}${r.aturan&&r.aturan!==r.nama?`<span class="vv">${esc(r.aturan)}</span>`:''}`},
     {k:'sumber',t:'Sumber',l:1,c:()=>'wrap lrg',f:r=>`${esc(r.sumber)}${r.plat&&r.plat!==r.sumber?`<span class="vv">${esc(r.plat)}</span>`:''}`},
-    {k:'status',t:'Status',l:1,f:r=>knPill(r.status)},
+    {k:'status',t:'Status',l:1,f:r=>knPill(r.status,d.perlu)},
     {k:'lift',t:'Lift tahan',tip:'kn_lift',v:r=>r.hasil?r.hasil.lift_tahan:-99,
      f:r=>r.hasil?`<b class="${cls(r.hasil.lift_tahan)}">${sg2(r.hasil.lift_tahan)}</b><span class="vv">${esc(r.hasil.keluar)} · latih ${sg2(r.hasil.lift_latih)}</span>`:'<span class="mut">–</span>'},
     {k:'jangkaan',t:'Jangkaan',tip:'kn_jangkaan',v:r=>r.hasil?r.hasil.jangkaan:-99,

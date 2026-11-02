@@ -350,10 +350,15 @@ MASUK = [
   'juga sebut "50x saiz akaun" yang peraturan berbeza sama sekali.'),
  ('N123', 'POLA', 'Power Earnings Gap',
   'gap earnings DAN vol_n50 >= 3.0 DAN tutup dalam 25% atas julat hari', 'therighttrader',
-  'blog', 'PERLU:tarikh_earnings',
+  'blog', 'PERLU:gabung_sec',
   'keluar asal: henti bawah rendah hari gap; gagal jika tutup < buka hari gap. DIBETULKAN '
   '30 Okt 2026 (SPEC_NXX §10): perlu tarikh earnings titik-masa; data/sec/ ada tetapi '
-  'penyertaannya tugas data berasingan.'),
+  'penyertaannya tugas data berasingan. DIBETULKAN LAGI 2 Nov 2026 (AUDIT_PERLU.md): token '
+  'lama `tarikh_earnings` SALAH kerana ia menyiratkan data yang hilang. Data ADA dan '
+  'dijejak git — data/sec/earnings_8k.csv 178,726 baris 8-K Item 2.02 merentas 2,795 saham '
+  '2004-2026. Yang tiada ialah PAIP yang menggabungkannya ke panel, bukan data; liputan '
+  'terhadap 3,180 nama panel 83.6%, jadi pengecualian mesti eksplisit atau N123 jadi '
+  'penapis liputan tersembunyi.'),
  ('N124', 'POLA', 'Episodic pivot gap 8-10%', 'gap >= 8% DAN vol_n50 >= 2.0',
   'Qullamaggie/Bonde melalui Tradingsim', 'blog', 'SEDIA',
   'lebih tegas daripada N64 yang hanya guna gap_and_go'),
@@ -443,9 +448,14 @@ MASUK = [
  ('N142', 'KEKUATAN', 'CANSLIM (7 syarat O’Neil)',
   'EPS suku semasa >= 25% DAN EPS tahunan >= 25% selama 3 tahun DAN produk/pengurusan baharu '
   'DAN volum menyokong DAN RS >= 80 DAN sokongan institusi DAN arah pasaran menaik',
-  'O’Neil, How to Make Money in Stocks', 'buku/IBD', 'PERLU:data_eps_suku',
+  'O’Neil, How to Make Money in Stocks', 'buku/IBD', 'PERLU:gabung_sec',
   'sumber TIDAK SEPAKAT: EPS suku 18%, 20% atau 25%; dalam 15% atau 5% daripada tinggi 52w; '
-  'RS >= 70 atau >= 80. Composite Rating IBD tidak dapat disahkan dalam carian.'),
+  'RS >= 70 atau >= 80. Composite Rating IBD tidak dapat disahkan dalam carian. DIBETULKAN '
+  '2 Nov 2026 (AUDIT_PERLU.md): token lama `data_eps_suku` SALAH. EPS suku titik-masa ADA '
+  'dan dijejak git — data/sec/eps_hasil.csv 142,635 baris metrik=eps merentas 2,846 saham, '
+  'dan sue.csv sudah mengira pasangan tahun-ke-tahun. Kaki EPS tidak perlukan data baharu. '
+  'Kaki yang KEKAL tersekat ialah RS titik-masa (data/rs/ tiada sejarah sebelum Sep 2026) '
+  'dan sokongan institusi (13F).'),
  ('N143', 'REJIM', 'Nisbah put/call purata 10 hari > 0.85',
   'purata 10 hari nisbah put/call ekuiti > 0.85', 'konsensus sentimen', 'StockCharts/blog',
   'PERLU:data_putcall',

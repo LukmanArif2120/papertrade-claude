@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793628338-2ad3",
-  "nombor": 172,
-  "sha256": "430fcccd0c53dd8941c90d748fad1d22807f41f8facb6ea3542cb7a5e26b1409",
-  "bait": 654789,
-  "dikemas": "2026-11-02 14:05 UTC",
-  "nota": "Kad skor 8 pradaftar (P94 + CARAK ditambah), kaedah_n/papan -> subBhg (88.8% had), label BERSARA GB02xX13; gabung v143-v146 sesi lain yang diterbit tanpa dikomit"
+  "versi_artifact": "1793637385-3482",
+  "nombor": 173,
+  "sha256": "fc39ca8f369741366937603ecb51e7586cca1c39e7e4189db288da3003c0f1f6",
+  "bait": 655739,
+  "dikemas": "2026-11-02 16:36 UTC",
+  "nota": "Lencana PERLU kini membawa kelas diaudit (AUDIT_PERLU.md): kod belum ditulis / data ADA paip tiada / disekat data luar / paksi lain"
 }

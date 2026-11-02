@@ -1,5 +1,6 @@
 """Ujian registry Nxx — keluarga kedua selari dengan Mxx."""
 import csv
+import json
 import os
 import sys
 import tempfile
@@ -88,6 +89,31 @@ class TestStatus(unittest.TestCase):
         for b in R.MASUK:
             if b[6].startswith('PERLU:'):
                 self.assertTrue(b[6].split(':', 1)[1].strip(), b[0])
+
+    def test_perlu_sudah_diaudit(self):
+        """Setiap token PERLU mesti ada kelas yang diaudit dalam REVERSE/audit_perlu.json.
+
+        Punca masalah yang audit 2 Nov 2026 dedahkan: status `PERLU:<x>` DITAIP TANGAN dan
+        dua ujian di atas hanya menyemak BENTUK rentetan, jadi label boleh salah selama
+        berbulan tanpa sesiapa tahu. Dua memang salah — `N123`/`N142` dilabel perlukan data
+        SEC yang sebenarnya ADA dan dijejak git. Ujian ini menutup punca itu secara
+        STRUKTUR: token PERLU baharu tidak boleh masuk tanpa dikelaskan dahulu (KOD_SAHAJA /
+        SUDAH_ADA / DATA_LUAR / BUKAN_INDIKATOR). Ia tidak menyemak kelas itu BETUL — itu
+        kerja audit — tetapi ia menghalang label yang tidak pernah disemak langsung.
+        """
+        fail = os.path.join(AKAR, 'REVERSE', 'audit_perlu.json')
+        if not os.path.exists(fail):
+            self.skipTest('REVERSE/audit_perlu.json tiada')
+        with open(fail, encoding='utf-8') as f:
+            A = json.load(f)
+        diaudit = {t['token'] for t in A['token']}
+        semua = [b[6] for b in R.MASUK]
+        for _n, baris, _a in R.paksi():
+            semua += [b[4] for b in baris]
+        hilang = sorted({st.split(':', 1)[1] for st in semua
+                         if st.startswith('PERLU:')} - diaudit)
+        self.assertEqual(hilang, [], f'token PERLU belum diaudit: {hilang} — '
+                                     'jalankan audit dan kemas kini REVERSE/audit_perlu.json')
 
     def test_n01_adalah_dapatan_pengguna(self):
         n01 = R.MASUK[0]

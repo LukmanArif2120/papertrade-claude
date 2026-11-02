@@ -704,6 +704,7 @@ def kaedah_n(dibina):
                      asas5=ff(r.get('asas5')), p=ff(r.get('p'), 6), n=ii(r.get('n_tahan')),
                      g3=bl(r.get('gate3'))) for r in X],
         produksi=_produksi_n(rd, ff, ii, bl, RV, reg),
+        perlu=_perlu_kelas(RV),
         tarik=TARIK_N,
         ujian=UJ,
         skor=_skor_n(UJ),
@@ -899,6 +900,26 @@ TARIK_N = dict(
           'penyebut merangkumi carian yang menghasilkannya, jadi 94 kombinasi produksi '
           'ialah UJIAN PERTAMA yang jujur - bukan pengesahan kelebihan yang sudah diukur.',
 )
+
+def _perlu_kelas(RV):
+    """Peta token PERLU -> kelas diaudit, daripada REVERSE/audit_perlu.json.
+
+    Lencana `PERLU:<x>` pada papan registry membaca seperti "belum diuji, nanti kita uji",
+    sedangkan ia bermaksud ujian itu tidak boleh dijalankan langsung. Pengguna bertanya
+    tepat soalan itu pada 2 Nov 2026. Audit (REVERSE/AUDIT_PERLU.md) mengasingkan EMPAT
+    perkara berbeza yang satu label itu campurkan, jadi papan kini menunjukkan YANG MANA.
+
+    Satu peta token (68 entri), bukan medan setiap baris: 99 baris berkongsi 68 token, jadi
+    peta lebih kecil dan halaman mencarinya daripada rentetan status yang sudah ada.
+    """
+    p = os.path.join(RV, 'audit_perlu.json')
+    if not os.path.exists(p):
+        return None
+    with open(p, encoding='utf-8') as f:
+        A = json.load(f)
+    return {t['token']: [t['kelas_akhir'], t.get('baris_kod') or 0]
+            for t in A.get('token', [])}
+
 
 METRIK_N = {
     'A': ['lift latih', 'lift tahan', 'jangkaan'],
