@@ -1,18 +1,18 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-10-30 17:02 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-02 14:08 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| main | 2026-10-30 | 0 | 2026-10-30 |
+| claude/wizardly-mendel-qr6j64 | 2026-11-02 | 0 | 2026-11-02 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (8)
+## 1. Perlu keputusan anda (10)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
@@ -24,6 +24,8 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 | 2026-10-29 | Kecacatan mekanikal: 421 posisi C dihentikan pada hari masuk, kadar menang 0.00% | KOLAM_EKOR.md §4a. 421 daripada 1,770 posisi C ditutup (23.8%) dibeli dan dihentikan pada hari yang sama, purata -2.47%, kadar menang 0.00% merentas 421 dagangan — mekanikal, bukan hasil pasaran: paras henti kaedah terletak DALAM julat intrabar hari masuk (jarak henti median 1.93% lawan 5.33% bagi yang terselamat). Membetulkannya (jangan masuk bila henti < ~2% daripada harga masuk dirancang) mengurangkan jumlah kerugian direalisasi 19.5%. TETAPI purata baki 1,349 posisi ialah -3.18%, LEBIH BURUK daripada -3.01% keseluruhan: ia tidak menukar tanda. §4b: jangkaan negatif pada SETIAP lebar henti dan makin negatif bila dilebarkan (kadar menang naik 5.9x, kerugian purata naik 8.8x) = masuk tanpa kelebihan, mengesahkan fasa 1 pada data HADAPAN. Keputusan pengguna diperlukan: betulkan sebagai kebersihan sistem atau biarkan. |
 | 2026-10-29 | Sambung spus_harian.csv ke lejar.yml supaya RINGKASAN.md melapor SPUS setiap malam | data/penanda_aras/spus_harian.csv kini disegarkan MANUAL (banding_spus.py --kemas-kini, guna yfinance). Ia TIDAK dipasang ke workflow malam dengan sengaja: yfinance tiada dalam sesi ini jadi laluan kemas kini belum diuji, dan kod belum diuji dalam kerja berjadual adalah liabiliti. portfolio_slot/RINGKASAN.md masih melapor SPY sahaja kerana hanya SPY+QQQ ada dalam harga_idx.csv. Pilihan: (a) tambah SPUS ke stor indeks (kod/stor.py, pengambil idx) supaya portfolio_slot.py boleh membacanya terus - paling bersih; (b) jalankan banding_spus.py dalam lejar.yml selepas portfolio_slot; (c) biar manual. Keputusan pengguna diperlukan kerana (a) dan (b) mengubah aliran data malam. |
 | 2026-10-29 | Uji PEAD x konteks harga pada alam lebih luas ATAU slot lebih banyak | Daripada SILANG_GATE_C.md. Dapatan silang adalah NYATA (Gate A+B lulus, p=0.0010, bertahan FDR + dua bootstrap blok + 1000 permutasi) tetapi gagal portfolio kerana bentuk taburan: kelebihan hidup dalam ekor kanan nipis dan 8 posisi tidak cukup menangkapnya. Dua lever yang dituju oleh diagnosis itu sendiri: (a) lebih banyak slot - tetapi KEPEKATAN.md menunjukkan 8->60 slot mengorbankan pulangan 5.97 mata pada entri DIPILIH, walaupun PEMBINAAN.md menunjukkan ia MEMBANTU pada entri rawak, jadi arahnya tidak diketahui untuk entri signal; (b) alam lebih luas supaya n naik daripada 541-751 - bergabung dengan keputusan terbuka PEAD saham kecil, dan PERLU model kos saham tidak cair (slippage melebihi tier 0.25% tertinggi sekarang). PERLU pradaftar baharu; tembakan SPEC_SILANG sudah terbelanja. JANGAN jalankan sebagai penalaan parameter atau pelebaran grid 48. |
+| 2026-11-02 | papertrade/moomoo pada 92.0% had dokumen db dan dibaca melalui sub(), bukan subBhg() | Didedahkan oleh amaran >= 85% yang ditambah kepada jana_db.py 2 Nov. kaedah_n/papan (88.8%) sudah ditukar kepada subBhg() dalam terbitan #172, tetapi papertrade/moomoo LEBIH HAMPIR (241,271 daripada 262,144) dan ia dibaca melalui pembalut lazy subRingkas(...)->sub(...), bukan sub() biasa, jadi penukaran itu bukan satu baris. Ia dokumen posisi Moomoo LAMA (beku sejak 13 Okt) jadi ia hanya tumbuh melalui medan penilaian harian - perlahan, tetapi apabila ia melepasi had ia menghentikan tolakan db MALAM, bukan sesi kerja. Urutan WAJIB: tukar pembaca halaman kepada subBhg() dan TERBITKAN dahulu, baru tambah ke jana_db.PECAH - sebaliknya halaman kehilangan baris secara senyap. |
+| 2026-11-02 | semak_dashboard.js: 10 kegagalan "Untung center/right" dan hanya 22 jadual diaudit (dahulu 44) | Diukur 2 Nov dan DIATRIBUSIKAN: menjalankan pemeriksa pada badan versi hidup 1793607248-b31f SAHAJA (tanpa suntingan saya) memberi 10/22 yang sama, jadi ia datang daripada v143-v146 (rel kiri bersarang) yang diterbitkan oleh sesi lain, bukan daripada terbitan #172. Dua perkara berasingan: (1) jajaran tajuk lajur Untung lawan selnya - mungkin artifak indeks pemeriksa jika baris pertama ada colspan, perlu disemak sebelum menukar CSS; (2) liputan jatuh separuh kerana rel bersarang menukar panel mana yang dicapai pemeriksa. Yang (2) lebih penting: pemeriksa yang mengaudit separuh jadual memberi keyakinan palsu. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
@@ -38,10 +40,10 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
-| RS pasaran | 30 | 2026-09-18 | 2026-10-29 | 0.5 |  | tidak |
-| Gred kumpulan | 25 | 2026-09-25 | 2026-10-29 | 0.4 |  | tidak |
-| SEC EPS/hasil | 4096 | 2009-04-15 | 2026-10-30 | 65.0 | 268439 | ya |
-| SEC earnings 8-K | 5449 | 2004-08-23 | 2026-10-30 | 86.5 | 178702 | ya |
+| RS pasaran | 30 | 2026-09-21 | 2026-10-30 | 0.5 |  | tidak |
+| Gred kumpulan | 26 | 2026-09-25 | 2026-10-30 | 0.4 |  | tidak |
+| SEC EPS/hasil | 4096 | 2009-04-15 | 2026-10-30 | 65.0 | 268630 | ya |
+| SEC earnings 8-K | 5449 | 2004-08-23 | 2026-10-30 | 86.5 | 178726 | ya |
 
 
 Leg **RS/gred**: terbaik **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
@@ -59,36 +61,36 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Lorong | Ekuiti | Dipegang | Keluar | Sesi terakhir |
 |---|---|---|---|---|
-| RS_10 | 0.953163 | 10 | 0 | 2026-10-29 |
-| RAWAK_10 | 1.00006 | 10 | 1 | 2026-10-29 |
-| GABUNGAN_10 | 1.013214 | 9 | 14 | 2026-10-29 |
-| TOP1_10 | 1.012105 | 9 | 16 | 2026-10-29 |
-| RAWAK_KAEDAH_10 | 1.009998 | 10 | 1 | 2026-10-29 |
-| RISIKO_10 | 0.98375 | 10 | 0 | 2026-10-29 |
+| RS_10 | 0.872562 | 10 | 1 | 2026-10-30 |
+| RAWAK_10 | 0.976889 | 10 | 1 | 2026-10-30 |
+| GABUNGAN_10 | 1.003587 | 9 | 15 | 2026-10-30 |
+| TOP1_10 | 1.000277 | 10 | 16 | 2026-10-30 |
+| RAWAK_KAEDAH_10 | 0.981025 | 10 | 1 | 2026-10-30 |
+| RISIKO_10 | 0.958757 | 10 | 1 | 2026-10-30 |
 
 
 `RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz. Ia menguji saiz atas **isyarat Mxx** dan bukan ujian ke hadapan dapatan REVERSE fasa 1b (`REVERSE/SPEC_FASA2.md` §9.2).
 
 
-### Papan Penganalisis — 134 kaedah Mxx
+### Papan Penganalisis — 228 kaedah Mxx
 
 | Status pantau | Bilangan |
 |---|---|
-| BELUM CUKUP | 131 |
-| OK | 3 |
+| BELUM CUKUP | 224 |
+| OK | 4 |
 
 
 ## 4. Kesegaran data
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261029 | 1 | OK |
-| Trend D10H2-r2 | 20261029 | 1 | OK |
-| Lejar Penuh | 2026-10-29 | 1 | OK |
-| portfolio_slot | 2026-10-29 | 1 | OK |
-| Papan Penganalisis | 2026-10-31 | -1 | OK |
-| RS pasaran | 2026-10-29 | 1 | OK |
-| Gred kumpulan | 2026-10-29 | 1 | OK |
+| Stor harga | 20261030 | 3 | OK |
+| Trend D10H2-r2 | 20261029 | 4 | **LEWAT 4 hari** |
+| Lejar Penuh | 2026-10-30 | 3 | OK |
+| portfolio_slot | 2026-10-30 | 3 | OK |
+| Papan Penganalisis | 2026-11-02 | 0 | OK |
+| RS pasaran | 2026-10-30 | 3 | OK |
+| Gred kumpulan | 2026-10-30 | 3 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
 
