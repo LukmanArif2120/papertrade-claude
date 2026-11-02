@@ -632,7 +632,9 @@ def kaedah_n(dibina):
             d['hasil'] = best[x['id']]
         rows.append(d)
     UJ = _ujian_n(A, B, G, X, rd(os.path.join(RV, 'portfolio_n_ringkas.csv')),
-                  rd(os.path.join(RV, 'cara.csv')), ff, ii, bl)
+                  rd(os.path.join(RV, 'cara.csv')),
+                  rd(os.path.join(RV, 'portfolio_94_ringkas.csv')),
+                  rd(os.path.join(RV, 'cara_keluar_94.csv')), ff, ii, bl)
     return dict(
         dibina=dibina,
         nota='TIGA populasi dalam tab ini, unitnya BERBEZA dan ia TIDAK boleh dicampur. '
@@ -905,10 +907,12 @@ METRIK_N = {
     'SX': ['lift latih', 'lift tahan', 'jangkaan'],
     'PORT': ['CAGR latih', 'CAGR tahan', 'MDD'],
     'CARA': ['jangkaan/sig latih', 'jangkaan/sig tahan', 'kadar isi %'],
+    'P94': ['CAGR p5 jalur', 'CAGR median', 'MDD median'],
+    'CARAK': ['jangkaan/sig latih', 'jangkaan/sig tahan', 'kadar isi %'],
 }
 
 
-def _ujian_n(A, B, G, X, PO, CA, ff, ii, bl):
+def _ujian_n(A, B, G, X, PO, CA, P9, CK, ff, ii, bl):
     """Satu baris bagi SETIAP ujian dipradaftar merentas enam larian.
 
     Unit BERBEZA antara pradaftar (lift mata lawan CAGR % lawan jangkaan %/signal), jadi
@@ -992,6 +996,47 @@ def _ujian_n(A, B, G, X, PO, CA, ff, ii, bl):
                       lulus=bl(r.get('CARA1')) and bl(r.get('CARA2')) and bl(r.get('CARA3')),
                       nota=f'jangkaan/isi {ff(r.get("jangkaan_isi"))}%'
                            + (f' · henti hari-0 {h0:,}' if h0 else '')))
+    # P94: kohort 94 kombinasi diuji sebagai PORTFOLIO (step33/34/36). Lengan KAWALAN
+    # (RAWAK/RAWAKALAM) ditanda `ref` kerana `P3` DITENTUKAN terhadap jalur mereka — baris
+    # yang mendefinisikan gate tidak boleh juga menjadi ujian gate itu (P3 sendirinya
+    # dipaksa False), jadi memasukkannya akan mengubah penyebut.
+    for r in P9:
+        kaw = str(r.get('lengan', '')).startswith('RAWAK')
+        cacat = (r.get('cacat') or '').strip()
+        U.append(dict(pra='P94', masuk=f"{r.get('larian')}·{r.get('lengan')}", cara='C01',
+                      keluar='kohort', urutan=r.get('urutan'),
+                      slot=ii(r.get('slot')) if str(r.get('slot')).isdigit() else None,
+                      n=ii(r.get('n_dag')), m1=ff(r.get('cagr_p5')), m2=ff(r.get('cagr')),
+                      m3=ff(r.get('mdd')), menang=None, tanpa5=None, p=None,
+                      gate=gt(('P1', bl(r.get('P1'))), ('P2', bl(r.get('P2'))),
+                              ('P3', bl(r.get('P3'))), ('P4', bl(r.get('P4')))),
+                      lulus=bl(r.get('T1')), ref=1 if kaw else 0,
+                      nota=('kawalan dipadankan (menetapkan jalur P3) · ' if kaw else '')
+                           + f'alam {r.get("alam")} · nisbah {ff(r.get("nisbah"), 2)} · '
+                             f'dedah {ff(r.get("dedah"), 0)}% · {ii(r.get("nb"))} benih'
+                           + (f' · CACAT: {cacat}' if cacat else '')))
+    # CARAK: paksi CARA pada KESEMUA enam keluar kohort (step38). `C01` ialah asas yang
+    # setiap cara lain dibanding dengannya, jadi ia `ref`, bukan ujian — penyebut 30 = 5
+    # cara x 6 keluar, tepat penyebut BH-FDR yang spec pradaftarkan.
+    lk = {(r.get('keluar'), r.get('cara')): r for r in CK if r.get('tingkap') == 'latih'}
+    for r in CK:
+        if r.get('tingkap') != 'tahan':
+            continue
+        c, k = r.get('cara'), r.get('keluar')
+        L = lk.get((k, c), {})
+        h0 = ii(r.get('henti_hari0'))
+        U.append(dict(pra='CARAK', masuk=f'{ii(r.get("n_masuk"))} masuk', cara=c, keluar=k,
+                      urutan=None, slot=None, n=ii(r.get('n_isyarat')),
+                      m1=ff(L.get('jangkaan_sig')), m2=ff(r.get('jangkaan_sig')),
+                      m3=ff(r.get('kadar_isi'), 1), menang=ff(r.get('menang'), 1),
+                      tanpa5=ff(r.get('tanpa5')), p=ff(r.get('p'), 6),
+                      gate=gt(('1', bl(r.get('CARA1'))), ('2', bl(r.get('CARA2'))),
+                              ('3', bl(r.get('CARA3')))),
+                      lulus=bl(r.get('MENANG')), ref=1 if c == 'C01' else 0,
+                      nota=('asas: setiap cara lain dibanding dengannya · ' if c == 'C01'
+                            else '')
+                           + f'jangkaan/isi {ff(r.get("jangkaan_isi"))}%'
+                           + (f' · henti hari-0 {h0:,}' if h0 else '')))
     for r in U:
         if not r.get('ref'):
             r.pop('ref', None)   # baris ujian = kebanyakan; jangan bayar bait untuk ref=0
@@ -1002,7 +1047,8 @@ def _ujian_n(A, B, G, X, PO, CA, ff, ii, bl):
 # Metrik yang menentukan pangkat dalam setiap pradaftar, sebagai indeks ke dalam METRIK_N:
 # "jangkaan tahan" bagi pradaftar setiap-dagangan, "CAGR tahan" bagi portfolio. Pangkat
 # dikira DALAM kumpulan sendiri sahaja — 2 mata lift dan 9% CAGR bukan unit yang sama.
-PANGKAT_N = {'A': 2, 'B': 2, 'GAB': 2, 'SX': 2, 'PORT': 1, 'CARA': 1}
+PANGKAT_N = {'A': 2, 'B': 2, 'GAB': 2, 'SX': 2, 'PORT': 1, 'CARA': 1,
+             'P94': 1, 'CARAK': 1}
 
 
 def _pangkat_n(U):
@@ -1026,9 +1072,10 @@ def _skor_n(U):
     menyimpang daripada baris yang jadual tunjukkan. Baris rujukan dibuang daripada penyebut.
     """
     NAMA = {'A': 'A · ruang MASUK', 'B': 'B · ruang KELUAR', 'GAB': 'Paksi GABUNGAN',
-            'SX': 'Silang akhir', 'PORT': 'Portfolio lawan SPUS', 'CARA': 'Paksi CARA'}
+            'SX': 'Silang akhir', 'PORT': 'Portfolio lawan SPUS', 'CARA': 'Paksi CARA',
+            'P94': 'Portfolio kohort 94', 'CARAK': 'CARA x enam keluar'}
     corong, n_uji, n_lulus = [], 0, 0
-    for pra in ('A', 'B', 'GAB', 'SX', 'PORT', 'CARA'):
+    for pra in ('A', 'B', 'GAB', 'SX', 'PORT', 'CARA', 'P94', 'CARAK'):
         g = [r for r in U if r['pra'] == pra and not r.get('ref')]
         if not g:
             continue
@@ -1248,6 +1295,7 @@ def main(argv=None):
     semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama in PECAH
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
     semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
+    hampir = []                 # dokumen >= 85% had, dilapor dalam ringkas.json
     for kol, bahagian in semua:
         # `kump_id` = kumpulan keatoman: satu bagi setiap operasi bahagi(), supaya SEMUA
         # bahagiannya ditolak dalam satu panggilan. Ia datang daripada operasi pecahan itu
@@ -1259,6 +1307,15 @@ def main(argv=None):
             sz = bait(dd)
             if sz >= HAD_DB:
                 raise SystemExit(f'{kol}/{doc_id}: {sz} bait melebihi had db {HAD_DB} (jalankan pecah_claude.py --pecah)')
+            # AMARAN sebelum ia menjadi SystemExit. `analisis/papan` dan `kaedah_n/papan`
+            # kedua-duanya tumbuh melepasi had sambil kelihatan baik-baik sahaja pada larian
+            # sebelumnya, dan apabila had itu dilanggar ia menghentikan tolakan db MALAM,
+            # bukan sesi kerja. 85% memberi ruang satu kohort lagi untuk dilihat dahulu.
+            if sz >= 0.85 * HAD_DB and f'{kol}/{doc_id}' not in PECAH:
+                hampir.append((f'{kol}/{doc_id}', sz))
+                print(f'  AMARAN {kol}/{doc_id}: {sz} bait = '
+                      f'{100.0 * sz / HAD_DB:.1f}% had db — tukar halaman kepada subBhg() '
+                      f'dan tambah ke PECAH sebelum ia melebihi {HAD_DB}', file=sys.stderr)
             p = os.path.join(a.keluar, kol, doc_id + '.json'); os.makedirs(os.path.dirname(p), exist_ok=True)
             open(p, 'w', encoding='utf-8').write(padat(dd))
             w = dict(op='set', collection=kol, doc_id=doc_id, file_path=os.path.abspath(p))
@@ -1300,7 +1357,7 @@ def main(argv=None):
     fail = []
     for i, bt in enumerate(batches):
         p = os.path.join(a.keluar, f'batch_{i}.json'); json.dump(bt, open(p, 'w'), indent=1); fail.append(p)
-    ring = dict(dibina=dibina, sesi=S, dokumen=len(tulis), batch=fail, kumpulan_terpecah=terpecah, tanpa_versi=[f"{w['collection']}/{w['doc_id']}" for w, _, _ in tulis if 'if_version' not in w],
+    ring = dict(dibina=dibina, sesi=S, dokumen=len(tulis), batch=fail, kumpulan_terpecah=terpecah, hampir_had=hampir, tanpa_versi=[f"{w['collection']}/{w['doc_id']}" for w, _, _ in tulis if 'if_version' not in w],
                 pengawas=pengawas(st, masa))
     json.dump(ring, open(os.path.join(a.keluar, 'ringkas.json'), 'w'), ensure_ascii=False, indent=1)
     print(json.dumps(ring, ensure_ascii=False, indent=1))

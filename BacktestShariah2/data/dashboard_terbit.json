@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793600120-12c3",
-  "nombor": 167,
-  "sha256": "2b885a75206d6c21fc0219e3c5e948ed9c2d420f0242e62135b32f753afb9b30",
-  "bait": 650057,
-  "dikemas": "2026-11-02 06:15 UTC",
-  "nota": "analisis/papan dipecah: subBhg + pengawal kelengkapan dalam subBhg (11 dokumen), jana_db.PECAH padan nama PENUH supaya kaedah_n/papan tidak terpecah, pembatchan sedar-bahagian."
+  "versi_artifact": "1793628338-2ad3",
+  "nombor": 172,
+  "sha256": "430fcccd0c53dd8941c90d748fad1d22807f41f8facb6ea3542cb7a5e26b1409",
+  "bait": 654789,
+  "dikemas": "2026-11-02 14:05 UTC",
+  "nota": "Kad skor 8 pradaftar (P94 + CARAK ditambah), kaedah_n/papan -> subBhg (88.8% had), label BERSARA GB02xX13; gabung v143-v146 sesi lain yang diterbit tanpa dikomit"
 }

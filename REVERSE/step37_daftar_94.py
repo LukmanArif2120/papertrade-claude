@@ -140,8 +140,12 @@ ENTRI = """    # Kohort 94 kombinasi produksi — pradaftar SPEC_PORTFOLIO_94.md
                 'median +46.17% (AL01: +2.70%). Keahlian SPUS ialah petikan semasa ditolak '
                 'ke belakang; E4 mengukur ia menyanjung MDD 30.9 mata. T2 yang lulus di '
                 'sini BUKAN lorong risiko-rendah.'),
-    dict(id='CARA94', nama='Paksi CARA pada 45 masuk produksi (6 cara)',
+    dict(id='CARA94', nama='Paksi CARA pada 45 masuk produksi (6 cara, keluar X13)',
          fail='cara_94.csv', gate='CARA1'),
+    # Pradaftar SPEC_CARA_94.md: CARA_94 mengukur cara pada X13 SAHAJA (6/94 slot) dan
+    # menyatakan bakinya ANGGAPAN. Entri ini ialah ukurannya: enam keluar, m = 30.
+    dict(id='CARAK94', nama='Paksi CARA x enam keluar kohort (6 asas C01 + 30 ujian)',
+         fail='cara_keluar_94.csv', gate='MENANG'),
 """
 
 TAMPAL = [
@@ -243,13 +247,19 @@ def daftar():
         s = s.replace(cari, ganti, 1)
         n += 1
         print(f'  tampalan "{nama}": dikenakan')
-    if "id='P94'" not in s:
+    if "id='P94'" not in s and "id='CARAK94'" not in s:
         jangkar = "    dict(id='E1', nama='PEGANG x SLOT (320 konfigurasi)',"
         if s.count(jangkar) != 1:
             raise SystemExit('jangkar E1 tidak unik dalam strategi.py')
         s = s.replace(jangkar, ENTRI + jangkar, 1)
         n += 1
         print('  3 entri (P94, P94AL, CARA94) ditambah sebelum E1')
+    elif "id='CARAK94'" not in s:
+        jangkar = "    dict(id='E1', nama='PEGANG x SLOT (320 konfigurasi)',"
+        blok = ENTRI[ENTRI.index('    # Pradaftar SPEC_CARA_94.md'):]
+        s = s.replace(jangkar, blok + jangkar, 1)
+        n += 1
+        print('  entri CARAK94 ditambah sebelum E1')
     else:
         print('  entri 94: sudah didaftar')
     if n:

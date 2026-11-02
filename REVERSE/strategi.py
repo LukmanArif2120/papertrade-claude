@@ -61,8 +61,12 @@ EKSPERIMEN = [
                 'median +46.17% (AL01: +2.70%). Keahlian SPUS ialah petikan semasa ditolak '
                 'ke belakang; E4 mengukur ia menyanjung MDD 30.9 mata. T2 yang lulus di '
                 'sini BUKAN lorong risiko-rendah.'),
-    dict(id='CARA94', nama='Paksi CARA pada 45 masuk produksi (6 cara)',
+    dict(id='CARA94', nama='Paksi CARA pada 45 masuk produksi (6 cara, keluar X13 sahaja)',
          fail='cara_94.csv', gate='CARA1'),
+    # Pradaftar SPEC_CARA_94.md: CARA_94 mengukur cara pada X13 SAHAJA (6/94 slot) dan
+    # menyatakan bakinya ANGGAPAN. Entri ini ialah ukurannya: enam keluar, m = 30.
+    dict(id='CARAK94', nama='Paksi CARA x enam keluar kohort (6 asas C01 + 30 ujian)',
+         fail='cara_keluar_94.csv', gate='MENANG'),
     dict(id='E1', nama='PEGANG x SLOT (320 konfigurasi)',
          fail='pegang_slot_ringkas.csv', gate='lulus', pf=True, giliran=True),
     # `tapis`: alam_ringkas.csv membawa KEDUA-DUA alam (AL01 rujukan + AL02 ujian), jadi

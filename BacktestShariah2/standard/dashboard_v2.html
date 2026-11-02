@@ -98,9 +98,21 @@ aside.rail{display:none}
   div.wrap{padding-left:calc(var(--rel) + 20px)}
   header.top{margin-left:calc(-1*(var(--rel) + 20px));padding-left:calc(var(--rel) + 20px)}
   aside.rail nav.tabs{flex-direction:column;gap:3px;margin-top:0;overflow:visible}
-  aside.rail nav.tabs button{width:100%;text-align:left;border-bottom:0;border-radius:8px;padding:9px 12px;font-size:.9rem}
-  aside.rail nav.tabs button:hover{background:var(--card);color:var(--fg)}
-  aside.rail nav.tabs button[aria-selected="true"]{background:linear-gradient(90deg,var(--accent-soft),transparent),var(--card);color:var(--fg);box-shadow:inset 3px 0 0 var(--accent)}
+  aside.rail nav.tabs>button{width:100%;text-align:left;border-bottom:0;border-radius:8px;padding:9px 12px;font-size:.9rem}
+  aside.rail nav.tabs>button:hover{background:var(--card);color:var(--fg)}
+  aside.rail nav.tabs>button[aria-selected="true"]{background:linear-gradient(90deg,var(--accent-soft),transparent),var(--card);color:var(--fg);box-shadow:inset 3px 0 0 var(--accent)}
+  /* v143 (2 Nov 2026, permintaan pengguna): rel bahagian panel (pnav, v93) BERSARANG di bawah tab yang
+     diklik, bukan rel kedua dalam kawasan kandungan — jadi satu rel sahaja, dan kandungan dapat balik
+     232px yang dahulu dimakan oleh rel kedua itu. */
+  aside.rail .pnav-rail{position:static;width:auto;top:auto;bottom:auto;margin:3px 0 7px;padding-left:11px;border-left:1px solid var(--line-2)}
+  aside.rail .pnav-in{position:static;max-height:none;overflow:visible;padding:0;gap:1px}
+  aside.rail .pnav-in button{font-size:.79rem;padding:6px 9px;border-radius:6px;white-space:normal;overflow-wrap:anywhere;align-items:flex-start;line-height:1.32}
+  aside.rail .pnav-in button>span:first-child{min-width:0}
+  aside.rail .pnav-in button[aria-current="true"]{box-shadow:inset 2px 0 0 var(--accent)}
+  aside.rail .pnav-in .pn-k{padding:8px 2px 4px;margin-top:8px}
+  aside.rail .pnav-in hr{margin:5px 3px}
+  section.view.pnav.pn-luar{padding-left:0}
+  section.view.pnav.pn-luar .pnav-rail{display:none}
 }
 .subbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0}
 .subbar[hidden]{display:none}
@@ -140,7 +152,21 @@ section.view.pnav .panel.pn-a>.panel-h{cursor:default}section.view.pnav .panel-h
 .pnav-in .pill{font-size:.66rem;padding:1px 6px;margin-left:auto;flex:none}
 .pnav-in .pn-n{margin-left:auto;font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .pnav-in hr{border:0;border-top:1px solid var(--line);margin:6px 4px}
-.pnav-in .pn-k{font-size:.66rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px}
+/* v144 (2 Nov 2026, permintaan pengguna): tajuk kumpulan nampak macam boleh ditekan padahal tidak.
+   Ia kini dibaca sebagai PEMISAH, bukan baris: garis di atasnya, teks lebih kecil dan lebih pudar,
+   dan inden tidak sejajar dengan teks butang supaya lajur butang kekal satu-satunya yang boleh diklik. */
+/* Penanda warna setiap kumpulan guna slot kategori --k1..--k4 yang sudah ada (disahkan validator
+   dataviz: julat kecerahan, lantai kroma, pemisahan CVD dan kontras semuanya LULUS pada permukaan
+   gelap). Warna duduk pada penanda, BUKAN pada teks: teks kekal token pudar supaya hijau/merah/ambar
+   kekal bermaksud untung/rugi/amaran dan tajuk tidak terbaca sebagai status. Teal tidak diguna
+   kerana ia warna "sedang dipilih" dalam rel ini. */
+.pnav-in .pn-k{display:flex;align-items:flex-start;gap:7px;font-size:.61rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);opacity:.78;padding:9px 2px 5px;margin-top:9px;border-top:1px solid var(--line);cursor:default;user-select:none}
+.pnav-in .pn-k::before{content:"";flex:none;width:3px;height:9px;margin-top:2px;border-radius:2px;background:var(--kk,var(--line-2))}
+.pnav-in div.pn-k:nth-of-type(1){--kk:var(--k1)}
+.pnav-in div.pn-k:nth-of-type(2){--kk:var(--k2)}
+.pnav-in div.pn-k:nth-of-type(3){--kk:var(--k3)}
+.pnav-in div.pn-k:nth-of-type(4){--kk:var(--k4)}
+.pnav-in .pn-k:first-child{border-top:0;margin-top:0;padding-top:2px}
 @media (min-width:761px){
   section.view.pnav{padding-left:232px;position:relative}
   .pnav-rail{position:absolute;left:0;top:18px;bottom:0;width:216px}
@@ -1138,7 +1164,7 @@ document.addEventListener('click',e=>{const th=e.target.closest&&e.target.closes
 /* ================= navigasi ================= */
 function viewId(){if(S.tab==='backtest'){const b=S.sub.backtest;return b==='butiran'?(S.set==='2000'?'v-autotune':'v-'+S.b4):'v-keputusan';}if(S.tab==='prestasi')return 'v-pr-'+S.akaun;if(S.tab==='posisi')return 'v-pos';return 'v-'+S.tab;}
 function renderNav(){
-  document.querySelectorAll('#mainTabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===S.tab));
+  document.querySelectorAll('#mainTabs button[data-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===S.tab));
   const subs=SUBS[S.tab];const seg=$('#subSeg');
   seg.hidden=!subs;seg.innerHTML=subs?subs.map(([v,t])=>`<button type="button" role="tab" data-sub="${v}" aria-selected="${(S.tab==='prestasi'||S.tab==='posisi'?S.akaun:S.sub[S.tab])===v}">${t}</button>`).join(''):'';
   const showSet=S.tab==='backtest'&&S.sub.backtest==='butiran';$('#setSeg').hidden=!showSet;$('#setLbl').hidden=!showSet;
@@ -1146,7 +1172,7 @@ function renderNav(){
   const vid=viewId();document.querySelectorAll('section.view').forEach(v=>v.hidden=v.id!==vid);
 }
 function save(){try{localStorage.setItem('pbs3_tab',S.tab);localStorage.setItem('pbs3_akaun',S.akaun);localStorage.setItem('pbs2_sub',JSON.stringify(S.sub));localStorage.setItem('pbs_set',S.set);localStorage.setItem('pbs2_b4',S.b4);}catch(e){}}
-$('#mainTabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.tab=b.dataset.tab;save();renderNav();renderAll();window.scrollTo({top:0});};
+$('#mainTabs').onclick=e=>{const b=e.target.closest('button[data-tab]');if(!b)return;S.tab=b.dataset.tab;save();renderNav();renderAll();window.scrollTo({top:0});};
 $('#subSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(S.tab==='prestasi'||S.tab==='posisi')S.akaun=b.dataset.sub;else S.sub[S.tab]=b.dataset.sub;save();renderNav();renderAll();};
 $('#setSeg').onclick=e=>{const b=e.target.closest('button');if(!b)return;S.set=b.dataset.set;S.f.shown=40;save();renderNav();renderAll();};
 function setLive(on,txt){S.live=on;$('#dot').classList.toggle('on',on);$('#liveTxt').textContent=txt;}
@@ -4490,7 +4516,7 @@ function renderKaedahN(){
       ${(AK.t4||[]).map(r=>`<tr${r.berat===100?' class="skw-top"':''}><td class="l"><b>${r.berat}%</b><span class="vv">baki tunai</span></td><td><b class="pos">${sg2(r.cagr)}</b></td><td class="neg">${sg2(r.mdd)}</td><td>${fx(r.cagr/Math.abs(r.mdd),2)}</td></tr>`).join('')}
     </tbody></table></div>
     <p class="note">${esc(AK.t4_nota)}</p>
-    ${!AK.priori?'':`<p class="note"><b>Rekod jangkaan priori saya merentas enam pradaftar:</b> ${AK.priori.betul} betul · ${AK.priori.separa} separa · ${AK.priori.salah} salah. Satu-satunya pradaftar yang kebanyakannya betul ialah yang menguji mekanisme yang <b>sudah</b> diukur. Pada ruang belum diukur saya salah lebih kerap daripada betul — itu sebabnya setiap larian dipradaftar.</p>`}
+    ${!AK.priori?'':`<p class="note"><b>Rekod jangkaan priori saya merentas pradaftar yang priorinya direkod:</b> ${AK.priori.betul} betul · ${AK.priori.separa} separa · ${AK.priori.salah} salah. Satu-satunya pradaftar yang kebanyakannya betul ialah yang menguji mekanisme yang <b>sudah</b> diukur. Pada ruang belum diukur saya salah lebih kerap daripada betul — itu sebabnya setiap larian dipradaftar.</p>`}
   </div>`}
   ${!GI.length?'':`<div class="panel"><div class="panel-h"><h2>Baris gilir E1–E6</h2><span class="sub">setiap eksperimen: spec dan kod dikomit sebelum keputusan dilihat</span></div>
     <div class="tablewrap"><table data-st="kn-giliran"><thead><tr><th class="l">#</th><th class="l">Eksperimen</th><th class="l">Alam</th><th>Konfig</th><th>P1</th><th>P2</th><th>P3</th><th>P4</th><th>T1</th><th>T3</th><th class="l">Cabang</th></tr></thead><tbody>
@@ -4498,14 +4524,14 @@ function renderKaedahN(){
     <tr class="skw-x"><td></td><td class="l wrap" colspan="10"><b>${esc(r.khusus||'')}</b> ${esc(r.dapatan||'')}</td></tr>`).join('')}
     </tbody></table></div>
     <p class="note"><b>P1</b> = CAGR &gt; 17.95% SPUS · <b>P2</b> = MDD ≥ −26.82% SPUS · <b>P3</b> = atasi persentil-95 kawalan rawak · <b>P4</b> = nisbah &gt; 0.669 · <b>T1</b> = P1 dan P2 serentak · <b>T3</b> = CAGR ≥ 15% dengan MDD ≥ −15%. Jumlah: <b>161</b> lulus P1, <b>24</b> lulus P2, dan <b>sifar</b> lulus kedua-duanya.</p></div>`}
-  ${!(SK.corong||[]).length?'':`<div class="panel"><div class="panel-h"><h2>Kad skor: ${SK.lulus} daripada ${SK.ujian}</h2><span class="sub">enam pradaftar · setiap spec dan kod dikomit sebelum keputusan dilihat</span></div>
+  ${!(SK.corong||[]).length?'':`<div class="panel"><div class="panel-h"><h2>Kad skor: ${SK.lulus} daripada ${SK.ujian}</h2><span class="sub">${(SK.corong||[]).length} pradaftar · setiap spec dan kod dikomit sebelum keputusan dilihat</span></div>
     <p class="kesimpulan"><b>${fx(SK.peratus,2)}%</b> daripada <b>${SK.ujian}</b> ujian dipradaftar melepasi gate terakhirnya. Angka itu ialah kadar kelulusan <b>statistik setiap dagangan</b> — <b>bukan</b> kadar kejayaan sistem dagangan. Satu-satunya kumpulan yang pernah diukur sebagai <b>portfolio</b> gagal kesemua empat gate portfolio, <b>0 / 36</b>.</p>
-    <div class="corong">${(SK.corong||[]).map(c=>{const GL=c.pra==='CARA'?KN_GLC:KN_GL;
+    <div class="corong">${(SK.corong||[]).map(c=>{const GL=/^CARA/.test(c.pra)?KN_GLC:KN_GL;
       return `<div class="crg-h">${esc(c.nama)} · ${c.ujian} ujian${c.metrik?' · pangkat ikut '+esc(c.metrik):''}</div>`
         +c.tahap.map(t=>`<div class="crg" style="cursor:default"><span>${esc(GL[t.g]||t.g)}</span><span class="t"><i style="width:${(100*t.n/c.ujian).toFixed(1)}%"></i></span><span class="nm"><b>${t.n}</b></span></div>`).join('')
         +`<div class="crg akhir" style="cursor:default"><span><b class="${c.lulus?'pos':'mut'}">Lulus semua gate</b></span><span class="t"><i style="width:${(100*c.lulus/c.ujian).toFixed(1)}%"></i></span><span class="nm"><b>${c.lulus}</b></span></div>`;}).join('')}</div>
-    <p class="note"><b>Cara baca bar.</b> Bagi <b>A · B · GABUNGAN · Silang akhir</b> gate itu <b>bersarang</b> — setiap gate diuji atas baris yang lulus gate sebelumnya, jadi barnya memang corong menurun. Bagi <b>PORT</b> dan <b>CARA</b> gate itu syarat <b>bebas</b> yang mesti lulus <b>serentak</b>, jadi barnya bukan corong: P3 lulus 15 sementara P1 lulus 3, dan lulus-semua tetap 0.<br><b>Peratus setiap pradaftar bukan kebarangkalian kejayaan.</b> Silang akhir dilaporkan lulus 8/8 = 100%, tetapi angka itu <b class="neg">DITARIK BALIK</b>: penyebut FDR-nya ialah <code>m = 8</code>, jadi ambang BH = 0.05×8/8 = 0.05 iaitu p &lt; 0.05 <b>tanpa</b> pembetulan. Kelapan-lapannya juga <b>dua</b> masuk × <b>empat</b> keluar yang dipilih daripada data yang <b>sama</b> — satu dapatan melalui lapan kombinasi berkorelasi, bukan lapan dapatan bebas. Begitu juga 2/14 pada paksi GABUNGAN: kedua-duanya ialah kesatuan yang sama dengan dan tanpa <code>N20</code>.</p>
-    ${(T=>!T?'':`<div class="crg-h" style="margin-top:14px">Kombinasi terbaik: ${esc(T.k)} — terbaik SETIAP DAGANGAN; lajur portfolio diletak bersebelahan dengan sengaja</div>
+    <p class="note"><b>Cara baca bar.</b> Bagi <b>A · B · GABUNGAN · Silang akhir</b> gate itu <b>bersarang</b> — setiap gate diuji atas baris yang lulus gate sebelumnya, jadi barnya memang corong menurun. Bagi <b>PORT · CARA · Portfolio kohort 94 · CARA × enam keluar</b> gate itu syarat <b>bebas</b> yang mesti lulus <b>serentak</b>, jadi barnya bukan corong: pada PORT, P3 lulus 15 sementara P1 lulus 3, dan lulus-semua tetap 0.<br><b>Peratus setiap pradaftar bukan kebarangkalian kejayaan.</b> Silang akhir dilaporkan lulus 8/8 = 100%, tetapi angka itu <b class="neg">DITARIK BALIK</b>: penyebut FDR-nya ialah <code>m = 8</code>, jadi ambang BH = 0.05×8/8 = 0.05 iaitu p &lt; 0.05 <b>tanpa</b> pembetulan. Kelapan-lapannya juga <b>dua</b> masuk × <b>empat</b> keluar yang dipilih daripada data yang <b>sama</b> — satu dapatan melalui lapan kombinasi berkorelasi, bukan lapan dapatan bebas. Begitu juga 2/14 pada paksi GABUNGAN: kedua-duanya ialah kesatuan yang sama dengan dan tanpa <code>N20</code>.</p>
+    ${(T=>!T?'':`<div class="crg-h" style="margin-top:14px">${esc(T.k)} — dihantar ke produksi 1 Nov 2026, kini <b class="neg">BERSARA</b>: grid penuh memangkatkannya <b>7 daripada 1,496</b> dan kedua-dua kaki tunggalnya sendiri mengalahkannya. Dikekalkan di sini kerana lajur portfolio di bawah menunjukkan sebab kelebihan setiap dagangan tidak memindah kepada modal</div>
     <p class="sub" style="margin:0 0 8px">${esc(T.aturan)}</p>
     <div class="tablewrap"><table data-st="kn-skor"><thead><tr><th class="l">Diukur sebagai</th><th>Jangkaan /dagangan</th><th>CAGR setahun</th><th>MDD</th><th>Nisbah</th></tr></thead><tbody>
       <tr class="skw-top"><td class="l"><b>Setiap dagangan</b><span class="vv">n ${nf(T.n)} · menang ${fx(T.menang,1)}% · tanpa 5% ${sg2(T.tanpa5)}</span></td><td><b class="pos">${sg2(T.dagangan)}</b></td><td class="mut">–</td><td class="mut">–</td><td class="mut">–</td></tr>
@@ -4641,9 +4667,13 @@ function muatLajur(){
   });
 }
 /* v142: rel tab kiri (desktop >= 1100px) — nod #mainTabs dipindah, bukan diduplikasi */
-{const rl=$('#rail'),hdr=document.querySelector('header.top'),sb=$('#subBar'),nv=$('#mainTabs'),mq=window.matchMedia('(min-width:1100px)');
-  const pindah=()=>{if(!nv||!rl||!hdr)return;if(mq.matches){if(nv.parentElement!==rl)rl.appendChild(nv);}else if(nv.parentElement!==hdr)hdr.insertBefore(nv,sb);};
-  pindah();try{mq.addEventListener('change',pindah);}catch(e){try{mq.addListener(pindah);}catch(e2){}}}
+const MQ_REL=window.matchMedia('(min-width:1100px)');
+{const rl=$('#rail'),hdr=document.querySelector('header.top'),sb=$('#subBar'),nv=$('#mainTabs');
+  const pindah=()=>{if(!nv||!rl||!hdr)return;if(MQ_REL.matches){if(nv.parentElement!==rl)rl.appendChild(nv);}else if(nv.parentElement!==hdr)hdr.insertBefore(nv,sb);};
+  pindah();
+  /* melintasi 1100px menukar DI MANA senarai bahagian duduk, jadi paparan dilukis semula */
+  const tukar=()=>{pindah();try{renderAll();}catch(e){}};
+  try{MQ_REL.addEventListener('change',tukar);}catch(e){try{MQ_REL.addListener(tukar);}catch(e2){}}}
 {const hd=document.querySelector('header.top');const set=()=>document.documentElement.style.setProperty('--hdr',(hd?hd.offsetHeight:0)+'px');set();
   try{new ResizeObserver(set).observe(hd);}catch(e){}}
 let rzm;window.addEventListener('resize',()=>{clearTimeout(rzm);rzm=setTimeout(muatLajur,150);});
@@ -4874,14 +4904,28 @@ const PNAV_MIN=3,PNAV_TELEFON=['v-utama'],PNAV_ADA={};
 /* tajuk kumpulan rel (desktop): [tajuk, kunci panel pertama kumpulan] ('' = panel pertama); kunci tiada = tajuk tidak dipapar */
 /* bahagian lalai jika belum dipilih (selainnya item pertama) */
 const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah','v-utama':'__g','v-pr-c':'untung terkumpul lawan spy','v-pr-m':'untung terkumpul lawan spy','v-pr-gab':'untung terkumpul lawan spy'};
+/* v146 (2 Nov 2026): kunci kumpulan boleh jadi AWALAN, dan boleh jadi senarai calon (calon pertama
+   yang wujud dipakai). Perlu kerana tajuk panel tab Kombinasi N dijana daripada data — cth
+   "Produksi: 94 kombinasi yang BELUM diimbas" — jadi kunci tepat akan putus bila nombor berubah,
+   dan beberapa panel hanya wujud bila dokumen db membawanya. */
 const PNAV_KUMP={'v-pr-':[['Untung & rugi akaun',''],['Setiap kaedah','untung purata setiap kaedah'],['Eksperimen','banding dua lorong keluar']],
-  'v-analisis':[['Lejar Penuh (semua isyarat)',''],['Akaun Papertrade C','skor kaedah swing']]};
+  'v-analisis':[['Lejar Penuh (semua isyarat)',''],['Akaun Papertrade C','skor kaedah swing']],
+  /* susunan tab ini mengikut ayatnya sendiri: produksi = satu-satunya yang membeli, selebihnya rekod kajian */
+  'v-kaedahn':[['Produksi · yang membeli','produksi:'],
+    ['Rekod kajian · bukan isyarat',['⚠','keputusan akhir','empat pradaftar']],
+    ['Rujukan',['registry penuh','nota']]]};
 let pnavPilih={};try{pnavPilih=JSON.parse(localStorage.getItem('pbs2_pnav_pilih')||'{}');}catch(e){}
 S.pnav=true;try{S.pnav=localStorage.getItem('pbs2_pnav')!=='0';}catch(e){}
 const pnavLayak=vid=>!PNAV_TELEFON.includes(vid)||skrinKecil();
 const pnavBoleh=vid=>S.pnav&&pnavLayak(vid)&&PNAV_ADA[vid]!==false;
 const pnavPanel=el=>[...el.querySelectorAll('.panel')].filter(p=>p.querySelector(':scope>.panel-h h2')&&!p.parentElement.closest('.panel')&&!p.closest('.pnav-rail'));
+/* v143: bila rel kiri aktif (desktop >= 1100px) senarai bahagian duduk DI DALAM rel itu, di bawah
+   butang tab yang dipilih. Nod `.pnav-rail` yang sama dipindah, jadi semua logik pnav kekal; `el._rel`
+   mengingati di mana ia berada supaya pertanyaan butang tidak bergantung kepada induknya. */
+const pnavBtn=el=>((el&&el._rel)||el).querySelectorAll('.pnav-in button');
+function pnavLuarBersih(){const r=document.getElementById('rail');if(r)r.querySelectorAll('.pnav-rail').forEach(x=>x.remove());}
 function applyNav(el,vid){
+  pnavLuarBersih();el._rel=null;el.classList.remove('pn-luar');
   const ps=pnavPanel(el),dulu=el.classList.contains('pnav');
   if(ps.length)PNAV_ADA[vid]=ps.length>=PNAV_MIN;
   const kini=pnavBoleh(vid)&&ps.length>=PNAV_MIN;el.classList.toggle('pnav',kini);
@@ -4896,19 +4940,23 @@ function applyNav(el,vid){
   let pilih=pnavPilih[vid];if(!item.some(x=>x.k===pilih))pilih=item.some(x=>x.k===PNAV_LALAI[vid])?PNAV_LALAI[vid]:item[0].k;
   const rel=document.createElement('nav');rel.className='pnav-rail';rel.setAttribute('aria-label','Bahagian tab');
   const kp=Object.entries(PNAV_KUMP).find(([a])=>vid.startsWith(a)),kj={};
-  if(kp)kp[1].forEach(([t,k])=>{const x=k?item.find(y=>y.k===k):item.find(y=>y.p);if(x)kj[x.k]=t;});
+  const cari=k=>item.find(y=>y.k===k)||item.find(y=>y.k.startsWith(k));
+  if(kp)kp[1].forEach(([t,k])=>{const x=!k?item.find(y=>y.p):(Array.isArray(k)?k.map(cari).find(Boolean):cari(k));
+    if(x&&!kj[x.k])kj[x.k]=t;});
   rel.innerHTML=`<div class="pnav-in">${item.map((x,i)=>{const pl=x.p&&x.p.querySelector(':scope>.panel-h .pill'),pn=pl&&(pl.textContent.trim().match(/^⚠?\s*\d+/)||[])[0];
     return `${kj[x.k]?`<div class="pn-k">${esc(kj[x.k])}</div>`:i===1&&adaG?'<hr>':''}<button type="button" data-pnk="${esc(x.k)}"${x.p&&x.p.classList.contains('danger')?' class="pn-dg"':''}><span>${esc(x.t)}</span>${pn?`<span class="pill ${esc([...pl.classList].filter(c=>c!=='pill').join(' '))}" title="${esc(pl.textContent.trim())}">${esc(pn)}</span>`:''}</button>`;}).join('')}</div>`;
   el.prepend(rel);
+  if(MQ_REL&&MQ_REL.matches){const tb=document.querySelector('#rail #mainTabs button[data-tab][aria-selected="true"]');
+    if(tb){rel.setAttribute('role','group');tb.insertAdjacentElement('afterend',rel);el._rel=rel;el.classList.add('pn-luar');}}
   rel.onclick=e=>{const b=e.target.closest('button[data-pnk]');if(!b)return;pnavPilih[vid]=b.dataset.pnk;try{localStorage.setItem('pbs2_pnav_pilih',JSON.stringify(pnavPilih));}catch(e){}
     pnavTanda(el,b.dataset.pnk);const y=el.getBoundingClientRect().top+window.scrollY-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--hdr'))||0);
     if(window.scrollY>y)window.scrollTo({top:Math.max(0,y)});requestAnimationFrame(()=>topScrolls(el));};
   pnavTanda(el,pilih);}
 function pnavTanda(el,k){
   el.querySelectorAll('.pn-x,.pn-j,.pn-a').forEach(x=>x.classList.remove('pn-x','pn-j','pn-a'));
-  el.querySelectorAll('.pnav-in button').forEach(b=>b.setAttribute('aria-current',String(b.dataset.pnk===k)));
+  pnavBtn(el).forEach(b=>b.setAttribute('aria-current',String(b.dataset.pnk===k)));
   const a=k==='__g'?null:el.querySelector(`.panel[data-pn="${CSS.escape(k)}"]`);
-  el.querySelectorAll('.pnav-in button').forEach(b=>{if(b.dataset.pnk!==k)return;const j=b.parentElement;if(j.scrollWidth>j.clientWidth)j.scrollLeft=b.offsetLeft-(j.clientWidth-b.offsetWidth)/2;});
+  pnavBtn(el).forEach(b=>{if(b.dataset.pnk!==k)return;const j=b.parentElement;if(j.scrollWidth>j.clientWidth)j.scrollLeft=b.offsetLeft-(j.clientWidth-b.offsetWidth)/2;});
   [...el.children].forEach(c=>{if(c.classList.contains('pnav-rail')||c.matches('.foot'))return;
     /* tapisan di atas sekali (cth. pemilih Butiran Backtest) kekal; tapisan lain hanya bagi panel selepasnya */
     if(c.matches('.filters')){let s=c.previousElementSibling;while(s&&s.matches('.pnav-rail,.filters'))s=s.previousElementSibling;
@@ -4919,7 +4967,7 @@ function pnavTanda(el,k){
     [...par.children].forEach(s=>{if(s!==n&&(s.matches('.panel')||s.querySelector('.panel')))s.classList.add('pn-x');});}}
 /* bawa ke panel yang mengandungi x (cth. jadual selepas ketik peta) bila mod tab sisi aktif */
 function pnavKe(x){const v=x&&x.closest('.view.pnav');if(!v)return false;let p=x.closest('.panel');while(p&&p.parentElement.closest('.panel'))p=p.parentElement.closest('.panel');
-  const b=p&&v.querySelector(`.pnav-in button[data-pnk="${CSS.escape(p.dataset.pn||'')}"]`);if(!b)return false;b.click();return true;}
+  const kk=p&&p.dataset.pn||'',b=kk&&[...pnavBtn(v)].find(x=>x.dataset.pnk===kk);if(!b)return false;b.click();return true;}
 $('#pnavTog').onclick=()=>{S.pnav=!S.pnav;try{localStorage.setItem('pbs2_pnav',S.pnav?'1':'0');}catch(e){}renderAll();};
 
 renderNav();renderAll();
@@ -4997,7 +5045,12 @@ renderNav();renderAll();
      memecahnya — dan ia MESTI diterbitkan dahulu, bukan selepas. */
   subBhg('analisis/papan','anl',['analisis']);
   sub('kaedah/katalog','kat',['kaedah']);
-  sub('kaedah_n/papan','kn',['kaedahn']);
+  /* 232,704 bait pada 489 baris ujian = 88.8% had 262,144, dan ia tumbuh setiap kali
+     satu pradaftar ditambah (lonjakan terakhir: +67 baris daripada P94 + CARAK).
+     subBhg serasi ke belakang (laluan n=1 membaca dokumen yang belum dipecah seperti
+     biasa), jadi baris ini diterbitkan SEBELUM jana_db.py mula memecahnya — urutan
+     itu WAJIB, dan sebab `analisis/papan` hampir hilang baris secara senyap. */
+  subBhg('kaedah_n/papan','kn',['kaedahn']);
   /* AUTOTUNE: semua dokumen koleksi autotune (status, ringkasan, gabungan, kaedah_<ID>) */
   db.collection('autotune').limit(1000).onSnapshot(snap=>{const d={};snap.docs.forEach(x=>{if(x.exists)d[x.id]=x.data();});S.at=d;S.live=true;re('autotune','backtest');},()=>{});
 })();
