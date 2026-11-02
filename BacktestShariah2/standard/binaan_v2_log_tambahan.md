@@ -495,3 +495,11 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - tak beli: senarai_beli belum dikemas kini bagi isyarat 2026-10-30 (tarikh_isyarat dalam fail: ['2026-10-29'])
 - Dilangkau: tiada.
 - Tiada order. Tiada wang sebenar.
+
+## 2026-11-03 07:19 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-10-30)
+- Keluar baharu 564 (C {'isyarat': 108, 'henti': 410, 'sasaran': 16, 'masa': 26}, M {'sasaran': 2, 'henti': 1, 'isyarat': 1}); menunggu buka sesi seterusnya: 134.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 119 (beza > 0.5%: 26). Tidak dibeli baharu: tiada.
+- Senarai beli 1495 baris (341 saham, 198 kaedah; 83 daripada watchlist; belian semula 61). Ditolak: {'dipegang': 419, 'had': 12383, 'tidak_cair': 227, 'ambil_alih': 303, 'kelas_berganda': 36}.
+- Watchlist 246 (baharu 179, dibuang 147, ke senarai beli 83). Isyarat direkod: 14863 (data/isyarat/2026-10-30_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: C ACA M95: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M54: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M06: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M23: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M46: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M100: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M101: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M120: tiada bar 2026-10-30 (harga terkini 2026-10-22).
+- Tiada order. Tiada wang sebenar.

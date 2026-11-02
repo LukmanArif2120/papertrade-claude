@@ -82,6 +82,12 @@ jobs:
           F="${{ steps.mod.outputs.folder }}"
           if [ ! -d "$F" ]; then mkdir -p "$F" && cp BacktestShariah2/papertrade/*.csv BacktestShariah2/papertrade/*.json "$F"/ && rm -f "$F/status_harian.json"; fi
           X=""; [ "$PAKSA" = "ya" ] && X="--paksa"
+          # SEBELUM dibaca DI SINI, bukan selepas kejar. Larian 2 Nov 23:17 UTC membuktikan
+          # sebabnya: kejar memulihkan sesi 10-30, kemudian `malam` MENANGGUH 11-02 (data yfinance
+          # masih awal), jadi SEBELUM dan SELEPAS kedua-duanya 10-30 -> baru=tidak -> langkah gred,
+          # semak data, log dan ntfy DILANGKAU walaupun 1,448 posisi baru sahaja direkod. Kerja
+          # kejar ialah kerja baharu dan mesti dikira sebagai kerja baharu.
+          SEBELUM=$(python3 -c "import json,os;p='$F/status_harian.json';print(json.load(open(p)).get('malam',{}).get('sesi','') if os.path.exists(p) else '')")
           # KEJAR sesi tertinggal SEBELUM sesi terkini (2 Nov 2026). `malam` memilih bar terakhir
           # stor sebagai sesi, jadi setiap kegagalan berbilang hari dahulunya membuang sesi di
           # tengah-tengah SECARA SENYAP - itu yang berlaku kepada sesi 2026-10-30 selepas enam
@@ -96,7 +102,6 @@ jobs:
             echo "kejar=$K" >> "$GITHUB_OUTPUT"
             [ -n "$K" ] && echo "::warning::sesi tertinggal dikejar: $K"
           fi
-          SEBELUM=$(python3 -c "import json,os;p='$F/status_harian.json';print(json.load(open(p)).get('malam',{}).get('sesi','') if os.path.exists(p) else '')")
           python3 BacktestShariah2/standard/harian_c.py malam --folder "$F" --isyarat "${{ steps.mod.outputs.isyarat }}" --proses 4 $X
           SELEPAS=$(python3 -c "import json;print(json.load(open('$F/status_harian.json'))['malam']['sesi'])")
           if [ "$SEBELUM" != "$SELEPAS" ] || [ -n "$X" ]; then echo "baru=ya" >> "$GITHUB_OUTPUT"; else echo "baru=tidak" >> "$GITHUB_OUTPUT"; fi
