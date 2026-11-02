@@ -1,19 +1,19 @@
 {
- "dikemaskini": "2026-10-30 09:44 UTC",
- "bar_terakhir": 20261029,
+ "dikemaskini": "2026-10-31 07:33 UTC",
+ "bar_terakhir": 20261030,
  "laras": {},
  "perlu_sejarah": [],
  "harga_A.csv": {
   "ticker_dikemaskini": 431,
-  "bar_terakhir": 20261029
+  "bar_terakhir": 20261030
  },
  "harga_B.csv": {
   "ticker_dikemaskini": 498,
-  "bar_terakhir": 20261029
+  "bar_terakhir": 20261030
  },
  "harga_idx.csv": {
   "ticker_dikemaskini": 2,
-  "bar_terakhir": 20261029
+  "bar_terakhir": 20261030
  },
  "log_laras": 0,
  "faktor_dividen": [],

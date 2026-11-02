@@ -423,3 +423,6 @@
 - Rutin Claude dimatikan: Kemas kini 6:02 (`trig_01R2RcT5GZ4xGkncK5xa1jnH`), Imbas 7:47 (`trig_012DQb9KbjfhpKuopsMByNDh`), Beli 9:35 (`trig_018pfWtxtyMaC6aaThn7UDCo`).
 - Tugasan Claude baharu (Sonnet 5.5, sesi baharu): tolak db Isn–Sab 10:20 NY (`jadual/tolak_db.md`), mingguan Ahad 10:47 MYT (`jadual/mingguan.md`).
 - Notifikasi = ntfy topik `claude_azim`: `harian.yml` (keluar + senarai beli) dan `beli.yml` (dibeli / tak beli + sebab) melalui `standard/notifikasi.py`; amaran gagal `amaran_ntfy.yml`; sesi Claude menghantar mesej melalui `workflow_dispatch` `amaran_ntfy.yml` (ntfy.sh disekat proksi sesi Claude). Notifikasi Claude harian yang dirancang 24 Okt tidak dicipta.
+
+## Analisis mingguan 2026-10-31 (Sabtu)
+- `WFO/kod/analisis_sebenar.py`: 125 kaedah; AMARAN 0, SELARI 9 (M03, M73, M18, M20, M35, M25, M27, M28, M159), data belum cukup 116. Kaedah AMARAN: tiada. db `analisis/sebenar` dikemas kini. Tiada order. Tiada wang sebenar.

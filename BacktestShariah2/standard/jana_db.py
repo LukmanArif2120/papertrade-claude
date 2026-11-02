@@ -1080,13 +1080,15 @@ def _skor_n(U):
 # sedangkan dashboard membaca `kaedah_n/papan` dengan sub() biasa — jadi tab Kombinasi N
 # akan kehilangan baris secara SENYAP (KPI "Baris registry 200" sebelah teks "263 baris").
 # Setiap nama di sini MESTI dibaca dengan subBhg() dalam dashboard_v2.html.
-# SEMBILAN nama pertama ialah terjemahan satu-ke-satu tuple doc_id yang lama; `prestasi/mae`
-# dengan SENGAJA TIADA di sini walaupun dashboard membacanya dengan subBhg(), kerana
-# `mae.rows` ialah OBJEK (peta kunci->nilai), bukan senarai, jadi bahagi() menolaknya.
 PECAH = frozenset((
     'papertrade/senarai_beli', 'papertrade/watchlist', 'prestasi/garis', 'prestasi/mfe',
     'prestasi/mae_atr', 'prestasi/harian_kaedah', 'harian/trend',
     'harian/stage', 'posisi/lorong2',
+    # Daripada `main` 2 Nov 2026 (sesi lain): `posisi/jalur` (jalur jangkaan ke hadapan)
+    # dan `prestasi/mae`. Nota: `mae.rows` DAHULU peta, yang bahagi() tidak boleh pecah;
+    # sesi itu menukarnya kepada senarai pasangan tersusun KHUSUS supaya ia boleh dipecah,
+    # jadi ia memang milik senarai ini sekarang.
+    'posisi/jalur', 'prestasi/mae',
     # 2 Nov 2026: 274,573 bait pada 228 kaedah (134 Mxx + 94 kombinasi Nxx) = 12,429
     # melebihi HAD_DB. Tanpa pemecahan, jana_db.py SystemExit pada langkah 4 tolak_db.md.
     'analisis/papan',
@@ -1164,7 +1166,10 @@ def main(argv=None):
         tarikh_data=wl[0]['tarikh_data'] if wl else S, rows=[earn_sebenar(baris_db(r, PETA_WATCH), r, KAL) for r in wl])
     # prestasi
     mae = penurunan_maks(M, C, a.stor)
-    docs['prestasi/mae'] = dict(rows=mae, dibina=dibina, harga_hingga=f'{S} tutup',
+    # 2 Nov 2026: rows ditukar daripada peta kepada senarai pasangan tersusun supaya dokumen
+    # boleh DIBAHAGI (ia melebihi had 262,144 bait). Bentuk sama seperti prestasi/mae_atr.
+    docs['prestasi/mae'] = dict(rows=sorted([k, v] for k, v in mae.items()), dibina=dibina,
+                                harga_hingga=f'{S} tutup',
                                 definisi='Penurunan maksimum % = (harga rendah terendah sejak hari beli hingga hari ini, atau sehingga keluar) ÷ harga beli − 1, maksimum 0. Bagi posisi keluar: rendah hari sebelum hari keluar dan harga keluar. Kunci: akaun|saham|kaedah|tarikh_beli (akaun M=Moomoo, C=Claude). ATR isyarat: prestasi/mae_atr.')
     # 23 Okt 2026: atr dipindah ke dokumen sendiri (dibahagi) kerana mae + atr melebihi had satu dokumen
     docs['prestasi/mae_atr'] = dict(rows=sorted([k, v] for k, v in atr_isyarat(M, C, a.stor).items()), dibina=dibina,
@@ -1203,6 +1208,12 @@ def main(argv=None):
         docs['harian/trend'] = dict(TS.bawa_semalam(TS.dokumen(H, TS.alam(a.folder, H), nota_h, I), lama), dibina=dibina)
         docs['posisi/lorong2'] = dict(L2.dokumen(H, a.folder), dibina=dibina, harga_hingga=f'{S} tutup')
         docs['harian/stage'] = dict(ST.dokumen(H, TS.alam(a.folder, H), I), dibina=dibina)
+        try:  # posisi/jalur: jalur jangkaan ke hadapan (carta kedua helaian posisi)
+            import jalur_jangka as JJ
+            docs['posisi/jalur'] = dict(JJ.dokumen(H, docs['posisi/lorong2'].get('rows')),
+                                        dibina=dibina, harga_hingga=f'{S} tutup')
+        except Exception as e2:  # noqa: BLE001
+            print(f'amaran: posisi/jalur gagal: {e2!r}', file=sys.stderr)
     except Exception as e:  # noqa: BLE001
         print(f'amaran: harian/trend / harian/stage / posisi/lorong2 gagal: {e!r}', file=sys.stderr)
     ps = portfolio_slot(dibina)

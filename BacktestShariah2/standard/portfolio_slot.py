@@ -219,7 +219,7 @@ def jalur_rawak(P, hari, tutup, atrp, n=N_JALUR):
     """Jalur kawalan: n cabutan RAWAK_10 dengan benih berbeza, bukan satu.
 
     Sebabnya (REVERSE/KEPEKATAN_BENIH.md, 29 Okt 2026): pada 8 slot, hingar pemilihan merentas
-    susunan sewenang-wenang ialah 17.3 mata peratus setahun (20 benih: median 9.93%, julat
+    susunan sewenang-wenang ada SD 4.15 mata/tahun (20 benih: median 9.93%, julat
     2.57%-19.90%). Satu lorong rawak tunggal ialah SATU cabutan daripada taburan itu, jadi
     "RS_10 mengalahkan RAWAK_10" tidak bermakna apa-apa melainkan jurangnya melebihi jalur.
     Dengan jalur, perbandingan menjadi ujian: adakah RS_10 di atas persentil jalur?
@@ -255,7 +255,10 @@ def banding_jalur(hasil, J):
     L += ['', '**Cara membaca:** lorong yang berada DALAM jalur tidak dapat dibezakan daripada '
           'pemilihan rawak — jurangnya hingar, bukan dapatan. Hanya lorong di luar jalur (dan '
           'kekal di luar apabila jalur memanjang) bermakna apa-apa. Pada 10 slot hingar pemilihan '
-          'besar: `REVERSE/KEPEKATAN_BENIH.md` mengukurnya 17.3 mata peratus setahun pada 8 slot.', '']
+          'besar: `REVERSE/KEPEKATAN_BENIH.md` mengukur SD 4.15 mata setahun pada 8 slot, '
+          'jadi ambang 95% ialah ~9.7 mata antara dua lorong dan ~7.0 mata lawan median jalur. '
+          '(Angka 17.3 yang pernah disebut ialah JULAT 20 cabutan, bukan ambang: julat '
+          'berkembang dengan bilangan cabutan.)', '']
     return L
 
 

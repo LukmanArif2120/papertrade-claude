@@ -11,6 +11,30 @@ Arah terbalik daripada backtest: **hasil dahulu, signal kemudian**.
 - Perbandingan merentas tahun: **`BANDING_TAHUN.md`** (dijana `banding_tahun.py`).
 - Jadual keputusan satu baris setiap tahun: **`JADUAL_KEPUTUSAN.csv`** (dijana `jadual_keputusan.py`).
 
+## SEBELUM MEMULAKAN KAJIAN BAHARU — baca ini dahulu
+
+Dua kali pada 1 Nov 2026 satu kajian dimulakan di sini untuk soalan yang repo **sudah** jawab,
+kerana jawapannya berada di luar `REVERSE/` dan tidak dirujuk dari sini. Senarai silang:
+
+- **Ukuran momentum pakar sudah dikod dan diukur** — `BacktestShariah2/kajian/rs/RINGKASAN.md`
+  §14–16 (dijana `standard/kajian_rs.py`; 3,830 saham, 2005-01-03 hingga 2026-10-16, 1,034 tarikh
+  sampel, 1,780,970 pemerhatian; kelayakan tutup ≥ USD5 **dan** nilai 50 hari ≥ USD1 juta).
+  Sudah ada: 12-1 akademik (`m12_1`), gema Novy-Marx 12-7, 6-2, **formula Clenow penuh**
+  (`exp(cerun×252)−1` × R² atas 90 bar log), normalisasi turun naik Barroso–Santa-Clara (`rs_vol`),
+  **momentum residual Blitz–Huij–Martens** (`res_mom`), frog-in-the-pan (`id_fip`), MAX
+  Bali–Cakici–Whitelaw (`max21`), momentum industri (`rs_industri`), Mansfield RP, jarak tinggi 52w.
+  Portfolio bulanan desil teratas **selepas kos** lawan alam layak 9.38%: `m12_1` 11.70%,
+  `rs` 11.55%, `m12_7` 10.94%, `m6_2` 10.64%, `clenow` 9.74%, `rs_vol` 9.69%. Margin momentum
+  panjang-sahaja terbaik yang pernah diukur di sini ialah **+2.32 mata/tahun**.
+- **Siling ramalan ARAH** — `REVERSE/SILING_ARAH.md`: 51.55% luar sampel lawan asas 50.50%, dan
+  pilihan paling yakin memperoleh KURANG daripada membeli semua bar. Jangan uji semula.
+- **Ramalan MAGNITUD kenaikan** — `REVERSE/MOMENTUM_PEGANG.md` §2c: tertile ATR% teratas +23.72
+  mata, terbawah −23.90 mata (hampir simetri) = sasaran mengukur turun naik, bukan arah;
+  normalisasi menukar tanda 8/8. Pradaftar pendua yang ditarik balik: `SPEC_EKOR_RAMAL.md`.
+- **Ruang yang sudah ditutup**: pemicu harga (fasa 1), fundamental SEC (fasa 2), silang-keluarga
+  (`SILANG.md`), penapis setup (`SETUP.md` 0/598), pembinaan portfolio (`PEMBINAAN.md`),
+  masuk Nxx (`NXX.md` gate3 0/280).
+
 ## Jalankan semula (urutan)
 
 ```

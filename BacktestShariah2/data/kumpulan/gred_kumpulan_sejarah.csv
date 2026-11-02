@@ -3726,3 +3726,153 @@ tarikh,jenis,nama,sektor,n,skor,gred,w_rs_positif,w_rs_naik,w_trend,m1m_med,pct_
 2026-10-29,Sektor,Industrials,Industrials,492,27.3,D,0,1,0,0.74,44.1,2026-10-30 19:17 MYT
 2026-10-29,Sektor,Real Estate,Real Estate,86,18.2,E,0,1,0,-1.27,34.9,2026-10-30 19:17 MYT
 2026-10-29,Sektor,Basic Materials,Basic Materials,192,9.1,E,0,0,0,-3.15,31.2,2026-10-30 19:17 MYT
+2026-10-30,Industri,Financial Data & Stock Exchanges,Financial Services,13,100.0,A,1,1,1,14.35,92.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Oil & Gas E&P,Energy,56,99.3,A,1,1,1,13.11,76.8,2026-10-31 23:04 MYT
+2026-10-30,Industri,Discount Stores,Consumer Defensive,9,98.6,A,1,1,1,10.8,88.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Healthcare Plans,Healthcare,10,97.8,A,1,1,1,10.68,90.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Lodging,Consumer Cyclical,10,97.1,A,1,1,1,10.42,80.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Insurance - Property & Casualty,Financial Services,46,96.4,A,1,1,1,9.44,82.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Beverages - Non-Alcoholic,Consumer Defensive,15,95.7,A,1,1,1,9.35,53.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Insurance - Diversified,Financial Services,12,95.0,A,1,1,1,8.0,66.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Apparel Manufacturing,Consumer Cyclical,18,94.2,A,1,1,1,7.94,66.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Medical Care Facilities,Healthcare,38,93.5,A,1,1,1,6.67,78.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Oil & Gas Midstream,Energy,48,92.8,A,1,1,1,6.48,81.2,2026-10-31 23:04 MYT
+2026-10-30,Industri,Diagnostics & Research,Healthcare,35,92.1,A,1,1,1,6.46,85.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Oil & Gas Drilling,Energy,8,91.4,A,1,1,0,17.66,100.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Health Information Services,Healthcare,25,90.6,A,0,1,1,11.01,80.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Insurance Brokers,Financial Services,18,89.9,A,0,1,1,10.65,72.2,2026-10-31 23:04 MYT
+2026-10-30,Industri,Tools & Accessories,Industrials,10,89.2,A,1,1,1,3.37,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Restaurants,Consumer Cyclical,38,88.5,A,0,1,1,10.54,55.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Travel Services,Consumer Cyclical,13,87.8,A,0,1,1,10.02,61.5,2026-10-31 23:04 MYT
+2026-10-30,Industri,Personal Services,Consumer Cyclical,9,87.1,A,0,1,1,9.75,55.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Drug Manufacturers - General,Healthcare,17,86.3,A,0,1,1,9.02,82.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Banks - Regional,Financial Services,342,85.6,A,1,1,1,1.87,74.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Household & Personal Products,Consumer Defensive,20,84.9,A,0,1,1,7.45,80.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Staffing & Employment Services,Industrials,14,84.2,A,1,1,1,0.54,71.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Rental & Leasing Services,Industrials,17,83.5,A,1,1,0,7.26,47.1,2026-10-31 23:04 MYT
+2026-10-30,Industri,Footwear & Accessories,Consumer Cyclical,13,82.7,A,0,1,1,7.11,69.2,2026-10-31 23:04 MYT
+2026-10-30,Industri,Packaging & Containers,Consumer Cyclical,17,82.0,A,0,1,1,6.18,64.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Department Stores,Consumer Cyclical,5,81.3,A,1,1,1,-0.64,80.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Leisure,Consumer Cyclical,17,80.6,A,0,1,1,5.87,41.2,2026-10-31 23:04 MYT
+2026-10-30,Industri,Utilities - Regulated Water,Utilities,11,79.9,B,0,1,1,5.44,72.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Waste Management,Industrials,10,79.1,B,0,1,0,13.75,60.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Recreational Vehicles,Consumer Cyclical,12,78.4,B,0,1,0,12.58,8.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Tobacco,Consumer Defensive,7,77.7,B,0,1,0,11.9,42.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Beverages - Brewers,Consumer Defensive,7,77.0,B,0,1,0,11.1,57.1,2026-10-31 23:04 MYT
+2026-10-30,Industri,Software - Application,Technology,140,76.3,B,0,1,1,4.12,69.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Oil & Gas Integrated,Energy,17,75.5,B,0,1,0,10.9,88.2,2026-10-31 23:04 MYT
+2026-10-30,Industri,Luxury Goods,Consumer Cyclical,7,74.8,B,1,1,1,-2.47,71.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Medical Instruments & Supplies,Healthcare,35,74.1,B,0,1,1,3.97,62.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Beverages - Wineries & Distilleries,Consumer Defensive,5,73.4,B,0,1,0,10.57,60.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Information Technology Services,Technology,51,72.7,B,0,1,0,10.22,62.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Utilities - Regulated Electric,Utilities,38,71.9,B,0,1,0,9.64,57.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,"Furnishings, Fixtures & Appliances",Consumer Cyclical,22,71.2,B,0,1,1,2.34,68.2,2026-10-31 23:04 MYT
+2026-10-30,Industri,Utilities - Regulated Gas,Utilities,15,70.5,B,0,1,0,9.52,53.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Industrial Distribution,Industrials,23,69.8,B,0,1,1,2.05,69.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Apparel Retail,Consumer Cyclical,22,69.1,B,0,1,0,8.66,36.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Specialty Retail,Consumer Cyclical,28,68.3,B,0,1,0,8.63,53.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Airports & Air Services,Industrials,5,67.6,B,0,1,0,8.41,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Packaged Foods,Consumer Defensive,45,66.9,B,0,1,0,8.37,35.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Building Materials,Basic Materials,15,66.2,B,0,1,0,8.1,20.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Utilities - Diversified,Utilities,6,65.5,B,0,1,0,7.84,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Medical Distribution,Healthcare,4,64.7,B,0,1,0,7.83,100.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Oil & Gas Refining & Marketing,Energy,17,64.0,B,1,0,1,0.99,82.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Steel,Basic Materials,12,63.3,B,0,1,0,7.62,66.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Specialty Business Services,Industrials,34,62.6,B,0,1,0,7.44,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Shell Companies,Financial Services,313,61.9,B,0,1,1,0.1,40.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Publishing,Communication Services,7,61.2,B,0,1,0,6.22,57.1,2026-10-31 23:04 MYT
+2026-10-30,Industri,Railroads,Industrials,9,60.4,B,0,1,0,6.17,66.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Drug Manufacturers - Specialty & Generic,Healthcare,44,59.7,C,0,1,0,5.96,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Lumber & Wood Production,Basic Materials,4,59.0,C,0,1,0,5.9,75.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Insurance - Reinsurance,Financial Services,6,58.3,C,0,1,0,5.54,83.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Building Products & Equipment,Industrials,28,57.6,C,0,1,0,5.35,39.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Insurance - Specialty,Financial Services,12,56.8,C,0,1,0,5.31,58.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Chemicals,Basic Materials,12,56.1,C,0,1,0,5.14,16.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Home Improvement Retail,Consumer Cyclical,6,55.4,C,0,1,0,5.09,33.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Auto & Truck Dealerships,Consumer Cyclical,16,54.7,C,0,1,0,4.48,25.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Mortgage Finance,Financial Services,6,54.0,C,0,1,0,4.25,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Consulting Services,Industrials,15,53.2,C,0,1,0,4.04,66.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Confectioners,Consumer Defensive,3,52.5,C,0,1,0,3.96,33.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Specialty Chemicals,Basic Materials,47,51.8,C,0,1,0,3.16,59.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Insurance - Life,Financial Services,20,51.1,C,0,1,0,2.63,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Oil & Gas Equipment & Services,Energy,38,50.4,C,0,1,0,2.53,42.1,2026-10-31 23:04 MYT
+2026-10-30,Industri,Internet Retail,Consumer Cyclical,20,49.6,C,0,1,0,2.5,30.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Grocery Stores,Consumer Defensive,9,48.9,C,0,1,0,2.46,55.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Medical Devices,Healthcare,83,48.2,C,0,1,0,2.31,51.8,2026-10-31 23:04 MYT
+2026-10-30,Industri,REIT - Retail,Real Estate,6,47.5,C,0,1,0,1.93,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Credit Services,Financial Services,42,46.8,C,0,1,0,1.8,47.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Entertainment,Communication Services,32,46.0,C,0,1,0,1.8,71.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,REIT - Residential,Real Estate,4,45.3,C,0,1,0,1.75,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Integrated Freight & Logistics,Industrials,15,44.6,C,0,1,0,1.42,46.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Internet Content & Information,Communication Services,40,43.9,C,0,1,0,1.12,32.5,2026-10-31 23:04 MYT
+2026-10-30,Industri,Electronics & Computer Distribution,Technology,7,43.2,C,1,0,1,-7.25,100.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Auto Manufacturers,Consumer Cyclical,10,42.4,C,0,1,0,1.04,40.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Resorts & Casinos,Consumer Cyclical,13,41.7,C,0,1,0,0.76,38.5,2026-10-31 23:04 MYT
+2026-10-30,Industri,Residential Construction,Consumer Cyclical,18,41.0,C,0,1,0,0.37,27.8,2026-10-31 23:04 MYT
+2026-10-30,Industri,Utilities - Independent Power Producers,Utilities,8,40.3,C,0,1,0,0.22,12.5,2026-10-31 23:04 MYT
+2026-10-30,Industri,Security & Protection Services,Industrials,12,39.6,D,0,1,0,0.15,83.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Advertising Agencies,Communication Services,18,38.8,D,0,1,0,-0.08,55.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Broadcasting,Communication Services,7,38.1,D,0,1,0,-0.37,14.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Conglomerates,Industrials,19,37.4,D,0,1,0,-0.49,36.8,2026-10-31 23:04 MYT
+2026-10-30,Industri,Thermal Coal,Energy,5,36.7,D,0,1,0,-0.76,40.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Asset Management,Financial Services,101,36.0,D,0,1,0,-0.81,54.5,2026-10-31 23:04 MYT
+2026-10-30,Industri,Real Estate Services,Real Estate,30,35.3,D,0,1,0,-1.3,33.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Banks - Diversified,Financial Services,20,34.5,D,1,0,0,-1.83,65.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Telecom Services,Communication Services,45,33.8,D,0,1,0,-2.36,26.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Gambling,Consumer Cyclical,9,33.1,D,0,1,0,-2.43,11.1,2026-10-31 23:04 MYT
+2026-10-30,Industri,REIT - Diversified,Real Estate,5,32.4,D,0,1,0,-2.97,40.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Food Distribution,Consumer Defensive,9,31.7,D,0,0,0,2.43,66.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Real Estate - Development,Real Estate,7,30.9,D,0,1,0,-4.83,28.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Software - Infrastructure,Technology,109,30.2,D,0,0,0,1.95,63.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Coking Coal,Basic Materials,4,29.5,D,0,1,0,-5.0,25.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Education & Training Services,Consumer Defensive,21,28.8,D,0,1,0,-5.15,14.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,REIT - Office,Real Estate,6,28.1,D,0,1,0,-5.79,16.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Textile Manufacturing,Consumer Cyclical,3,27.3,D,0,0,0,1.59,66.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Consumer Electronics,Technology,7,26.6,D,0,1,0,-8.9,71.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Utilities - Renewable,Utilities,11,25.9,D,0,0,0,0.03,9.1,2026-10-31 23:04 MYT
+2026-10-30,Industri,Electronic Gaming & Multimedia,Communication Services,8,25.2,D,0,0,0,-0.25,37.5,2026-10-31 23:04 MYT
+2026-10-30,Industri,Agricultural Inputs,Basic Materials,7,24.5,D,0,0,0,-0.44,42.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Paper & Paper Products,Basic Materials,3,23.7,D,0,0,0,-1.47,33.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,REIT - Healthcare Facilities,Real Estate,6,23.0,D,0,0,0,-1.49,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Financial Conglomerates,Financial Services,6,22.3,D,0,0,0,-1.78,50.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,REIT - Mortgage,Real Estate,14,21.6,D,0,0,0,-2.83,28.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Farm Products,Consumer Defensive,18,20.9,D,0,0,0,-3.04,16.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Metal Fabrication,Industrials,14,20.1,D,0,0,0,-3.12,21.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Specialty Industrial Machinery,Industrials,57,19.4,E,0,0,0,-3.2,31.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Airlines,Industrials,14,18.7,E,0,0,0,-3.38,21.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Farm & Heavy Construction Machinery,Industrials,19,18.0,E,0,0,0,-3.47,31.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,Scientific & Technical Instruments,Technology,21,17.3,E,0,0,0,-4.12,42.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Biotechnology,Healthcare,277,16.5,E,0,0,0,-4.24,37.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Auto Parts,Consumer Cyclical,36,15.8,E,0,0,0,-4.53,19.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Marine Shipping,Industrials,25,15.1,E,0,0,0,-4.6,84.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Aerospace & Defense,Industrials,69,14.4,E,0,0,0,-4.62,21.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Trucking,Industrials,14,13.7,E,0,0,0,-4.87,21.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Solar,Technology,8,12.9,E,0,0,0,-4.88,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Engineering & Construction,Industrials,37,12.2,E,0,0,0,-5.01,21.6,2026-10-31 23:04 MYT
+2026-10-30,Industri,REIT - Specialty,Real Estate,5,11.5,E,0,0,0,-6.47,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Aluminum,Basic Materials,4,10.8,E,0,0,0,-6.47,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Pollution & Treatment Controls,Industrials,6,10.1,E,0,0,0,-7.51,16.7,2026-10-31 23:04 MYT
+2026-10-30,Industri,Communication Equipment,Technology,33,9.4,E,0,0,0,-9.03,36.4,2026-10-31 23:04 MYT
+2026-10-30,Industri,Capital Markets,Financial Services,55,8.6,E,0,0,0,-10.38,21.8,2026-10-31 23:04 MYT
+2026-10-30,Industri,Copper,Basic Materials,7,7.9,E,0,0,0,-11.43,14.3,2026-10-31 23:04 MYT
+2026-10-30,Industri,Uranium,Energy,6,7.2,E,0,0,0,-13.94,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Electronic Components,Technology,32,6.5,E,0,0,0,-14.01,25.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Gold,Basic Materials,36,5.8,E,0,0,0,-14.37,2.8,2026-10-31 23:04 MYT
+2026-10-30,Industri,Electrical Equipment & Parts,Industrials,26,5.0,E,0,0,0,-14.55,26.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Other Industrial Metals & Mining,Basic Materials,24,4.3,E,0,0,0,-16.68,4.2,2026-10-31 23:04 MYT
+2026-10-30,Industri,Other Precious Metals & Mining,Basic Materials,12,3.6,E,0,0,0,-18.99,0.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Silver,Basic Materials,5,2.9,E,0,0,0,-19.25,20.0,2026-10-31 23:04 MYT
+2026-10-30,Industri,Computer Hardware,Technology,24,2.2,E,0,0,0,-21.28,37.5,2026-10-31 23:04 MYT
+2026-10-30,Industri,Semiconductors,Technology,55,1.4,E,0,0,0,-21.7,30.9,2026-10-31 23:04 MYT
+2026-10-30,Industri,Semiconductor Equipment & Materials,Technology,28,0.7,E,0,0,0,-25.71,10.7,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Energy,Energy,195,100.0,A,1,1,0,6.95,70.3,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Financial Services,Financial Services,1012,90.9,A,0,1,1,0.2,56.9,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Healthcare,Healthcare,568,81.8,A,0,1,0,1.54,52.6,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Technology,Technology,515,72.7,B,0,0,0,-3.79,52.0,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Utilities,Utilities,89,63.6,B,0,1,0,7.66,48.3,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Consumer Cyclical,Consumer Cyclical,362,54.5,C,0,1,0,5.0,45.6,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Consumer Defensive,Consumer Defensive,168,45.5,C,0,1,0,5.55,45.2,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Communication Services,Communication Services,157,36.4,D,0,1,0,0.3,42.0,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Industrials,Industrials,493,27.3,D,0,1,0,-1.15,40.4,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Real Estate,Real Estate,88,18.2,E,0,1,0,-1.49,33.0,2026-10-31 23:04 MYT
+2026-10-30,Sektor,Basic Materials,Basic Materials,192,9.1,E,0,0,0,-6.42,27.6,2026-10-31 23:04 MYT
