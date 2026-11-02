@@ -82,6 +82,20 @@ jobs:
           F="${{ steps.mod.outputs.folder }}"
           if [ ! -d "$F" ]; then mkdir -p "$F" && cp BacktestShariah2/papertrade/*.csv BacktestShariah2/papertrade/*.json "$F"/ && rm -f "$F/status_harian.json"; fi
           X=""; [ "$PAKSA" = "ya" ] && X="--paksa"
+          # KEJAR sesi tertinggal SEBELUM sesi terkini (2 Nov 2026). `malam` memilih bar terakhir
+          # stor sebagai sesi, jadi setiap kegagalan berbilang hari dahulunya membuang sesi di
+          # tengah-tengah SECARA SENYAP - itu yang berlaku kepada sesi 2026-10-30 selepas enam
+          # kegagalan 31 Okt. kejar.py memproses lubang itu mengikut urutan, termasuk belian pagi
+          # berikutnya pada harga buka SEBENAR hari itu. Dilangkau apabila --paksa, kerana di situ
+          # pengguna sengaja memproses semula satu sesi tertentu.
+          if [ -z "$X" ]; then
+            python3 BacktestShariah2/standard/kejar.py --folder "$F" --isyarat "${{ steps.mod.outputs.isyarat }}" \
+              --proses 4 > /tmp/kejar.json 2>/tmp/kejar.err || echo "::warning::kejar: $(tr -s ' \n' ' ' < /tmp/kejar.err | cut -c1-200)"
+            cat /tmp/kejar.json 2>/dev/null || true
+            K=$(python3 -c "import json;d=json.load(open('/tmp/kejar.json'));print(','.join(d.get('dikejar') or []))" 2>/dev/null || echo "")
+            echo "kejar=$K" >> "$GITHUB_OUTPUT"
+            [ -n "$K" ] && echo "::warning::sesi tertinggal dikejar: $K"
+          fi
           SEBELUM=$(python3 -c "import json,os;p='$F/status_harian.json';print(json.load(open(p)).get('malam',{}).get('sesi','') if os.path.exists(p) else '')")
           python3 BacktestShariah2/standard/harian_c.py malam --folder "$F" --isyarat "${{ steps.mod.outputs.isyarat }}" --proses 4 $X
           SELEPAS=$(python3 -c "import json;print(json.load(open('$F/status_harian.json'))['malam']['sesi'])")
@@ -168,6 +182,7 @@ jobs:
           TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
         run: |
           M=$(python3 BacktestShariah2/standard/notifikasi.py malam --folder "${{ steps.mod.outputs.folder }}")
+          [ -n "${{ steps.malam.outputs.kejar }}" ] && M="$M | kejar: ${{ steps.malam.outputs.kejar }}"
           echo "$M"
           curl -sS -m 20 -H "Title: Papertrade: kemas kini + imbas" -H "Tags: chart_with_upwards_trend" -d "$M" \
             "https://ntfy.sh/$TOPIK" > /dev/null || echo "::warning::ntfy gagal"
