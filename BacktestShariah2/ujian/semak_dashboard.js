@@ -16,7 +16,7 @@
 // Kod keluar 1 jika ada kegagalan (bertindih, tajuk, keluar, tepi).
 const fs=require('fs'),path=require('path'),os=require('os');
 const {chromium}=require('playwright');
-const PNAV_MAKS=12;   // panel rel sisi terbanyak setakat ini: Kaedah N = 9
+const PNAV_MAKS=16;   // panel rel sisi terbanyak setakat ini: Kombinasi N = 12 (produksi, keputusan akhir, baris gilir, kad skor, penarikan, gate, portfolio, cara, silang, keluar, registry, ujian)
 /* --semua: cetak SETIAP jadual yang diaudit, bukan hanya yang bermasalah. Tanpa ini,
    "tiada temuan" dan "tidak diperiksa" kelihatan SAMA dalam log — dan had PNAV_MAKS
    lama membuktikan beza itu penting (31 Okt 2026). */
@@ -51,14 +51,22 @@ const AUDIT=()=>{
     if(va.size>1)o.valign.push([...va].join('/'));
     rows.slice(0,25).forEach(tr=>[...tr.cells].forEach((td,ci)=>{
       const tb=td.getBoundingClientRect();if(!tb.width)return;
+      /* Sel yang DIPOTONG dengan sengaja (overflow:hidden + text-overflow:ellipsis, cth
+         td.wrap dan td.name dalam mod Padat) tidak boleh dilapor sebagai "bertindih":
+         geometri anaknya memang melepasi tepi, tetapi pelayar mengeratnya jadi tiada
+         piksel yang bertindih. Tanpa pengecualian ini jadual Kaedah dilapor GAGAL
+         selama-lamanya dan audit jadi bunyi bising (2 Nov 2026). */
+      const cs=getComputedStyle(td), potong=cs.overflow!=='visible'&&cs.textOverflow==='ellipsis';
       const anak=[...td.querySelectorAll('*')].filter(e=>e.offsetWidth&&getComputedStyle(e).position!=='absolute');
       let kiri=Infinity,kanan=-Infinity;
       anak.forEach(e=>{const eb=e.getBoundingClientRect();if(!eb.width)return;
-        if(eb.right>tb.right+1.5)o.bertindih.push(nm(ci)+' +'+Math.round(eb.right-tb.right)+'px');
+        if(eb.right>tb.right+1.5&&!potong)o.bertindih.push(nm(ci)+' +'+Math.round(eb.right-tb.right)+'px');
         kiri=Math.min(kiri,eb.left);kanan=Math.max(kanan,eb.right);});
       if(!anak.length&&td.textContent.trim()){kiri=tb.left+parseFloat(getComputedStyle(td).paddingLeft);kanan=tb.right-parseFloat(getComputedStyle(td).paddingRight);}
       if(kanan>-Infinity){isiMaks[ci]=Math.max(isiMaks[ci],kanan-kiri);isiKiri[ci]=Math.min(isiKiri[ci],kiri);isiKanan[ci]=Math.max(isiKanan[ci],kanan);
-        if(kiri<tb.left+1.5||kanan>tb.right-1.5)o.tepi.push(nm(ci));}
+        /* `tepi` pada sel yang DIPOTONG ialah akibat langsung potongan itu, bukan cacat:
+           teks yang dieratkan memang berakhir tepat pada tepi. Lihat nota `potong` di atas. */
+        if((kiri<tb.left+1.5||kanan>tb.right-1.5)&&!potong)o.tepi.push(nm(ci));}
     }));
     ths.forEach((th,i)=>{if(!lebarKol[i]||!isiMaks[i])return;
       if(lebarKol[i]>90&&isiMaks[i]/lebarKol[i]<0.45)o.kosong.push(nm(i)+' '+Math.round(100*isiMaks[i]/lebarKol[i])+'% drp '+Math.round(lebarKol[i])+'px');

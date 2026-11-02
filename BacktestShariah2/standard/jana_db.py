@@ -437,6 +437,100 @@ def sesi_stor(path=STATUS_HARGA):
     return f'{s[:4]}-{s[4:6]}-{s[6:8]}' if len(s) == 8 and s.isdigit() else ''
 
 
+def _produksi_n(rd, ff, ii, bl, RV, reg):
+    """94 kombinasi masuk x keluar yang BENAR-BENAR diimbas setiap malam.
+
+    Populasi ini BERBEZA daripada registry Nxx di atas dan tidak boleh dicampur:
+    registry = katalog peraturan (263 baris, tidak didagangkan); produksi = kombinasi
+    `masuk`+`keluar` yang lulus empat syarat pradaftar SPEC_GRID_PENUH.md pada grid
+    penuh 1,495 sel dengan penyebut BH-FDR jujur m=1,495, dan yang kodnya ADA dalam
+    kod/kaedah/. Sumber: REVERSE/jejak_semua.csv + REVERSE/grid_penuh.csv.
+
+    Corong dikira daripada CSV, bukan ditulis tangan, supaya ia tidak boleh hanyut.
+    PENTING: s1/s2/s3 ialah syarat BEBAS yang mesti lulus SERENTAK. Kiraan bersarang
+    (688 -> 313) dan kiraan berasingan (s2 sendiri 461) ialah dua perkara berbeza;
+    kedua-duanya dilaporkan supaya bar corong tidak boleh dibaca salah.
+    """
+    J, G = rd(os.path.join(RV, 'jejak_semua.csv')), rd(os.path.join(RV, 'grid_penuh.csv'))
+    if not J or not G:
+        return None
+    B = lambda x, k: x.get(k) == 'True'
+    n1 = sum(1 for x in G if B(x, 's1_mutlak'))
+    n12 = sum(1 for x in G if B(x, 's1_mutlak') and B(x, 's2_lift'))
+    n123 = sum(1 for x in G if B(x, 's123'))
+    nfdr = sum(1 for x in G if B(x, 'lulus'))
+    s2_sendiri = sum(1 for x in G if B(x, 's2_lift'))
+    s3_sendiri = sum(1 for x in G if B(x, 's3_n'))
+    lulus = [x for x in G if B(x, 'lulus')]
+    hidup = {(x['masuk'], x['keluar']) for x in J}
+    buang = [x for x in lulus if (x['masuk'], x['keluar']) not in hidup]
+    kl_hidup = {x['keluar'] for x in J}
+    b_keluar = [x for x in buang if x['keluar'] not in kl_hidup]
+    b_rs = [x for x in buang if x['keluar'] in kl_hidup]
+    kira = {}
+    for x in J:
+        kira[x['keluar']] = kira.get(x['keluar'], 0) + 1
+    kel = {}
+    for x in J:
+        kel[x['keluarga']] = kel.get(x['keluarga'], 0) + 1
+    # Nama dan peraturan MASUK TIDAK diulang di sini: ia sudah ada sekali dalam `rows`
+    # (registry, satu sumber kebenaran standard/registry_n.py) dan dashboard mencarinya
+    # ikut `masuk`. Mengulangnya 94 kali menambah ~12 KB pada dokumen yang hadnya 256 KB,
+    # dan mewujudkan dua salinan peraturan yang sama yang boleh hanyut berasingan.
+    # Lajur `peraturan` dalam jejak_semua.csv ialah peraturan KELUAR, bukan masuk, jadi ia
+    # dinamakan `keluar_aturan` supaya tiada sesiapa membacanya sebagai peraturan masuk.
+    hil = sorted({x['masuk'] for x in J} - {x['id'] for x in reg})
+    baris = [dict(
+        pangkat=ii(x.get('pangkat')), id=x['masuk'] + x['keluar'], masuk=x['masuk'],
+        keluar=x['keluar'], kel=x.get('keluarga'), keluar_aturan=x.get('peraturan'),
+        jangkaan=ff(x.get('jangkaan_tahan')), jangkaan_latih=ff(x.get('jangkaan_latih')),
+        lift=ff(x.get('lift_tahan')), lift_latih=ff(x.get('lift_latih')),
+        n=ii(x.get('n_tahan')), menang=ff(x.get('menang'), 1),
+        untung=ff(x.get('untung'), 2), rugi=ff(x.get('rugi'), 2),
+        tanpa5=ff(x.get('tanpa5_tahan')), p=ff(x.get('p'), 6)) for x in J]
+    pos = [r for r in baris if (r['tanpa5'] or 0) > 0]
+    return dict(
+        bil=len(J), sel=len(G), masuk_unik=len({x['masuk'] for x in J}),
+        hilang_registry=hil,
+        keluar=sorted(kira.items(), key=lambda kv: -kv[1]),
+        keluarga=sorted(kel.items(), key=lambda kv: -kv[1]),
+        corong=[dict(g='Sel grid penuh (65 masuk x 23 keluar)', n=len(G), sendiri=None),
+                dict(g='S1 jangkaan mutlak > 0 pada KEDUA-DUA tingkap', n=n1, sendiri=n1),
+                dict(g='+ S2 lift > 0 pada KEDUA-DUA tingkap', n=n12, sendiri=s2_sendiri),
+                dict(g='+ S3 n_tahan >= 200', n=n123, sendiri=s3_sendiri),
+                dict(g='+ S4 BH-FDR q <= 0.05, penyebut m = ' + str(len(G)),
+                     n=nfdr, sendiri=nfdr),
+                dict(g='- keluar yang enjin tidak boleh laksana', n=nfdr - len(b_keluar),
+                     sendiri=None),
+                dict(g='- masuk yang perlukan RS (N69, N70, N120)',
+                     n=nfdr - len(buang), sendiri=None)],
+        buang_keluar=len(b_keluar), buang_rs=len(b_rs),
+        keluar_buang=sorted({x['keluar'] for x in b_keluar}),
+        tanpa5_positif=len(pos),
+        tanpa5_x13=sum(1 for r in pos if r['keluar'] == 'X13'),
+        baris=baris,
+        nota='Setiap ID ialah KOMBINASI masuk+keluar (cth N19X13), bukan kaedah berdiri '
+             'sendiri: masuk yang sama dengan keluar berbeza ialah baris berbeza, dan '
+             'grid penuh mengukur bahawa keluar yang salah MENYEMBUNYIKAN masuk yang '
+             'terbaik - N124 x X15 (+16.127%, sel terbaik dalam seluruh kajian) GAGAL '
+             'gate dalam grid jarang kerana N124 hanya pernah diuji pada X1-X4. '
+             'Konfigurasi sama bagi kesemua 94: cara C01 beli buka esok, TIADA henti '
+             '(stop = NaN, jadi kecacatan henti hari-0 mustahil secara struktur), TIADA '
+             'sasaran, TMAX 126 bar, rank U14 momentum 12-1, lorong 2 Chandelier 4xATR14 '
+             'kekal automatik seperti semua posisi lain.',
+        had='HAD WAJIB. (1) Ini jangkaan SETIAP DAGANGAN pada tingkap TAHAN 2020-2025, '
+            'BUKAN prestasi portfolio: ujian portfolio 8/40 slot lawan SPUS memberi 0/36 '
+            'lulus (CAGR 9.3-16.1%, MDD -22% hingga -63% lawan SPUS +17.95%/-26.82%), '
+            'jadi ini kohort setiap dagangan dan T4 (SPUS + tunai) kekal cadangan modal. '
+            '(2) tanpa5 POSITIF hanya pada ' + str(len(pos)) + ' daripada ' +
+            str(len(J)) + ', jadi kelebihan yang lain '
+            'hidup dalam ekor kanan dan SETUP.md terpakai sepenuhnya kepada mereka. '
+            '(3) N124 latih +3.064 lawan tahan +16.127 = jurang 5x; jangan saiz ia '
+            'seperti +16%. (4) Alam A02 tiada saham delist. (5) Kohort akan dilabel '
+            'BELUM CUKUP 3-6 bulan kerana pegangan median 36-64 hari.',
+    )
+
+
 def kaedah_n(dibina):
     """Dokumen kaedah_n/papan: registry Nxx (262 baris, 11 paksi) + hasil 371 ujian dipradaftar.
 
@@ -501,17 +595,21 @@ def kaedah_n(dibina):
                   rd(os.path.join(RV, 'cara.csv')), ff, ii, bl)
     return dict(
         dibina=dibina,
-        nota='Registry Nxx: 263 baris merentas 11 paksi (MASUK, KELUAR, CARA, URUTAN, '
-             'GABUNGAN, SAIZ, ALAM, PEGANG, IMBANG, KORELASI, INSTRUMEN). DUA populasi '
-             'ujian, unitnya BERBEZA dan ia tidak boleh dicampur: (1) 413 ujian '
+        nota='TIGA populasi dalam tab ini, unitnya BERBEZA dan ia TIDAK boleh dicampur. '
+             '(1) PRODUKSI: 94 kombinasi masuk x keluar yang diimbas setiap malam sejak '
+             '2 Nov 2026, daripada grid penuh 1,495 sel dengan penyebut BH-FDR jujur. '
+             '(2) REGISTRY: 263 baris merentas 11 paksi (MASUK, KELUAR, CARA, URUTAN, '
+             'GABUNGAN, SAIZ, ALAM, PEGANG, IMBANG, KORELASI, INSTRUMEN) - katalog '
+             'peraturan, BUKAN isyarat beli. (3) KAJIAN: (a) 413 ujian '
              'setiap-dagangan - NXX.md (280), NXX_KELUAR.md (69), GABUNGAN.md (14), '
              'SILANG_AKHIR.md (8), PORTFOLIO_N.md (36), CARA.md (6), daripadanya 10 lulus '
-             'gate akhir; (2) 724 konfigurasi portfolio dalam baris gilir E1-E6 '
+             'gate akhir; (b) 724 konfigurasi portfolio dalam baris gilir E1-E6 '
              '(PEGANG_SLOT, ALAM, INSTRUMEN, KELUAR_PORTFOLIO, KORELASI, HIERARKI) atas '
              '6,994 larian, daripadanya 161 lulus pulangan, 24 lulus risiko, dan SIFAR '
              'lulus kedua-duanya. Baris gilir ditutup 31 Okt 2026: BERHENTI-TUTUP, lihat '
              'REVERSE/KEPUTUSAN_AKHIR.md. Setiap spec DAN kod dikomit sebelum keputusan '
-             'dilihat. Rekod kajian sahaja; bukan isyarat beli.',
+             'dilihat. Nombor kajian di bawah ialah REKOD KAJIAN, bukan isyarat beli; '
+             'hanya 94 kombinasi dalam panel PRODUKSI yang benar-benar membeli.',
         rows=rows,
         gate=dict(A=dict(ujian=280, g1=52, g2=7, g3=0), B=dict(ujian=69, g1=24, g2=0, g3=0),
                   GAB=dict(ujian=14, g1=13, g2=8, g3=2), SX=dict(ujian=8, g1=8, g2=8, g3=8)),
@@ -561,6 +659,8 @@ def kaedah_n(dibina):
                      rugi=ff(r.get('rugi'), 2), tanpa5=ff(r.get('tanpa5')),
                      asas5=ff(r.get('asas5')), p=ff(r.get('p'), 6), n=ii(r.get('n_tahan')),
                      g3=bl(r.get('gate3'))) for r in X],
+        produksi=_produksi_n(rd, ff, ii, bl, RV, reg),
+        tarik=TARIK_N,
         ujian=UJ,
         skor=_skor_n(UJ),
         giliran=_giliran(rd, ff, ii),
@@ -725,6 +825,37 @@ def _giliran(rd, ff, ii):
 # Nama tiga lajur metrik bagi setiap pradaftar. Diangkat ke sini, bukan diulang pada
 # setiap baris: unitnya berbeza antara pradaftar dan papan mesti menamakannya, tetapi
 # mengulang rentetan yang sama 422 kali memakan ~21 KB daripada had dokumen db.
+# Penarikan balik 1 Nov 2026 (REVERSE/AUDIT_JEJAK_N.md). Dipaparkan pada panel yang
+# menunjukkan nombor yang ditarik, supaya nombor lama tidak boleh dibaca sebagai dakwaan
+# hidup. Nombor itu DIKEKALKAN, bukan dibuang: ia rekod apa yang pernah didakwa.
+TARIK_N = dict(
+    tarikh='1 Nov 2026',
+    fail='REVERSE/AUDIT_JEJAK_N.md',
+    tajuk='Dakwaan "silang akhir 8/8 lulus semua gate" DITARIK BALIK',
+    sebab='Penyebut BH-FDR dalam step21_silang_akhir.py ialah M_PRADAFTAR = 8 sedangkan '
+          'step18 guna 358 dan step19 guna 349. Dengan 8 baris, ambang BH = 0.05 x 8/8 = '
+          '0.05, iaitu p < 0.05 TANPA sebarang pembetulan pelbagai ujian. Pada panel yang '
+          'SAMA, N19 x X13 p=0.003576 direkod gate2 GAGAL (dinilai pada m=349) sementara '
+          'GB02_atau3 x X13 p=0.006803 direkod gate2 LULUS (dinilai pada m=8) - p yang '
+          'lebih BESAR lulus kerana penyebutnya lebih kecil. gate3 juga dilonggarkan '
+          'daripada "tanpa5 > 0" kepada "tanpa5 > asas5" selepas spec ditulis.',
+    salah=['"satu-satunya yang lulus gate0-gate3" SALAH: 8 daripada 12 baris lulus.',
+           '"satu-satunya dengan tanpa5 positif" SALAH: GB02_atau4 +2.8825 lebih tinggi, '
+           'dan ASAS sendiri +0.9118.',
+           'GB02_atau3 x X13 berpangkat 7 daripada 1,496 dalam grid penuh dan dikalahkan '
+           'oleh DUA kaki tunggalnya sendiri - kesatuan MENCAIRKAN, bukan menambah.',
+           'N19 x X13 jangkaan +11.2855% dan p 0.003576 LEBIH BAIK daripada konfigurasi '
+           'yang dihantar ke produksi pada 1 Nov.'],
+    bersih='Lapisan terjemahan kekal BERSIH: 22 lajur + 20 topeng bit-identik dengan '
+           'kajian, tiada kebocoran masa hadapan, dan stop = NaN benar-benar bermakna '
+           'tiada henti. Yang cacat ialah PENYEBUT statistik, bukan kodnya.',
+    ganti='Digantikan 2 Nov 2026 oleh grid penuh 1,495 sel dengan penyebut jujur '
+          'm = 1,495 (REVERSE/SPEC_GRID_PENUH.md, dikomit sebelum larian). Kajian ruang '
+          'MASUK tidak memberi sokongan bertahan-FDR kepada MANA-MANA konfigurasi apabila '
+          'penyebut merangkumi carian yang menghasilkannya, jadi 94 kombinasi produksi '
+          'ialah UJIAN PERTAMA yang jujur - bukan pengesahan kelebihan yang sudah diukur.',
+)
+
 METRIK_N = {
     'A': ['lift latih', 'lift tahan', 'jangkaan'],
     'B': ['lift latih', 'lift tahan', 'jangkaan'],

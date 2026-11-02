@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793495792-6a86",
-  "nombor": 162,
-  "sha256": "2fcd54e430380a255c8f9d13e489eb3913eeccb0c64b9de378d5a658fc883ab4",
-  "bait": 629301,
-  "dikemas": "2026-11-01 01:16 UTC",
-  "nota": "Kaedah N: keputusan akhir E1-E6 BERHENTI-TUTUP + baris gilir"
+  "versi_artifact": "1793597384-c19a",
+  "nombor": 164,
+  "sha256": "39ca6c93c82758d3e599d24a8fa92ef61fd621e0606403c10b2c2f0af067b03c",
+  "bait": 646677,
+  "dikemas": "2026-11-02 05:30 UTC",
+  "nota": "Tab Kaedah N -> Kombinasi N: panel 94 kombinasi produksi + corong grid penuh + penarikan balik m=8; tab Kaedah pisah keluarga M/N. Gabung ciri jalur jangkaan daripada sesi lain (v163, tidak dikomit)."
 }
