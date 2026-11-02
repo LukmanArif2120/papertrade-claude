@@ -438,7 +438,13 @@ def sesi_stor(path=STATUS_HARGA):
 
 
 def _produksi_n(rd, ff, ii, bl, RV, reg):
-    """94 kombinasi masuk x keluar yang BENAR-BENAR diimbas setiap malam.
+    """94 kombinasi masuk x keluar yang DIPILIH untuk produksi.
+
+    STATUS (semak sebelum mendakwa apa-apa): "produksi" di sini bermaksud DIPILIH dan
+    SIAP, bukan sedang berjalan. Cetusan `schedule` GitHub Actions sentiasa berjalan dari
+    cawangan LALAI, jadi imbasan malam hanya memasukkan kombinasi ini selepas kodnya
+    digabung ke `main`. Medan `hidup` di bawah dikira daripada kandungan repo sebenar
+    (bilangan fail kod/kaedah/<ID>.py yang ada), bukan ditulis tangan.
 
     Populasi ini BERBEZA daripada registry Nxx di atas dan tidak boleh dicampur:
     registry = katalog peraturan (263 baris, tidak didagangkan); produksi = kombinasi
@@ -454,6 +460,27 @@ def _produksi_n(rd, ff, ii, bl, RV, reg):
     J, G = rd(os.path.join(RV, 'jejak_semua.csv')), rd(os.path.join(RV, 'grid_penuh.csv'))
     if not J or not G:
         return None
+    # STATUS DIKIRA, BUKAN DITULIS. Panel pernah mendakwa "diimbas setiap malam sejak
+    # 2 Nov 2026" sementara `main` tiada satu pun modul Nxx dan Papertrade C tiada satu
+    # pun posisi Nxx. Dakwaan prosa hanyut; kiraan tidak. `kod` = modul yang ADA,
+    # `posisi` = posisi Nxx dalam Papertrade C, `lejar` = baris Nxx dalam Lejar Penuh.
+    # Halaman menyatakan status daripada ketiga-tiga nombor ini sahaja.
+    import glob as _glob
+    import re as _re
+    hidup = {x['masuk'] + x['keluar'] for x in J}
+    kod = sum(1 for i in hidup
+              if os.path.exists(os.path.join(BS2, 'kod', 'kaedah', i + '.py')))
+
+    def _kira(pola, medan=('kaedah', 'id')):
+        n = 0
+        for f in sorted(_glob.glob(os.path.join(BS2, *pola))):
+            for r in rd(f):
+                k = next((r[m] for m in medan if r.get(m)), '')
+                if _re.match(r'^N\d', str(k)):
+                    n += 1
+        return n
+
+    posisi, lejar_n = _kira(('papertrade', 'claude*.csv')), _kira(('lejar', '*.csv'))
     B = lambda x, k: x.get(k) == 'True'
     n1 = sum(1 for x in G if B(x, 's1_mutlak'))
     n12 = sum(1 for x in G if B(x, 's1_mutlak') and B(x, 's2_lift'))
@@ -492,6 +519,8 @@ def _produksi_n(rd, ff, ii, bl, RV, reg):
     return dict(
         bil=len(J), sel=len(G), masuk_unik=len({x['masuk'] for x in J}),
         hilang_registry=hil,
+        kod=kod, posisi=posisi, lejar=lejar_n,
+        berjalan=bool(posisi or lejar_n),
         keluar=sorted(kira.items(), key=lambda kv: -kv[1]),
         keluarga=sorted(kel.items(), key=lambda kv: -kv[1]),
         corong=[dict(g='Sel grid penuh (65 masuk x 23 keluar)', n=len(G), sendiri=None),
@@ -509,6 +538,17 @@ def _produksi_n(rd, ff, ii, bl, RV, reg):
         tanpa5_positif=len(pos),
         tanpa5_x13=sum(1 for r in pos if r['keluar'] == 'X13'),
         baris=baris,
+        status=('Modul kod ' + str(kod) + '/' + str(len(J)) + ' ADA dalam repo ini, '
+                'tetapi ' + ('ada ' + str(posisi) + ' posisi Papertrade C dan ' +
+                             str(lejar_n) + ' baris Lejar'
+                             if (posisi or lejar_n) else
+                             'SIFAR posisi Papertrade C dan SIFAR baris Lejar Penuh') +
+                '. Cetusan `schedule` GitHub Actions sentiasa berjalan dari cawangan '
+                'LALAI, jadi kombinasi ini hanya masuk imbasan malam selepas kodnya '
+                'DIGABUNG ke cawangan itu. Sehingga jurang itu ditutup, "produksi" '
+                'bermaksud DIPILIH dan DISAHKAN hujung-ke-hujung, bukan sedang berjalan '
+                '- dan nombor ini dikira daripada kandungan repo, bukan ditulis tangan, '
+                'supaya ia tidak boleh hanyut daripada kebenaran.'),
         nota='Setiap ID ialah KOMBINASI masuk+keluar (cth N19X13), bukan kaedah berdiri '
              'sendiri: masuk yang sama dengan keluar berbeza ialah baris berbeza, dan '
              'grid penuh mengukur bahawa keluar yang salah MENYEMBUNYIKAN masuk yang '
@@ -596,8 +636,10 @@ def kaedah_n(dibina):
     return dict(
         dibina=dibina,
         nota='TIGA populasi dalam tab ini, unitnya BERBEZA dan ia TIDAK boleh dicampur. '
-             '(1) PRODUKSI: 94 kombinasi masuk x keluar yang diimbas setiap malam sejak '
-             '2 Nov 2026, daripada grid penuh 1,495 sel dengan penyebut BH-FDR jujur. '
+             '(1) PRODUKSI: 94 kombinasi masuk x keluar yang DIPILIH pada 2 Nov 2026 '
+             'daripada grid penuh 1,495 sel dengan penyebut BH-FDR jujur - "produksi" '
+             'bermaksud dipilih dan siap, dan ia hanya masuk imbasan malam selepas '
+             'kodnya digabung ke cawangan lalai. '
              '(2) REGISTRY: 263 baris merentas 11 paksi (MASUK, KELUAR, CARA, URUTAN, '
              'GABUNGAN, SAIZ, ALAM, PEGANG, IMBANG, KORELASI, INSTRUMEN) - katalog '
              'peraturan, BUKAN isyarat beli. (3) KAJIAN: (a) 413 ujian '

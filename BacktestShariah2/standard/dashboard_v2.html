@@ -88,6 +88,20 @@ nav.tabs::-webkit-scrollbar{display:none}
 nav.tabs button{border:0;background:none;color:var(--muted);font-weight:600;font-size:.92rem;padding:10px 12px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
 nav.tabs button:hover{color:var(--fg-2)}
 nav.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent);background:linear-gradient(0deg,var(--accent-soft),transparent 70%)}
+/* v142 (2 Nov 2026, permintaan pengguna): tab utama jadi REL KIRI tetap di desktop (>= 1100px).
+   Nod #mainTabs yang sama dipindah oleh JS (pengendali klik kekal); telefon/tablet tidak berubah. */
+aside.rail{display:none}
+@media (min-width:1100px){
+  :root{--rel:204px}
+  aside.rail{display:block;position:fixed;left:0;top:0;bottom:0;width:var(--rel);z-index:30;background:var(--surface);border-right:1px solid var(--line);overflow-y:auto;scrollbar-width:thin;padding:14px 10px calc(16px + env(safe-area-inset-bottom,0px))}
+  aside.rail .rh{font-size:.64rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:2px 10px 9px}
+  div.wrap{padding-left:calc(var(--rel) + 20px)}
+  header.top{margin-left:calc(-1*(var(--rel) + 20px));padding-left:calc(var(--rel) + 20px)}
+  aside.rail nav.tabs{flex-direction:column;gap:3px;margin-top:0;overflow:visible}
+  aside.rail nav.tabs button{width:100%;text-align:left;border-bottom:0;border-radius:8px;padding:9px 12px;font-size:.9rem}
+  aside.rail nav.tabs button:hover{background:var(--card);color:var(--fg)}
+  aside.rail nav.tabs button[aria-selected="true"]{background:linear-gradient(90deg,var(--accent-soft),transparent),var(--card);color:var(--fg);box-shadow:inset 3px 0 0 var(--accent)}
+}
 .subbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0}
 .subbar[hidden]{display:none}
 .seg{display:inline-flex;flex-wrap:wrap;max-width:100%;background:var(--sunk);border:1px solid var(--line);border-radius:8px;padding:3px;gap:2px}
@@ -983,6 +997,7 @@ td.stc{white-space:nowrap}
 @media (min-width:761px){body.padat .tablewrap td .tra{display:none}body.padat .tablewrap td .trd{padding:1px 5px}body.padat .tablewrap td .l2bar{width:38px}}
 </style>
 
+<aside class="rail" id="rail"><div class="rh">Papan</div></aside>
 <div class="wrap">
   <header class="top">
     <div class="titlerow">
@@ -2190,9 +2205,9 @@ function renderKaedah(){
       {k:'pegang',t:KAT_LBL.pegang,tip:'kat_pegang',l:1,f:r=>katSenarai('pegang',r.pegang,r.baris&&r.baris.pegang),c:()=>'wrap lrg'},
       {k:'henti',t:KAT_LBL.henti,tip:'kat_henti',l:1,ns:1,f:r=>katSenarai('henti',r.henti,r.baris&&r.baris.henti),c:wrap}];
   el.innerHTML=`
-  <p class="headline">Katalog <b>${all.length}</b> baris aktif yang diimbas setiap malam dan dibeli maya dalam Papertrade C — <b>DUA keluarga</b>: <b>${nM}</b> <b>kaedah</b> <code>Mxx</code> (pakej lengkap daripada pedagang bernama) dan <b>${nN}</b> <b>kombinasi</b> <code>NxxXyy</code> (satu masuk × satu keluar daripada grid penuh REVERSE). Setiap baris ialah varian yang <b>sedang digunakan</b> dalam kod: dari mana asalnya, bila beli, bila jual, berapa lama pegang dan di mana henti rugi. Ketik baris untuk butiran penuh.</p>
+  <p class="headline">Katalog <b>${all.length}</b> baris dalam kod — <b>DUA keluarga</b>: <b>${nM}</b> <b>kaedah</b> <code>Mxx</code> (pakej lengkap daripada pedagang bernama) dan <b>${nN}</b> <b>kombinasi</b> <code>NxxXyy</code> (satu masuk × satu keluar daripada grid penuh REVERSE). <b>${nM}</b> kaedah <code>Mxx</code> diimbas setiap malam dan dibeli maya dalam Papertrade C; <b>${nN}</b> kombinasi <code>NxxXyy</code> <b class="neg">belum</b> — lihat panel Status dalam tab <b>Kombinasi N</b>. Setiap baris ialah varian yang ada dalam kod: dari mana asalnya, bila beli, bila jual, berapa lama pegang dan di mana henti rugi. Ketik baris untuk butiran penuh.</p>
   <div class="kpis">
-    <div class="kpi"><div class="lbl">Baris aktif</div><div class="v">${all.length}</div><div class="s"><b>${nM}</b> kaedah Mxx · <b>${nN}</b> kombinasi Nxx · ${new Set(all.map(r=>r.pencipta).filter(x=>x&&!/^tidak dinyatakan/i.test(x))).size} pencipta berbeza</div></div>
+    <div class="kpi"><div class="lbl">Baris dalam kod</div><div class="v">${all.length}</div><div class="s"><b>${nM}</b> kaedah Mxx · <b>${nN}</b> kombinasi Nxx · ${new Set(all.map(r=>r.pencipta).filter(x=>x&&!/^tidak dinyatakan/i.test(x))).size} pencipta berbeza</div></div>
     <div class="kpi"><div class="lbl" data-tip="kat_bt">Backtest / papertrade</div><div class="v">${nBt}<span class="mut" style="font-size:1rem"> / ${nPt}</span></div><div class="s">kaedah ada keputusan backtest set 431 / ada dagangan Papertrade C (${ptN} dagangan)</div></div>
     <div class="kpi"><div class="lbl" data-tip="kat_pegang">Ada had masa</div><div class="v">${tmax}</div><div class="s">${all.length-tmax} kaedah pegang sehingga isyarat keluar atau henti</div></div>
     <div class="kpi"><div class="lbl" data-tip="kat_umum">Beli</div><div class="v" style="font-size:1.25rem">Buka esok</div><div class="s">Isyarat pada harga tutup hari ini · 1 unit maya</div></div>
@@ -4401,9 +4416,9 @@ function renderKaedahN(){
      f:r=>r.hasil&&r.hasil.tanpa5!=null?`<span class="${cls(r.hasil.tanpa5)}">${sg2(r.hasil.tanpa5)}</span>`:'<span class="mut">–</span>'}];
   const gateRow=(k,t)=>{const g=gt[k]||{};return `<tr><td class="l">${t}</td><td>${g.ujian||0}</td><td>${g.g1||0}</td><td>${g.g2||0}</td><td class="${g.g3?'pos':''}"><b>${g.g3||0}</b></td></tr>`;};
   el.innerHTML=`
-  <p class="headline"><b>${PR?nf(PR.bil):'–'}</b> <b>kombinasi</b> <code>masuk</code>×<code>keluar</code> diimbas setiap malam sejak 2 Nov 2026 — itu bahagian <b>produksi</b>, dan ia satu-satunya bahagian tab ini yang membeli. Selebihnya ialah <b>rekod kajian</b>: <b>${all.length}</b> baris katalog merentas <b>11 paksi</b> (${nD} peraturan masuk), <b>${SK.ujian}</b> ujian setiap-dagangan dan <b>${AK?nf(AK.konfig):'–'}</b> konfigurasi portfolio (<b class="neg">${AK?AK.T1+AK.T3:'–'}</b> mencapai sasaran). <b>Tiga populasi, tiga unit — jangan campur.</b></p>
+  <p class="headline"><b>${PR?nf(PR.bil):'–'}</b> <b>kombinasi</b> <code>masuk</code>×<code>keluar</code> dipilih pada 2 Nov 2026 — itu bahagian <b>produksi</b>, dan ia satu-satunya bahagian tab ini yang akan membeli.${PR&&!PR.berjalan?` <b class="neg">Ia BELUM berjalan:</b> ${PR.posisi} posisi Papertrade C dan ${PR.lejar} baris Lejar setakat ini.`:''} Selebihnya ialah <b>rekod kajian</b>: <b>${all.length}</b> baris katalog merentas <b>11 paksi</b> (${nD} peraturan masuk), <b>${SK.ujian}</b> ujian setiap-dagangan dan <b>${AK?nf(AK.konfig):'–'}</b> konfigurasi portfolio (<b class="neg">${AK?AK.T1+AK.T3:'–'}</b> mencapai sasaran). <b>Tiga populasi, tiga unit — jangan campur.</b></p>
   <div class="kpis">
-    <div class="kpi"><div class="lbl">Kombinasi produksi</div><div class="v ${PR?'pos':''}">${PR?PR.bil:'–'}</div><div class="s">${PR?`${PR.masuk_unik} masuk × ${PR.keluar.length} keluar · diimbas setiap malam`:'belum ditolak'}</div></div>
+    <div class="kpi"><div class="lbl">Kombinasi dipilih</div><div class="v ${PR&&PR.berjalan?'pos':''}">${PR?PR.bil:'–'}</div><div class="s">${PR?`${PR.masuk_unik} masuk × ${PR.keluar.length} keluar · ${PR.berjalan?'<b class="pos">sedang diimbas</b>':'<b class="neg">belum diimbas</b>'}`:'belum ditolak'}</div></div>
     <div class="kpi"><div class="lbl">Baris registry</div><div class="v">${all.length}</div><div class="s">${nD} masuk · 11 paksi · katalog, bukan isyarat</div></div>
     <div class="kpi"><div class="lbl" data-tip="kn_gate">Lulus gate kajian</div><div class="v ${SK.lulus?'pos':'neg'}">${SK.peratus==null?'–':fx(SK.peratus,1)+'%'}</div><div class="s">${SK.lulus} daripada ${SK.ujian} ujian dipradaftar</div></div>
     <div class="kpi"><div class="lbl" data-tip="kn_jangkaan">Terbaik diukur</div><div class="v">${PR&&PR.baris.length?sg2(PR.baris[0].jangkaan):(top?sg2(top.jangkaan):'–')}</div><div class="s">${PR&&PR.baris.length?`${esc(PR.baris[0].id)} · setiap dagangan · tingkap tahan`:''}</div></div>
@@ -4435,13 +4450,14 @@ function renderKaedahN(){
       {k:'tanpa5',t:'Tanpa 5%',tip:'kn_ekor',v:r=>r.tanpa5,
        f:r=>`<b class="${cls(r.tanpa5)}">${sg2(r.tanpa5)}</b>`},
       {k:'p',t:'p',hc:'kp-lo',v:r=>r.p,f:r=>r.p==null?'<span class="mut">–</span>':(r.p<0.001?r.p.toExponential(1):fx(r.p,4))}];
-    return `<div class="panel"><div class="panel-h"><h2>Produksi: ${PR.bil} kombinasi yang benar-benar diimbas</h2><span class="sub">sejak 2 Nov 2026 · grid penuh ${nf(PR.sel)} sel · penyebut BH-FDR jujur m = ${nf(PR.sel)}</span></div>
+    return `<div class="panel"><div class="panel-h"><h2>Produksi: ${PR.bil} kombinasi ${PR.berjalan?'yang diimbas':'yang BELUM diimbas'}</h2><span class="sub">dipilih 2 Nov 2026 · grid penuh ${nf(PR.sel)} sel · penyebut BH-FDR jujur m = ${nf(PR.sel)}</span></div>
+    <p class="note" style="border:1px solid var(--${PR.berjalan?'line':'neg'})"><b${PR.berjalan?'':' class="neg"'}>Status:</b> ${esc(PR.status||'')}</p>
     <p class="kesimpulan">Setiap ID ialah <b>kombinasi</b> <code>masuk</code>+<code>keluar</code> — cth <code>N19X13</code> = masuk <code>N19</code> dengan keluar <code>X13</code> — dan <b>bukan</b> kaedah berdiri sendiri seperti <code>Mxx</code>. Masuk yang sama dengan keluar berbeza ialah <b>baris berbeza</b>, kerana grid penuh mengukur bahawa <b>keluar yang salah menyembunyikan masuk yang terbaik</b>: <code>N124×X15</code> (+16.127%, sel terbaik dalam seluruh kajian) <b>gagal</b> gate dalam grid jarang semata-mata kerana <code>N124</code> hanya pernah diuji pada <code>X1</code>–<code>X4</code>.</p>
     <div class="kpis" style="margin-bottom:12px">
       <div class="kpi"><div class="lbl">Masuk × keluar</div><div class="v">${PR.masuk_unik}<span class="mut" style="font-size:1rem"> × ${PR.keluar.length}</span></div><div class="s">${PR.keluar.map(([k,n])=>`${k} ${n}`).join(' · ')}</div></div>
       <div class="kpi"><div class="lbl" data-tip="kn_ekor">Tanpa 5% POSITIF</div><div class="v ${PR.tanpa5_positif?'pos':'neg'}">${PR.tanpa5_positif}<span class="mut" style="font-size:1rem">/${PR.bil}</span></div><div class="s">${PR.tanpa5_x13} daripada ${PR.tanpa5_positif} memakai <b>X13</b> · ${PR.bil-PR.tanpa5_positif} yang lain hidup dalam ekor kanan</div></div>
       <div class="kpi"><div class="lbl">Keluarga masuk</div><div class="v" style="font-size:1.25rem">${PR.keluarga.length}</div><div class="s">${PR.keluarga.map(([k,n])=>`${k} ${n}`).join(' · ')}</div></div>
-      <div class="kpi"><div class="lbl" data-tip="dua_lorong">Konfigurasi sama semua</div><div class="v" style="font-size:1.1rem">C01 · tiada henti</div><div class="s">beli buka esok · stop = NaN · tiada sasaran · TMAX 126 · rank U14 · lorong 2 Chandelier kekal</div></div>
+      <div class="kpi"><div class="lbl" data-tip="dua_lorong">Konfigurasi sama semua</div><div class="v" style="font-size:1.1rem">C01 · tiada henti</div><div class="s">beli buka esok · stop = NaN · tiada sasaran · TMAX 126 · rank U14 · lorong 2 Chandelier seperti semua posisi</div></div>
     </div>
     <div class="corong"><div class="crg-h">Corong daripada ${nf(PR.sel)} sel kepada ${PR.bil} kombinasi — dikira daripada CSV keputusan, bukan ditulis tangan</div>
     ${PR.corong.map(c=>`<div class="crg" style="cursor:default"><span>${esc(c.g)}</span><span class="t"><i style="width:${(100*c.n/PR.sel).toFixed(1)}%"></i></span><span class="nm"><b>${nf(c.n)}</b>${c.sendiri!=null&&c.sendiri!==c.n?`<span class="vv">sendiri ${nf(c.sendiri)}</span>`:''}</span></div>`).join('')}</div>
@@ -4624,6 +4640,10 @@ function muatLajur(){
     if(sor.length)w.insertAdjacentHTML('afterend',`<p class="sbn-nota">Lajur disembunyi kerana skrin tidak cukup lebar: ${esc(sor.join(', '))}. ${t.querySelector('tbody tr[tabindex]')?'Ketik baris untuk butiran penuh, atau besarkan tetingkap.':'Besarkan tetingkap untuk melihatnya.'}</p>`);
   });
 }
+/* v142: rel tab kiri (desktop >= 1100px) — nod #mainTabs dipindah, bukan diduplikasi */
+{const rl=$('#rail'),hdr=document.querySelector('header.top'),sb=$('#subBar'),nv=$('#mainTabs'),mq=window.matchMedia('(min-width:1100px)');
+  const pindah=()=>{if(!nv||!rl||!hdr)return;if(mq.matches){if(nv.parentElement!==rl)rl.appendChild(nv);}else if(nv.parentElement!==hdr)hdr.insertBefore(nv,sb);};
+  pindah();try{mq.addEventListener('change',pindah);}catch(e){try{mq.addListener(pindah);}catch(e2){}}}
 {const hd=document.querySelector('header.top');const set=()=>document.documentElement.style.setProperty('--hdr',(hd?hd.offsetHeight:0)+'px');set();
   try{new ResizeObserver(set).observe(hd);}catch(e){}}
 let rzm;window.addEventListener('resize',()=>{clearTimeout(rzm);rzm=setTimeout(muatLajur,150);});

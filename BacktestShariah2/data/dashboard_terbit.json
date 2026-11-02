@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793597384-c19a",
-  "nombor": 164,
-  "sha256": "39ca6c93c82758d3e599d24a8fa92ef61fd621e0606403c10b2c2f0af067b03c",
-  "bait": 646677,
-  "dikemas": "2026-11-02 05:30 UTC",
-  "nota": "Tab Kaedah N -> Kombinasi N: panel 94 kombinasi produksi + corong grid penuh + penarikan balik m=8; tab Kaedah pisah keluarga M/N. Gabung ciri jalur jangkaan daripada sesi lain (v163, tidak dikomit)."
+  "versi_artifact": "1793598411-c57c",
+  "nombor": 166,
+  "sha256": "5507e847433f972cfc763babd1bb4f69a93b2fb05297e3b6798ae421a20ca5d9",
+  "bait": 649056,
+  "dikemas": "2026-11-02 05:47 UTC",
+  "nota": "Betulkan status: 94 kombinasi DIPILIH tetapi BELUM diimbas (main tiada modulnya; 0 posisi, 0 baris Lejar). Status kini DIKIRA daripada bilangan modul + posisi + Lejar. Gabung rel tab kiri v142 daripada sesi lain."
 }
