@@ -490,3 +490,8 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Direkod 774 (316 saham; belian semula 61; fail claude_98.csv); dilangkau 22. Harga: buka sementara yfinance 10:21 NY.
 - Dilangkau: STM M02: buka 47.58 <= henti 49.40; DIOD M02: buka 82.10 <= henti 86.93; GKOS M06: buka 242.42 > buka_maks 197.34; ESCA M06: buka 20.14 > buka_maks 20.05; TTAN M08: buka 81.30 > buka_maks 80.48; INTU M08: buka 339.77 > buka_maks 333.65; FSLY M14: buka 24.46 <= henti 24.78; ON M14: buka 72.71 <= henti 73.80; QCOM M18: buka 174.82 <= henti 179.47; TECK M20: buka 61.63 <= henti 61.65; RGEN M21: buka 175.37 <= henti 185.28; QCOM M25: buka 174.82 <= henti 177.68; TWLO M28: buka 186.59 <= henti 230.40; CRSR M55: buka 13.13 <= henti 13.21; QCOM M66: buka 174.82 <= henti 175.48; AMD M70: buka 508.51 <= henti 560.57; AAPL M102: buka 346.68 <= henti 347.30; QCOM M116: isyarat batal pada buka (peraturan kaedah); XMTR M123: buka 97.04 <= henti 98.00; SNN M150: isyarat batal pada buka (peraturan kaedah); EMR M153: isyarat batal pada buka (peraturan kaedah); GSAT M156: isyarat batal pada buka (peraturan kaedah).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-11-03 04:53 MYT — GitHub Actions: beli maya 2026-11-02 (isyarat -)
+- tak beli: senarai_beli belum dikemas kini bagi isyarat 2026-10-30 (tarikh_isyarat dalam fail: ['2026-10-29'])
+- Dilangkau: tiada.
+- Tiada order. Tiada wang sebenar.
