@@ -69,6 +69,38 @@ def _supertrend(h, l, c, atr, mult=3.0):
     return pd.Series(arah, index=c.index)
 
 
+def _psar(h, l, af0=0.02, afm=0.2, afs=0.02):
+    """Arah PSAR: +1 jika PSAR di bawah harga, -1 jika di atas. ind.py:_psar verbatim."""
+    hh = h.to_numpy('float64')
+    ll = l.to_numpy('float64')
+    n = hh.size
+    arah = np.full(n, np.nan)
+    if n < 2:
+        return pd.Series(arah, index=h.index)
+    naik = hh[1] >= hh[0]
+    sar = ll[0] if naik else hh[0]
+    ep = hh[0] if naik else ll[0]
+    af = af0
+    for i in range(1, n):
+        sar = sar + af * (ep - sar)
+        if naik:
+            if ll[i] < sar:
+                naik, sar, ep, af = False, ep, ll[i], af0
+            else:
+                if hh[i] > ep:
+                    ep, af = hh[i], min(af + afs, afm)
+                sar = min(sar, ll[i - 1], ll[i])
+        else:
+            if hh[i] > sar:
+                naik, sar, ep, af = True, ep, hh[i], af0
+            else:
+                if ll[i] < ep:
+                    ep, af = ll[i], min(af + afs, afm)
+                sar = max(sar, hh[i - 1], hh[i])
+        arah[i] = 1 if naik else -1
+    return pd.Series(arah, index=h.index)
+
+
 def indikator(g):
     """Lajur yang N19/N20/N37/N115 dan keluar X13 perlukan, formula kajian verbatim."""
     o, h, l, c, v = g.open, g.high, g.low, g.close, g.volume
@@ -167,6 +199,61 @@ def indikator(g):
     # j_52w_tinggi - ind.py:258,270
     t52 = c.rolling(252, min_periods=252).max()
     d['j_52w_tinggi'] = (c / t52.replace(0, np.nan) - 1.0) * 100.0
+
+    # purata bergerak tambahan - ind.py:124-128, step18.tambahan:54-56
+    d['ema9'] = _ema(c, 9)
+    d['ema10'] = _ema(c, 10)
+    d['ema50'] = _ema(c, 50)
+    d['ma10'] = c.rolling(10).mean()
+    d['atr14'] = atr14
+    d['j_ma200'] = (c / d['ma200'].replace(0, np.nan) - 1.0) * 100.0
+    d['cerun_ema21'] = (d['ema21'] / d['ema21'].shift(10).replace(0, np.nan) - 1.0) * 100.0
+
+    # macd - ind.py:153-155
+    macd = _ema(c, 12) - _ema(c, 26)
+    d['macd'] = macd
+    d['macd_sig'] = _ema(macd, 9)
+
+    # bb_squeeze - ind.py:191-195
+    bb_lebar = (bb_a - bb_b) / (m20 + EPS) * 100.0
+    d['bb_squeeze'] = (bb_lebar <= bb_lebar.rolling(120, min_periods=120).min()
+                       + EPS).astype('float64')
+    d.loc[bb_lebar.rolling(120, min_periods=120).min().isna(), 'bb_squeeze'] = np.nan
+
+    # cmf20 - ind.py:219 (mfv = ind.py:216)
+    mfv = (((c - l) - (h - c)) / ((h - l) + EPS)) * v
+    d['cmf20'] = (mfv.rolling(20, min_periods=20).sum()
+                  / (v.rolling(20, min_periods=20).sum() + EPS))
+
+    # psar + ichimoku + donchian20 - ind.py:223-235
+    d['psar_arah'] = _psar(h, l)
+    tenkan = (h.rolling(9, min_periods=9).max() + l.rolling(9, min_periods=9).min()) / 2.0
+    kijun = (h.rolling(26, min_periods=26).max() + l.rolling(26, min_periods=26).min()) / 2.0
+    sa = ((tenkan + kijun) / 2.0).shift(26)
+    sb = ((h.rolling(52, min_periods=52).max()
+           + l.rolling(52, min_periods=52).min()) / 2.0).shift(26)
+    d['atas_awan'] = ((c > sa) & (c > sb)).astype('float64')
+    d.loc[sb.isna(), 'atas_awan'] = np.nan
+    d['tenkan_atas'] = (tenkan > kijun).astype('float64')
+    d.loc[kijun.isna(), 'tenkan_atas'] = np.nan
+    dc20 = h.rolling(20, min_periods=20).max().shift(1)
+    d['donchian20'] = (c > dc20).astype('float64')
+    d.loc[dc20.isna(), 'donchian20'] = np.nan
+
+    # bullish_engulfing - ind.py:248-249
+    d['bullish_engulfing'] = ((c > o) & (c.shift(1) < o.shift(1)) & (c >= o.shift(1))
+                              & (o <= c.shift(1))).astype('float64')
+
+    # breakout_52w - ind.py:258-260
+    t52c = c.rolling(252, min_periods=252).max()
+    d['breakout_52w'] = (c >= t52c - EPS).astype('float64')
+
+    # step18.tambahan:60-67
+    d['tinggi_sepanjang'] = c.cummax().shift(1)
+    d['tinggi_52w'] = h.rolling(252, min_periods=200).max().shift(1)
+    julat = (h - l).replace(0, np.nan)
+    d['pos_buka'] = (o - l) / julat
+    d['pos_tutup'] = (c - l) / julat
 
     # step18_nxx.tambahan: tinggi20, gap, turun_4d5
     d['tinggi20'] = h.rolling(20).max().shift(1)
@@ -363,6 +450,116 @@ def n65(f):
     return (f.gap_and_go > 0) & (f.vol_n50 >= 1.5) & (f.j_52w_tinggi >= -5.0)
 
 
+# ---------- 21 topeng tambahan bagi senarai 95 (step18_nxx.topeng verbatim) ----------
+def n07(f, g):
+    """Hari PERTAMA `ma10 > ma20 > ma50`."""
+    t = (f.ma10 > f.ma20) & (f.ma20 > f.ma50)
+    lalu = (f.ma10.shift(1) > f.ma20.shift(1)) & (f.ma20.shift(1) > f.ma50.shift(1))
+    return t & ~lalu
+
+
+def n08(f, g):
+    """`tutup > ema20 DAN (tutup - ema20) <= 1.5 x atr14`."""
+    return (g.close > f.ema20) & ((g.close - f.ema20) <= 1.5 * f.atr14)
+
+
+def n09(f, g):
+    """`tutup > ema10 DAN tutup[-1] < ema10[-1] DAN tutup > ema50`."""
+    return ((g.close > f.ema10) & (g.close.shift(1) < f.ema10.shift(1))
+            & (g.close > f.ema50))
+
+
+def n27(f):
+    """`atas_awan DAN tenkan_atas` (Ichimoku)."""
+    return (f.atas_awan > 0) & (f.tenkan_atas > 0)
+
+
+def n29(f, g):
+    """`psar_arah > 0 DAN tutup > ma50`."""
+    return (f.psar_arah > 0) & (g.close > f.ma50)
+
+
+def n33(f):
+    """`donchian20 pecah DAN j_ma200 > 0`."""
+    return (f.donchian20 > 0) & (f.j_ma200 > 0)
+
+
+def n35(f):
+    """`breakout_52w`."""
+    return f.breakout_52w > 0
+
+
+def n39(f):
+    """`nr7[-1] DAN donchian20`."""
+    return (f.nr7.shift(1) > 0) & (f.donchian20 > 0)
+
+
+def n41(f, g):
+    """`cmf20 > 0 DAN tutup > ema20`."""
+    return (f.cmf20 > 0) & (g.close > f.ema20)
+
+
+def n43(f, g):
+    """`tutup[-1] < ema9[-1] DAN tutup > ema9 DAN tutup > ma50`."""
+    return ((g.close.shift(1) < f.ema9.shift(1)) & (g.close > f.ema9)
+            & (g.close > f.ma50))
+
+
+def n45(f, g):
+    """`tutup > ema21 DAN cerun_ema21 > 0 DAN julat10 < julat20`."""
+    return (g.close > f.ema21) & (f.cerun_ema21 > 0) & (f.julat10 < f.julat20)
+
+
+def n47(f, g):
+    """`nr7 DAN ema9 > ema21 DAN tutup > ema21`."""
+    return (f.nr7 > 0) & (f.ema9 > f.ema21) & (g.close > f.ema21)
+
+
+def n48(f, g):
+    """`inside_day[-1] DAN tutup > tinggi[-1]`."""
+    return (f.inside_day.shift(1) > 0) & (g.close > g.high.shift(1))
+
+
+def n51(f):
+    """`bb_squeeze DAN supertrend > 0`."""
+    return (f.bb_squeeze > 0) & (f.supertrend > 0)
+
+
+def n54(f):
+    """`supertrend > 0 DAN rsi14 > 50`."""
+    return (f.supertrend > 0) & (f.rsi14 > 50)
+
+
+def n57(f, g):
+    """`adx14 > 20 DAN adx14[-1] <= 20 DAN tutup > ma50`."""
+    return (f.adx14 > 20) & (f.adx14.shift(1) <= 20) & (g.close > f.ma50)
+
+
+def n66(f, g):
+    """`tutup > 1.01 x tinggi_52w[-1]`."""
+    return g.close > 1.01 * f.tinggi_52w
+
+
+def n68(f, g):
+    """`bullish_engulfing DAN tutup > ema21`."""
+    return (f.bullish_engulfing > 0) & (g.close > f.ema21)
+
+
+def n74(f):
+    """`macd > macd_sig`."""
+    return f.macd > f.macd_sig
+
+
+def n80(f, g):
+    """`tutup >= tutup tertinggi sepanjang masa`."""
+    return g.close >= f.tinggi_sepanjang
+
+
+def n113(f):
+    """Buka dalam 20% BAWAH julat hari DAN tutup dalam 20% ATAS julat."""
+    return (f.pos_buka <= 0.2) & (f.pos_tutup >= 0.8)
+
+
 # ---------- keluar (lorong 1) ----------
 def x13(f):
     """X13 - keluar bila rsi14 > 70; enjin menjual pada buka esok. Keluar TERBAIK diukur
@@ -436,6 +633,57 @@ KELUAR_FN = {'X13': lambda f, g: x13(f), 'X14': lambda f, g: x14(f),
              # IALAH X15, dan ia berjalan automatik pada setiap posisi. Jadi kohort X15
              # dikod TANPA keluar kaedah dan lorong 2 ialah keluarnya.
              'X15': None}
+
+
+# Peta nama topeng -> fungsi, supaya `ujian/test_nxx_sepadan.py` boleh menguji pariti
+# SETIAP topeng terhadap `step18_nxx.topeng()` tanpa transkripsi tangan (audit F6).
+TOPENG_FN = {
+    'N06': lambda f, g: n06(f, g),
+    'N07': lambda f, g: n07(f, g),
+    'N08': lambda f, g: n08(f, g),
+    'N09': lambda f, g: n09(f, g),
+    'N16': lambda f, g: n16(f),
+    'N19': lambda f, g: n19(f),
+    'N22': lambda f, g: n22(f),
+    'N24': lambda f, g: n24(f),
+    'N25': lambda f, g: n25(f, g),
+    'N27': lambda f, g: n27(f),
+    'N28': lambda f, g: n28(f),
+    'N29': lambda f, g: n29(f, g),
+    'N31': lambda f, g: n31(f),
+    'N33': lambda f, g: n33(f),
+    'N35': lambda f, g: n35(f),
+    'N36': lambda f, g: n36(f),
+    'N37': lambda f, g: n37(f),
+    'N38': lambda f, g: n38(f),
+    'N39': lambda f, g: n39(f),
+    'N40': lambda f, g: n40(f, g),
+    'N41': lambda f, g: n41(f, g),
+    'N42': lambda f, g: n42(f, g),
+    'N43': lambda f, g: n43(f, g),
+    'N45': lambda f, g: n45(f, g),
+    'N47': lambda f, g: n47(f, g),
+    'N48': lambda f, g: n48(f, g),
+    'N50': lambda f, g: n50(f, g),
+    'N51': lambda f, g: n51(f),
+    'N53': lambda f, g: n53(f),
+    'N54': lambda f, g: n54(f),
+    'N55': lambda f, g: n55(f),
+    'N56': lambda f, g: n56(f),
+    'N57': lambda f, g: n57(f, g),
+    'N64': lambda f, g: n64(f),
+    'N65': lambda f, g: n65(f),
+    'N66': lambda f, g: n66(f, g),
+    'N68': lambda f, g: n68(f, g),
+    'N73': lambda f, g: n73(f, g),
+    'N74': lambda f, g: n74(f),
+    'N75': lambda f, g: n75(f),
+    'N76': lambda f, g: n76(f, g),
+    'N80': lambda f, g: n80(f, g),
+    'N113': lambda f, g: n113(f),
+    'N119': lambda f, g: n119(g),
+    'N124': lambda f, g: n124(f),
+}
 
 
 def pasang(g, masuk, f=None, nama_rank=None, keluar='X13'):

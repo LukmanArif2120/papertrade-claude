@@ -1,7 +1,7 @@
-"""N37X36 = N37 x X36 — pangkat 16/40 jejak grid penuh.
+"""N37X36 = N37 x X36 — pangkat 16/94 jejak grid penuh.
 
 Pradaftar `REVERSE/SPEC_GRID_PENUH.md` · keputusan `REVERSE/GRID_PENUH.md` ·
-senarai `REVERSE/jejak40.csv`
+senarai `REVERSE/jejak_semua.csv`
 
 MASUK  : gap_and_go
 KELUAR : lorong 1 = X36 (keluar selepas DUA tutup bawah ma50)
@@ -12,7 +12,7 @@ URUTAN : rank = U14 momentum 12-1
 DIUKUR pada grid penuh 1,495 sel, penyebut BH-FDR JUJUR m = 1,495:
   jangkaan latih +1.839%  tahan +4.145%  ·  lift latih +1.429  tahan +3.253
   menang 36.9%  untung +31.39%  rugi -11.76%  n tahan 19,652  p 0.00000
-  tanpa5 -3.114%  -> NEGATIF: kelebihan hidup dalam ekor kanan, SETUP.md terpakai
+  tanpa5 -3.114%  -> NEGATIF: hidup dalam ekor kanan, SETUP.md terpakai
 
 HAD: jangkaan SETIAP DAGANGAN, bukan prestasi portfolio.
 """

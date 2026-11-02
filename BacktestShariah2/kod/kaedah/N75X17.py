@@ -1,7 +1,7 @@
-"""N75X17 = N75 x X17 — pangkat 13/40 jejak grid penuh.
+"""N75X17 = N75 x X17 — pangkat 13/94 jejak grid penuh.
 
 Pradaftar `REVERSE/SPEC_GRID_PENUH.md` · keputusan `REVERSE/GRID_PENUH.md` ·
-senarai `REVERSE/jejak40.csv`
+senarai `REVERSE/jejak_semua.csv`
 
 MASUK  : rsi14 < 40
 KELUAR : lorong 1 = X17 (keluar bila adx14 < 20)
@@ -12,7 +12,7 @@ URUTAN : rank = U14 momentum 12-1
 DIUKUR pada grid penuh 1,495 sel, penyebut BH-FDR JUJUR m = 1,495:
   jangkaan latih +1.973%  tahan +4.526%  ·  lift latih +1.235  tahan +2.670
   menang 56.0%  untung +16.69%  rugi -10.93%  n tahan 861,071  p 0.00001
-  tanpa5 -1.484%  -> NEGATIF: kelebihan hidup dalam ekor kanan, SETUP.md terpakai
+  tanpa5 -1.484%  -> NEGATIF: hidup dalam ekor kanan, SETUP.md terpakai
 
 HAD: jangkaan SETIAP DAGANGAN, bukan prestasi portfolio.
 """

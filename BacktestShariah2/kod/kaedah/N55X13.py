@@ -1,7 +1,7 @@
-"""N55X13 = N55 x X13 — pangkat 14/40 jejak grid penuh.
+"""N55X13 = N55 x X13 — pangkat 14/94 jejak grid penuh.
 
 Pradaftar `REVERSE/SPEC_GRID_PENUH.md` · keputusan `REVERSE/GRID_PENUH.md` ·
-senarai `REVERSE/jejak40.csv`
+senarai `REVERSE/jejak_semua.csv`
 
 MASUK  : bb_pctb < 20 DAN rsi14 > 40 DAN adx14 > 20
 KELUAR : lorong 1 = X13 (keluar bila rsi14 > 70)
@@ -12,7 +12,7 @@ URUTAN : rank = U14 momentum 12-1
 DIUKUR pada grid penuh 1,495 sel, penyebut BH-FDR JUJUR m = 1,495:
   jangkaan latih +3.475%  tahan +4.449%  ·  lift latih +0.770  tahan +0.098
   menang 64.6%  untung +18.54%  rugi -21.29%  n tahan 113,407  p 0.00251
-  tanpa5 +1.115%  -> POSITIF: kelebihan tidak bergantung ekor kanan
+  tanpa5 +1.115%  -> POSITIF: tidak bergantung ekor kanan
 
 HAD: jangkaan SETIAP DAGANGAN, bukan prestasi portfolio.
 """

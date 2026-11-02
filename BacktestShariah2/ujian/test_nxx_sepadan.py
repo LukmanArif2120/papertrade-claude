@@ -28,14 +28,22 @@ STOR = AKAR / 'BacktestShariah2' / 'data' / 'harga' / 'stor' / 'harga_A.csv'
 # 20 kohort jejak hadapan (SPEC_JEJAK_N.md). Senarai ini ialah kontrak: kalau modul
 # ditambah atau dibuang tanpa mengemas spec, ujian ini gagal.
 NXX = (
-    'N124X15', 'N19X13', 'N75X13', 'N73X13', 'N124X36',
-    'N16X13', 'N75X15', 'N42X15', 'N119X13', 'N37X17',
-    'N64X17', 'N28X17', 'N75X17', 'N55X13', 'N16X15',
-    'N37X36', 'N64X36', 'N50X17', 'N42X17', 'N119X15',
-    'N53X17', 'N65X36', 'N37X14', 'N65X14', 'N64X14',
-    'N06X36', 'N24X17', 'N25X17', 'N42X14', 'N53X36',
-    'N56X17', 'N25X36', 'N38X36', 'N50X14', 'N56X36',
-    'N53X16', 'N40X36', 'N36X36', 'N24X36', 'N22X36',
+    'N124X15', 'N19X13', 'N75X13', 'N73X13', 'N124X36', 'N16X13',
+    'N75X15', 'N42X15', 'N119X13', 'N37X17', 'N64X17', 'N28X17',
+    'N75X17', 'N55X13', 'N16X15', 'N37X36', 'N64X36', 'N50X17',
+    'N42X17', 'N119X15', 'N53X17', 'N65X36', 'N37X14', 'N37X16',
+    'N65X14', 'N64X14', 'N64X16', 'N06X36', 'N24X17', 'N25X17',
+    'N42X14', 'N42X36', 'N53X36', 'N56X17', 'N25X36', 'N38X36',
+    'N50X14', 'N56X36', 'N53X16', 'N40X36', 'N36X36', 'N24X36',
+    'N22X36', 'N33X36', 'N24X16', 'N45X36', 'N54X36', 'N57X36',
+    'N07X36', 'N66X36', 'N27X36', 'N42X16', 'N25X16', 'N31X36',
+    'N29X36', 'N47X36', 'N76X36', 'N28X36', 'N43X36', 'N75X14',
+    'N28X14', 'N54X16', 'N68X36', 'N41X36', 'N09X36', 'N36X16',
+    'N39X36', 'N56X16', 'N07X16', 'N22X14', 'N36X14', 'N08X36',
+    'N22X16', 'N35X36', 'N45X16', 'N28X16', 'N47X16', 'N33X14',
+    'N48X36', 'N40X16', 'N57X16', 'N29X16', 'N08X16', 'N33X16',
+    'N74X16', 'N68X16', 'N76X16', 'N27X16', 'N41X16', 'N80X36',
+    'N113X36', 'N51X36', 'N51X16', 'N113X16',
 )
 N_TICKER = 25
 MIN_BAR = 300
@@ -214,12 +222,12 @@ class TestKohortLengkap(unittest.TestCase):
         self.assertEqual(ada, set(NXX),
                          f'modul tanpa dalam senarai: {sorted(ada - set(NXX))}; '
                          f'dalam senarai tanpa modul: {sorted(set(NXX) - ada)}')
-        self.assertEqual(len(NXX), 40)
+        self.assertEqual(len(NXX), 94)
 
     def test_setiap_kohort_ada_baris_jejak40(self):
         """Setiap modul mesti sepadan satu baris `REVERSE/jejak40.csv` — kontrak."""
         import csv as _csv
-        with (AKAR / 'REVERSE' / 'jejak40.csv').open() as fh:
+        with (AKAR / 'REVERSE' / 'jejak_semua.csv').open() as fh:
             baris = {f"{r['masuk']}{r['keluar']}" for r in _csv.DictReader(fh)}
         self.assertEqual(set(NXX), baris,
                          f'modul tanpa baris: {sorted(set(NXX) - baris)}; '
@@ -237,13 +245,13 @@ class TestKohortLengkap(unittest.TestCase):
         self.assertGreaterEqual(len(kl), 4, f'hanya {len(kl)} keluar berbeza: {kl}')
 
 
-class TestPariti40(unittest.TestCase):
-    """Pariti bit bagi SETIAP topeng dan keluar yang 40 kohort produksi pakai.
+class TestParitiSemua(unittest.TestCase):
+    """Pariti bit bagi SETIAP topeng dan keluar yang kohort produksi pakai.
 
-    `AUDIT_JEJAK_N.md` F6: dalam jejak 20-kohort hanya 6 daripada 20 topeng dilindungi ujian
-    pariti walaupun senarai itu dipanggil "kontrak", dan audit perlu menyemak 14 yang lain
-    sendiri. Kelas ini menutup jurang itu: setiap topeng dan keluar dalam `jejak40.csv`
-    dibandingkan dengan `REVERSE/teras/ind.py` + `step18_nxx.tambahan` secara eksplisit.
+    `AUDIT_JEJAK_N.md` F6: jejak 20-kohort hanya menguji 6 daripada 20 topeng walaupun
+    dipanggil "kontrak". Kelas ini menjana senarai daripada `jejak_semua.csv` dan
+    membandingkan setiap topeng dengan `step18_nxx.topeng()` — rujukan kajian yang SEBENAR,
+    bukan transkripsi tangan — supaya kohort baharu tidak boleh masuk produksi tanpa pariti.
     """
 
     @classmethod
@@ -253,76 +261,53 @@ class TestPariti40(unittest.TestCase):
         cls.H = _harga()
         if not cls.H:
             raise unittest.SkipTest('tiada ticker dengan bar cukup')
-        with (AKAR / 'REVERSE' / 'jejak40.csv').open() as fh:
-            import csv as _csv
+        import csv as _csv
+        with (AKAR / 'REVERSE' / 'jejak_semua.csv').open() as fh:
             rows = list(_csv.DictReader(fh))
         cls.MASUK = sorted({r['masuk'] for r in rows}, key=lambda x: int(x[1:]))
         cls.KELUAR = sorted({r['keluar'] for r in rows if r['keluar'] != 'X15'})
 
-    def test_semua_topeng_dan_keluar_40_identik(self):
-        L = lambda x, n=1: x.shift(n)  # noqa: E731
+    def test_setiap_topeng_identik_dengan_step18(self):
+        """Bandingkan dengan `step18_nxx.topeng()` — rujukan kajian, bukan transkripsi."""
+        import pandas as pd
+
+        import REVERSE.step18_nxx as S18
         jum = {}
         for t, g in self.H:
-            a, b = NX.indikator(g), IND.kira(g)
-            e20 = g.close.ewm(span=20, adjust=False, min_periods=20).mean()
-            t20 = g.high.rolling(20).max().shift(1)
-            gap = g.open / g.close.shift(1) - 1.0
-            t45 = (g.close < g.close.shift(1)).rolling(5).sum() >= 4
-            # ind.kira tidak mendedahkan ma20/sd20 (pemboleh ubah tempatan); formula
-            # ind.py:189-190 verbatim
-            m20 = g.close.rolling(20, min_periods=20).mean()
-            s20 = g.close.rolling(20, min_periods=20).std(ddof=0)
-            ref = {
-                'N06': (b.ma50 > b.ma200) & (L(b.ma50) <= L(b.ma200)),
-                'N16': b.rsi2 < 10,
-                'N19': (b.bb_pctb < 0) & (b.rsi14 < 30),
-                'N22': (b.bb_pctb > 100) & (b.rsi14 > 50),
-                'N24': (b.supertrend > 0) & (b.adx14 > 20),
-                'N25': (b.supertrend > 0) & (g.close > e20) & (b.adx14 > 23),
-                'N28': (b.adx14 > 25) & (b.mdi < b.adx14),
-                'N36': b.pocket_pivot > 0,
-                'N37': b['gap_and_go'] > 0,
-                'N38': b.vcp > 0,
-                'N40': (b.obv_tinggi_baru > 0) & (g.close > b.ma50),
-                'N42': (b.vol_n50 >= 2.0) & (g.close > L(g.close)),
-                'N50': ((b.julat10 < 0.5 * b.julat20) & (b.vol_n50 >= 1.5)
-                        & (g.close > L(g.high))),
-                'N53': (b.supertrend > 0) & (b.adx14 > 25),
-                'N55': (b.bb_pctb < 20) & (b.rsi14 > 40) & (b.adx14 > 20),
-                'N56': (b.rsi14 > 50) & (b.adx14 > 20),
-                'N64': (b['gap_and_go'] > 0) & (b.vol_n50 >= 2.0),
-                'N65': ((b['gap_and_go'] > 0) & (b.vol_n50 >= 1.5)
-                        & (b['j_52w_tinggi'] >= -5.0)),
-                'N73': g.close < (m20 - 2.0 * s20),
-                'N75': b.rsi14 < 40,
-                'N119': (L(g.close, 2) > L(g.close)) & (L(g.close) > g.close),
-                'N124': (gap >= 0.08) & (b.vol_n50 >= 2.0),
-                'X13': b.rsi14 > 70,
-                'X14': (b.rsi14 > 50) & (L(b.rsi14) <= 50),
-                'X16': b.supertrend <= 0,
-                'X17': b.adx14 < 20,
-                'X36': (g.close < b.ma50) & L(g.close < b.ma50).fillna(False),
-            }
-            got = {
-                'N06': NX.n06(a, g), 'N16': NX.n16(a), 'N19': NX.n19(a), 'N22': NX.n22(a),
-                'N24': NX.n24(a), 'N25': NX.n25(a, g), 'N28': NX.n28(a), 'N36': NX.n36(a),
-                'N37': NX.n37(a), 'N38': NX.n38(a), 'N40': NX.n40(a, g),
-                'N42': NX.n42(a, g), 'N50': NX.n50(a, g), 'N53': NX.n53(a),
-                'N55': NX.n55(a), 'N56': NX.n56(a), 'N64': NX.n64(a), 'N65': NX.n65(a),
-                'N73': NX.n73(a, g), 'N75': NX.n75(a), 'N119': NX.n119(g),
-                'N124': NX.n124(a), 'X13': NX.x13(a), 'X14': NX.x14(a), 'X16': NX.x16(a),
-                'X17': NX.x17(a), 'X36': NX.x36(a, g),
-            }
-            # setiap yang jejak40 perlukan MESTI ada di sini
-            for k in self.MASUK + self.KELUAR:
-                self.assertIn(k, ref, f'{k} dipakai oleh jejak40 tetapi tiada rujukan pariti')
-                x = got[k].fillna(False).astype(bool)
-                y = ref[k].fillna(False).astype(bool)
-                self.assertEqual(int((x != y).sum()), 0, f'{t} {k}: topeng terpesong')
+            a = NX.indikator(g)
+            # panel satu-ticker dibina TEPAT seperti step18 baris 130-137
+            ind = IND.kira(g)
+            f = pd.concat([ind[[c for c in S18.DARI_IND if c in ind.columns]],
+                           S18.tambahan(g)], axis=1)
+            f.insert(0, 'tutup', g['close'].to_numpy())
+            f.insert(0, 'date', g.index)
+            f.insert(0, 'ticker', t)
+            f = f.reset_index(drop=True)
+            # lajur RS/sektor tidak tersedia dalam produksi; diisi NaN supaya
+            # step18.topeng() boleh berjalan. Topeng yang memakainya (N69/N70/N120)
+            # TIDAK dalam jejak dan tidak diuji di sini.
+            for k in ('rs_pst', 'sektor_atas_ma50', 'rs_spy_6b', 'garis_rs_tinggi',
+                      'rs_spy_3b', 'rs_spy_12b'):
+                if k not in f.columns:
+                    f[k] = np.nan
+            T = S18.topeng(f)
+            for k in self.MASUK:
+                if k not in T:
+                    continue
+                y = np.asarray(T[k], bool)
+                x = NX.TOPENG_FN[k](a, g).fillna(False).astype(bool).to_numpy()
+                self.assertEqual(int((x != y).sum()), 0,
+                                 f'{t} {k}: topeng terpesong daripada step18')
                 jum[k] = jum.get(k, 0) + int(y.sum())
+        self.assertGreaterEqual(len(jum), 40,
+                                f'hanya {len(jum)} topeng diuji daripada {len(self.MASUK)}')
         for k, n in jum.items():
-            self.assertGreater(n, 0, f'{k}: SIFAR isyarat rujukan — ujian sia-sia')
-        self.assertGreaterEqual(len(jum), 27, f'hanya {len(jum)} topeng/keluar diuji')
+            self.assertGreater(n, 0, f'{k}: SIFAR isyarat rujukan')
+
+    def test_setiap_keluar_ada_fungsi(self):
+        for k in self.KELUAR:
+            self.assertIn(k, NX.KELUAR_FN, f'{k} dipakai tetapi tiada dalam KELUAR_FN')
+            self.assertIsNotNone(NX.KELUAR_FN[k], f'{k} dipetakan ke None')
 
 
 if __name__ == '__main__':

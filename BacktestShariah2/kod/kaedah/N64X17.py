@@ -1,7 +1,7 @@
-"""N64X17 = N64 x X17 — pangkat 11/40 jejak grid penuh.
+"""N64X17 = N64 x X17 — pangkat 11/94 jejak grid penuh.
 
 Pradaftar `REVERSE/SPEC_GRID_PENUH.md` · keputusan `REVERSE/GRID_PENUH.md` ·
-senarai `REVERSE/jejak40.csv`
+senarai `REVERSE/jejak_semua.csv`
 
 MASUK  : gap_and_go DAN vol_n50 >= 2.0
 KELUAR : lorong 1 = X17 (keluar bila adx14 < 20)
@@ -12,7 +12,7 @@ URUTAN : rank = U14 momentum 12-1
 DIUKUR pada grid penuh 1,495 sel, penyebut BH-FDR JUJUR m = 1,495:
   jangkaan latih +1.582%  tahan +4.815%  ·  lift latih +0.845  tahan +2.960
   menang 41.7%  untung +29.30%  rugi -12.72%  n tahan 13,667  p 0.00151
-  tanpa5 -3.363%  -> NEGATIF: kelebihan hidup dalam ekor kanan, SETUP.md terpakai
+  tanpa5 -3.363%  -> NEGATIF: hidup dalam ekor kanan, SETUP.md terpakai
 
 HAD: jangkaan SETIAP DAGANGAN, bukan prestasi portfolio.
 """

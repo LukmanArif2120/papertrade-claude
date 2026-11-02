@@ -1,7 +1,7 @@
-"""N53X17 = N53 x X17 — pangkat 21/40 jejak grid penuh.
+"""N53X17 = N53 x X17 — pangkat 21/94 jejak grid penuh.
 
 Pradaftar `REVERSE/SPEC_GRID_PENUH.md` · keputusan `REVERSE/GRID_PENUH.md` ·
-senarai `REVERSE/jejak40.csv`
+senarai `REVERSE/jejak_semua.csv`
 
 MASUK  : supertrend > 0 DAN adx14 > 25
 KELUAR : lorong 1 = X17 (keluar bila adx14 < 20)
@@ -12,7 +12,7 @@ URUTAN : rank = U14 momentum 12-1
 DIUKUR pada grid penuh 1,495 sel, penyebut BH-FDR JUJUR m = 1,495:
   jangkaan latih +1.516%  tahan +3.814%  ·  lift latih +0.779  tahan +1.958
   menang 41.9%  untung +23.40%  rugi -10.33%  n tahan 913,085  p 0.00000
-  tanpa5 -2.446%  -> NEGATIF: kelebihan hidup dalam ekor kanan, SETUP.md terpakai
+  tanpa5 -2.446%  -> NEGATIF: hidup dalam ekor kanan, SETUP.md terpakai
 
 HAD: jangkaan SETIAP DAGANGAN, bukan prestasi portfolio.
 """

@@ -1,7 +1,7 @@
-"""N119X13 = N119 x X13 — pangkat 9/40 jejak grid penuh.
+"""N119X13 = N119 x X13 — pangkat 9/94 jejak grid penuh.
 
 Pradaftar `REVERSE/SPEC_GRID_PENUH.md` · keputusan `REVERSE/GRID_PENUH.md` ·
-senarai `REVERSE/jejak40.csv`
+senarai `REVERSE/jejak_semua.csv`
 
 MASUK  : tutup[-2] > tutup[-1] DAN tutup[-1] > tutup
 KELUAR : lorong 1 = X13 (keluar bila rsi14 > 70)
@@ -12,7 +12,7 @@ URUTAN : rank = U14 momentum 12-1
 DIUKUR pada grid penuh 1,495 sel, penyebut BH-FDR JUJUR m = 1,495:
   jangkaan latih +3.319%  tahan +5.090%  ·  lift latih +0.614  tahan +0.740
   menang 64.9%  untung +19.62%  rugi -21.74%  n tahan 1,051,604  p 0.00011
-  tanpa5 +1.176%  -> POSITIF: kelebihan tidak bergantung ekor kanan
+  tanpa5 +1.176%  -> POSITIF: tidak bergantung ekor kanan
 
 HAD: jangkaan SETIAP DAGANGAN, bukan prestasi portfolio.
 """
