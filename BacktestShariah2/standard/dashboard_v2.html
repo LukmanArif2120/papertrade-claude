@@ -5037,13 +5037,7 @@ renderNav();renderAll();
       for(let i=2;i<=B.n;i++)anak(nama+'_'+i,d=>{ch[i]=d;});
       for(let i=1;i<=B.nk;i++)anak(nama+'_kamus_'+i,d=>{km[i]=d;});
       cuba();},()=>{});};
-  subRingkas('ringkas_m','ptm',()=>{sub('papertrade/moomoo','ptm',['ptm','prestasi']);sub('papertrade/moomoo_peta','ptmPeta',['ptm','prestasi']);});
-  subRingkas('ringkas_c','ptc',()=>{
-    sub('papertrade/claude','ptc',['ptc','prestasi']);
-    /* papertrade/claude_2, _3, … tanpa had: dokumen yang wujud membuka langganan dua nombor seterusnya */
-    const ptcDah=new Set();
-    const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
-    subPtc(2);subPtc(3);});
+
   /* dokumen besar dibahagi (standard/bahagi_db.py): asas {bahagian:{id,n}} + <nama>_2… {induk,bahagian,rows}; bahagian lama (induk lain) diabaikan */
   /* 2 Nov 2026: PENGAWAL KELENGKAPAN. Tanpa ia, gabung() menerbitkan keadaan SEPARA pada
      setiap snapshot — dokumen asas tiba dahulu, jadi halaman memapar bahagian 1 sahaja
@@ -5057,10 +5051,36 @@ renderNav();renderAll();
         if(b&&b.n>1){for(let i=2;i<=b.n;i++)if(!ch[i]||ch[i].induk!==b.id)return;
           for(let i=2;i<=b.n;i++)rows=rows.concat(ch[i].rows||[]);}
         d=Object.assign({},asas,{rows});}
-      S[keyName]=d;S.live=true;re(...tabs);};
+      /* `Siap` juga, bukan hanya data (3 Nov 2026). ptSiap() membaca S.ptmSiap/S.ptcSiap untuk
+         membezakan "belum dimuat" daripada "tiada posisi", dan `sub` menetapkannya. Apabila
+         pembaca sandaran moomoo ditukar daripada sub kepada subBhg tanpa ini, tab Moomoo akan
+         tersekat pada "Memuatkan…" SELAMANYA - kegagalan senyap, jenis yang paling sukar
+         dikesan kerana halaman nampak sedang bekerja. Ditetapkan hanya apabila gabung() benar-
+         benar menerbit, jadi keadaan separa tidak pernah dilapor sebagai siap. */
+      S[keyName]=d;S[keyName+'Siap']=true;S.live=true;re(...tabs);};
     db.doc(path).onSnapshot(s=>{asas=s.exists?s.data():null;const n=asas&&asas.bahagian?asas.bahagian.n:1;
       for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);db.doc(path+'_'+i).onSnapshot(t=>{ch[i]=t.exists?t.data():null;gabung();},()=>{});}
       gabung();},()=>{});};
+  /* Langganan ringkas_m/ringkas_c diletak SELEPAS takrifan subBhg (3 Nov 2026): sandaran
+     moomoo kini memanggil subBhg, dan `const` mempunyai zon mati temporal - memanggilnya
+     sebelum pernyataan takrifan dilaksanakan membuang ReferenceError. Callback sandaran
+     berjalan secara async jadi ia MUNGKIN selamat, tetapi "mungkin" bukan asas yang
+     munasabah untuk laluan yang hanya dipakai apabila dokumen padat tiada - iaitu tepat
+     keadaan tidak normal yang sandaran itu wujud untuk menanganinya. */
+  /* `papertrade/moomoo` pada 93.1% had dokumen db dan naik ~0.5 mata sehari: ia melanggar
+     dalam ~12 hari, dan apabila itu berlaku jana_db.py SystemExit dan tolakan db MALAM berhenti
+     sepenuhnya - walaupun halaman ini jarang membacanya (laluan utama ialah bentuk padat
+     `ringkas_m`; ini sandaran). subBhg serasi ke belakang - laluan n=1 membaca dokumen yang
+     BELUM dipecah seperti biasa - jadi baris ini selamat diterbitkan SEBELUM jana_db mula
+     memecahnya, dan ia MESTI diterbitkan dahulu. Terbalik urutannya, halaman kehilangan baris
+     secara senyap. */
+  subRingkas('ringkas_m','ptm',()=>{subBhg('papertrade/moomoo','ptm',['ptm','prestasi']);sub('papertrade/moomoo_peta','ptmPeta',['ptm','prestasi']);});
+  subRingkas('ringkas_c','ptc',()=>{
+    sub('papertrade/claude','ptc',['ptc','prestasi']);
+    /* papertrade/claude_2, _3, … tanpa had: dokumen yang wujud membuka langganan dua nombor seterusnya */
+    const ptcDah=new Set();
+    const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
+    subPtc(2);subPtc(3);});
   subBhg('papertrade/watchlist','watch',['watch','sektor']);
   sub('sektor/snapshot','sektor',['sektor']);
   db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});

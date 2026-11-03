@@ -1160,6 +1160,13 @@ PECAH = frozenset((
     # 2 Nov 2026: 274,573 bait pada 228 kaedah (134 Mxx + 94 kombinasi Nxx) = 12,429
     # melebihi HAD_DB. Tanpa pemecahan, jana_db.py SystemExit pada langkah 4 tolak_db.md.
     'analisis/papan',
+    # 3 Nov 2026: `papertrade/moomoo` pada 93.1% had dan naik ~0.5 mata sehari - ia melanggar
+    # dalam ~12 hari dan menghentikan tolakan db MALAM sepenuhnya. Halaman sudah diterbitkan
+    # (#175) dengan subBhg bagi dokumen ini, jadi urutan WAJIB dipatuhi: pembaca dahulu, baru
+    # pemecah. `papertrade/claude` SENGAJA TIDAK di sini walaupun ia 86.6%: `papertrade/claude_2`
+    # sudah wujud sebagai dokumen BEBAS daripada pecah_claude.py, jadi bahagi() akan menulis
+    # ganti serpihan posisi sebenar. Masalah itu perlu penyelesaian lain.
+    'papertrade/moomoo',
 ))
 
 

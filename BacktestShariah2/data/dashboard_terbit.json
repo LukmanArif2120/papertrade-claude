@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793665205-f837",
-  "nombor": 174,
-  "sha256": "c83c731d344aff99c67f747d5c97f1df1b6ccca8c7e14e4a26b9868b220290c8",
-  "bait": 657580,
-  "dikemas": "2026-11-03 00:20 UTC",
-  "nota": "Papertrade C dipecah mengikut keluarga kaedah: 4 butang akaun (C · M / C · N / Moomoo lama / Gabung). Bukan akaun baharu - Mxx dan Nxx kedua-duanya posisi akaun C."
+  "versi_artifact": "1793709027-408f",
+  "nombor": 175,
+  "sha256": "e60e5a3a8fd3c68509c1c522097a0a7550c385c72230c69eed965184e968d4c8",
+  "bait": 659258,
+  "dikemas": "2026-11-03 12:30 UTC",
+  "nota": "Sandaran papertrade/moomoo kini dibaca dengan subBhg (serasi ke belakang), supaya jana_db boleh memecahnya sebelum ia melanggar had 262,144 bait. subBhg juga menetapkan <key>Siap, yang ptSiap() perlukan."
 }
