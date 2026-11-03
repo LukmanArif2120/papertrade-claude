@@ -122,6 +122,27 @@ class TestKumpulPosisi(unittest.TestCase):
             self.assertNotIn('M02', k)
 
 
+class TestSusunanLejar(unittest.TestCase):
+    """Meniru TEPAT tiga tempat susunan dalam lejar.py yang dahulu membuang ValueError.
+    Diuji dengan campuran tiga keluarga, kerana itulah keadaan produksi sejak 2 Nov 2026."""
+
+    CAMPUR = ['N19X15', 'M10', 'GB02', 'N19X13', 'M02', 'N124X15']
+
+    def test_sort_values_pandas(self):
+        """lejar.py:574 — kunci tuple mesti boleh disusun oleh pandas, bukan hanya oleh Python."""
+        d = pd.DataFrame(dict(kaedah=self.CAMPUR, saham=list('BACAZB')))
+        d['_n'] = d.kaedah.map(L.nombor_kaedah)
+        urut = list(d.sort_values(['_n', 'saham']).kaedah)
+        self.assertEqual(urut, ['M02', 'M10', 'N19X13', 'N19X15', 'N124X15', 'GB02'])
+
+    def test_sort_senarai_posisi(self):
+        """lejar.py:577/578 — susunan terbuka.csv dan tunggu.csv."""
+        T = [dict(id_kaedah=k, tarikh_beli='2026-11-02', saham='A') for k in self.CAMPUR]
+        T.sort(key=lambda p: (L.nombor_kaedah(p['id_kaedah']), p['tarikh_beli'], p['saham']))
+        self.assertEqual([p['id_kaedah'] for p in T],
+                         ['M02', 'M10', 'N19X13', 'N19X15', 'N124X15', 'GB02'])
+
+
 class TestModulNxx(unittest.TestCase):
     """94 kombinasi: setiap satu mesti lengkap masuk + keluar + cara, bukan separuh."""
 
