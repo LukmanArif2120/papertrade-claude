@@ -25,7 +25,16 @@ concurrency:
 jobs:
   lejar:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    # 330 minit, dinaikkan daripada 150 pada 3 Nov 2026. Sebabnya diukur: satu sesi dengan 228
+    # kaedah mengambil ~46 minit pada pelaksana GitHub (14.5 minit pada 4 vCPU tempatan - `--proses 4`
+    # melebihi langganan pada 2 vCPU). Jadi TIGA sesi tertinggal sudah mencecah had 150 minit.
+    # Itu bukan sekadar larian gagal: langkah "Commit dan push" TIDAK mempunyai `if: always()`, jadi
+    # larian yang tamat masa membuang kerja sesi yang sudah siap bersama runner, dan larian
+    # berikutnya bermula dari tempat yang SAMA dan tamat masa lagi - gelung yang tidak pulih sendiri.
+    # `if: always()` bukan pembetulan di sini kerana `tambah_bulan` menambah tanpa menyahduplikasi,
+    # jadi mengekalkan sesi yang separa ditulis akan menduakan baris. Memberi masa yang cukup ialah
+    # pembetulan yang tidak memperkenalkan risiko baharu.
+    timeout-minutes: 330
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

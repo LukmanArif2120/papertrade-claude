@@ -34,7 +34,11 @@ concurrency:
 jobs:
   harian:
     runs-on: ubuntu-latest
-    timeout-minutes: 150
+    # 300 minit (3 Nov 2026). Larian 3 Nov mengambil 45 minit bagi SATU sesi dengan 222 kaedah;
+    # kejar.py boleh memproses sehingga 5 sesi tertinggal dalam satu larian, jadi had lama 150
+    # minit menjadikan pemulihan backlog mustahil - tepat keadaan yang kejar.py dibina untuk
+    # menangani. Langkah commit di sini pun tidak bersyarat pada kejayaan imbasan.
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
         with:
