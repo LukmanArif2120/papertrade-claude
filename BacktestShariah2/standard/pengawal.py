@@ -78,9 +78,9 @@ class Semakan:
     def __init__(self):
         self.hasil = []
 
-    def tambah(self, nama, ok, butiran='', remedi=None, boleh_betul=False):
+    def tambah(self, nama, ok, butiran='', remedi=None, boleh_betul=False, cetus=None):
         self.hasil.append(dict(nama=nama, ok=bool(ok), butiran=butiran, remedi=remedi,
-                               boleh_betul=bool(boleh_betul), dibetulkan=None))
+                               boleh_betul=bool(boleh_betul), dibetulkan=None, cetus=cetus))
 
     def gagal(self):
         return [h for h in self.hasil if not h['ok']]
@@ -101,10 +101,28 @@ def semak(folder, stor, lejar_dir, a):
     m = st.get('malam') or {}
     b = st.get('beli') or {}
 
-    # 1. Sesi terkini stor sudah diproses. Remedi: kejar.py (ia sendiri idempoten dan ada had --maks).
-    S.tambah('sesi terkini diproses', akhir and m.get('sesi') == akhir,
-             f"stor {akhir} · diproses {m.get('sesi')}",
-             remedi=['BacktestShariah2/standard/kejar.py', '--folder', folder], boleh_betul=True)
+    # 1. Sesi terkini stor sudah diproses.
+    #
+    #    Remedi bergantung pada BENTUK jurang, dan membezakannya penting: `kejar.py` sengaja tidak
+    #    menyentuh sesi TERKINI (itu kerja langkah `malam` harian.yml, yang ada pengawal datanya
+    #    sendiri), jadi memanggilnya apabila yang hilang ialah sesi terkini tidak melakukan apa-apa.
+    #    Ujian 3 Nov 2026 mendedahkan ini: pengawal melaporkan "remedi jalan tetapi semakan masih
+    #    gagal" - jujur, tetapi tidak berguna.
+    #
+    #    Jadi: lubang DI BELAKANG -> kejar.py (pengawal betulkan sendiri). Sesi TERKINI belum
+    #    diproses -> harian.yml belum menjalankan tugasnya, dan pembetulan yang betul ialah
+    #    MENCETUS harian.yml, bukan meniru imbasannya di sini. pengawal.yml membaca bendera
+    #    `cetus` dalam keluaran dan mencetusnya. Pengawal mencetus saluran yang diuji; ia tidak
+    #    membina saluran kedua yang tidak pernah diuji.
+    diproses = m.get('sesi') or ''
+    lubang = [x for x in ses[:-1] if x > diproses] if diproses else []
+    ok1 = bool(akhir) and diproses == akhir
+    S.tambah('sesi terkini diproses', ok1,
+             f"stor {akhir} · diproses {diproses}" +
+             (f" · {len(lubang)} lubang di belakang" if lubang else
+              (' · sesi terkini belum diproses (harian.yml)' if not ok1 else '')),
+             remedi=(['BacktestShariah2/standard/kejar.py', '--folder', folder] if lubang else None),
+             boleh_betul=bool(lubang), cetus=(None if ok1 or lubang else 'harian.yml'))
 
     # 2. KEDUA-DUA keluarga ada dalam senarai beli. Ini semakan paling penting dalam fail ini:
     #    ia menjawab "adakah kohort N masih hidup" dengan satu nombor, setiap hari.
@@ -217,7 +235,8 @@ def semak(folder, stor, lejar_dir, a):
         with open(stl, encoding='utf-8') as f:
             sl = json.load(f)
     S.tambah('lejar segar', akhir and sl.get('sesi_terakhir') == akhir,
-             f"lejar {sl.get('sesi_terakhir')} · stor {akhir}")
+             f"lejar {sl.get('sesi_terakhir')} · stor {akhir}",
+             cetus=None if (akhir and sl.get('sesi_terakhir') == akhir) else 'lejar.yml')
 
     # 10. Belian direkod bagi hari dagangan terakhir yang sudah berlalu. Laporan sahaja.
     S.tambah('belian direkod', bool(b.get('tarikh')), f"{b.get('tarikh')} · {b.get('direkod')} direkod")
@@ -258,7 +277,8 @@ def main(argv=None):
         else:
             print('⚠ Pengawal: ' + '; '.join(f"{h['nama']} — {h['butiran']}" for h in tinggal)[:180])
     else:
-        print(json.dumps(dict(ok=not tinggal, semakan=S.hasil), ensure_ascii=False, indent=1))
+        cetus = sorted({h['cetus'] for h in S.tinggal() if h.get('cetus')})
+        print(json.dumps(dict(ok=not tinggal, cetus=cetus, semakan=S.hasil), ensure_ascii=False, indent=1))
     return 1 if tinggal else 0
 
 

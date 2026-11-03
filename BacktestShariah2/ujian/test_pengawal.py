@@ -41,7 +41,7 @@ def pos(saham, kaedah, **kw):
     return d
 
 
-def sediakan(tmp, baris, malam, sesi=('2026-10-30', '2026-11-02')):
+def sediakan(tmp, baris, malam, sesi=('2026-10-30', '2026-11-02'), lejar_sesi=None):
     pt = os.path.join(tmp, 'pt')
     tulis(pt, baris)
     with open(os.path.join(pt, 'status_harian.json'), 'w', encoding='utf-8') as f:
@@ -58,7 +58,7 @@ def sediakan(tmp, baris, malam, sesi=('2026-10-30', '2026-11-02')):
     lj = os.path.join(tmp, 'lejar')
     os.makedirs(lj, exist_ok=True)
     with open(os.path.join(lj, 'status.json'), 'w', encoding='utf-8') as f:
-        json.dump(dict(sesi_terakhir=sesi[-1]), f)
+        json.dump(dict(sesi_terakhir=lejar_sesi or sesi[-1]), f)
     return pt, stor, lj
 
 
@@ -90,13 +90,14 @@ class TestSemakan(unittest.TestCase):
         self.assertTrue(nama(S, 'senarai beli ada Mxx')['ok'])
         self.assertFalse(nama(S, 'senarai beli ada Nxx')['ok'])
 
-    def test_sesi_tertinggal_dikesan_dan_boleh_dibetulkan(self):
+    def test_sesi_tertinggal_dikesan(self):
+        """Sesi terkini belum diproses: dikesan, dan dirutekan kepada harian.yml - bukan kejar.py,
+        yang sengaja tidak menyentuh sesi terkini (lihat TestRoutingRemedi)."""
         m = dict(MALAM_OK, sesi='2026-10-30')
         S = self.jalankan([pos('AAA', 'M01', keluar_henti='True')], m)
         h = nama(S, 'sesi terkini diproses')
         self.assertFalse(h['ok'])
-        self.assertTrue(h['boleh_betul'])
-        self.assertIn('kejar.py', ' '.join(h['remedi']))
+        self.assertEqual(h['cetus'], 'harian.yml')
 
     def test_posisi_n_tidak_dikemas_kini_dikesan(self):
         """Pepijat 3 Nov 2026: 835 posisi Nxx tidak dikemas kini dan tiada apa-apa menyedarinya."""
@@ -128,6 +129,44 @@ class TestSemakan(unittest.TestCase):
         self.assertTrue(h['boleh_betul'])
 
 
+class TestRoutingRemedi(unittest.TestCase):
+    """Remedi mesti dipadankan dengan BENTUK jurang, bukan dengan nama semakan.
+
+    kejar.py sengaja tidak menyentuh sesi TERKINI (itu kerja langkah malam harian.yml). Jadi
+    memanggilnya apabila yang hilang ialah sesi terkini tidak melakukan apa-apa - pengawal akan
+    melaporkan "remedi jalan tetapi semakan masih gagal", iaitu jujur tetapi tidak berguna. Kes itu
+    ditemui oleh ujian hujung-ke-hujung pada 3 Nov 2026, bukan oleh pembacaan kod.
+    """
+
+    def jalankan(self, sesi_diproses, lejar_sesi=None):
+        tmp = tempfile.mkdtemp()
+        m = dict(MALAM_OK, sesi=sesi_diproses)
+        pt, stor, lj = sediakan(tmp, [pos('AAA', 'M01', keluar_henti='True')], m,
+                                sesi=('2026-10-29', '2026-10-30', '2026-11-02'),
+                                lejar_sesi=lejar_sesi)
+        return P.semak(pt, stor, lj, None)
+
+    def test_lubang_di_belakang_guna_kejar(self):
+        h = nama(self.jalankan('2026-10-29'), 'sesi terkini diproses')
+        self.assertTrue(h['boleh_betul'])
+        self.assertIn('kejar.py', ' '.join(h['remedi']))
+        self.assertIsNone(h['cetus'])
+        self.assertIn('lubang di belakang', h['butiran'])
+
+    def test_sesi_terkini_hilang_cetus_harian(self):
+        """Tiada lubang di belakang, cuma sesi terkini: harian.yml belum menjalankan tugasnya."""
+        h = nama(self.jalankan('2026-10-30'), 'sesi terkini diproses')
+        self.assertFalse(h['boleh_betul'], 'jangan panggil kejar di sini: ia tidak akan buat apa-apa')
+        self.assertIsNone(h['remedi'])
+        self.assertEqual(h['cetus'], 'harian.yml')
+
+    def test_lejar_basi_cetus_lejar(self):
+        h = nama(self.jalankan('2026-11-02', lejar_sesi='2026-10-30'), 'lejar segar')
+        self.assertFalse(h['ok'])
+        self.assertEqual(h['cetus'], 'lejar.yml')
+        self.assertFalse(h['boleh_betul'], 'lejar 46 minit: cetus workflownya, jangan jalankan di sini')
+
+
 class TestSempadanAutoBetul(unittest.TestCase):
     """Apa yang pengawal dibenarkan betulkan SENDIRI ialah keputusan reka bentuk, bukan kebetulan."""
 
@@ -138,9 +177,11 @@ class TestSempadanAutoBetul(unittest.TestCase):
         pt, stor, lj = sediakan(tmp, [pos('AAA', 'M01', keluar_henti='True')], MALAM_OK)
         S = P.semak(pt, stor, lj, None)
         boleh = {h['nama'] for h in S.hasil if h['boleh_betul']}
-        self.assertEqual(boleh, self.BOLEH,
-                         'Senarai remedi automatik berubah. Setiap tambahan mesti idempoten DAN '
-                         'tidak membuat keputusan baharu - lihat docstring pengawal.py.')
+        self.assertTrue(boleh <= self.BOLEH,
+                        f'Remedi automatik baharu: {boleh - self.BOLEH}. Setiap tambahan mesti '
+                        'idempoten DAN tidak membuat keputusan baharu - lihat docstring pengawal.py.')
+        # Setiap nama dalam BOLEH mesti wujud sebagai semakan: senarai tidak boleh hanyut diam-diam.
+        self.assertTrue(self.BOLEH <= {h['nama'] for h in S.hasil})
 
     def test_yang_tidak_boleh_kekal_tidak_boleh(self):
         """Gred, kaedah ralat, lejar dan belian TIDAK boleh diauto-betulkan: masing-masing
