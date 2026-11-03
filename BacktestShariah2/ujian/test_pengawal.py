@@ -167,6 +167,30 @@ class TestRoutingRemedi(unittest.TestCase):
         self.assertFalse(h['boleh_betul'], 'lejar 46 minit: cetus workflownya, jangan jalankan di sini')
 
 
+class TestHadKejarPengawal(unittest.TestCase):
+    """Pengawal memegang kunci concurrency `papertrade`, dan beli.yml berkongsi kunci itu.
+
+    beli.yml ada pintu KERAS 09:31-17:00 NY. Jika rantaian beratur menolak beli melepasi 17:00
+    NY, belian hari itu TIDAK berlaku - dan tidak seperti imbasan, ia tidak boleh dikejar esok:
+    harga buka hari itu sudah berlalu. Jadi berapa lama pengawal memegang kunci ialah soalan
+    integriti data, bukan soalan prestasi."""
+
+    def test_had_lalai_dua_sesi(self):
+        import argparse
+        ap = argparse.ArgumentParser()
+        P.main.__globals__  # pastikan modul dimuat
+        tmp = tempfile.mkdtemp()
+        m = dict(MALAM_OK, sesi='2026-10-29')
+        pt, stor, lj = sediakan(tmp, [pos('AAA', 'M01', keluar_henti='True')], m,
+                                sesi=('2026-10-29', '2026-10-30', '2026-11-02'))
+        a = argparse.Namespace(maks_kejar=2)
+        h = nama(P.semak(pt, stor, lj, a), 'sesi terkini diproses')
+        self.assertIn('--maks', h['remedi'])
+        self.assertEqual(h['remedi'][h['remedi'].index('--maks') + 1], '2',
+                         'had kejar pengawal mesti kecil: ia memegang kunci yang beli.yml perlukan')
+        del ap
+
+
 class TestSempadanAutoBetul(unittest.TestCase):
     """Apa yang pengawal dibenarkan betulkan SENDIRI ialah keputusan reka bentuk, bukan kebetulan."""
 

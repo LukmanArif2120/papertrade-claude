@@ -43,7 +43,13 @@ jobs:
     # menunggu. Itu BETUL dan disengajakan: jika sesi belum diproses, senarai_beli basi dan
     # beli.yml akan menolak belian ("tak beli") - jadi membetulkan data dahulu ialah pertukaran
     # yang betul. beli.yml ada cron sandaran 14:40, 16:25 dan 19:25 UTC untuk memulihkan.
-    timeout-minutes: 240
+    # 120 minit. Dinaikkan daripada 40 pagi tadi (remedi kejar ialah imbasan ~45 minit sesesi),
+    # kemudian DITURUNKAN daripada 240 apabila rantaian concurrency diperiksa: pengawal memegang
+    # kunci `papertrade` dan beli.yml berkongsi kunci itu. beli.yml ada pintu KERAS 09:31-17:00 NY
+    # - di luar tetingkap itu ia tidak membeli langsung, dan isyarat hari itu hilang KEKAL kerana
+    # harga buka hari itu tidak boleh dibeli semula esok. 240 minit memakan margin itu tanpa sebab;
+    # kejar dihadkan 2 sesi (~90 minit) melalui --maks-kejar, jadi 120 sudah cukup dengan lebihan.
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -121,7 +121,8 @@ def semak(folder, stor, lejar_dir, a):
              f"stor {akhir} · diproses {diproses}" +
              (f" · {len(lubang)} lubang di belakang" if lubang else
               (' · sesi terkini belum diproses (harian.yml)' if not ok1 else '')),
-             remedi=(['BacktestShariah2/standard/kejar.py', '--folder', folder] if lubang else None),
+             remedi=(['BacktestShariah2/standard/kejar.py', '--folder', folder,
+                      '--maks', str(a.maks_kejar if a else 2)] if lubang else None),
              boleh_betul=bool(lubang), cetus=(None if ok1 or lubang else 'harian.yml'))
 
     # 2. KEDUA-DUA keluarga ada dalam senarai beli. Ini semakan paling penting dalam fail ini:
@@ -248,6 +249,14 @@ def main(argv=None):
     ap.add_argument('--folder', default=PT)
     ap.add_argument('--stor', default=STOR)
     ap.add_argument('--lejar', default=LEJAR)
+    ap.add_argument('--maks-kejar', type=int, default=2, dest='maks_kejar',
+                    help='had sesi yang kejar.py kejar dalam SATU larian pengawal. Lalai 2, bukan 5 '
+                         '(had kejar sendiri), kerana pengawal memegang kunci concurrency '
+                         '`papertrade` sambil berjalan dan beli.yml berkongsi kunci itu. beli.yml '
+                         'ada pintu KERAS 09:31-17:00 NY: jika rantaian beratur menolaknya melepasi '
+                         '17:00 NY, belian hari itu TIDAK berlaku dan isyarat itu hilang kekal. Dua '
+                         'sesi (~90 minit) mengehadkan pegangan kunci; lubang yang tinggal dikejar '
+                         'oleh harian.yml, yang berjalan empat kali sehari dan boleh mengejar 5.')
     ap.add_argument('--betulkan', action='store_true', help='jalankan remedi selamat bagi semakan yang gagal')
     ap.add_argument('--ntfy', action='store_true', help='cetak satu baris ringkas untuk amaran telefon')
     a = ap.parse_args(argv)
