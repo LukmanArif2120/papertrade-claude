@@ -130,6 +130,15 @@ KELUARGA = {'M': 0, 'N': 1, 'GB': 2}
 AWALAN_KAEDAH = tuple(x.split('*')[0] for x in POLA_KAEDAH)
 
 
+def keluarga_kaedah(mid):
+    """'M01' -> 'M' · 'N19X13' -> 'N' · 'GB02' -> 'GB'. Dipakai untuk kiraan selari M lawan N."""
+    s = str(mid or '')
+    for a in sorted(AWALAN_KAEDAH, key=len, reverse=True):
+        if s.startswith(a):
+            return a
+    return '?'
+
+
 def nombor_kaedah(mid):
     """Kunci susunan merentas keluarga: Mxx dahulu, kemudian Nxx, kemudian GBxx.
 
@@ -469,6 +478,11 @@ def kemas(folder, stor_dir, S, hasil, masa, ringkas):
     for h in hasil.values():
         hasil_pos.update(h['posisi'])
     keluar_baru = {'M': Counter(), 'C': Counter()}
+    # Kiraan mengikut KELUARGA kaedah (3 Nov 2026, permintaan pengguna: "data M dan N yang
+    # selari"). `keluar_baru` berkunci AKAUN (M = Moomoo, C = Claude), jadi ia tidak boleh
+    # menjawab "adakah kohort Nxx bergerak malam ini". Tanpa angka ini, satu-satunya cara
+    # mengesan Nxx berhenti ialah membuka dashboard dan mengira sendiri.
+    kel_keluarga = Counter(); tunggu_keluarga = Counter()
     menunggu, betul, betul_besar, tidak_dibeli, nota = 0, 0, 0, [], []
     for p in fail_posisi(folder):
         nm = os.path.basename(p); ak = 'M' if nm == 'moomoo.csv' else 'C'
@@ -542,6 +556,8 @@ def kemas(folder, stor_dir, S, hasil, masa, ringkas):
                 w = x['why']
                 keluar_baru[ak]['henti' if w.startswith('kena henti') else 'sasaran' if w.startswith('capai') else
                                 'isyarat' if w.startswith('isyarat') else 'masa'] += 1
+                if ak == 'C':
+                    kel_keluarga[keluarga_kaedah(r.get('kaedah'))] += 1
                 continue
             # (d) masih dipegang: harga tutup terkini
             if g is not None and g.index[-1] == St:
@@ -552,6 +568,8 @@ def kemas(folder, stor_dir, S, hasil, masa, ringkas):
             if x and x.get('menunggu'):
                 r['isyarat_keluar'] = f"Isyarat keluar {hb(x['menunggu'])} — jual pada buka esok (menunggu)"
                 menunggu += 1
+                if ak == 'C':
+                    tunggu_keluarga[keluarga_kaedah(r.get('kaedah'))] += 1
             else:
                 r['isyarat_keluar'] = status_pegang(r)
         SH.tulis(p, lajur, rows)
@@ -559,6 +577,7 @@ def kemas(folder, stor_dir, S, hasil, masa, ringkas):
     KL.main(['--stor', stor_dir, '--folder', folder])
     ringkas.update(keluar_baru={k: dict(v) for k, v in keluar_baru.items()},
                    keluar_baru_jumlah={k: sum(v.values()) for k, v in keluar_baru.items()}, menunggu=menunggu,
+                   keluar_keluarga=dict(kel_keluarga), menunggu_keluarga=dict(tunggu_keluarga),
                    harga_beli_dibetulkan=betul, harga_beli_beza_besar=int(betul_besar), tidak_dibeli=tidak_dibeli,
                    nota=nota[:40])
 
@@ -655,6 +674,8 @@ def imbas(folder, S, hasil, masa, ringkas, isyarat_dir):
     fail_isy = simpan_isyarat(rekod, isyarat_dir, Ss, 'malam') if isyarat_dir else None
     wk = {(w['Saham'], w['Kaedah']) for w in watch}
     ringkas.update(senarai_beli=len(senarai), saham_unik=len({r['saham'] for r in senarai}),
+                   senarai_keluarga=dict(Counter(keluarga_kaedah(r['kaedah']) for r in senarai)),
+                   kaedah_keluarga=dict(Counter(keluarga_kaedah(m) for m in {r['kaedah'] for r in senarai})),
                    kaedah=len({r['kaedah'] for r in senarai}), belian_semula=sum(r['belian_ke'] >= 2 for r in senarai),
                    dari_watchlist=sum(r['asal'] == 'watchlist' for r in senarai), isyarat=len(rekod),
                    ditolak=dict(tolak), tidak_layak={t: x['sebab'] for t, x in sorted(aa.items())}, watchlist=len(watch), watchlist_baharu=len(wk - set(lama)),

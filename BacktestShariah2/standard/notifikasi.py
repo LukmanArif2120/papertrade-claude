@@ -43,9 +43,27 @@ def baris_malam(st, kini):
     jenis = ', '.join(f'{k} {v}' for k, v in sorted(kc.items()) if v)
     seterus = str(c.next_session(pd.Timestamp(S)).date())
     td = len(m.get('tidak_dibeli') or [])
-    return (f"Harian {S}: keluar C {kj.get('C', 0)}" + (f' ({jenis})' if jenis else '') + f", M {kj.get('M', 0)}; "
-            f"menunggu {m.get('menunggu', 0)}" + (f'; tidak sah {td}' if td else '') +
-            f"; senarai beli {m.get('senarai_beli', 0)} ({m.get('saham_unik', 0)} saham) untuk {seterus}")
+    # Pecahan keluarga kaedah dan kiraan ralat (3 Nov 2026). Dua sebab, kedua-duanya diminta
+    # pengguna: (1) "data M dan N yang selari" - satu nombor gabungan tidak boleh menjawab
+    # sama ada kohort Nxx masih bergerak; (2) kaedah yang ranap dahulunya SENYAP di sini -
+    # `ralat_kaedah` hanya wujud dalam status_harian.json, jadi modul yang berhenti bekerja
+    # kelihatan sama seperti modul yang tiada isyarat.
+    def pec(d, awal=''):
+        d = d or {}
+        x = ' '.join(f'{k}{v}' for k, v in sorted(d.items()) if v)
+        return f' [{awal}{x}]' if x else ''
+    ralat = len(m.get('ralat_kaedah') or []); tanpa = len(m.get('kaedah_tanpa_modul') or [])
+    amaran = (f" ⚠RALAT kaedah {ralat}" if ralat else '') + (f" ⚠tanpa modul {tanpa}" if tanpa else '')
+    # Susunan medan ditentukan oleh PEMOTONGAN, bukan oleh bacaan semula jadi: baris dipotong
+    # pada HAD aksara dari hujung, jadi apa-apa yang mesti sampai diletak di HADAPAN. Amaran
+    # ralat datang terus selepas tarikh; pecahan jenis keluar (henti/isyarat/sasaran/masa)
+    # diletak PALING AKHIR kerana ia satu-satunya bahagian yang boleh dibaca semula daripada
+    # dashboard tanpa kehilangan maklumat.
+    return (f"Harian {S}{amaran}: keluar C {kj.get('C', 0)}" + pec(m.get('keluar_keluarga')) +
+            f", M {kj.get('M', 0)}; menunggu {m.get('menunggu', 0)}" + pec(m.get('menunggu_keluarga')) +
+            (f'; tidak sah {td}' if td else '') +
+            f"; senarai beli {m.get('senarai_beli', 0)}" + pec(m.get('senarai_keluarga')) +
+            f" ({m.get('saham_unik', 0)} saham) untuk {seterus}" + (f' ({jenis})' if jenis else ''))
 
 
 def baris_beli(st, kini):

@@ -22,7 +22,11 @@ MALAM = dict(sesi='2026-10-26', keluar_baru_jumlah=dict(C=120, M=1), keluar_baru
 class TestNotifikasi(unittest.TestCase):
     def test_malam_siap(self):
         s = jalan({'malam': MALAM}, 'malam', '--masa', '2026-10-27 07:17')   # Selasa 3:17 ptg MYT
-        self.assertIn('Harian 2026-10-26: keluar C 120 (henti 80, isyarat 30, sasaran 10), M 1', s)
+        # Format dipinda 3 Nov 2026: pecahan jenis keluar dipindah ke HUJUNG supaya pemotongan
+        # pada HAD aksara memakan bahagian yang paling boleh dibaca semula daripada dashboard,
+        # bukan amaran ralat atau kiraan keluarga.
+        self.assertIn('Harian 2026-10-26: keluar C 120, M 1', s)
+        self.assertIn('(henti 80, isyarat 30, sasaran 10)', s)
         self.assertIn('senarai beli 650 (300 saham) untuk 2026-10-27', s)
         self.assertLess(len(s), 200)
 
