@@ -1,5 +1,5 @@
 saham,id_kaedah,tarikh_isyarat,rs,tarikh_beli,harga_beli,saiz_pct,status,tarikh_keluar,harga_keluar,untung_pct,harga_terkini,untung_semasa_pct,lorong
-AMSC,M03,2026-10-21,6.0000,2026-10-22,25.5800,10.0000,Pegang,,,,26.3500,3.0102,henti
+AMSC,M03,2026-10-21,7.0000,2026-10-22,25.5800,10.0000,Pegang,,,,26.3500,3.0102,henti
 ASH,M18,2026-10-21,78.0000,2026-10-22,72.5100,10.0000,Keluar,2026-10-22,71.1000,-2.1405,,,kaedah
 BDC,M03,2026-10-21,40.0000,2026-10-22,105.5000,10.0000,Pegang,,,,107.4400,1.8389,henti
 ESAB,M03,2026-10-21,5.0000,2026-10-22,64.7900,10.0000,Pegang,,,,76.3000,17.7651,henti
