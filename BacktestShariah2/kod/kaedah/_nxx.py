@@ -761,26 +761,162 @@ def pasang(g, masuk, f=None, nama_rank=None, keluar='X13'):
     return f
 
 
-def hampir_syarat(syarat, n_bar, cukup):
+# ---------------------------------------------------------------- syarat masuk (watchlist Nxx)
+# Penguraian setiap masuk kepada syarat ATOM, supaya watchlist boleh melaporkan "berapa hampir".
+# Permintaan pengguna 3 Nov 2026: apa yang kaedah Mxx jalankan patut direplikasi untuk Nxx.
+#
+# TOPENG MASUK DI ATAS TIDAK DISENTUH. Jadual ini TAMBAHAN, bukan sumber topeng - jadi tiada
+# risiko langsung kepada laluan imbasan yang menghasilkan isyarat. Harganya: penguraian boleh
+# TERPESONG daripada topeng (cth. ditulis `< 30` sedangkan topeng `<= 30`), dan watchlist akan
+# melaporkan "hampir" bagi peraturan yang BUKAN peraturan sebenar - senyap, tanpa ralat.
+# `ujian/test_nxx_watchlist.py` menutup lubang itu: ia membandingkan DAN bagi syarat terurai
+# dengan topeng asal, setiap masuk, pada harga SEBENAR. Perbezaan tidak boleh dihantar.
+#
+# `jarak` ialah berapa jauh syarat yang BELUM dipenuhi, dalam unit yang boleh dibaca:
+#   - ambang indikator (RSI, ADX, %b)  -> MATA indikator
+#   - perbandingan harga               -> PERATUS harga tutup
+#   - bendera corak (gap_and_go, vcp)  -> None; "hampir" tiada makna bagi corak yang ada/tiada
+# Kedua-dua unit mendarat pada skala ~0-100 supaya skor hampir_syarat setanding. Itu anggaran
+# yang disengajakan dan dinyatakan, bukan ketepatan yang didakwa.
+def _p(a, b, g):
+    """Jarak peratus: berapa % harga tutup perlu bergerak supaya a mencapai b."""
+    return (b - a).abs() / g.close.abs().replace(0, float('nan')) * 100.0
+
+
+SYARAT_MASUK = {
+    'n06':  lambda f, g: [('ma50 > ma200', f.ma50 > f.ma200, _p(f.ma50, f.ma200, g)),
+                          ('silang baharu', f.ma50.shift(1) <= f.ma200.shift(1), None)],
+    'n07':  lambda f, g: [('ma10>ma20>ma50', (f.ma10 > f.ma20) & (f.ma20 > f.ma50), _p(f.ma10, f.ma20, g)),
+                          ('susunan baharu', ~((f.ma10.shift(1) > f.ma20.shift(1)) & (f.ma20.shift(1) > f.ma50.shift(1))), None)],
+    'n08':  lambda f, g: [('tutup > ema20', g.close > f.ema20, _p(g.close, f.ema20, g)),
+                          ('jarak <= 1.5 ATR', (g.close - f.ema20) <= 1.5 * f.atr14, _p(g.close - f.ema20, 1.5 * f.atr14, g))],
+    'n09':  lambda f, g: [('tutup > ema10', g.close > f.ema10, _p(g.close, f.ema10, g)),
+                          ('semalam < ema10', g.close.shift(1) < f.ema10.shift(1), None),
+                          ('tutup > ema50', g.close > f.ema50, _p(g.close, f.ema50, g))],
+    'n113': lambda f, g: [('buka di bawah 20%', f.pos_buka <= 0.2, (f.pos_buka - 0.2) * 100.0),
+                          ('tutup di atas 80%', f.pos_tutup >= 0.8, (0.8 - f.pos_tutup) * 100.0)],
+    'n119': lambda f, g: [('3 tutup turun', (g.close.shift(2) > g.close.shift(1)) & (g.close.shift(1) > g.close), None)],
+    'n124': lambda f, g: [('gap >= 8%', f.gap >= 0.08, (0.08 - f.gap) * 100.0),
+                          ('volum >= 2x', f.vol_n50 >= 2.0, (2.0 - f.vol_n50) * 10.0)],
+    'n16':  lambda f, g: [('rsi2 < 10', f.rsi2 < 10, f.rsi2 - 10)],
+    'n19':  lambda f, g: [('bawah jalur BB', f.bb_pctb < 0, f.bb_pctb - 0),
+                          ('rsi14 < 30', f.rsi14 < 30, f.rsi14 - 30)],
+    'n22':  lambda f, g: [('bb_pctb > 100', f.bb_pctb > 100, 100 - f.bb_pctb),
+                          ('rsi14 > 50', f.rsi14 > 50, 50 - f.rsi14)],
+    'n24':  lambda f, g: [('supertrend naik', f.supertrend > 0, None),
+                          ('adx14 > 20', f.adx14 > 20, 20 - f.adx14)],
+    'n25':  lambda f, g: [('supertrend naik', f.supertrend > 0, None),
+                          ('tutup > ema20', g.close > f.ema20, _p(g.close, f.ema20, g)),
+                          ('adx14 > 23', f.adx14 > 23, 23 - f.adx14)],
+    'n27':  lambda f, g: [('atas awan', f.atas_awan > 0, None),
+                          ('tenkan di atas', f.tenkan_atas > 0, None)],
+    'n28':  lambda f, g: [('adx14 > 25', f.adx14 > 25, 25 - f.adx14),
+                          ('-DI < adx14', f.mdi < f.adx14, f.mdi - f.adx14)],
+    'n29':  lambda f, g: [('psar naik', f.psar_arah > 0, None),
+                          ('tutup > ma50', g.close > f.ma50, _p(g.close, f.ma50, g))],
+    'n31':  lambda f, g: [('pecah donchian55', f.donchian55 > 0, None)],
+    'n33':  lambda f, g: [('pecah donchian20', f.donchian20 > 0, None),
+                          ('di atas ma200', f.j_ma200 > 0, -f.j_ma200)],
+    'n35':  lambda f, g: [('pecah tinggi 52w', f.breakout_52w > 0, None)],
+    'n36':  lambda f, g: [('pocket pivot', f.pocket_pivot > 0, None)],
+    'n37':  lambda f, g: [('gap and go', f.gap_and_go > 0, None)],
+    'n38':  lambda f, g: [('VCP', f.vcp > 0, None)],
+    'n39':  lambda f, g: [('NR7 semalam', f.nr7.shift(1) > 0, None),
+                          ('pecah donchian20', f.donchian20 > 0, None)],
+    'n40':  lambda f, g: [('OBV tinggi baharu', f.obv_tinggi_baru > 0, None),
+                          ('tutup > ma50', g.close > f.ma50, _p(g.close, f.ma50, g))],
+    'n41':  lambda f, g: [('cmf20 > 0', f.cmf20 > 0, -f.cmf20 * 100.0),
+                          ('tutup > ema20', g.close > f.ema20, _p(g.close, f.ema20, g))],
+    'n42':  lambda f, g: [('volum >= 2x', f.vol_n50 >= 2.0, (2.0 - f.vol_n50) * 10.0),
+                          ('tutup naik', g.close > g.close.shift(1), _p(g.close, g.close.shift(1), g))],
+    'n43':  lambda f, g: [('semalam < ema9', g.close.shift(1) < f.ema9.shift(1), None),
+                          ('tutup > ema9', g.close > f.ema9, _p(g.close, f.ema9, g)),
+                          ('tutup > ma50', g.close > f.ma50, _p(g.close, f.ma50, g))],
+    'n45':  lambda f, g: [('tutup > ema21', g.close > f.ema21, _p(g.close, f.ema21, g)),
+                          ('cerun ema21 naik', f.cerun_ema21 > 0, None),
+                          ('julat mengecil', f.julat10 < f.julat20, _p(f.julat10, f.julat20, g))],
+    'n47':  lambda f, g: [('NR7', f.nr7 > 0, None),
+                          ('ema9 > ema21', f.ema9 > f.ema21, _p(f.ema9, f.ema21, g)),
+                          ('tutup > ema21', g.close > f.ema21, _p(g.close, f.ema21, g))],
+    'n48':  lambda f, g: [('inside day semalam', f.inside_day.shift(1) > 0, None),
+                          ('pecah tinggi semalam', g.close > g.high.shift(1), _p(g.close, g.high.shift(1), g))],
+    'n50':  lambda f, g: [('julat < 1/2 julat20', f.julat10 < 0.5 * f.julat20, _p(f.julat10, 0.5 * f.julat20, g)),
+                          ('volum >= 1.5x', f.vol_n50 >= 1.5, (1.5 - f.vol_n50) * 10.0),
+                          ('pecah tinggi semalam', g.close > g.high.shift(1), _p(g.close, g.high.shift(1), g))],
+    'n51':  lambda f, g: [('BB squeeze', f.bb_squeeze > 0, None),
+                          ('supertrend naik', f.supertrend > 0, None)],
+    'n53':  lambda f, g: [('supertrend naik', f.supertrend > 0, None),
+                          ('adx14 > 25', f.adx14 > 25, 25 - f.adx14)],
+    'n54':  lambda f, g: [('supertrend naik', f.supertrend > 0, None),
+                          ('rsi14 > 50', f.rsi14 > 50, 50 - f.rsi14)],
+    'n55':  lambda f, g: [('bb_pctb < 20', f.bb_pctb < 20, f.bb_pctb - 20),
+                          ('rsi14 > 40', f.rsi14 > 40, 40 - f.rsi14),
+                          ('adx14 > 20', f.adx14 > 20, 20 - f.adx14)],
+    'n56':  lambda f, g: [('rsi14 > 50', f.rsi14 > 50, 50 - f.rsi14),
+                          ('adx14 > 20', f.adx14 > 20, 20 - f.adx14)],
+    'n57':  lambda f, g: [('adx14 > 20', f.adx14 > 20, 20 - f.adx14),
+                          ('silang baharu', f.adx14.shift(1) <= 20, None),
+                          ('tutup > ma50', g.close > f.ma50, _p(g.close, f.ma50, g))],
+    'n64':  lambda f, g: [('gap and go', f.gap_and_go > 0, None),
+                          ('volum >= 2x', f.vol_n50 >= 2.0, (2.0 - f.vol_n50) * 10.0)],
+    'n65':  lambda f, g: [('gap and go', f.gap_and_go > 0, None),
+                          ('volum >= 1.5x', f.vol_n50 >= 1.5, (1.5 - f.vol_n50) * 10.0),
+                          ('dalam 5% tinggi 52w', f.j_52w_tinggi >= -5.0, -5.0 - f.j_52w_tinggi)],
+    'n66':  lambda f, g: [('tutup > 1.01x tinggi 52w', g.close > 1.01 * f.tinggi_52w, _p(g.close, 1.01 * f.tinggi_52w, g))],
+    'n68':  lambda f, g: [('bullish engulfing', f.bullish_engulfing > 0, None),
+                          ('tutup > ema21', g.close > f.ema21, _p(g.close, f.ema21, g))],
+    'n73':  lambda f, g: [('tutup < BB bawah', g.close < (f.ma20 - 2.0 * f.sd20), _p(g.close, f.ma20 - 2.0 * f.sd20, g))],
+    'n74':  lambda f, g: [('macd > isyarat', f.macd > f.macd_sig, _p(f.macd, f.macd_sig, g))],
+    'n75':  lambda f, g: [('rsi14 < 40', f.rsi14 < 40, f.rsi14 - 40)],
+    'n76':  lambda f, g: [('tutup > ma50', g.close > f.ma50, _p(g.close, f.ma50, g))],
+    'n80':  lambda f, g: [('tinggi sepanjang masa', g.close >= f.tinggi_sepanjang, _p(g.close, f.tinggi_sepanjang, g))],
+}
+
+
+def syarat(nama, f, g):
+    """Triple (label, dipenuhi, jarak) bagi bar TERAKHIR, untuk hampir_syarat()."""
+    out = []
+    for label, kon, jar in SYARAT_MASUK[nama](f, g):
+        ok = bool(kon.iloc[-1]) if hasattr(kon, 'iloc') else bool(kon)
+        j = None
+        if jar is not None and not ok:
+            v = jar.iloc[-1] if hasattr(jar, 'iloc') else jar
+            j = None if v != v else abs(float(v))     # NaN -> None
+        out.append((label, ok, j))
+    return out
+
+
+def hampir_nxx(g, nama, cukup):
+    """Calon watchlist bagi satu modul Nxx: satu baris dalam setiap modul.
+
+    `hampir()` menerima bingkai HARGA sahaja, bukan indikator - jadi ia mengira semula
+    indikator di sini. Itu mahal sebelum 3 Nov 2026 (29 ms setiap ticker setiap modul); memo
+    dalam indikator() menjadikannya hampir percuma, jadi watchlist Nxx baru menjadi praktikal
+    selepas memo itu. Keduanya dihantar pada hari yang sama bukan kebetulan.
+    """
+    return hampir_syarat(syarat(nama, indikator(g), g), len(g), cukup)
+
+
+def hampir_syarat(syarat_senarai, n_bar, cukup):
     """Watchlist "hampir" generik bagi kaedah Nxx.
 
-    `syarat` = senarai (label, dipenuhi, jarak_unit) bagi bar TERAKHIR. Jarak dalam unit
+    `syarat_senarai` = senarai (label, dipenuhi, jarak_unit) bagi bar TERAKHIR. Jarak dalam unit
     indikator sendiri (mata RSI, mata %b, mata ADX) kerana peraturan Nxx ialah ambang
     indikator, bukan paras harga: melaporkan "paras harga" akan mengandaikan hubungan
     harga->indikator yang tidak linear, jadi `paras` dibiar None dengan sengaja.
     """
     if n_bar < cukup:
         return None
-    ok = [s for s in syarat if s[1]]
-    belum = [s for s in syarat if not s[1]]
+    ok = [s for s in syarat_senarai if s[1]]
+    belum = [s for s in syarat_senarai if not s[1]]
     if not belum or not ok:                 # semua sudah (= sig) atau semua belum (terlalu jauh)
         return None
     jarak = [s[2] for s in belum if s[2] is not None]
     j = float(min(jarak)) if jarak else None
     return {'sebab': ' DAN '.join(s[0] for s in ok) + ' sudah',
-            'syarat_beli': ' DAN '.join(s[0] for s in syarat),
+            'syarat_beli': ' DAN '.join(s[0] for s in syarat_senarai),
             'pencetus': ' DAN '.join(s[0] for s in belum),
             'paras': None,
             'jarak_pct': j,
-            'syarat_dipenuhi': f'{len(ok)}/{len(syarat)}',
+            'syarat_dipenuhi': f'{len(ok)}/{len(syarat_senarai)}',
             'skor': 0.5 if j is None else round(float(max(0.0, 1.0 - j / 20.0)), 3)}
