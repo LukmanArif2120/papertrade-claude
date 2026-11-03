@@ -20,7 +20,15 @@ TINJAU_JAM = 16          # cetusan lebih lama daripada ini diabaikan
 AWAL_MIN = 2             # larian dicipta sedikit sebelum cetusan masih dikira
 JAGA = {
     'harga_harian.yml': 'buka', 'skrin_tv.yml': 'buka', 'rs_pasaran.yml': 'buka', 'gred_kumpulan.yml': 'buka',
-    'lejar.yml': 'buka', 'harian.yml': 'buka', 'petang.yml': ('ny', 9, 15), 'beli.yml': ('ny', 16, 45),
+    'lejar.yml': 'buka', 'harian.yml': 'buka', 'petang.yml': ('ny', 9, 15),
+    # beli.yml: had ATAS 16:45 NY, dan had BAWAH 09:31 NY - pintu workflow itu sendiri.
+    # Diukur 3 Nov 2026: penjaga mencetus beli pada 09:21 NY, SEPULUH MINIT sebelum pintu,
+    # jadi setiap langkah dilangkau dan tiada belian. Kerosakan sebenar bukan cetusan terbuang
+    # itu: `keputusan()` kemudian melihat larian yang dicipta selepas cetusan 13:40 dan
+    # menganggap cetusan itu SUDAH dipenuhi, jadi ia tidak mencetus lagi. Belian hari itu
+    # hilang terus - dan tidak seperti imbasan, belian tidak boleh dikejar esok kerana harga
+    # buka hari itu sudah berlalu. Tanpa had bawah, penjaga memusnahkan perkara yang ia jaga.
+    'beli.yml': ('ny', 16, 45, 9, 31),
     'edgar.yml': 'buka', 'fundamental_sec.yml': 'buka', 'senarai_bursa.yml': 'buka',
     'autotune_suku.yml': 'buka',   # suku-tahunan; pintu workflow menapis hari > 7 (termasuk dispatch penjaga)
     # Pengawal papertrade (3 Nov 2026): had masa = sebelum beli.yml 13:40 UTC, kerana tujuannya
@@ -74,7 +82,19 @@ def had_masa(jenis, t):
     if jenis == 'buka':
         h = t.replace(hour=13, minute=0, second=0, microsecond=0)
         return h if h > t else h + timedelta(days=1)
-    _, jam, minit = jenis
+    jam, minit = jenis[1], jenis[2]
+    return t.astimezone(NY).replace(hour=jam, minute=minit, second=0, microsecond=0).astimezone(timezone.utc)
+
+
+def mula_masa(jenis, t):
+    """Masa UTC sebelumnya cetusan t belum wajar didispatch, atau None jika tiada had bawah.
+
+    Workflow yang mempunyai pintu masanya sendiri tidak boleh didispatch sebelum pintu itu
+    dibuka: larian itu akan melangkau setiap langkah, DAN ia dikira sebagai 'sudah berlaku'
+    oleh keputusan(), jadi cetusan sebenar tidak pernah dipulihkan."""
+    if jenis == 'buka' or len(jenis) < 5:
+        return None
+    jam, minit = jenis[3], jenis[4]
     return t.astimezone(NY).replace(hour=jam, minute=minit, second=0, microsecond=0).astimezone(timezone.utc)
 
 
@@ -86,7 +106,7 @@ def baca_cron(laluan):
 def sasaran(crons, jenis, kini):
     """Cetusan terkini yang perlu dipastikan berlaku (sudah lewat LEWAT_MIN, masih dalam had), atau None."""
     calon = [t for c in crons for t in cetusan(c, kini - timedelta(hours=TINJAU_JAM), kini - timedelta(minutes=LEWAT_MIN))
-             if kini < had_masa(jenis, t)]
+             if kini < had_masa(jenis, t) and (mula_masa(jenis, t) is None or kini >= mula_masa(jenis, t))]
     return max(calon) if calon else None
 
 
