@@ -36,11 +36,25 @@ DELIST_SESI = 10       # 22 Okt 2026: 5 -> 10 (penggantungan SEC H10 sehingga 10
 
 
 def versi():
-    """Kunci peraturan (termasuk senarai ambil alih dan kelas berganda): lejar.py membina semula lejar apabila berubah."""
+    """Cap jari PENUH (peraturan + senarai ambil alih + kelas berganda): untuk status dan diagnosis."""
     import hashlib
     h = hashlib.sha1(open(KELAS, 'rb').read()).hexdigest()[:8] if os.path.exists(KELAS) else '-'
     import peristiwa
     return f'{VERSI}; {AA.versi()}; kelas {h}; {peristiwa.versi()}'
+
+
+def versi_peraturan():
+    """Kunci PERATURAN: lejar.py membina semula lejar apabila ini berubah.
+
+    Berbeza daripada versi() pada satu perkara sahaja — cincangan `data/ambil_alih.csv` dibuang
+    (lihat ambil_alih.versi_peraturan untuk sebabnya). Cincangan `kelas_berganda.csv` DIKEKALKAN:
+    fail itu jarang berubah dan ia menukar saham mana yang layak diimbas dari awal lagi, bukan
+    sekadar menambah pengetahuan baharu tentang saham sedia ada.
+    """
+    import hashlib
+    h = hashlib.sha1(open(KELAS, 'rb').read()).hexdigest()[:8] if os.path.exists(KELAS) else '-'
+    import peristiwa
+    return f'{VERSI}; {AA.versi_peraturan()}; kelas {h}; {peristiwa.versi()}'
 
 
 def kumpulan_kelas(path=KELAS):

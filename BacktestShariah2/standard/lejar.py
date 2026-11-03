@@ -508,14 +508,15 @@ def bina_semula(st):
         os.remove(f)
     if st.get('lorong2') != keluar_lorong.VERSI:
         dari, ke = st.get('lorong2') or '2 tutup turun berturut atau henti', keluar_lorong.VERSI
-    elif st.get('tidak_layak') != tidak_layak.versi():
-        dari, ke = st.get('tidak_layak') or 'tiada penapis tidak layak', tidak_layak.versi()
+    elif st.get('tidak_layak_peraturan') != tidak_layak.versi_peraturan():
+        dari, ke = st.get('tidak_layak_peraturan') or 'tiada penapis tidak layak', tidak_layak.versi_peraturan()
     else:
         dari, ke = st.get('keluar') or 'tokokan dari dinilai_hingga', VERSI_KELUAR
     rekod = dict(tarikh=pd.Timestamp.now(tz='Asia/Kuala_Lumpur').strftime('%Y-%m-%d %H:%M MYT'),
                  dari=dari, ke=ke, sesi_terakhir_lama=st.get('sesi_terakhir'))
     print(json.dumps(dict(bina_semula=rekod), ensure_ascii=False), flush=True)
-    st = dict(mula=st.get('mula'), lorong2=keluar_lorong.VERSI, tidak_layak=tidak_layak.versi(), keluar=VERSI_KELUAR,
+    st = dict(mula=st.get('mula'), lorong2=keluar_lorong.VERSI, tidak_layak=tidak_layak.versi(),
+              tidak_layak_peraturan=tidak_layak.versi_peraturan(), keluar=VERSI_KELUAR,
               bina_semula=st.get('bina_semula', []) + [rekod])
     json.dump(st, open(os.path.join(LEJAR, 'status.json'), 'w'), ensure_ascii=False, indent=1)
     return st
@@ -525,11 +526,25 @@ def cmd_jalan(a):
     global FR, IDX
     os.makedirs(LEJAR, exist_ok=True)
     st, T, W, bil = keadaan()
+    # Pencetus bina semula = PERATURAN sahaja (keputusan pengguna 3 Nov 2026). Dahulu ia
+    # `tidak_layak.versi()`, cap jari PENUH yang merangkumi cincangan `data/ambil_alih.csv` -
+    # fail yang edgar.yml tambah kira-kira mingguan. Setiap tambahan memadam seluruh lejar dan
+    # membina semula dari sesi pertama: diukur 3 Nov 2026 pada 13 sesi x ~17 minit = 3.7 jam,
+    # tumbuh ~17 minit setiap hari dagangan. Larian 06:00 hari itu dibunuh had masa di tengah
+    # bina semula, dan kerjanya hilang kerana langkah commit tidak berjalan pada larian yang
+    # tamat masa. Lihat ambil_alih.versi_peraturan untuk sebab semantiknya, bukan hanya kosnya.
+    #
+    # `tidak_layak_peraturan` TIADA pada status lama. Dalam kes itu nilai semasa diterima pakai
+    # TANPA bina semula - jika tidak, melonggarkan pencetus akan mencetusnya sekali lagi, iaitu
+    # tepat perkara yang kita elakkan.
+    pr = tidak_layak.versi_peraturan()
     if DUA_LORONG and st.get('sesi_terakhir') and (st.get('lorong2') != keluar_lorong.VERSI
-                                                   or st.get('tidak_layak') != tidak_layak.versi()
+                                                   or (st.get('tidak_layak_peraturan') is not None
+                                                       and st.get('tidak_layak_peraturan') != pr)
                                                    or st.get('keluar') != VERSI_KELUAR):
         st = bina_semula(st); T, W, bil = [], [], {}
-    st['lorong2'] = keluar_lorong.VERSI; st['tidak_layak'] = tidak_layak.versi(); st['keluar'] = VERSI_KELUAR
+    st['lorong2'] = keluar_lorong.VERSI; st['tidak_layak'] = tidak_layak.versi()
+    st['tidak_layak_peraturan'] = pr; st['keluar'] = VERSI_KELUAR
     FR, IDX = frames_dict(muat(STOR))
     sesi = [x for x in IDX['SPY'].index]
     akhir = st.get('sesi_terakhir')

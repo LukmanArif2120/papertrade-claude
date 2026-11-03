@@ -376,3 +376,61 @@ class UjiLiputan(unittest.TestCase):
                 self.assertEqual(pd.Timestamp(st['sesi_terakhir']), akhir)
             finally:
                 lejar.STOR, lejar.LEJAR = lama; os.environ.pop('LEJAR_UNIV', None)
+
+
+class TestPencetusBinaSemula(unittest.TestCase):
+    """Apa yang MEMADAM dan membina semula seluruh lejar ialah keputusan yang mahal.
+
+    Sebelum 3 Nov 2026 pencetusnya ialah `tidak_layak.versi()`, cap jari PENUH yang merangkumi
+    cincangan `data/ambil_alih.csv`. edgar.yml menambah fail itu kira-kira mingguan, jadi setiap
+    pemfailan SEC baharu memadam lejar dan membinanya semula dari sesi pertama: diukur pada
+    3 Nov 2026 sebagai 13 sesi x ~17 minit = 3.7 jam, tumbuh ~17 minit setiap hari dagangan.
+    Larian produksi 06:00 hari itu dibunuh had masa di tengah bina semula.
+    """
+
+    def _bina(self, st, pr):
+        """Syarat bina semula yang sama seperti lejar.cmd_jalan."""
+        import keluar_lorong
+        import lejar as L
+        return bool(st.get('sesi_terakhir')) and (
+            st.get('lorong2') != keluar_lorong.VERSI
+            or (st.get('tidak_layak_peraturan') is not None and st.get('tidak_layak_peraturan') != pr)
+            or st.get('keluar') != L.VERSI_KELUAR)
+
+    def asas(self):
+        import keluar_lorong
+        import lejar as L
+        import tidak_layak
+        pr = tidak_layak.versi_peraturan()
+        return dict(sesi_terakhir='2026-11-02', lorong2=keluar_lorong.VERSI,
+                    keluar=L.VERSI_KELUAR, tidak_layak_peraturan=pr), pr
+
+    def test_senarai_ambil_alih_tidak_mencetus(self):
+        """Pemfailan SEC baharu menambah pengetahuan tentang saham sedia ada; ia tidak menukar
+        PERATURAN, jadi ia tidak boleh menulis semula sejarah jejak hadapan."""
+        import ambil_alih
+        self.assertEqual(ambil_alih.versi_peraturan(), ambil_alih.VERSI)
+        self.assertNotIn('senarai ', ambil_alih.versi_peraturan())
+        self.assertIn('senarai ', ambil_alih.versi(), 'versi() penuh masih untuk status/diagnosis')
+        st, pr = self.asas()
+        self.assertFalse(self._bina(st, pr))
+
+    def test_migrasi_status_lama_tidak_mencetus(self):
+        """Status sebelum perubahan ini tiada kunci `tidak_layak_peraturan`. Jika ketiadaannya
+        dikira sebagai perbezaan, melonggarkan pencetus akan mencetusnya sekali lagi - tepat
+        perkara yang dielakkan."""
+        st, pr = self.asas()
+        del st['tidak_layak_peraturan']
+        st['tidak_layak'] = 'cap jari penuh lama; senarai 6eb58275'
+        self.assertFalse(self._bina(st, pr))
+
+    def test_peraturan_berubah_masih_mencetus(self):
+        st, pr = self.asas()
+        st['tidak_layak_peraturan'] = 'tidak_layak v4 (peraturan baharu)'
+        self.assertTrue(self._bina(st, pr))
+
+    def test_lorong2_dan_keluar_masih_mencetus(self):
+        for k, v in (('lorong2', 'peraturan lorong 2 lama'), ('keluar', 'logik keluar lama')):
+            st, pr = self.asas()
+            st[k] = v
+            self.assertTrue(self._bina(st, pr), k)

@@ -41,10 +41,33 @@ LAJUR = ['saham', 'tarikh_umum', 'tarikh_tamat', 'pembeli', 'harga_tawaran', 'ba
 
 
 def versi(path=SENARAI):
-    """VERSI + cincangan senarai sah: lejar.py membina semula lejar apabila peraturan atau senarai berubah."""
+    """VERSI + cincangan senarai sah. Cap jari PENUH, untuk status dan diagnosis.
+
+    BUKAN lagi pencetus bina semula lejar — lihat versi_peraturan()."""
     import hashlib
     h = hashlib.sha1(open(path, 'rb').read()).hexdigest()[:8] if path and os.path.exists(path) else '-'
     return f'{VERSI}; senarai {h}'
+
+
+def versi_peraturan():
+    """VERSI peraturan SAHAJA, tanpa cincangan senarai. Inilah yang mencetus bina semula lejar.
+
+    Keputusan pengguna 3 Nov 2026. `data/ambil_alih.csv` bertambah apabila edgar.yml menemui
+    pemfailan SEC baharu — kira-kira mingguan. Dahulu setiap tambahan itu menukar cap jari dan
+    `lejar.jalan` MEMADAM seluruh lejar lalu membina semula dari sesi pertama. Kos itu diukur
+    pada 3 Nov 2026: 13 sesi x ~17 minit = 3.7 jam, dan ia tumbuh ~17 minit setiap hari dagangan
+    kerana sejarah memanjang. Larian 06:00 hari itu dibunuh oleh had masa di tengah bina semula.
+
+    Sebab ia dilonggarkan, bukan sekadar kos: lejar ialah rekod jejak KE HADAPAN. Keputusan
+    setiap sesi dibuat dengan pengetahuan yang ada pada sesi itu, dan `lejar.univ_sesi()` sudah
+    mengarkibkan alam setiap sesi. Menulis semula sejarah kerana SEC memfailkan sesuatu HARI INI
+    menukar rekod jejak hadapan menjadi sesuatu yang sentiasa ditulis semula — bertentangan
+    dengan tujuan mengumpulnya.
+
+    Perubahan PERATURAN (VERSI) masih mencetus bina semula, kerana itu menukar cara isyarat
+    lampau sepatutnya dinilai.
+    """
+    return VERSI
 
 
 def baca_senarai(path=SENARAI):
