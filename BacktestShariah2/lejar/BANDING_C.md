@@ -1,120 +1,63 @@
 # Banding Papertrade C dengan Lejar Penuh (fasa 1)
 
-Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-10-30. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
+Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-11-02. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
 
-- Posisi C (isyarat >= 2026-10-15): 7126; ada dalam lejar: 6367; tiada: 759 {'isyarat ada, dipegang lejar': 733, 'isyarat ada, belum diproses': 11, 'tiada isyarat dalam lejar': 15}
-- Posisi lejar: 16629 (C hanya 7126; lejar 2.3×)
-- Harga beli berbeza > 0.5%: 26 daripada 6367
-- Status keluar sama: 5898 daripada 6367; berbeza: 469
+- Posisi C (isyarat >= 2026-10-15): 8566; ada dalam lejar: 7140; tiada: 1426 {'isyarat ada, dipegang lejar': 1395, 'isyarat batal pada buka (peraturan kaedah)': 6, 'isyarat ada, belum diproses': 11, 'tiada isyarat dalam lejar': 14}
+- Posisi lejar: 51225 (C hanya 8566; lejar 6.0×)
+- Harga beli berbeza > 0.5%: 48 daripada 7140
+- Status keluar sama: 7139 daripada 7140; berbeza: 1
 
 ## Harga beli berbeza > 0.5%
 
-- M25 ZS 2026-10-29: C 246.74 / lejar 244.245 (+1.02%)
-- M33 EML 2026-10-29: C 27.67 / lejar 26.62 (+3.94%)
-- M34 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
-- M46 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
-- M48 SVRN 2026-10-29: C 29.02 / lejar 29.79 (-2.58%)
-- M55 UFPT 2026-10-29: C 285.725 / lejar 289.8 (-1.41%)
-- M66 EML 2026-10-29: C 27.67 / lejar 26.62 (+3.94%)
-- M73 GRAL 2026-10-29: C 150.51 / lejar 152.08 (-1.03%)
-- M74 GRAL 2026-10-29: C 150.51 / lejar 152.08 (-1.03%)
-- M79 RGEN 2026-10-29: C 175.3711 / lejar 177.44 (-1.17%)
-- M89 EML 2026-10-29: C 27.67 / lejar 26.62 (+3.94%)
-- M89 TWIN 2026-10-29: C 25.32 / lejar 25.01 (+1.24%)
-- M100 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
-- M101 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
-- M105 EML 2026-10-29: C 27.67 / lejar 26.62 (+3.94%)
-- M111 FRD 2026-10-29: C 42.815 / lejar 42.52 (+0.69%)
-- M119 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
-- M122 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
-- M145 ALKS 2026-10-29: C 46.0475 / lejar 45.67 (+0.83%)
-- M146 HOFT 2026-10-29: C 14.3699 / lejar 14.05 (+2.28%)
-- M151 EML 2026-10-29: C 27.67 / lejar 26.62 (+3.94%)
-- M156 NICE 2026-10-29: C 114.85 / lejar 114.18 (+0.59%)
-- M159 RGEN 2026-10-29: C 175.3711 / lejar 177.44 (-1.17%)
-- M04 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
-- M10 MKTW 2026-10-29: C 19.97 / lejar 20.155 (-0.92%)
-- M23 CLMB 2026-10-29: C 41.33 / lejar 40.96 (+0.90%)
+- M01 PLPC 2026-10-30: C 301.87 / lejar 300.01 (+0.62%)
+- M08 INTA 2026-10-30: C 41.78 / lejar 42.03 (-0.59%)
+- M20 CF 2026-10-30: C 118.55 / lejar 120.78 (-1.85%)
+- M20 PAYX 2026-10-30: C 112.02 / lejar 112.71 (-0.61%)
+- M25 HQY 2026-10-30: C 104.08 / lejar 102.85 (+1.20%)
+- M26 CF 2026-10-30: C 118.55 / lejar 120.78 (-1.85%)
+- M28 ZBRA 2026-10-30: C 366.23 / lejar 363.12 (+0.86%)
+- M41 CAI 2026-10-30: C 34.76 / lejar 34.945 (-0.53%)
+- M49 INTA 2026-10-30: C 41.78 / lejar 42.03 (-0.59%)
+- M66 INTA 2026-10-30: C 41.78 / lejar 42.03 (-0.59%)
+- M73 CRM 2026-10-30: C 231.34 / lejar 229.75 (+0.69%)
+- M77 INTA 2026-10-30: C 41.78 / lejar 42.03 (-0.59%)
+- M79 HOFT 2026-10-30: C 14.314 / lejar 14.4 (-0.60%)
+- M80 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- M92 INTA 2026-10-30: C 41.78 / lejar 42.03 (-0.59%)
+- M93 QLYS 2026-10-30: C 222.77 / lejar 224.15 (-0.62%)
+- M94 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- M106 INTA 2026-10-30: C 41.78 / lejar 42.03 (-0.59%)
+- M107 PPIH 2026-10-30: C 30.0 / lejar 29.54 (+1.56%)
+- M118 HOFT 2026-10-30: C 14.314 / lejar 14.4 (-0.60%)
+- M147 CF 2026-10-30: C 118.55 / lejar 120.78 (-1.85%)
+- N50X17 MPWR 2026-10-30: C 1239.66 / lejar 1231.18 (+0.69%)
+- N56X17 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N50X14 MPWR 2026-10-30: C 1239.66 / lejar 1231.18 (+0.69%)
+- N42X36 MPWR 2026-10-30: C 1239.66 / lejar 1231.18 (+0.69%)
+- N09X36 CF 2026-10-30: C 118.55 / lejar 120.78 (-1.85%)
+- N113X36 CF 2026-10-30: C 118.55 / lejar 120.78 (-1.85%)
+- N42X16 MPWR 2026-10-30: C 1239.66 / lejar 1231.18 (+0.69%)
+- N42X17 MPWR 2026-10-30: C 1239.66 / lejar 1231.18 (+0.69%)
+- N56X36 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N113X16 CF 2026-10-30: C 118.55 / lejar 120.78 (-1.85%)
+- N75X14 AUGO 2026-10-30: C 67.62 / lejar 68.005 (-0.57%)
+- N24X16 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N57X16 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N42X14 MPWR 2026-10-30: C 1239.66 / lejar 1231.18 (+0.69%)
+- N55X13 TEAM 2026-10-30: C 190.178 / lejar 193.73 (-1.83%)
+- N73X13 AUGO 2026-10-30: C 67.62 / lejar 68.005 (-0.57%)
+- N75X13 AUGO 2026-10-30: C 67.62 / lejar 68.005 (-0.57%)
+- N56X16 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N07X16 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N75X15 AUGO 2026-10-30: C 67.62 / lejar 68.005 (-0.57%)
+- N57X36 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N06X36 PPIH 2026-10-30: C 30.0 / lejar 29.54 (+1.56%)
+- N24X17 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N42X15 MPWR 2026-10-30: C 1239.66 / lejar 1231.18 (+0.69%)
+- N24X36 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- N75X17 AUGO 2026-10-30: C 67.62 / lejar 68.005 (-0.57%)
+- N07X36 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
 
 ## Status keluar berbeza
 
-- M77 MMSI 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M81 INTC 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M81 FORM 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M81 AUGO 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M81 TER 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M81 ASST 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M82 SWK 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M90 SPSC 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M23 NRDS 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M25 RBRK 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M25 TEL 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M25 JCI 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M28 FFIV 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M46 WST 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M49 KRT 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M55 NEOG 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M55 UFPT 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M55 CVSA 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M57 QGEN 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M70 ATRC 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M70 RVTY 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M70 A 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M70 DHR 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M70 HP 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M74 GRAL 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M89 ASX 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M89 TSM 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M90 RBRK 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M102 ISRG 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M102 WSM 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M111 ASX 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M111 BAND 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M122 BAND 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M123 EMBJ 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M124 ASX 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M131 QCOM 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M133 AAON 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M134 IDXX 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M140 BAND 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M146 SIBN 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M151 IDXX 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M151 TCMD 2026-10-29: C terbuka / lejar keluar 2026-10-30 henti
-- M102 ZETA 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M111 CTSH 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M117 SGC 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M131 PRVA 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M136 GFI 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M136 HMY 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M137 SONO 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M139 OPRA 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M141 OPRA 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M147 AGI 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M147 KGC 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M04 INTA 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M06 MATX 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M09 CRSR 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M27 ADBE 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M128 TEAM 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M153 CRM 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M153 SSL 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M155 SHOP 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M155 FCX 2026-10-15: C terbuka / lejar keluar 2026-10-30 henti
-- M159 CTSH 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M159 CRM 2026-10-15: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M12 ZETA 2026-10-16: C terbuka / lejar keluar 2026-10-30 henti
-- M57 ZETA 2026-10-16: C terbuka / lejar keluar 2026-10-30 henti
-- M57 DT 2026-10-16: C terbuka / lejar keluar 2026-10-30 henti
-- M78 TEAM 2026-10-16: C terbuka / lejar keluar 2026-10-30 henti
-- M90 TEAM 2026-10-16: C terbuka / lejar keluar 2026-10-30 henti
-- M92 EQT 2026-10-16: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M116 APA 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M116 VET 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M116 COP 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M116 SM 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M116 EQNR 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M116 SU 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M116 SHEL 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M150 EXE 2026-10-16: C terbuka / lejar keluar 2026-10-30 isyarat keluar
-- M153 APA 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
-- M153 COP 2026-10-16: C terbuka / lejar keluar 2026-10-30 masa
+- M13 SBH 2026-10-15: C keluar 2026-10-19 / lejar keluar 2026-10-20 henti

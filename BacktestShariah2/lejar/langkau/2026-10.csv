@@ -295,6 +295,8 @@ M153,SCL,2026-10-20,2026-10-21,isyarat batal pada buka (peraturan kaedah),62.51,
 M153,TTD,2026-10-20,2026-10-21,isyarat batal pada buka (peraturan kaedah),12.5,11.132
 M153,VMI,2026-10-20,2026-10-21,isyarat batal pada buka (peraturan kaedah),451.65,396.5984
 M153,ZBH,2026-10-20,2026-10-21,isyarat batal pada buka (peraturan kaedah),94.6,84.48
+N68X16,RGS,2026-10-20,2026-10-21,saham tidak cair,,
+N68X36,RGS,2026-10-20,2026-10-21,saham tidak cair,,
 M06,APPN,2026-10-21,2026-10-22,isyarat batal pada buka (peraturan kaedah),48.81,34.8232
 M12,MSM,2026-10-21,2026-10-22,isyarat batal pada buka (peraturan kaedah),126.01,127.75
 M13,ARW,2026-10-21,2026-10-22,isyarat batal pada buka (peraturan kaedah),214.26,247.4682
@@ -548,6 +550,8 @@ M153,LMNR,2026-10-23,2026-10-26,isyarat batal pada buka (peraturan kaedah),10.77
 M153,SGU,2026-10-23,2026-10-26,isyarat batal pada buka (peraturan kaedah),12.96,11.572
 M153,TCOM,2026-10-23,2026-10-26,isyarat batal pada buka (peraturan kaedah),39.83,35.0064
 M155,TIMB,2026-10-23,2026-10-26,buka <= henti,17.0,17.5114
+N07X16,RRC,2026-10-23,2026-10-26,saham ambil alih,,
+N07X36,RRC,2026-10-23,2026-10-26,saham ambil alih,,
 M06,TENB,2026-10-26,2026-10-27,isyarat batal pada buka (peraturan kaedah),48.19,36.1251
 M06,XNCR,2026-10-26,2026-10-27,isyarat batal pada buka (peraturan kaedah),29.74,21.7503
 M08,EXE,2026-10-26,2026-10-27,isyarat batal pada buka (peraturan kaedah),94.24,89.3277
@@ -788,6 +792,11 @@ M153,SPXC,2026-10-28,2026-10-29,isyarat batal pada buka (peraturan kaedah),164.1
 M153,STRL,2026-10-28,2026-10-29,isyarat batal pada buka (peraturan kaedah),357.02,342.2056
 M153,TBN,2026-10-28,2026-10-29,isyarat batal pada buka (peraturan kaedah),31.68,27.8872
 M159,IOVA,2026-10-28,2026-10-29,buka <= henti,10.7,12.5885
+N48X36,CRTO,2026-10-28,2026-10-29,saham ambil alih,,
+N113X16,ACA,2026-10-22,2026-10-29,tiada bar masuk,,
+N113X16,CRTO,2026-10-28,2026-10-29,saham ambil alih,,
+N113X36,ACA,2026-10-22,2026-10-29,tiada bar masuk,,
+N113X36,CRTO,2026-10-28,2026-10-29,saham ambil alih,,
 M02,DIOD,2026-10-29,2026-10-30,isyarat batal pada buka (peraturan kaedah),82.1,86.9273
 M02,LFUS,2026-10-29,2026-10-30,isyarat batal pada buka (peraturan kaedah),387.39,394.7382
 M02,PDFS,2026-10-29,2026-10-30,isyarat batal pada buka (peraturan kaedah),42.61,44.1272
