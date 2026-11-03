@@ -143,6 +143,26 @@ class TestSusunanLejar(unittest.TestCase):
                          ['M02', 'M10', 'N19X13', 'N19X15', 'N124X15', 'GB02'])
 
 
+class TestKolamPortfolioSlot(unittest.TestCase):
+    """portfolio_slot ialah ujian ke hadapan yang bermula 19 Okt 2026 ATAS ISYARAT Mxx.
+
+    Pada sesi 2026-11-02 Lejar membawa 1,222 isyarat Mxx lawan 11,862 Nxx. Tanpa tapisan
+    keluarga, kolam calon RS_10/RAWAK_10/RISIKO_10 menjadi ~90% Nxx dalam satu malam dan lorong
+    itu berhenti mengukur perkara yang sama - 15 sesi pertama tidak lagi setanding dengan yang
+    selepasnya. Keputusan pengguna 3 Nov 2026: kekal Mxx; lorong Nxx mesti lorong BAHARU."""
+
+    def test_kolam_mxx_sahaja(self):
+        import portfolio_slot as PS
+        self.assertEqual(PS.KELUARGA_CALON, ('M',))
+
+    def test_tapisan_membuang_n_dan_gb(self):
+        import pandas as pd_
+        import portfolio_slot as PS
+        d = pd_.DataFrame(dict(id_kaedah=['M01', 'N19X13', 'GB02', 'M166']))
+        kekal = list(d[d.id_kaedah.astype(str).str.startswith(PS.KELUARGA_CALON)].id_kaedah)
+        self.assertEqual(kekal, ['M01', 'M166'])
+
+
 class TestModulNxx(unittest.TestCase):
     """94 kombinasi: setiap satu mesti lengkap masuk + keluar + cara, bukan separuh."""
 

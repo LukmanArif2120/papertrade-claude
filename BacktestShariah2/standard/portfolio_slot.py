@@ -53,12 +53,25 @@ L_POSISI = ['saham', 'id_kaedah', 'tarikh_isyarat', 'rs', 'tarikh_beli', 'harga_
 L_EKUITI = ['tarikh', 'ekuiti', 'tunai', 'bil_posisi', 'spy']
 
 
+# Keluarga kaedah yang lorong 10-slot ambil sebagai calon. KEKAL 'M' SAHAJA dengan sengaja
+# (keputusan pengguna 3 Nov 2026). Lorong ini bermula 19 Okt 2026 sebagai ujian ke hadapan ATAS
+# ISYARAT Mxx - RS lawan rawak lawan saiz berskala risiko. Apabila 94 kombinasi Nxx masuk Lejar
+# pada 2 Nov 2026 ia membawa 11,862 isyarat dalam satu sesi lawan 1,222 Mxx, jadi tanpa tapisan
+# ini kolam calon menjadi ~90% Nxx dalam satu malam dan lorong itu berhenti mengukur perkara yang
+# sama: 15 sesi pertama tidak lagi setanding dengan yang selepasnya, dan perbandingan RS lawan
+# rawak hilang maknanya di tengah eksperimen. Nxx dijejak melalui Papertrade C·N dan Lejar Penuh.
+# Lorong Nxx selari boleh ditambah kemudian; ia mesti lorong BAHARU, bukan menukar yang ini.
+KELUARGA_CALON = ('M',)
+
+
 def calon_lejar():
-    """Semua posisi lejar yang dibeli (terbuka + tutup) dengan lorong 2 dan RS pada tarikh isyarat."""
+    """Posisi lejar yang dibeli (terbuka + tutup) bagi KELUARGA_CALON, dengan lorong 2 dan RS pada
+    tarikh isyarat."""
     import lejar
     T, O = lejar.semua_posisi()
     P = pd.concat([T, O], ignore_index=True)
     P = P[(P.tarikh_beli != '') & (P.harga_beli != '')].copy()
+    P = P[P.id_kaedah.astype(str).str.startswith(KELUARGA_CALON)].copy()
     P['harga_beli'] = P.harga_beli.astype(float)
     P['keluar'] = P.keluar_henti.astype(str).str.lower().eq('true') & P.tarikh_keluar_henti.ne('')
     P['harga_keluar_henti'] = pd.to_numeric(P.harga_keluar_henti, errors='coerce')
