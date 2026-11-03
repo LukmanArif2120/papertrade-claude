@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 06:25 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 07:50 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,7 +12,7 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 06:25 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (12)
+## 1. Perlu keputusan anda (13)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
@@ -28,6 +28,7 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 | 2026-11-02 | semak_dashboard.js: 10 kegagalan "Untung center/right" dan hanya 22 jadual diaudit (dahulu 44) | Diukur 2 Nov dan DIATRIBUSIKAN: menjalankan pemeriksa pada badan versi hidup 1793607248-b31f SAHAJA (tanpa suntingan saya) memberi 10/22 yang sama, jadi ia datang daripada v143-v146 (rel kiri bersarang) yang diterbitkan oleh sesi lain, bukan daripada terbitan #172. Dua perkara berasingan: (1) jajaran tajuk lajur Untung lawan selnya - mungkin artifak indeks pemeriksa jika baris pertama ada colspan, perlu disemak sebelum menukar CSS; (2) liputan jatuh separuh kerana rel bersarang menukar panel mana yang dicapai pemeriksa. Yang (2) lebih penting: pemeriksa yang mengaudit separuh jadual memberi keyakinan palsu. |
 | 2026-11-03 | Gred tiada bagi 1,448 posisi yang dibeli 2026-11-02 (613 M + 835 N) | BUKAN masalah Nxx: kedua-dua keluarga terjejas sama rata, kerana larian kejar melangkau langkah gred (kesan baru=tidak, dibetulkan f17c917) DAN kerana menggredkan isyarat 10-30 dengan berita hari ini ialah maklumat masa hadapan. cmd_gred tiada tapisan awalan, jadi posisi yang dibeli mulai 2026-11-03 akan bergred seperti biasa. Keputusan yang diperlukan: biarkan 1,448 baris itu tanpa gred (jujur, dan jurangnya kelihatan), atau isi semula dengan nilai hari ini dan terima bahawa medan gred tidak lagi titik-masa. Saya cadang biarkan. |
 | 2026-11-03 | papertrade/claude pada 91.6% had dokumen db dan dibaca melalui sub(), bukan subBhg() | 240,261 daripada 262,144 bait. Sama kelas dengan papertrade/moomoo (92.6%) yang sudah dilog 2 Nov. Dengan Nxx menambah sehingga ~900 posisi sesi, ini akan dilanggar. Apabila ia berlaku, tolak db malam berhenti - data papertrade tetap dikomit (pembetulan 845dbbc), tetapi dashboard berhenti dikemas kini. Urutan WAJIB sama seperti moomoo: tukar pembaca halaman kepada subBhg() dan TERBITKAN dahulu, baru tambah ke jana_db.PECAH. |
+| 2026-11-03 | lejar.tambah_bulan menambah tanpa menyahduplikasi: sesi separa ditulis akan menduakan baris | Ditemui semasa menilai sama ada if: always() boleh ditambah kepada langkah commit lejar.yml. Dalam gelung setiap sesi, CSV ditulis DAHULU dan status.json (sesi_terakhir) ditulis LEPAS, jadi kemalangan antara keduanya meninggalkan baris sesi S dalam tutup/langkau sementara status masih S-1 - dan larian berikutnya memproses S semula, menambah baris yang sama sekali lagi. Selagi ini benar, commit bersyarat-kejayaan ialah perlindungan, bukan kekurangan. Pembaikan sebenar: kunci nyahduplikasi (id_kaedah+saham+tarikh) dalam tambah_bulan, ATAU penanda 'sesi sedang diproses' yang dibersihkan pada larian berikutnya. Selepas itu barulah if: always() selamat dan lejar boleh menyimpan kemajuan separa. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
@@ -112,6 +113,7 @@ Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau 
 | harga_harian.yml | 37 21 * * 1-5, 23 0 * * 2-6 | ya |
 | harian.yml | 7 5 * * 2-6, 7 7 * * 2-6, 7 9 * * 2-6, 7 11 * * 2-6 | ya |
 | lejar.yml | 17 6 * * 2-6, 17 10 * * 2-6 | ya |
+| pengawal.yml | 35 12 * * 1-5 | ya |
 | penjaga_jadual.yml | 23 * * * *, 53 * * * * | **tidak** |
 | petang.yml | 47 11 * * 1-5, 17 12 * * 1-5 | ya |
 | rs_pasaran.yml | 41 22 * * 1-5, 17 3 * * 2-6 | ya |
