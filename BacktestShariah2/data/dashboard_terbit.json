@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793709027-408f",
-  "nombor": 175,
-  "sha256": "e60e5a3a8fd3c68509c1c522097a0a7550c385c72230c69eed965184e968d4c8",
-  "bait": 659258,
-  "dikemas": "2026-11-03 12:30 UTC",
-  "nota": "Sandaran papertrade/moomoo kini dibaca dengan subBhg (serasi ke belakang), supaya jana_db boleh memecahnya sebelum ia melanggar had 262,144 bait. subBhg juga menetapkan <key>Siap, yang ptSiap() perlukan."
+  "versi_artifact": "1793745754-679d",
+  "nombor": 176,
+  "sha256": "9d7f0e14b0ecd09e075128ce94fc04822b289d1be1ad12df3828192a073b8e17",
+  "bait": 661659,
+  "dikemas": "2026-11-03 22:42 UTC",
+  "nota": "v145: dokumen padat yang belum berhimpun (ringkas_c = 22 dokumen / 3.3 MB, ditolak dalam beberapa batch) tidak lagi dilaporkan sebagai 'Belum ada posisi dalam pangkalan data'. subRingkas/subBhg mengira bahagian yang tiba, ptSiap() menolak keadaan separa, pemasa anti-tergantung 20s tidak memaksa Siap pada dokumen yang sedang berhimpun, dan rangka membawa teks 'Memuatkan (bahagian k/N)'. Pada 3 Nov 2026 kecacatan ini melaporkan 1,641 posisi Nxx + 10,121 Mxx sebagai kosong."
 }

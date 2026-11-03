@@ -1170,6 +1170,57 @@ PECAH = frozenset((
 ))
 
 
+def batchkan(tulis):
+    """(batches, terpecah) daripada [(write, bait, kumpulan)] — lihat nota di dalam.
+
+    Diasingkan daripada main() supaya ia boleh diuji: urutan entri dalam fail batch
+    ialah protokol antara jana_db.py, tolak_db.md langkah 5 dan pengawal kelengkapan
+    dalam dashboard_v2.html, dan tiada apa-apa dalam main() yang boleh mengujinya.
+    """
+    # Pembatchan SEDAR-BAHAGIAN. bahagi_db.py mewajibkan semua bahagian satu dokumen
+    # ditolak dalam SATU batch, tetapi tolak_db.md langkah 5 membuat satu panggilan
+    # ArtifactData bagi SETIAP batch_N.json — jadi bahagian yang jatuh ke fail berbeza
+    # ditolak dalam panggilan berbeza, dan antara keduanya halaman melihat dokumen asas
+    # yang mengisytiharkan n bahagian sementara bahagian itu belum ada. Kumpulan ialah
+    # dokumen asas + semua bahagiannya; ia tidak boleh dipecahkan merentas batch.
+    kump, idx = [], {}
+    for w, sz, k in tulis:
+        if k not in idx:
+            idx[k] = len(kump); kump.append([])
+        kump[idx[k]].append((w, sz))
+    # Satu kumpulan disimpan utuh apabila ia MUAT dalam satu batch. Apabila ia tidak muat
+    # (posisi/lorong2 ialah 3.1 MB merentas bahagian, lawan had batch 900 KB), ia dipecahkan
+    # seperti dahulu dan DIREKOD dalam ringkas.json, bukan menyebabkan SystemExit: keadaan
+    # itu sudah berlaku setiap malam sebelum perubahan ini dan tiada apa yang rosak. Yang
+    # membuatnya selamat ialah pengawal kelengkapan dalam subBhg (dashboard_v2.html):
+    # halaman tidak merender sehingga setiap bahagian dengan `induk` sepadan tiba, jadi
+    # tingkap antara dua panggilan tolakan memapar "Memuatkan…", bukan jadual separa.
+    batches, cur, size, terpecah = [], [], 0, []
+    for g in kump:
+        gs = sum(sz for _, sz in g)
+        if gs > HAD_BATCH and len(g) > 1:
+            terpecah.append(f'{g[0][0]["collection"]}/{g[0][0]["doc_id"]} ({len(g)} bahagian, {gs} bait)')
+            # Dokumen ASAS ditolak TERAKHIR apabila kumpulannya tidak muat satu batch.
+            # Asas membawa `bahagian.id` (induk) yang halaman bandingkan dengan setiap
+            # bahagian sebelum merender. Dengan asas terakhir, halaman yang sudah terbuka
+            # terus merender set LAMA yang lengkap sepanjang tingkap tolakan, dan bertukar
+            # kepada set baharu dalam satu detik apabila asas tiba. Dengan asas DAHULU
+            # (tingkah laku sebelum 3 Nov 2026) asas mengisytiharkan induk baharu selama
+            # beberapa minit sementara bahagian masih lama, jadi tiada apa yang padan dan
+            # tab Posisi memapar "Belum ada posisi dalam pangkalan data" - 1,641 posisi Nxx
+            # dilaporkan kosong pada 3 Nov 2026. Urutan dalam fail batch MESTI dikekalkan.
+            g = g[1:] + [g[0]]
+        if cur and (size + gs > HAD_BATCH or len(cur) + len(g) > 50):
+            batches.append(cur); cur, size = [], 0
+        for w, sz in g:
+            if cur and (size + sz > HAD_BATCH or len(cur) >= 50):
+                batches.append(cur); cur, size = [], 0
+            cur.append(w); size += sz
+    if cur:
+        batches.append(cur)
+    return batches, terpecah
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument('--keluar', required=True); ap.add_argument('--folder', default=PT); ap.add_argument('--stor', default=STOR)
@@ -1351,37 +1402,7 @@ def main(argv=None):
             if v:
                 w['if_version'] = int(v)
             tulis.append((w, sz, kump_id or f'{kol}/{doc_id}'))
-    # Pembatchan SEDAR-BAHAGIAN. bahagi_db.py mewajibkan semua bahagian satu dokumen
-    # ditolak dalam SATU batch, tetapi tolak_db.md langkah 5 membuat satu panggilan
-    # ArtifactData bagi SETIAP batch_N.json — jadi bahagian yang jatuh ke fail berbeza
-    # ditolak dalam panggilan berbeza, dan antara keduanya halaman melihat dokumen asas
-    # yang mengisytiharkan n bahagian sementara bahagian itu belum ada. Kumpulan ialah
-    # dokumen asas + semua bahagiannya; ia tidak boleh dipecahkan merentas batch.
-    kump, idx = [], {}
-    for w, sz, k in tulis:
-        if k not in idx:
-            idx[k] = len(kump); kump.append([])
-        kump[idx[k]].append((w, sz))
-    # Satu kumpulan disimpan utuh apabila ia MUAT dalam satu batch. Apabila ia tidak muat
-    # (posisi/lorong2 ialah 3.1 MB merentas bahagian, lawan had batch 900 KB), ia dipecahkan
-    # seperti dahulu dan DIREKOD dalam ringkas.json, bukan menyebabkan SystemExit: keadaan
-    # itu sudah berlaku setiap malam sebelum perubahan ini dan tiada apa yang rosak. Yang
-    # membuatnya selamat ialah pengawal kelengkapan dalam subBhg (dashboard_v2.html):
-    # halaman tidak merender sehingga setiap bahagian dengan `induk` sepadan tiba, jadi
-    # tingkap antara dua panggilan tolakan memapar "Memuatkan…", bukan jadual separa.
-    batches, cur, size, terpecah = [], [], 0, []
-    for g in kump:
-        gs = sum(sz for _, sz in g)
-        if gs > HAD_BATCH and len(g) > 1:
-            terpecah.append(f'{g[0][0]["collection"]}/{g[0][0]["doc_id"]} ({len(g)} bahagian, {gs} bait)')
-        if cur and (size + gs > HAD_BATCH or len(cur) + len(g) > 50):
-            batches.append(cur); cur, size = [], 0
-        for w, sz in g:
-            if cur and (size + sz > HAD_BATCH or len(cur) >= 50):
-                batches.append(cur); cur, size = [], 0
-            cur.append(w); size += sz
-    if cur:
-        batches.append(cur)
+    batches, terpecah = batchkan(tulis)
     fail = []
     for i, bt in enumerate(batches):
         p = os.path.join(a.keluar, f'batch_{i}.json'); json.dump(bt, open(p, 'w'), indent=1); fail.append(p)

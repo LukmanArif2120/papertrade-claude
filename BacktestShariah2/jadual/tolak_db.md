@@ -30,7 +30,26 @@ Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e
    dipenuhi — jangan anggap `harian.yml`/`beli.yml` tidak perlu ditembak; nyatakan ia tidak diketahui.
 5. Bagi setiap fail `batch_N.json` yang dicetak: `ArtifactData` `batch`, `writes` = kandungan fail itu (setiap entri sudah
    ada `file_path` dan `if_version`). Ditolak kerana versi berubah → ulang langkah 3–5 sekali.
-6. Amaran (hanya jika langkah 2–5 gagal atau db tidak ditolak): `mcp__github__actions_run_trigger` (method `run_workflow`,
+   **URUTAN WAJIB: batch_0, batch_1, … mengikut nombor, dan urutan entri dalam setiap fail jangan diubah.**
+   `ringkas_c` ialah 22 dokumen / 3.3 MB — ia TIDAK muat satu batch, jadi `jana_db.py` meletakkan
+   dokumen asasnya (yang membawa `induk`) pada entri TERAKHIR. Halaman tidak merender sehingga
+   setiap bahagian sepadan dengan induk asas, jadi dengan urutan ini halaman kekal memapar set
+   LAMA yang lengkap sepanjang tolakan. Tolak asas lebih awal dan tab Posisi memapar "Belum ada
+   posisi dalam pangkalan data" selama beberapa minit (berlaku 3 Nov 2026: 1,641 posisi Nxx).
+5b. **Sahkan penghimpunan** (selepas SEMUA batch ditolak; 3 Nov 2026). Bagi setiap nama dalam
+   `kumpulan_terpecah` daripada `ringkas.json` — iaitu kumpulan yang TIDAK muat satu batch — baca
+   dokumen asasnya dan bahagian NOMBOR TERTINGGI dengan `ArtifactData` `get` (`out_dir` supaya
+   kandungan tidak dibaca; hanya medan diperlukan). Bandingkan `bahagian.id` asas dengan `induk`
+   bahagian itu.
+   - Sama → penghimpunan lengkap; teruskan.
+   Pemeriksaan ini SAH kerana asas ditolak terakhir (langkah 5): jika induk asas sudah baharu,
+   setiap bahagiannya sudah ditulis sebelum itu.
+   - BERBEZA → satu batch tidak sampai. Ulang langkah 5 bagi fail batch yang tinggal, kemudian
+     semak lagi. Masih berbeza → cetus amaran (langkah 6) dengan mesej
+     "tolak db separa: <nama> induk tak sepadan". JANGAN laporkan tolakan db sebagai berjaya:
+     halaman akan memapar "Memuatkan (bahagian k/N)" sampai pembetulan berikutnya, dan posisi
+     Papertrade C tidak kelihatan sampai itu.
+6. Amaran (hanya jika langkah 2–5b gagal atau db tidak ditolak): `mcp__github__actions_run_trigger` (method `run_workflow`,
    owner `pedagangsenja`, repo `papertrade-claude`, workflow_id `amaran_ntfy.yml`, ref `main`, inputs
    {"tajuk": "tolak db gagal", "mesej": "<tarikh>: <sebab ringkas, < 200 aksara>"}). Berjaya → tiada notifikasi.
 7. **Dashboard hidup lawan repo** (satu-satunya tempat semakan ini boleh dibuat: GitHub Actions

@@ -1873,7 +1873,7 @@ function posColsR(akaun){return [
   {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?'<span class="pill p-warn">Luar peraturan</span> ':''}${lorongRingkas(r)}`,c:()=>'wrap'}];}
 function renderPos(){
   const el=$('#v-pos'),a=S.akaun,ps=S.pos;const all=posRows(a);
-  if(!all.length){el.innerHTML=`<div class="panel empty">${ptSiap(a)?'Belum ada posisi dalam pangkalan data.':'Memuatkan posisi…'}</div>`;return;}
+  if(!all.length){el.innerHTML=`<div class="panel empty">${ptSiap(a)?'Belum ada posisi dalam pangkalan data.':'Memuatkan posisi…'+ptTunggu(a)}</div>`;return;}
   const peg=all.filter(r=>!r.keluar),kel=all.filter(r=>r.keluar);
   const base=ps.st==='pegang'?peg:ps.st==='keluar'?kel:all;
   const fb=ptFilterBar('pos'+a,base);const rows=fb.apply(base);const rk=lajurOf('pos')==='ringkas',pd=pandOf();
@@ -2137,7 +2137,7 @@ function teruk(list,title,tip,val,fmt,bad,sub){
 function renderPrestasi(which){
   const el=$('#v-pr-'+which);const src=prSrc(which);
   const nama=AKN[which];
-  if(!src.length){el.innerHTML=`<div class="panel empty">${ptSiap(which)?nama+': belum ada posisi dalam pangkalan data.':'Memuatkan posisi…'}</div>`;return;}
+  if(!src.length){el.innerHTML=`<div class="panel empty">${ptSiap(which)?nama+': belum ada posisi dalam pangkalan data.':'Memuatkan posisi…'+ptTunggu(which)}</div>`;return;}
   const pf=S.prf||(S.prf={minN:1});
   let all=prStatsC.get(src);if(!all){all=prStats(src);prStatsC.set(src,all);}const st=all.filter(o=>o.n>=pf.minN);
   const tb=prLayak(all)[0];
@@ -3782,8 +3782,15 @@ function posColsP(p,akaun){const sh={k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f
     {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>lorongRingkas(r),c:()=>'wrap'}];}
 
 /* rangka semasa memuat: ganti panel "Memuatkan…" supaya tiada kelipan "Belum ada posisi" */
-const ptSiap=a=>!!(S.tanpaDb||(a==='m'?S.ptmSiap:(a==='c'||a==='cm'||a==='cn')?S.ptcSiap:S.ptmSiap&&S.ptcSiap));
-const rangka=()=>`<div class="rangka" aria-busy="true" role="status" aria-label="Memuatkan data"><div class="rk-b" style="width:62%"></div><div class="kpis">${'<div class="kpi"><div class="rk-b" style="width:45%"></div><div class="rk-b rk-v"></div><div class="rk-b" style="width:70%"></div></div>'.repeat(4)}</div><div class="panel"><div class="rk-b" style="width:30%;height:16px"></div><div class="rk-c"></div></div><div class="panel">${'<div class="rk-b"></div>'.repeat(6)}</div></div>`;
+const ptSiapSatu=k=>!!(S[k+'Siap']&&!S[k+'Tunggu']);
+const ptSiap=a=>!!(S.tanpaDb||(a==='m'?ptSiapSatu('ptm'):(a==='c'||a==='cm'||a==='cn')?ptSiapSatu('ptc'):ptSiapSatu('ptm')&&ptSiapSatu('ptc')));
+/* "Memuatkan" tanpa nombor tidak boleh dibezakan daripada tergantung; dengan "bahagian 9/22"
+   ia memberitahu tolakan db sedang berjalan DAN di mana ia berhenti jika ia berhenti. */
+const ptTunggu=a=>{const t=a==='m'?S.ptmTunggu:S.ptcTunggu;return t?` (bahagian ${t.ada}/${t.perlu} tiba · tolakan db sedang berjalan)`:'';};
+/* `nota` = baris kemajuan yang kekal KELIHATAN di atas rangka. Tanpa ia, rangka berkilau
+   selama-lamanya dan tidak membezakan "sedang memuat" daripada "tolakan db terhenti pada
+   bahagian 21 daripada 22" - dan rangka itulah sebab teks kemajuan tidak pernah dilihat. */
+const rangka=(nota)=>`<div class="rangka" aria-busy="true" role="status" aria-label="Memuatkan data">${nota?`<p class="sub" style="margin:0 0 10px">${esc(nota)}</p>`:''}<div class="rk-b" style="width:62%"></div><div class="kpis">${'<div class="kpi"><div class="rk-b" style="width:45%"></div><div class="rk-b rk-v"></div><div class="rk-b" style="width:70%"></div></div>'.repeat(4)}</div><div class="panel"><div class="rk-b" style="width:30%;height:16px"></div><div class="rk-c"></div></div><div class="panel">${'<div class="rk-b"></div>'.repeat(6)}</div></div>`;
 
 /* ================= Panduan: cara membaca papan + konsep + glosari (dijana daripada TIPS) ================= */
 function openPanduan(){const ent=[],seen=new Set();
@@ -4238,7 +4245,7 @@ function heroUtama(src,a,aS,A,As,nKat,t0,nKaedah,usd){
     ${H&&H.kum.length>2?`<div class="hsp">${sparkG(H.kum,{W:760,H:88,p:6,ref:0,lbl:`Untung terkumpul Papertrade C, ${H.kum.length} sesi`})}</div>`:''}</div>`;}
 function renderUtama(){
   const el=$('#v-utama');const src=prSrc('c');
-  if(!src.length){el.innerHTML=`<div class="panel empty">${ptSiap('cm')?'Belum ada posisi Papertrade C dalam pangkalan data.':'Memuatkan data…'}</div>`;return;}
+  if(!src.length){el.innerHTML=`<div class="panel empty">${ptSiap('cm')?'Belum ada posisi Papertrade C dalam pangkalan data.':'Memuatkan data…'+ptTunggu('cm')}</div>`;return;}
   let st=prStatsC.get(src);if(!st){st=prStats(src);prStatsC.set(src,st);}
   const kat={};(S.kat&&S.kat.rows||[]).forEach(r=>{kat[r.id]=r;});
   const v=src.map(r=>r.hasil).filter(x=>x!=null),a=avgOf(v),up=v.filter(x=>x>0).length,dn=v.filter(x=>x<0).length;
@@ -4657,7 +4664,10 @@ const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(render
 function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const el=document.getElementById(vid);el.classList.toggle('pnav',pnavBoleh(vid));
   const sx={},sy={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;sy[t.dataset.st]=t.parentElement.scrollTop;});
   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
-  {const e1=el.firstElementChild;if(el.children.length===1&&e1.classList.contains('empty')&&/Memuatkan/.test(e1.textContent))el.innerHTML=rangka();}
+  /* Teks "(bahagian k/N …)" dibawa ke rangka: ia satu-satunya petunjuk bahawa dokumen padat
+     sedang berhimpun, dan menggantikan panel dengan rangka kosong akan membuangnya. */
+  {const e1=el.firstElementChild;if(el.children.length===1&&e1.classList.contains('empty')&&/Memuatkan/.test(e1.textContent)){
+    const m=/\(bahagian [^)]*\)/.exec(e1.textContent);el.innerHTML=rangka(m?'Memuatkan '+m[0]:'');}}
   applyFold(el);applyNav(el,vid);applyTips(el);renderData();renderSal();
   requestAnimationFrame(()=>{topScrolls(el);el.querySelectorAll('table[data-st]').forEach(t=>{if(sx[t.dataset.st])t.parentElement.scrollLeft=sx[t.dataset.st];if(sy[t.dataset.st])t.parentElement.scrollTop=sy[t.dataset.st];});});}
 /* tiada skrol mendatar: jika jadual lebih lebar daripada bekasnya, sembunyi lajur dari kanan ke kiri (untung bulanan: bulan
@@ -5004,8 +5014,16 @@ renderNav();renderAll();
 (async function connect(){
   const db=window.claude?.use?await window.claude.use('db'):null;
   if(!db){setLive(false,'Data langsung tidak tersedia di paparan ini');S.live=true;S.tanpaDb=true;renderAll();return;}
-  /* rangka dipapar sehingga papertrade siap; selepas 20 saat anggap siap supaya halaman tidak tergantung */
-  setTimeout(()=>{if(!S.ptcSiap||!S.ptmSiap){S.ptcSiap=S.ptmSiap=true;renderAll();}},20000);
+  /* Rangka dipapar sehingga papertrade siap; selepas 20 saat anggap siap supaya halaman tidak
+     tergantung - KECUALI dokumen padat yang sedang berhimpun (S.*Tunggu). Memaksa `Siap` pada
+     dokumen separa menukar "Memuatkan" kepada "Belum ada posisi dalam pangkalan data", iaitu
+     dakwaan PALSU bahawa papertrade tiada posisi; pada 3 Nov 2026 ia melaporkan 1,641 posisi
+     Nxx sebagai kosong. Lebih baik kekal "Memuatkan (bahagian 9/22)" selama-lamanya: itu benar,
+     dan ia menunjuk tepat di mana tolakan db terhenti. */
+  setTimeout(()=>{let u=false;
+    if(!S.ptcSiap&&!S.ptcTunggu){S.ptcSiap=true;u=true;}
+    if(!S.ptmSiap&&!S.ptmTunggu){S.ptmSiap=true;u=true;}
+    if(u)renderAll();},20000);
   /* tab Kaedah membaca registry dan papertrade juga */
   /* setiap dokumen boleh mengubah Ringkasan; kiraan berat dimemo, jadi lukis semula tab semasa sahaja */
   const re=()=>renderSoon();
@@ -5027,9 +5045,18 @@ renderNav();renderAll();
       if(t==='k'||t==='j'){if(!v)continue;v=M[K[j]][v-1];if(t==='j')v=JSON.parse(v);}else if(t==='b')v=!!v;r[K[j]]=v;}out.push(r);});
     const d={};Object.keys(asas).forEach(k=>{if(!['kolum','jenis','rows','bahagian'].includes(k))d[k]=asas[k];});d.rows=out;return d;};
   const subRingkas=(nama,keyName,lama)=>{let asas=null,dahLama=false;const ch={},km={},dah=new Set();
-    const cuba=()=>{if(!asas)return;const B=asas.bahagian||{n:1,nk:0};
-      for(let i=2;i<=B.n;i++)if(!ch[i]||ch[i].induk!==B.id)return;
-      for(let i=1;i<=B.nk;i++)if(!km[i]||km[i].induk!==B.id)return;
+    /* v145 (3 Nov 2026): KIRA bahagian yang tiba, bukan sekadar pulang awal. Tolakan db malam
+       memerlukan 22 dokumen bagi `ringkas_c` dan 3.3 MB tidak muat had batch 900 KB, jadi ia
+       tiba dalam beberapa panggilan ArtifactData berasingan - beberapa minit di mana dokumen
+       asas dan bahagiannya TIDAK sepadan. Tanpa kiraan ini halaman yang dimuat dalam tingkap
+       itu memapar "Belum ada posisi dalam pangkalan data": ia MENDAKWA pengumpulan data
+       kosong sedangkan ia cuma belum selesai berhimpun. Itulah yang pengguna lihat pada
+       3 Nov 2026 pada tab Papertrade C - N. */
+    const cuba=()=>{if(!asas)return;const B=asas.bahagian||{n:1,nk:0};let ada=1;
+      for(let i=2;i<=B.n;i++)if(ch[i]&&ch[i].induk===B.id)ada++;
+      for(let i=1;i<=B.nk;i++)if(km[i]&&km[i].induk===B.id)ada++;
+      if(ada<B.n+B.nk){S[keyName+'Tunggu']={ada,perlu:B.n+B.nk};re();return;}
+      S[keyName+'Tunggu']=null;
       S[keyName]=nyahkod(asas,ch,km);S[keyName+'Siap']=true;S.live=true;re();};
     const anak=(id,simpan)=>{if(dah.has(id))return;dah.add(id);db.doc('papertrade/'+id).onSnapshot(t=>{simpan(t.exists?t.data():null);cuba();},()=>{});};
     db.doc('papertrade/'+nama).onSnapshot(s=>{if(!s.exists){if(!dahLama){dahLama=true;lama();}return;}
@@ -5048,7 +5075,8 @@ renderNav();renderAll();
      sepadan, tiada apa diterbitkan dan tab kekal pada keadaan "Memuatkan…". */
   const subBhg=(path,keyName,tabs)=>{let asas=null;const ch={},dah=new Set();
     const gabung=()=>{let d=null;if(asas){const b=asas.bahagian;let rows=asas.rows||[];
-        if(b&&b.n>1){for(let i=2;i<=b.n;i++)if(!ch[i]||ch[i].induk!==b.id)return;
+        if(b&&b.n>1){let ada=1;for(let i=2;i<=b.n;i++)if(ch[i]&&ch[i].induk===b.id)ada++;
+          if(ada<b.n){S[keyName+'Tunggu']={ada,perlu:b.n};re(...tabs);return;}
           for(let i=2;i<=b.n;i++)rows=rows.concat(ch[i].rows||[]);}
         d=Object.assign({},asas,{rows});}
       /* `Siap` juga, bukan hanya data (3 Nov 2026). ptSiap() membaca S.ptmSiap/S.ptcSiap untuk
@@ -5057,7 +5085,7 @@ renderNav();renderAll();
          tersekat pada "Memuatkan…" SELAMANYA - kegagalan senyap, jenis yang paling sukar
          dikesan kerana halaman nampak sedang bekerja. Ditetapkan hanya apabila gabung() benar-
          benar menerbit, jadi keadaan separa tidak pernah dilapor sebagai siap. */
-      S[keyName]=d;S[keyName+'Siap']=true;S.live=true;re(...tabs);};
+      S[keyName+'Tunggu']=null;S[keyName]=d;S[keyName+'Siap']=true;S.live=true;re(...tabs);};
     db.doc(path).onSnapshot(s=>{asas=s.exists?s.data():null;const n=asas&&asas.bahagian?asas.bahagian.n:1;
       for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);db.doc(path+'_'+i).onSnapshot(t=>{ch[i]=t.exists?t.data():null;gabung();},()=>{});}
       gabung();},()=>{});};
