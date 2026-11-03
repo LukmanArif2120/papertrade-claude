@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793745754-679d",
-  "nombor": 176,
-  "sha256": "9d7f0e14b0ecd09e075128ce94fc04822b289d1be1ad12df3828192a073b8e17",
-  "bait": 661659,
-  "dikemas": "2026-11-03 22:42 UTC",
-  "nota": "v145: dokumen padat yang belum berhimpun (ringkas_c = 22 dokumen / 3.3 MB, ditolak dalam beberapa batch) tidak lagi dilaporkan sebagai 'Belum ada posisi dalam pangkalan data'. subRingkas/subBhg mengira bahagian yang tiba, ptSiap() menolak keadaan separa, pemasa anti-tergantung 20s tidak memaksa Siap pada dokumen yang sedang berhimpun, dan rangka membawa teks 'Memuatkan (bahagian k/N)'. Pada 3 Nov 2026 kecacatan ini melaporkan 1,641 posisi Nxx + 10,121 Mxx sebagai kosong."
+  "versi_artifact": "1793746332-53f6",
+  "nombor": 177,
+  "sha256": "26fe828220e9d1026a71191172d38b53b11f880587766eade0655c33442426b8",
+  "bait": 663897,
+  "dikemas": "2026-11-03 22:52 UTC",
+  "nota": "v146: panel kosong melaporkan sebabnya. Setiap onSnapshot dalam connect() dahulunya menelan ralatnya dengan ()=>{} - langganan db yang gagal pada peranti pengguna kelihatan sama seperti koleksi kosong. Sekarang ralat direkod (S.dbErr) dan dipapar, diagnostik penghimpunan menamakan dokumen yang belum sampai ('ringkas_c_9 (induk lain)'), dan ralat pada dokumen padat asas menjatuhkan halaman ke laluan sandaran claude*/moomoo."
 }

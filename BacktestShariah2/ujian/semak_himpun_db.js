@@ -56,8 +56,10 @@ async function jalan(D, tunggu) {
     out[v] = await pg.evaluate(() => {
       const el = document.querySelector('section.view:not([hidden])');
       const ep = el.querySelector('.panel.empty') || el.querySelector('.rangka .sub');
+      const nd = el.querySelector('.note');
       return { baris: el.querySelectorAll('table tbody tr').length,
                teks: ep ? ep.textContent.trim() : null,
+               nota: nd ? nd.textContent.trim() : null,
                jumlah: (/(\d[\d,]*) posisi · ketik baris/.exec(el.textContent) || [, null])[1] };
     });
   }
@@ -94,6 +96,9 @@ async function jalan(D, tunggu) {
       if (/[Bb]elum ada posisi/.test(t)) gagal.push(`${v}: dokumen separa dilaporkan sebagai "tiada posisi" — ${t}`);
       else if (!/bahagian \d+\/\d+/.test(t)) gagal.push(`${v}: tiada kiraan bahagian semasa berhimpun — ${t || '(tiada teks)'}`);
       if (out[v].jumlah) gagal.push(`${v}: jadual SEPARA dirender (${out[v].jumlah} posisi) — pengawal kelengkapan tidak berfungsi`);
+      // Diagnostik mesti NAMAKAN dokumen yang belum sampai: tanpa itu kegagalan pada peranti
+      // pengguna tidak boleh dibezakan daripada koleksi kosong, dan itulah yang berlaku.
+      if (!/belum:.*ringkas_c_/.test(out[v].nota || '')) gagal.push(`${v}: diagnostik tidak menamakan dokumen yang hilang — ${out[v].nota || '(tiada nota)'}`);
     }
   }
   if (gagal.length) { console.error('\nGAGAL:\n  ' + gagal.join('\n  ')); process.exit(1); }

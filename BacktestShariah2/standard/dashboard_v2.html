@@ -1873,7 +1873,7 @@ function posColsR(akaun){return [
   {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>`${r.tidak_sah?'<span class="pill p-warn">Luar peraturan</span> ':''}${lorongRingkas(r)}`,c:()=>'wrap'}];}
 function renderPos(){
   const el=$('#v-pos'),a=S.akaun,ps=S.pos;const all=posRows(a);
-  if(!all.length){el.innerHTML=`<div class="panel empty">${ptSiap(a)?'Belum ada posisi dalam pangkalan data.':'Memuatkan posisi…'+ptTunggu(a)}</div>`;return;}
+  if(!all.length){el.innerHTML=`<div class="panel empty">${ptSiap(a)?'Belum ada posisi dalam pangkalan data.':'Memuatkan posisi…'+ptTunggu(a)}${dbDiag(a)}</div>`;return;}
   const peg=all.filter(r=>!r.keluar),kel=all.filter(r=>r.keluar);
   const base=ps.st==='pegang'?peg:ps.st==='keluar'?kel:all;
   const fb=ptFilterBar('pos'+a,base);const rows=fb.apply(base);const rk=lajurOf('pos')==='ringkas',pd=pandOf();
@@ -3787,10 +3787,19 @@ const ptSiap=a=>!!(S.tanpaDb||(a==='m'?ptSiapSatu('ptm'):(a==='c'||a==='cm'||a==
 /* "Memuatkan" tanpa nombor tidak boleh dibezakan daripada tergantung; dengan "bahagian 9/22"
    ia memberitahu tolakan db sedang berjalan DAN di mana ia berhenti jika ia berhenti. */
 const ptTunggu=a=>{const t=a==='m'?S.ptmTunggu:S.ptcTunggu;return t?` (bahagian ${t.ada}/${t.perlu} tiba · tolakan db sedang berjalan)`:'';};
+/* Panel kosong mesti MENERANGKAN dirinya. "Belum ada posisi" tanpa diagnostik tidak boleh
+   dibezakan daripada langganan db yang gagal pada peranti itu sahaja, dan itulah yang menyekat
+   pembaikan selama sehari pada 3 Nov 2026. */
+const dbDiag=a=>{const d=a==='m'?S.ptmDiag:S.ptcDiag,e=S.dbErr||[];
+  if(!d&&!e.length)return '';
+  return `<div class="note" style="margin-top:12px;text-align:left"><b>Diagnostik db</b>`
+    +(d?`<br>${esc(String(d))}`:'')
+    +(e.length?`<br><b class="neg">Langganan gagal:</b> ${esc(e.join(' | '))}`:'')
+    +`</div>`;};
 /* `nota` = baris kemajuan yang kekal KELIHATAN di atas rangka. Tanpa ia, rangka berkilau
    selama-lamanya dan tidak membezakan "sedang memuat" daripada "tolakan db terhenti pada
    bahagian 21 daripada 22" - dan rangka itulah sebab teks kemajuan tidak pernah dilihat. */
-const rangka=(nota)=>`<div class="rangka" aria-busy="true" role="status" aria-label="Memuatkan data">${nota?`<p class="sub" style="margin:0 0 10px">${esc(nota)}</p>`:''}<div class="rk-b" style="width:62%"></div><div class="kpis">${'<div class="kpi"><div class="rk-b" style="width:45%"></div><div class="rk-b rk-v"></div><div class="rk-b" style="width:70%"></div></div>'.repeat(4)}</div><div class="panel"><div class="rk-b" style="width:30%;height:16px"></div><div class="rk-c"></div></div><div class="panel">${'<div class="rk-b"></div>'.repeat(6)}</div></div>`;
+const rangka=(nota,ekstra)=>`<div class="rangka" aria-busy="true" role="status" aria-label="Memuatkan data">${nota?`<p class="sub" style="margin:0 0 10px">${esc(nota)}</p>`:''}${ekstra||''}<div class="rk-b" style="width:62%"></div><div class="kpis">${'<div class="kpi"><div class="rk-b" style="width:45%"></div><div class="rk-b rk-v"></div><div class="rk-b" style="width:70%"></div></div>'.repeat(4)}</div><div class="panel"><div class="rk-b" style="width:30%;height:16px"></div><div class="rk-c"></div></div><div class="panel">${'<div class="rk-b"></div>'.repeat(6)}</div></div>`;
 
 /* ================= Panduan: cara membaca papan + konsep + glosari (dijana daripada TIPS) ================= */
 function openPanduan(){const ent=[],seen=new Set();
@@ -4667,7 +4676,8 @@ function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const e
   /* Teks "(bahagian k/N …)" dibawa ke rangka: ia satu-satunya petunjuk bahawa dokumen padat
      sedang berhimpun, dan menggantikan panel dengan rangka kosong akan membuangnya. */
   {const e1=el.firstElementChild;if(el.children.length===1&&e1.classList.contains('empty')&&/Memuatkan/.test(e1.textContent)){
-    const m=/\(bahagian [^)]*\)/.exec(e1.textContent);el.innerHTML=rangka(m?'Memuatkan '+m[0]:'');}}
+    const m=/\(bahagian [^)]*\)/.exec(e1.textContent),nd=e1.querySelector('.note');
+    el.innerHTML=rangka(m?'Memuatkan '+m[0]:'',nd?nd.outerHTML:'');}}
   applyFold(el);applyNav(el,vid);applyTips(el);renderData();renderSal();
   requestAnimationFrame(()=>{topScrolls(el);el.querySelectorAll('table[data-st]').forEach(t=>{if(sx[t.dataset.st])t.parentElement.scrollLeft=sx[t.dataset.st];if(sy[t.dataset.st])t.parentElement.scrollTop=sy[t.dataset.st];});});}
 /* tiada skrol mendatar: jika jadual lebih lebar daripada bekasnya, sembunyi lajur dari kanan ke kiri (untung bulanan: bulan
@@ -5033,7 +5043,16 @@ renderNav();renderAll();
     setLive(true,`Langsung · ujian terkini ${ts}`);re('backtest');
   },()=>setLive(false,'Sambungan terputus. Muat semula halaman.'));
   db.doc('meta/info').onSnapshot(s=>{S.meta=s.exists?s.data():null;re('backtest');},()=>{});
-  const sub=(path,keyName,tabs)=>db.doc(path).onSnapshot(s=>{S[keyName]=s.exists?s.data():null;S[keyName+'Siap']=true;S.live=true;re(...tabs);},()=>{});
+  /* v146 (3 Nov 2026): SETIAP onSnapshot di bawah dahulunya menelan ralatnya dengan `()=>{}`.
+     Langganan yang gagal pada pelayar pengguna - kuota, rangkaian, dokumen terlalu besar -
+     kelihatan SAMA seperti koleksi kosong, dan tiada apa-apa dalam halaman atau konsol yang
+     membezakannya. Apabila pengguna melaporkan "Belum ada posisi" pada 3 Nov 2026 sedangkan db
+     dan halaman kedua-duanya terbukti betul, tiada cara untuk tahu apa yang gagal pada telefon
+     mereka. Sekarang ada: ralat direkod dan dipapar dalam panel kosong. */
+  const dbErr=(path,e)=>{const m=String(e&&(e.message||e.code)||e).slice(0,90);
+    (S.dbErr=S.dbErr||[]).push(path+' → '+m);if(S.dbErr.length>12)S.dbErr.shift();
+    try{console.error('langganan db gagal:',path,e);}catch(x){}renderSoon();};
+  const sub=(path,keyName,tabs)=>db.doc(path).onSnapshot(s=>{S[keyName]=s.exists?s.data():null;S[keyName+'Siap']=true;S.live=true;re(...tabs);},e=>dbErr(path,e));
   /* papertrade/ringkas_c, ringkas_m (v90; standard/jana_db.py ringkas_pt): semua baris dalam bentuk padat ikut lajur dengan kamus
      dikongsi, ~4× lebih kecil daripada papertrade/claude*. Dinyahkod kepada objek baris yang sama; dipapar hanya selepas semua
      bahagian dan kamus tiba (indeks posisi stabil). Jika dokumen padat belum wujud, baca dokumen lama (claude*, moomoo). */
@@ -5052,18 +5071,24 @@ renderNav();renderAll();
        itu memapar "Belum ada posisi dalam pangkalan data": ia MENDAKWA pengumpulan data
        kosong sedangkan ia cuma belum selesai berhimpun. Itulah yang pengguna lihat pada
        3 Nov 2026 pada tab Papertrade C - N. */
-    const cuba=()=>{if(!asas)return;const B=asas.bahagian||{n:1,nk:0};let ada=1;
-      for(let i=2;i<=B.n;i++)if(ch[i]&&ch[i].induk===B.id)ada++;
-      for(let i=1;i<=B.nk;i++)if(km[i]&&km[i].induk===B.id)ada++;
+    const cuba=()=>{if(!asas){S[keyName+'Diag']='dokumen asas tidak sampai';return;}
+      const B=asas.bahagian||{n:1,nk:0};let ada=1,hil=[];
+      for(let i=2;i<=B.n;i++){if(ch[i]&&ch[i].induk===B.id)ada++;else hil.push(nama+'_'+i+(ch[i]?' (induk lain)':' (tiada)'));}
+      for(let i=1;i<=B.nk;i++){if(km[i]&&km[i].induk===B.id)ada++;else hil.push(nama+'_kamus_'+i+(km[i]?' (induk lain)':' (tiada)'));}
+      S[keyName+'Diag']=`asas ${B.id} · ${ada}/${B.n+B.nk} bahagian`+(hil.length?' · belum: '+hil.slice(0,6).join(', ')+(hil.length>6?` dan ${hil.length-6} lagi`:''):'');
       if(ada<B.n+B.nk){S[keyName+'Tunggu']={ada,perlu:B.n+B.nk};re();return;}
       S[keyName+'Tunggu']=null;
       S[keyName]=nyahkod(asas,ch,km);S[keyName+'Siap']=true;S.live=true;re();};
-    const anak=(id,simpan)=>{if(dah.has(id))return;dah.add(id);db.doc('papertrade/'+id).onSnapshot(t=>{simpan(t.exists?t.data():null);cuba();},()=>{});};
+    const anak=(id,simpan)=>{if(dah.has(id))return;dah.add(id);db.doc('papertrade/'+id).onSnapshot(t=>{simpan(t.exists?t.data():null);cuba();},e=>{simpan(null);dbErr('papertrade/'+id,e);cuba();});};
     db.doc('papertrade/'+nama).onSnapshot(s=>{if(!s.exists){if(!dahLama){dahLama=true;lama();}return;}
       asas=s.data();const B=asas.bahagian||{n:1,nk:0};
       for(let i=2;i<=B.n;i++)anak(nama+'_'+i,d=>{ch[i]=d;});
       for(let i=1;i<=B.nk;i++)anak(nama+'_kamus_'+i,d=>{km[i]=d;});
-      cuba();},()=>{});};
+      cuba();},e=>{dbErr('papertrade/'+nama,e);
+        /* Dokumen padat tidak boleh dibaca → guna laluan sandaran (claude, moomoo) seperti
+           apabila ia TIADA. Dahulu ralat pada dokumen asas bermakna tiada sandaran langsung:
+           halaman mendiamkan diri dan kemudian mendakwa tiada posisi. */
+        if(!dahLama){dahLama=true;lama();}});};
 
   /* dokumen besar dibahagi (standard/bahagi_db.py): asas {bahagian:{id,n}} + <nama>_2… {induk,bahagian,rows}; bahagian lama (induk lain) diabaikan */
   /* 2 Nov 2026: PENGAWAL KELENGKAPAN. Tanpa ia, gabung() menerbitkan keadaan SEPARA pada
@@ -5087,8 +5112,8 @@ renderNav();renderAll();
          benar menerbit, jadi keadaan separa tidak pernah dilapor sebagai siap. */
       S[keyName+'Tunggu']=null;S[keyName]=d;S[keyName+'Siap']=true;S.live=true;re(...tabs);};
     db.doc(path).onSnapshot(s=>{asas=s.exists?s.data():null;const n=asas&&asas.bahagian?asas.bahagian.n:1;
-      for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);db.doc(path+'_'+i).onSnapshot(t=>{ch[i]=t.exists?t.data():null;gabung();},()=>{});}
-      gabung();},()=>{});};
+      for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);db.doc(path+'_'+i).onSnapshot(t=>{ch[i]=t.exists?t.data():null;gabung();},e=>{ch[i]=null;dbErr(path+'_'+i,e);gabung();});}
+      gabung();},e=>dbErr(path,e));};
   /* Langganan ringkas_m/ringkas_c diletak SELEPAS takrifan subBhg (3 Nov 2026): sandaran
      moomoo kini memanggil subBhg, dan `const` mempunyai zon mati temporal - memanggilnya
      sebelum pernyataan takrifan dilaksanakan membuang ReferenceError. Callback sandaran
