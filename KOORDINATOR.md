@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 07:50 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 11:10 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,7 +12,7 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 07:50 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (13)
+## 1. Perlu keputusan anda (14)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
@@ -29,6 +29,7 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 | 2026-11-03 | Gred tiada bagi 1,448 posisi yang dibeli 2026-11-02 (613 M + 835 N) | BUKAN masalah Nxx: kedua-dua keluarga terjejas sama rata, kerana larian kejar melangkau langkah gred (kesan baru=tidak, dibetulkan f17c917) DAN kerana menggredkan isyarat 10-30 dengan berita hari ini ialah maklumat masa hadapan. cmd_gred tiada tapisan awalan, jadi posisi yang dibeli mulai 2026-11-03 akan bergred seperti biasa. Keputusan yang diperlukan: biarkan 1,448 baris itu tanpa gred (jujur, dan jurangnya kelihatan), atau isi semula dengan nilai hari ini dan terima bahawa medan gred tidak lagi titik-masa. Saya cadang biarkan. |
 | 2026-11-03 | papertrade/claude pada 91.6% had dokumen db dan dibaca melalui sub(), bukan subBhg() | 240,261 daripada 262,144 bait. Sama kelas dengan papertrade/moomoo (92.6%) yang sudah dilog 2 Nov. Dengan Nxx menambah sehingga ~900 posisi sesi, ini akan dilanggar. Apabila ia berlaku, tolak db malam berhenti - data papertrade tetap dikomit (pembetulan 845dbbc), tetapi dashboard berhenti dikemas kini. Urutan WAJIB sama seperti moomoo: tukar pembaca halaman kepada subBhg() dan TERBITKAN dahulu, baru tambah ke jana_db.PECAH. |
 | 2026-11-03 | lejar.tambah_bulan menambah tanpa menyahduplikasi: sesi separa ditulis akan menduakan baris | Ditemui semasa menilai sama ada if: always() boleh ditambah kepada langkah commit lejar.yml. Dalam gelung setiap sesi, CSV ditulis DAHULU dan status.json (sesi_terakhir) ditulis LEPAS, jadi kemalangan antara keduanya meninggalkan baris sesi S dalam tutup/langkau sementara status masih S-1 - dan larian berikutnya memproses S semula, menambah baris yang sama sekali lagi. Selagi ini benar, commit bersyarat-kejayaan ialah perlindungan, bukan kekurangan. Pembaikan sebenar: kunci nyahduplikasi (id_kaedah+saham+tarikh) dalam tambah_bulan, ATAU penanda 'sesi sedang diproses' yang dibersihkan pada larian berikutnya. Selepas itu barulah if: always() selamat dan lejar boleh menyimpan kemajuan separa. |
+| 2026-11-03 | Kohort Nxx mengira indikator 94 kali setiap ticker: lejar 5.5 minit -> ~2 jam sesesi | DIUKUR, bukan dianggar. Larian lejar sebelum Nxx: 309-336 saat sesesi dengan 134 kaedah (status.json 'larian' bagi sesi 10-28, 10-29, 10-30). Larian 3 Nov dengan 228 kaedah: >2 jam dan masih berjalan - 21x lebih lama, bukan 1.7x yang nisbah bilangan kaedah cadangkan. Puncanya _nxx.indikator() TIADA cache: setiap satu daripada 94 modul Nxx memanggilnya semula bagi SETIAP ticker dalam sedia(). Diukur 29.1 ms/ticker, jadi 94 modul x 947 ticker = 43 minit CPU satu teras sesesi, berbanding 0.5 minit jika dikira sekali. Alam lejar lebih besar daripada 947 jadi angka sebenar lebih tinggi. Kesan: had masa lejar sudah dinaikkan 150->330 minit sebagai perlindungan, tetapi DUA sesi tertinggal kini mendekati had itu dan TIGA melepasinya - margin yang sama yang kita baru sahaja baiki telah dimakan semula oleh kohort baharu. Pembaikan: memo indikator per (ticker, bil_bar, tarikh akhir) dalam proses pekerja; satu pekerja memproses banyak kaedah berturut-turut, jadi cache peringkat modul dalam _nxx akan digunakan semula merentas 94 modul. Anggaran memori: ~25 lajur x ~300 baris x 8 bait x 3,000 ticker = ~180 MB setiap pekerja, 4 pekerja pada runner 7 GB - perlu diukur sebelum dilaksana, dan kemungkinan --proses perlu diturunkan serentak. JANGAN laksana tanpa mengesahkan keputusan imbasan tidak berubah: bandingkan senarai_beli dan isyarat sebelum/selepas pada sesi yang sama. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
