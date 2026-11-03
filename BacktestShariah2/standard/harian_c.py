@@ -125,22 +125,35 @@ def akhir_minggu(S):
 # susunan mesti memisahkan awalan daripada nombor — `int(mid[1:])` akan gagal pada 'GB02'.
 POLA_KAEDAH = ('M*.py', 'N*.py', 'GB*.py')
 KELUARGA = {'M': 0, 'N': 1, 'GB': 2}
+# Awalan ID kaedah yang sah, DITERBITKAN daripada POLA_KAEDAH supaya ia tidak boleh hanyut
+# daripadanya. `kumpul_posisi` memakainya untuk memilih posisi yang dikemas kini setiap malam.
+AWALAN_KAEDAH = tuple(x.split('*')[0] for x in POLA_KAEDAH)
 
 
 def nombor_kaedah(mid):
     """Kunci susunan merentas keluarga: Mxx dahulu, kemudian Nxx, kemudian GBxx.
-    `int(mid[1:])` akan gagal pada awalan dua aksara seperti 'GB02', jadi awalan dan
-    nombor dipisah dan awalan diberi pangkat tetap."""
+
+    `int(mid[1:])` gagal pada DUA bentuk: awalan dua aksara ('GB02' -> 'B02') dan ID
+    kombinasi masuk x keluar ('N19X13' -> '19X13'). Jadi ID dihurai kepada tiga bahagian:
+    awalan huruf, nombor, dan baki ('X13' bagi kombinasi, '' bagi kaedah tunggal).
+
+    Baki dipulangkan supaya 94 kombinasi Nxx tidak semuanya seri pada satu nombor ganti:
+    sebelum 3 Nov 2026 baki itu dibuang dan setiap N dapat n = 10**6, jadi susunannya
+    jatuh kepada saham sahaja dan `N19X13` boleh mendahului `N19X15` atau sebaliknya
+    antara larian - susunan tidak stabil dalam fail yang dikomit setiap malam."""
     s = str(mid)
     i = 0
     while i < len(s) and not s[i].isdigit():
         i += 1
     awalan = s[:i]
+    j = i
+    while j < len(s) and s[j].isdigit():
+        j += 1
     try:
-        n = int(s[i:])
+        n = int(s[i:j])
     except ValueError:
         n = 10 ** 6
-    return (KELUARGA.get(awalan, 9), n)
+    return (KELUARGA.get(awalan, 9), n, s[j:])
 
 
 def senarai_kaedah():
@@ -426,7 +439,13 @@ def kumpul_posisi(folder, S, SES):
             if benar(r.get('tidak_dibeli')) or not r.get('tarikh_beli') or nombor(r.get('harga_beli')) is None:
                 continue
             mid = r.get('id_kaedah') or r.get('kaedah') or ''
-            if not mid.startswith('M') or r.get('sumber') == 'luar':
+            # Tapisan ini dahulunya `not mid.startswith('M')`, ditulis ketika Mxx satu-satunya
+            # keluarga. Apabila 94 kombinasi Nxx masuk produksi (2 Nov 2026) ia menjadi lubang
+            # SENYAP yang paling teruk dalam saluran: 835 posisi Nxx tidak akan pernah dikumpul,
+            # jadi lorong 1 tidak dinilai, harga tidak dikemas kini, dan kohort itu beku selama-
+            # lamanya tanpa satu pun ralat. Awalan kini datang daripada POLA_KAEDAH, supaya
+            # menambah keluarga baharu di satu tempat membawa tapisan ini sekali.
+            if not mid.startswith(AWALAN_KAEDAH) or r.get('sumber') == 'luar':
                 continue
             if benar(r.get('keluar')) and not sementara(r):
                 continue      # lorong 1 sudah keluar dan dibekukan (lorong 2: keluar_lorong.py)

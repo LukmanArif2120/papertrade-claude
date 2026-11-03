@@ -98,18 +98,28 @@ KELUARGA = {'M': 0, 'N': 1, 'GB': 2}     # Mxx pedagang · Nxx kombinasi REVERSE
 
 def nombor_kaedah(mid):
     """Kunci susunan merentas keluarga: Mxx dahulu, kemudian Nxx, kemudian GBxx.
-    `int(mid[1:])` akan gagal pada awalan dua aksara seperti 'GB02', jadi awalan dan
-    nombor dipisah dan awalan diberi pangkat tetap."""
+
+    `int(mid[1:])` gagal pada DUA bentuk: awalan dua aksara ('GB02' -> 'B02') dan ID
+    kombinasi masuk x keluar ('N19X13' -> '19X13'). Jadi ID dihurai kepada tiga bahagian:
+    awalan huruf, nombor, dan baki ('X13' bagi kombinasi, '' bagi kaedah tunggal).
+
+    Baki dipulangkan supaya 94 kombinasi Nxx tidak semuanya seri pada satu nombor ganti:
+    sebelum 3 Nov 2026 baki itu dibuang dan setiap N dapat n = 10**6, jadi susunannya
+    jatuh kepada saham sahaja dan `N19X13` boleh mendahului `N19X15` atau sebaliknya
+    antara larian - susunan tidak stabil dalam fail yang dikomit setiap malam."""
     s = str(mid)
     i = 0
     while i < len(s) and not s[i].isdigit():
         i += 1
     awalan = s[:i]
+    j = i
+    while j < len(s) and s[j].isdigit():
+        j += 1
     try:
-        n = int(s[i:])
+        n = int(s[i:j])
     except ValueError:
         n = 10 ** 6
-    return (KELUARGA.get(awalan, 9), n)
+    return (KELUARGA.get(awalan, 9), n, s[j:])
 
 
 def senarai_kaedah():
@@ -571,11 +581,16 @@ def cmd_jalan(a):
             tambah_bulan(tutup, os.path.join(LEJAR, 'tutup'), 'tarikh_keluar', L_TUTUP)
             tambah_bulan(langkau, os.path.join(LEJAR, 'langkau'), 'sesi', L_LANGKAU)
             os.makedirs(os.path.join(LEJAR, 'isyarat'), exist_ok=True)
-            d = pd.DataFrame(isy, columns=L_ISYARAT); d['_n'] = d.kaedah.str[1:].astype(int)
+            # Susunan MESTI melalui nombor_kaedah(). `int(kaedah[1:])` membuang ValueError pada
+            # 'N19X13' dan pada 'GB02' - iaitu RALAT KERAS yang menamatkan larian lejar selepas
+            # imbasan siap, jadi sesi itu tidak menghasilkan baris langsung. Ia tidak pernah
+            # meletup setakat ini semata-mata kerana lejar.yml tidak berjalan antara 31 Okt
+            # (sebelum 94 modul Nxx digabung) dan 3 Nov.
+            d = pd.DataFrame(isy, columns=L_ISYARAT); d['_n'] = d.kaedah.map(nombor_kaedah)
             d.sort_values(['_n', 'saham']).drop(columns='_n').to_csv(
                 os.path.join(LEJAR, 'isyarat', f"{S.strftime('%Y%m%d')}.csv.gz"), index=False, compression={'method': 'gzip', 'mtime': 0})
-            T.sort(key=lambda p: (int(p['id_kaedah'][1:]), p['tarikh_beli'], p['saham']))
-            W.sort(key=lambda w: (int(w['id_kaedah'][1:]), w['tarikh_isyarat'], w['saham']))
+            T.sort(key=lambda p: (nombor_kaedah(p['id_kaedah']), p['tarikh_beli'], p['saham']))
+            W.sort(key=lambda w: (nombor_kaedah(w['id_kaedah']), w['tarikh_isyarat'], w['saham']))
             tulis_csv(T, os.path.join(LEJAR, 'terbuka.csv'), L_POS)
             tulis_csv(W, os.path.join(LEJAR, 'tunggu.csv'), L_TUNGGU)
             ringkas = dict(sesi=str(S.date()), beli=len(beli), tutup=len(tutup), langkau=len(langkau), isyarat=len(isy),
