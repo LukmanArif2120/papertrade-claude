@@ -23,6 +23,10 @@ JAGA = {
     'lejar.yml': 'buka', 'harian.yml': 'buka', 'petang.yml': ('ny', 9, 15), 'beli.yml': ('ny', 16, 45),
     'edgar.yml': 'buka', 'fundamental_sec.yml': 'buka', 'senarai_bursa.yml': 'buka',
     'autotune_suku.yml': 'buka',   # suku-tahunan; pintu workflow menapis hari > 7 (termasuk dispatch penjaga)
+    # Pengawal papertrade (3 Nov 2026): had masa = sebelum beli.yml 13:40 UTC, kerana tujuannya
+    # ialah membetulkan apa-apa yang rosak SEBELUM belian hari itu, bukan selepas. Pengawal yang
+    # sendiri terlepas cetusan ialah ironi yang mahal, jadi ia dijaga seperti yang lain.
+    'pengawal.yml': ('ny', 8, 30),
 }
 
 

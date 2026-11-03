@@ -1,0 +1,82 @@
+# Pengawal papertrade (BacktestShariah2/standard/pengawal.py): semak bahawa pengumpulan data M DAN N
+# berjalan, dan jalankan remedi yang selamat.
+#
+# Papertrade ialah mekanisme pengumpulan data, bukan dagangan: sesi yang terlepas ialah lubang KEKAL,
+# kerana isyarat hari itu tidak boleh dijana semula pada harga hari itu kemudian. Audit 3 Nov 2026
+# menemui dua kegagalan yang berjalan SENYAP berhari-hari (835 posisi Nxx tidak dikemas kini; susunan
+# yang akan meranapkan lejar) dan kedua-duanya ditemui hanya kerana seseorang pergi mencari.
+#
+# Masa: 12:35 UTC, selepas tingkap malam (harian 05:07-11:07, lejar 06:17/10:17) dan kira-kira sejam
+# SEBELUM beli.yml 13:40 - supaya apa-apa yang perlu dibetulkan sempat dibetulkan sebelum belian.
+# Juga selepas setiap larian Lejar penuh, dan boleh dicetus tangan.
+#
+# ntfy hanya dihantar apabila ada sesuatu untuk dikatakan (masalah tinggal, atau remedi dijalankan).
+# Pengawal yang menghantar "semua baik" setiap hari akan diabaikan, dan pengawal yang diabaikan
+# tidak melindungi apa-apa.
+name: Pengawal papertrade
+
+on:
+  schedule:
+    - cron: '35 12 * * 1-5'
+  workflow_run:
+    workflows: ['Lejar penuh']
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: papertrade          # jangan sekali-kali berlumba dengan harian.yml / beli.yml / petang.yml
+  cancel-in-progress: false
+
+jobs:
+  pengawal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q -c kekangan.txt pandas numpy exchange_calendars
+      - name: Semak + betulkan
+        id: semak
+        run: |
+          set +e
+          python3 BacktestShariah2/standard/pengawal.py --betulkan > /tmp/pengawal.json 2>/tmp/pengawal.err
+          echo "rc=$?" >> "$GITHUB_OUTPUT"
+          set -e
+          cat /tmp/pengawal.json || true
+          [ -s /tmp/pengawal.err ] && { echo "--- stderr ---"; cat /tmp/pengawal.err; } || true
+          M=$(python3 BacktestShariah2/standard/pengawal.py --ntfy 2>/dev/null | head -1)
+          echo "mesej<<EOF" >> "$GITHUB_OUTPUT"; echo "$M" >> "$GITHUB_OUTPUT"; echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "$M"
+      - name: Commit pembetulan
+        run: |
+          git config user.name "pengawal[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/papertrade 2>/dev/null || true
+          if git diff --cached --quiet; then echo "tiada pembetulan untuk dikomit"; exit 0; fi
+          git commit -q -m "Pengawal papertrade: remedi automatik"
+          for n in 1 2 3 4; do
+            if git pull -q --rebase -X theirs origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 20))
+          done
+          echo "Push gagal" >&2; exit 1
+      - name: Notifikasi ntfy (hanya jika ada sesuatu untuk dikatakan)
+        if: always() && !contains(steps.semak.outputs.mesej, 'semua baik')
+        env:
+          TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
+          MESEJ: ${{ steps.semak.outputs.mesej }}
+        run: |
+          curl -sS -m 20 -H "Title: Papertrade: pengawal" -H "Tags: shield" -d "${MESEJ:-pengawal gagal berjalan}" \
+            "https://ntfy.sh/$TOPIK" > /dev/null || echo "::warning::ntfy gagal"
+      - name: Gagalkan larian jika ada masalah tinggal
+        # Supaya amaran_ntfy.yml turut menangkapnya, dan larian merah kelihatan dalam senarai Actions.
+        if: steps.semak.outputs.rc != '0'
+        run: |
+          echo "::error::pengawal: ada masalah yang tinggal (lihat langkah Semak)"
+          exit 1
