@@ -1,5 +1,5 @@
 {
- "dijana": "2026-11-02 22:22 UTC",
+ "dijana": "2026-11-03 03:05 UTC",
  "sumber": "https://scanner.tradingview.com/america/scan",
  "tv": {
   "baris": 4136,
@@ -40,12 +40,13 @@
   "tiada_maklumat": 726,
   "sp500_tiada_spus": 51,
   "univ_moomoo": 912,
-  "papertrade": 753,
+  "papertrade": 745,
   "papertrade_sp500_tiada_spus": [
    "ADP",
    "AEP",
    "AKAM",
    "APA",
+   "APP",
    "ATO",
    "AXON",
    "BG",
@@ -84,6 +85,7 @@
    "SRE",
    "SW",
    "SWK",
+   "TTWO",
    "UHS",
    "VLO",
    "WDC",
