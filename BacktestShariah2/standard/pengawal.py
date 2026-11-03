@@ -27,6 +27,7 @@ Guna:
 Kod keluar: 0 semua baik (atau semua yang gagal sudah dibetulkan) · 1 ada masalah yang TINGGAL.
 """
 import argparse
+import collections
 import glob
 import json
 import os
@@ -241,6 +242,8 @@ def semak(folder, stor, lejar_dir, a):
 
     # 10. Belian direkod bagi hari dagangan terakhir yang sudah berlalu. Laporan sahaja.
     S.tambah('belian direkod', bool(b.get('tarikh')), f"{b.get('tarikh')} · {b.get('direkod')} direkod")
+    S.hidup = hidup
+    S.st = st
     return S
 
 
@@ -262,6 +265,8 @@ def main(argv=None):
     a = ap.parse_args(argv)
 
     S = semak(a.folder, a.stor, a.lejar, a)
+    hidup_global = S.hidup
+    st = S.st
     if a.betulkan:
         for h in S.gagal():
             if not h['boleh_betul'] or not h['remedi']:
@@ -271,6 +276,7 @@ def main(argv=None):
             h['nota_remedi'] = r.get('ralat') or ('dijalankan' if h['dibetulkan'] else 'gagal')
         if any(h['dibetulkan'] for h in S.hasil if h['dibetulkan'] is not None):
             S2 = semak(a.folder, a.stor, a.lejar, a)   # semak semula selepas remedi
+            hidup_global, st = S2.hidup, S2.st
             for lama, baru in zip(S.hasil, S2.hasil):
                 if lama['dibetulkan'] is True and not baru['ok']:
                     lama['dibetulkan'] = False
@@ -281,8 +287,21 @@ def main(argv=None):
     tinggal = S.tinggal()
     if a.ntfy:
         if not tinggal:
+            # Baris "semua baik" DIHANTAR setiap hari, bukan ditahan (3 Nov 2026). Mula-mula saya
+            # menahannya untuk elak bising, dan itu silap: ia menjadikan SENYAP bermaksud dua
+            # perkara yang sangat berbeza - "semua baik" dan "tiada apa-apa yang berjalan
+            # langsung". Jika pengawal sendiri berhenti dicetus, telefon kekal senyap dan itu
+            # kelihatan sama seperti kejayaan. Dengan baris harian, senyap menjadi ISYARAT.
+            # Nombor M/N disertakan supaya satu pandangan mengesahkan kedua-dua kohort bergerak.
+            m = (st.get('malam') or {})
+            sk = m.get('senarai_keluarga') or {}
+            pos = collections.Counter()
+            for r in hidup_global:
+                pos[fam(r.get('kaedah'))] += 1
             dib = [h['nama'] for h in S.hasil if h['dibetulkan'] is True]
-            print('Pengawal: semua baik' + (f" (dibetulkan: {', '.join(dib)})" if dib else ''))
+            print(f"Pengawal {m.get('sesi') or '-'}: semua baik · beli M{sk.get('M', 0)} N{sk.get('N', 0)}"
+                  f" · pegang M{pos.get('M', 0)} N{pos.get('N', 0)}"
+                  + (f" · dibetulkan: {', '.join(dib)}" if dib else ''))
         else:
             print('⚠ Pengawal: ' + '; '.join(f"{h['nama']} — {h['butiran']}" for h in tinggal)[:180])
     else:

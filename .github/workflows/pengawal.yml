@@ -102,8 +102,14 @@ jobs:
             echo "cetus $W"
             gh workflow run "$W" --ref main --repo "$GITHUB_REPOSITORY" || echo "::warning::gagal cetus $W"
           done
-      - name: Notifikasi ntfy (hanya jika ada sesuatu untuk dikatakan)
-        if: always() && !contains(steps.semak.outputs.mesej, 'semua baik')
+      # Dihantar SETIAP hari, termasuk apabila semuanya baik (3 Nov 2026). Reka bentuk asal
+      # menahan baris "semua baik" untuk elak bising, dan itu silap: ia menjadikan SENYAP
+      # bermaksud dua perkara yang sangat berbeza - "semua baik" dan "tiada apa-apa yang
+      # berjalan langsung". Jika pengawal sendiri berhenti dicetus (cron GitHub digugurkan,
+      # workflow dilumpuhkan, repo tidak aktif), telefon kekal senyap dan itu kelihatan SAMA
+      # seperti kejayaan. Satu baris sehari menjadikan senyap sebagai ISYARAT, bukan andaian.
+      - name: Notifikasi ntfy (denyut harian; senyap bermakna sesuatu tidak berjalan)
+        if: always()
         env:
           TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
           MESEJ: ${{ steps.semak.outputs.mesej }}
