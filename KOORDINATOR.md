@@ -1,18 +1,18 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-02 23:44 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 06:25 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| main | 2026-11-02 | 0 | 2026-11-02 |
+| main | 2026-11-03 | 0 | 2026-11-03 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (10)
+## 1. Perlu keputusan anda (12)
 
 | Dibuka | Perkara | Catatan |
 |---|---|---|
@@ -26,6 +26,8 @@ Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah bol
 | 2026-10-29 | Uji PEAD x konteks harga pada alam lebih luas ATAU slot lebih banyak | Daripada SILANG_GATE_C.md. Dapatan silang adalah NYATA (Gate A+B lulus, p=0.0010, bertahan FDR + dua bootstrap blok + 1000 permutasi) tetapi gagal portfolio kerana bentuk taburan: kelebihan hidup dalam ekor kanan nipis dan 8 posisi tidak cukup menangkapnya. Dua lever yang dituju oleh diagnosis itu sendiri: (a) lebih banyak slot - tetapi KEPEKATAN.md menunjukkan 8->60 slot mengorbankan pulangan 5.97 mata pada entri DIPILIH, walaupun PEMBINAAN.md menunjukkan ia MEMBANTU pada entri rawak, jadi arahnya tidak diketahui untuk entri signal; (b) alam lebih luas supaya n naik daripada 541-751 - bergabung dengan keputusan terbuka PEAD saham kecil, dan PERLU model kos saham tidak cair (slippage melebihi tier 0.25% tertinggi sekarang). PERLU pradaftar baharu; tembakan SPEC_SILANG sudah terbelanja. JANGAN jalankan sebagai penalaan parameter atau pelebaran grid 48. |
 | 2026-11-02 | papertrade/moomoo pada 92.0% had dokumen db dan dibaca melalui sub(), bukan subBhg() | Didedahkan oleh amaran >= 85% yang ditambah kepada jana_db.py 2 Nov. kaedah_n/papan (88.8%) sudah ditukar kepada subBhg() dalam terbitan #172, tetapi papertrade/moomoo LEBIH HAMPIR (241,271 daripada 262,144) dan ia dibaca melalui pembalut lazy subRingkas(...)->sub(...), bukan sub() biasa, jadi penukaran itu bukan satu baris. Ia dokumen posisi Moomoo LAMA (beku sejak 13 Okt) jadi ia hanya tumbuh melalui medan penilaian harian - perlahan, tetapi apabila ia melepasi had ia menghentikan tolakan db MALAM, bukan sesi kerja. Urutan WAJIB: tukar pembaca halaman kepada subBhg() dan TERBITKAN dahulu, baru tambah ke jana_db.PECAH - sebaliknya halaman kehilangan baris secara senyap. |
 | 2026-11-02 | semak_dashboard.js: 10 kegagalan "Untung center/right" dan hanya 22 jadual diaudit (dahulu 44) | Diukur 2 Nov dan DIATRIBUSIKAN: menjalankan pemeriksa pada badan versi hidup 1793607248-b31f SAHAJA (tanpa suntingan saya) memberi 10/22 yang sama, jadi ia datang daripada v143-v146 (rel kiri bersarang) yang diterbitkan oleh sesi lain, bukan daripada terbitan #172. Dua perkara berasingan: (1) jajaran tajuk lajur Untung lawan selnya - mungkin artifak indeks pemeriksa jika baris pertama ada colspan, perlu disemak sebelum menukar CSS; (2) liputan jatuh separuh kerana rel bersarang menukar panel mana yang dicapai pemeriksa. Yang (2) lebih penting: pemeriksa yang mengaudit separuh jadual memberi keyakinan palsu. |
+| 2026-11-03 | Gred tiada bagi 1,448 posisi yang dibeli 2026-11-02 (613 M + 835 N) | BUKAN masalah Nxx: kedua-dua keluarga terjejas sama rata, kerana larian kejar melangkau langkah gred (kesan baru=tidak, dibetulkan f17c917) DAN kerana menggredkan isyarat 10-30 dengan berita hari ini ialah maklumat masa hadapan. cmd_gred tiada tapisan awalan, jadi posisi yang dibeli mulai 2026-11-03 akan bergred seperti biasa. Keputusan yang diperlukan: biarkan 1,448 baris itu tanpa gred (jujur, dan jurangnya kelihatan), atau isi semula dengan nilai hari ini dan terima bahawa medan gred tidak lagi titik-masa. Saya cadang biarkan. |
+| 2026-11-03 | papertrade/claude pada 91.6% had dokumen db dan dibaca melalui sub(), bukan subBhg() | 240,261 daripada 262,144 bait. Sama kelas dengan papertrade/moomoo (92.6%) yang sudah dilog 2 Nov. Dengan Nxx menambah sehingga ~900 posisi sesi, ini akan dilanggar. Apabila ia berlaku, tolak db malam berhenti - data papertrade tetap dikomit (pembetulan 845dbbc), tetapi dashboard berhenti dikemas kini. Urutan WAJIB sama seperti moomoo: tukar pembaca halaman kepada subBhg() dan TERBITKAN dahulu, baru tambah ke jana_db.PECAH. |
 
 
 Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
@@ -40,10 +42,10 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
-| RS pasaran | 30 | 2026-09-21 | 2026-10-30 | 0.5 |  | tidak |
-| Gred kumpulan | 26 | 2026-09-25 | 2026-10-30 | 0.4 |  | tidak |
-| SEC EPS/hasil | 4096 | 2009-04-15 | 2026-10-30 | 65.0 | 268630 | ya |
-| SEC earnings 8-K | 5449 | 2004-08-23 | 2026-10-30 | 86.5 | 178726 | ya |
+| RS pasaran | 30 | 2026-09-22 | 2026-11-02 | 0.5 |  | tidak |
+| Gred kumpulan | 27 | 2026-09-25 | 2026-11-02 | 0.4 |  | tidak |
+| SEC EPS/hasil | 4097 | 2009-04-15 | 2026-11-02 | 65.0 | 268765 | ya |
+| SEC earnings 8-K | 5450 | 2004-08-23 | 2026-11-02 | 86.5 | 178831 | ya |
 
 
 Leg **RS/gred**: terbaik **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
@@ -84,13 +86,13 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261102 | 0 | OK |
-| Trend D10H2-r2 | 20261102 | 0 | OK |
-| Lejar Penuh | 2026-10-30 | 3 | OK |
-| portfolio_slot | 2026-10-30 | 3 | OK |
-| Papan Penganalisis | 2026-11-02 | 0 | OK |
-| RS pasaran | 2026-10-30 | 3 | OK |
-| Gred kumpulan | 2026-10-30 | 3 | OK |
+| Stor harga | 20261102 | 1 | OK |
+| Trend D10H2-r2 | 20261102 | 1 | OK |
+| Lejar Penuh | 2026-10-30 | 4 | **LEWAT 4 hari** |
+| portfolio_slot | 2026-10-30 | 4 | **LEWAT 4 hari** |
+| Papan Penganalisis | 2026-11-02 | 1 | OK |
+| RS pasaran | 2026-11-02 | 1 | OK |
+| Gred kumpulan | 2026-11-02 | 1 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
 

@@ -503,3 +503,11 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Watchlist 246 (baharu 179, dibuang 147, ke senarai beli 83). Isyarat direkod: 14863 (data/isyarat/2026-10-30_malam.csv.gz).
 - Ralat kaedah: tiada. Nota: C ACA M95: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M54: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M06: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M23: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M46: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M100: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M101: tiada bar 2026-10-30 (harga terkini 2026-10-22); C ACA M120: tiada bar 2026-10-30 (harga terkini 2026-10-22).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-11-03 13:42 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-11-02)
+- Keluar baharu 528 (C {'isyarat': 134, 'henti': 331, 'sasaran': 31, 'masa': 29}, M {'isyarat': 2, 'henti': 1}); menunggu buka sesi seterusnya: 285.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 32 (beza > 0.5%: 10). Tidak dibeli baharu: tiada.
+- Senarai beli 1463 baris (383 saham, 190 kaedah; 70 daripada watchlist; belian semula 62). Ditolak: {'dipegang': 721, 'had': 13227, 'tidak_cair': 242, 'ambil_alih': 291, 'kelas_berganda': 49, 'mingguan': 72}.
+- Watchlist 253 (baharu 201, dibuang 124, ke senarai beli 70). Isyarat direkod: 16065 (data/isyarat/2026-11-02_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: C KVUE M93: tiada bar 2026-11-02 (harga terkini 2026-10-30); C KVUE M74: tiada bar 2026-11-02 (harga terkini 2026-10-30); C KVUE M99: tiada bar 2026-11-02 (harga terkini 2026-10-30); C ACA M95: tiada bar 2026-11-02 (harga terkini 2026-10-22); C ACA M54: tiada bar 2026-11-02 (harga terkini 2026-10-22); C KVUE M124: tiada bar 2026-11-02 (harga terkini 2026-10-30); C KVUE M80: tiada bar 2026-11-02 (harga terkini 2026-10-30); C KVUE M141: tiada bar 2026-11-02 (harga terkini 2026-10-30).
+- Tiada order. Tiada wang sebenar.

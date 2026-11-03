@@ -1,5 +1,5 @@
 {
- "dikemaskini": "2026-11-02 22:44 UTC",
+ "dikemaskini": "2026-11-03 05:42 UTC",
  "bar_terakhir": 20261102,
  "laras": {},
  "perlu_sejarah": [],
@@ -17,8 +17,6 @@
  },
  "log_laras": 0,
  "faktor_dividen": [],
- "faktor_calon": [
-  "SVRN 2026-11-02 -0.3858"
- ],
+ "faktor_calon": [],
  "moomoo": 0
 }
