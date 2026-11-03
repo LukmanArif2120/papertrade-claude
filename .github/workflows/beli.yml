@@ -10,10 +10,26 @@ on:
   schedule:
     # Didaftar semula 19 Okt 2026: tiada cetusan jadual sejak 17 Okt 14:10 UTC (semua workflow active).
     # Jika cetusan hilang/lewat > 30 minit, penjaga_jadual.yml mencetus workflow_dispatch (dalam had masa).
-    - cron: '40 13 * * 1-5'
-    - cron: '40 14 * * 1-5'
-    - cron: '25 16 * * 1-5'
-    - cron: '25 19 * * 1-5'
+    # Cron GitHub ialah UTC SAHAJA, tetapi pintu beli ialah waktu NEW YORK (09:31-17:00) - jadi
+    # setiap peralihan waktu penjimatan siang menggeser setiap cetusan sejam relatif kepada pintu.
+    # DST AS tamat 1 Nov 2026 (NY: UTC-4 -> UTC-5) dan kesannya diukur pada 3 Nov:
+    #   13:40 UTC jatuh daripada 09:40 NY kepada 08:40 NY = DI LUAR pintu, cetusan terbuang
+    #   19:25 UTC jatuh daripada 15:25 NY kepada 14:25 NY = `--akhir` TIDAK lagi dicetus,
+    #   jadi hari "tak beli" tidak lagi direkod ke status_harian.json dan jejak audit hilang
+    # Belian sendiri tidak terlepas (14:40 UTC = 09:40 NY, tepat masa yang dimaksudkan), tetapi
+    # bergantung pada satu cetusan tunggal yang kebetulan sejajar ialah nasib, bukan reka bentuk.
+    #
+    # Penyelesaiannya: cetusan BERPASANGAN sejam berbeza, supaya satu daripada setiap pasangan
+    # sejajar dalam musim panas dan satu lagi dalam musim sejuk. Pintu NY dalam langkah "Masa New
+    # York" menapis yang tidak sejajar (jalan=tidak, kerja dilangkau dalam beberapa saat), dan
+    # harian_c.py beli idempoten - larian kedua pada hari yang sama melangkau. Jadi kos cetusan
+    # tambahan ialah beberapa saat, dan ia menghapuskan geseran DST dua kali setahun SELAMANYA.
+    - cron: '40 13 * * 1-5'    # 09:40 NY musim panas · 08:40 musim sejuk (di luar pintu)
+    - cron: '40 14 * * 1-5'    # 10:40 NY musim panas · 09:40 musim sejuk
+    - cron: '25 16 * * 1-5'    # 12:25 NY musim panas · 11:25 musim sejuk
+    - cron: '25 17 * * 1-5'    # 13:25 NY musim panas · 12:25 musim sejuk
+    - cron: '25 19 * * 1-5'    # 15:25 NY musim panas (--akhir) · 14:25 musim sejuk
+    - cron: '25 20 * * 1-5'    # 16:25 NY musim panas · 15:25 musim sejuk (--akhir)
   workflow_dispatch:
     inputs:
       cuba_tarikh:
