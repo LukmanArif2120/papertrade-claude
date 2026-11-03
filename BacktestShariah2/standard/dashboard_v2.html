@@ -1063,7 +1063,8 @@ td.stc{white-space:nowrap}
   <section class="view" id="v-watch" hidden></section>
   <section class="view" id="v-pos" hidden></section>
   <section class="view" id="v-pr-m" hidden></section>
-  <section class="view" id="v-pr-c" hidden></section>
+  <section class="view" id="v-pr-cm" hidden></section>
+  <section class="view" id="v-pr-cn" hidden></section>
   <section class="view" id="v-pr-gab" hidden></section>
   <section class="view" id="v-kaedah" hidden></section>
   <section class="view" id="v-kaedahn" hidden></section>
@@ -1084,21 +1085,32 @@ const CMPCOL=['--accent','--uji','--violet'];
 const HARI=['5','10','15','20','30','40','60'];
 const MAIN=['utama','analisis','prestasi','posisi','watch','backtest','kaedah','kaedahn','sektor'];
 const SETSEG=[...SETS,'2000'];
-/* akaun papertrade dikongsi tab Prestasi, Posisi, Backtest dan Kaedah: C (rasmi sejak 13 Okt 2026), M (Moomoo lama), gabung */
-const AKAUN=[['c','Papertrade C'],['m','Moomoo lama'],['gab','Gabung']];
-const AKN={c:'Papertrade C',m:'Moomoo lama',gab:'C + Moomoo lama'};
+/* akaun papertrade dikongsi tab Prestasi, Posisi, Backtest dan Kaedah: C (rasmi sejak 13 Okt 2026), M (Moomoo lama), gabung.
+   3 Nov 2026: Papertrade C dipecah mengikut KELUARGA KAEDAH, bukan akaun baharu. Mxx dan Nxx kedua-duanya
+   posisi akaun C dalam claude*.csv yang sama; kohort Nxx bermula 2026-11-02 (835 posisi pada hari pertama).
+   Label mengekalkan "Papertrade C" kerana lencana akaun di sebelah simbol saham masih C atau M, dan M di situ
+   bermaksud Moomoo lama - bukan kaedah Mxx. */
+const AKAUN=[['cm','Papertrade C · M'],['cn','Papertrade C · N'],['m','Moomoo lama'],['gab','Gabung']];
+const AKN={c:'Papertrade C',cm:'Papertrade C · Mxx',cn:'Papertrade C · Nxx',m:'Moomoo lama',gab:'Semua (C + Moomoo lama)'};
+/* 'c' = SEMUA Papertrade C. Ia tiada dalam kawalan AKAUN tetapi kekal kunci sah kerana KPI tab Utama,
+   watchlist, panel esok, nasib dan katGabung memanggil prSrc('c')/posRows('c') untuk maksud itu.
+   Tanpa cabangnya ia jatuh ke else = gab, dan posisi Moomoo akan masuk ke angka "Papertrade C"
+   secara SENYAP - kegagalan yang nampak seperti data, bukan seperti pepijat. */
+/* keluarga kaedah daripada awalan ID. GBxx ialah kesatuan masuk Nxx tetapi awalannya sendiri, jadi ia
+   dikumpul dengan Mxx supaya tiada posisi hilang daripada kedua-dua paparan. */
+const kelN=k=>/^N\d/.test(String(k||''));
 const SUBS={backtest:[['keputusan','Keputusan'],['butiran','Butiran']],prestasi:AKAUN,posisi:AKAUN};
 /* skrin telefon (≤ 760px) semasa halaman dibuka: jadual bermula dengan lebih sedikit baris */
 const TELEFON=(()=>{try{return matchMedia('(max-width:760px)').matches;}catch(e){return false;}})();
-const S={set:'431',tab:'utama',akaun:'c',sub:{backtest:'keputusan'},docs:{},meta:null,live:false,
+const S={set:'431',tab:'utama',akaun:'cm',sub:{backtest:'keputusan'},docs:{},meta:null,live:false,
   f:{jenis:'semua',kep:new Set(),q:'',best:true,gaya:false,shown:TELEFON?10:40},cmp:[],cmpTouched:false,
   ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:TELEFON?10:25},kat:null,kf:{kel:'semua',q:'',shown:TELEFON?10:25},at:{},af:{lbl:'',q:'',eq:'oos',v:'sar',lane:''},kp:{lihat:'pingat',gaya:false,q:'',langkah:null,shown:TELEFON?10:1e9},b4:'papan',
   pos:{st:'semua'},lajur:{},anl:null,af2:{lihat:'swing',q:'',shown:TELEFON?10:25},kn:null,knf:{paksi:'semua',q:'',shown:TELEFON?10:25},knu:{pra:'semua',q:'',shown:TELEFON?10:25},knp:{keluar:'semua',q:'',shown:TELEFON?10:25}};
-try{const t=localStorage.getItem('pbs3_tab');if(MAIN.includes(t))S.tab=t;const a=localStorage.getItem('pbs3_akaun');if(AKAUN.some(x=>x[0]===a))S.akaun=a;
+try{const t=localStorage.getItem('pbs3_tab');if(MAIN.includes(t))S.tab=t;const a=localStorage.getItem('pbs3_akaun');if(AKAUN.some(x=>x[0]===a))S.akaun=a;else if(a==='c')S.akaun='cm';
   const s=localStorage.getItem('pbs_set');if(SETSEG.includes(s))S.set=s;const b4=localStorage.getItem('pbs2_b4');if(['papan','ringkasan','banding'].includes(b4))S.b4=b4;
   const sb=JSON.parse(localStorage.getItem('pbs2_sub')||'null');if(sb&&SUBS.backtest.some(x=>x[0]===sb.backtest))S.sub.backtest=sb.backtest;
   const lj=JSON.parse(localStorage.getItem('pbs3_lajur')||'null');if(lj&&typeof lj==='object')S.lajur=lj;}catch(e){}
-{const h=(location.hash||'').slice(1);const map={utama:['utama'],ringkasan:['utama'],analisis:['analisis'],penganalisis:['analisis'],keputusan:['backtest','keputusan'],kedudukan:['backtest','keputusan'],butiran:['backtest','butiran'],papan:['backtest','butiran'],banding:['backtest','butiran'],sektor:['sektor'],watchlist:['watch'],posisi:['posisi'],ptm:['posisi'],ptc:['posisi'],prestasi:['prestasi'],kaedah:['kaedah'],kaedahn:['kaedahn'],autotune:['backtest','butiran']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];if(h==='ptm')S.akaun='m';if(h==='ptc')S.akaun='c';if(h==='autotune')S.set='2000';if((h==='papan'||h==='banding')&&S.set==='2000')S.set='431';if(h==='banding')S.b4='banding';if(h==='papan')S.b4='papan';}}
+{const h=(location.hash||'').slice(1);const map={utama:['utama'],ringkasan:['utama'],analisis:['analisis'],penganalisis:['analisis'],keputusan:['backtest','keputusan'],kedudukan:['backtest','keputusan'],butiran:['backtest','butiran'],papan:['backtest','butiran'],banding:['backtest','butiran'],sektor:['sektor'],watchlist:['watch'],posisi:['posisi'],ptm:['posisi'],ptc:['posisi'],prestasi:['prestasi'],kaedah:['kaedah'],kaedahn:['kaedahn'],autotune:['backtest','butiran']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];if(h==='ptm')S.akaun='m';if(h==='ptc')S.akaun='cm';if(h==='autotune')S.set='2000';if((h==='papan'||h==='banding')&&S.set==='2000')S.set='431';if(h==='banding')S.b4='banding';if(h==='papan')S.b4='papan';}}
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1841,7 +1853,8 @@ function ptcRows(){return ptcRowsM(S.ptc,...Object.keys(S.ptcN).map(Number).sort
 /* ================= Posisi: Papertrade C dan Moomoo lama (akaun C · M · Gabung) ================= */
 const posRowsM={};
 function posRows(a){return (posRowsM[a]||(posRowsM[a]=memo((M,C)=>{const tag=(p,k)=>p?p.rows.filter(r=>!r.tidak_dibeli).map((r,i)=>Object.assign({},r,{akaun:k,_p:k+'|'+i})):[];
-  return a==='m'?tag(M,'M'):a==='c'?tag(C,'C'):[...tag(M,'M'),...tag(C,'C')];})))(ptmRows(),ptcRows());}
+  const c=tag(C,'C');
+  return a==='m'?tag(M,'M'):a==='c'?c:a==='cm'?c.filter(r=>!kelN(r.kaedah)):a==='cn'?c.filter(r=>kelN(r.kaedah)):[...tag(M,'M'),...c];})))(ptmRows(),ptcRows());}
 /* status lorong kaedah tanpa mengulang untung %: Pegang · henti, Tunggu (jual buka esok), Keluar tarikh @ harga · sebab */
 function lorongRingkas(r){const s=String(r.isyarat_keluar||'');
   if(r.keluar){const sb=s.replace(/^Keluar:? ?/,'').replace(/ \([^)]*\)\s*$/,'');return `<span class="pill p-exit">Keluar</span> <span class="nw">${esc(tkO(r.tarikh_keluar))} @ ${fx(r.harga_keluar,2)}</span>${sb?`<span class="vv">${esc(sb)}</span>`:''}`;}
@@ -1864,13 +1877,15 @@ function renderPos(){
   const peg=all.filter(r=>!r.keluar),kel=all.filter(r=>r.keluar);
   const base=ps.st==='pegang'?peg:ps.st==='keluar'?kel:all;
   const fb=ptFilterBar('pos'+a,base);const rows=fb.apply(base);const rk=lajurOf('pos')==='ringkas',pd=pandOf();
-  const tdb=a!=='m'&&ptcRows()?ptcRows().rows.filter(r=>r.tidak_dibeli):[],tdbS=S.tdb||(S.tdb={shown:AWAL});
+  /* "Isyarat tidak dibeli" mesti mengikut pecahan keluarga yang sama seperti jadual posisi di
+     atasnya, jika tidak paparan C · N menunjukkan senarai isyarat Mxx di bawah posisi Nxx. */
+  const tdb=a!=='m'&&ptcRows()?ptcRows().rows.filter(r=>r.tidak_dibeli&&(a==='cm'?!kelN(r.kaedah):a==='cn'?kelN(r.kaedah):true)):[],tdbS=S.tdb||(S.tdb={shown:AWAL});
   const pm=ptmRows(),pc=ptcRows();
   const head=a==='m'?`<p class="headline">Akaun simulasi Moomoo <b>${esc(pm&&pm.d.akaun||'4135388')}</b>: posisi lama, tiada belian baharu sejak 13 Okt 2026 · harga pada <b>${esc(hargaPada(pm&&pm.d))}</b>. 1 unit setiap saham. Saham yang kena isyarat keluar ditanda <b class="neg">merah</b> dan harganya dibekukan; posisi tidak dijual.</p>
     <div class="strip"><b class="t">Sumber</b><span>${all.filter(r=>r.sumber==='harian').length} posisi sistem harian · ${all.filter(r=>r.sumber==='log_v1').length} pegangan warisan v1 · ${all.filter(r=>r.sumber==='luar').length} strategi luar 87 M. Isyarat keluar dinilai ikut peraturan kaedah sehingga tutup terakhir yang lengkap.</span></div>`
-   :a==='c'?`<p class="headline">Papertrade C (maya, oleh Claude) bermula <b>${esc((()=>{const t=all.reduce((m,r)=>r.tarikh_beli&&(!m||r.tarikh_beli<m)?r.tarikh_beli:m,'');return t?tkO(t)+' '+t.slice(0,4):'–';})())}</b>; sejak 13 Okt 2026 semua isyarat baharu dibeli di sini sahaja (1 unit, harga buka sebenar pada hari dagangan selepas isyarat). Harga terkini pada <b>${esc(hargaPada(pc&&pc.d))}</b>. Baris <b class="neg">merah</b> = kedua-dua lorong sudah keluar.</p>`
+   :(a==='cm'||a==='cn')?`<p class="headline">${a==='cn'?'Kaedah <b>Nxx</b> sahaja (94 kombinasi masuk×keluar; kohort bermula 2026-11-02). ':'Kaedah <b>Mxx</b> sahaja. '}Papertrade C (maya, oleh Claude) bermula <b>${esc((()=>{const t=all.reduce((m,r)=>r.tarikh_beli&&(!m||r.tarikh_beli<m)?r.tarikh_beli:m,'');return t?tkO(t)+' '+t.slice(0,4):'–';})())}</b>; sejak 13 Okt 2026 semua isyarat baharu dibeli di sini sahaja (1 unit, harga buka sebenar pada hari dagangan selepas isyarat). Harga terkini pada <b>${esc(hargaPada(pc&&pc.d))}</b>. Baris <b class="neg">merah</b> = kedua-dua lorong sudah keluar.</p>`
    :`<p class="headline">Gabungan Papertrade C dan Moomoo lama. Lencana <b>C</b> atau <b>M</b> di sebelah simbol menunjukkan akaun.</p>`;
-  el.innerHTML=head+ptKpis(all,a==='m'?'Moomoo':a==='c'?'Claude dibeli':'gabungan')+panelPeta(sahSahaja(peg),fb.st)+`
+  el.innerHTML=head+ptKpis(all,a==='m'?'Moomoo':a==='cm'?'Claude Mxx dibeli':a==='cn'?'Claude Nxx dibeli':'gabungan')+panelPeta(sahSahaja(peg),fb.st)+`
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>${rejimHtml()}
     ${panelPerhatian(peg)}
     ${blokGredGrid(rows)}
@@ -1903,7 +1918,8 @@ const maePeta=()=>{const d=S.mae;if(!d||!d.rows)return null;if(!Array.isArray(d.
 function maeOf(r){const m=maePeta();if(!m)return null;const v=m[`${r.akaun}|${r.saham}|${r.kaedah}|${r.tarikh_beli}`];return v==null?null:v;}
 const prSrcM={};
 function prSrc(which){return (prSrcM[which]||(prSrcM[which]=memo((M,C)=>{const tag=(p,a)=>p?sahSahaja(p.rows).map(r=>Object.assign({},r,{akaun:a})):[];
-  const rows=which==='m'?tag(M,'M'):which==='c'?tag(C,'C'):[...tag(M,'M'),...tag(C,'C')];
+  const c=tag(C,'C');
+  const rows=which==='m'?tag(M,'M'):which==='c'?c:which==='cm'?c.filter(r=>!kelN(r.kaedah)):which==='cn'?c.filter(r=>kelN(r.kaedah)):[...tag(M,'M'),...c];
   rows.forEach(r=>{r.hasil=r.keluar?r.untung_akhir_pct:r.untung_pct;r.mae=maeOf(r);if(r.mae==null&&r.hasil!=null)r.mae=Math.min(0,r.hasil);});return rows;})))(ptmRows(),ptcRows(),S.mae);}
 const prStatsC=new WeakMap();
 /* statistik setiap kaedah + skor Untung×Selamat + keputusan */
@@ -2625,7 +2641,7 @@ function sheet(html){const sh=$('#sheet');sh.innerHTML=`<div class="grab"></div>
 function tutupSheet(){$('#sheet').hidden=true;$('#scrim').hidden=true;}
 const mSel=(a,v,t)=>`<div class="m"><div class="k"${t?` data-tip="${t}"`:''}>${a}</div><div class="v">${v}</div></div>`;
 function openKaedah(id){const k=(S.kat&&S.kat.rows||[]).find(x=>x.id===id)||null;
-  const ak=S.tab==='prestasi'||S.tab==='posisi'?S.akaun:'c',src=prSrc(ak);let st=prStatsC.get(src);if(!st){st=prStats(src);prStatsC.set(src,st);}const p=st.find(o=>o.kaedah===id)||null;
+  const ak=S.tab==='prestasi'||S.tab==='posisi'?S.akaun:'gab',src=prSrc(ak);let st=prStatsC.get(src);if(!st){st=prStats(src);prStatsC.set(src,st);}const p=st.find(o=>o.kaedah===id)||null;
   const b=kpM(S.docs,S.at,S.meta,S.kat).rows.find(o=>o.id===id)||null;
   if(!k&&!p&&!b)return;
   const lr=src.filter(r=>r.kaedah===id),lk=avgOf(lr.map(r=>hasilL(r,'kaedah'))),lh=avgOf(lr.map(r=>hasilL(r,'henti'))),xh=lr.filter(r=>r.keluar_henti).length;
@@ -3766,7 +3782,7 @@ function posColsP(p,akaun){const sh={k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f
     {k:'isyarat_keluar',t:'Keluar kaedah',tip:'isyarat_keluar',l:1,v:r=>hasilL(r,'kaedah'),f:r=>lorongRingkas(r),c:()=>'wrap'}];}
 
 /* rangka semasa memuat: ganti panel "Memuatkan…" supaya tiada kelipan "Belum ada posisi" */
-const ptSiap=a=>!!(S.tanpaDb||(a==='m'?S.ptmSiap:a==='c'?S.ptcSiap:S.ptmSiap&&S.ptcSiap));
+const ptSiap=a=>!!(S.tanpaDb||(a==='m'?S.ptmSiap:(a==='c'||a==='cm'||a==='cn')?S.ptcSiap:S.ptmSiap&&S.ptcSiap));
 const rangka=()=>`<div class="rangka" aria-busy="true" role="status" aria-label="Memuatkan data"><div class="rk-b" style="width:62%"></div><div class="kpis">${'<div class="kpi"><div class="rk-b" style="width:45%"></div><div class="rk-b rk-v"></div><div class="rk-b" style="width:70%"></div></div>'.repeat(4)}</div><div class="panel"><div class="rk-b" style="width:30%;height:16px"></div><div class="rk-c"></div></div><div class="panel">${'<div class="rk-b"></div>'.repeat(6)}</div></div>`;
 
 /* ================= Panduan: cara membaca papan + konsep + glosari (dijana daripada TIPS) ================= */
@@ -4222,7 +4238,7 @@ function heroUtama(src,a,aS,A,As,nKat,t0,nKaedah,usd){
     ${H&&H.kum.length>2?`<div class="hsp">${sparkG(H.kum,{W:760,H:88,p:6,ref:0,lbl:`Untung terkumpul Papertrade C, ${H.kum.length} sesi`})}</div>`:''}</div>`;}
 function renderUtama(){
   const el=$('#v-utama');const src=prSrc('c');
-  if(!src.length){el.innerHTML=`<div class="panel empty">${ptSiap('c')?'Belum ada posisi Papertrade C dalam pangkalan data.':'Memuatkan data…'}</div>`;return;}
+  if(!src.length){el.innerHTML=`<div class="panel empty">${ptSiap('cm')?'Belum ada posisi Papertrade C dalam pangkalan data.':'Memuatkan data…'}</div>`;return;}
   let st=prStatsC.get(src);if(!st){st=prStats(src);prStatsC.set(src,st);}
   const kat={};(S.kat&&S.kat.rows||[]).forEach(r=>{kat[r.id]=r;});
   const v=src.map(r=>r.hasil).filter(x=>x!=null),a=avgOf(v),up=v.filter(x=>x>0).length,dn=v.filter(x=>x<0).length;
@@ -4637,7 +4653,7 @@ function renderKaedahN(){
   const q=$('#knQ');if(q){let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.shown=AWAL;renderAll();const n=$('#knQ');if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);};}
   bindLagi('knMore',f);
 }
-const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),sektor:renderSektor,watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-c':()=>renderPrestasi('c'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis,kaedahn:renderKaedahN};
+const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),sektor:renderSektor,watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-cm':()=>renderPrestasi('cm'),'pr-cn':()=>renderPrestasi('cn'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis,kaedahn:renderKaedahN};
 function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const el=document.getElementById(vid);el.classList.toggle('pnav',pnavBoleh(vid));
   const sx={},sy={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;sy[t.dataset.st]=t.parentElement.scrollTop;});
   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
@@ -4915,7 +4931,7 @@ $('#foldAll').onclick=()=>foldAllNow(true);$('#openAll').onclick=()=>foldAllNow(
 const PNAV_MIN=3,PNAV_TELEFON=['v-utama'],PNAV_ADA={};
 /* tajuk kumpulan rel (desktop): [tajuk, kunci panel pertama kumpulan] ('' = panel pertama); kunci tiada = tajuk tidak dipapar */
 /* bahagian lalai jika belum dipilih (selainnya item pertama) */
-const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah','v-utama':'__g','v-pr-c':'untung terkumpul lawan spy','v-pr-m':'untung terkumpul lawan spy','v-pr-gab':'untung terkumpul lawan spy'};
+const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah','v-utama':'__g','v-pr-cm':'untung terkumpul lawan spy','v-pr-cn':'untung terkumpul lawan spy','v-pr-m':'untung terkumpul lawan spy','v-pr-gab':'untung terkumpul lawan spy'};
 /* v146 (2 Nov 2026): kunci kumpulan boleh jadi AWALAN, dan boleh jadi senarai calon (calon pertama
    yang wujud dipakai). Perlu kerana tajuk panel tab Kombinasi N dijana daripada data — cth
    "Produksi: 94 kombinasi yang BELUM diimbas" — jadi kunci tepat akan putus bila nombor berubah,
