@@ -930,7 +930,6 @@ AUPH,Aurinia Pharmaceuticals Inc - Common Shares,NASDAQ,0,1,2026-10-27
 AUR,"Aurora Innovation, Inc.  - Class A Common Stock",NASDAQ,0,1,2026-10-27
 AURA,"Aura Biosciences, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 AURE,Aurelion Inc.  - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
-AUROW,"Aurora Innovation, Inc.  - Warrant",NASDAQ,0,0,2026-10-27
 AUSF,Global X Adaptive U.S. Factor ETF,NYSE Arca,1,0,2026-10-27
 AUSM,Allspring Ultra Short Municipal ETF,NYSE Arca,1,0,2026-10-27
 AUST,Austin Gold Corp. Common Shares,NYSE American,0,1,2026-10-27
@@ -3545,6 +3544,7 @@ EMGF,iShares Emerging Markets Equity Factor ETF,Cboe BZX,1,0,2026-10-27
 EMHC,State Street SPDR Bloomberg Emerging Markets USD Bond ETF,NYSE Arca,1,0,2026-10-27
 EMHY,iShares J.P. Morgan EM High Yield Bond ETF,Cboe BZX,1,0,2026-10-27
 EMIF,iShares Emerging Markets Infrastructure ETF,NASDAQ,1,0,2026-10-27
+EMIL,VanEck EM Focus Inflation Bond ETF,NYSE Arca,1,0,2026-11-03
 EMIS,Emmis Acquisition Corp. - Class A Ordinary Share,NASDAQ,0,0,2026-10-27
 EMISR,Emmis Acquisition Corp. - Rights,NASDAQ,0,0,2026-10-27
 EMJL,Corgi Emerging Markets Equities 15% Structured Buffer ETF - July Series,Cboe BZX,1,0,2026-10-27
@@ -5311,7 +5311,6 @@ HNRG,Hallador Energy Company - Common Stock,NASDAQ,0,1,2026-10-27
 HNST,"The Honest Company, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 HNVR,"Hanover Bancorp, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 HODL,VanEck Bitcoin Trust ,Cboe BZX,1,0,2026-10-27
-HODO,House of Doge Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 HODU,Direxion Daily HOOD Bull 2X ETF,NASDAQ,1,0,2026-10-27
 HOFT,Hooker Furnishings Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 HOG,"Harley-Davidson, Inc. Common Stock",NYSE,0,1,2026-10-27
@@ -5825,7 +5824,6 @@ INDO,Indonesia Energy Corporation Limited Ordinary Shares,NYSE American,0,1,2026
 INDP,"Indaptus Therapeutics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 INDQ,Pacer ActiveAlpha India Quality ETF,NASDAQ,1,0,2026-10-27
 INDS,Pacer Industrial Real Estate ETF,NYSE Arca,1,0,2026-10-27
-INDV,"Indivior Pharmaceuticals, Inc.  - Common Stock",NASDAQ,0,1,2026-10-27
 INDY,iShares India 50 ETF,NASDAQ,1,0,2026-10-27
 INDZ,VanEck India Select ETF,NYSE Arca,1,0,2026-10-27
 INEO,INNEOVA Holdings Limited - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
@@ -7315,8 +7313,6 @@ MLCI,Mount Logan Capital Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 MLCIL,Mount Logan Capital Inc. - 8.00% Notes Due 2031,NASDAQ,0,0,2026-10-27
 MLCO,Melco Resorts & Entertainment Limited - American Depositary Shares ,NASDAQ,0,1,2026-10-27
 MLDR,Global X Intermediate-Term Treasury Ladder ETF,NYSE Arca,1,0,2026-10-27
-MLEC,Moolec Science SA - Ordinary Shares,NASDAQ,0,1,2026-10-27
-MLECW,Moolec Science SA - Warrant,NASDAQ,0,0,2026-10-27
 MLGO,"MicroAlgo, Inc. - Ordinary Shares",NASDAQ,0,1,2026-10-27
 MLI,"Mueller Industries, Inc. Common Stock",NYSE,0,1,2026-10-27
 MLKN,"MillerKnoll, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -10829,7 +10825,7 @@ SUNB,"Sunbelt Rentals Holdings, Inc. Common Stock",NYSE,0,1,2026-10-27
 SUNC,"SunocoCorp LLC Common Units, representing limited liability company interests",F,0,0,2026-10-27
 SUNE,"SUNation Energy, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SUNS,"Sunrise Realty Trust, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
-SUPN,"Supernus Pharmaceuticals, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
+SUPN,"Supernus, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SUPP,TCW Transform Supply Chain ETF,NASDAQ,1,0,2026-10-27
 SUPV,Grupo Supervielle S.A. American Depositary Shares each Representing five Class B shares,NYSE,0,1,2026-10-27
 SUPX,SuperX AI Technology Limited - Ordinary Shares,NASDAQ,0,1,2026-10-27
@@ -10873,7 +10869,6 @@ SWAN,Amplify BlackSwan Growth & Treasury Core ETF,NYSE Arca,1,0,2026-10-27
 SWBI,"Smith & Wesson Brands, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SWIM,"Latham Group, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SWK,"Stanley Black & Decker, Inc. Common Stock",NYSE,0,1,2026-10-27
-SWKHL,SWK Holdings Corporation - 9.00% Senior Notes due 2027,NASDAQ,0,0,2026-10-27
 SWKS,"Skyworks Solutions, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SWMR,"Swarmer, Inc - common stock",NASDAQ,0,1,2026-10-27
 SWP,SWP Growth & Income ETF,NASDAQ,1,0,2026-10-27
@@ -11116,6 +11111,7 @@ TGTX,"TG Therapeutics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 TH,Target Hospitality Corp. - Common Stock,NASDAQ,0,1,2026-10-27
 THC,Tenet Healthcare Corporation Common Stock,NYSE,0,1,2026-10-27
 THCH,TH International Limited - Ordinary shares,NASDAQ,0,1,2026-10-27
+THCR,THOR Conservative Risk Dynamic ETF,NYSE,1,0,2026-11-03
 THD,iShares MSCI Thailand ETF,NYSE Arca,1,0,2026-10-27
 THEO,BOA Acquisition Corp. II - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 THEOR,BOA Acquisition Corp. II - Rights,NASDAQ,0,0,2026-10-27
@@ -12141,6 +12137,7 @@ VTS,"Vitesse Energy, Inc. Common Stock",NYSE,0,1,2026-10-27
 VTSI,"VirTra, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 VTV,Vanguard Morningstar Value ETF,NYSE Arca,1,0,2026-10-27
 VTVT,vTv Therapeutics Inc. - Class A Common Stock,NASDAQ,0,1,2026-10-27
+VTVX,XFUNDS Value Income ETF,NYSE Arca,1,0,2026-11-03
 VTWG,Vanguard Russell 2000 Growth ETF,NASDAQ,1,0,2026-10-27
 VTWO,Vanguard Russell 2000 ETF,NASDAQ,1,0,2026-10-27
 VTWV,Vanguard Russell 2000 Value ETF,NASDAQ,1,0,2026-10-27

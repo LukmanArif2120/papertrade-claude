@@ -12980,3 +12980,13 @@ tarikh,simbol,peristiwa,nama,bursa,etf,biasa
 2026-11-03,WBIF,tukar_nama,WBI Fundamental Factors Hedged ETF,NYSE Arca,1,0
 2026-11-03,WBIG,tukar_nama,WBI Income Generators Hedged ETF,NYSE Arca,1,0
 2026-11-03,WBIL,tukar_nama,WBI Trend Leaders Hedged ETF,NYSE Arca,1,0
+2026-11-03,EMIL,tambah,VanEck EM Focus Inflation Bond ETF,NYSE Arca,1,0
+2026-11-03,THCR,tambah,THOR Conservative Risk Dynamic ETF,NYSE,1,0
+2026-11-03,VTVX,tambah,XFUNDS Value Income ETF,NYSE Arca,1,0
+2026-11-03,AUROW,buang,"Aurora Innovation, Inc.  - Warrant",NASDAQ,0,0
+2026-11-03,HODO,buang,House of Doge Inc. - Common Stock,NASDAQ,0,1
+2026-11-03,INDV,buang,"Indivior Pharmaceuticals, Inc.  - Common Stock",NASDAQ,0,1
+2026-11-03,MLEC,buang,Moolec Science SA - Ordinary Shares,NASDAQ,0,1
+2026-11-03,MLECW,buang,Moolec Science SA - Warrant,NASDAQ,0,0
+2026-11-03,SWKHL,buang,SWK Holdings Corporation - 9.00% Senior Notes due 2027,NASDAQ,0,0
+2026-11-03,SUPN,tukar_nama,"Supernus, Inc. - Common Stock",NASDAQ,0,1
