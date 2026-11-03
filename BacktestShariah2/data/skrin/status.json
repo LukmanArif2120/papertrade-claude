@@ -1,9 +1,9 @@
 {
- "dijana": "2026-11-03 03:05 UTC",
+ "dijana": "2026-11-03 22:23 UTC",
  "sumber": "https://scanner.tradingview.com/america/scan",
  "tv": {
-  "baris": 4136,
-  "jumlah_padan": 4136,
+  "baris": 4143,
+  "jumlah_padan": 4143,
   "harga_min": 5.0,
   "medan_tiada_data": [
    "is_shariah_compliant"
@@ -11,7 +11,7 @@
   "is_shariah_compliant": {
    "benar": 0,
    "salah": 0,
-   "tiada": 4136
+   "tiada": 4143
   }
  },
  "etf": {
@@ -40,7 +40,7 @@
   "tiada_maklumat": 726,
   "sp500_tiada_spus": 51,
   "univ_moomoo": 912,
-  "papertrade": 745,
+  "papertrade": 772,
   "papertrade_sp500_tiada_spus": [
    "ADP",
    "AEP",
