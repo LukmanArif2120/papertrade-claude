@@ -129,6 +129,7 @@ ACIO,Aptus Collared Investment Opportunity ETF,Cboe BZX,1,0,2026-10-27
 ACIU,AC Immune SA - Common Stock,NASDAQ,0,1,2026-10-27
 ACIV,Hartford Alpha Capture International Value ETF,Cboe BZX,1,0,2026-10-27
 ACIW,"ACI Worldwide, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
+ACJL,"Buffered Bulldog ETF by C.J. Lawrence, a division of Apollon",NYSE Arca,1,0,2026-11-03
 ACKY,VistaShares Target 15 ACKtivist Distribution ETF,NYSE Arca,1,0,2026-10-27
 ACLC,American Century Large Cap Equity ETF,NYSE Arca,1,0,2026-10-27
 ACLO,TCW AAA CLO ETF,NYSE,1,0,2026-10-27
@@ -353,6 +354,7 @@ AIA,iShares Asia 50 ETF,NASDAQ,1,0,2026-10-27
 AIAI,AIAI Holdings Corporation - Class A common stock,NASDAQ,0,1,2026-10-27
 AIB,AIB Data Centers Inc. Common Stock,NYSE American,0,1,2026-10-27
 AIBD,Direxion Daily AI and Big Data Bear 2X ETF,NYSE Arca,1,0,2026-10-27
+AIBE,FINQ CORE U.S. Large Cap AI-Managed Equity ETF,NYSE Arca,1,0,2026-11-03
 AIBF,iShares Future AI Beneficiaries ETF,NYSE Arca,1,0,2026-10-27
 AIBN,Defiance AI Infrastructure Bond ETF,NYSE Arca,1,0,2026-10-27
 AIBU,Direxion Daily AI and Big Data Bull 2X ETF,NYSE Arca,1,0,2026-10-27
@@ -1300,7 +1302,6 @@ BFOR,Barron's 400 ETF,NYSE Arca,1,0,2026-10-27
 BFRG,"Bullfrog AI Holdings, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 BFRGW,"Bullfrog AI Holdings, Inc. - Warrants",NASDAQ,0,0,2026-10-27
 BFRI,Biofrontera Inc. - Common Stock,NASDAQ,0,1,2026-10-27
-BFRIW,Biofrontera Inc. - Warrants,NASDAQ,0,0,2026-10-27
 BFRZ,Innovator Equity Managed 100 Buffer ETF,NYSE Arca,1,0,2026-10-27
 BFS,"Saul Centers, Inc. Common Stock",NYSE,0,1,2026-10-27
 BFST,"Business First Bancshares, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -1947,6 +1948,7 @@ CARY,Angel Oak Income ETF,NASDAQ,1,0,2026-10-27
 CARZ,First Trust S-Network Future Vehicles & Technology ETF,NASDAQ,1,0,2026-10-27
 CAS,Simplify China A Shares PLUS Income ETF,NYSE Arca,1,0,2026-10-27
 CASH,"Pathward Financial, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
+CASK,"Sempreon, Inc. - Common Stock",NASDAQ,0,1,2026-11-03
 CASS,"Cass Information Systems, Inc - Common Stock",NASDAQ,0,1,2026-10-27
 CAST,"FreeCast, Inc. - Class A common stock",NASDAQ,0,1,2026-10-27
 CASY,"Caseys General Stores, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -2006,7 +2008,6 @@ CBXJ,Calamos Bitcoin 90 Series Structured Alt Protection ETF - January,Cboe BZX,
 CBXL,Calamos Laddered Bitcoin 90 Series Structured Alt Protection ETF,Cboe BZX,1,0,2026-10-27
 CBXO,Calamos Bitcoin 90 Series Structured Alt Protection ETF - October,Cboe BZX,1,0,2026-10-27
 CBXY,Calamos Bitcoin 90 Series Structured Alt Protection ETF - July,Cboe BZX,1,0,2026-10-27
-CBZ,"CBIZ, Inc. Common Stock",NYSE,0,1,2026-10-27
 CC,Chemours Company (The) Common Stock,NYSE,0,1,2026-10-27
 CCAP,"Crescent Capital BDC, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 CCAQ,Collective Acquisition Corp. - Class A ordinary shares,NASDAQ,0,0,2026-10-27
@@ -2086,7 +2087,7 @@ CDXS,"Codexis, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 CDZI,"Cadiz, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 CDZIP,"Cadiz, Inc. - Depositary Shares",NASDAQ,0,1,2026-10-27
 CE,Celanese Corporation Common Stock,NYSE,0,1,2026-10-27
-CECO,CECO Environmental Corp. Common Stock,TXSE,0,1,2026-10-27
+CECO,CECO Environmental Corp. Common Stock,F,0,1,2026-10-27
 CEE,"The Central and Eastern Europe Fund, Inc. (The) Common Stock",NYSE,0,0,2026-10-27
 CEF,Sprott Physical Gold and Silver Trust Units,NYSE Arca,1,0,2026-10-27
 CEFA,Global X S&P Catholic Values Developed ex-U.S. ETF,NASDAQ,1,0,2026-10-27
@@ -2398,7 +2399,7 @@ CNP,"CenterPoint Energy, Inc (Holding Co) Common Stock",NYSE,0,1,2026-10-27
 CNQ,Canadian Natural Resources Limited Common Stock,NYSE,0,1,2026-10-27
 CNQQ,Rayliant-ChinaAMC Transformative China Tech ETF,NASDAQ,1,0,2026-10-27
 CNR,"Core Natural Resources, Inc. Common Stock",NYSE,0,1,2026-10-27
-CNRG,State Street SPDR S&P Kensho Clean Power ETF,NYSE Arca,1,0,2026-10-27
+CNRG,State Street SPDR S&P Kensho Grid Innovation ETF,NYSE Arca,1,0,2026-10-27
 CNS,Cohen & Steers Inc Common Stock,NYSE,0,1,2026-10-27
 CNSP,"CNS Pharmaceuticals, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 CNSY,"Cerenome, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -2674,7 +2675,7 @@ CTA,Simplify Managed Futures Strategy ETF,NYSE Arca,1,0,2026-10-27
 CTAA,ClearThink 1 Acquisition Corp. - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 CTAAR,ClearThink 1 Acquisition Corp. - Rights,NASDAQ,0,0,2026-10-27
 CTAAU,ClearThink 1 Acquisition Corp. - Units,NASDAQ,0,0,2026-10-27
-CTAG,Calamos Timpani Active SMID Growth ETF,TXSE,1,0,2026-10-27
+CTAG,Calamos Timpani Active SMID Growth ETF,F,1,0,2026-10-27
 CTAP,Simplify US Equity PLUS Managed Futures Strategy ETF,NYSE Arca,1,0,2026-10-27
 CTAS,Cintas Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 CTAU,Corgi U.S. Equities 30% Structured Buffer ETF - August Series,Cboe BZX,1,0,2026-10-27
@@ -2896,9 +2897,9 @@ DDLS,WisdomTree Dynamic International SmallCap Equity Fund,Cboe BZX,1,0,2026-10-
 DDM,ProShares Ultra Dow30,NYSE Arca,1,0,2026-10-27
 DDNQ,Innovator Growth-100 Dual Directional 5 Buffer ETF - Quarterly,Cboe BZX,1,0,2026-10-27
 DDOG,"Datadog, Inc. - Class A Common Stock",NASDAQ,0,1,2026-10-27
-DDS,"Dillard's, Inc. Common Stock",TXSE,0,1,2026-10-27
+DDS,"Dillard's, Inc. Common Stock",F,0,1,2026-10-27
 DDSQ,Innovator Equity Dual Directional 5 Buffer ETF - Quarterly,Cboe BZX,1,0,2026-10-27
-DDT,Dillard's Capital Trust I,TXSE,0,1,2026-10-27
+DDT,Dillard's Capital Trust I,F,0,1,2026-10-27
 DDTA,Innovator Equity Dual Directional 10 Buffer ETF - April,Cboe BZX,1,0,2026-10-27
 DDTD,Innovator Equity Dual Directional 10 Buffer ETF - December,Cboe BZX,1,0,2026-10-27
 DDTF,Innovator Equity Dual Directional 10 Buffer ETF - February,Cboe BZX,1,0,2026-10-27
@@ -3047,7 +3048,6 @@ DIG,ProShares Ultra Energy,NYSE Arca,1,0,2026-10-27
 DIHP,Dimensional International High Profitability ETF,Cboe BZX,1,0,2026-10-27
 DIM,WisdomTree International MidCap Dividend Fund,NYSE Arca,1,0,2026-10-27
 DIN,"Dine Brands Global, Inc. Common Stock",NYSE,0,1,2026-10-27
-DINE,Simplify Tax Aware Diversified Income Strategy ETF,NASDAQ,1,0,2026-10-27
 DINO,HF Sinclair Corporation Common Stock,NYSE,0,1,2026-10-27
 DINT,Davis Select International ETF,Cboe BZX,1,0,2026-10-27
 DIOD,Diodes Incorporated - Common Stock,NASDAQ,0,1,2026-10-27
@@ -3428,7 +3428,7 @@ EFC,Ellington Financial Inc. Common Stock ,NYSE,0,1,2026-10-27
 EFFE,Harbor Osmosis Emerging Markets Resource Efficient ETF,NYSE Arca,1,0,2026-10-27
 EFFI,Harbor Osmosis International Resource Efficient ETF,NYSE Arca,1,0,2026-10-27
 EFG,iShares MSCI EAFE Growth ETF,Cboe BZX,1,0,2026-10-27
-EFIV,State Street SPDR S&P 500 ESG ETF,NYSE Arca,1,0,2026-10-27
+EFIV,State Street SPDR S&P 500 Scored and Screened ETF,NYSE Arca,1,0,2026-10-27
 EFNL,iShares MSCI Finland ETF,Cboe BZX,1,0,2026-10-27
 EFO,ProShares Ultra MSCI EAFE,NYSE Arca,1,0,2026-10-27
 EFOI,"Energy Focus, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -3713,7 +3713,7 @@ ESTA,Establishment Labs Holdings Inc. - Common Shares,NASDAQ,0,1,2026-10-27
 ESTC,Elastic N.V. Ordinary Shares,NYSE,0,1,2026-10-27
 ESUM,Eventide US Market ETF,NYSE Arca,1,0,2026-10-27
 ESYN,EnerSyn Global Inc. - Common Stock,NASDAQ,0,1,2026-10-27
-ET,Energy Transfer LP Common Units,TXSE,0,0,2026-10-27
+ET,Energy Transfer LP Common Units,F,0,0,2026-10-27
 ETB,Eaton Vance Tax-Managed Buy-Write Income Fund Eaton Vance Tax-Managed Buy-Write Income Fund Common Shares of Beneficial Interest,NYSE,0,0,2026-10-27
 ETCO,Grayscale Ethereum High Income ETF,NYSE Arca,1,0,2026-10-27
 ETD,Ethan Allen Interiors Inc. Common Stock,NYSE,0,1,2026-10-27
@@ -4127,7 +4127,7 @@ FID,First Trust S&P International Dividend Aristocrats ETF,NASDAQ,1,0,2026-10-27
 FIDI,Fidelity International High Dividend ETF,NYSE Arca,1,0,2026-10-27
 FIDU,Fidelity MSCI Industrials Index ETF,NYSE Arca,1,0,2026-10-27
 FIEE,"FiEE, Inc - Common Stock",NASDAQ,0,1,2026-10-27
-FIFT,HCM Select 50 ETF,TXSE,1,0,2026-10-27
+FIFT,HCM Select 50 ETF,F,1,0,2026-10-27
 FIG,"Figma, Inc. Class A Common Stock",NYSE,0,1,2026-10-27
 FIGB,Fidelity Investment Grade Bond ETF,NYSE Arca,1,0,2026-10-27
 FIGG,Leverage Shares 2x Long FIG Daily ETF,NASDAQ,1,0,2026-10-27
@@ -4447,7 +4447,7 @@ FTCI,"FTC Solar, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 FTCS,First Trust Capital Strength ETF,NASDAQ,1,0,2026-10-27
 FTDR,"Frontdoor, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 FTDS,First Trust Dividend Strength ETF,NASDAQ,1,0,2026-10-27
-FTEC,Fidelity MSCI Information Technology Index ETF,NYSE Arca,1,0,2026-10-27
+FTEC,ETF,NYSE Arca,1,0,2026-10-27
 FTEK,"Fuel Tech, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 FTF,Franklin Limited Duration Income Trust Common Shares of Beneficial Interest,NYSE American,0,0,2026-10-27
 FTFT,Future FinTech Group Inc. - Common Stock,NASDAQ,0,1,2026-10-27
@@ -5583,7 +5583,7 @@ IBMX,iShares iBonds Dec 2035 Term Muni Bond ETF,Cboe BZX,1,0,2026-10-27
 IBN,ICICI Bank Limited Common Stock,NYSE,0,1,2026-10-27
 IBND,State Street SPDR Bloomberg International Corporate Bond ETF,NYSE Arca,1,0,2026-10-27
 IBO,"Impact BioMedical, Inc. Common Stock",NYSE American,0,1,2026-10-27
-IBOC,International Bancshares Corporation Common Stock,TXSE,0,1,2026-10-27
+IBOC,International Bancshares Corporation Common Stock,F,0,1,2026-10-27
 IBOT,VanEck Robotics ETF,NASDAQ,1,0,2026-10-27
 IBP,"Installed Building Products, Inc. Common Stock",NYSE,0,1,2026-10-27
 IBRN,iShares Neuroscience and Healthcare ETF,NYSE Arca,1,0,2026-10-27
@@ -5617,7 +5617,7 @@ ICLO,Invesco AAA CLO Floating Rate Note ETF,Cboe BZX,1,0,2026-10-27
 ICLR,ICON plc - Ordinary Shares,NASDAQ,0,1,2026-10-27
 ICMB,"Investcorp Credit Management BDC, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 ICMO,Symmetry Panoramic International Country Momentum ETF,NASDAQ,1,0,2026-10-27
-ICOM,Tema Commodity Income ETF,TXSE,1,0,2026-10-27
+ICOM,Tema Commodity Income ETF,F,1,0,2026-10-27
 ICON,Icon Energy Corp. - Common stock,NASDAQ,0,1,2026-10-27
 ICOP,iShares Copper and Metals Mining ETF,NASDAQ,1,0,2026-10-27
 ICOW,Pacer Developed Markets International Cash Cows 100 ETF,Cboe BZX,1,0,2026-10-27
@@ -5762,7 +5762,7 @@ ILLUW,Illumination Acquisition Corp I - Warrant,NASDAQ,0,0,2026-10-27
 ILMN,"Illumina, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 ILOW,AB International Low Volatility Equity ETF,NYSE Arca,1,0,2026-10-27
 ILPT,Industrial Logistics Properties Trust - Common Shares of Beneficial Interest,NASDAQ,0,0,2026-10-27
-ILS,Brookmont Catastrophic Bond ETF,TXSE,1,0,2026-10-27
+ILS,Brookmont Catastrophic Bond ETF,F,1,0,2026-10-27
 ILTB,iShares Core 10  Year USD Bond ETF,NYSE Arca,1,0,2026-10-27
 IMA,"ImageneBio, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 IMAR,Innovator International Developed Power Buffer ETF  March,NYSE Arca,1,0,2026-10-27
@@ -6075,7 +6075,7 @@ IVW,iShares S&P 500 Growth ETF,NYSE Arca,1,0,2026-10-27
 IVZ,Invesco Ltd Common Stock,NYSE,0,1,2026-10-27
 IWB,iShares Russell 1000 ETF,NYSE Arca,1,0,2026-10-27
 IWC,iShares Microcap ETF,NYSE Arca,1,0,2026-10-27
-IWD,iShares Russell 1000 Value ETF,NYSE Arca,1,0,2026-10-27
+IWD,iShares Russell 1000 Value Index Fund,NYSE Arca,1,0,2026-10-27
 IWF,iShares Russell 1000 Growth Fund,NYSE Arca,1,0,2026-10-27
 IWFG,NYLIM Winslow Focused Large Cap Growth ETF,NYSE Arca,1,0,2026-10-27
 IWL,iShares Russell Top 200 ETF,NYSE Arca,1,0,2026-10-27
@@ -6112,7 +6112,7 @@ IYM,iShares U.S. Basic Materials ETF,NYSE Arca,1,0,2026-10-27
 IYR,iShares U.S. Real Estate ETF,NYSE Arca,1,0,2026-10-27
 IYRI,NEOS Real Estate High Income ETF,Cboe BZX,1,0,2026-10-27
 IYT,iShares U.S. Transportation ETF,Cboe BZX,1,0,2026-10-27
-IYW,iShares U.S. Technology ETF,NYSE Arca,1,0,2026-10-27
+IYW,iShares Dow Jones U.S. Technology Sector Index Fund,NYSE Arca,1,0,2026-10-27
 IYY,iShares Dow Jones U.S. ETF,NYSE Arca,1,0,2026-10-27
 IYZ,iShares U.S. Telecommunications ETF,Cboe BZX,1,0,2026-10-27
 IZEA,"IZEA Worldwide, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -6149,7 +6149,7 @@ JATT,JATT II Acquisition Corp - Ordinary Shares,NASDAQ,0,0,2026-10-27
 JAVA,JPMorgan Active Value ETF,NYSE Arca,1,0,2026-10-27
 JAZZ,Jazz Pharmaceuticals plc - Ordinary Shares,NASDAQ,0,1,2026-10-27
 JBBB,Janus Henderson B-BBB CLO ETF,Cboe BZX,1,0,2026-10-27
-JBDI,JBDI Holdings Limited - Ordinary Shares,NASDAQ,0,1,2026-10-27
+JBDI,JBDI Holdings Limited - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 JBGS,JBG SMITH Properties Common Shares ,NYSE,0,1,2026-10-27
 JBHT,"J.B. Hunt Transport Services, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 JBI,"Janus International Group, Inc. Common Stock",NYSE,0,1,2026-10-27
@@ -6584,7 +6584,6 @@ KURE,KraneShares MSCI All China Health Care Index ETF,NYSE Arca,1,0,2026-10-27
 KUST,"Kustom Entertainment, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 KVHI,"KVH Industries, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 KVLE,KraneShares Value Line Dynamic Dividend Equity Index ETF,NYSE Arca,1,0,2026-10-27
-KVUE,Kenvue Inc. Common Stock,NYSE,0,1,2026-10-27
 KVYO,"Klaviyo, Inc. Series A Common Stock",NYSE,0,1,2026-10-27
 KWEB,KraneShares CSI China Internet ETF,NYSE Arca,1,0,2026-10-27
 KWH,GMO Power Infrastructure ETF,NYSE Arca,1,0,2026-10-27
@@ -6735,7 +6734,6 @@ LGDS,JPMorgan Fundamental Data Science Large Growth ETF,NASDAQ,1,0,2026-10-27
 LGDX,Intech S&P Large Cap Diversified Alpha ETF,NYSE Arca,1,0,2026-10-27
 LGH,HCM Defender 500 Index ETF,NYSE Arca,1,0,2026-10-27
 LGHL,Lion Group Holding Ltd. - American Depositary Share,NASDAQ,0,1,2026-10-27
-LGHT,Langar Global HealthTech ETF,Cboe BZX,1,0,2026-10-27
 LGI,Lazard Global Total Return and Income Fund Common Stock,NYSE,0,0,2026-10-27
 LGIH,"LGI Homes, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 LGL,"LGL Group, Inc. (The) Common Stock",NYSE American,0,1,2026-10-27
@@ -6874,7 +6872,6 @@ LPRE,Long Pond Real Estate Select ETF,NYSE Arca,1,0,2026-10-27
 LPSV,Lone Peak SMID Value ETF,NYSE Arca,1,0,2026-10-27
 LPTH,"LightPath Technologies, Inc. - Class A Common Stock",NASDAQ,0,1,2026-10-27
 LPX,Louisiana-Pacific Corporation Common Stock,NYSE,0,1,2026-10-27
-LQ,Simplify Tax Aware Alternatives ETF,NASDAQ,1,0,2026-10-27
 LQAI,LG QRAFT AI-Powered U.S. Large Cap Core ETF,NYSE Arca,1,0,2026-10-27
 LQD,iShares iBoxx $ Investment Grade Corporate Bond ETF,NYSE Arca,1,0,2026-10-27
 LQDA,Liquidia Corporation - Common Stock,NASDAQ,0,1,2026-10-27
@@ -6970,7 +6967,6 @@ LX,LexinFintech Holdings Ltd. - American Depositary Shares,NASDAQ,0,1,2026-10-27
 LXEH,"Lixiang Education Holding Co., Ltd. - American Depositary Shares",NASDAQ,0,1,2026-10-27
 LXEO,"Lexeo Therapeutics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 LXFR,Luxfer Holdings PLC Ordinary Shares,NYSE,0,1,2026-10-27
-LXP,LXP Industrial Trust Common Stock (Maryland REIT),NYSE,0,1,2026-10-27
 LXRX,"Lexicon Pharmaceuticals, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 LXU,"LSB Industries, Inc. Common Stock",NYSE,0,1,2026-10-27
 LYB,LyondellBasell Industries NV Ordinary Shares Class A (Netherlands),NYSE,0,1,2026-10-27
@@ -7234,7 +7230,6 @@ MGNR,American Beacon Select Funds American Beacon GLG Natural Resources ETF,NYSE
 MGNX,"MacroGenics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 MGOL,Leverage Shares MANGOS ETF,NASDAQ,1,0,2026-10-27
 MGOV,First Trust Intermediate Government Opportunities ETF,NYSE Arca,1,0,2026-10-27
-MGPI,"MGP Ingredients, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 MGR,"Affiliated Managers Group, Inc. 5.875% Junior Subordinated Notes due 2059",NYSE,0,0,2026-10-27
 MGRB,"Affiliated Managers Group, Inc. 4.750% Junior Subordinated Notes due 2060",NYSE,0,0,2026-10-27
 MGRC,McGrath RentCorp - Common Stock,NASDAQ,0,1,2026-10-27
@@ -7702,6 +7697,7 @@ NANO,Forge Nano Holdings Inc. - Common stock,NASDAQ,0,1,2026-10-27
 NANOW,Forge Nano Holdings Inc. - Warrants,NASDAQ,0,0,2026-10-27
 NANR,State Street SPDR S&P North American Natural Resources ETF,NYSE Arca,1,0,2026-10-27
 NAPR,Innovator Growth-100 Power Buffer ETF - April,Cboe BZX,1,0,2026-10-27
+NARA,"Narragansett Bancorp, Inc. - Common Stock",NASDAQ,0,1,2026-11-03
 NASA,Tema Space Innovators ETF,NYSE Arca,1,0,2026-10-27
 NAT,Nordic American Tankers Limited Common Stock,NYSE,0,1,2026-10-27
 NATL,NCR Atleos Corporation Common Stock,NYSE,0,1,2026-10-27
@@ -7926,6 +7922,7 @@ NMS,Nuveen Minnesota Quality Municipal Income Fund ,NYSE,0,0,2026-10-27
 NMT,Nuveen Massachusetts Quality Municipal Income Fund Common Stock,NYSE,0,0,2026-10-27
 NMTC,NeuroOne Medical Technologies Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 NMZ,"Nuveen Municipal High Income Opportunity Fund Common Stock, $0.01 par value, per share",NYSE,0,0,2026-10-27
+NMZ.V,"Nuveen Municipal High Income Opportunity Fund Rights (expiring December 2, 2026) Rights when issued",NYSE,0,0,2026-11-03
 NN,NextNav Inc. - Common stock,NASDAQ,0,1,2026-10-27
 NNBR,"NN, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 NNDM,Nano Dimension Ltd. - American Depositary Shares,NASDAQ,0,1,2026-10-27
@@ -8174,7 +8171,6 @@ NXT,Nextpower Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 NXTC,"NextCure, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 NXTE,AXS Green Alpha ETF,NYSE Arca,1,0,2026-10-27
 NXTG,First Trust Indxx NextG ETF,NASDAQ,1,0,2026-10-27
-NXTI,Simplify Next Intangible Core Index ETF,Cboe BZX,1,0,2026-10-27
 NXTS,Nexentis Technologies Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 NXTT,Next Technology Holding Inc. - Ordinary Shares,NASDAQ,0,1,2026-10-27
 NXUS,Nuveen International Aggregate Bond ETF,NYSE Arca,1,0,2026-10-27
@@ -8215,7 +8211,7 @@ OBDC,Blue Owl Capital Corporation Common Stock,NYSE,0,1,2026-10-27
 OBE,Obsidian Energy Ltd. Common Shares,NYSE American,0,1,2026-10-27
 OBIL,US Treasury 12 Month Bill ETF,NASDAQ,1,0,2026-10-27
 OBIO,"Orchestra BioMed Holdings, Inc. - Ordinary Shares",NASDAQ,0,1,2026-10-27
-OBK,"Origin Bancorp, Inc. Common Stock",TXSE,0,1,2026-10-27
+OBK,"Origin Bancorp, Inc. Common Stock",F,0,1,2026-10-27
 OBND,State Street Loomis Sayles Opportunistic Bond ETF,Cboe BZX,1,0,2026-10-27
 OBOR,KraneShares MSCI One Belt One Road Index ETF,NYSE Arca,1,0,2026-10-27
 OBT,"Orange County Bancorp, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -8300,7 +8296,7 @@ OIH,VanEck Oil Services ETF,NYSE Arca,1,0,2026-10-27
 OII,"Oceaneering International, Inc. Common Stock",NYSE,0,1,2026-10-27
 OILD,MicroSectors Oil & Gas Exp. & Prod. -3x Inverse Leveraged ETN,NYSE Arca,1,0,2026-10-27
 OILK,ProShares K-1 Free Crude Oil ETF,Cboe BZX,1,0,2026-10-27
-OILT,Texas Capital Texas Oil Index ETF,TXSE,1,0,2026-10-27
+OILT,Texas Capital Texas Oil Index ETF,F,1,0,2026-10-27
 OILU,MicroSectors Oil & Gas Exp. & Prod. 3x Leveraged ETN,NYSE Arca,1,0,2026-10-27
 OIM,OneIM Acquisition Corp. - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 OIMAU,OneIM Acquisition Corp. - Units,NASDAQ,0,0,2026-10-27
@@ -8378,6 +8374,7 @@ OOMA,"Ooma, Inc. Common Stock",NYSE,0,1,2026-10-27
 OOSP,Obra Opportunistic Structured Products ETF,NYSE Arca,1,0,2026-10-27
 OPAD,Offerpad Solutions Inc.  - Class A Common Stock,NASDAQ,0,1,2026-10-27
 OPAL,OPAL Fuels Inc. - Class A Common Stock,NASDAQ,0,1,2026-10-27
+OPAY,"OPay Limited American Depositary Shares, each representing ten Ordinary Shares",NYSE,0,1,2026-11-03
 OPBK,OP Bancorp - Common Stock,NASDAQ,0,1,2026-10-27
 OPCH,"Option Care Health, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 OPEN,Opendoor Technologies Inc  - Common Stock,NASDAQ,0,1,2026-10-27
@@ -8661,7 +8658,6 @@ PCPC,Porter & Company Property & Casualty Index ETF,Cboe BZX,1,0,2026-10-27
 PCPI,PIMCO Inflation PLUS Active Exchange-Traded Fund,NASDAQ,1,0,2026-10-27
 PCPP,Porter & Company Porter Portfolio Index ETF,Cboe BZX,1,0,2026-10-27
 PCQ,PIMCO California Municipal Income Fund Common Stock,NYSE,0,0,2026-10-27
-PCR,Simplify VettaFi Private Credit Strategy ETF,NYSE Arca,1,0,2026-10-27
 PCRX,"Pacira BioSciences, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 PCS,PGIM Corporate Bond 0-5 Year ETF,Cboe BZX,1,0,2026-10-27
 PCSA,"Processa Pharmaceuticals, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -9185,7 +9181,7 @@ PWP,Perella Weinberg Partners - Class A Common Stock,NASDAQ,0,1,2026-10-27
 PWR,"Quanta Services, Inc. Common Stock",NYSE,0,1,2026-10-27
 PWRD,TCW Transform Systems ETF,NASDAQ,1,0,2026-10-27
 PWRL,Powerlaw Corp. - Common Stock,NASDAQ,0,1,2026-10-27
-PWRX,Westwood Salient Enhanced Power & Infrastructure ETF,TXSE,1,0,2026-10-27
+PWRX,Westwood Salient Enhanced Power & Infrastructure ETF,F,1,0,2026-10-27
 PWRZ,TrueShares Eagle Global Renewable Energy Income ETF,Cboe BZX,1,0,2026-10-27
 PWS,Pacer WealthShield ETF,Cboe BZX,1,0,2026-10-27
 PWV,Invesco Large Cap Value ETF,NYSE Arca,1,0,2026-10-27
@@ -9375,7 +9371,7 @@ QSR,Restaurant Brands International Inc. Common Shares,NYSE,0,1,2026-10-27
 QSU,Defiance Daily Target 2X Long QS ETF,NYSE Arca,1,0,2026-10-27
 QTAC,Q3 All-Season Tactical Advantage ETF,Cboe BZX,1,0,2026-10-27
 QTAP,Innovator Growth Accelerated Plus ETF - April,Cboe BZX,1,0,2026-10-27
-QTEC,First Trust NASDAQ-100-Technology Sector Index Fund,NASDAQ,1,0,2026-10-27
+QTEC,First Trust NASDAQ-100- Technology Index Fund,NASDAQ,1,0,2026-10-27
 QTEX,QTREX Quantum Ltd. - Ordinary Shares,NASDAQ,0,1,2026-10-27
 QTI,"QT Imaging Holdings, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 QTJA,Innovator Growth Accelerated Plus ETF - January,Cboe BZX,1,0,2026-10-27
@@ -9440,7 +9436,6 @@ RAINW,"Rain Enhancement Technologies Holdco, Inc. - Warrants",NASDAQ,0,0,2026-10
 RAL,Ralliant Corporation Common Stock,NYSE,0,1,2026-10-27
 RAM,Roundhill T-REX 2X Long DRAM Daily Target ETF,Cboe BZX,1,0,2026-10-27
 RAML,Leverage Shares 2X Long Memory Daily ETF,Cboe BZX,1,0,2026-10-27
-RAMP,"LiveRamp Holdings, Inc. Common Stock",NYSE,0,1,2026-10-27
 RAMZ,T-REX 2X Inverse DRAM Daily Target ETF,Cboe BZX,1,0,2026-10-27
 RAND,Rand Capital Corporation - Closed End Fund,NASDAQ,0,0,2026-10-27
 RANG,Range Capital Acquisition Corp. - Ordinary Shares,NASDAQ,0,0,2026-10-27
@@ -10545,7 +10540,7 @@ SOXS,Direxion Daily Semiconductor Bear 3X ETF,NYSE Arca,1,0,2026-10-27
 SOXX,iShares PHLX SOX Semiconductor Sector Index Fund,NASDAQ,1,0,2026-10-27
 SOXY,YieldMax Target 12 Semiconductor Option Income ETF,NYSE Arca,1,0,2026-10-27
 SOYB,Teucrium Soybean Fund ETV,NYSE Arca,1,0,2026-10-27
-SPAB,State Street SPDR Portfolio Aggregate Bond ETF,NYSE Arca,1,0,2026-10-27
+SPAB,State Street SPDR Portfolio Aggregate Bond Index ETF,NYSE Arca,1,0,2026-10-27
 SPAI,Safe Pro Group Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 SPAL,GraniteShares 2x Long SpaceX Daily ETF,Cboe BZX,1,0,2026-10-27
 SPAM,Themes Cybersecurity ETF,NASDAQ,1,0,2026-10-27
@@ -10553,7 +10548,7 @@ SPAQ,Horizon Kinetics SPAC Active ETF,NASDAQ,1,0,2026-10-27
 SPAX,T-REX 2X Long SPCX Daily Target ETF,NYSE Arca,1,0,2026-10-27
 SPB,"Spectrum Brands Holdings, Inc. Common Stock",NYSE,0,1,2026-10-27
 SPBC,Simplify US Equity PLUS Bitcoin Strategy ETF,NASDAQ,1,0,2026-10-27
-SPBO,State Street SPDR Portfolio Corporate Bond ETF,NYSE Arca,1,0,2026-10-27
+SPBO,State Street SPDR Portfolio Corporate Bond Index ETF,NYSE Arca,1,0,2026-10-27
 SPBU,AllianzIM Buffer15 Uncapped Allocation ETF,Cboe BZX,1,0,2026-10-27
 SPBW,AllianzIM Buffer20 Allocation ETF,Cboe BZX,1,0,2026-10-27
 SPBX,AllianzIM 6 Month Buffer10 Allocation ETF,Cboe BZX,1,0,2026-10-27
@@ -10594,17 +10589,17 @@ SPHD,Invesco S&P 500 High Dividend Low Volatility ETF,NYSE Arca,1,0,2026-10-27
 SPHL,Springview Holdings Ltd - Ordinary shares,NASDAQ,0,1,2026-10-27
 SPHQ,Invesco S&P 500 Quality ETF,NYSE Arca,1,0,2026-10-27
 SPHR,Sphere Entertainment Co. Class A Common Stock,NYSE,0,1,2026-10-27
-SPHY,State Street SPDR Portfolio High Yield Bond ETF,NYSE Arca,1,0,2026-10-27
-SPIB,State Street SPDR Portfolio Intermediate Term Corporate Bond ETF,NYSE Arca,1,0,2026-10-27
+SPHY,State Street SPDR Portfolio High Yield Bond Index ETF,NYSE Arca,1,0,2026-10-27
+SPIB,State Street SPDR Portfolio Intermediate Term Corporate Bond Index ETF,NYSE Arca,1,0,2026-10-27
 SPIN,State Street US Equity Premium Income ETF,Cboe BZX,1,0,2026-10-27
-SPIP,State Street SPDR Portfolio TIPS ETF,NYSE Arca,1,0,2026-10-27
+SPIP,State Street SPDR Portfolio TIPS Index ETF,NYSE Arca,1,0,2026-10-27
 SPIR,"Spire Global, Inc. Class A Common Stock",NYSE,0,1,2026-10-27
 SPIT,F/m Emerald Special Situations ETF,NASDAQ,1,0,2026-10-27
-SPLB,State Street SPDR Portfolio Long Term Corporate Bond ETF,NYSE Arca,1,0,2026-10-27
+SPLB,State Street SPDR Portfolio Long Term Corporate Bond Index ETF,NYSE Arca,1,0,2026-10-27
 SPLS,PIMCO US Stocks PLUS Active Bond Exchange-Traded Fund,Cboe BZX,1,0,2026-10-27
 SPLV,Invesco S&P 500 Low Volatility ETF,NYSE Arca,1,0,2026-10-27
 SPMA,"Sound Point Meridian Capital, Inc. 8.00% Series A Preferred Shares Due 2029",NYSE,0,0,2026-10-27
-SPMB,State Street SPDR Portfolio Mortgage Backed Bond ETF,NYSE Arca,1,0,2026-10-27
+SPMB,State Street SPDR Portfolio Mortgage Backed Bond Index ETF,NYSE Arca,1,0,2026-10-27
 SPMC,"Sound Point Meridian Capital, Inc. Common Stock",NYSE,0,1,2026-10-27
 SPMD,State Street SPDR Portfolio S&P 400 Mid Cap ETF,NYSE Arca,1,0,2026-10-27
 SPME,"Sound Point Meridian Capital, Inc. 7.875% Series B Preferred Shares due 2030",NYSE,0,0,2026-10-27
@@ -10622,18 +10617,18 @@ SPRO,"Spero Therapeutics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SPRU,Spruce Power Holding Corporation Class A Common Stock,NYSE,0,1,2026-10-27
 SPRX,Spear Alpha ETF,NASDAQ,1,0,2026-10-27
 SPRY,"ARS Pharmaceuticals, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
-SPSB,State Street SPDR Portfolio Short Term Corporate Bond ETF,NYSE Arca,1,0,2026-10-27
+SPSB,State Street SPDR Portfolio Short Term Corporate Bond Index ETF,NYSE Arca,1,0,2026-10-27
 SPSC,"SPS Commerce, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SPSK,SP Funds Dow Jones Global Sukuk ETF,NYSE Arca,1,0,2026-10-27
 SPSM,State Street SPDR Portfolio S&P 600 Small Cap ETF,NYSE Arca,1,0,2026-10-27
 SPT,"Sprout Social, Inc - Class A Common Stock",NASDAQ,0,1,2026-10-27
-SPTB,State Street SPDR Portfolio Treasury ETF,NYSE Arca,1,0,2026-10-27
+SPTB,State Street SPDR Portfolio Treasury Index ETF,NYSE Arca,1,0,2026-10-27
 SPTE,SP Funds S&P Global Technology ETF,NYSE Arca,1,0,2026-10-27
-SPTI,State Street SPDR Portfolio Intermediate Term Treasury ETF,NYSE Arca,1,0,2026-10-27
-SPTL,State Street SPDR Portfolio Long Term Treasury ETF,NYSE Arca,1,0,2026-10-27
+SPTI,State Street SPDR Portfolio Intermediate Term Treasury Index ETF,NYSE Arca,1,0,2026-10-27
+SPTL,State Street SPDR Portfolio Long Term Treasury Index ETF,NYSE Arca,1,0,2026-10-27
 SPTM,State Street SPDR Portfolio S&P 1500 Composite Stock Market ETF,NYSE Arca,1,0,2026-10-27
-SPTS,State Street SPDR Portfolio Short Term Treasury ETF,NYSE Arca,1,0,2026-10-27
-SPTU,State Street SPDR Portfolio Ultra Short T-Bill ETF,NYSE Arca,1,0,2026-10-27
+SPTS,State Street SPDR Portfolio Short Term Treasury Index ETF,NYSE Arca,1,0,2026-10-27
+SPTU,State Street SPDR Portfolio Ultra Short T-Bill Index ETF,NYSE Arca,1,0,2026-10-27
 SPTX,"Seaport Therapeutics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SPUC,Simplify US Equity Income ETF,NYSE Arca,1,0,2026-10-27
 SPUS,SP Funds S&P 500 Sharia Industry Exclusions ETF,NYSE Arca,1,0,2026-10-27
@@ -10829,9 +10824,9 @@ SUJA,"Suja Life, Inc. - Class A Common Stock",NASDAQ,0,1,2026-10-27
 SUMA,SUMA Acquisition Corporation - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 SUMAR,SUMA Acquisition Corporation - Rights,NASDAQ,0,0,2026-10-27
 SUMAU,SUMA Acquisition Corporation - Units,NASDAQ,0,0,2026-10-27
-SUN,Sunoco LP Common Units representing limited partner interests,TXSE,0,0,2026-10-27
+SUN,Sunoco LP Common Units representing limited partner interests,F,0,0,2026-10-27
 SUNB,"Sunbelt Rentals Holdings, Inc. Common Stock",NYSE,0,1,2026-10-27
-SUNC,"SunocoCorp LLC Common Units, representing limited liability company interests",TXSE,0,0,2026-10-27
+SUNC,"SunocoCorp LLC Common Units, representing limited liability company interests",F,0,0,2026-10-27
 SUNE,"SUNation Energy, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SUNS,"Sunrise Realty Trust, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SUPN,"Supernus Pharmaceuticals, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -10990,7 +10985,7 @@ TCAF,T. Rowe Price Capital Appreciation Equity ETF,NYSE Arca,1,0,2026-10-27
 TCAI,Tortoise AI Infrastructure ETF,NYSE,1,0,2026-10-27
 TCAL,T. Rowe Price Capital Appreciation Premium Income ETF,NYSE Arca,1,0,2026-10-27
 TCAN,21Shares Canton Network ETF,NASDAQ,1,0,2026-10-27
-TCBI,"Texas Capital Bancshares, Inc. Common Stock",TXSE,0,1,2026-10-27
+TCBI,"Texas Capital Bancshares, Inc. Common Stock",F,0,1,2026-10-27
 TCBK,TriCo Bancshares - Common Stock,NASDAQ,0,1,2026-10-27
 TCBS,"Texas Community Bancshares, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 TCBX,"Third Coast Bancshares, Inc. Common Stock",NYSE,0,1,2026-10-27
@@ -11080,7 +11075,6 @@ TER,"Teradyne, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 TERC,Corgi TER 2x Daily ETF,Cboe BZX,1,0,2026-10-27
 TERG,Leverage Shares 2X Long TER Daily ETF,NASDAQ,1,0,2026-10-27
 TESC,Corgi TSLA 2x Daily ETF,Cboe BZX,1,0,2026-10-27
-TESL,Simplify Volt TSLA Revolution ETF,NYSE Arca,1,0,2026-10-27
 TEST,YieldMax TSLA Performance & Distribution Target 25 ETF,Cboe BZX,1,0,2026-10-27
 TETH,21Shares Ethereum ETF,Cboe BZX,1,0,2026-10-27
 TEUP,T-REX 2X Long TE Daily Target ETF,Cboe BZX,1,0,2026-10-27
@@ -11142,7 +11136,7 @@ THOR,Thornburg Premium Income Builder ETF,NYSE Arca,1,0,2026-10-27
 THQ,abrdn Healthcare Opportunities Fund Shares of Beneficial Interest,NYSE,0,0,2026-10-27
 THRM,Gentherm Inc - Common Stock,NASDAQ,0,1,2026-10-27
 THRO,iShares U.S. Thematic Rotation Active ETF,NYSE Arca,1,0,2026-10-27
-THRU,Tema Commodity Infrastructure ETF,TXSE,1,0,2026-10-27
+THRU,Tema Commodity Infrastructure ETF,F,1,0,2026-10-27
 THRV,Prospera Income ETF,NASDAQ,1,0,2026-10-27
 THRY,"Thryv Holdings, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 THTA,SoFi Enhanced Yield ETF,NYSE Arca,1,0,2026-10-27
@@ -11554,7 +11548,7 @@ TXNU,Direxion Daily TXN Bull 2X ETF,NYSE Arca,1,0,2026-10-27
 TXNY,Northern Trust New York Intermediate Tax-Exempt Bond ETF,NASDAQ,1,0,2026-10-27
 TXO,"TXO Partners, L.P. Common Units Representing Limited Partner Interests",NYSE,0,0,2026-10-27
 TXRH,"Texas Roadhouse, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
-TXS,Texas Capital Texas Equity Index ETF,TXSE,1,0,2026-10-27
+TXS,Texas Capital Texas Equity Index ETF,F,1,0,2026-10-27
 TXT,Textron Inc. Common Stock,NYSE,0,1,2026-10-27
 TXUE,Thornburg International Equity ETF,NASDAQ,1,0,2026-10-27
 TXUG,Thornburg International Growth Fund ETF,NASDAQ,1,0,2026-10-27
@@ -11735,7 +11729,7 @@ URSP,ProShares Ultra S&P 500 Equal Weight,NYSE Arca,1,0,2026-10-27
 URTH,iShares MSCI World ETF,NYSE Arca,1,0,2026-10-27
 URTY,ProShares UltraPro Russell2000,NYSE Arca,1,0,2026-10-27
 USA,Liberty All-Star Equity Fund Common Stock,NYSE,0,0,2026-10-27
-USAC,"USA Compression Partners, LP Common Units Representing Limited Partner Interests",TXSE,0,0,2026-10-27
+USAC,"USA Compression Partners, LP Common Units Representing Limited Partner Interests",F,0,0,2026-10-27
 USAF,Atlas America Fund,NASDAQ,1,0,2026-10-27
 USAI,Pacer American Energy Infrastructure ETF,NYSE Arca,1,0,2026-10-27
 USAR,"USA Rare Earth, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -12203,9 +12197,9 @@ WB,Weibo Corporation - American Depositary Shares,NASDAQ,0,1,2026-10-27
 WBEM,William Blair Emerging Markets Equity ETF,NYSE Arca,1,0,2026-10-27
 WBI,WaterBridge Infrastructure LLC Class A Shares Representing Limited Liability Company Interests,NYSE,0,1,2026-10-27
 WBIE,William Blair International Equity ETF,NYSE Arca,1,0,2026-10-27
-WBIF,WBI BullBear Value 3000 ETF,NYSE Arca,1,0,2026-10-27
-WBIG,WBI BullBear Yield 3000 ETF,NYSE Arca,1,0,2026-10-27
-WBIL,WBI BullBear Quality 3000 ETF,NYSE Arca,1,0,2026-10-27
+WBIF,WBI Fundamental Factors Hedged ETF,NYSE Arca,1,0,2026-10-27
+WBIG,WBI Income Generators Hedged ETF,NYSE Arca,1,0,2026-10-27
+WBIL,WBI Trend Leaders Hedged ETF,NYSE Arca,1,0,2026-10-27
 WBIY,WBI Power Factor High Dividend ETF,NYSE,1,0,2026-10-27
 WBMO,VanEck Wealth Builder ETF,NYSE Arca,1,0,2026-10-28
 WBTN,WEBTOON Entertainment Inc. - Common stock,NASDAQ,0,1,2026-10-27
@@ -12372,7 +12366,7 @@ WSE,Wise Group plc - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 WSFS,WSFS Financial Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 WSGE,Warren Street Global Equity ETF,NASDAQ,1,0,2026-10-27
 WSHP,WeShop Holdings Limited - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
-WSLS,WisdomTree Efficient Long/Short U.S. SmallCap Equity Fund,TXSE,1,0,2026-10-27
+WSLS,WisdomTree Efficient Long/Short U.S. SmallCap Equity Fund,F,1,0,2026-10-27
 WSM,"Williams-Sonoma, Inc. Common Stock (DE)",NYSE,0,1,2026-10-27
 WSMD,Wasatch Small/Mid Cap ETF,NYSE Arca,1,0,2026-10-27
 WSML,iShares MSCI World Small-Cap ETF,NASDAQ,1,0,2026-10-27
@@ -12385,7 +12379,7 @@ WSTNR,Westin Acquisition Corp - Right,NASDAQ,0,0,2026-10-27
 WSTNU,Westin Acquisition Corp - Units,NASDAQ,0,0,2026-10-27
 WT,"WisdomTree, Inc. Common Stock",NYSE,0,1,2026-10-27
 WTAI,WisdomTree Artificial Intelligence and Innovation Fund,Cboe BZX,1,0,2026-10-27
-WTAL,WisdomTree Global Alpha Fund,TXSE,1,0,2026-10-27
+WTAL,WisdomTree Global Alpha Fund,F,1,0,2026-10-27
 WTBA,West Bancorporation - Common Stock,NASDAQ,0,1,2026-10-27
 WTBN,WisdomTree Bianco Total Return Fund,NASDAQ,1,0,2026-10-27
 WTF,Waton Financial Limited - Ordinary Shares,NASDAQ,0,1,2026-10-27

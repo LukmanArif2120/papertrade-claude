@@ -12939,3 +12939,44 @@ tarikh,simbol,peristiwa,nama,bursa,etf,biasa
 2026-10-31,BBTX,tambah,"Bambusa Therapeutics, Inc. - Common stock",NASDAQ,0,1
 2026-10-31,METAM,tambah,"Meta Platforms, Inc. - Depositary Shares representing a 1/20th Interest in a Share of Series A Mandatory Convertible Preferred Stock",NASDAQ,0,0
 2026-10-31,NORD,tambah,Nordicus Partners Corporation - Common Stock,NASDAQ,0,1
+2026-11-03,ACJL,tambah,"Buffered Bulldog ETF by C.J. Lawrence, a division of Apollon",NYSE Arca,1,0
+2026-11-03,AIBE,tambah,FINQ CORE U.S. Large Cap AI-Managed Equity ETF,NYSE Arca,1,0
+2026-11-03,CASK,tambah,"Sempreon, Inc. - Common Stock",NASDAQ,0,1
+2026-11-03,NARA,tambah,"Narragansett Bancorp, Inc. - Common Stock",NASDAQ,0,1
+2026-11-03,NMZ.V,tambah,"Nuveen Municipal High Income Opportunity Fund Rights (expiring December 2, 2026) Rights when issued",NYSE,0,0
+2026-11-03,OPAY,tambah,"OPay Limited American Depositary Shares, each representing ten Ordinary Shares",NYSE,0,1
+2026-11-03,BFRIW,buang,Biofrontera Inc. - Warrants,NASDAQ,0,0
+2026-11-03,CBZ,buang,"CBIZ, Inc. Common Stock",NYSE,0,1
+2026-11-03,DINE,buang,Simplify Tax Aware Diversified Income Strategy ETF,NASDAQ,1,0
+2026-11-03,KVUE,buang,Kenvue Inc. Common Stock,NYSE,0,1
+2026-11-03,LGHT,buang,Langar Global HealthTech ETF,Cboe BZX,1,0
+2026-11-03,LQ,buang,Simplify Tax Aware Alternatives ETF,NASDAQ,1,0
+2026-11-03,LXP,buang,LXP Industrial Trust Common Stock (Maryland REIT),NYSE,0,1
+2026-11-03,MGPI,buang,"MGP Ingredients, Inc. - Common Stock",NASDAQ,0,1
+2026-11-03,NXTI,buang,Simplify Next Intangible Core Index ETF,Cboe BZX,1,0
+2026-11-03,PCR,buang,Simplify VettaFi Private Credit Strategy ETF,NYSE Arca,1,0
+2026-11-03,RAMP,buang,"LiveRamp Holdings, Inc. Common Stock",NYSE,0,1
+2026-11-03,TESL,buang,Simplify Volt TSLA Revolution ETF,NYSE Arca,1,0
+2026-11-03,CNRG,tukar_nama,State Street SPDR S&P Kensho Grid Innovation ETF,NYSE Arca,1,0
+2026-11-03,EFIV,tukar_nama,State Street SPDR S&P 500 Scored and Screened ETF,NYSE Arca,1,0
+2026-11-03,FTEC,tukar_nama,ETF,NYSE Arca,1,0
+2026-11-03,IWD,tukar_nama,iShares Russell 1000 Value Index Fund,NYSE Arca,1,0
+2026-11-03,IYW,tukar_nama,iShares Dow Jones U.S. Technology Sector Index Fund,NYSE Arca,1,0
+2026-11-03,JBDI,tukar_nama,JBDI Holdings Limited - Class A Ordinary Shares,NASDAQ,0,1
+2026-11-03,QTEC,tukar_nama,First Trust NASDAQ-100- Technology Index Fund,NASDAQ,1,0
+2026-11-03,SPAB,tukar_nama,State Street SPDR Portfolio Aggregate Bond Index ETF,NYSE Arca,1,0
+2026-11-03,SPBO,tukar_nama,State Street SPDR Portfolio Corporate Bond Index ETF,NYSE Arca,1,0
+2026-11-03,SPHY,tukar_nama,State Street SPDR Portfolio High Yield Bond Index ETF,NYSE Arca,1,0
+2026-11-03,SPIB,tukar_nama,State Street SPDR Portfolio Intermediate Term Corporate Bond Index ETF,NYSE Arca,1,0
+2026-11-03,SPIP,tukar_nama,State Street SPDR Portfolio TIPS Index ETF,NYSE Arca,1,0
+2026-11-03,SPLB,tukar_nama,State Street SPDR Portfolio Long Term Corporate Bond Index ETF,NYSE Arca,1,0
+2026-11-03,SPMB,tukar_nama,State Street SPDR Portfolio Mortgage Backed Bond Index ETF,NYSE Arca,1,0
+2026-11-03,SPSB,tukar_nama,State Street SPDR Portfolio Short Term Corporate Bond Index ETF,NYSE Arca,1,0
+2026-11-03,SPTB,tukar_nama,State Street SPDR Portfolio Treasury Index ETF,NYSE Arca,1,0
+2026-11-03,SPTI,tukar_nama,State Street SPDR Portfolio Intermediate Term Treasury Index ETF,NYSE Arca,1,0
+2026-11-03,SPTL,tukar_nama,State Street SPDR Portfolio Long Term Treasury Index ETF,NYSE Arca,1,0
+2026-11-03,SPTS,tukar_nama,State Street SPDR Portfolio Short Term Treasury Index ETF,NYSE Arca,1,0
+2026-11-03,SPTU,tukar_nama,State Street SPDR Portfolio Ultra Short T-Bill Index ETF,NYSE Arca,1,0
+2026-11-03,WBIF,tukar_nama,WBI Fundamental Factors Hedged ETF,NYSE Arca,1,0
+2026-11-03,WBIG,tukar_nama,WBI Income Generators Hedged ETF,NYSE Arca,1,0
+2026-11-03,WBIL,tukar_nama,WBI Trend Leaders Hedged ETF,NYSE Arca,1,0
