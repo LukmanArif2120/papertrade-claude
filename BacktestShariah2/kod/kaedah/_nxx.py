@@ -15,6 +15,9 @@ Rujukan nombor (REVERSE/silang_akhir.csv, 2 tingkap, BH-FDR, gate0-gate3 LULUS):
   GB02_atau3 x X13 -> jangkaan tahan +8.541%, lift +4.191/+1.818, menang 64.2%,
   n 195,681, p 0.0068, tanpa5 +2.858% (POSITIF - tidak bergantung ekor kanan).
 """
+import collections
+import hashlib
+
 import numpy as np
 import pandas as pd
 
@@ -101,8 +104,53 @@ def _psar(h, l, af0=0.02, afm=0.2, afs=0.02):
     return pd.Series(arah, index=h.index)
 
 
+# ---------------------------------------------------------------- memo indikator
+# 94 modul Nxx memanggil indikator() bagi SETIAP ticker dalam sedia(), jadi set indikator yang
+# sama dikira 94 kali setiap ticker setiap sesi. Diukur 3 Nov 2026: 29.1 ms/ticker, jadi 94
+# modul x ~3,000 ticker = berjam-jam CPU yang sepatutnya beberapa minit. Kesannya nyata dalam
+# produksi: larian lejar jatuh daripada 309-336 saat sesesi (134 kaedah) kepada melebihi 150
+# minit (228 kaedah) dan DIBATALKAN oleh had masa, membuang kerja 2.5 jam.
+#
+# Kunci ialah cap jari BAIT bagi OHLCV + indeks, bukan nama ticker: modul menerima bingkai
+# TANPA nama (`for g in fr.values()`), dan menukar 94 modul untuk menghantar nama ialah
+# perubahan yang jauh lebih berisiko daripada cap jari. Hashing ~300 x 5 float mengambil
+# mikrosaat berbanding 29 ms pengiraan, jadi ia percuma dari segi praktikal.
+#
+# Pekerja memproses banyak kaedah berturut-turut dalam proses yang SAMA, jadi cache peringkat
+# modul ini digunakan semula merentas 94 modul. Had saiz menghalang pertumbuhan tidak terbatas
+# pada alam besar; pada 3,000 ticker satu laluan mengisinya dan laluan seterusnya mengenainya.
+_MEMO = collections.OrderedDict()
+_MEMO_MAKS = 4096
+
+
+def _cap(g):
+    h = hashlib.blake2b(digest_size=16)
+    h.update(g.index.view('int64').tobytes() if hasattr(g.index, 'view') else str(g.index).encode())
+    for k in ('open', 'high', 'low', 'close', 'volume'):
+        h.update(np.ascontiguousarray(g[k].to_numpy(dtype='float64')).tobytes())
+    return h.digest()
+
+
 def indikator(g):
-    """Lajur yang N19/N20/N37/N115 dan keluar X13 perlukan, formula kajian verbatim."""
+    """Lajur yang N19/N20/N37/N115 dan keluar X13 perlukan, formula kajian verbatim.
+
+    Hasil dimemo ikut cap jari bait bingkai (lihat _MEMO). Salinan dipulangkan supaya pemanggil
+    yang menulis ke dalam hasil tidak boleh mencemarkan entri cache untuk modul berikutnya.
+    """
+    k = _cap(g)
+    d = _MEMO.get(k)
+    if d is not None:
+        _MEMO.move_to_end(k)
+        return d.copy()
+    d = _indikator(g)
+    _MEMO[k] = d
+    if len(_MEMO) > _MEMO_MAKS:
+        _MEMO.popitem(last=False)
+    return d.copy()
+
+
+def _indikator(g):
+    """Pengiraan sebenar; indikator() ialah pembalut memo."""
     o, h, l, c, v = g.open, g.high, g.low, g.close, g.volume
     d = pd.DataFrame(index=g.index)
 
