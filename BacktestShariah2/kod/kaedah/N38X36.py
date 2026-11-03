@@ -39,5 +39,11 @@ def sedia(fr, idx):
 
 
 def hampir(g, idx):
-    """Watchlist tidak dilaporkan bagi kohort kombinasi."""
-    return None
+    """Calon watchlist: syarat masuk yang sebahagiannya sudah dipenuhi.
+
+    Jarak dilapor dalam unit syarat itu sendiri (mata RSI/ADX/%b, atau peratus harga), dan
+    `paras` kekal None: peraturan ini ialah ambang INDIKATOR, jadi menukar jarak indikator
+    kepada paras harga esok akan mengandaikan hubungan linear yang tidak wujud. Kaedah Mxx
+    boleh melaporkan paras kerana peraturannya ditulis pada harga; Nxx tidak boleh, dan
+    mendakwa sebaliknya lebih buruk daripada membiarkannya kosong."""
+    return NX.hampir_nxx(g, 'n38', PERLU_BAR)
