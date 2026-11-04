@@ -1,12 +1,10 @@
 {
- "dikemaskini": "2026-11-04 05:45 UTC",
+ "dikemaskini": "2026-11-04 07:16 UTC",
  "bar_terakhir": 20261103,
- "laras": {
-  "SUPN": 0.846397
- },
+ "laras": {},
  "perlu_sejarah": [],
  "harga_A.csv": {
-  "ticker_dikemaskini": 431,
+  "ticker_dikemaskini": 430,
   "bar_terakhir": 20261103
  },
  "harga_B.csv": {
@@ -18,12 +16,7 @@
   "bar_terakhir": 20261103
  },
  "log_laras": 1,
- "faktor_dividen": [
-  "INDV 2026-11-03 D=8.13 P=36.28 (22.4%)",
-  "SUPN 2026-11-03 D=8.13 P=36.28 (22.4%)"
- ],
- "faktor_calon": [
-  "SUPN 2026-10-21 -0.1530"
- ],
+ "faktor_dividen": [],
+ "faktor_calon": [],
  "moomoo": 0
 }

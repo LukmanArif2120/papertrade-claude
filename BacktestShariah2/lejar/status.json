@@ -1,7 +1,7 @@
 {
  "mula": "2026-10-15",
  "lorong2": "chandelier_tutup_4xATR14",
- "tidak_layak": "tidak_layak v3 (22 Okt 2026): tidak cair 3/2/100k, delist 10 sesi, kelas berganda; ambil_alih v1 (21 Okt 2026); senarai c8444e69; kelas 430e7d7f; peristiwa v1 (22 Okt 2026); faktor d09fecd2",
+ "tidak_layak": "tidak_layak v3 (22 Okt 2026): tidak cair 3/2/100k, delist 10 sesi, kelas berganda; ambil_alih v1 (21 Okt 2026); senarai c8444e69; kelas 430e7d7f; peristiwa v1 (22 Okt 2026); faktor 38506be4",
  "keluar": "laluan penuh + dagangan sendiri v1 (22 Okt 2026)",
  "bina_semula": [
   {
@@ -41,8 +41,8 @@
    "sesi_terakhir_lama": "2026-10-30"
   }
  ],
- "sesi_terakhir": "2026-11-02",
- "kemaskini": "2026-11-03 20:18 MYT",
+ "sesi_terakhir": "2026-11-03",
+ "kemaskini": "2026-11-04 15:20 MYT",
  "bil_kaedah": 228,
  "larian": [
   {
@@ -213,6 +213,71 @@
    "ralat": [],
    "nota": [],
    "masa_s": 1058
+  },
+  {
+   "sesi": "2026-11-03",
+   "beli": 3346,
+   "tutup": 550,
+   "langkau": 91,
+   "isyarat": 13767,
+   "terbuka": 51937,
+   "tunggu": 2172,
+   "kaedah_isyarat": 190,
+   "ralat": [],
+   "nota": [
+    "M13 SUPN: laras x0.6580",
+    "M19 SUPN: laras x0.6572",
+    "M73 SUPN: laras x0.6498",
+    "M106 SUPN: laras x0.6415",
+    "M125 SUPN: laras x0.6580",
+    "M136 SUPN: laras x0.6595",
+    "M155 SUPN: laras x0.6568",
+    "M159 SUPN: laras x0.6498",
+    "N08X16 SUPN: laras x0.6580",
+    "N08X16 SUPN: laras x0.6415",
+    "N08X36 SUPN: laras x0.6580",
+    "N08X36 SUPN: laras x0.6415",
+    "N16X13 SUPN: laras x0.7759",
+    "N16X15 SUPN: laras x0.7759",
+    "N19X13 SUPN: laras x0.7759",
+    "N28X14 SUPN: laras x0.6572",
+    "N28X14 SUPN: laras x0.6633",
+    "N28X16 SUPN: laras x0.6572",
+    "N28X16 SUPN: laras x0.6568",
+    "N28X16 SUPN: laras x0.6407",
+    "N28X17 SUPN: laras x0.6572",
+    "N28X36 SUPN: laras x0.6572",
+    "N28X36 SUPN: laras x0.6568",
+    "N28X36 SUPN: laras x0.6407",
+    "N36X14 SUPN: laras x0.6415",
+    "N36X16 SUPN: laras x0.6415",
+    "N36X36 SUPN: laras x0.6415",
+    "N41X16 SUPN: laras x0.6415",
+    "N41X36 SUPN: laras x0.6415",
+    "N42X14 SUPN: laras x0.7759",
+    "N42X14 SUPN: laras x0.6415",
+    "N42X15 SUPN: laras x0.7759",
+    "N42X16 SUPN: laras x0.7759",
+    "N42X16 SUPN: laras x0.6415",
+    "N42X17 SUPN: laras x0.7759",
+    "N42X36 SUPN: laras x0.7759",
+    "N42X36 SUPN: laras x0.6415",
+    "N56X16 SUPN: laras x0.6580",
+    "N56X16 SUPN: laras x0.6415",
+    "N56X17 SUPN: laras x0.6580",
+    "N56X36 SUPN: laras x0.6580",
+    "N56X36 SUPN: laras x0.6415",
+    "N73X13 SUPN: laras x0.7759",
+    "N74X16 SUPN: laras x0.6580",
+    "N74X16 SUPN: laras x0.6595",
+    "N75X13 SUPN: laras x0.7759",
+    "N75X14 SUPN: laras x0.7759",
+    "N75X15 SUPN: laras x0.7759",
+    "N75X17 SUPN: laras x0.7759",
+    "N119X13 SUPN: laras x0.7759"
+   ],
+   "masa_s": 247
   }
- ]
+ ],
+ "tidak_layak_peraturan": "tidak_layak v3 (22 Okt 2026): tidak cair 3/2/100k, delist 10 sesi, kelas berganda; ambil_alih v1 (21 Okt 2026); kelas 430e7d7f; peristiwa v1 (22 Okt 2026); faktor 38506be4"
 }
