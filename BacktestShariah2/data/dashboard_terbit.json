@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793746332-53f6",
-  "nombor": 177,
-  "sha256": "26fe828220e9d1026a71191172d38b53b11f880587766eade0655c33442426b8",
-  "bait": 663897,
-  "dikemas": "2026-11-03 22:52 UTC",
-  "nota": "v146: panel kosong melaporkan sebabnya. Setiap onSnapshot dalam connect() dahulunya menelan ralatnya dengan ()=>{} - langganan db yang gagal pada peranti pengguna kelihatan sama seperti koleksi kosong. Sekarang ralat direkod (S.dbErr) dan dipapar, diagnostik penghimpunan menamakan dokumen yang belum sampai ('ringkas_c_9 (induk lain)'), dan ralat pada dokumen padat asas menjatuhkan halaman ke laluan sandaran claude*/moomoo."
+  "versi_artifact": "1793753536-834e",
+  "nombor": 178,
+  "sha256": "1833ab51043c2ecb52964a6c6fc5427205e78ef26615f113cb0f55ce353851db",
+  "bait": 665001,
+  "dikemas": "2026-11-04 00:52 UTC",
+  "nota": "v147: (1) ambang kesegaran ikut masa TOLAKAN db sebenar — data sesi D hanya muncul D+1 ~15:30 UTC (sesi tolak_db 10:20 NY), jadi jangkaSesi(39.5) bukan (23); ambang lama menyalakan 'basi' ~16 jam setiap malam walaupun setiap saluran berjalan sempurna (Data 1/8 pada 00:42 UTC, dihasilkan semula tempatan). (2) Diagnostik db dipapar pada panel kosong Analisis dan Kombinasi N juga, bukan Posisi sahaja; subBhg kini merekod bahagian yang belum sampai."
 }

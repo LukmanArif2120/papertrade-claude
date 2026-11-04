@@ -3224,8 +3224,16 @@ function jangkaSesi(jam){const now=Date.now(),d=new Date();d.setUTCHours(0,0,0,0
   for(let i=0;i<10;i++){const w=d.getUTCDay();if(w&&w<6&&now>=d.getTime()+jam*3600e3)return d.toISOString().slice(0,10);d.setUTCDate(d.getUTCDate()-1);}return '';}
 const hariKerjaSebelum=t=>{const d=new Date(t+'T00:00:00Z');do{d.setUTCDate(d.getUTCDate()-1);}while(d.getUTCDay()===0||d.getUTCDay()===6);return d.toISOString().slice(0,10);};
 function saluran(){if(!S.live)return [];const h=S.hst||{},a=S.anl||{},iso=t=>(/^\d{4}-\d\d-\d\d/.exec(String(t||''))||[''])[0];
-  /* data malam siap ≈ 6:30 pagi MYT (22:30 UTC hari sesi); belian 9:35 NY ≈ 21:35–22:35 MYT (13:35–14:35 UTC) */
-  const js=jangkaSesi(23),jb=jangkaSesi(15);
+  /* v147 (4 Nov 2026): ambang = bila data BOLEH BERADA DALAM DB, bukan bila ia dikira.
+     Halaman ini membaca db sahaja, dan db ditolak SEKALI sehari oleh sesi berjadual tolak_db
+     (10:20 NY = 15:20 UTC, Isn–Sab). Jadi data sesi D baru muncul pada D+1 ~15:30 UTC = 39.5
+     jam selepas tengah malam D — bukan 23 jam. Ambang 23 jam yang lama menyalakan "basi"
+     selama ~16 jam setiap malam walaupun setiap saluran berjalan sempurna: disahkan 4 Nov 2026
+     apabila pengguna melihat "Data 1/8" pada 00:42 UTC, dan larian tempatan terhadap db yang
+     baru dijana menghasilkan 1/8 yang sama. Penunjuk yang merah setiap malam ialah penunjuk
+     yang diabaikan, dan penunjuk yang diabaikan tidak melindungi apa-apa.
+     Belian berlaku 9:40 NY (13:40/14:40 UTC) dan ditolak pada 15:20 UTC HARI SAMA, jadi 16 jam. */
+  const js=jangkaSesi(39.5),jb=jangkaSesi(16);
   return [['Harga & posisi',iso(h.harga_tutup_pada),js,'harian.yml → harian/status'],['Belian 9:35 NY',iso(h.beli_pada),jb,'beli.yml → harian/status.beli_pada'],
     ['Watchlist',iso(S.watch&&S.watch.tarikh_data),js,'imbasan malam → papertrade/watchlist'],['Harga tinggi/rendah',iso(S.mae&&S.mae.harga_hingga),js,'prestasi/mae'],
     ['Lejar Penuh',iso(a.lejar_sesi),js,'lejar.yml → analisis/papan.lejar_sesi'],['Penganalisis',iso(a.harga_pada),js,'analisis.yml → analisis/papan'],
@@ -3790,12 +3798,13 @@ const ptTunggu=a=>{const t=a==='m'?S.ptmTunggu:S.ptcTunggu;return t?` (bahagian 
 /* Panel kosong mesti MENERANGKAN dirinya. "Belum ada posisi" tanpa diagnostik tidak boleh
    dibezakan daripada langganan db yang gagal pada peranti itu sahaja, dan itulah yang menyekat
    pembaikan selama sehari pada 3 Nov 2026. */
-const dbDiag=a=>{const d=a==='m'?S.ptmDiag:S.ptcDiag,e=S.dbErr||[];
+const diagDok=k=>{const d=S[k+'Diag'],e=S.dbErr||[];
   if(!d&&!e.length)return '';
   return `<div class="note" style="margin-top:12px;text-align:left"><b>Diagnostik db</b>`
     +(d?`<br>${esc(String(d))}`:'')
     +(e.length?`<br><b class="neg">Langganan gagal:</b> ${esc(e.join(' | '))}`:'')
     +`</div>`;};
+const dbDiag=a=>diagDok(a==='m'?'ptm':'ptc');
 /* `nota` = baris kemajuan yang kekal KELIHATAN di atas rangka. Tanpa ia, rangka berkilau
    selama-lamanya dan tidak membezakan "sedang memuat" daripada "tolakan db terhenti pada
    bahagian 21 daripada 22" - dan rangka itulah sebab teks kemajuan tidak pernah dilihat. */
@@ -4333,7 +4342,7 @@ const anlSem=r=>`${anlTk(r.lulus_subset)} ${anlTk(r.lulus_wfo)} ${anlTk(r.lulus_
 const anlJul=(m,a,b)=>`<b class="${cls(m)}">${sg2(m)}</b><span class="vv">${sg2(a)} … ${sg2(b)}</span>`;
 function renderAnalisis(){
   const el=$('#v-analisis'),d=S.anl;
-  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Papan penganalisis belum ditolak ke pangkalan data (analisis/papan).':'Memuatkan papan penganalisis…'}</div>`;return;}
+  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Papan penganalisis belum ditolak ke pangkalan data (analisis/papan).':'Memuatkan papan penganalisis…'}${diagDok('anl')}</div>`;return;}
   const f=S.af2,all=d.rows,ruj=d.rujukan||{},sl=ruj.slot,pm=d.parameter||{};
   if(!f.fp)f.fp='bln';if(!f.fps)f.fps='k';
   const sw=all.filter(r=>r.kedudukan),mt=all.reduce((t,r)=>t+(r.h_matang||0),0),ps=all.reduce((t,r)=>t+(r.h_posisi||0),0);
@@ -4454,7 +4463,7 @@ const KN_PAKSI=[['MASUK','Masuk'],['KELUAR','Keluar'],['CARA','Cara'],['URUTAN',
   ['IMBANG','Imbang'],['KORELASI','Korelasi'],['INSTRUMEN','Instrumen']];
 function renderKaedahN(){
   const el=$('#v-kaedahn'),d=S.kn;
-  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Registry Nxx belum ditolak ke pangkalan data (kaedah_n/papan).':'Memuatkan registry Nxx…'}</div>`;return;}
+  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Registry Nxx belum ditolak ke pangkalan data (kaedah_n/papan).':'Memuatkan registry Nxx…'}${diagDok('kn')}</div>`;return;}
   const f=S.knf,all=d.rows,gt=d.gate||{};
   let rows=f.paksi==='semua'?all:all.filter(r=>r.paksi===f.paksi);
   if(f.q){const q=f.q.toLowerCase();rows=rows.filter(r=>[r.id,r.nama,r.aturan,r.sumber,r.plat,r.status].join(' ').toLowerCase().includes(q));}
@@ -5100,7 +5109,9 @@ renderNav();renderAll();
      sepadan, tiada apa diterbitkan dan tab kekal pada keadaan "Memuatkan…". */
   const subBhg=(path,keyName,tabs)=>{let asas=null;const ch={},dah=new Set();
     const gabung=()=>{let d=null;if(asas){const b=asas.bahagian;let rows=asas.rows||[];
-        if(b&&b.n>1){let ada=1;for(let i=2;i<=b.n;i++)if(ch[i]&&ch[i].induk===b.id)ada++;
+        if(b&&b.n>1){let ada=1,hil=[];
+          for(let i=2;i<=b.n;i++){if(ch[i]&&ch[i].induk===b.id)ada++;else hil.push(path.split('/').pop()+'_'+i+(ch[i]?' (induk lain)':' (tiada)'));}
+          S[keyName+'Diag']=`asas ${b.id} · ${ada}/${b.n} bahagian`+(hil.length?' · belum: '+hil.slice(0,6).join(', ')+(hil.length>6?` dan ${hil.length-6} lagi`:''):'');
           if(ada<b.n){S[keyName+'Tunggu']={ada,perlu:b.n};re(...tabs);return;}
           for(let i=2;i<=b.n;i++)rows=rows.concat(ch[i].rows||[]);}
         d=Object.assign({},asas,{rows});}
@@ -5110,7 +5121,8 @@ renderNav();renderAll();
          tersekat pada "Memuatkan…" SELAMANYA - kegagalan senyap, jenis yang paling sukar
          dikesan kerana halaman nampak sedang bekerja. Ditetapkan hanya apabila gabung() benar-
          benar menerbit, jadi keadaan separa tidak pernah dilapor sebagai siap. */
-      S[keyName+'Tunggu']=null;S[keyName]=d;S[keyName+'Siap']=true;S.live=true;re(...tabs);};
+      S[keyName+'Tunggu']=null;if(!asas)S[keyName+'Diag']='dokumen asas tidak sampai';
+      S[keyName]=d;S[keyName+'Siap']=true;S.live=true;re(...tabs);};
     db.doc(path).onSnapshot(s=>{asas=s.exists?s.data():null;const n=asas&&asas.bahagian?asas.bahagian.n:1;
       for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);db.doc(path+'_'+i).onSnapshot(t=>{ch[i]=t.exists?t.data():null;gabung();},e=>{ch[i]=null;dbErr(path+'_'+i,e);gabung();});}
       gabung();},e=>dbErr(path,e));};

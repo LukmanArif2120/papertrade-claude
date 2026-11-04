@@ -1304,12 +1304,17 @@ def main(argv=None):
     docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
                                       nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
     # papertrade/ringkas_c, ringkas_m: semua baris dalam bentuk padat (halaman v90 membaca ini sahaja, bukan claude*)
-    pra = {}
+    # SATU kumpulan keatoman bagi setiap panggilan ringkas_pt (bukan dict rata). `ringkas_c`
+    # ialah 22 dokumen / 3.3 MB: sebagai dokumen BEBAS ia bertaburan merentas fail batch dengan
+    # dokumen asasnya di mana-mana, dan halaman tidak boleh berhimpun sehingga setiap bahagian
+    # DAN asas dengan induk sepadan tiba. Pada 3 Nov 2026 itu memapar "Belum ada posisi dalam
+    # pangkalan data" bagi 1,641 posisi Nxx. Sebagai kumpulan, batchkan() meletakkan asasnya
+    # TERAKHIR, jadi halaman kekal memapar set lama yang lengkap sepanjang tolakan.
+    pra = []
     dc = docs.get('papertrade/claude', {})
     for kod, R, meta in (('c', [earn_sebenar(baris_db(r), r, KAL) for r in C], {k: dc[k] for k in ('dibina', 'harga_pada', 'nota', 'slot', 'batal') if k in dc}),
                          ('m', [earn_sebenar(baris_db(r), r, KAL) for r in M], {k: v for k, v in docs['papertrade/moomoo'].items() if k not in ('rows', 'medan_digugurkan')})):
-        for doc_id, d in ringkas_pt(R, f'ringkas_{kod}', meta):
-            pra[f'papertrade/{doc_id}'] = d
+        pra.append(('papertrade', list(ringkas_pt(R, f'ringkas_{kod}', meta))))
     garis, mfe = garis_harga(M, C, a.stor)
     docs['prestasi/garis'] = dict(garis, dibina=dibina, harga_hingga=f'{S} tutup',
                                   definisi='rows: {s: saham, c: tutup sejajar dengan tarikh (null = tiada bar)} bagi saham yang masih ada '
@@ -1373,7 +1378,7 @@ def main(argv=None):
     tulis = []
     semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama in PECAH
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
-    semua += [(nama.split('/')[0], [(nama.split('/')[1], d)]) for nama, d in pra.items()]   # sudah dibahagi (ringkas_pt)
+    semua += pra   # sudah dibahagi oleh ringkas_pt; setiap panggilan = satu kumpulan keatoman
     hampir = []                 # dokumen >= 85% had, dilapor dalam ringkas.json
     for kol, bahagian in semua:
         # `kump_id` = kumpulan keatoman: satu bagi setiap operasi bahagi(), supaya SEMUA

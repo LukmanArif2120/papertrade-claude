@@ -73,5 +73,40 @@ class TestAsasTerakhir(unittest.TestCase):
         self.assertEqual(len(rata), len(set(rata)))
 
 
+class TestRingkasPtSatuKumpulan(unittest.TestCase):
+    """`ringkas_pt` memulangkan ASAS dahulu, dan main() menolaknya sebagai SATU kumpulan.
+
+    Dua invarian bergantung padanya. (1) batchkan menggerakkan `g[0]` ke hujung, jadi kalau asas
+    bukan elemen pertama, dokumen yang SALAH dipindahkan. (2) Sebelum 4 Nov 2026 keluaran
+    ringkas_pt dimasukkan ke `semua` sebagai dokumen BEBAS satu per satu, jadi 22 dokumen
+    `ringkas_c` bertaburan merentas fail batch tanpa kumpulan - dan pembetulan asas-terakhir
+    tidak terpakai langsung kepada dokumen yang menyebabkan kegagalan 3 Nov 2026.
+    """
+
+    def test_asas_elemen_pertama(self):
+        R = [dict(saham=f'S{i:03d}', kaedah='M01', untung_pct=i / 7.0, keluar=False) for i in range(400)]
+        out = jd.ringkas_pt(R, 'ringkas_x', {'dibina': 'ujian'}, had=4000)
+        self.assertEqual(out[0][0], 'ringkas_x', 'asas mesti elemen PERTAMA')
+        self.assertIn('bahagian', out[0][1])
+        B = out[0][1]['bahagian']
+        self.assertGreater(B['n'], 1, 'had kecil sepatutnya memaksa lebih satu bahagian')
+        nama = [d for d, _ in out]
+        self.assertEqual(nama[1:B['n']], [f'ringkas_x_{i}' for i in range(2, B['n'] + 1)])
+        self.assertEqual(nama[B['n']:], [f'ringkas_x_kamus_{i}' for i in range(1, B['nk'] + 1)])
+        for _, d in out[1:]:
+            self.assertEqual(d['induk'], B['id'])
+
+    def test_sebagai_kumpulan_asas_ditolak_terakhir(self):
+        R = [dict(saham=f'S{i:03d}', kaedah='M01', untung_pct=i / 7.0, keluar=False) for i in range(400)]
+        out = jd.ringkas_pt(R, 'ringkas_x', {'dibina': 'ujian'}, had=4000)
+        # seperti main(): satu kumpulan, saiz dinaikkan supaya ia TIDAK muat satu batch
+        t = [({'op': 'set', 'collection': 'papertrade', 'doc_id': d}, 500_000, 'papertrade/ringkas_x')
+             for d, _ in out]
+        b, tp = jd.batchkan(t)
+        rata = [x['doc_id'] for bt in b for x in bt]
+        self.assertEqual(rata[-1], 'ringkas_x')
+        self.assertEqual(len(tp), 1)
+
+
 if __name__ == '__main__':
     unittest.main()
