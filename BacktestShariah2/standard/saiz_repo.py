@@ -145,13 +145,22 @@ def teks(d):
 
 
 def main(argv=None):
+    global AKAR
     ap = argparse.ArgumentParser(description='Pertumbuhan git ikut laluan, dan tripwire kadar')
     ap.add_argument('--hari', type=int, default=14)
     ap.add_argument('--atas', type=int, default=20, help='bilangan laluan teratas dilaporkan')
     ap.add_argument('--had-mb-hari', type=float, default=None, dest='had',
                     help='kod keluar 1 jika MB/hari melebihi nilai ini')
     ap.add_argument('--teks', action='store_true', help='jadual untuk manusia, bukan JSON')
+    # `--akar` wujud supaya skrip ini BOLEH DIUJI. Tanpa ia, AKAR dikira daripada __file__ dan
+    # subproses sentiasa mengukur repo sebenar, apa pun cwd - jadi ujian yang menetapkan AKAR
+    # dalam proses tidak menjejaskan subproses langsung. Dua ujian saya membuat kesilapan itu:
+    # ia lulus pada klon penuh dan GAGAL dalam CI, yang mengklon cetek, kerana tripwire memang
+    # dilangkau pada klon cetek dengan sengaja. Ujian itu menguji persekitaran, bukan kod.
+    ap.add_argument('--akar', default=None, help='repo yang diukur (lalai: repo skrip ini)')
     a = ap.parse_args(argv)
+    if a.akar:
+        AKAR = os.path.abspath(a.akar)
     if a.hari < 1:
         raise SystemExit('--hari mesti >= 1')
     d = laporan(a.hari, a.atas)
