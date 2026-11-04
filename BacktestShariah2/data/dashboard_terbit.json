@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793753536-834e",
-  "nombor": 178,
-  "sha256": "1833ab51043c2ecb52964a6c6fc5427205e78ef26615f113cb0f55ce353851db",
-  "bait": 665001,
-  "dikemas": "2026-11-04 00:52 UTC",
-  "nota": "v147: (1) ambang kesegaran ikut masa TOLAKAN db sebenar — data sesi D hanya muncul D+1 ~15:30 UTC (sesi tolak_db 10:20 NY), jadi jangkaSesi(39.5) bukan (23); ambang lama menyalakan 'basi' ~16 jam setiap malam walaupun setiap saluran berjalan sempurna (Data 1/8 pada 00:42 UTC, dihasilkan semula tempatan). (2) Diagnostik db dipapar pada panel kosong Analisis dan Kombinasi N juga, bukan Posisi sahaja; subBhg kini merekod bahagian yang belum sampai."
+  "versi_artifact": "1793754518-0c2e",
+  "nombor": 179,
+  "sha256": "62f8e4324e36303ad6abd63dad7758d9d40d0f536a569f8165993cb49d8ca8b6",
+  "bait": 668332,
+  "dikemas": "2026-11-04 01:08 UTC",
+  "nota": "v148: KOLAM LANGGANAN. Pelanggan db menolak langganan melebihi hadnya dengan 'Too many active subscriptions' dan halaman membuka 71 serentak (ringkas_c 22, posisi/lorong2 20, jalur 4, ...). Yang didaftar TERAKHIR ditolak, jadi analisis/papan_2, posisi/lorong2_18 dan posisi/jalur_2..4 tidak pernah sampai pada telefon pengguna walaupun db sempurna — itulah punca sebenar tab kosong 3-4 Nov 2026. Langganan kini melalui kolam berhad (32, menyesuaikan ke bawah bila ditolak, penjaga kemajuan menaikkannya semula); dokumen BAHAGIAN dibaca SEKALI dan slotnya dilepaskan; anak dibuka semula apabila induk asas berubah. Diukur: had pelanggan 30 dan 40 kedua-duanya memuat penuh."
 }

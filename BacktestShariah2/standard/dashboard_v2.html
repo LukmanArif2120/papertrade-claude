@@ -5033,6 +5033,47 @@ renderNav();renderAll();
 (async function connect(){
   const db=window.claude?.use?await window.claude.use('db'):null;
   if(!db){setLive(false,'Data langsung tidak tersedia di paparan ini');S.live=true;S.tanpaDb=true;renderAll();return;}
+  /* v148 (4 Nov 2026): KOLAM LANGGANAN. Pelanggan db menolak langganan melebihi hadnya dengan
+     "Too many active subscriptions", dan halaman ini membuka 71 serentak: ringkas_c 22,
+     posisi/lorong2 20, posisi/jalur 4, mae/mae_atr/mfe/watchlist/analisis-papan 2 setiap satu,
+     ditambah ~20 dokumen tunggal. Yang DIDAFTAR TERAKHIR ditolak, jadi dokumen yang hilang
+     kelihatan rawak dan kekal hilang sehingga muat semula - itulah "Belum ada posisi dalam
+     pangkalan data" dan "Papan penganalisis belum ditolak" yang pengguna lihat pada 3-4 Nov
+     2026, pada db yang SEMPURNA. Diagnostik v146 yang menamakannya.
+     Dokumen BAHAGIAN hanya berubah sekali sehari (satu tolakan db), jadi ia dilanggan SEKALI,
+     dibaca, dan slotnya dilepaskan; dokumen asas kekal dilanggan supaya tolakan malam masih
+     sampai ke halaman yang terbuka. Had menyesuaikan diri KE BAWAH apabila pelanggan menolak,
+     jadi peranti dengan had lebih ketat tetap memuat - lebih perlahan, bukan separa. */
+  const KOLAM={maks:32,aktif:0,baris:[]};
+  const langgan=(path,cb,ralat,sekali)=>{KOLAM.baris.push({path,cb,ralat,sekali,cuba:0});kolamJalan();};
+  function kolamJalan(){
+    while(KOLAM.aktif<KOLAM.maks&&KOLAM.baris.length){
+      const t=KOLAM.baris.shift();KOLAM.aktif++;
+      let lepas=null,mintaLepas=false,habis=false;
+      const bebas=()=>{if(habis)return;habis=true;KOLAM.aktif--;setTimeout(kolamJalan,0);};
+      const buang=()=>{if(lepas){try{lepas();}catch(e){}}else mintaLepas=true;bebas();};
+      try{
+        lepas=db.doc(t.path).onSnapshot(s=>{try{t.cb(s);}catch(e){}if(t.sekali)buang();},
+          e=>{const m=String(e&&(e.message||e.code)||e);
+            if(/too many active subscriptions/i.test(m)&&++t.cuba<=10){
+              KOLAM.maks=Math.max(8,Math.min(KOLAM.maks,KOLAM.aktif)-2);
+              buang();KOLAM.baris.push(t);setTimeout(kolamJalan,250+t.cuba*200);return;}
+            t.ralat&&t.ralat(e);buang();});
+        if(mintaLepas){try{lepas();}catch(e){}}
+      }catch(e){t.ralat&&t.ralat(e);bebas();}
+    }
+  }
+  /* Penjaga kemajuan. Had boleh turun di bawah bilangan langganan KEKAL (dokumen asas, yang
+     mesti kekal hidup supaya tolakan malam sampai ke halaman yang terbuka). Kalau itu berlaku
+     tiada slot akan terlepas sendiri dan baris giliran akan lapar SENYAP - kegagalan yang sama
+     bentuk dengan yang sedang dibetulkan. Jadi giliran yang tidak bergerak menaikkan had semula,
+     perlahan dan berbatas: ia akan drain, atau ralatnya dilaporkan selepas 10 cubaan. */
+  setInterval(()=>{if(!KOLAM.baris.length)return;
+    if(KOLAM.aktif>=KOLAM.maks)KOLAM.maks=Math.min(64,KOLAM.maks+1);
+    kolamJalan();},5000);
+  const dbErr=(path,e)=>{const m=String(e&&(e.message||e.code)||e).slice(0,90);
+    (S.dbErr=S.dbErr||[]).push(path+' → '+m);if(S.dbErr.length>12)S.dbErr.shift();
+    try{console.error('langganan db gagal:',path,e);}catch(x){}renderSoon();};
   /* Rangka dipapar sehingga papertrade siap; selepas 20 saat anggap siap supaya halaman tidak
      tergantung - KECUALI dokumen padat yang sedang berhimpun (S.*Tunggu). Memaksa `Siap` pada
      dokumen separa menukar "Memuatkan" kepada "Belum ada posisi dalam pangkalan data", iaitu
@@ -5051,17 +5092,14 @@ renderNav();renderAll();
     const ts=Object.values(d).map(x=>x.tarikh||'').sort().pop()||'';S.live=true;
     setLive(true,`Langsung · ujian terkini ${ts}`);re('backtest');
   },()=>setLive(false,'Sambungan terputus. Muat semula halaman.'));
-  db.doc('meta/info').onSnapshot(s=>{S.meta=s.exists?s.data():null;re('backtest');},()=>{});
+  langgan('meta/info',s=>{S.meta=s.exists?s.data():null;re('backtest');},e=>dbErr('meta/info',e));
   /* v146 (3 Nov 2026): SETIAP onSnapshot di bawah dahulunya menelan ralatnya dengan `()=>{}`.
      Langganan yang gagal pada pelayar pengguna - kuota, rangkaian, dokumen terlalu besar -
      kelihatan SAMA seperti koleksi kosong, dan tiada apa-apa dalam halaman atau konsol yang
      membezakannya. Apabila pengguna melaporkan "Belum ada posisi" pada 3 Nov 2026 sedangkan db
      dan halaman kedua-duanya terbukti betul, tiada cara untuk tahu apa yang gagal pada telefon
      mereka. Sekarang ada: ralat direkod dan dipapar dalam panel kosong. */
-  const dbErr=(path,e)=>{const m=String(e&&(e.message||e.code)||e).slice(0,90);
-    (S.dbErr=S.dbErr||[]).push(path+' → '+m);if(S.dbErr.length>12)S.dbErr.shift();
-    try{console.error('langganan db gagal:',path,e);}catch(x){}renderSoon();};
-  const sub=(path,keyName,tabs)=>db.doc(path).onSnapshot(s=>{S[keyName]=s.exists?s.data():null;S[keyName+'Siap']=true;S.live=true;re(...tabs);},e=>dbErr(path,e));
+  const sub=(path,keyName,tabs)=>langgan(path,s=>{S[keyName]=s.exists?s.data():null;S[keyName+'Siap']=true;S.live=true;re(...tabs);},e=>dbErr(path,e));
   /* papertrade/ringkas_c, ringkas_m (v90; standard/jana_db.py ringkas_pt): semua baris dalam bentuk padat ikut lajur dengan kamus
      dikongsi, ~4× lebih kecil daripada papertrade/claude*. Dinyahkod kepada objek baris yang sama; dipapar hanya selepas semua
      bahagian dan kamus tiba (indeks posisi stabil). Jika dokumen padat belum wujud, baca dokumen lama (claude*, moomoo). */
@@ -5072,7 +5110,7 @@ renderNav();renderAll();
     rows.flat().forEach(a=>{const r={};for(let j=0;j<K.length;j++){let v=a[j];const t=J[j];if(v==null)continue;
       if(t==='k'||t==='j'){if(!v)continue;v=M[K[j]][v-1];if(t==='j')v=JSON.parse(v);}else if(t==='b')v=!!v;r[K[j]]=v;}out.push(r);});
     const d={};Object.keys(asas).forEach(k=>{if(!['kolum','jenis','rows','bahagian'].includes(k))d[k]=asas[k];});d.rows=out;return d;};
-  const subRingkas=(nama,keyName,lama)=>{let asas=null,dahLama=false;const ch={},km={},dah=new Set();
+  const subRingkas=(nama,keyName,lama)=>{let asas=null,dahLama=false,idLama=null;const ch={},km={},dah=new Set();
     /* v145 (3 Nov 2026): KIRA bahagian yang tiba, bukan sekadar pulang awal. Tolakan db malam
        memerlukan 22 dokumen bagi `ringkas_c` dan 3.3 MB tidak muat had batch 900 KB, jadi ia
        tiba dalam beberapa panggilan ArtifactData berasingan - beberapa minit di mana dokumen
@@ -5088,9 +5126,17 @@ renderNav();renderAll();
       if(ada<B.n+B.nk){S[keyName+'Tunggu']={ada,perlu:B.n+B.nk};re();return;}
       S[keyName+'Tunggu']=null;
       S[keyName]=nyahkod(asas,ch,km);S[keyName+'Siap']=true;S.live=true;re();};
-    const anak=(id,simpan)=>{if(dah.has(id))return;dah.add(id);db.doc('papertrade/'+id).onSnapshot(t=>{simpan(t.exists?t.data():null);cuba();},e=>{simpan(null);dbErr('papertrade/'+id,e);cuba();});};
-    db.doc('papertrade/'+nama).onSnapshot(s=>{if(!s.exists){if(!dahLama){dahLama=true;lama();}return;}
+    /* `sekali` = baca sekali, lepas slot. Bahagian hanya berubah apabila db ditolak, dan
+       apabila itu berlaku INDUK asas berubah juga - jadi anak dibuka semula di bawah. */
+    const anak=(id,simpan)=>{if(dah.has(id))return;dah.add(id);
+      langgan('papertrade/'+id,t=>{simpan(t.exists?t.data():null);cuba();},
+        e=>{simpan(null);dbErr('papertrade/'+id,e);cuba();},true);};
+    langgan('papertrade/'+nama,s=>{if(!s.exists){if(!dahLama){dahLama=true;lama();}return;}
       asas=s.data();const B=asas.bahagian||{n:1,nk:0};
+      /* induk baharu = tolakan db baharu: buang anak lama dan baca semula, jika tidak halaman
+         tersekat selama-lamanya pada "bahagian k/N" dengan anak sesi SEMALAM dalam ingatan. */
+      if(idLama!==null&&idLama!==B.id){dah.clear();for(const k in ch)delete ch[k];for(const k in km)delete km[k];}
+      idLama=B.id;
       for(let i=2;i<=B.n;i++)anak(nama+'_'+i,d=>{ch[i]=d;});
       for(let i=1;i<=B.nk;i++)anak(nama+'_kamus_'+i,d=>{km[i]=d;});
       cuba();},e=>{dbErr('papertrade/'+nama,e);
@@ -5107,7 +5153,7 @@ renderNav();renderAll();
      sudah menunggu setiap anak sebelum menerbit; subBhg tidak, dan 11 dokumen memakainya.
      Sekarang ia menunggu juga: jika mana-mana bahagian belum tiba atau `induk`-nya tidak
      sepadan, tiada apa diterbitkan dan tab kekal pada keadaan "Memuatkan…". */
-  const subBhg=(path,keyName,tabs)=>{let asas=null;const ch={},dah=new Set();
+  const subBhg=(path,keyName,tabs)=>{let asas=null,idLama=null;const ch={},dah=new Set();
     const gabung=()=>{let d=null;if(asas){const b=asas.bahagian;let rows=asas.rows||[];
         if(b&&b.n>1){let ada=1,hil=[];
           for(let i=2;i<=b.n;i++){if(ch[i]&&ch[i].induk===b.id)ada++;else hil.push(path.split('/').pop()+'_'+i+(ch[i]?' (induk lain)':' (tiada)'));}
@@ -5123,8 +5169,12 @@ renderNav();renderAll();
          benar menerbit, jadi keadaan separa tidak pernah dilapor sebagai siap. */
       S[keyName+'Tunggu']=null;if(!asas)S[keyName+'Diag']='dokumen asas tidak sampai';
       S[keyName]=d;S[keyName+'Siap']=true;S.live=true;re(...tabs);};
-    db.doc(path).onSnapshot(s=>{asas=s.exists?s.data():null;const n=asas&&asas.bahagian?asas.bahagian.n:1;
-      for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);db.doc(path+'_'+i).onSnapshot(t=>{ch[i]=t.exists?t.data():null;gabung();},e=>{ch[i]=null;dbErr(path+'_'+i,e);gabung();});}
+    langgan(path,s=>{asas=s.exists?s.data():null;const b=asas&&asas.bahagian,n=b?b.n:1;
+      if(b&&idLama!==null&&idLama!==b.id){dah.clear();for(const k in ch)delete ch[k];}
+      if(b)idLama=b.id;
+      for(let i=2;i<=n;i++){if(dah.has(i))continue;dah.add(i);
+        langgan(path+'_'+i,t=>{ch[i]=t.exists?t.data():null;gabung();},
+          e=>{ch[i]=null;dbErr(path+'_'+i,e);gabung();},true);}
       gabung();},e=>dbErr(path,e));};
   /* Langganan ringkas_m/ringkas_c diletak SELEPAS takrifan subBhg (3 Nov 2026): sandaran
      moomoo kini memanggil subBhg, dan `const` mempunyai zon mati temporal - memanggilnya
@@ -5144,11 +5194,12 @@ renderNav();renderAll();
     sub('papertrade/claude','ptc',['ptc','prestasi']);
     /* papertrade/claude_2, _3, … tanpa had: dokumen yang wujud membuka langganan dua nombor seterusnya */
     const ptcDah=new Set();
-    const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);db.doc('papertrade/claude_'+n).onSnapshot(s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},()=>{});};
+    const subPtc=n=>{if(ptcDah.has(n))return;ptcDah.add(n);
+      langgan('papertrade/claude_'+n,s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},e=>dbErr('papertrade/claude_'+n,e),true);};
     subPtc(2);subPtc(3);});
   subBhg('papertrade/watchlist','watch',['watch','sektor']);
   sub('sektor/snapshot','sektor',['sektor']);
-  db.doc('harian/status').onSnapshot(s=>{S.hst=s.exists?s.data():null;renderData();},()=>{});
+  langgan('harian/status',s=>{S.hst=s.exists?s.data():null;renderData();},e=>dbErr('harian/status',e));
   subBhg('prestasi/mae','mae',['prestasi']);subBhg('prestasi/mae_atr','maeAtr',['prestasi']);
   subBhg('prestasi/garis','garis',['utama','ptc','prestasi','watch']);subBhg('prestasi/mfe','mfe',['prestasi']);subBhg('prestasi/harian_kaedah','hk',['utama','prestasi','analisis']);subBhg('posisi/lorong2','l2s',['ptc']);subBhg('posisi/jalur','jlr',['ptc']);subBhg('harian/trend','trend',['ptc','watch']);subBhg('harian/stage','stage',['ptc','watch']);subBhg('kumpulan/siri','ksiri',['sektor']);
   sub('prestasi/portfolio_slot','pslot',['utama','prestasi']);
