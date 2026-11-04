@@ -1,4 +1,4 @@
-import contextlib, csv, io, os, sys, tempfile, unittest
+import contextlib, csv, io, json, os, sys, tempfile, unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'standard'))
 import pecah_claude as pc
@@ -148,3 +148,47 @@ class TestMetaClaudeBerskala(unittest.TestCase):
             h, rr = pc.baca(os.path.join(d, 'claude_2.csv'))
             self.assertEqual(pc.ukur(2, h, rr, 226)['anggaran'],
                              pc.META_LAIN + 13 + sum(pc.saiz_baris(h, r) for r in rr))
+
+
+class TestAmbangTindakanLawanKerosakan(unittest.TestCase):
+    """`--had` = bila patut pecah. `--gagal-pada` = bila benar-benar rosak. Jangan campur.
+
+    Sebelum 4 Nov 2026 kod keluar diikat pada `--had`, jadi keadaan "patut dipecah, dan larian
+    berjadual seterusnya MEMANG akan memecahnya" dilaporkan sebagai kegagalan CI. Amaran yang
+    tidak boleh ditindaki melatih orang mengabaikan amaran, jadi ini bukan kosmetik.
+    """
+
+    def _folder(self, d, n):
+        buat(d, 'claude.csv', n)
+        return d
+
+    def test_antara_had_dan_gagal_pada_bukan_kegagalan(self):
+        with tempfile.TemporaryDirectory() as d:
+            buat(d, 'claude.csv', 200)
+            kod, out = jalan(['--folder', d, '--had', '100000', '--sasaran', '80000',
+                              '--gagal-pada', '250000'])
+            j = json.loads(out)
+            u = j['fail']['claude.csv']['unjuran']
+            self.assertGreater(u, 100000)          # melepasi ambang tindakan
+            self.assertLess(u, 250000)             # tetapi bukan kerosakan
+            self.assertEqual(kod, 0)
+            self.assertEqual(j['melebihi'], [])
+            self.assertEqual(j['perlu_pecah'], ['claude.csv'])
+
+    def test_melepasi_gagal_pada_tetap_gagal(self):
+        with tempfile.TemporaryDirectory() as d:
+            buat(d, 'claude.csv', 200)
+            kod, out = jalan(['--folder', d, '--had', '100000', '--sasaran', '80000',
+                              '--gagal-pada', '110000'])
+            j = json.loads(out)
+            self.assertEqual(kod, 1)
+            self.assertEqual(j['melebihi'], ['claude.csv'])
+            self.assertEqual(j['perlu_pecah'], [])   # dilapor sebagai kerosakan, bukan tindakan
+
+    def test_lalai_gagal_pada_ialah_had(self):
+        """Tanpa --gagal-pada, tingkah laku kekal seperti sebelum ini."""
+        with tempfile.TemporaryDirectory() as d:
+            buat(d, 'claude.csv', 200)
+            kod, out = jalan(['--folder', d, '--had', '100000', '--sasaran', '80000'])
+            self.assertEqual(kod, 1)
+            self.assertEqual(json.loads(out)['gagal_pada'], 100000)

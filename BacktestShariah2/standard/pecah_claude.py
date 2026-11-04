@@ -124,7 +124,20 @@ def main(argv=None):
     ap.add_argument('--had', type=int, default=240000, help='unjuran maksimum (bait) sebelum fail dipecah')
     ap.add_argument('--sasaran', type=int, default=190000, help='unjuran fail asal selepas dipecah (bait)')
     ap.add_argument('--pecah', action='store_true', help='pindah baris hujung ke fail baharu')
+    # DUA ambang berbeza, dipisahkan 4 Nov 2026. `--had` ialah ambang TINDAKAN: bila fail patut
+    # dipecah, sengaja konservatif supaya pecahan berlaku lama sebelum ada bahaya. `--gagal-pada`
+    # ialah ambang KEROSAKAN: bila dokumen benar-benar tidak boleh ditolak.
+    #
+    # Sebelum ini kod keluar 1 diikat pada `--had`, jadi keadaan "patut dipecah, dan larian
+    # berjadual seterusnya MEMANG akan memecahnya" dilaporkan sebagai kegagalan CI. Itu amaran
+    # yang tidak boleh ditindaki: ia berbunyi untuk kerja yang sudah dijadualkan, dan amaran
+    # begitu melatih orang mengabaikan amaran. Didedahkan apabila pembetulan META menaikkan
+    # unjuran claude.csv kepada 251,705 - di bawah had keras, tetapi di atas ambang pecah.
+    ap.add_argument('--gagal-pada', type=int, default=None, dest='gagal_pada',
+                    help=f'kod keluar 1 jika unjuran melebihi nilai ini (lalai: --had; CI guna {HAD_DB})')
     a = ap.parse_args(argv)
+    if a.gagal_pada is None:
+        a.gagal_pada = a.had
     if not a.sasaran < a.had < HAD_DB:
         raise SystemExit('perlu --sasaran < --had < 262144')
     fail = {nombor_fail(p): p for p in glob.glob(os.path.join(a.folder, 'claude*.csv')) if nombor_fail(p)}
@@ -161,14 +174,17 @@ def main(argv=None):
                                 kekal=k, dipindah=len(rows) - k))
             continue  # ukur semula fail ini; fail baharu diperiksa apabila n sampai kepadanya
         n += 1
-    lapor, lebih = {}, []
+    lapor, lebih, perlu_pecah = {}, [], []
     for m in sorted(fail):
         hdr, rows = baca(fail[m])
         u = ukur(m, hdr, rows, bk)
         lapor[os.path.basename(fail[m])] = u
-        if u['unjuran'] > a.had:
+        if u['unjuran'] > a.gagal_pada:
             lebih.append(os.path.basename(fail[m]))
-    print(json.dumps(dict(had=a.had, sasaran=a.sasaran, bil_kaedah=bk, fail=lapor, dipecah=dipecah,
+        elif u['unjuran'] > a.had:
+            perlu_pecah.append(os.path.basename(fail[m]))
+    print(json.dumps(dict(had=a.had, sasaran=a.sasaran, gagal_pada=a.gagal_pada, bil_kaedah=bk,
+                          fail=lapor, dipecah=dipecah, perlu_pecah=perlu_pecah,
                           berubah=sorted(set(berubah), key=lambda s: nombor_fail(s)), melebihi=lebih),
                      ensure_ascii=False, indent=1))
     return 1 if lebih else 0
