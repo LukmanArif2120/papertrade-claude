@@ -10,6 +10,10 @@ Alat (satu panggilan ToolSearch): `select:ArtifactData,Artifact,mcp__github__act
 Notifikasi (keputusan pengguna 27 Okt 2026): ntfy SAHAJA (ringkasan belian dihantar oleh `beli.yml`); JANGAN guna PushNotification.
 Dashboard: https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e
 
+Semakan kedua: `tolak_db_semak.md` (12:20 NY, trig_013bee461xNS3Z5meBZQ9zTh) menyemak hasil
+tugasan ini dua jam kemudian dan menolak SEMULA hanya jika db tidak segar atau tidak lengkap.
+Kalau tugasan ini gagal senyap, itulah satu-satunya perkara yang akan menangkapnya.
+
 1. `git pull --rebase origin main`.
 2. `python3 BacktestShariah2/standard/jana_db.py --keluar <scratchpad>/db0` dan baca medan `pengawas` dalam output.
    Jika `tembak` mengandungi `harian.yml` atau `beli.yml`: semak larian terakhir workflow itu (`mcp__github__actions_list`,

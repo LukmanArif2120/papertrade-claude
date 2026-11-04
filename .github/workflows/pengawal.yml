@@ -18,6 +18,12 @@ name: Pengawal papertrade
 on:
   schedule:
     - cron: '35 12 * * 1-5'
+    # Larian KEDUA, RINGAN, DI DALAM pintu beli 09:31-17:00 NY (16:00 UTC = 11:00 NY musim
+    # sejuk, 12:00 NY musim panas - kedua-duanya di dalam pintu). Larian 12:35 UTC berlaku
+    # SEJAM SEBELUM belian: kalau keenam-enam cubaan beli gagal selepas itu, tiada apa yang
+    # tahu sampai esok, dan harga buka hari itu hilang KEKAL kerana ia tidak boleh dibeli
+    # semula. Pada 11:00 NY belian masih boleh diselamatkan dengan mencetus beli.yml.
+    - cron: '0 16 * * 1-5'
   workflow_run:
     workflows: ['Lejar penuh']
     types: [completed]
@@ -59,14 +65,25 @@ jobs:
         run: pip install -q -c kekangan.txt pandas numpy exchange_calendars
       - name: Semak + betulkan
         id: semak
+        env:
+          JADUAL: ${{ github.event.schedule }}
         run: |
+          # Larian 16:00 UTC berkongsi kunci concurrency `papertrade` dengan beli.yml, dan
+          # cubaan beli berikutnya ialah 16:25 UTC - 25 minit kemudian. Remedi kejar ialah
+          # imbasan ~45 minit SESESI, jadi larian penuh di sini akan MENYEKAT belian yang ia
+          # datang untuk menjaga. Maka: tiada kejar (--maks-kejar 0) dan dibatasi 10 minit
+          # dengan `timeout`. Cetusan tangan (workflow_dispatch) = JADUAL kosong = larian penuh.
+          if [ "$JADUAL" = "0 16 * * 1-5" ]; then MK=0; TO=600; RINGAN=1; else MK=2; TO=7200; RINGAN=0; fi
+          echo "ringan=$RINGAN" >> "$GITHUB_OUTPUT"
           set +e
-          python3 BacktestShariah2/standard/pengawal.py --betulkan > /tmp/pengawal.json 2>/tmp/pengawal.err
+          timeout "$TO" python3 BacktestShariah2/standard/pengawal.py --betulkan --maks-kejar "$MK" \
+            > /tmp/pengawal.json 2>/tmp/pengawal.err
           echo "rc=$?" >> "$GITHUB_OUTPUT"
           set -e
           cat /tmp/pengawal.json || true
           [ -s /tmp/pengawal.err ] && { echo "--- stderr ---"; cat /tmp/pengawal.err; } || true
           M=$(python3 BacktestShariah2/standard/pengawal.py --ntfy 2>/dev/null | head -1)
+          [ "$RINGAN" = "1" ] && M="(dalam pintu beli) $M" || true
           echo "mesej<<EOF" >> "$GITHUB_OUTPUT"; echo "$M" >> "$GITHUB_OUTPUT"; echo "EOF" >> "$GITHUB_OUTPUT"
           echo "$M"
           C=$(python3 -c "import json;print(' '.join(json.load(open('/tmp/pengawal.json')).get('cetus') or []))" 2>/dev/null || echo "")
@@ -108,8 +125,11 @@ jobs:
       # berjalan langsung". Jika pengawal sendiri berhenti dicetus (cron GitHub digugurkan,
       # workflow dilumpuhkan, repo tidak aktif), telefon kekal senyap dan itu kelihatan SAMA
       # seperti kejayaan. Satu baris sehari menjadikan senyap sebagai ISYARAT, bukan andaian.
+      # Larian ringan TIDAK menghantar denyut "semua baik": satu baris sehari ialah isyarat,
+      # dua baris sehari ialah bising, dan pengawal yang diabaikan tidak melindungi apa-apa.
+      # Ia menghantar hanya apabila ada masalah tinggal atau workflow perlu dicetus.
       - name: Notifikasi ntfy (denyut harian; senyap bermakna sesuatu tidak berjalan)
-        if: always()
+        if: always() && (steps.semak.outputs.ringan != '1' || steps.semak.outputs.rc != '0' || steps.semak.outputs.cetus != '')
         env:
           TOPIK: ${{ secrets.NTFY_TOPIC || 'claude_azim' }}
           MESEJ: ${{ steps.semak.outputs.mesej }}
