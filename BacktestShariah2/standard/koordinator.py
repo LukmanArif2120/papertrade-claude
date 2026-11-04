@@ -263,7 +263,45 @@ def jadual_md(baris, kol):
     return '\n'.join(o) + '\n'
 
 
+# Ambang BERASINGAN daripada LEWAT_HARI. LEWAT_HARI=3 memandu PAPARAN dalam KOORDINATOR.md,
+# di mana amaran tersilap tidak merugikan - seseorang membacanya dan meneruskan. Tripwire
+# mesti lebih longgar kerana `_umur` mengira hari KALENDAR: Khamis tutup + Jumaat cuti +
+# hujung minggu memberi 4 hari tanpa apa-apa yang rosak, dan amaran tersilap pada saluran ntfy
+# yang sama dengan amaran sebenar melatih orang mengabaikan kedua-duanya.
+SEMAK_HARI = 5
+
+
+def semak_segar(lewat=SEMAK_HARI):
+    """(kod keluar, baris) — sumber yang berhenti bergerak walaupun workflow hijau.
+
+    JURANG YANG INI TUTUP (4 Nov 2026). `kesegaran()` sudah mengira status LEWAT, tetapi ia
+    PAPARAN SAHAJA: ia ditulis ke dalam KOORDINATOR.md dan tiada apa-apa yang gagal. Sementara
+    itu `amaran_ntfy.yml` hanya berbunyi apabila workflow GAGAL. Jadi keadaan "workflow hijau,
+    data tidak bergerak" - yfinance pulangkan kosong, penulis langkau dengan senyap, kursor
+    tersangkut - tidak kelihatan melainkan seseorang membuka KOORDINATOR.md dan membacanya.
+
+    Itu tepat bentuk kegagalan yang pengguna minta dihalang: "make sure tiada yang terhenti
+    sendiri dan tidak menjalankan tugas".
+
+    Sumber dengan umur `None` DILANGKAU, bukan dilaporkan rosak: ia bermakna fail atau medan
+    tiada, yang sudah ditangani di tempat lain dan akan menghasilkan amaran berganda di sini.
+    """
+    buruk = [(n, t, u) for n, t, u, _ in kesegaran() if u is not None and u > lewat]
+    return (1 if buruk else 0), buruk
+
+
 def main():
+    if '--semak' in sys.argv:
+        lewat = SEMAK_HARI
+        if '--lewat' in sys.argv:
+            lewat = int(sys.argv[sys.argv.index('--lewat') + 1])
+        kod, buruk = semak_segar(lewat)
+        for n, t, u in buruk:
+            print(f'LEWAT {u} hari: {n} (terakhir {t})', file=sys.stderr)
+        print(json.dumps(dict(lewat_hari=lewat, bil=len(buruk),
+                              sumber=[dict(nama=n, terakhir=str(t), umur=u) for n, t, u in buruk]),
+                         ensure_ascii=False))
+        return kod
     L = []
     A = L.append
     A('# KOORDINATOR — keadaan repo dalam satu halaman\n')

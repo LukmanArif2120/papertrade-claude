@@ -35,6 +35,10 @@ JAGA = {
     # ialah membetulkan apa-apa yang rosak SEBELUM belian hari itu, bukan selepas. Pengawal yang
     # sendiri terlepas cetusan ialah ironi yang mahal, jadi ia dijaga seperti yang lain.
     'pengawal.yml': ('ny', 8, 30),
+    # Sandaran mingguan (4 Nov 2026). Mingguan, jadi cetusan yang terlepas bermakna SEMINGGU
+    # tanpa salinan di luar repo - tepat tetingkap di mana kehilangan paling mahal. 'buka' =
+    # had masa biasa workflow itu sendiri.
+    'sandaran.yml': 'buka',
 }
 
 

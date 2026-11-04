@@ -20,6 +20,8 @@ on:
       - Data pemangkin
       - Fundamental SEC
       - Senarai bursa
+      # Mingguan, jadi kegagalan senyap bermakna SEMINGGU tanpa salinan di luar repo.
+      - Sandaran mingguan
     types: [completed]
   workflow_dispatch:
     inputs:

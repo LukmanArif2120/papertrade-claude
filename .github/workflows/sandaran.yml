@@ -1,0 +1,118 @@
+# Sandaran mingguan data tidak boleh ganti -> aset GitHub Release, + laporan pertumbuhan repo.
+#
+# MENGAPA (4 Nov 2026, audit atas permintaan pengguna). Sebelum ini repo ini ialah SATU-SATUNYA
+# salinan segala-galanya. Sebahagian daripada datanya tidak boleh dibina semula pada harga apa pun:
+# `data/rs/`, `data/kumpulan/` dan `data/senarai_bursa/` ialah petikan HARIAN yang dikira daripada
+# keadaan pasaran pada hari itu dan tiada sumber sejarah - terlepas sehari, hilang selamanya.
+# `papertrade/` dan `lejar/` ialah rekod dagangan itu sendiri. Kehilangan repo, atau satu
+# `git push --force` yang silap, memadam kesemuanya.
+#
+# Release dipilih dan bukan commit kerana aset Release berada DI LUAR sejarah git: ia selamat
+# daripada penulisan semula sejarah, ia tidak menambah saiz repo (yang audit sama dapati tumbuh
+# ~5.5 MB/hari), dan corak itu sudah terbukti dalam repo ini (`autotune-data-a02`).
+#
+# Laporan pertumbuhan diletak DI SINI, bukan dalam harian.yml, atas sebab khusus: `saiz_repo.py`
+# perlu sejarah penuh, dan harian.yml sengaja ditukar kepada klon cetek pada 4 Nov kerana ia
+# berjalan 4x sehari. Kerja mingguan ini mampu membayar klon penuh; kerja harian tidak.
+name: Sandaran mingguan
+
+on:
+  schedule:
+    # Sabtu 02:19 UTC. Bukan Ahad (mingguan.md), bukan minit :00 (waktu paling sesak), dan
+    # bukan 14:00-17:00 UTC (6-9 pagi Pasifik) yang lazim tertunda.
+    - cron: '19 2 * * 6'
+  workflow_dispatch:
+
+concurrency:
+  group: sandaran
+  cancel-in-progress: false
+
+permissions:
+  contents: write        # perlu untuk mencipta Release dan memuat naik aset
+
+jobs:
+  sandaran:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # saiz_repo.py perlu sejarah penuh; lihat nota di atas
+
+      - name: Bina arkib
+        id: arkib
+        run: |
+          set -euo pipefail
+          TAG="sandaran-$(date -u +%G-W%V)"
+          FAIL="${TAG}.tar.gz"
+          # Hanya yang tidak boleh dibina semula, atau mahal untuk dibina semula. Stor harga
+          # DIMASUKKAN walaupun yfinance boleh memberinya semula, kerana pelarasan sejarah
+          # (kod/peristiwa.py, faktor.csv, log_laras.csv) tidak boleh dihasilkan semula.
+          tar -czf "$FAIL" \
+            BacktestShariah2/papertrade \
+            BacktestShariah2/lejar \
+            BacktestShariah2/portfolio_slot \
+            BacktestShariah2/uji_kertas \
+            BacktestShariah2/data/rs \
+            BacktestShariah2/data/kumpulan \
+            BacktestShariah2/data/senarai_bursa \
+            BacktestShariah2/data/sec \
+            BacktestShariah2/data/analisis \
+            BacktestShariah2/data/harga/stor \
+            BacktestShariah2/koordinator
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "fail=$FAIL" >> "$GITHUB_OUTPUT"
+          ls -l "$FAIL" | awk '{printf "arkib %.1f MB\n", $5/1e6}'
+
+      - name: Sahkan arkib boleh dibaca semula
+        # Sandaran yang tidak pernah diuji bukan sandaran. Senarai kandungan mesti mengandungi
+        # fail penunjuk bagi setiap folder yang tidak boleh diganti; jika tar rosak atau satu
+        # laluan tersilap eja, ini gagal SEKARANG dan bukan pada hari ia diperlukan.
+        run: |
+          set -euo pipefail
+          tar -tzf "${{ steps.arkib.outputs.fail }}" > /tmp/isi.txt
+          echo "entri: $(wc -l < /tmp/isi.txt)"
+          for p in \
+            BacktestShariah2/papertrade/claude.csv \
+            BacktestShariah2/lejar/terbuka.csv \
+            BacktestShariah2/data/rs/rs_pasaran.csv \
+            BacktestShariah2/data/senarai_bursa/peristiwa.csv \
+            BacktestShariah2/data/harga/stor/harga_A.csv ; do
+            grep -qx "$p" /tmp/isi.txt || { echo "::error::sandaran tiada $p"; exit 1; }
+          done
+          echo "semua fail penunjuk hadir"
+
+      - name: Muat naik ke Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG="${{ steps.arkib.outputs.tag }}"
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            || gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --notes \
+               "Sandaran automatik data tidak boleh ganti. Pulih: gh release download $TAG && tar -xzf $TAG.tar.gz"
+          gh release upload "$TAG" "${{ steps.arkib.outputs.fail }}" --repo "$GITHUB_REPOSITORY" --clobber
+
+      - name: Buang sandaran lama (simpan 8)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          # Hanya tag `sandaran-*` disentuh; Release lain (autotune-data…) tidak boleh terjejas.
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName \
+            --jq '.[].tagName | select(startswith("sandaran-"))' | sort -r | tail -n +9 > /tmp/lama.txt || true
+          while read -r t; do
+            [ -n "$t" ] || continue
+            echo "buang $t"
+            gh release delete "$t" --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
+          done < /tmp/lama.txt
+
+      - name: Laporan pertumbuhan repo
+        # Tidak menghalang: tujuannya menjadikan pertumbuhan KELIHATAN setiap minggu. Had 12 MB/hari
+        # ialah ~2x kadar yang diukur 4 Nov (5.45), jadi ia hanya berbunyi pada perubahan sebenar
+        # dalam corak tulisan, bukan pada turun naik biasa.
+        continue-on-error: true
+        run: |
+          python3 BacktestShariah2/standard/saiz_repo.py --teks --hari 14
+          python3 BacktestShariah2/standard/saiz_repo.py --hari 14 --had-mb-hari 12 >/dev/null \
+            || echo "::warning::pertumbuhan repo melebihi 12 MB/hari — lihat jadual di atas"

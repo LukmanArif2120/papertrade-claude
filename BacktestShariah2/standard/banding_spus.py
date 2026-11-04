@@ -41,8 +41,24 @@ def muat_spus():
 def kemas_kini():
     """Lanjutkan spus_harian.csv dengan yfinance jika pustaka itu ada.
 
-    Tidak dipasang dalam workflow malam dengan sengaja: kod yang belum diuji dalam kerja
-    berjadual adalah liabiliti. Jalankan secara manual, atau lihat keputusan terbuka.
+    Dipasang dalam harian.yml pada 4 Nov 2026 (keputusan terbuka 29 Okt diselesaikan). Sebelum
+    itu ia manual, dan akibatnya diukur: pada 4 Nov fail ini TUJUH HARI basi, pada penanda aras
+    yang setiap kesimpulan pulangan dalam repo bergantung padanya (`PENANDA_ARAS_SYARIAH.md`).
+    Penanda aras basi lebih buruk daripada tiada penanda aras, kerana ia masih kelihatan sah.
+
+    Sebab asal untuk tidak mengautomasi ("laluan belum diuji") ditangani dengan menjadikan
+    SETIAP mod kegagalan tidak merosakkan, bukan dengan mengandaikan ia berjaya: pustaka tiada,
+    rangkaian gagal, Yahoo pulangkan kosong - semuanya pulang 1 dengan mesej dan MENINGGALKAN
+    fail sedia ada tidak tersentuh. Tiada satu pun boleh menggagalkan kerja malam.
+
+    HAD YANG JUJUR: laluan berjaya masih belum pernah dijalankan dalam sesi ini - proksi sesi
+    awan memulangkan 403 bagi Yahoo, jadi hanya laluan KEGAGALAN yang disahkan di sini. Larian
+    Actions pertama ialah ujian sebenar pertama bagi laluan berjaya; langkahnya
+    `continue-on-error` supaya kegagalan di sana tidak menahan data papertrade.
+
+    Nota sumber: baris sedia ada datang daripada Moomoo, baris baharu daripada yfinance
+    `auto_adjust=True`. `keep='first'` disengajakan - ia menghalang yfinance daripada menulis
+    ganti asas Moomoo, jadi dua konvensyen pelarasan tidak bercampur ke belakang.
     """
     try:
         import yfinance as yf
@@ -51,7 +67,17 @@ def kemas_kini():
         return 1
     lama = muat_spus()
     mula = (lama.tarikh.max() - pd.Timedelta(days=5)).strftime('%Y-%m-%d')
-    h = yf.Ticker('SPUS').history(start=mula, auto_adjust=True)
+    try:
+        h = yf.Ticker('SPUS').history(start=mula, auto_adjust=True)
+    except Exception as e:                                    # noqa: BLE001 - lihat docstring
+        # Sengaja luas. yfinance membungkus curl_cffi, requests dan pandas, jadi kegagalan
+        # rangkaian tiba sebagai beberapa jenis pengecualian yang tidak berkaitan (disahkan
+        # 4 Nov: proksi 403 muncul sebagai curl_cffi ConnectionError). Menyenaraikan jenis
+        # bermakna terlepas satu, dan terlepas satu bermakna kerja malam ranap kerana Yahoo
+        # tersekat - pertukaran yang salah bagi medan yang hanya PAPARAN.
+        print(f'yfinance gagal mengambil SPUS ({type(e).__name__}: {e}); '
+              f'spus_harian.csv dibiar seperti sedia ada')
+        return 1
     if h.empty:
         print('yfinance tidak memulangkan data SPUS')
         return 1
