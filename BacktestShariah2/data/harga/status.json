@@ -1,21 +1,20 @@
 {
  "terkini": {
-  "dijana": "2026-11-04 08:04 UTC",
+  "dijana": "2026-11-04 11:13 UTC",
   "sesi": 20261103,
-  "bil_ticker": 930,
+  "bil_ticker": 931,
   "bil_universe": 931,
-  "tiada_data": [
-   "QRVO"
-  ],
+  "tiada_data": [],
   "tiada_bar_sesi": [
    "ACA",
    "ATKR",
    "BLFS",
    "INDV",
    "KVUE",
+   "QRVO",
    "RAMP"
   ],
-  "bil_tiada_bar_sesi": 6,
+  "bil_tiada_bar_sesi": 7,
   "dividen_baharu": 0
  },
  "sejarah": {

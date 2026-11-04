@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-04 09:15 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-04 11:14 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| claude/optimistic-archimedes-9zntz2 | 2026-11-04 | 0 | 2026-11-04 |
+| main | 2026-11-04 | 0 | 2026-11-04 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
