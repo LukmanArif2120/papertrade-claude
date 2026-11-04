@@ -9,12 +9,13 @@
  * mengira puncak serentak, dan menghormati unsubscribe. Halaman lulus hanya jika setiap tab
  * tetap terisi DAN puncak serentak tidak melebihi had pelanggan.
  *
- * SEMPADAN YANG DIKETAHUI: ~22 langganan KEKAL (satu bagi setiap dokumen asas) mesti hidup
- * supaya tolakan db malam sampai ke halaman yang sudah terbuka. Jadi had pelanggan di bawah
- * ~26 tidak boleh dipenuhi sepenuhnya: diukur, `had 24` menyebabkan tab Prestasi kehabisan
- * cubaan. Had sebenar yang diperhatikan pada telefon pengguna ialah ~60, jadi margin itu luas;
- * had 30 dan 40 kedua-duanya LULUS. Kalau had pelanggan dikurangkan pada masa depan, pembetulan
- * yang betul ialah menangguhkan posisi/lorong2 (20 dokumen) sampai tab Posisi dibuka.
+ * SEMPADAN YANG DIKETAHUI: ~22 langganan KEKAL (satu bagi setiap dokumen asas, supaya tolakan
+ * db malam sampai ke halaman yang sudah terbuka) DAN kumpulan terbesar (ringkas_c: 21 anak)
+ * mesti muat serentak, kerana slot anak hanya dilepaskan selepas kumpulannya berhimpun. Jadi
+ * had pelanggan di bawah ~46 tidak dijamin. Diukur: had 46, 50 dan 60 semuanya LULUS (puncak
+ * 46, akhir 22, 0 ditolak). Had sebenar yang diperhatikan pada telefon pengguna ~60.
+ * Kalau had pelanggan menjadi lebih ketat, pembetulan yang betul ialah menangguhkan
+ * posisi/lorong2 (20 dokumen) sampai tab Posisi dibuka, bukan melonggarkan penghimpunan.
  *
  * Perlu Playwright (tiada dalam semak_data.yml) jadi ia dijalankan TANGAN:
  *   node BacktestShariah2/ujian/semak_kolam_langganan.js <folder-db> [had] [fail-html]
@@ -44,11 +45,24 @@ for (const c of fs.readdirSync(DB)) {
   pg.on('pageerror', e => ralat.push(String(e).slice(0, 180)));
   await pg.addInitScript(([docs, had]) => {
     window.__D = docs; window.__aktif = 0; window.__puncak = 0; window.__tolak = 0; window.__had = had;
+    /* Pelanggan db sebenar menghantar salinan CACHE dahulu, kemudian nilai pelayan. Salinan
+       cache itu boleh datang dari sesi LAIN, jadi `induk`-nya tidak sepadan. Langganan yang
+       ditutup selepas snapshot PERTAMA membeku pada salinan itu dan melaporkan "(induk lain)"
+       selama-lamanya pada dokumen yang di pelayan sempurna — diperhatikan pada telefon
+       pengguna 4 Nov 2026. Mock ini meniru urutan itu, jadi ujian menangkapnya. */
+    const basi = (d) => {
+      if (!d || typeof d !== 'object') return d;
+      const c = Object.assign({}, d);
+      if (c.induk) c.induk = 'CACHE-LAMA';
+      if (c.bahagian && typeof c.bahagian === 'object') c.bahagian = Object.assign({}, c.bahagian, { id: 'CACHE-LAMA-2' });
+      return c;
+    };
     const buka = (kunci, cb) => {
       if (window.__aktif >= window.__had) { window.__tolak++; setTimeout(() => cb.err(new Error('Too many active subscriptions.')), 0); return function () {}; }
       window.__aktif++; window.__puncak = Math.max(window.__puncak, window.__aktif);
       let hidup = true;
-      setTimeout(() => { if (hidup) cb.ok(); }, 0);
+      setTimeout(() => { if (hidup) cb.ok(true); }, 0);      // snapshot cache
+      setTimeout(() => { if (hidup) cb.ok(false); }, 120);   // nilai pelayan
       return function () { if (hidup) { hidup = false; window.__aktif--; } };
     };
     window.claude = { use: async function () { return {
@@ -56,7 +70,7 @@ for (const c of fs.readdirSync(DB)) {
         return buka('COL/' + c, { ok: () => ok({ docs: Object.keys(window.__D).filter(k => k.indexOf(c + '/') === 0).map(k => ({ id: k.slice(c.length + 1), exists: true, data: () => window.__D[k] })) }), err: err || function () {} });
       } }; } }; },
       doc: function (q) { return { onSnapshot: function (ok, err) {
-        return buka(q, { ok: () => ok({ exists: !!window.__D[q], data: () => window.__D[q] }), err: err || function () {} });
+        return buka(q, { ok: (cache) => ok({ exists: !!window.__D[q], data: () => cache ? basi(window.__D[q]) : window.__D[q] }), err: err || function () {} });
       } }; } }; } };
   }, [D, HAD]);
   await pg.goto('file://' + path.join(S, 'd.html'));

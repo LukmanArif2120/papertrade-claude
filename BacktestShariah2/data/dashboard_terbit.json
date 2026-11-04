@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793754518-0c2e",
-  "nombor": 179,
-  "sha256": "62f8e4324e36303ad6abd63dad7758d9d40d0f536a569f8165993cb49d8ca8b6",
-  "bait": 668332,
-  "dikemas": "2026-11-04 01:08 UTC",
-  "nota": "v148: KOLAM LANGGANAN. Pelanggan db menolak langganan melebihi hadnya dengan 'Too many active subscriptions' dan halaman membuka 71 serentak (ringkas_c 22, posisi/lorong2 20, jalur 4, ...). Yang didaftar TERAKHIR ditolak, jadi analisis/papan_2, posisi/lorong2_18 dan posisi/jalur_2..4 tidak pernah sampai pada telefon pengguna walaupun db sempurna — itulah punca sebenar tab kosong 3-4 Nov 2026. Langganan kini melalui kolam berhad (32, menyesuaikan ke bawah bila ditolak, penjaga kemajuan menaikkannya semula); dokumen BAHAGIAN dibaca SEKALI dan slotnya dilepaskan; anak dibuka semula apabila induk asas berubah. Diukur: had pelanggan 30 dan 40 kedua-duanya memuat penuh."
+  "versi_artifact": "1793757977-cfa6",
+  "nombor": 180,
+  "sha256": "475d59996109d0444714dc07e8aa7f5c9617263890580720d4ca832dcc9f2a15",
+  "bait": 669997,
+  "dikemas": "2026-11-04 02:06 UTC",
+  "nota": "v149: REGRESI v148 dibetulkan. Pelanggan db menghantar salinan CACHE dahulu dan nilai pelayan selepasnya; langganan 'sekali-baca' v148 menutup slot selepas snapshot pertama, jadi dokumen bahagian beku pada salinan cache sesi lama dan halaman melaporkan '(induk lain)' selama-lamanya pada dokumen yang di pelayan sempurna. Langganan kini dibatalkan selepas KUMPULAN berhimpun, bukan selepas snapshot pertama; token kolam boleh dibatalkan; had lalai 44 (22 kekal + 21 anak kumpulan terbesar). Mock ujian kini meniru cache-lalu-pelayan dan ia GAGAL pada #179."
 }
