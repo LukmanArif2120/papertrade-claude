@@ -40,9 +40,18 @@ jobs:
     # menangani. Langkah commit di sini pun tidak bersyarat pada kejayaan imbasan.
     timeout-minutes: 300
     steps:
+      # Klon cetek (lalai depth=1), ditukar daripada `fetch-depth: 0` pada 4 Nov 2026.
+      # Sejarah penuh hanya pernah diperlukan oleh satu langkah: "Banding mod selari", yang
+      # dipagar `mod == 'bayang'` dan memanggil banding_bayang.py `git archive <commit>`.
+      # BacktestShariah2/MOD_ACTIONS ialah `rasmi` sejak 27 Okt 2026, jadi langkah itu tidak
+      # pernah berjalan. Empat arahan git koordinator.py disemak pada klon yang meniru
+      # actions/checkout@v4 depth=1: `rev-list --count HEAD..origin/main` memberi 0 dan
+      # `log -1 origin/main` memberi tarikh, kerana checkout mencipta ref origin/main walaupun
+      # cetek. Ia juga menurunkan git ke '' dengan selamat jika ref itu hilang.
+      # Sebabnya saiz: repo 332 MB tumbuh ~15.8 MB/hari, dan workflow ini berjalan 4x sehari,
+      # jadi klon sejarah penuh ialah kos yang bertambah setiap hari tanpa apa-apa pengguna.
+      # JIKA mod dikembalikan ke `bayang` (jadual/PERALIHAN.md), `fetch-depth: 0` mesti dipulihkan.
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
