@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-04 06:08 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-04 08:07 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -45,7 +45,7 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
 | RS pasaran | 30 | 2026-09-23 | 2026-11-03 | 0.5 |  | tidak |
-| Gred kumpulan | 27 | 2026-09-25 | 2026-11-02 | 0.4 |  | tidak |
+| Gred kumpulan | 28 | 2026-09-25 | 2026-11-03 | 0.4 |  | tidak |
 | SEC EPS/hasil | 4098 | 2009-04-15 | 2026-11-03 | 65.0 | 269107 | ya |
 | SEC earnings 8-K | 5451 | 2004-08-23 | 2026-11-03 | 86.5 | 179019 | ya |
 
@@ -65,12 +65,12 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Lorong | Ekuiti | Dipegang | Keluar | Sesi terakhir |
 |---|---|---|---|---|
-| RS_10 | 0.802281 | 10 | 2 | 2026-11-02 |
-| RAWAK_10 | 0.971055 | 10 | 2 | 2026-11-02 |
-| GABUNGAN_10 | 1.000874 | 7 | 18 | 2026-11-02 |
-| TOP1_10 | 0.982475 | 6 | 20 | 2026-11-02 |
-| RAWAK_KAEDAH_10 | 0.986192 | 10 | 1 | 2026-11-02 |
-| RISIKO_10 | 0.94169 | 10 | 2 | 2026-11-02 |
+| RS_10 | 0.826999 | 10 | 2 | 2026-11-03 |
+| RAWAK_10 | 0.974195 | 10 | 2 | 2026-11-03 |
+| GABUNGAN_10 | 1.013984 | 9 | 19 | 2026-11-03 |
+| TOP1_10 | 0.983531 | 7 | 23 | 2026-11-03 |
+| RAWAK_KAEDAH_10 | 0.980675 | 10 | 1 | 2026-11-03 |
+| RISIKO_10 | 0.949423 | 10 | 2 | 2026-11-03 |
 
 
 `RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz. Ia menguji saiz atas **isyarat Mxx** dan bukan ujian ke hadapan dapatan REVERSE fasa 1b (`REVERSE/SPEC_FASA2.md` §9.2).
@@ -80,8 +80,8 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Status pantau | Bilangan |
 |---|---|
-| BELUM CUKUP | 222 |
-| OK | 6 |
+| BELUM CUKUP | 221 |
+| OK | 7 |
 
 
 ## 4. Kesegaran data
@@ -90,11 +90,11 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 |---|---|---|---|
 | Stor harga | 20261103 | 1 | OK |
 | Trend D10H2-r2 | 20261103 | 1 | OK |
-| Lejar Penuh | 2026-11-02 | 2 | OK |
-| portfolio_slot | 2026-11-02 | 2 | OK |
+| Lejar Penuh | 2026-11-03 | 1 | OK |
+| portfolio_slot | 2026-11-03 | 1 | OK |
 | Papan Penganalisis | 2026-11-04 | 0 | OK |
 | RS pasaran | 2026-11-03 | 1 | OK |
-| Gred kumpulan | 2026-11-02 | 2 | OK |
+| Gred kumpulan | 2026-11-03 | 1 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
 
@@ -114,10 +114,11 @@ Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau 
 | harga_harian.yml | 37 21 * * 1-5, 23 0 * * 2-6 | ya |
 | harian.yml | 7 5 * * 2-6, 7 7 * * 2-6, 7 9 * * 2-6, 7 11 * * 2-6 | ya |
 | lejar.yml | 17 6 * * 2-6, 17 10 * * 2-6 | ya |
-| pengawal.yml | 35 12 * * 1-5 | ya |
+| pengawal.yml | 35 12 * * 1-5, 0 16 * * 1-5 | ya |
 | penjaga_jadual.yml | 23 * * * *, 53 * * * * | **tidak** |
 | petang.yml | 47 11 * * 1-5, 17 12 * * 1-5 | ya |
 | rs_pasaran.yml | 41 22 * * 1-5, 17 3 * * 2-6 | ya |
+| sandaran.yml | 19 2 * * 6 | ya |
 | senarai_bursa.yml | 53 23 * * 1-5, 23 4 * * 2-6 | ya |
 | skrin_tv.yml | 47 21 * * 1-5 | ya |
 
