@@ -70,16 +70,33 @@ class TestSaizRepo(unittest.TestCase):
         besar = next(f for f in d['fail'] if f['laluan'] == 'besar.csv')
         self.assertEqual(besar['versi'], 4)
 
+    def _jalan(self, *a):
+        """Subproses atas repo FIXTURE melalui --akar.
+
+        Versi pertama menghilangkan --akar dan bergantung pada cwd. Itu tidak berkesan: AKAR
+        dikira daripada __file__, jadi subproses mengukur repo SEBENAR tanpa mengira cwd. Ujian
+        itu lulus pada klon penuh dan GAGAL dalam CI, yang mengklon cetek - ia menguji kedalaman
+        klon persekitaran, bukan kod. Jangan buang --akar.
+        """
+        return subprocess.run(
+            [sys.executable, os.path.join(self._akar, 'BacktestShariah2', 'standard', 'saiz_repo.py'),
+             '--akar', self.d, *a], capture_output=True, text=True)
+
     def test_had_mencetus_kod_keluar(self):
-        out = subprocess.run([sys.executable, os.path.join(self._akar, 'BacktestShariah2', 'standard', 'saiz_repo.py'),
-                              '--had-mb-hari', '0.000001'], capture_output=True, text=True, cwd=self._akar)
-        self.assertEqual(out.returncode, 1)
+        out = self._jalan('--had-mb-hari', '0.000001')
+        self.assertEqual(out.returncode, 1, out.stderr)
         self.assertIn('MELEBIHI', out.stderr)
 
     def test_had_longgar_lulus(self):
-        out = subprocess.run([sys.executable, os.path.join(self._akar, 'BacktestShariah2', 'standard', 'saiz_repo.py'),
-                              '--had-mb-hari', '100000'], capture_output=True, text=True, cwd=self._akar)
-        self.assertEqual(out.returncode, 0)
+        out = self._jalan('--had-mb-hari', '100000')
+        self.assertEqual(out.returncode, 0, out.stderr)
+
+    def test_akar_menyasarkan_repo_yang_diminta(self):
+        """--akar mesti benar-benar menukar apa yang diukur, bukan sekadar diterima."""
+        import json as _j
+        out = self._jalan('--hari', '14')
+        d = _j.loads(out.stdout)
+        self.assertEqual(d['fail'][0]['laluan'], 'besar.csv')   # fail fixture, bukan fail repo
 
     def test_padaman_tidak_dikira(self):
         """Membuang fail tidak menambah bait; hanya blob BAHARU dikira."""
