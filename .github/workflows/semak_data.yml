@@ -12,13 +12,32 @@ on:
       - '**/*.py'
       - 'ruff.toml'
       - '.github/workflows/**'
+  # Ditambah 4 Nov 2026 selepas kegagalan yang ia akan halang. Sebelum ini semakan hanya
+  # berjalan SELEPAS push ke main, jadi `main` hanya boleh didapati merah selepas kejadian:
+  # PR #3 digabung, run #387 gagal pada main, dan pembetulan perlu PR kedua. Setiap PR ialah
+  # pertaruhan, dan `main` yang merah bermakna amaran_ntfy sudah berbunyi untuk sesuatu yang
+  # sepatutnya ditangkap sebelum ia mendarat.
+  #
+  # Laluan SENGAJA tidak ditapis di sini, tidak seperti pencetus push. Kegagalan #387 ialah
+  # ujian unit yang dipecahkan oleh perubahan dalam `.github/workflows/` + `BacktestShariah2/`
+  # — ia memang akan padan — tetapi penapis laluan pada PR bermakna sesetengah PR tiada check
+  # LANGSUNG, dan "tiada check" kelihatan sama seperti "lulus" dalam UI gabungan. Pada push
+  # penapis itu menjimatkan minit tanpa risiko kerana setiap push ke main akhirnya disemak;
+  # pada PR ia mencipta lubang senyap tepat sebelum keputusan gabung.
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: semak-data
+  # Kumpulan mesti termasuk ref sejak `pull_request` ditambah (4 Nov 2026). Dengan kumpulan
+  # tetap `semak-data` dan `cancel-in-progress`, push ke PR akan MEMBATALKAN semakan main yang
+  # sedang berjalan — jadi menambah semakan PR akan melemahkan semakan main, bertentangan
+  # dengan tujuannya. Satu baris per-ref mengekalkan penjimatan (push berturut pada PR yang
+  # sama masih membatalkan yang lama) tanpa dua ref bertelagah.
+  group: semak-data-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
