@@ -287,7 +287,6 @@ AFOS,ARS Focused Opportunity Strategy ETF,NASDAQ,1,0,2026-10-27
 AFRI,Forafric Global PLC - Ordinary Shares,NASDAQ,0,1,2026-10-27
 AFRIW,Forafric Global PLC - Warrants,NASDAQ,0,0,2026-10-27
 AFRM,"Affirm Holdings, Inc. - Class A Common Stock",NASDAQ,0,1,2026-10-27
-AFRU,T-REX 2X Long AFRM Daily Target ETF,Cboe BZX,1,0,2026-10-27
 AFSC,abrdn Focused U.S. Small Cap Active ETF,NASDAQ,1,0,2026-10-27
 AFSM,First Trust Active Factor Small Cap ETF,NYSE Arca,1,0,2026-10-27
 AFYA,Afya Limited - Class A Common Shares,NASDAQ,0,1,2026-10-27
@@ -860,7 +859,6 @@ ASTS,"AST SpaceMobile, Inc. - Class A Common Stock",NASDAQ,0,1,2026-10-27
 ASTT,Corgi ASTS 2x Daily ETF,Cboe BZX,1,0,2026-10-27
 ASTX,Tradr 2X Long ASTS Daily ETF,Cboe BZX,1,0,2026-10-27
 ASTY,Defiance Daily Target 2X Long ASTS ETF,Cboe BZX,1,0,2026-10-27
-ASUP,T-REX 2X Long ASTS Daily Target ETF,Cboe BZX,1,0,2026-10-27
 ASUR,Asure Software Inc - Common Stock,NASDAQ,0,1,2026-10-27
 ASX,"ASE Technology Holding Co., Ltd. American Depositary Shares (each representing Two Common Shares) ",NYSE,0,1,2026-10-27
 ASYS,"Amtech Systems, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -4620,7 +4618,6 @@ GCAL,Goldman Sachs Dynamic California Municipal Income ETF,NYSE Arca,1,0,2026-10
 GCB,Corgi FTSE Intermediate Government/Credit Bond ETF,Cboe BZX,1,0,2026-10-27
 GCBC,"Greene County Bancorp, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 GCC,WisdomTree EnhancedContinuous Commodity Index Fund,NYSE Arca,1,0,2026-10-27
-GCDT,Green Circle Decarbonize Technology Limited Class A Ordinary Shares,NYSE American,0,1,2026-10-27
 GCGR,General Catalyst Global Resilience Merger Corp. - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 GCGRU,General Catalyst Global Resilience Merger Corp. - Units,NASDAQ,0,0,2026-10-27
 GCGRW,General Catalyst Global Resilience Merger Corp. - Warrants,NASDAQ,0,0,2026-10-27
@@ -4878,7 +4875,6 @@ GNRC,Generac Holdlings Inc. Common Stock,NYSE,0,1,2026-10-27
 GNS,Genius Group Limited Ordinary Shares,NYSE American,0,1,2026-10-27
 GNSS,Genasys Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 GNT,"GAMCO Natural Resources, Gold & Income Trust",NYSE,0,1,2026-10-27
-GNTA,Genenta Science S.p.A. - American Depositary Shares,NASDAQ,0,1,2026-10-27
 GNTX,Gentex Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 GNW,Genworth Financial Inc Common Stock,NYSE,0,1,2026-10-27
 GO,Grocery Outlet Holding Corp. - Common Stock,NASDAQ,0,1,2026-10-27
@@ -6625,7 +6621,7 @@ LAPR,Innovator Premium Income 15 Buffer ETF - April,Cboe BZX,1,0,2026-10-27
 LAR,Lithium Argentina AG Common Shares,NYSE,0,1,2026-10-27
 LARK,Landmark Bancorp Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 LASC,Corgi LASR 2x Daily ETF,Cboe BZX,1,0,2026-10-27
-LASE,Laser Photonics Corporation - Common Stock,NASDAQ,0,1,2026-10-27
+LASE,LASE Corp. - Common Stock,NASDAQ,0,1,2026-10-27
 LASR,"nLIGHT, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 LATA,Galata Acquisition Corp. II - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 LATAU,Galata Acquisition Corp. II - Units,NASDAQ,0,0,2026-10-27
@@ -7918,7 +7914,7 @@ NMS,Nuveen Minnesota Quality Municipal Income Fund ,NYSE,0,0,2026-10-27
 NMT,Nuveen Massachusetts Quality Municipal Income Fund Common Stock,NYSE,0,0,2026-10-27
 NMTC,NeuroOne Medical Technologies Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 NMZ,"Nuveen Municipal High Income Opportunity Fund Common Stock, $0.01 par value, per share",NYSE,0,0,2026-10-27
-NMZ.V,"Nuveen Municipal High Income Opportunity Fund Rights (expiring December 2, 2026) Rights when issued",NYSE,0,0,2026-11-03
+NMZ.R,"Nuveen Municipal High Income Opportunity Fund Rights (expiring December 2, 2026) Rights",NYSE,0,0,2026-11-04
 NN,NextNav Inc. - Common stock,NASDAQ,0,1,2026-10-27
 NNBR,"NN, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 NNDM,Nano Dimension Ltd. - American Depositary Shares,NASDAQ,0,1,2026-10-27
@@ -9028,7 +9024,7 @@ PRK,Park National Corporation Common Stock,NYSE American,0,1,2026-10-27
 PRKS,United Parks & Resorts Inc. Common Stock,NYSE,0,1,2026-10-27
 PRLB,"Proto Labs, Inc. Common stock",NYSE,0,1,2026-10-27
 PRLD,Prelude Therapeutics Incorporated - Common Stock,NASDAQ,0,1,2026-10-27
-PRM,"Perimeter Solutions, SA Common Stock",NYSE,0,1,2026-10-27
+PRM,Perimeter Group Inc. Common Stock,NYSE,0,1,2026-10-27
 PRMB,Primo Brands Corporation Class A Common Stock,NYSE,0,1,2026-10-27
 PRME,"Prime Medicine, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 PRMR,PeakShares RMR Prime Equity ETF,NASDAQ,1,0,2026-10-27
@@ -9519,7 +9515,9 @@ REAI,Intelligent Real Estate ETF,NASDAQ,1,0,2026-10-27
 REAL,"The RealReal, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 REAX,Real REMAX Group Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 REBN,"Reborn Coffee, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
+RECD,Columbia RECS Laddered Deep Buffer ETF,NYSE Arca,1,0,2026-11-04
 RECI,Columbia Research Enhanced Core Premium Income ETF,NYSE Arca,1,0,2026-10-27
+RECM,Columbia RECS Laddered Moderate Buffer ETF,NYSE Arca,1,0,2026-11-04
 RECS,Columbia Research Enhanced Core ETF,NYSE Arca,1,0,2026-10-27
 RECT,Rectitude Holdings Ltd - Ordinary Shares,NASDAQ,0,1,2026-10-27
 REED,"Reed's, Inc. Common Stock",NYSE American,0,1,2026-10-27
@@ -9903,6 +9901,7 @@ SAC,Safeguard Acquisition Corp. Class A Ordinary Shares,NYSE,0,0,2026-10-27
 SAC.U,"Safeguard Acquisition Corp. Units, each consisting of one Class A ordinary share and one-half of one redeemable warrant",NYSE,0,0,2026-10-27
 SAC.W,"Safeguard Acquisition Corp. Warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50 per share",NYSE,0,0,2026-10-27
 SACH,Sachem Capital Corp. Common Shares,NYSE American,0,1,2026-10-27
+SAEN,Genenta Science S.p.A. - American Depositary Shares,NASDAQ,0,1,2026-11-04
 SAFE,Safehold Inc. New Common Stock ,NYSE,0,1,2026-10-27
 SAFT,"Safety Insurance Group, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SAFX,"XCF Global, Inc. - Class A Common Stock",NASDAQ,0,1,2026-10-27
@@ -9975,7 +9974,6 @@ SBRA,"Sabra Health Care REIT, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 SBS,Companhia de saneamento Basico Do Estado De Sao Paulo - Sabesp American Depositary Shares (Each repstg 250 Common Shares),NYSE,0,1,2026-10-27
 SBSI,"Southside Bancshares, Inc. Common Stock",NYSE,0,1,2026-10-27
 SBSW,D/B/A Sibanye-Stillwater Limited ADS,NYSE,0,1,2026-10-27
-SBTU,T-REX 2X Long SBET Daily Target ETF,Cboe BZX,1,0,2026-10-27
 SBUX,Starbucks Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 SBXE,SilverBox Corp V Class A Ordinary Shares,NYSE,0,1,2026-10-27
 SBXE.U,"SilverBox Corp V Units, each consisting of one Class A Ordinary Share and one-third of one redeemable warrant",NYSE,0,0,2026-10-27
@@ -10271,6 +10269,7 @@ SITE,"SiteOne Landscape Supply, Inc. Common Stock",NYSE,0,1,2026-10-27
 SITM,SiTime Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 SITX,Tradr 2X Long SITM Daily ETF,Cboe BZX,1,0,2026-10-27
 SIVR,abrdn Physical Silver Shares ETF,NYSE Arca,1,0,2026-10-27
+SIX,Global X Magnificent Six ETF,Cboe BZX,1,0,2026-11-04
 SIXA,ETC 6 Meridian Mega Cap Equity ETF,NYSE Arca,1,0,2026-10-27
 SIXD,AllianzIM U.S. Large Cap 6 Month Buffer10 Jun/Dec ETF,Cboe BZX,1,0,2026-10-27
 SIXF,AllianzIM U.S. Large Cap 6 Month Buffer10 Feb/Aug ETF,Cboe BZX,1,0,2026-10-27
@@ -11072,7 +11071,6 @@ TERG,Leverage Shares 2X Long TER Daily ETF,NASDAQ,1,0,2026-10-27
 TESC,Corgi TSLA 2x Daily ETF,Cboe BZX,1,0,2026-10-27
 TEST,YieldMax TSLA Performance & Distribution Target 25 ETF,Cboe BZX,1,0,2026-10-27
 TETH,21Shares Ethereum ETF,Cboe BZX,1,0,2026-10-27
-TEUP,T-REX 2X Long TE Daily Target ETF,Cboe BZX,1,0,2026-10-27
 TEVA,Teva Pharmaceutical Industries Limited Ordinary Shares,NYSE,0,1,2026-10-27
 TEX,Terex Corporation Common Stock,NYSE,0,1,2026-10-27
 TEXN,iShares Texas Equity ETF,NASDAQ,1,0,2026-10-27
