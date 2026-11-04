@@ -11,6 +11,9 @@
 #   ATR14%    = purata mudah 14 julat sebenar ÷ tutup × 100 (sama dengan enjin.atr / keluar_lorong.atr); atr_q = kuintil
 #               merentas semua saham stor pada tarikh yang sama (1 rendah … 5 sangat tinggi)
 #   lonjak    = pulangan 5 sesi dalam 20% teratas stor pada tarikh sama (tooltip sahaja)
+#   j52/t52   = jarak tutup dari tinggi 252 sesi (tinggi intrahari, TERMASUK hari ini) dan harga tinggi itu; bar52 = sesi
+#               sejak tinggi itu ditetapkan. PAPARAN SAHAJA — kajian REVERSE/JARAK_52W.md ukur kesannya; lihat fail itu
+#               sebelum memakainya sebagai peraturan beli. Tiada jika sejarah < 252 sesi.
 #   rejim     = SPY D10+H2 + RV21 SPY (sisihan piawai 21 pulangan log × √252): Tertekan jika SPY Bearish atau RV21 >= 21.8%;
 #               Tenang jika RV21 < 14.0%; Biasa selainnya (ambang = tertil IS 2020–2022)
 # Siri harga: stor repo (konvensyen backtest) + bar terkini.csv yang lebih baharu daripada bar akhir stor; jika bar bertindih
@@ -40,12 +43,14 @@ MIN_BAR = N_PANJANG + 1        # SMA200 + dua tutup
 BAHARU, LAMA = 20, 60
 TETINGKAP_TITIK = 63
 N_ATR = 14
+N_52W = 252                    # sesi dalam 52 minggu (jarak ke tinggi 52w; paparan sahaja)
 TOL_LARAS = 0.003              # sama dengan kod/stor.py nisbah_laras
 LOMPAT_SEMAK = 0.40
 RV_TENANG, RV_TERTEKAN = 14.0, 21.8
 NAMA = {1: 'Bullish', 0: 'Neutral', -1: 'Bearish'}
 LAJUR = ['saham', 's', 'sub', 'sah', 'umur', 'tepat', 'pct_sejak', 'dari', 'sebab', 'isyarat', 'titik_tarikh', 'titik_harga',
          'pct_titik', 'tembus', 'atr_pct', 'atr_q', 'mentah', 'calon', 'susun', 'jarak', 'c', 'c_sah', 'sma50', 'n60', 'lonjak',
+         'j52', 't52', 'bar52',
          'tarikh_data']
 K = {n: i for i, n in enumerate(LAJUR)}
 
@@ -153,6 +158,14 @@ def kira(g):
             r['atr_pct'] = float(a[-1] / c[-1] * 100)
     if n > 5:
         r['r5'] = float(c[-1] / c[-6] - 1)
+    if n >= N_52W:
+        w = h[-N_52W:]
+        t52 = float(np.max(w))
+        if t52 > 0:
+            j = len(w) - 1 - int(np.argmax(w[::-1]))      # kemunculan TERAKHIR tinggi itu
+            r['t52'] = t52
+            r['j52'] = float((c[-1] / t52 - 1) * 100)     # <= 0 secara binaan
+            r['bar52'] = int(len(w) - 1 - j)              # sesi sejak tinggi 52w ditetapkan
     if n:
         r['c'] = float(c[-1])
     if n < MIN_BAR:
@@ -244,10 +257,10 @@ def baris(t, r):
     if not r:
         return o
     for f in ('s', 'sub', 'sah', 'umur', 'tepat', 'dari', 'sebab', 'isyarat', 'titik_tarikh', 'tembus', 'atr_q', 'mentah', 'calon',
-              'susun', 'n60', 'lonjak', 'tarikh_data'):
+              'susun', 'n60', 'lonjak', 'tarikh_data', 'bar52'):
         v = r.get('status' if f == 's' else f)
         o[K[f]] = int(v) if isinstance(v, (bool, np.bool_)) else v
-    for f in ('pct_sejak', 'titik_harga', 'pct_titik', 'atr_pct', 'c', 'c_sah', 'sma50'):
+    for f in ('pct_sejak', 'titik_harga', 'pct_titik', 'atr_pct', 'c', 'c_sah', 'sma50', 'j52', 't52'):
         o[K[f]] = _r2(r.get(f))
     o[K['jarak']] = [_r2(x) for x in r['jarak']] if r.get('jarak') else None
     o[K['sub']] = o[K['sub']] or ''
@@ -290,20 +303,31 @@ def dokumen(H, saham, nota=None, idx=None):
                 nota={k: v for k, v in nota.items() if k in saham})
 
 
+BAWA = ('sah', 'tepat', 'dari', 'sebab', 'isyarat', 'titik_tarikh', 'titik_harga', 'tembus', 'c_sah')
+
+
 def bawa_semalam(baru, lama):
     """Bawa medan beku dari dokumen sebelumnya apabila tarikh_sah sudah keluar daripada tetingkap stor (status sama;
-    kiraan baharu tersensor tetapi lama tepat). Umur = umur lama + 1 jika tarikh data maju."""
-    if not lama or lama.get('lajur') != LAJUR:
+    kiraan baharu tersensor tetapi lama tepat). Umur = umur lama + 1 jika tarikh data maju.
+
+    Dipeta ikut NAMA lajur, bukan kedudukan: menambah lajur baharu kepada LAJUR tidak lagi
+    membuang pembawaan sehari (sebelum ini `lama['lajur'] != LAJUR` terus pulangkan `baru`).
+    """
+    LL = (lama or {}).get('lajur')
+    if not lama or not LL:
         return baru
-    L = {r[0]: r for r in lama.get('rows', [])}
+    KO = {n: i for i, n in enumerate(LL)}
+    if any(f not in KO for f in BAWA + ('saham', 's', 'umur', 'tepat', 'tarikh_data')):
+        return baru
+    L = {r[KO['saham']]: r for r in lama.get('rows', [])}
     for r in baru['rows']:
-        o = L.get(r[0])
-        if not o or r[K['s']] is None or o[K['s']] != r[K['s']] or r[K['tepat']] or not o[K['tepat']]:
+        o = L.get(r[K['saham']])
+        if not o or r[K['s']] is None or o[KO['s']] != r[K['s']] or r[K['tepat']] or not o[KO['tepat']]:
             continue
-        tambah = 1 if (r[K['tarikh_data']] or 0) > (o[K['tarikh_data']] or 0) else 0
-        for f in ('sah', 'tepat', 'dari', 'sebab', 'isyarat', 'titik_tarikh', 'titik_harga', 'tembus', 'c_sah'):
-            r[K[f]] = o[K[f]]
-        r[K['umur']] = o[K['umur']] + tambah
+        tambah = 1 if (r[K['tarikh_data']] or 0) > (o[KO['tarikh_data']] or 0) else 0
+        for f in BAWA:
+            r[K[f]] = o[KO[f]]
+        r[K['umur']] = o[KO['umur']] + tambah
         c = r[K['c']]
         r[K['pct_sejak']] = _r2((c / r[K['c_sah']] - 1) * 100) if c and r[K['c_sah']] else None
         r[K['pct_titik']] = _r2((c / r[K['titik_harga']] - 1) * 100) if c and r[K['titik_harga']] else None

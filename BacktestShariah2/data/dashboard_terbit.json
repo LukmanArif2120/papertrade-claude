@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793757977-cfa6",
-  "nombor": 180,
-  "sha256": "475d59996109d0444714dc07e8aa7f5c9617263890580720d4ca832dcc9f2a15",
-  "bait": 669997,
-  "dikemas": "2026-11-04 02:06 UTC",
-  "nota": "v149: REGRESI v148 dibetulkan. Pelanggan db menghantar salinan CACHE dahulu dan nilai pelayan selepasnya; langganan 'sekali-baca' v148 menutup slot selepas snapshot pertama, jadi dokumen bahagian beku pada salinan cache sesi lama dan halaman melaporkan '(induk lain)' selama-lamanya pada dokumen yang di pelayan sempurna. Langganan kini dibatalkan selepas KUMPULAN berhimpun, bukan selepas snapshot pertama; token kolam boleh dibatalkan; had lalai 44 (22 kekal + 21 anak kumpulan terbesar). Mock ujian kini meniru cache-lalu-pelayan dan ia GAGAL pada #179."
+  "versi_artifact": "1793772113-3a1f",
+  "nombor": 181,
+  "sha256": "a2acd3ab65f84d76333ecdba758b4c0fe54bd05f39faa38d19e3fd536f3ddc72",
+  "bait": 673259,
+  "dikemas": "2026-11-04 06:02 UTC",
+  "nota": "v150: lajur 52W (jarak tutup ke tinggi intrahari 252 sesi, + sesi sejak tinggi itu) dalam jadual Posisi (penuh/ringkas/risiko/gred) dan Watchlist (penuh/ringkas). Sumber medan j52/t52/bar52 = harian/trend (trend_status.py). PAPARAN SAHAJA: kajian REVERSE/JARAK_52W.md ukur ia GAGAL sebagai penapis belian dan hanya sedikit berguna sebagai urutan, dengan kelebihan habis kira-kira -10%."
 }

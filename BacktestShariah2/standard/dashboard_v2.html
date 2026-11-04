@@ -993,6 +993,10 @@ td.rsk{white-space:nowrap}
 body.padat .tablewrap td .trA{flex-direction:column;align-items:flex-start;gap:1px}
 body.padat .tablewrap td .trA .atk{margin-left:0}
 .atk{font-size:.72rem;font-weight:600;color:var(--muted);white-space:nowrap;margin-left:5px}.atk.hmp{color:var(--warn)}
+/* jarak ke tinggi 52 minggu (lajur 52w) — neutral, tiada warna penilaian: paparan sahaja */
+.j52c{display:inline-flex;align-items:baseline;gap:4px;font-size:.78rem;font-weight:600;color:var(--fg-2);white-space:nowrap}
+.j52c small{font-size:.66rem;color:var(--muted);font-weight:600}
+td.j52{white-space:nowrap}
 .tra{font-style:normal}
 /* kad hover Trend (v105, 28 Okt 2026): tangga susunan tutup/SMA + satu ayat; pil tidak bergaris */
 .trd.has-tip{text-decoration:none;cursor:help}
@@ -1659,7 +1663,7 @@ function wBeli(r){const t0=String(S.watch&&S.watch.tarikh_data||r.ditambah||'').
 const watchColsR=()=>[
   {k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b>${baruW(r)} ${esc(r.nama||'')}`,c:()=>'name'},
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`},
-  TRC,RSC,STC,
+  TRC,RSC,J52C,STC,
   {k:'pct_dipenuhi',t:'% hampir',tip:'pct_dipenuhi',f:wPill},
   {k:'harga_terkini',t:'Harga',tip:'harga_w',f:r=>`${fx(r.harga_terkini,2)}<span class="vv nw">paras ${fx(r.paras,2)}</span>`},
   {k:'gred_keseluruhan',t:'Gred',tip:'gred_ringkas',l:1,v:r=>GORD[r.gred_keseluruhan]??null,f:grSatu},
@@ -1702,7 +1706,7 @@ function renderWatch(){
       <input type="search" id="wQ" placeholder="Cari saham, sektor, industri" value="${esc(wf.q)}" aria-label="Cari watchlist"></div>
     ${sortTable({id:'watch',rows,def:{k:'pct_dipenuhi',dir:-1},limit:wf.shown,attr:r=>`data-wl="${r._w}" tabindex="0"`,rcls:r=>'click'+bukaC('w'+r._w),cols:lajurOf('watch')==='ringkas'?watchColsR():[
       {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`<b>${esc(r.saham)}</b>${baruW(r)}<span class="vv">${esc(r.nama||'')}</span>`,c:()=>'tk m0'},
-      {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`,c:()=>'kw m0'},TRC,RSC,STC,
+      {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`,c:()=>'kw m0'},TRC,RSC,J52C,STC,
       {k:'harga_terkini',t:'Harga',tip:'harga_w',f:r=>fx(r.harga_terkini,2)},
       {k:'pct_dipenuhi',t:'% hampir',tip:'pct_dipenuhi',f:wPill,c:()=>'pc m0'},
       {k:'pencetus',t:'Syarat belum cukup',tip:'syarat_belum',l:1,f:r=>`<b style="color:var(--fg)">${esc(r.pencetus||'–')}</b>${r.syarat_dipenuhi?` <span class="mut">(${esc(r.syarat_dipenuhi)} dipenuhi)</span>`:''}<span class="vv">${esc(r.sebab||'')}</span><span class="vv">${esc(r.syarat_belum||'')}</span>`,c:()=>'wrap syr'},
@@ -1815,7 +1819,7 @@ function ptCols(akaun){return [
   {k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>r.tarikh_beli?`<span class="tpd" title="${esc(r.tarikh_beli)}">${esc(tkO(r.tarikh_beli))}</span><span class="tpl">${esc(r.tarikh_beli)}</span>`:'–'},
   {k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`${titikPos(r)}<b>${esc(r.saham)}</b>${baruPos(r)}${earnH(r)}${r.tutup_semua?'':cipKeluar(r)}${akaun&&r.akaun?` <span class="pill p-mute" title="${r.akaun==='M'?'Moomoo':'Claude'}">${r.akaun}</span>`:''}`,c:()=>'tk m0'},
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>{const kk=kongsiOf(r);return `${esc(r.kaedah)}${kk.length?`<span class="kng" aria-label="Isyarat sama daripada ${kk.length} kaedah lain">+${kk.length}</span><span class="vv kng-l">kongsi: ${esc(kk.join(' '))}</span><span class="kgd"><span class="kgh">Isyarat sama juga daripada ${kk.length} kaedah:</span>${kk.map(id=>`<span class="kgi"><b>${esc(id)}</b> ${esc(katNama(id))}${katMasuk(id)?`<span class="kgm">Masuk: ${esc(katMasuk(id))}</span>`:''}</span>`).join('')}</span>`:''}`;},c:()=>'kdh m0'},
-  TRCA,STC,
+  TRCA,J52C,STC,
   ...(padatDesk()?[]:[{k:'harga_beli',t:'Harga beli',tip:'harga_beli',f:r=>fx(r.harga_beli,2)},{k:'unit',t:'Unit',tip:'unit',f:r=>fx(r.unit,0)},{k:'harga_terkini',t:'Harga terkini',tip:'harga_terkini_pt',f:r=>fx(r.harga_terkini,2)}]),
   /* Untung % dikembalikan 28 Okt 2026 (permintaan pengguna) selepas sempat dibuang di desktop */
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}${padatDesk()?'':`<span class="vv nw">beli ${fx(r.harga_beli,2)} → ${r.keluar?'keluar':'kini'} ${fx(r.harga_terkini,2)}</span>`}${spyCip(r)}`,c:()=>'utg m0'},
@@ -1863,7 +1867,7 @@ function lorongRingkas(r){const s=String(r.isyarat_keluar||'');
 /* lajur ringkas posisi: lorong 2 dan gred penuh dalam helaian butiran */
 function posColsR(akaun){return [
   {k:'saham',t:'Saham',tip:'saham',l:1,c:()=>'tk',f:r=>`${titikPos(r)}<b>${esc(r.saham)}</b>${baruPos(r)}${earnH(r)}${r.tutup_semua?'':cipKeluar(r)}${akaun&&r.akaun?` <span class="pill p-mute" title="${r.akaun==='M'?'Moomoo lama':'Papertrade C'}">${r.akaun}</span>`:''}`},
-  TRC,RSC,STC,
+  TRC,RSC,J52C,STC,
   {k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}<span class="vv nw">${fx(r.harga_beli,2)} → ${fx(r.harga_terkini,2)}</span>${spyCip(r)}`},
   {k:'_spark',t:'Sejak beli',tip:'carta_kecil',ns:1,l:1,f:r=>sparkPos(r)},
   {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b class="nw">${esc(r.kaedah)}</b>`},
@@ -3779,8 +3783,8 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
   try{localStorage.setItem('pbs3_pandangan',PANDANGAN);}catch(x){}renderAll();});
 function posColsP(p,akaun){const sh={k:'saham',t:'Saham',tip:'saham',l:1,frz:1,f:r=>`${titikPos(r)}<b>${esc(r.saham)}</b>${baruPos(r)}${earnH(r)}${r.tutup_semua?'':cipKeluar(r)}${akaun&&r.akaun?` <span class="pill p-mute">${r.akaun}</span>`:''}<span class="vv">${esc(r.kaedah)}</span>`,c:()=>'tk grd'};
   const ut={k:'untung_pct',t:'Untung %',tip:'untung_pct',f:r=>`${untungHc(r.untung_pct)}<span class="vv nw">${fx(r.harga_beli,2)} → ${fx(r.harga_terkini,2)}</span>`,c:()=>'utg'};
-  if(p==='gred')return [sh,ut,TRC,RSC,STC,{k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>`<span class="nw">${esc(tkO(r.tarikh_beli))}</span>`},...grCols()];
-  return [sh,ut,TRC,RSC,STC,{k:'_r',t:'R',tip:'r_multiple',v:rOf,f:rSel},
+  if(p==='gred')return [sh,ut,TRC,RSC,J52C,STC,{k:'tarikh_beli',t:'Tarikh beli',tip:'tarikh_beli',l:1,f:r=>`<span class="nw">${esc(tkO(r.tarikh_beli))}</span>`},...grCols()];
+  return [sh,ut,TRC,RSC,J52C,STC,{k:'_r',t:'R',tip:'r_multiple',v:rOf,f:rSel},
     {k:'_risk',t:'Risiko awal',tip:'r_multiple',v:riskAwal,f:r=>{const k=riskAwal(r);return k==null?(tiadaHentiH(r)||'–'):`${fx(k,1)}%<span class="vv nw">henti ${fx(r.henti,2)}</span>`;}},
     {k:'_mae',t:'Turun maks',tip:'penurunan_maks',v:maeOf,f:r=>{const m=maeOf(r);return m==null?'–':`<span class="${cls(m)}">${sg2(m)}</span>`;}},
     {k:'_mfe',t:'Naik maks',tip:'mfe',v:mfeOf,f:r=>{const m=mfeOf(r);return m==null?'–':`<span class="pos">${sg2(m)}</span>`;}},
@@ -4129,6 +4133,21 @@ const atrCip=s=>{const t=trendOf(s);if(!t||t.atr_pct==null)return '<span class="
 const atrKcl=s=>{const t=trendOf(s);return t&&t.atr_pct!=null?`<span class="atk${t.atr_q===5?' hmp':''}" title="ATR14 ${fx(t.atr_pct,1)}% · kuintil ${t.atr_q||'–'} daripada 5 (peluang jatuh > 8% dalam 10 sesi ≈ ${ATR_P[t.atr_q]||'–'} dalam backtest)">${fx(t.atr_pct,1)}%</span>`:'';};
 const TRCA=Object.assign({},TRC,{f:r=>`<span class="trA">${trPill(r.saham)}${padatDesk()?atrKcl(r.saham):atrCip(r.saham)}</span>${(b=>b?`<span class="vv trv">${esc(b)}</span>`:'')(trBaris(r.saham))}`});
 const RSC={k:'_risiko',t:'Risiko',tip:'atr_risiko',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.atr_pct!=null?t.atr_pct:null;},f:r=>atrCip(r.saham),c:()=>'rsk'};
+/* --- v150 (4 Nov 2026, permintaan pengguna): lajur 52W.
+   jarak ke tinggi 52 minggu (harian/trend: j52 = tutup ÷ tinggi intrahari 252 sesi − 1; t52 = harga tinggi itu;
+   bar52 = sesi sejak ia ditetapkan; standard/trend_status.py). Kajian REVERSE/JARAK_52W.md (4 Nov 2026), 10,468,053 bar
+   2012–2025: sebagai PENAPIS ia GAGAL (band 0%…−2% lift −1.34 mata pada tingkap tahan; N35/N66/N120 juga gagal).
+   Sebagai URUTAN dalam hari yang SAMA ia berfungsi sedikit — IC Spearman +0.032…+0.116, tanda sama dua tingkap,
+   positif 10/14 tahun — tetapi median desil 126 sesi MENDATAR selepas kira-kira −10%: D6 +4.43%, D7 +4.53%,
+   D8 +4.70%, D9 +4.53%, D10 (paling hampir) +3.87%. Jadi hampir lebih baik daripada jauh, dan TEPAT pada tinggi
+   bukan yang terbaik. PAPARAN SAHAJA: bukan penapis belian, bukan isyarat jual. */
+const J52_T='Jarak tutup dari tinggi 52 minggu (tinggi intrahari 252 sesi, termasuk hari ini; 0.0% = pada tinggi itu). '
+  +'Nombor kecil = sesi sejak tinggi itu ditetapkan. Kajian 2012–2025 (REVERSE/JARAK_52W.md): sebagai penapis belian ia gagal; '
+  +'sebagai urutan dalam hari sama ia sedikit berguna (IC +0.03…+0.12, positif 10/14 tahun) tetapi kelebihan habis kira-kira −10% '
+  +'— desil paling hampir bukan yang terbaik. Paparan sahaja.';
+const j52Cip=s=>{const t=trendOf(s);if(!t||t.j52==null)return '<span class="mut" title="Sejarah kurang 252 sesi dalam stor.">–</span>';
+  return `<span class="j52c" title="${esc(J52_T)}${t.t52!=null?` Tinggi 52w = ${fx(t.t52,2)}.`:''}">${sgp(t.j52,1)}${t.bar52!=null?`<small>${t.bar52}s</small>`:''}</span>`;};
+const J52C={k:'_j52',t:'52w',tip:'j52_jarak',l:1,v:r=>{const t=trendOf(r.saham);return t&&t.j52!=null?t.j52:null;},f:r=>j52Cip(r.saham),c:()=>'j52'};
 /* --- Stage Analysis Weinstein (harian/stage; standard/stage.py): bar mingguan + MA 30 minggu, 11 sub-stage screener
    stageanalysis.net (2A · 2 · 2− · 2B · 2B− · 1/3 · 4A · 4 · 4− · 4B · 4B−) + penggred kualiti (+/−) daripada Mansfield RP
    dan volum minggu mula. PAPARAN SAHAJA: bukan penapis belian, bukan isyarat jual. */
@@ -4740,6 +4759,7 @@ let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(wi
 const TIPS={
   trend_jp:{t:'Trend (susunan SMA 50/150/200)',d:'Bullish = tutup > SMA50 > SMA150 > SMA200; Bearish = tutup < SMA50 < SMA150 < SMA200; lain-lain Neutral. Status bertukar hanya selepas 2 tutup berturut. "Sejak" = tutup kedua itu (umur dikira dari situ, tarikh sah = 1); baharu = ≤ 20 sesi, lama = > 60 sesi; Neutral menunjukkan status sebelumnya. Titik mula = harga terendah (Bullish) atau tertinggi (Bearish) dalam 63 sesi hingga tarikh sah, dibekukan; berapa jauh harga sudah bergerak sebelum label bertukar. Kajian 23 Okt 2026 (lebih 500 varian, 2020–2026): status ini tidak meramal pulangan 3–30 hari dan tiada peraturan jual berasaskannya yang lebih baik daripada lorong 1/lorong 2. Bullish tidak bermaksud lebih selamat; risiko diukur oleh ATR (lajur Risiko), jarak lorong 2 dan earnings. Bearish lama (diisi merah) satu-satunya amaran: lebih kerap jatuh > 8% dalam 10 sesi (bukti sederhana).',e:'Bullish lama · 142 sesi · sejak 1 Apr (+38.5%) · titik mula 2 Jan @ 121.61 (+87%)'},
   stage_w:{t:'Stage (Stage Analysis Weinstein)',d:'Peringkat kitaran saham pada bar MINGGUAN dengan purata bergerak 30 minggu (MA30), kaedah Stan Weinstein. Stage 2 = tutup di atas MA30 yang menaik (fasa naik); Stage 4 = tutup di bawah MA30 yang menurun (fasa turun); 1/3 = selain itu — asas (selepas Stage 4) atau kawasan puncak (selepas Stage 2); kedua-duanya kelihatan sama pada carta, jadi screener stageanalysis.net menggabungkannya dan baris kecil di bawah label menyatakan yang mana. Sebelas label sama seperti screener itu: 2A (minggu breakout pertama kitaran ini) · 2 · 2− · 2B · 2B− · 1/3 · 4A (minggu breakdown pertama) · 4 · 4− · 4B · 4B−. B = sudah 39 minggu atau lebih dalam kitaran yang sama (surut sementara ke 1/3 tidak menetapkan semula kiraan). “−” dalam label = harga menentang arah peringkat berbanding MA 10 minggu (Stage 2 bawah MA10 = hambar; Stage 4 atas MA10 = mula perk up). Cip kecil (+)/(−) di sebelah label ialah penggred kualiti Weinstein dan BERBEZA daripada “−” dalam label: (+) = garis Mansfield RP positif dan volum minggu mula ≥ 2× purata 4 minggu sebelumnya; (−) = Mansfield negatif. Dikira daripada stor harga repo mengikut takrif yang diterbitkan stageanalysis.net; tiada sambungan ke laman itu (tiada API awam). Stor 520 sesi ≈ 104 minggu, jadi kitaran yang bermula lebih awal ditanda “≥ n minggu” dan tidak diberi label A. PAPARAN SAHAJA (keputusan pengguna 27 Okt 2026): belum diuji sama ada ia meramal pulangan 3–30 hari, jadi ia bukan penapis belian dan bukan isyarat jual — keluar kekal ikut lorong kaedah dan lorong 2.',e:'2B+ · 64 minggu · sejak 15 Ogo 2025'},
+  j52_jarak:{t:'Jarak ke tinggi 52 minggu',d:'Tutup ÷ tinggi intrahari tertinggi 252 sesi (termasuk hari ini) − 1. 0.0% = harga pada tinggi 52 minggu; −12.0% = 12% di bawahnya. Nombor kecil = sesi sejak tinggi itu ditetapkan. Kajian REVERSE/JARAK_52W.md (4 Nov 2026), 10,468,053 bar 2012–2025 dengan tingkap latih/tahan berasingan: sebagai PENAPIS belian ia GAGAL — band 0%…−2% memberi lift −1.34 mata (21 sesi) dan −5.76 mata (126 sesi) pada tingkap tahan, sama seperti N35 (pecah 52w), N66 dan N120 (Minervini) yang sudah diuji dan gagal. Sebagai URUTAN antara calon pada HARI YANG SAMA ia berfungsi sedikit: IC Spearman +0.032 hingga +0.116, bertanda sama dalam kedua-dua tingkap, positif dalam 10 daripada 14 tahun. Tetapi kelebihan itu HABIS kira-kira −10%: median pulangan 126 sesi desil 6–10 ialah +4.43%, +4.53%, +4.70%, +4.53%, +3.87% (tahan) — desil paling hampir tinggi BUKAN yang terbaik. Jadual band mutlak mengukur pemasaan pasaran, bukan pemilihan saham (Mac 2020 hampir setiap nama > 40% di bawah tingginya). Alam kajian tiada saham delist. PAPARAN SAHAJA: bukan penapis belian, bukan isyarat jual.',e:'−12.4% 49s'},
   atr_risiko:{t:'Risiko (ATR14%)',d:'ATR14% = purata julat harian 14 sesi ÷ harga. Q1–Q5 = kuintil merentas semua saham stor pada tarikh sama (Q5 ambar). Backtest posisi 19 kaedah, 2020–2026: peluang jatuh > 8% dalam 10 sesi ≈ 7–11% (Q1), 11–16% (Q2), 16–23% (Q3), 21–31% (Q4), 31–42% (Q5). Ini ukuran risiko yang lulus ujian luar sampel; status trend tidak menambah maklumat melebihinya. Maklumat, bukan peraturan saiz posisi atau isyarat jual. Earnings (📅, ≤ 10 sesi) menambah risiko jatuh tajam +6.5 hingga +13.9 mata.',e:'ATR 3.1% Q3'},
   r_multiple:{t:'R (unit risiko)',d:'Untung dibahagi risiko awal. Risiko awal = (harga beli − henti kaedah pada hari isyarat) ÷ harga beli. +2R = untung dua kali ganda risiko; −1R = rugi sebanyak risiko penuh. Bagi kaedah yang hentinya mengekor, R ialah anggaran kerana hanya henti awal digunakan.',e:'Beli 100, henti 95 (risiko 5%), kini 110 (+10%) = +2R.'},
   kaedah_terbaik:{t:'Kaedah terbaik ikut % untung',d:'Kaedah disusun ikut untung purata % setiap dagangan (semua dagangan: selesai dan masih dipegang), tanpa mengira jumlah wang atau bilangan dagangan. Hanya kaedah dengan ≥ 20 dagangan selesai disenaraikan supaya satu dua dagangan bernasib baik tidak menang; yang belum cukup ditunjuk sebagai calon.',e:'M70: 71 dagangan, 33 selesai, purata +2.89% → layak; kaedah 6 dagangan purata +9% → calon sahaja.'},

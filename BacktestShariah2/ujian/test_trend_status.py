@@ -57,6 +57,60 @@ class Kira(unittest.TestCase):
         self.assertEqual(T.titik_mula(lo, hi, 4, 1), (3, 3.0))
 
 
+class Jarak52W(unittest.TestCase):
+    """j52/t52/bar52 — jarak tutup dari tinggi 252 sesi (REVERSE/JARAK_52W.md; paparan sahaja)."""
+
+    def test_tiada_jika_sejarah_pendek(self):
+        r = T.kira(frame(np.full(251, 100.0)))
+        self.assertIsNone(r.get('j52'))
+        self.assertIsNone(r.get('t52'))
+
+    def test_pada_tinggi_52w(self):
+        c = np.r_[np.full(260, 100.0), np.array([120.0])]
+        h = c * 1.0                                  # tinggi = tutup supaya j52 tepat 0
+        g = frame(c, o=c, h=h, l=c * 0.99)
+        r = T.kira(g)
+        self.assertAlmostEqual(r['t52'], 120.0)
+        self.assertAlmostEqual(r['j52'], 0.0)
+        self.assertEqual(r['bar52'], 0)
+
+    def test_jarak_dan_umur_tinggi(self):
+        c = np.full(300, 100.0)
+        h = c.copy()
+        h[250] = 125.0                               # tinggi 52w ditetapkan 49 sesi lalu
+        g = frame(c, o=c, h=h, l=c * 0.99)
+        r = T.kira(g)
+        self.assertAlmostEqual(r['t52'], 125.0)
+        self.assertAlmostEqual(r['j52'], (100.0 / 125.0 - 1) * 100)
+        self.assertEqual(r['bar52'], 299 - 250)
+
+    def test_tinggi_keluar_tetingkap_252(self):
+        c = np.full(300, 100.0)
+        h = c.copy()
+        h[20] = 200.0                                # di luar 252 sesi terakhir -> diabaikan
+        h[100] = 110.0
+        g = frame(c, o=c, h=h, l=c * 0.99)
+        r = T.kira(g)
+        self.assertAlmostEqual(r['t52'], 110.0)
+
+    def test_seri_ambil_kemunculan_terakhir(self):
+        c = np.full(300, 100.0)
+        h = c.copy()
+        h[100] = h[280] = 130.0                      # seri -> bar52 ikut yang TERAKHIR
+        g = frame(c, o=c, h=h, l=c * 0.99)
+        self.assertEqual(T.kira(g)['bar52'], 299 - 280)
+
+    def test_baris_membawa_medan(self):
+        c = np.full(300, 100.0)
+        h = c.copy()
+        h[250] = 125.0
+        r = T.kira(frame(c, o=c, h=h, l=c * 0.99))
+        b = T.baris('AAA', r)
+        self.assertAlmostEqual(b[T.K['j52']], -20.0)
+        self.assertAlmostEqual(b[T.K['t52']], 125.0)
+        self.assertEqual(b[T.K['bar52']], 49)
+
+
 class Dokumen(unittest.TestCase):
     def test_kuintil_dan_baris(self):
         rng = np.random.default_rng(1)
@@ -80,6 +134,22 @@ class Dokumen(unittest.TestCase):
         self.assertEqual((b[K['sah']], b[K['umur']], b[K['tepat']], b[K['sub']]), (20240102, 401, 1, 'lama'))
         self.assertAlmostEqual(b[K['pct_sejak']], 20.0)
         self.assertAlmostEqual(b[K['pct_titik']], 50.0)
+
+
+    def test_bawa_semalam_lajur_lama_lebih_pendek(self):
+        """Lajur baharu ditambah: pembawaan mesti kekal (dipeta ikut nama, bukan kedudukan)."""
+        L, K = T.LAJUR, T.K
+        LO = [x for x in L if x not in ('j52', 't52', 'bar52')]      # dokumen sebelum lajur 52w
+        KO = {n: i for i, n in enumerate(LO)}
+        r0 = [None] * len(LO)
+        r0[KO['saham']] = 'A'; r0[KO['s']] = 1; r0[KO['tepat']] = 1; r0[KO['sah']] = 20240102
+        r0[KO['umur']] = 400; r0[KO['c_sah']] = 50.0; r0[KO['tarikh_data']] = 20261021
+        lama = dict(lajur=LO, rows=[r0])
+        baru = dict(rows=[[None] * len(L)]); b = baru['rows'][0]
+        b[K['saham']] = 'A'; b[K['s']] = 1; b[K['tepat']] = 0; b[K['umur']] = 319
+        b[K['c']] = 60.0; b[K['tarikh_data']] = 20261022
+        T.bawa_semalam(baru, lama)
+        self.assertEqual((b[K['sah']], b[K['umur']], b[K['tepat']]), (20240102, 401, 1))
 
 
 class Alam(unittest.TestCase):
