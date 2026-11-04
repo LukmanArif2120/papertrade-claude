@@ -21,9 +21,22 @@ const PNAV_MAKS=16;   // panel rel sisi terbanyak setakat ini: Kombinasi N = 12 
    "tiada temuan" dan "tidak diperiksa" kelihatan SAMA dalam log — dan had PNAV_MAKS
    lama membuktikan beza itu penting (31 Okt 2026). */
 const SEMUA=process.argv.includes('--semua');
+/* --min-jadual N: kod keluar bukan sifar jika KURANG daripada N jadual diaudit.
+   Ditambah 4 Nov 2026. Bahaya yang ia tutup bukan susun atur, ia KEYAKINAN PALSU: liputan
+   jatuh daripada 44 jadual kepada 22 pada 2 Nov apabila rel kiri bersarang (v143-v146)
+   menukar panel mana yang dicapai, dan pemeriksa tetap keluar 0. Pemeriksa yang mengaudit
+   separuh papan sambil melapor lulus lebih buruk daripada tiada pemeriksa.
+   Lalai 0 = mati, supaya pemanggil sedia ada tidak berubah. Diukur 4 Nov pada satu lebar
+   (1440px): 11 jadual. */
+const iMin=process.argv.indexOf('--min-jadual');
+const MIN=iMin>=0?parseInt(process.argv[iMin+1],10)||0:0;
 const DB=process.argv[2];
 if(!DB){console.error('guna: node semak_dashboard.js <folder db jana_db> [lebar ...]');process.exit(2);}
-const LEBAR=process.argv.slice(3).filter(x=>x!=='--semua').map(Number).filter(Boolean);
+/* Bendera DAN nilainya mesti dibuang sebelum baki argumen jadi lebar skrin. Tanpa
+   membuang nilai `--min-jadual`, `... 1440 --min-jadual 40` berjalan pada lebar 40px
+   dan 1440px — diperhatikan pada ujian pertama perubahan ini. */
+const LEBAR=process.argv.slice(3).filter((x,i)=>x!=='--semua'&&x!=='--min-jadual'
+  &&!(iMin>=0&&process.argv[i+3]===process.argv[iMin+1]&&i+3===iMin+1)).map(Number).filter(Boolean);
 const HTML=path.join(path.dirname(__dirname),'standard','dashboard_v2.html');
 const S=fs.mkdtempSync(path.join(os.tmpdir(),'dash-'));
 fs.writeFileSync(path.join(S,'live.html'),'<!doctype html><html><head><meta charset=utf8></head><body>'+fs.readFileSync(HTML,'utf8')+'</body></html>');
@@ -137,7 +150,10 @@ let gagal=0,nAudit=0;
     await p.close();
   }
   await b.close();fs.rmSync(S,{recursive:true,force:true});
+  const kurang=MIN>0&&nAudit<MIN;
   console.log('RINGKASAN: '+(gagal?gagal+' kegagalan berat':'tiada kegagalan berat')+
-    ' · '+nAudit+' jadual diaudit'+(SEMUA?'':' (guna --semua untuk senarai penuh; '+
+    ' · '+nAudit+' jadual diaudit'+(MIN?' (minimum '+MIN+')':'')+(SEMUA?'':' (guna --semua untuk senarai penuh; '+
     '"tiada temuan" dan "tidak diperiksa" kelihatan sama tanpa ia)'));
-  process.exit(gagal?1:0);})();
+  if(kurang)console.error('LIPUTAN JATUH: '+nAudit+' jadual diaudit, minimum '+MIN+'. '+
+    'Panel yang tidak dicapai tidak diperiksa langsung — lulus di sini TIDAK bermakna papan bersih.');
+  process.exit(gagal||kurang?1:0);})();
