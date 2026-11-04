@@ -1165,7 +1165,16 @@ PECAH = frozenset((
     # (#175) dengan subBhg bagi dokumen ini, jadi urutan WAJIB dipatuhi: pembaca dahulu, baru
     # pemecah. `papertrade/claude` SENGAJA TIDAK di sini walaupun ia 86.6%: `papertrade/claude_2`
     # sudah wujud sebagai dokumen BEBAS daripada pecah_claude.py, jadi bahagi() akan menulis
-    # ganti serpihan posisi sebenar. Masalah itu perlu penyelesaian lain.
+    # ganti serpihan posisi sebenar. PEMBETULAN 4 Nov 2026: ia tidak perlu penyelesaian lain —
+    # `pecah_claude.py` sudah memecah claude.csv sendiri pada unjuran 240,000 bait (sasaran
+    # 190,000), dan pengawal.yml ada remedinya. 226,050 bait hari ini masih di bawah ambang itu.
+    #
+    # 4 Nov 2026: `kaedah_n/papan` 234,697 bait pada 263 baris = 89.5% had, dan setiap baris
+    # registry N menambah ~892 bait — jadi ia melanggar HAD_DB selepas ~30 baris lagi, dan
+    # apabila itu berlaku jana_db.py SystemExit dan tolakan db MALAM berhenti sepenuhnya.
+    # Halaman SUDAH membacanya dengan subBhg (dashboard_v2.html), jadi urutan wajib
+    # "pembaca dahulu, baru pemecah" memang sudah dipenuhi dan baris ini selamat sekarang.
+    'kaedah_n/papan',
     'papertrade/moomoo',
 ))
 
