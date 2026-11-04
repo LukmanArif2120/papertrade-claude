@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-03 18:27 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-04 06:08 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| main | 2026-11-03 | 0 | 2026-11-03 |
+| main | 2026-11-04 | 0 | 2026-11-04 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -44,16 +44,16 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
-| RS pasaran | 30 | 2026-09-22 | 2026-11-02 | 0.5 |  | tidak |
+| RS pasaran | 30 | 2026-09-23 | 2026-11-03 | 0.5 |  | tidak |
 | Gred kumpulan | 27 | 2026-09-25 | 2026-11-02 | 0.4 |  | tidak |
-| SEC EPS/hasil | 4097 | 2009-04-15 | 2026-11-02 | 65.0 | 268765 | ya |
-| SEC earnings 8-K | 5450 | 2004-08-23 | 2026-11-02 | 86.5 | 178831 | ya |
+| SEC EPS/hasil | 4098 | 2009-04-15 | 2026-11-03 | 65.0 | 269107 | ya |
+| SEC earnings 8-K | 5451 | 2004-08-23 | 2026-11-03 | 86.5 | 179019 | ya |
 
 
 Leg **RS/gred**: terbaik **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
 
 
-Leg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 (`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: 2846 daripada 3302 ticker universe ada data EPS/hasil, 0 belum diisi. Universe REVERSE kira-kira 2,300 setahun.
+Leg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 (`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: 2847 daripada 3302 ticker universe ada data EPS/hasil, 0 belum diisi. Universe REVERSE kira-kira 2,300 setahun.
 
 
 ## 3. Operasi repo — 134 kaedah Mxx dan papertrade C
@@ -88,13 +88,13 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261102 | 1 | OK |
-| Trend D10H2-r2 | 20261102 | 1 | OK |
-| Lejar Penuh | 2026-11-02 | 1 | OK |
-| portfolio_slot | 2026-11-02 | 1 | OK |
-| Papan Penganalisis | 2026-11-04 | -1 | OK |
-| RS pasaran | 2026-11-02 | 1 | OK |
-| Gred kumpulan | 2026-11-02 | 1 | OK |
+| Stor harga | 20261103 | 1 | OK |
+| Trend D10H2-r2 | 20261103 | 1 | OK |
+| Lejar Penuh | 2026-11-02 | 2 | OK |
+| portfolio_slot | 2026-11-02 | 2 | OK |
+| Papan Penganalisis | 2026-11-04 | 0 | OK |
+| RS pasaran | 2026-11-03 | 1 | OK |
+| Gred kumpulan | 2026-11-02 | 2 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
 
