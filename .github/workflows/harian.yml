@@ -40,9 +40,18 @@ jobs:
     # menangani. Langkah commit di sini pun tidak bersyarat pada kejayaan imbasan.
     timeout-minutes: 300
     steps:
+      # Klon cetek (lalai depth=1), ditukar daripada `fetch-depth: 0` pada 4 Nov 2026.
+      # Sejarah penuh hanya pernah diperlukan oleh satu langkah: "Banding mod selari", yang
+      # dipagar `mod == 'bayang'` dan memanggil banding_bayang.py `git archive <commit>`.
+      # BacktestShariah2/MOD_ACTIONS ialah `rasmi` sejak 27 Okt 2026, jadi langkah itu tidak
+      # pernah berjalan. Empat arahan git koordinator.py disemak pada klon yang meniru
+      # actions/checkout@v4 depth=1: `rev-list --count HEAD..origin/main` memberi 0 dan
+      # `log -1 origin/main` memberi tarikh, kerana checkout mencipta ref origin/main walaupun
+      # cetek. Ia juga menurunkan git ke '' dengan selamat jika ref itu hilang.
+      # Sebabnya saiz: repo 332 MB tumbuh ~15.8 MB/hari, dan workflow ini berjalan 4x sehari,
+      # jadi klon sejarah penuh ialah kos yang bertambah setiap hari tanpa apa-apa pengguna.
+      # JIKA mod dikembalikan ke `bayang` (jadual/PERALIHAN.md), `fetch-depth: 0` mesti dipulihkan.
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -71,6 +80,15 @@ jobs:
           if [ -f BacktestShariah2/data/harga/perlu_sejarah.txt ]; then python3 BacktestShariah2/standard/harga_yf.py sejarah; fi
       - name: Stor harga repo (Lejar Penuh kekal dalam lejar.yml 06:17 UTC)
         run: python3 BacktestShariah2/standard/lejar.py stor
+      - name: Penanda aras SPUS (data/penanda_aras/spus_harian.csv)
+        # Dipasang 4 Nov 2026; sebelum ini manual dan diukur TUJUH HARI basi, pada penanda aras
+        # yang setiap kesimpulan pulangan bergantung padanya (REVERSE/PENANDA_ARAS_SYARIAH.md).
+        # Diletak di sini kerana harian.yml ialah satu-satunya workflow yang memasang yfinance.
+        # continue-on-error: SPUS ialah medan paparan/laporan - ia tidak boleh menahan data
+        # papertrade. kemas_kini() juga menurun dengan selamat sendiri (pustaka tiada, rangkaian
+        # gagal, hasil kosong -> fail dibiar seperti sedia ada), jadi ini lapisan kedua.
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/banding_spus.py --kemas-kini
       - name: Status trend D10+H2 (data/trend/status.json; medan beku untuk db harian/trend melalui jana_db.py)
         continue-on-error: true
         run: python3 BacktestShariah2/standard/trend_status.py tulis
@@ -172,6 +190,7 @@ jobs:
           git config user.name "harian[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add BacktestShariah2/data/harga BacktestShariah2/data/trend BacktestShariah2/data/stage BacktestShariah2/bayang 2>/dev/null || true
+          git add BacktestShariah2/data/penanda_aras 2>/dev/null || true
           git add BacktestShariah2/uji_kertas/jejak_M166.csv 2>/dev/null || true
           git add KOORDINATOR.md 2>/dev/null || true
           git add "${{ steps.mod.outputs.folder }}" "${{ steps.mod.outputs.isyarat }}" "${{ steps.mod.outputs.pemangkin }}" "${{ steps.mod.outputs.log }}" 2>/dev/null || true
@@ -205,3 +224,17 @@ jobs:
         run: |
           curl -sS -m 20 -H "Title: Papertrade: saiz db" -H "Tags: warning" -d "$PESAN" \
             "https://ntfy.sh/$TOPIK" > /dev/null || echo "::warning::ntfy gagal"
+      # Tripwire kesegaran data (4 Nov 2026). Menutup jurang yang khusus: `amaran_ntfy.yml`
+      # hanya berbunyi apabila workflow GAGAL, dan koordinator.py sudah mengira status LEWAT
+      # tetapi hanya MEMAPARKANNYA dalam KOORDINATOR.md. Jadi "workflow hijau, data tidak
+      # bergerak" - yfinance pulangkan kosong, penulis langkau senyap, kursor tersangkut -
+      # tidak kelihatan melainkan seseorang membuka fail itu dan membacanya.
+      #
+      # Diletak SELEPAS commit dengan sengaja: data hari ini sudah selamat dalam repo sebelum
+      # langkah ini boleh menggagalkan job. Kegagalan di sini bermaksud "sesuatu berhenti
+      # bergerak", bukan "larian ini rosak", dan ia menyalakan amaran_ntfy melalui kesimpulan
+      # job. Ambang 5 hari, bukan 3 seperti paparan: `_umur` mengira hari kalendar jadi cuti
+      # panjang memberi 4 hari tanpa apa-apa yang rosak.
+      - name: Tripwire kesegaran data
+        if: always() && steps.mod.outputs.mod == 'rasmi'
+        run: python3 BacktestShariah2/standard/koordinator.py --semak

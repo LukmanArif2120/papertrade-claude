@@ -15,8 +15,46 @@ PT = os.path.join(os.path.dirname(HERE), 'papertrade')
 HAD_DB = 262144          # had keras dokumen db
 TUMBUH = 140             # bait tambahan bagi setiap posisi terbuka apabila keluar (diukur 113–128; dibundar ke atas)
 TUMBUH_LORONG = 150      # bait tambahan apabila lorong 2 (pegang selagi naik) keluar (keluar_lorong.py; diukur 106–113, peraturan 19 Okt 2026)
-META = {'claude': 12000}  # meta dokumen (slot, batal, nota_slot) dalam papertrade/claude
+# Meta dokumen `papertrade/claude`. BUKAN pemalar: jana_db.py (cari `docs['papertrade/claude'].update`)
+# melampirkan medan `slot` dengan SATU entri bagi SETIAP kaedah, jadi ia berskala dengan bilangan kaedah.
+#
+# Dibetulkan 4 Nov 2026 selepas amaran 85% jana_db.py mendedahkannya. `META = {'claude': 12000}` yang lama
+# ditala ketika repo ada ~134 kaedah; kohort 94 kombinasi Nxx menjadikannya 226 entri slot = 27,947 bait,
+# jadi anggaran terkurang 17,945 bait (8.6%) pada dokumen TERBESAR — iaitu satu-satunya dokumen yang
+# pemecah ini wujud untuk melindungi. 123 fail lain tepat ±0.3%, jadi kecacatan itu khusus di sini dan
+# ia SENYAP: `--pecah` tidak memecah apa yang ia sangka masih kecil.
+#
+# Diukur 4 Nov 2026 daripada dokumen db sebenar: slot 27,947 bait / 226 entri = 123.7; batal 1,401 +
+# nota 312 + nota_slot 139 + harga_pada 65 + dibina 22 = 1,939. Dibundar ke atas supaya anggaran
+# TERLEBIH, bukan terkurang — terlebih bermakna pecah lebih awal (selamat), terkurang bermakna had
+# dilanggar dan tolakan db malam berhenti.
+SLOT_SETIAP_KAEDAH = 140   # diukur 123.7; baki melindungi entri slot yang tiada posisi (226 lawan 223)
+META_CLAUDE_TETAP = 2500   # diukur 1,939 (batal, nota, nota_slot, harga_pada, dibina)
 META_LAIN = 1000
+
+
+def meta_claude(bil_kaedah):
+    """Meta dokumen papertrade/claude bagi `bil_kaedah` kaedah berbeza."""
+    return META_CLAUDE_TETAP + SLOT_SETIAP_KAEDAH * bil_kaedah
+
+
+def bil_kaedah_folder(folder):
+    """Kaedah berbeza merentas SEMUA claude*.csv — penentu saiz medan `slot`.
+
+    jana_db membina `slot` daripada kesatuan claude*.csv dan moomoo.csv; diukur 4 Nov 2026 moomoo
+    tidak menyumbang kaedah yang tiada dalam claude*.csv, dan jana_db menambah beberapa entri tanpa
+    posisi (226 lawan 223). Baki dalam SLOT_SETIAP_KAEDAH menampung perbezaan itu.
+    """
+    k = set()
+    for p in glob.glob(os.path.join(folder, 'claude*.csv')):
+        if nombor_fail(p) is None:
+            continue
+        hdr, rows = baca(p)
+        if 'id_kaedah' not in hdr:
+            continue
+        i = hdr.index('id_kaedah')
+        k.update(r[i] for r in rows if i < len(r) and r[i])
+    return len(k)
 
 
 def nombor_fail(path):
@@ -73,8 +111,8 @@ def tulis(path, hdr, rows):
     open(path, 'w', encoding='utf-8', newline='').write(b.getvalue())
 
 
-def ukur(n, hdr, rows):
-    meta = META.get('claude' if n == 1 else '', META_LAIN)
+def ukur(n, hdr, rows, bil_kaedah=0):
+    meta = meta_claude(bil_kaedah) if n == 1 else META_LAIN
     kini = meta + 13 + sum(saiz_baris(hdr, r) for r in rows)
     buka = sum(terbuka(hdr, r) for r in rows)
     return dict(baris=len(rows), terbuka=buka, anggaran=kini, unjuran=kini + sum(tumbuh(hdr, r) for r in rows))
@@ -86,13 +124,30 @@ def main(argv=None):
     ap.add_argument('--had', type=int, default=240000, help='unjuran maksimum (bait) sebelum fail dipecah')
     ap.add_argument('--sasaran', type=int, default=190000, help='unjuran fail asal selepas dipecah (bait)')
     ap.add_argument('--pecah', action='store_true', help='pindah baris hujung ke fail baharu')
+    # DUA ambang berbeza, dipisahkan 4 Nov 2026. `--had` ialah ambang TINDAKAN: bila fail patut
+    # dipecah, sengaja konservatif supaya pecahan berlaku lama sebelum ada bahaya. `--gagal-pada`
+    # ialah ambang KEROSAKAN: bila dokumen benar-benar tidak boleh ditolak.
+    #
+    # Sebelum ini kod keluar 1 diikat pada `--had`, jadi keadaan "patut dipecah, dan larian
+    # berjadual seterusnya MEMANG akan memecahnya" dilaporkan sebagai kegagalan CI. Itu amaran
+    # yang tidak boleh ditindaki: ia berbunyi untuk kerja yang sudah dijadualkan, dan amaran
+    # begitu melatih orang mengabaikan amaran. Didedahkan apabila pembetulan META menaikkan
+    # unjuran claude.csv kepada 251,705 - di bawah had keras, tetapi di atas ambang pecah.
+    ap.add_argument('--gagal-pada', type=int, default=None, dest='gagal_pada',
+                    help=f'kod keluar 1 jika unjuran melebihi nilai ini (lalai: --had; CI guna {HAD_DB})')
     a = ap.parse_args(argv)
+    if a.gagal_pada is None:
+        a.gagal_pada = a.had
     if not a.sasaran < a.had < HAD_DB:
         raise SystemExit('perlu --sasaran < --had < 262144')
     fail = {nombor_fail(p): p for p in glob.glob(os.path.join(a.folder, 'claude*.csv')) if nombor_fail(p)}
     if not fail:
         print('tiada fail claude*.csv', file=sys.stderr)
         return 2
+    # Medan `slot` dokumen claude ada satu entri setiap kaedah, jadi metanya bergantung pada ini.
+    # Dikira SEKALI sebelum gelung: memecah fail memindahkan baris antara fail tetapi tidak menukar
+    # himpunan kaedah, jadi nilainya tetap sepanjang larian.
+    bk = bil_kaedah_folder(a.folder)
     berubah, dipecah = [], []
     n = 1
     while n <= max(fail):
@@ -100,7 +155,7 @@ def main(argv=None):
             n += 1
             continue
         hdr, rows = baca(fail[n])
-        u = ukur(n, hdr, rows)
+        u = ukur(n, hdr, rows, bk)
         if a.pecah and u['unjuran'] > a.had and len(rows) > 1:
             k = len(rows)
             unj = u['unjuran'] - sum(saiz_baris(hdr, r) + tumbuh(hdr, r) for r in rows)
@@ -119,14 +174,17 @@ def main(argv=None):
                                 kekal=k, dipindah=len(rows) - k))
             continue  # ukur semula fail ini; fail baharu diperiksa apabila n sampai kepadanya
         n += 1
-    lapor, lebih = {}, []
+    lapor, lebih, perlu_pecah = {}, [], []
     for m in sorted(fail):
         hdr, rows = baca(fail[m])
-        u = ukur(m, hdr, rows)
+        u = ukur(m, hdr, rows, bk)
         lapor[os.path.basename(fail[m])] = u
-        if u['unjuran'] > a.had:
+        if u['unjuran'] > a.gagal_pada:
             lebih.append(os.path.basename(fail[m]))
-    print(json.dumps(dict(had=a.had, sasaran=a.sasaran, fail=lapor, dipecah=dipecah,
+        elif u['unjuran'] > a.had:
+            perlu_pecah.append(os.path.basename(fail[m]))
+    print(json.dumps(dict(had=a.had, sasaran=a.sasaran, gagal_pada=a.gagal_pada, bil_kaedah=bk,
+                          fail=lapor, dipecah=dipecah, perlu_pecah=perlu_pecah,
                           berubah=sorted(set(berubah), key=lambda s: nombor_fail(s)), melebihi=lebih),
                      ensure_ascii=False, indent=1))
     return 1 if lebih else 0

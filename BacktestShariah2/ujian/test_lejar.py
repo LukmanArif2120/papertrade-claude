@@ -434,3 +434,77 @@ class TestPencetusBinaSemula(unittest.TestCase):
             st, pr = self.asas()
             st[k] = v
             self.assertTrue(self._bina(st, pr), k)
+
+
+class TestTambahBulanIdempoten(unittest.TestCase):
+    """`tambah_bulan` dengan kunci `unik` mesti idempoten.
+
+    Gelung sesi menulis CSV dahulu dan status.json (`sesi_terakhir`) lepas, jadi kemalangan antara
+    keduanya meninggalkan baris sesi S dalam tutup/langkau sementara status masih S-1 - dan larian
+    berikutnya memproses S semula. Tanpa kunci itu, baris diduakan; itulah sebab langkah commit
+    lejar.yml tidak boleh mempunyai `if: always()`. Ujian ini mengunci sifat yang menjadikannya
+    selamat, kerana kegagalan di sini senyap: lejar terus berjalan dan hanya kiraan yang salah.
+    """
+
+    def setUp(self):
+        self.d = tempfile.mkdtemp()
+
+    def _baris(self, mid, saham, beli, keluar='2026-11-03', untung='1.5'):
+        r = {c: '' for c in lejar.L_TUTUP}
+        r.update(id_kaedah=mid, saham=saham, tarikh_beli=beli,
+                 tarikh_keluar=keluar, untung_pct=untung)
+        return r
+
+    def _tulis(self, rows):
+        lejar.tambah_bulan(rows, self.d, 'tarikh_keluar', lejar.L_TUTUP,
+                           unik=['id_kaedah', 'saham', 'tarikh_beli'])
+
+    def _baca(self):
+        return pd.read_csv(os.path.join(self.d, '2026-11.csv'), dtype=str, keep_default_na=False)
+
+    def test_sesi_diproses_dua_kali_tidak_menduakan(self):
+        rows = [self._baris('M01', 'AAA', '2026-10-20'), self._baris('N19X13', 'BBB', '2026-10-21')]
+        self._tulis(rows)
+        self._tulis(rows)                      # larian kedua: sesi yang sama selepas kemalangan
+        self.assertEqual(len(self._baca()), 2)
+
+    def test_baris_baharu_masih_ditambah(self):
+        self._tulis([self._baris('M01', 'AAA', '2026-10-20')])
+        self._tulis([self._baris('M01', 'AAA', '2026-10-20'),      # ulangan
+                     self._baris('M02', 'CCC', '2026-10-22')])     # baharu
+        b = self._baca()
+        self.assertEqual(len(b), 2)
+        self.assertEqual(set(b.id_kaedah), {'M01', 'M02'})
+
+    def test_baris_terkini_menang(self):
+        """Stor harga boleh dilaras antara dua larian; pengiraan terkini yang betul."""
+        self._tulis([self._baris('M01', 'AAA', '2026-10-20', untung='1.5')])
+        self._tulis([self._baris('M01', 'AAA', '2026-10-20', untung='9.9')])
+        b = self._baca()
+        self.assertEqual(len(b), 1)
+        self.assertEqual(b.untung_pct.iloc[0], '9.9')
+
+    def test_belian_semula_tarikh_lain_bukan_pendua(self):
+        """`belian_ke` membenarkan kaedah+saham yang sama dibeli semula, jadi tarikh_beli mesti
+        sebahagian daripada kunci - jika tidak belian semula yang sah akan dibuang."""
+        self._tulis([self._baris('M01', 'AAA', '2026-10-20'),
+                     self._baris('M01', 'AAA', '2026-10-28')])
+        self.assertEqual(len(self._baca()), 2)
+
+    def test_tanpa_unik_kekal_menambah(self):
+        """Tingkah laku asal dikekalkan bagi pemanggil yang tidak menghantar kunci."""
+        r = [self._baris('M01', 'AAA', '2026-10-20')]
+        for _ in range(2):
+            lejar.tambah_bulan(r, self.d, 'tarikh_keluar', lejar.L_TUTUP)
+        self.assertEqual(len(self._baca()), 2)
+
+    def test_langkau_kunci_sesi(self):
+        """langkau/ dikunci oleh sesi juga: saham yang sama boleh dilangkau pada sesi berbeza."""
+        def lr(sesi, sebab='tidak cair'):
+            r = {c: '' for c in lejar.L_LANGKAU}
+            r.update(id_kaedah='M01', saham='AAA', tarikh_isyarat='2026-11-01', sesi=sesi, sebab=sebab)
+            return r
+        u = ['id_kaedah', 'saham', 'tarikh_isyarat', 'sesi']
+        lejar.tambah_bulan([lr('2026-11-02'), lr('2026-11-03')], self.d, 'sesi', lejar.L_LANGKAU, unik=u)
+        lejar.tambah_bulan([lr('2026-11-03')], self.d, 'sesi', lejar.L_LANGKAU, unik=u)
+        self.assertEqual(len(self._baca()), 2)

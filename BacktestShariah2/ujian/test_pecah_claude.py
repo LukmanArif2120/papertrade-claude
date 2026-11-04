@@ -1,4 +1,4 @@
-import contextlib, csv, io, os, sys, tempfile, unittest
+import contextlib, csv, io, json, os, sys, tempfile, unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'standard'))
 import pecah_claude as pc
@@ -68,3 +68,127 @@ class TestPecahClaude(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestMetaClaudeBerskala(unittest.TestCase):
+    """Meta `papertrade/claude` mesti berskala dengan bilangan kaedah, dan mesti TERLEBIH.
+
+    Dokumen itu membawa medan `slot` dengan SATU entri setiap kaedah (jana_db.py, cari
+    `docs['papertrade/claude'].update`). Pemalar lama `META = {'claude': 12000}` ditala ketika repo
+    ada ~134 kaedah; kohort 94 kombinasi Nxx menjadikannya 226 entri = 27,947 bait dan anggaran
+    terkurang 17,945 bait (8.6%) pada dokumen TERBESAR — satu-satunya dokumen yang pemecah ini
+    wujud untuk melindungi, dan 123 fail lain tepat +-0.3% jadi tiada apa-apa lain yang mendedahkannya.
+
+    Kegagalan di sini SENYAP dan berakibat: `--pecah` tidak memecah fail yang ia sangka masih kecil,
+    dokumen melepasi 262,144, jana_db.py SystemExit, dan tolakan db MALAM berhenti sepenuhnya.
+    """
+
+    # Diukur 4 Nov 2026 daripada dokumen db papertrade/claude yang sebenar.
+    SLOT_ENTRI = 226
+    SLOT_BAIT = 27947
+    META_BUKAN_ROWS = 29945
+
+    def test_meta_berskala_dengan_bilangan_kaedah(self):
+        """Pemalar tetap ialah model yang SALAH: tambah kaedah, meta mesti naik."""
+        self.assertGreater(pc.meta_claude(226), pc.meta_claude(134))
+        naik = pc.meta_claude(135) - pc.meta_claude(134)
+        self.assertEqual(naik, pc.SLOT_SETIAP_KAEDAH)
+
+    def test_meta_menampung_ukuran_sebenar_4nov(self):
+        """Pada 226 kaedah, meta mesti >= 29,945 bait yang diukur — jika tidak kita terkurang lagi."""
+        self.assertGreaterEqual(pc.meta_claude(self.SLOT_ENTRI), self.META_BUKAN_ROWS)
+
+    def test_slot_setiap_kaedah_tidak_bawah_ukuran(self):
+        self.assertGreaterEqual(pc.SLOT_SETIAP_KAEDAH, self.SLOT_BAIT / self.SLOT_ENTRI)
+
+    def test_anggaran_meliputi_dokumen_berbentuk_sebenar(self):
+        """Ujian regresi sebenar: bina dokumen berbentuk sama seperti jana_db dan bandingkan.
+
+        Inilah semakan yang tidak pernah wujud — META ditaip tangan dan tiada apa-apa yang
+        membandingkannya dengan dokumen yang jana_db SEBENARNYA hasilkan.
+        """
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'standard'))
+        from bahagi_db import bait
+        with tempfile.TemporaryDirectory() as d:
+            rows = [['2026-10-14', f'S{i:04d}', 'M02', '20.34', 'False', '', 'nota'] for i in range(60)]
+            hdr = ['tarikh_beli', 'saham', 'id_kaedah', 'harga_beli', 'keluar', 'tidak_dibeli', 'nota']
+            pc.tulis(os.path.join(d, 'claude.csv'), hdr, rows)
+            bk = 226
+            dok = dict(dibina='2026-11-04 10:00 MYT', harga_pada='2026-11-03',
+                       nota='n' * 300,
+                       nota_slot='claude_terbuka = posisi Papertrade C yang belum tutup kedua-dua lorong; '
+                                 'moomoo = posisi Moomoo warisan (sumber harian) yang belum keluar.',
+                       rows=[dict(zip(hdr, r)) for r in rows],
+                       slot={f'M{i:02d}': dict(claude_jumlah=64, claude_terbuka=64, moomoo=3,
+                                               moomoo_termasuk_warisan=4, nama='Bollinger Band + RSI')
+                             for i in range(bk)},
+                       batal={f'B{i}': dict(n=3, sebab='tidak cair') for i in range(29)})
+            h, rr = pc.baca(os.path.join(d, 'claude.csv'))
+            anggaran = pc.ukur(1, h, rr, bk)['anggaran']
+            self.assertGreaterEqual(
+                anggaran, bait(dok),
+                f'anggaran {anggaran} TERKURANG lawan dokumen sebenar {bait(dok)} — '
+                'pemecah akan membiarkan dokumen melepasi had db')
+
+    def test_bil_kaedah_dikira_merentas_semua_fail(self):
+        with tempfile.TemporaryDirectory() as d:
+            hdr = ['tarikh_beli', 'saham', 'id_kaedah']
+            pc.tulis(os.path.join(d, 'claude.csv'), hdr, [['2026-10-14', 'AAA', 'M01'],
+                                                          ['2026-10-14', 'BBB', 'M02']])
+            pc.tulis(os.path.join(d, 'claude_2.csv'), hdr, [['2026-10-15', 'CCC', 'M02'],
+                                                            ['2026-10-15', 'DDD', 'N19X13']])
+            self.assertEqual(pc.bil_kaedah_folder(d), 3)   # M01, M02, N19X13 (M02 tidak dikira dua kali)
+
+    def test_fail_bukan_pertama_tidak_dapat_meta_slot(self):
+        """Hanya papertrade/claude membawa `slot`; claude_N yang lain tidak."""
+        with tempfile.TemporaryDirectory() as d:
+            hdr = ['tarikh_beli', 'saham', 'id_kaedah']
+            rows = [['2026-10-14', 'AAA', 'M01']]
+            pc.tulis(os.path.join(d, 'claude_2.csv'), hdr, rows)
+            h, rr = pc.baca(os.path.join(d, 'claude_2.csv'))
+            self.assertEqual(pc.ukur(2, h, rr, 226)['anggaran'],
+                             pc.META_LAIN + 13 + sum(pc.saiz_baris(h, r) for r in rr))
+
+
+class TestAmbangTindakanLawanKerosakan(unittest.TestCase):
+    """`--had` = bila patut pecah. `--gagal-pada` = bila benar-benar rosak. Jangan campur.
+
+    Sebelum 4 Nov 2026 kod keluar diikat pada `--had`, jadi keadaan "patut dipecah, dan larian
+    berjadual seterusnya MEMANG akan memecahnya" dilaporkan sebagai kegagalan CI. Amaran yang
+    tidak boleh ditindaki melatih orang mengabaikan amaran, jadi ini bukan kosmetik.
+    """
+
+    def _folder(self, d, n):
+        buat(d, 'claude.csv', n)
+        return d
+
+    def test_antara_had_dan_gagal_pada_bukan_kegagalan(self):
+        with tempfile.TemporaryDirectory() as d:
+            buat(d, 'claude.csv', 200)
+            kod, out = jalan(['--folder', d, '--had', '100000', '--sasaran', '80000',
+                              '--gagal-pada', '250000'])
+            j = json.loads(out)
+            u = j['fail']['claude.csv']['unjuran']
+            self.assertGreater(u, 100000)          # melepasi ambang tindakan
+            self.assertLess(u, 250000)             # tetapi bukan kerosakan
+            self.assertEqual(kod, 0)
+            self.assertEqual(j['melebihi'], [])
+            self.assertEqual(j['perlu_pecah'], ['claude.csv'])
+
+    def test_melepasi_gagal_pada_tetap_gagal(self):
+        with tempfile.TemporaryDirectory() as d:
+            buat(d, 'claude.csv', 200)
+            kod, out = jalan(['--folder', d, '--had', '100000', '--sasaran', '80000',
+                              '--gagal-pada', '110000'])
+            j = json.loads(out)
+            self.assertEqual(kod, 1)
+            self.assertEqual(j['melebihi'], ['claude.csv'])
+            self.assertEqual(j['perlu_pecah'], [])   # dilapor sebagai kerosakan, bukan tindakan
+
+    def test_lalai_gagal_pada_ialah_had(self):
+        """Tanpa --gagal-pada, tingkah laku kekal seperti sebelum ini."""
+        with tempfile.TemporaryDirectory() as d:
+            buat(d, 'claude.csv', 200)
+            kod, out = jalan(['--folder', d, '--had', '100000', '--sasaran', '80000'])
+            self.assertEqual(kod, 1)
+            self.assertEqual(json.loads(out)['gagal_pada'], 100000)

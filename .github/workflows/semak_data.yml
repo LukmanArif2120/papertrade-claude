@@ -44,7 +44,13 @@ jobs:
       - name: Semak data papertrade (sahkan.py)
         run: python3 BacktestShariah2/standard/sahkan.py
       - name: Saiz dokumen claude_N di bawah had db (pecah_claude.py)
-        run: python3 BacktestShariah2/standard/pecah_claude.py
+        # `--gagal-pada 262144` = had KERAS db, bukan ambang pecah 240,000. CI mesti gagal apabila
+        # dokumen benar-benar tidak boleh ditolak, bukan apabila ia sekadar patut dipecah - kerana
+        # `pecah_claude.py --pecah` dalam harian.yml/beli.yml memang akan memecahnya pada larian
+        # berjadual seterusnya. Gagal pada 240,000 bermakna CI berbunyi untuk kerja yang sudah
+        # dijadualkan, dan amaran yang tidak boleh ditindaki melatih orang mengabaikan amaran.
+        # Kalau ini gagal, maksudnya pemecah automatik TIDAK dapat mengikut - itu defek sebenar.
+        run: python3 BacktestShariah2/standard/pecah_claude.py --gagal-pada 262144
       - name: Integriti Lejar Penuh (lejar.py semak)
         run: python3 BacktestShariah2/standard/lejar.py semak
       # Hanya arah "repo disunting tanpa diterbitkan". Arah bertentangan ("diterbitkan

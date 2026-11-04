@@ -141,16 +141,36 @@ def tulis_csv(d, p, lajur):
     pd.DataFrame(d, columns=lajur).to_csv(p, index=False)
 
 
-def tambah_bulan(rows, folder, kunci, lajur):
-    """Tambah baris ke <folder>/<YYYY-MM>.csv mengikut tarikh `kunci` (fail sedia ada tidak ditulis semula selain ditambah)."""
+def tambah_bulan(rows, folder, kunci, lajur, unik=None):
+    """Tambah baris ke <folder>/<YYYY-MM>.csv mengikut tarikh `kunci`.
+
+    `unik` = senarai lajur kunci nyahduplikasi. Tanpanya fail hanya ditambah (tingkah laku asal,
+    dikekalkan supaya pemanggil lain tidak terjejas). Dengannya fail sedia ada dibaca, baris lama
+    yang kuncinya muncul dalam kelompok baharu DIBUANG, dan fail ditulis semula — jadi memproses
+    sesi yang sama dua kali tidak lagi menduakan baris.
+
+    Ini bukan kebersihan kosmetik. Gelung sesi menulis CSV DAHULU dan status.json (`sesi_terakhir`)
+    LEPAS, jadi kemalangan antara keduanya — tamat masa 330 minit ialah cara biasa ia berlaku —
+    meninggalkan baris sesi S dalam tutup/langkau sementara status masih S-1, dan larian berikutnya
+    memproses S semula. Sebelum ini itu bermakna langkah commit TIDAK boleh mempunyai `if: always()`,
+    kerana menyimpan kemajuan separa akan menduakan baris. Dengan kunci ini, menyimpan kemajuan
+    separa menjadi selamat dan sesi yang sudah siap tidak lagi dibuang bersama runner.
+
+    Baris baharu MENGGANTIKAN yang lama (keep='last'): larian semula sesi yang sama menghasilkan
+    baris yang sama, tetapi jika stor harga dilaras antara dua larian, pengiraan terkini yang betul.
+    """
     if not rows: return
     d = pd.DataFrame(rows, columns=lajur)
     for bln, g in d.groupby(d[kunci].str[:7]):
         p = os.path.join(folder, f'{bln}.csv'); os.makedirs(folder, exist_ok=True)
         lama = list(pd.read_csv(p, nrows=0).columns) if os.path.exists(p) else None
-        if lama is not None and lama != lajur:   # tajuk lama (sebelum lajur baharu): tulis semula dengan lajur semasa
-            x = pd.read_csv(p, dtype=str, keep_default_na=False)
-            pd.concat([x.reindex(columns=lajur, fill_value=''), g.astype(object)], ignore_index=True).to_csv(p, index=False)
+        if lama is not None and (unik or lama != lajur):
+            # tajuk lama (sebelum lajur baharu) ATAU nyahduplikasi diminta: baca, gabung, tulis semula
+            x = pd.read_csv(p, dtype=str, keep_default_na=False).reindex(columns=lajur, fill_value='')
+            b = pd.concat([x, g.astype(object)], ignore_index=True)
+            if unik:
+                b = b.drop_duplicates(subset=unik, keep='last')
+            b.to_csv(p, index=False)
             continue
         g.to_csv(p, mode='a', header=lama is None, index=False)
 
@@ -593,8 +613,15 @@ def cmd_jalan(a):
                 if h['ralat']: ralat.append(f"{h['mid']}: {h['ralat']}"); continue
                 tutup += h['tutup']; beli += h['beli']; langkau += h['langkau']; isy += h['isyarat']; nota += h['nota']
                 for p in h['beli']: bil.setdefault(h['mid'], {})[p['saham']] = p['belian_ke']
-            tambah_bulan(tutup, os.path.join(LEJAR, 'tutup'), 'tarikh_keluar', L_TUTUP)
-            tambah_bulan(langkau, os.path.join(LEJAR, 'langkau'), 'sesi', L_LANGKAU)
+            # Kunci unik: satu posisi = satu baris (lorong 1 dan lorong 2 dalam baris yang sama),
+            # jadi id_kaedah+saham+tarikh_beli mengenal pastinya walaupun `belian_ke` membenarkan
+            # belian semula kaedah+saham yang sama pada tarikh lain. Sesi yang diproses semula
+            # menghasilkan `tarikh_keluar`/`sesi` yang sama, jadi barisnya mendarat dalam fail
+            # bulan yang sama dan nyahduplikasi per-fail mencukupi.
+            tambah_bulan(tutup, os.path.join(LEJAR, 'tutup'), 'tarikh_keluar', L_TUTUP,
+                         unik=['id_kaedah', 'saham', 'tarikh_beli'])
+            tambah_bulan(langkau, os.path.join(LEJAR, 'langkau'), 'sesi', L_LANGKAU,
+                         unik=['id_kaedah', 'saham', 'tarikh_isyarat', 'sesi'])
             os.makedirs(os.path.join(LEJAR, 'isyarat'), exist_ok=True)
             # Susunan MESTI melalui nombor_kaedah(). `int(kaedah[1:])` membuang ValueError pada
             # 'N19X13' dan pada 'GB02' - iaitu RALAT KERAS yang menamatkan larian lejar selepas
