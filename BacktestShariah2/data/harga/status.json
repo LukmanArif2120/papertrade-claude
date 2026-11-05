@@ -1,10 +1,11 @@
 {
  "terkini": {
-  "dijana": "2026-11-05 15:23 UTC",
+  "dijana": "2026-11-05 17:22 UTC",
   "sesi": 20261104,
-  "bil_ticker": 930,
+  "bil_ticker": 929,
   "bil_universe": 931,
   "tiada_data": [
+   "AMBQ",
    "QRVO"
   ],
   "tiada_bar_sesi": [
