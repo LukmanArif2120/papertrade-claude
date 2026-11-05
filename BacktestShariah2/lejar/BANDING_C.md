@@ -1,11 +1,11 @@
 # Banding Papertrade C dengan Lejar Penuh (fasa 1)
 
-Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-11-03. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
+Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-11-04. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
 
-- Posisi C (isyarat >= 2026-10-15): 11286; ada dalam lejar: 7964; tiada: 3322 {'isyarat ada, dipegang lejar': 2542, 'isyarat batal pada buka (peraturan kaedah)': 6, 'isyarat ada, belum diproses': 760, 'tiada isyarat dalam lejar': 14}
-- Posisi lejar: 54571 (C hanya 11286; lejar 4.8×)
-- Harga beli berbeza > 0.5%: 50 daripada 7964
-- Status keluar sama: 7963 daripada 7964; berbeza: 1
+- Posisi C (isyarat >= 2026-10-15): 11277; ada dalam lejar: 8705; tiada: 2572 {'isyarat ada, dipegang lejar': 2541, 'isyarat batal pada buka (peraturan kaedah)': 6, 'isyarat ada, belum diproses': 11, 'tiada isyarat dalam lejar': 14}
+- Posisi lejar: 56695 (C hanya 11277; lejar 5.0×)
+- Harga beli berbeza > 0.5%: 50 daripada 8705
+- Status keluar sama: 8704 daripada 8705; berbeza: 1
 
 ## Harga beli berbeza > 0.5%
 
