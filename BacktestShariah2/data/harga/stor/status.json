@@ -1,21 +1,23 @@
 {
- "dikemaskini": "2026-11-04 07:16 UTC",
- "bar_terakhir": 20261103,
- "laras": {},
+ "dikemaskini": "2026-11-05 06:22 UTC",
+ "bar_terakhir": 20261104,
+ "laras": {
+  "SUPN": 1.28881
+ },
  "perlu_sejarah": [],
  "harga_A.csv": {
   "ticker_dikemaskini": 430,
-  "bar_terakhir": 20261103
+  "bar_terakhir": 20261104
  },
  "harga_B.csv": {
   "ticker_dikemaskini": 498,
-  "bar_terakhir": 20261103
+  "bar_terakhir": 20261104
  },
  "harga_idx.csv": {
   "ticker_dikemaskini": 2,
-  "bar_terakhir": 20261103
+  "bar_terakhir": 20261104
  },
- "log_laras": 1,
+ "log_laras": 0,
  "faktor_dividen": [],
  "faktor_calon": [],
  "moomoo": 0

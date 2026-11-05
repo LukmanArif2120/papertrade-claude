@@ -43,63 +43,77 @@
   ]
  },
  "malam": {
-  "sesi": "2026-11-03",
-  "masa": "2026-11-04 13:46 MYT",
+  "sesi": "2026-11-04",
+  "masa": "2026-11-05 14:22 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 334,
+  "masa_kaedah_s": 507,
   "keluar_baru": {
    "M": {
-    "isyarat": 4,
-    "henti": 3
+    "henti": 2,
+    "masa": 6,
+    "sasaran": 1,
+    "isyarat": 3
    },
    "C": {
-    "henti": 307,
-    "isyarat": 281,
-    "sasaran": 12,
-    "masa": 23
+    "henti": 664,
+    "isyarat": 278,
+    "sasaran": 48,
+    "masa": 15
    }
   },
   "keluar_baru_jumlah": {
-   "M": 7,
-   "C": 623
+   "M": 12,
+   "C": 1005
   },
-  "menunggu": 278,
+  "menunggu": 414,
   "keluar_keluarga": {
-   "M": 538,
-   "N": 85
-  },
-  "menunggu_keluarga": {
-   "M": 138,
+   "M": 868,
    "N": 137
   },
-  "harga_beli_dibetulkan": 217,
-  "harga_beli_beza_besar": 40,
-  "tidak_dibeli": [],
+  "menunggu_keluarga": {
+   "M": 152,
+   "N": 254
+  },
+  "harga_beli_dibetulkan": 872,
+  "harga_beli_beza_besar": 641,
+  "tidak_dibeli": [
+   "ASAN M08",
+   "SSL M14",
+   "CVS M15",
+   "CNQ M18",
+   "CVE M76",
+   "SU M102",
+   "BE M144",
+   "CVS M160",
+   "CVS M161"
+  ],
   "nota": [
-   "C KVUE M93: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M74: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M99: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C ACA M95: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C ACA M54: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C KVUE M124: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C INDV M19: tiada bar 2026-11-03 (harga terkini 2026-11-02)",
-   "C KVUE M80: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M141: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M148: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C ACA M06: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C ACA M23: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C ACA M46: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C ACA M100: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C ACA M101: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C ACA M120: tiada bar 2026-11-03 (harga terkini 2026-10-22)",
-   "C KVUE M137: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M81: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M82: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C SUPN M106: buka stor 34.78 lawan harga_beli 42.07 (> 15%; split/data tidak sepadan) — tidak dinilai",
-   "C KVUE M147: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M158: tiada bar 2026-11-03 (harga terkini 2026-10-30)",
-   "C KVUE M14: tiada bar 2026-11-03 (harga terkini 2026-10-30)"
+   "C WLYB M30: tiada bar 2026-11-04 (harga terkini 2026-11-03)",
+   "C KVUE M93: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C KVUE M74: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C WLYB M74: tiada bar 2026-11-04 (harga terkini 2026-11-03)",
+   "C KVUE M99: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C ACA M95: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C ACA M54: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C KVUE M124: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C INDV M19: buka stor 34.92 lawan harga_beli 27.0948 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C KVUE M80: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C KVUE M141: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C KVUE M148: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C ACA M06: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C ACA M23: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C ACA M46: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C ACA M100: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C ACA M101: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C ACA M120: tiada bar 2026-11-04 (harga terkini 2026-10-22)",
+   "C KVUE M137: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C KVUE M81: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C KVUE M82: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C SUPN M106: buka stor 26.99 lawan harga_beli 42.07 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C KVUE M147: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C KVUE M158: tiada bar 2026-11-04 (harga terkini 2026-10-30)",
+   "C KVUE M14: tiada bar 2026-11-04 (harga terkini 2026-10-30)"
   ],
   "tidak_layak_posisi": {
    "ambil_alih": {
@@ -120,33 +134,33 @@
     "saham": []
    },
    "faktor": {
-    "dilaras": 1,
+    "dilaras": 0,
     "semak": [],
     "dibuka_semula": []
    }
   },
   "dagangan_betul": 0,
-  "senarai_beli": 1309,
-  "saham_unik": 335,
+  "senarai_beli": 1890,
+  "saham_unik": 413,
   "senarai_keluarga": {
-   "M": 511,
-   "N": 798
+   "M": 910,
+   "N": 980
   },
   "kaedah_keluarga": {
-   "M": 92,
-   "N": 93
+   "M": 109,
+   "N": 94
   },
-  "kaedah": 185,
-  "belian_semula": 74,
-  "dari_watchlist": 60,
-  "isyarat": 13765,
+  "kaedah": 203,
+  "belian_semula": 146,
+  "dari_watchlist": 232,
+  "isyarat": 19354,
   "ditolak": {
-   "dipegang": 858,
-   "tidak_cair": 255,
-   "had": 11015,
-   "ambil_alih": 254,
-   "kelas_berganda": 55,
-   "mingguan": 19
+   "dipegang": 1629,
+   "tidak_cair": 306,
+   "had": 14911,
+   "kelas_berganda": 88,
+   "ambil_alih": 309,
+   "mingguan": 221
   },
   "tidak_layak": {
    "ACLS": "ambil alih",
@@ -186,22 +200,22 @@
    "TECH": "ambil alih",
    "WLYB": "tidak cair"
   },
-  "watchlist": 564,
-  "watchlist_baharu": 485,
-  "watchlist_dibuang": 114,
-  "watchlist_ke_senarai": 60,
+  "watchlist": 590,
+  "watchlist_baharu": 415,
+  "watchlist_dibuang": 157,
+  "watchlist_ke_senarai": 232,
   "minggu_akhir": false,
-  "fail_isyarat": "data/isyarat/2026-11-03_malam.csv.gz"
+  "fail_isyarat": "data/isyarat/2026-11-04_malam.csv.gz"
  },
  "gred": {
-  "tarikh": "2026-11-04",
-  "masa": "2026-11-04 20:22 MYT",
+  "tarikh": "2026-11-05",
+  "masa": "2026-11-05 14:32 MYT",
   "pemangkin": {
-   "D": 982,
-   "B": 85,
-   "C": 204,
-   "A": 36,
-   "–": 2
+   "D": 1588,
+   "C": 121,
+   "B": 151,
+   "A": 25,
+   "–": 5
   }
  }
 }
