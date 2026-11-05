@@ -310,6 +310,8 @@ AGIO,"Agios Pharmaceuticals, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 AGIQ,SoFi Agentic AI ETF,NYSE Arca,1,0,2026-10-27
 AGIX,KraneShares Public-Private AI & Technology ETF,NASDAQ,1,0,2026-10-27
 AGL,"agilon health, inc. Common Stock",NYSE,0,1,2026-10-27
+AGLT,"Agility Robotics, Inc. - Ordinary Shares",NASDAQ,0,1,2026-11-05
+AGLTW,"Agility Robotics, Inc. - Warrants",NASDAQ,0,0,2026-11-05
 AGM,Federal Agricultural Mortgage Corporation Common Stock,NYSE,0,1,2026-10-27
 AGM.A,Federal Agricultural Mortgage Corporation Common Stock,NYSE,0,1,2026-10-27
 AGMB,AgomAb Therapeutics NV - ADRs representing one common share.,NASDAQ,0,1,2026-10-27
@@ -1142,6 +1144,7 @@ BBLB,JPMorgan BetaBuilders U.S. Treasury Bond 20+ Year ETF,Cboe BZX,1,0,2026-10-
 BBLG,Bone Biologics Corp - Common Stock,NASDAQ,0,1,2026-10-27
 BBLS,Munificent Seven ETF,NYSE Arca,1,0,2026-10-27
 BBLU,EA Bridgeway Blue Chip ETF,NYSE Arca,1,0,2026-10-27
+BBLX,BondBloxx Core Plus ETF,NYSE Arca,1,0,2026-11-05
 BBMC,JPMorgan BetaBuilders U.S. Mid Cap Equity ETF,Cboe BZX,1,0,2026-10-27
 BBN,BlackRock Taxable Municipal Bond Trust Common Shares of Beneficial Interest,NYSE,0,0,2026-10-27
 BBNX,"Beta Bionics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -2053,9 +2056,6 @@ CCSO,Carbon Collective Climate Solutions U.S. Equity ETF,NASDAQ,1,0,2026-10-27
 CCTG,CCSC Technology International Holdings Limited - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 CCU,"Compania Cervecerias Unidas, S.A. Common Stock",NYSE,0,1,2026-10-27
 CCUP,T-REX 2X Long CRCL Daily Target ETF,Cboe BZX,1,0,2026-10-27
-CCXI,Churchill Capital Corp XI - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
-CCXIU,Churchill Capital Corp XI - Units,NASDAQ,0,0,2026-10-27
-CCXIW,Churchill Capital Corp XI - Warrants,NASDAQ,0,0,2026-10-27
 CCZ,Comcast Holdings ZONES,NYSE,0,1,2026-10-27
 CD,Chaince Digital Holdings Inc. - American Ordinary Shares,NASDAQ,0,1,2026-10-27
 CDC,VictoryShares US EQ Income Enhanced Volatility Wtd ETF,NASDAQ,1,0,2026-10-27
@@ -2064,7 +2064,7 @@ CDIG,City Different Investments Global Equity ETF,NASDAQ,1,0,2026-10-27
 CDIO,Cardio Diagnostics Holdings Inc. - Common stock,NASDAQ,0,1,2026-10-27
 CDIOW,Cardio Diagnostics Holdings Inc. - Warrant,NASDAQ,0,0,2026-10-27
 CDL,VictoryShares US Large Cap High Div Volatility Wtd ETF,NASDAQ,1,0,2026-10-27
-CDLR,Cadeler A/S American Depositary Share (each representing four (4) Ordinary Shares),NYSE,0,1,2026-10-27
+CDLR,Cadeler plc Ordinary Shares,NYSE,0,1,2026-10-27
 CDLX,"Cardlytics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 CDNA,"CareDx, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 CDNG,Leverage Shares 2X Long CDNS Daily ETF,Cboe BZX,1,0,2026-10-27
@@ -2972,6 +2972,7 @@ DFII,FT Vest Bitcoin Strategy & Target Income ETF,NYSE Arca,1,0,2026-10-27
 DFIN,"Donnelley Financial Solutions, Inc. Common Stock ",NYSE,0,1,2026-10-27
 DFIP,Dimensional Inflation-Protected Securities ETF,NYSE Arca,1,0,2026-10-27
 DFIS,Dimensional International Small Cap ETF,Cboe BZX,1,0,2026-10-27
+DFIT,Davidson Intermediate Taxable ETF,Cboe BZX,1,0,2026-11-05
 DFIV,Dimensional International Value ETF,NYSE Arca,1,0,2026-10-27
 DFJ,WisdomTree Japan SmallCap Fund,NYSE Arca,1,0,2026-10-27
 DFLI,Dragonfly Energy Holdings Corp - Common Stock,NASDAQ,0,1,2026-10-27
@@ -3084,6 +3085,7 @@ DKL,"Delek Logistics Partners, L.P. Common Units representing Limited Partner In
 DKNG,DraftKings Inc. - Class A Common Stock,NASDAQ,0,1,2026-10-27
 DKS,Dick's Sporting Goods Inc Common Stock,NYSE,0,1,2026-10-27
 DLAG,FT Vest U.S. Equity Dual Directional Buffer ETF - August,Cboe BZX,1,0,2026-10-27
+DLAY,Tuttle Capital AI Bottleneck ETF,Cboe BZX,1,0,2026-11-05
 DLB,Dolby Laboratories Common Stock,NYSE,0,1,2026-10-27
 DLCU,U.S. Large Company Portfolio: ETF Class Shares,NASDAQ,1,0,2026-10-27
 DLFE,FT Vest U.S. Equity Dual Directional Buffer ETF - February,Cboe BZX,1,0,2026-10-27
@@ -3750,7 +3752,7 @@ ETX,Eaton Vance Municipal Income 2028 Term Trust Common Shares of Beneficial Int
 ETY,"Eaton Vance Tax-Managed Diversified Equity Income Fund Common Shares of Beneficial Interest,",NYSE,0,0,2026-10-27
 EU,enCore Energy Corp. - Common Stock,NASDAQ,0,1,2026-10-27
 EUAD,Select STOXX Europe Aerospace & Defense ETF,Cboe BZX,1,0,2026-10-27
-EUDA,Euda Health Holdings Limited - Ordinary Shares,NASDAQ,0,1,2026-10-27
+EUDA,Euda Health Holdings Limited - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 EUDAW,Euda Health Holdings Limited - Warrant,NASDAQ,0,0,2026-10-27
 EUDG,WisdomTree Europe Quality Dividend Growth Fund,NYSE Arca,1,0,2026-10-27
 EUDV,ProShares MSCI Europe Dividend Growers ETF,Cboe BZX,1,0,2026-10-27
@@ -4279,6 +4281,7 @@ FMET,Fidelity Metaverse ETF,NASDAQ,1,0,2026-10-27
 FMF,First Trust Managed Futures Strategy Fund,NYSE Arca,1,0,2026-10-27
 FMFC,Kandal M Venture Limited - Class A ordinary Shares,NASDAQ,0,1,2026-10-27
 FMHI,First Trust Municipal High Income ETF,NASDAQ,1,0,2026-10-27
+FMIG,FMI Global Equity ETF,NYSE Arca,1,0,2026-11-05
 FMKT,The Free Markets ETF,NYSE Arca,1,0,2026-10-27
 FMN,Federated Hermes Premier Municipal Income Fund,NYSE,0,0,2026-10-27
 FMNB,Farmers National Banc Corp. - Common Stock,NASDAQ,0,1,2026-10-27
@@ -5288,7 +5291,6 @@ HLN,Haleon plc American Depositary Shares (Each representing two Ordinary Shares
 HLNE,Hamilton Lane Incorporated - Class A Common Stock,NASDAQ,0,1,2026-10-27
 HLP,Hongli Group Inc. - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 HLSQ,Tessera Defense and Homeland Security Inc. Common Stock,NYSE American,0,1,2026-10-27
-HLT,Hilton Worldwide Holdings Inc. Common Stock ,NYSE,0,1,2026-10-27
 HLTH,Tema Healthcare AI ETF,NASDAQ,1,0,2026-10-27
 HLXC,Helix Acquisition Corp. III - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 HMAY,Corgi U.S. Equities 100% Structured Buffer ETF - May Series,Cboe BZX,1,0,2026-10-27
@@ -12644,9 +12646,9 @@ XT,iShares Future Exponential Technologies ETF,NASDAQ,1,0,2026-10-27
 XTAI,Corgi Taiwan 2x Daily ETF,Cboe BZX,1,0,2026-10-27
 XTAP,Innovator U.S. Equity Accelerated Plus ETF - April,Cboe BZX,1,0,2026-10-27
 XTEN,BondBloxx Bloomberg Ten Year Target Duration US Treasury ETF,NYSE Arca,1,0,2026-10-27
-XTER,Karman Line Acquisition Corp. - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
-XTERU,Karman Line Acquisition Corp. - Units,NASDAQ,0,0,2026-10-27
-XTERW,Karman Line Acquisition Corp. - Warrants,NASDAQ,0,0,2026-10-27
+XTER,Xterax Corporation II - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
+XTERU,Xterax Corporation II - Units,NASDAQ,0,0,2026-10-27
+XTERW,Xterax Corporation II - Warrants,NASDAQ,0,0,2026-10-27
 XTIA,"XTI Aerospace, Inc. Common Stock  - Common Stock",NASDAQ,0,1,2026-10-27
 XTJA,Innovator U.S. Equity Accelerated Plus ETF - January,Cboe BZX,1,0,2026-10-27
 XTJL,Innovator U.S. Equity Accelerated Plus ETF - July,Cboe BZX,1,0,2026-10-27
