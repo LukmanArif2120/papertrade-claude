@@ -1,6 +1,6 @@
 {
  "terkini": {
-  "dijana": "2026-11-05 07:03 UTC",
+  "dijana": "2026-11-05 09:57 UTC",
   "sesi": 20261104,
   "bil_ticker": 930,
   "bil_universe": 931,
@@ -13,10 +13,9 @@
    "BLFS",
    "INDV",
    "KVUE",
-   "RAMP",
-   "WLYB"
+   "RAMP"
   ],
-  "bil_tiada_bar_sesi": 7,
+  "bil_tiada_bar_sesi": 6,
   "dividen_baharu": 0
  },
  "sejarah": {
