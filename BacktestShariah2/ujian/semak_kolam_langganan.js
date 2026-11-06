@@ -9,11 +9,13 @@
  * mengira puncak serentak, dan menghormati unsubscribe. Halaman lulus hanya jika setiap tab
  * tetap terisi DAN puncak serentak tidak melebihi had pelanggan.
  *
- * SEMPADAN YANG DIKETAHUI: ~22 langganan KEKAL (satu bagi setiap dokumen asas, supaya tolakan
- * db malam sampai ke halaman yang sudah terbuka) DAN kumpulan terbesar (ringkas_c: 21 anak)
- * mesti muat serentak, kerana slot anak hanya dilepaskan selepas kumpulannya berhimpun. Jadi
- * had pelanggan di bawah ~46 tidak dijamin. Diukur: had 46, 50 dan 60 semuanya LULUS (puncak
- * 46, akhir 22, 0 ditolak). Had sebenar yang diperhatikan pada telefon pengguna ~60.
+ * SEMPADAN YANG DIKETAHUI: langganan KEKAL (satu bagi setiap dokumen asas, supaya tolakan db
+ * malam sampai ke halaman yang sudah terbuka) DAN kumpulan terbesar (ringkas_c: bilangan anaknya
+ * tumbuh dengan Lejar; 26 pada 6 Nov 2026) mesti muat serentak, kerana slot anak hanya dilepaskan
+ * selepas kumpulannya berhimpun. Angka semasa dicetak oleh ujian ini (puncak, aktif akhir), jadi
+ * baca output dan bandingkan dengan KOLAM.maks dalam dashboard_v2.html - JANGAN salin nombor ke
+ * komen ini (komen lama "22 kekal / 21 anak" hanyut dalam dua hari). Had sebenar yang
+ * diperhatikan pada telefon pengguna ~60.
  * Kalau had pelanggan menjadi lebih ketat, pembetulan yang betul ialah menangguhkan
  * posisi/lorong2 (20 dokumen) sampai tab Posisi dibuka, bukan melonggarkan penghimpunan.
  *
@@ -75,16 +77,25 @@ for (const c of fs.readdirSync(DB)) {
   }, [D, HAD]);
   await pg.goto('file://' + path.join(S, 'd.html'));
   await pg.waitForTimeout(25000);          // kolam + backoff perlu masa; 20s pemasa anti-tergantung juga lepas
-  const tabs = await pg.$$eval('#mainTabs button', bs => bs.map(b => b.dataset.tab));
-  const out = {};
-  for (const t of tabs) {
+  /* v155+: 5 tab atas; Posisi dan Rujukan ialah KUMPULAN yang bahagiannya dipilih dengan #kumpSeg.
+     Setiap bahagian dinilai berasingan (kunci = data-k bahagian, cth `kaedahn`). */
+  const atas = await pg.$$eval('#mainTabs button[data-tab]', bs => bs.map(b => b.dataset.tab));
+  const tabs = [], out = {};
+  const ukur = () => pg.evaluate(() => {
+    const el = document.querySelector('section.view:not([hidden])');
+    const ep = el.querySelector('.panel.empty');
+    return { baris: el.querySelectorAll('table tbody tr').length, kosong: ep ? ep.textContent.trim().slice(0, 60) : null };
+  });
+  for (const t of atas) {
     await (await pg.$(`#mainTabs button[data-tab="${t}"]`)).click();
     await pg.waitForTimeout(900);
-    out[t] = await pg.evaluate(() => {
-      const el = document.querySelector('section.view:not([hidden])');
-      const ep = el.querySelector('.panel.empty');
-      return { baris: el.querySelectorAll('table tbody tr').length, kosong: ep ? ep.textContent.trim().slice(0, 60) : null };
-    });
+    const bhg = await pg.$$eval('#kumpSeg:not([hidden]) button', bs => bs.map(b => b.dataset.k)).catch(() => []);
+    if (!bhg.length) { tabs.push(t); out[t] = await ukur(); continue; }
+    for (const k of bhg) {
+      await (await pg.$(`#kumpSeg button[data-k="${k}"]`)).click();
+      await pg.waitForTimeout(900);
+      tabs.push(k); out[k] = await ukur();
+    }
   }
   const st = await pg.evaluate(() => ({ aktif: window.__aktif, puncak: window.__puncak, tolak: window.__tolak }));
   await br.close();

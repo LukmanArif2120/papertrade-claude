@@ -23,7 +23,9 @@ Alat (ToolSearch; jika `select:mcp__Moo_Moo__…` gagal, cari ikut nama alat, ct
 5. SST: `institutional_flow` dan `unusual_volume` (market US) → simpan JSON di `BacktestShariah2/data/sst/`;
    `market_events` (market US, daysLookahead 40) → `BacktestShariah2/data/pemangkin/market_events.json` (gred QR; dipakai
    Actions sehingga 9 hari). Ralat SST → langkau dan catat.
-6. Snapshot sektor dashboard: `ArtifactData get` `sektor/snapshot` dengan out_dir (fail lama), kemudian
+6. **DILANGKAU sejak 6 Nov 2026 (dashboard v156):** tab Sektor diarkib dan halaman tidak lagi melanggan `sektor/snapshot`
+   (audit v154 pepijat #3: `data/db/sektor_snapshot.json` tidak pernah sampai ke `main`, jadi tab itu beku). Langkah asal, untuk rujukan:
+   Snapshot sektor dashboard: `ArtifactData get` `sektor/snapshot` dengan out_dir (fail lama), kemudian
    `python3 BacktestShariah2/standard/snapshot_sektor_db.py --pasaran <sektor_pasaran.json> --lama <fail lama>
    --peta BacktestShariah2/papertrade/peta_industri.csv --papertrade BacktestShariah2/papertrade --dibina "<YYYY-MM-DD HH:MM> MYT"
    --out BacktestShariah2/data/db/sektor_snapshot.json` (jana_db.py menolaknya bersama dokumen harian).

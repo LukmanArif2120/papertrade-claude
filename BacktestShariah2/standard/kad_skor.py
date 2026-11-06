@@ -70,6 +70,23 @@ LIFT = os.environ.get('KS_LIFT', os.path.join(AN, 'lift.json'))
 PAPAN = os.environ.get('KS_PAPAN', os.path.join(AN, 'papan.json'))
 T4 = os.environ.get('KS_T4', os.path.join(BS2, 'portfolio_slot', 't4_ringkasan.csv'))
 JSN = os.environ.get('KS_JSON', os.path.join(AN, 'kad_skor.json'))
+SPEC_SEMUA = os.path.join(BS2, 'spec', 'SPEC_SEMUA_KAEDAH.md')
+
+
+def bendera_kaedah():
+    """(set REPLIKA, {id: fail spec asal}) - asal-usul kaedah untuk tab Kaedah (audit v154: 13 REPLIKA dan
+    penanda `FAIL ASAL` tidak dipapar di mana-mana). REPLIKA = keluar/sasaran dinilai dengan dagangan replika
+    enjin (`kod/dagangan.py`); FAIL ASAL = bahagian spec yang disatukan daripada fail spec asal tersendiri."""
+    try:
+        sys.path.insert(0, os.path.join(BS2, 'kod'))
+        from dagangan import REPLIKA
+    except Exception:
+        REPLIKA = set()
+    asal = {}
+    if os.path.exists(SPEC_SEMUA):
+        for m in re.finditer(r'<!-- FAIL ASAL: (spec/(M\d+)_[^ ]+?\.md) -->', open(SPEC_SEMUA, encoding='utf-8').read()):
+            asal.setdefault(m.group(2), m.group(1))
+    return set(REPLIKA), asal
 MD = os.environ.get('KS_MD', os.path.join(BS2, 'laporan', 'KAD_SKOR.md'))
 
 
@@ -255,6 +272,7 @@ def main():
     perlu_hb = max(int(perlu_hb), G1_HARI_BELI_MIN) if perlu_hb else None
     nhb = int(P.tarikh_beli.nunique())
 
+    replika, spec_asal = bendera_kaedah()
     rows = []
     for mid, g in P.groupby('id_kaedah'):
         r = dict(id=mid, nama=nm.get(mid, '') or (papan.get(mid) or {}).get('nama', ''),
@@ -266,6 +284,9 @@ def main():
         pr = papan.get(mid) or {}
         r.update(pantau=pr.get('pantau'), p_dd=pr.get('p_dd'), p_dd_had=pr.get('p_dd_had'),
                  lintas_earnings=pr.get('h_lintas_earnings'), bt_hari=pr.get('hari'),
+                 # Backtest | Hadapan bersebelahan (audit v154, corak LEAN): purata setiap dagangan set 431
+                 bt_purata=pr.get('bt_purata'), bt_menang=pr.get('bt_menang'),
+                 replika=mid in replika, spec_asal=spec_asal.get(mid),
                  semakan=sum(bool(pr.get(k)) for k in ('lulus_subset', 'lulus_wfo', 'lulus_at'))
                  if pr.get('bt_cagr') is not None else None)
         for kod, pre in (('L1', 't4_'), ('L2', 't4b_')):
