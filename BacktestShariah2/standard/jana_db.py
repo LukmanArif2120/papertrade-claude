@@ -249,6 +249,24 @@ def ringkas_pt(R, nama, meta, had=HAD_RINGKAS):
 SESI_GARIS = 60
 
 
+SPUS_HARIAN = os.path.join(BS2, 'data', 'penanda_aras', 'spus_harian.csv')
+
+
+def spus_siri(mula=None):
+    """{tarikh int YYYYMMDD: (buka, tutup)} daripada data/penanda_aras/spus_harian.csv (disegarkan harian.yml).
+
+    SPUS ialah penanda aras patuh Syariah yang sah bagi repo ini (REVERSE/PENANDA_ARAS_SYARIAH.md);
+    SPY bukan. Dashboard memakai siri ini menggantikan SPY dalam setiap perbandingan HADAPAN apabila
+    ia lengkap hingga sesi yang sama (audit dashboard v154 pepijat #19, 6 Nov 2026)."""
+    if not os.path.exists(SPUS_HARIAN):
+        return {}
+    d = pd.read_csv(SPUS_HARIAN, comment='#')
+    d['t'] = d.tarikh.astype(str).str.replace('-', '', regex=False).astype(int)
+    if mula is not None:
+        d = d[d.t >= int(mula)]
+    return {int(t): (float(o), float(c)) for t, o, c in zip(d.t, d.buka, d.tutup)}
+
+
 def garis_harga(M, C, stor):
     """prestasi/garis + prestasi/mfe (pratonton dashboard v3).
     garis: tarikh (<= 60 sesi terakhir stor), tutup setiap saham yang masih ada posisi terbuka atau keluar dalam sesi
@@ -298,7 +316,8 @@ def garis_harga(M, C, stor):
         I = pd.read_csv(pi)
         I = I[(I.ticker == 'SPY') & (I.date >= mula)].sort_values('date')
         spy = [[int(d), round(float(o), 2), round(float(c), 2)] for d, o, c in zip(I.date, I.open, I.close)]
-    return dict(tarikh=hari, spy=spy, rows=rows), [[k, v] for k, v in sorted(mfe.items())]
+    spus = [[t, round(o, 4), round(c, 4)] for t, (o, c) in sorted(spus_siri(mula).items())] if mula else []
+    return dict(tarikh=hari, spy=spy, spus=spus, rows=rows), [[k, v] for k, v in sorted(mfe.items())]
 
 
 TERKINI = os.path.join(BS2, 'data', 'harga', 'terkini.csv')
@@ -367,7 +386,15 @@ def harian_kaedah(M, C, stor, terkini=None):
         rows.append(dict(a=ak, k=k, np=len(x['u']), j=round(stt.mean(x['u']), 2),
                          d=[round(100 * p / a, 2) if a > 0 else None for p, a in zip(x['pnl'], x['asas'])], n=x['n'],
                          ev=[[i] + v for i, v in sorted(x['ev'].items())]))
-    return dict(tarikh=hari, spy=spy, rows=rows)
+    # spus: untung harian % SPUS sejajar `hari` (None jika SPUS belum ada sesi itu); halaman memakainya
+    # menggantikan spy apabila lengkap.
+    su = spus_siri(hari[0]) if hari else {}
+    st_ = sorted(su)
+    spus = []
+    for d in hari:
+        lalu = [t for t in st_ if t < d]
+        spus.append(round(100 * (su[d][1] / su[lalu[-1]][1] - 1), 2) if lalu and d in su else None)
+    return dict(tarikh=hari, spy=spy, spus=spus, rows=rows)
 
 
 def pengawas(st, masa):
