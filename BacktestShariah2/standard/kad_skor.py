@@ -16,8 +16,9 @@ Gate (ambang di bawah ialah PRADAFTAR; `ujian/test_kad_skor.py::TestKunci` gagal
                   berkelompok ikut hari beli.
   G3 lift       : lift padan hari beli x baldi hari pegang > 0 DAN lulus BH-FDR q <= G3_Q pada penyebut
                   SEMUA kaedah diuji (`laporan/LIFT_KAEDAH.md`).
-  G4 hari-0     : henti hari-0 TIDAK BOLEH dikecualikan daripada jangkaan. Lulus jika bilangan 0, atau
-                  jika jangkaan semua posisi (termasuk hari-0) masih > 0.
+  G4 hari-0     : bilangan henti pada hari beli <= G4_HARI0_MAKS (= 0). PINDAAN 6 Nov 2026: versi asal
+                  ("0, ATAU jangkaan termasuk hari-0 > 0") tidak pernah mengubah status kerana G2 sudah
+                  mewajibkan jangkaan > 0; laporan audit menetapkan "hari-0 = 0 secara struktur".
   G5 pantau     : status pantau Papan Penganalisis bukan GANTUNG/BERSARA, dan kejatuhan kohort
                   p_dd <= p_dd_had jika had wujud.
   G6 portfolio  : lorong T4 L1 kaedah itu (`portfolio_t4.py`) ada >= G6_SESI sesi, pulangan > SPUS
@@ -60,6 +61,7 @@ G3_Q = 0.05                 # BH-FDR, sama dengan lift_kaedah.Q_FDR
 G6_SESI = 126               # ~6 bulan; BANDING_SPUS.md: tanda pertama kelebihan 20 mata/tahun
 G6_PERSENTIL = 95           # pulangan lorong > persentil ini dalam jalur rawak tingkap sama
 G6_MDD = -26.82             # MDD SPUS 2020-2025 (REVERSE/PENANDA_ARAS_SYARIAH.md, SISTEM.md)
+G4_HARI0_MAKS = 0           # PINDAAN 6 Nov 2026 (keputusan pengguna): henti hari-0 mesti sifar secara struktur
 STATUS = ('NEGATIF', 'GAGAL', 'BELUM CUKUP', 'CALON', 'TERBUKTI')
 # ---------------------------------------------------------------------------------------------------------------
 
@@ -122,11 +124,10 @@ def g3(r):
 
 
 def g4(r):
-    if (r.get('hari0') or 0) == 0:
+    n = int(r.get('hari0') or 0)
+    if n <= G4_HARI0_MAKS:
         return True, ''
-    if _ada(r.get('jangkaan')) and r['jangkaan'] > 0:
-        return True, f"{r['hari0']} hari-0 termasuk dalam jangkaan"
-    return False, f"{r['hari0']} henti hari-0; jangkaan tidak positif"
+    return False, f"{n} henti hari-0 (mesti {G4_HARI0_MAKS})"
 
 
 def g5(r):

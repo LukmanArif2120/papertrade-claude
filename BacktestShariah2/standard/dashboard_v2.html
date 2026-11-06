@@ -3984,7 +3984,7 @@ const anlJul=(m,a,b)=>`<b class="${cls(m)}">${sg2(m)}</b><span class="vv">${sg2(
    memaparkan; ia tidak mengira gate sendiri, supaya tiada dua takrif. */
 const KS_ST={'TERBUKTI':'k-GUNA','CALON':'k-UJI','BELUM CUKUP':'p-mute','GAGAL':'p-exit','NEGATIF':'k-DITOLAK'};
 const KS_ORD=['TERBUKTI','CALON','BELUM CUKUP','GAGAL','NEGATIF'];
-const KS_G={G1:'Kematangan',G2:'Jangkaan > 0, had bawah 95% > 0',G3:'Lift padan hari beli lulus BH-FDR',G4:'Henti hari-0 tidak dikecualikan',G5:'Bukan GANTUNG/BERSARA',G6:'Portfolio T4 atasi SPUS (126 sesi)'};
+const KS_G={G1:'Kematangan',G2:'Jangkaan > 0, had bawah 95% > 0',G3:'Lift padan hari beli lulus BH-FDR',G4:'Henti hari-0 = 0 (sifar secara struktur)',G5:'Bukan GANTUNG/BERSARA',G6:'Portfolio T4 atasi SPUS (126 sesi)'};
 const ksPill=s=>`<span class="pill ${KS_ST[s]||'p-mute'}">${esc(s||'–')}</span>`;
 const ksRows=memo(d=>{if(!d||!Array.isArray(d.kol)||!Array.isArray(d.rows))return null;
   return d.rows.map(v=>{const r={};d.kol.forEach((k,i)=>{r[k]=v[i];});r.gate=String(r.gate||'000000');r.sebab=r.sebab||{};return r;});});
@@ -4044,7 +4044,7 @@ function renderAnalisis(){
     <ul class="utama3" style="margin-top:14px">
       <li><b>T4 kaedah</b> = portfolio maya 10 slot yang membeli isyarat kaedah itu SAHAJA sejak belian pertamanya, dibanding SPUS dalam tingkap sama dan 20 cabutan rawak (p = persentil dalam jalur rawak). <b>T4 campur SPUS</b> = teras SPUS + satelit kaedah, imbang bulanan, pada tiga berat. Berat ialah soalan toleransi drawdown anda, bukan soalan data — ia dipilih selepas G6 lulus.</li>
       <li><b>Ditutup / terbuka</b> dipapar bersebelahan kerana peraturan keluar memilih posisi mana ditutup dahulu: kaedah bersasaran untung kelihatan terlalu baik pada posisi ditutup, kaedah berhenti ketat terlalu buruk (KAEDAH_TERBAIK.md §3a). Jangkaan di lajur kiri memakai SEMUA posisi.</li>
-      <li><b>Hari-0</b> = dihentikan pada hari beli. Ia tidak pernah dikecualikan daripada jangkaan (G4). Nxx tiada henti, jadi sentiasa 0.</li>
+      <li><b>Hari-0</b> = dihentikan pada hari beli. G4 (pindaan 6 Nov 2026) mewajibkan sifar: satu henti hari-0 sudah menggagalkan kaedah selepas G1. Nxx tiada henti, jadi sentiasa 0.</li>
       <li>Kohort setiap dagangan yang lulus pernah gagal sebagai portfolio (REVERSE/KEPUTUSAN_AKHIR.md: 0/36 lawan SPUS). Itu sebab G6 wujud. Rekod analisis sahaja: tiada order, tiada wang sebenar.</li>
     </ul>
     <div class="foot"><span>Sumber: standard/kad_skor.py · standard/portfolio_t4.py · laporan/KAD_SKOR.md · laporan/T4_KAEDAH.md</span><span>Data ${esc(tkP(d.kini))}</span></div></div>

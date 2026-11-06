@@ -19,7 +19,7 @@ Setiap posisi Lejar Penuh **lorong 1** (keluar kaedah itu sendiri) bagi kesemua 
 | G1 kematangan | hari beli ≥ 20 **DAN** (posisi ditutup ≥ n_perlu **ATAU** hari beli ≥ hari beli perlu untuk lift 2 mata) | `G1_HARI_BELI_MIN = 20`, `G1_BEZA_MATA = 1.0`, `G1_LIFT_MATA = 2.0`, z 1.96 / 0.84 | `penganalisis.PANTAU_G`; `KAEDAH_TERBAIK.md` §6; `LIFT_KAEDAH.md` |
 | G2 jangkaan | jangkaan semua posisi > 0 **DAN** had bawah selang keyakinan 95% > 0, SE berkelompok ikut hari beli | `G2_ALPHA = 0.05` | `REVERSE/NXX.md` (perangkap lift positif atas asas negatif: jangkaan mutlak wajib) |
 | G3 lift | lift padan hari beli × baldi hari pegang > 0 **DAN** lulus BH-FDR pada penyebut semua kaedah diuji | `G3_Q = 0.05` | `standard/lift_kaedah.py` |
-| G4 henti hari-0 | bilangan henti pada hari beli = 0, **ATAU** jangkaan semua posisi (TERMASUK posisi hari-0) > 0. Posisi hari-0 **tidak boleh** dikecualikan daripada jangkaan. | — | `REVERSE/KOLAM_EKOR.md` §4a; `REVERSE/CARA.md` |
+| G4 henti hari-0 | bilangan henti pada hari beli ≤ 0, iaitu **sifar secara struktur** (pindaan 6 Nov 2026, lihat di bawah) | `G4_HARI0_MAKS = 0` | `REVERSE/KOLAM_EKOR.md` §4a; `REVERSE/CARA.md`; laporan audit v154 |
 | G5 pantau | status pantau Papan Penganalisis bukan GANTUNG/BERSARA, dan kejatuhan kohort `p_dd ≤ p_dd_had` jika had wujud | — | `standard/penganalisis.py` |
 | G6 portfolio | lorong T4 **L1** kaedah itu: sesi ≥ 126 **DAN** pulangan > SPUS tingkap sama **DAN** pulangan > persentil 95 jalur rawak 20 cabutan tingkap sama **DAN** MDD ≥ −26.82% | `G6_SESI = 126`, `G6_PERSENTIL = 95`, `G6_MDD = -26.82` | `laporan/BANDING_SPUS.md`; `REVERSE/KEPEKATAN_BENIH.md`; `REVERSE/PENANDA_ARAS_SYARIAH.md` |
 
@@ -44,6 +44,10 @@ Setiap posisi Lejar Penuh **lorong 1** (keluar kaedah itu sendiri) bagi kesemua 
 ## Lajur maklumat (bukan gate)
 
 Menang %, untung purata, rugi purata, payoff, CVaR 10%, terburuk, MAE/MFE median, `tanpa5` (jangkaan selepas buang 5% posisi terbaik), kejatuhan kohort, lintas earnings, semakan luar sampel x/3, purata ditutup lawan terbuka. Kadar menang tidak pernah dipapar tanpa payoff di sebelahnya (`REVERSE/NXX_KELUAR.md`: `X10` menang 94.1% dengan jangkaan −0.023%).
+
+## Pindaan 6 Nov 2026 — G4 diketatkan (keputusan pengguna)
+
+**Pindaan bertarikh 6 Nov 2026**, dibuat pada hari yang sama dengan pradaftar dan **sebelum mana-mana kaedah melepasi G1** (paling awal ~6 Jan 2027), jadi tiada status yang dilihat bergantung padanya. Sebab: G4 asal lulus jika "hari-0 = 0 ATAU jangkaan termasuk hari-0 > 0". Oleh kerana G2 sudah mewajibkan jangkaan > 0, setiap kaedah yang lulus G2 juga lulus G4 — G4 tidak pernah mengubah status. Laporan audit v154 (G4: "henti hari-0 = 0 secara struktur") memaksudkan gate yang menapis. Pengguna memilih versi ketat: **`G4_HARI0_MAKS = 0`**. Kesan yang dijangka: kaedah Mxx berhenti ketat yang pernah dihentikan pada hari beli akan GAGAL selepas G1; Nxx (`stop = NaN`) lulus secara struktur. Ini bukan pelonggaran — ia mengetatkan — dan `TestKunci` kini mengunci nilai ini juga.
 
 ## Keadaan pada pradaftar (6 Nov 2026)
 
