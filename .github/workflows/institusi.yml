@@ -1,0 +1,58 @@
+# Aliran institusi 13F (BacktestShariah2/standard/institusi_13f.py; 6 Nov 2026, keputusan pengguna): set data Form 13F
+# SEC (zip setiap tetingkap fail 3 bulan) -> data/institusi/{saham,kumpulan}.csv, dipaparkan dalam tab Sektor.
+# PAPARAN SAHAJA: pegangan akhir suku, data 2.5–3.5 bulan lapuk pada hari ia muncul; bukan penapis.
+# Mingguan kerana SEC menerbitkan set baharu sekali setiap suku (~2 minggu selepas tetingkap tamat: pertengahan
+# Mac/Jun/Sep/Dis); larian tanpa set baharu tetap mengira semula tempoh terkini (pemfail lewat + pindaan).
+# Rahsia: SEC_USER_AGENT (sedia ada, wajib oleh SEC); OPENFIGI_APIKEY (pilihan: pemetaan CUSIP 10x lebih laju).
+name: Aliran institusi
+
+on:
+  schedule:
+    # Isnin 03:37 UTC: bukan minit :00, bukan 14:00–17:00 UTC, tidak bertindih jadual harian 04:17+.
+    - cron: '37 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      suku:
+        description: 'bilangan tempoh terkini dikira (isi sejarah: > 1)'
+        required: false
+        default: '1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: institusi
+  cancel-in-progress: false
+
+jobs:
+  institusi:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q -c kekangan.txt pandas numpy requests
+      - name: Kira aliran institusi
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          OPENFIGI_APIKEY: ${{ secrets.OPENFIGI_APIKEY }}
+          SUKU: ${{ github.event.inputs.suku || '1' }}
+        # had OpenFIGI 50 min: tanpa kunci ~12,000 CUSIP/50 min; baki disambung larian seterusnya (cache).
+        run: python3 BacktestShariah2/standard/institusi_13f.py jalan --suku "$SUKU" --cache /tmp/f13 --had-figi 3000
+      - name: Commit dan push
+        run: |
+          git config user.name "institusi[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/data/institusi
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          T=$(python3 -c "import json;print(json.load(open('BacktestShariah2/data/institusi/status.json'))['tempoh_terkini'])")
+          git commit -q -m "Aliran institusi 13F: tempoh $T"
+          for n in 1 2 3; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 15))
+          done
+          exit 1

@@ -39,6 +39,7 @@ JAGA = {
     # tanpa salinan di luar repo - tepat tetingkap di mana kehilangan paling mahal. 'buka' =
     # had masa biasa workflow itu sendiri.
     'sandaran.yml': 'buka',
+    'institusi.yml': 'buka',   # aliran institusi 13F mingguan (6 Nov 2026)
 }
 
 

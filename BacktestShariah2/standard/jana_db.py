@@ -7,7 +7,7 @@
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), papertrade/senarai_beli (dipulihkan 6 Nov 2026),
 # papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), harian/status,
-# harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py). sektor/snapshot dijana oleh tugasan
+# harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py), institusi/kumpulan (institusi_13f.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
 
@@ -1436,6 +1436,11 @@ def main(argv=None):
     pk = os.path.join(BS2, 'data', 'analisis', 'kad_skor.json')
     if os.path.exists(pk):
         docs['analisis/kad_skor'] = json.load(open(pk, encoding='utf-8'))
+    # institusi/kumpulan: aliran institusi 13F setiap sektor/industri (standard/institusi_13f.py, institusi.yml
+    # mingguan; 6 Nov 2026). Paparan sahaja dalam tab Sektor. ~170 baris, jauh di bawah HAD_DB.
+    pi = os.path.join(BS2, 'data', 'institusi', 'db.json')
+    if os.path.exists(pi):
+        docs['institusi/kumpulan'] = json.load(open(pi, encoding='utf-8'))
     # sektor/snapshot (dijana mingguan; medan posisi dikemas kini jika fail ada)
     snap = os.path.join(BS2, 'data', 'db', 'sektor_snapshot.json')
     if os.path.exists(snap):

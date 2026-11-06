@@ -1101,6 +1101,7 @@ td.stc{white-space:nowrap}
   <section class="view" id="v-pr-gab" hidden></section>
   <section class="view" id="v-kaedah" hidden></section>
   <section class="view" id="v-kaedahn" hidden></section>
+  <section class="view" id="v-sektor" hidden></section>
   <section class="view" id="v-autotune" hidden></section>
 </div>
 <div class="scrim" id="scrim" hidden></div>
@@ -1116,13 +1117,14 @@ const KCLS={'GUNA':'k-GUNA','UJI KERTAS':'k-UJI','SIMPAN':'k-SIMPAN','DITOLAK':'
 const KVAR={'GUNA':'--guna','UJI KERTAS':'--uji','SIMPAN':'--simpan','DITOLAK':'--tolak'};
 const CMPCOL=['--accent','--uji','--violet'];
 const HARI=['5','10','15','20','30','40','60'];
-const MAIN=['utama','analisis','prestasi','posisi','watch','backtest','kaedah','kaedahn'];
+const MAIN=['utama','analisis','prestasi','posisi','watch','backtest','kaedah','kaedahn','sektor'];
 /* v155 (audit v154, keputusan pengguna 6 Nov 2026 Pilihan B): 9 tab -> 5 di navigasi atas. Kunci dalaman KEKAL
    (langganan db, pautan #hash, data-pergi dan localStorage merujuknya), jadi tab lama menjadi BAHAGIAN dalam
    kumpulan: Posisi = Posisi + Watchlist; Rujukan = Kaedah + Kombinasi N + Backtest.
    v156: tab Sektor DIARKIB (audit v154 pepijat #3/#4): sektor/snapshot tiada fail sumber di main dan kumpulan/siri
-   tiada penulis, jadi datanya beku pada tarikh yang tidak diketahui; rejim pasaran kekal sebagai satu baris di Posisi. */
-const KUMP={posisi:[['posisi','Posisi'],['watch','Watchlist']],rujukan:[['kaedah','Kaedah'],['kaedahn','Kombinasi N'],['backtest','Backtest']]};
+   tiada penulis, jadi datanya beku pada tarikh yang tidak diketahui; rejim pasaran kekal sebagai satu baris di Posisi.
+   v157: bahagian Sektor KEMBALI dengan aliran institusi 13F sahaja (ada penulis mingguan: institusi.yml). */
+const KUMP={posisi:[['posisi','Posisi'],['watch','Watchlist']],rujukan:[['kaedah','Kaedah'],['kaedahn','Kombinasi N'],['backtest','Backtest'],['sektor','Sektor']]};
 const atasOf=t=>Object.keys(KUMP).find(g=>KUMP[g].some(x=>x[0]===t))||t;
 /* tab yang memerlukan registry backtest (~2 MB) + autotune; Hari ini dan Pilih kaedah tidak, jadi semakan pagi di
    telefon tidak memuat turunnya (audit v154 pepijat #18) */
@@ -1156,7 +1158,7 @@ try{const t=localStorage.getItem('pbs3_tab');if(MAIN.includes(t))S.tab=t;
   const s=localStorage.getItem('pbs_set');if(SETSEG.includes(s))S.set=s;const b4=localStorage.getItem('pbs2_b4');if(['papan','ringkasan','banding'].includes(b4))S.b4=b4;
   const sb=JSON.parse(localStorage.getItem('pbs2_sub')||'null');if(sb&&SUBS.backtest.some(x=>x[0]===sb.backtest))S.sub.backtest=sb.backtest;
   const lj=JSON.parse(localStorage.getItem('pbs3_lajur')||'null');if(lj&&typeof lj==='object')S.lajur=lj;}catch(e){}
-{const h=(location.hash||'').slice(1);const map={utama:['utama'],harini:['utama'],pilih:['analisis'],akaun:['prestasi'],rujukan:['kaedah'],ringkasan:['utama'],analisis:['analisis'],penganalisis:['analisis'],keputusan:['backtest','keputusan'],kedudukan:['backtest','keputusan'],butiran:['backtest','butiran'],papan:['backtest','butiran'],banding:['backtest','butiran'],sektor:['kaedah'],watchlist:['watch'],posisi:['posisi'],ptm:['posisi'],ptc:['posisi'],prestasi:['prestasi'],kaedah:['kaedah'],kaedahn:['kaedahn'],autotune:['backtest','butiran']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];if(h==='ptm')S.akaun='m';if(h==='ptc')S.akaun='cm';if(h==='autotune')S.set='2000';if((h==='papan'||h==='banding')&&S.set==='2000')S.set='431';if(h==='banding')S.b4='banding';if(h==='papan')S.b4='papan';}}
+{const h=(location.hash||'').slice(1);const map={utama:['utama'],harini:['utama'],pilih:['analisis'],akaun:['prestasi'],rujukan:['kaedah'],ringkasan:['utama'],analisis:['analisis'],penganalisis:['analisis'],keputusan:['backtest','keputusan'],kedudukan:['backtest','keputusan'],butiran:['backtest','butiran'],papan:['backtest','butiran'],banding:['backtest','butiran'],sektor:['sektor'],watchlist:['watch'],posisi:['posisi'],ptm:['posisi'],ptc:['posisi'],prestasi:['prestasi'],kaedah:['kaedah'],kaedahn:['kaedahn'],autotune:['backtest','butiran']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];if(h==='ptm')S.akaun='m';if(h==='ptc')S.akaun='cm';if(h==='autotune')S.set='2000';if((h==='papan'||h==='banding')&&S.set==='2000')S.set='431';if(h==='banding')S.b4='banding';if(h==='papan')S.b4='papan';}}
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -2848,6 +2850,49 @@ function panelPerhatian(src){
 
 
 
+/* ================= v157 (6 Nov 2026): bahagian Sektor = aliran institusi 13F (SEC) =================
+   Keputusan pengguna 6 Nov 2026: "sektor/industri yang hot + saham yang institusi beli", sumber SEC EDGAR, digabung ke
+   Sektor. Tab Sektor lama diarkib v156 kerana datanya beku tanpa penulis; bahagian ini HANYA membawa data yang ada
+   penulis: standard/institusi_13f.py -> data/institusi/db.json (db `institusi/kumpulan`), institusi.yml mingguan.
+   Pegangan akhir suku P lawan P-1, dana yang memfail kedua-dua suku sahaja; pecahan saham dilaras.
+   PAPARAN SAHAJA: 13F difail sehingga 45 hari selepas suku dan SEC menerbitkan set ~2 minggu selepas tetingkap,
+   jadi data 2.5–3.5 bulan lapuk; belum diuji sebagai peramal (registry N146). Bukan penapis beli. */
+const sg1=v=>v==null||isNaN(v)?'–':(v>0?'+':'')+Number(v).toFixed(1)+'%';
+const juta=v=>v==null||isNaN(v)?'–':(v>0?'+':v<0?'−':'')+(Math.abs(v)>=1000?(Math.abs(v)/1000).toFixed(1)+' bn':Math.abs(v).toFixed(0)+' j');
+const pilInst=x=>`<span class="pill ${x[1]>0?'p-buy':x[1]<0?'p-exit':'p-mute'}" title="${esc(x[0])}: saham dipegang institusi ${sg1(x[1])} · dana baru tolak keluar ${x[2]>0?'+':''}${x[2]} · aliran USD ${juta(x[3])}">${esc(x[0])} ${sg1(x[1])}</span>`;
+const LP_INST={key:r=>'inst|'+r.j+'|'+r.n,
+  line:(r,i)=>`<span class="mut">${i+1}</span><b class="mlx" style="color:var(--fg);font-size:.9rem">${esc(r.n)}</b>${r.g?`<span class="pill p-mute">${esc(r.g)}</span>`:''}<b class="mlr ${cls(r.a)}">${sg1(r.a)}</b>${mlC}`,
+  kad:r=>`<div class="mk"><div class="mk1"><span class="mkt"><b>${esc(r.n)}</b>${r.sk==null?'':cipN(r.sk,'Skor aliran institusi',1)} <b>${esc(r.g||'')}</b></span><b class="mku ${cls(r.a)}">${sg1(r.a)}<small class="mut"> nilai</small></b></div>
+    <div class="mkr">${r.j==='I'?esc(r.s)+' · ':''}${r.c} saham</div>
+    <div class="mkz mkg2">${mkS('Median saham',`<span class="${cls(r.m)}">${sg1(r.m)}</span>`,'inst_median')}${mkS('Saham bersih dibeli',r.b==null?'–':fx(r.b,0)+'%','inst_bersih')}
+      ${mkS('Aliran USD',`<span class="${cls(r.u)}">${juta(r.u)}</span>`,'inst_usd')}${mkS('Dana baru · keluar',`<span class="pos">${fx(r.nb,0)}</span> · <span class="neg">${fx(r.nk,0)}</span>`,'inst_dana')}</div>
+    <div class="mkr" style="margin-top:6px">${(r.t||[]).map(pilInst).join(' ')}</div></div>`};
+function renderSektor(){
+  const el=$('#v-sektor'),d=S.inst,h='<div class="panel-h"><h2>Aliran institusi (13F)</h2>';
+  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel">${h}</div><div class="empty">${S.live?'Belum ditolak ke pangkalan data (institusi/kumpulan).':'Memuatkan aliran institusi…'}</div></div>`;return;}
+  const sf=S.isf||(S.isf={j:'S',sek:''});
+  let rows=d.rows.filter(r=>r.j===sf.j);if(sf.j==='I'&&sf.sek)rows=rows.filter(r=>r.s===sf.sek);
+  const sek=d.rows.filter(r=>r.j==='S'),ber=d.rows.filter(r=>r.j===sf.j&&r.sk!=null).sort((a,b)=>b.sk-a.sk);
+  const nm=r=>`<b>${esc(r.n)}</b> ${sg1(r.a)}`;
+  const seg=`<div class="seg" id="instJ">${[['S','Sektor'],['I','Industri']].map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${sf.j===v}">${t}</button>`).join('')}</div>`;
+  const sel=sf.j==='I'?`<select id="instSek" aria-label="Tapis sektor"><option value="">Semua sektor</option>${sek.map(r=>r.n).sort().map(n=>`<option ${sf.sek===n?'selected':''}>${esc(n)}</option>`).join('')}</select>`:'';
+  el.innerHTML=`<p class="headline">${ber.length?`Suku ${esc(d.tempoh)}: institusi paling banyak <b>menambah</b> ${sf.j==='S'?'sektor':'industri'} ${ber.slice(0,3).map(nm).join(', ')}; paling banyak <b>mengurangkan</b> ${ber.slice(-3).reverse().map(nm).join(', ')}.`:''} Data 13F, <b>paparan sahaja</b>, bukan penapis beli.</p>
+  <div class="panel">${h}<span class="sub">Pegangan ${esc(d.tempoh)} lawan ${esc(d.tempoh_lalu)} · ${fx(d.pemfail,0)} dana yang memfail kedua-dua suku · ${fx(d.saham,0)} saham · SEC Form 13F</span></div>
+    <div class="filters" style="margin-bottom:10px">${seg}${sel}</div>
+    ${sortTable({id:'inst-'+sf.j,rows,lp:LP_INST,limit:TELEFON?sf.shown||AWAL*2:0,foot:TELEFON?kakiLagi('instMore'):null,def:{k:'sk',dir:-1},cols:[
+      {k:'n',t:sf.j==='S'?'Sektor':'Industri',l:1,frz:1,f:(r,i)=>`<span class="rkn">${i+1}</span><b>${esc(r.n)}</b><span class="vv">${r.j==='I'?esc(r.s)+' · ':''}${r.c} saham</span>`,c:()=>'name'},
+      {k:'sk',t:'Skor',tip:'inst_skor',f:r=>r.sk==null?'<span class="mut">–</span>':`<span class="grc" style="gap:6px">${cipN(r.sk,'Skor aliran institusi (0–100)',1)}<b>${esc(r.g||'')}</b></span>`},
+      {k:'a',t:'Aliran (nilai)',tip:'inst_aliran',f:r=>`<b class="${cls(r.a)}">${sg1(r.a)}</b>`},
+      {k:'m',t:'Median saham',tip:'inst_median',f:r=>`<span class="${cls(r.m)}">${sg1(r.m)}</span>`},
+      {k:'b',t:'Saham bersih dibeli',tip:'inst_bersih',f:r=>r.b==null?'–':`<span class="${r.b>=60?'pos':r.b<40?'neg':''}">${fx(r.b,0)}%</span>`},
+      {k:'u',t:'Aliran USD',tip:'inst_usd',f:r=>`<span class="${cls(r.u)}">${juta(r.u)}</span>`},
+      {k:'nb',t:'Dana baru · keluar',tip:'inst_dana',f:r=>`<span class="pos">${fx(r.nb,0)}</span><span class="mut"> · </span><span class="neg">${fx(r.nk,0)}</span>`},
+      {k:'_t',t:'Saham dikumpul teratas',tip:'inst_teratas',ns:1,l:1,f:r=>(r.t||[]).map(pilInst).join(' ')||'<span class="mut">–</span>'}]})}
+    <p class="sub" style="margin-top:10px"><b>Aliran (nilai)</b> = perubahan saham yang dipegang institusi, ditimbang nilai (dikuasai saham besar); <b>median saham</b> = perubahan bagi saham biasa dalam kumpulan itu. Skor = purata pangkat kedua-duanya. Data 13F ialah pegangan akhir suku yang difail sehingga 45 hari kemudian, jadi ia <b>2.5–3.5 bulan lapuk</b> dan <b>belum diuji sebagai peramal</b> pulangan: paparan sahaja, bukan penapis beli. Dibina ${esc(d.dibina||'')}.</p></div>`;
+  const s1=$('#instJ');if(s1)s1.onclick=e=>{const b=e.target.closest('button');if(!b)return;sf.j=b.dataset.v;sf.sek='';sf.shown=0;renderAll();};
+  const s2=$('#instSek');if(s2)s2.onchange=e=>{sf.sek=e.target.value;sf.shown=0;renderAll();};
+  bindLagi('instMore',sf);}
+
 /* kad bagi 10 industri 1M terkuat (menggantikan jubin gaya lama) */
 
 /* carta kecil harga sejak beli: garis putus kelabu = harga beli, titik-titik kuning = paras keluar lorong 2 */
@@ -4150,7 +4195,7 @@ function renderKaedahN(){
   const q=$('#knQ');if(q){let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.shown=AWAL;renderAll();const n=$('#knQ');if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);};}
   bindLagi('knMore',f);
 }
-const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-cm':()=>renderPrestasi('cm'),'pr-cn':()=>renderPrestasi('cn'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis,kaedahn:renderKaedahN};
+const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-cm':()=>renderPrestasi('cm'),'pr-cn':()=>renderPrestasi('cn'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis,kaedahn:renderKaedahN,sektor:renderSektor};
 function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const el=document.getElementById(vid);el.classList.toggle('pnav',pnavBoleh(vid));
   const sx={},sy={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;sy[t.dataset.st]=t.parentElement.scrollTop;});
   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
@@ -4316,6 +4361,13 @@ const TIPS={
   breadth_pasaran:{t:'Breadth pasaran',d:'Peratus semua saham AS harga ≥ USD5 yang naik dalam sebulan (screener Moomoo). Di bawah 40% = pasaran lemah; di atas 60% = sihat.',e:''},
   volum_relatif:{t:'Volum relatif',d:'Median nisbah volum purata 5 hari terakhir berbanding purata 50 hari. Melebihi 1× = lebih ramai pedagang memberi fokus.',e:'1.3× = volum 30% lebih tinggi daripada biasa.'},
   aliran_institusi:{t:'Aliran institusi',d:'Bilangan saham kumpulan dalam senarai 20 teratas pengumpulan institusi tolak bilangan dalam senarai 20 teratas pengagihan (SST institutional_flow, perubahan % pegangan institusi).',e:'+2 = dua saham lebih banyak sedang dikumpul berbanding diagihkan.'},
+  inst_skor:{t:'Skor aliran institusi',d:'Purata pangkat persentil aliran (nilai) dan median saham antara kumpulan sejenis, 0–100; gred A > 80 … E ≤ 20. Kumpulan < 3 saham tiada skor. Sumber: SEC Form 13F (standard/institusi_13f.py). Paparan sahaja, belum diuji sebagai peramal.',e:'A = institusi menambah pegangan dalam kumpulan ini lebih daripada kebanyakan kumpulan lain pada suku itu.'},
+  inst_aliran:{t:'Aliran (nilai)',d:'Jumlah perubahan saham dipegang institusi × harga akhir suku, dibahagi nilai pegangan suku lalu. Hanya dana yang memfail 13F bagi KEDUA-DUA suku; pecahan saham dilaras. Ditimbang nilai, jadi saham besar menguasai.',e:'+3.0% = institusi memegang 3% lebih banyak saham kumpulan ini (ikut nilai) berbanding suku lalu.'},
+  inst_median:{t:'Median saham',d:'Median perubahan % saham dipegang institusi bagi saham kumpulan ini yang ada ≥ 5 pemegang suku lalu. Berat sama: tidak dikuasai saham besar.',e:'+5% = saham biasa dalam kumpulan ini dipegang 5% lebih banyak oleh institusi.'},
+  inst_bersih:{t:'Saham bersih dibeli',d:'% saham kumpulan dengan lebih banyak dana membuka posisi baharu daripada menutup posisi sepenuhnya.',e:'70% = tujuh daripada sepuluh saham mendapat pemegang institusi baharu bersih.'},
+  inst_usd:{t:'Aliran USD',d:'Jumlah aliran dalam dolar AS pada harga akhir suku (j = juta, bn = bilion).',e:'+850 j = institusi bersih membeli ~USD 850 juta saham kumpulan ini.'},
+  inst_dana:{t:'Dana baru · keluar',d:'Bilangan pasangan dana–saham yang dibuka baharu (hijau) dan ditutup sepenuhnya (merah) dalam kumpulan ini pada suku itu.',e:'120 · 40 = 120 posisi baharu dibuka, 40 ditutup penuh.'},
+  inst_teratas:{t:'Saham dikumpul teratas',d:'Lima saham kumpulan ini dengan aliran USD institusi terbesar (≥ 5 pemegang suku lalu). Peratus = perubahan saham dipegang institusi. Hover untuk dana baru tolak keluar dan aliran USD.',e:'NVDA +4.2% = institusi memegang 4.2% lebih banyak saham NVDA berbanding suku lalu.'},
   volum_luar_biasa:{t:'Volum luar biasa',d:'Saham yang didagangkan ≥ 2× purata volum 20 hari hari ini (SST unusual_volume).',e:''},
   n_saham:{t:'Saham',d:'Bilangan saham dengan sejarah harga yang dipakai untuk 1W/1M/3M, breadth dan volum; \"daripada\" = semua saham yang dikelaskan dalam kumpulan.',e:''},
   pencetus:{t:'Pencetus',d:'Syarat entry terakhir yang belum dipenuhi.',e:''},
@@ -4699,6 +4751,7 @@ renderNav();renderAll();
       langgan('papertrade/claude_'+n,s=>{S.ptcN[n]=s.exists?s.data():null;S.live=true;if(s.exists){subPtc(n+1);subPtc(n+2);}re('ptc','prestasi');},e=>dbErr('papertrade/claude_'+n,e));};
     subPtc(2);subPtc(3);});
   subBhg('papertrade/watchlist','watch',['watch']);
+  sub('institusi/kumpulan','inst',['sektor']);
   /* v156: senarai beli sebenar (henti, buka_maks, sasaran) untuk tab Hari ini */
   subBhg('papertrade/senarai_beli','sb',['utama']);
   langgan('harian/status',s=>{S.hst=s.exists?s.data():null;renderData();},e=>dbErr('harian/status',e));
