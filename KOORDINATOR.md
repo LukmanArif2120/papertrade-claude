@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-06 12:56 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-06 15:00 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -12,9 +12,14 @@ Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-06 12:56 (waktu p
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
 
 
-## 1. Perlu keputusan anda (0)
+## 1. Perlu keputusan anda (1)
 
-Tiada. (`BacktestShariah2/koordinator/keputusan.csv` tiada baris `terbuka`.)
+| Dibuka | Perkara | Catatan |
+|---|---|---|
+| 2026-11-06 | Pilih berat T4 (SPUS 80/20, 70/30 atau 50/50) untuk wang sebenar | Keputusan pengguna 6 Nov 2026 (audit dashboard v154 Pilihan B + T4): papar ketiga-tiga berat dan tangguh pilihan sehingga satu kaedah mencapai TERBUKTI (G6 lulus; paling awal ~9 Apr 2027). Sumber: laporan/KAD_SKOR.md, laporan/T4_KAEDAH.md. Jangan pilih kaedah atau berat sebelum itu. |
+
+
+Sunting `BacktestShariah2/koordinator/keputusan.csv` — tukar `status` ke `selesai` apabila diputuskan (tambah sahaja; jangan buang baris).
 
 
 ## 2. Kajian REVERSE — signal dan indikator (BUKAN kaedah Mxx)
