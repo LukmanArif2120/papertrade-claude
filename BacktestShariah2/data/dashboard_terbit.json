@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793937695-9368",
-  "nombor": 185,
-  "sha256": "8b2764d102a598d16d8b930a437a976797c58fcca95c41f8b62a30133e347fb5",
-  "bait": 683519,
-  "dikemas": "2026-11-06 04:01 UTC",
+  "versi_artifact": "1793972778-64f6",
+  "nombor": 186,
+  "sha256": "326558c77c3febef49c1129cecaef92a1b409466b1977b40a6c30e123104cdae",
+  "bait": 621525,
+  "dikemas": "2026-11-06 13:46 UTC",
   "nota": "v154 (soalan pengguna \"kaedah mana nak pilih\"): panel Lift atas kolam Lejar dalam tab Analisis, daripada db baharu analisis/lift (standard/lift_kaedah.py, analisis.yml). Ia melengkapkan jadual Kedudukan kaedah, bukan menggantikannya: kedudukan = SKOR (backtest 431 + hadapan) jadi hanya Mxx boleh dipangkat, manakala lift = hadapan SAHAJA jadi kesemua 222 kaedah (Mxx + 94 Nxx) dipangkat pada paksi sama. Semua posisi dinilai, yang terbuka ditanda-ke-pasaran, supaya peraturan keluar tidak lagi memilih sampel; kemudian pulangan ditolak purata posisi lain yang dibeli hari SAMA dan dipegang baldi hari pegang SAMA, dengan asas sel mengecualikan kaedah itu sendiri. Keadaan 6 Nov 2026: 17 kaedah positif lawan sifar, 0 selepas hari beli dipadankan. Panel dirender walaupun analisis/papan tiada. Terbitan ini juga memulihkan v151-v153 yang dikomit pada cawangan claude/sleepy-noether-gx742r tetapi tidak pernah digabung ke main, jadi manifes main tertinggal tiga versi di belakang artifact hidup."
 }
