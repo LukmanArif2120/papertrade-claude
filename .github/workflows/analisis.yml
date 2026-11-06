@@ -23,7 +23,9 @@ jobs:
   analisis:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion != 'cancelled'
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # 30 minit (asal 15): portfolio_t4.py membina 444 lorong + 20 cabutan jalur setiap malam, ~1 minit pada
+    # 15 sesi dan bertambah linear dengan bilangan sesi (~8 minit pada 126 sesi).
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -62,6 +64,18 @@ jobs:
         id: terbaik
         continue-on-error: true
         run: python3 BacktestShariah2/standard/kaedah_terbaik.py
+      # Lorong T4 satu-kaedah + kad skor keputusan (keputusan pengguna 6 Nov 2026, audit dashboard
+      # v154 Pilihan B + T4; pradaftar standard/SPEC_KAD_SKOR.md). portfolio_t4.py MESTI sebelum
+      # kad_skor.py (G6 membaca t4_ringkasan.csv), dan kad_skor.py MESTI selepas lift_kaedah.py
+      # (G3) dan penganalisis.py (G5). continue-on-error atas sebab yang sama seperti lift di atas.
+      - name: Jana lorong T4 setiap kaedah
+        id: t4
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/portfolio_t4.py
+      - name: Jana kad skor keputusan
+        id: kad
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/kad_skor.py
       - name: Commit dan push
         run: |
           git config user.name "analisis[bot]"
@@ -71,7 +85,10 @@ jobs:
           # dijejak, dan `git add` pada laluan yang tiada menggagalkan langkah ini — iaitu tepat
           # kegagalan yang baris continue-on-error di atas cuba elakkan.
           for f in BacktestShariah2/laporan/LIFT_KAEDAH.md BacktestShariah2/data/analisis/lift.json \
-                   BacktestShariah2/laporan/KAEDAH_TERBAIK.md; do
+                   BacktestShariah2/laporan/KAEDAH_TERBAIK.md \
+                   BacktestShariah2/portfolio_slot/t4_ringkasan.csv BacktestShariah2/portfolio_slot/t4_siri.csv \
+                   BacktestShariah2/laporan/T4_KAEDAH.md BacktestShariah2/data/analisis/kad_skor.json \
+                   BacktestShariah2/laporan/KAD_SKOR.md; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
@@ -85,13 +102,21 @@ jobs:
           exit 1
       # Dijalankan SELEPAS commit: data malam ini sudah selamat, jadi job boleh gagal dengan jujur.
       - name: Semak laporan sampingan berjaya
-        if: steps.lift.outcome == 'failure' || steps.terbaik.outcome == 'failure'
+        if: >-
+          steps.lift.outcome == 'failure' || steps.terbaik.outcome == 'failure' ||
+          steps.t4.outcome == 'failure' || steps.kad.outcome == 'failure'
         run: |
           if [ "${{ steps.lift.outcome }}" = "failure" ]; then
             echo "lift_kaedah.py GAGAL (lihat langkah 'Jana lift kaedah'); analisis/lift lapuk." >&2
           fi
           if [ "${{ steps.terbaik.outcome }}" = "failure" ]; then
             echo "kaedah_terbaik.py GAGAL (lihat langkah 'Jana laporan kaedah terbaik')." >&2
+          fi
+          if [ "${{ steps.t4.outcome }}" = "failure" ]; then
+            echo "portfolio_t4.py GAGAL (lihat langkah 'Jana lorong T4 setiap kaedah'); G6 lapuk." >&2
+          fi
+          if [ "${{ steps.kad.outcome }}" = "failure" ]; then
+            echo "kad_skor.py GAGAL (lihat langkah 'Jana kad skor keputusan'); analisis/kad_skor lapuk." >&2
           fi
           echo "Papan penganalisis sudah dikomit; hanya laporan sampingan yang lapuk." >&2
           exit 1

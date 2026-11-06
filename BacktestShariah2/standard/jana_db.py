@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
-# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), harian/status,
+# papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), harian/status,
 # harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
@@ -471,7 +471,10 @@ def _produksi_n(rd, ff, ii, bl, RV, reg):
     kod = sum(1 for i in hidup
               if os.path.exists(os.path.join(BS2, 'kod', 'kaedah', i + '.py')))
 
-    def _kira(pola, medan=('kaedah', 'id')):
+    # medan: `id_kaedah` (Lejar), `kaedah` (claude*.csv), `id`. Sebelum 6 Nov 2026 `id_kaedah` tiada
+    # di sini dan corak Lejar ('lejar', '*.csv') tidak masuk ke `tutup/`, jadi panel Produksi
+    # melapor "0 baris Lejar" sedangkan Lejar ada 38,204 baris Nxx (audit dashboard v154 pepijat #1).
+    def _kira(pola, medan=('id_kaedah', 'kaedah', 'id')):
         n = 0
         for f in sorted(_glob.glob(os.path.join(BS2, *pola))):
             for r in rd(f):
@@ -480,7 +483,8 @@ def _produksi_n(rd, ff, ii, bl, RV, reg):
                     n += 1
         return n
 
-    posisi, lejar_n = _kira(('papertrade', 'claude*.csv')), _kira(('lejar', '*.csv'))
+    posisi = _kira(('papertrade', 'claude*.csv'))
+    lejar_n = _kira(('lejar', 'terbuka.csv')) + _kira(('lejar', 'tutup', '*.csv'))
     B = lambda x, k: x.get(k) == 'True'
     n1 = sum(1 for x in G if B(x, 's1_mutlak'))
     n12 = sum(1 for x in G if B(x, 's1_mutlak') and B(x, 's2_lift'))
@@ -1310,8 +1314,11 @@ def main(argv=None):
     docs['prestasi/mae_atr'] = dict(rows=sorted([k, v] for k, v in atr_isyarat(M, C, a.stor).items()), dibina=dibina,
                                     harga_hingga=f'{S} tutup', definisi='ATR14 % pada hari isyarat (bar terakhir sebelum hari beli). '
                                     'rows: [akaun|saham|kaedah|tarikh_beli, %].')
-    docs['prestasi/ringkasan'] = dict(prestasi(M, C, mae), dibina=dibina, harga_pada=f'{S} tutup',
-                                      nota='Dikira oleh standard/jana_db.py (GitHub Actions + sesi tolak db) dengan peraturan skor & keputusan P4 (sama seperti halaman).')
+    # `prestasi/ringkasan` DIHENTIKAN 6 Nov 2026 (audit dashboard v154 pepijat #5): ~91 KB ditolak setiap
+    # hari tetapi tiada pembaca dalam dashboard_v2.html, dan ia masih menulis label TERUSKAN/PERHATI/
+    # HENTIKAN yang halaman buang 29 Okt. Satu jawapan "kaedah mana" kini `analisis/kad_skor`.
+    # Fungsi prestasi() dikekalkan (dipanggil oleh ujian/alat lain jika ada); dokumen db lama kekal
+    # dalam db sehingga dipadam, tanpa pembaca.
     # papertrade/ringkas_c, ringkas_m: semua baris dalam bentuk padat (halaman v90 membaca ini sahaja, bukan claude*)
     # SATU kumpulan keatoman bagi setiap panggilan ringkas_pt (bukan dict rata). `ringkas_c`
     # ialah 22 dokumen / 3.3 MB: sebagai dokumen BEBAS ia bertaburan merentas fail batch dengan
@@ -1372,6 +1379,13 @@ def main(argv=None):
     pl = os.path.join(BS2, 'data', 'analisis', 'lift.json')
     if os.path.exists(pl):
         docs['analisis/lift'] = json.load(open(pl, encoding='utf-8'))
+    # analisis/kad_skor: kad skor keputusan (standard/kad_skor.py, analisis.yml; pradaftar
+    # standard/SPEC_KAD_SKOR.md, 6 Nov 2026) = SATU jawapan "kaedah mana" bagi tab Pilih kaedah.
+    # Bentuk lajur (`kol` + baris senarai): 104,664 bait pada 222 kaedah (6 Nov 2026) = 40% HAD_DB,
+    # ~470 bait setiap baris; jangan tambah ke PECAH sebelum halaman membacanya dengan subBhg().
+    pk = os.path.join(BS2, 'data', 'analisis', 'kad_skor.json')
+    if os.path.exists(pk):
+        docs['analisis/kad_skor'] = json.load(open(pk, encoding='utf-8'))
     # sektor/snapshot (dijana mingguan; medan posisi dikemas kini jika fail ada)
     snap = os.path.join(BS2, 'data', 'db', 'sektor_snapshot.json')
     if os.path.exists(snap):

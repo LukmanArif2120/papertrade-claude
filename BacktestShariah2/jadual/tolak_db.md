@@ -21,7 +21,7 @@ Kalau tugasan ini gagal senyap, itulah satu-satunya perkara yang akan menangkapn
    Jika tiada larian `queued`/`in_progress`, tembak sekali (`mcp__github__actions_run_trigger`, method `run_workflow`,
    workflow_id nama workflow, ref `main`). Jangan tunggu; teruskan dengan data sedia ada dan catat dalam notifikasi.
 3. Versi dokumen db: `ArtifactData` `list` bagi koleksi `papertrade` (query.limit 100; ulang dengan next_cursor),
-   `prestasi`, `harian`, `sektor`, `analisis` dan `posisi`, dengan `out_dir` <scratchpad>/lama (kandungan tidak perlu dibaca).
+   `prestasi`, `harian`, `sektor`, `analisis`, `posisi` dan `kaedah_n`, dengan `out_dir` <scratchpad>/lama (kandungan tidak perlu dibaca).
    Tulis `<scratchpad>/versi.json` = {"papertrade/claude": versi, …} untuk SEMUA dokumen yang disenaraikan.
 4. `python3 BacktestShariah2/standard/jana_db.py --keluar <scratchpad>/db --versi <scratchpad>/versi.json`
    (`pecah_claude.py` dijalankan oleh Actions; `bahagi_db` **tidak** — ia diimport DALAM PROSES
@@ -35,7 +35,7 @@ Kalau tugasan ini gagal senyap, itulah satu-satunya perkara yang akan menangkapn
 5. Bagi setiap fail `batch_N.json` yang dicetak: `ArtifactData` `batch`, `writes` = kandungan fail itu (setiap entri sudah
    ada `file_path` dan `if_version`). Ditolak kerana versi berubah → ulang langkah 3–5 sekali.
    **URUTAN WAJIB: batch_0, batch_1, … mengikut nombor, dan urutan entri dalam setiap fail jangan diubah.**
-   `ringkas_c` ialah 22 dokumen / 3.3 MB — ia TIDAK muat satu batch, jadi `jana_db.py` meletakkan
+   `ringkas_c` ialah berpuluh dokumen (27 / 5.3 MB pada 6 Nov 2026, bertambah setiap hari) — ia TIDAK muat satu batch, jadi `jana_db.py` meletakkan
    dokumen asasnya (yang membawa `induk`) pada entri TERAKHIR. Halaman tidak merender sehingga
    setiap bahagian sepadan dengan induk asas, jadi dengan urutan ini halaman kekal memapar set
    LAMA yang lengkap sepanjang tolakan. Tolak asas lebih awal dan tab Posisi memapar "Belum ada
