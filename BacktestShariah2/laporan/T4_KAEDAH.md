@@ -1,6 +1,6 @@
 # Lorong T4 satu-kaedah (jejak hadapan; rekod sahaja)
 
-Dijana 2026-11-06 13:10 UTC oleh `standard/portfolio_t4.py` (Actions `analisis.yml`). Tiada order, tiada wang sebenar. Jangan ubah secara manual.
+Dijana 2026-11-06 14:22 UTC oleh `standard/portfolio_t4.py` (Actions `analisis.yml`). Tiada order, tiada wang sebenar. Jangan ubah secara manual.
 
 Sesi terakhir 2026-11-05. **222 kaedah**, setiap satu dua lorong (L1 = keluar kaedah, L2 = Chandelier 4xATR14). Kawalan: 20 cabutan rawak 10 slot atas seluruh kolam Lejar, diasas semula pada tarikh mula setiap lorong. Penanda aras: SPUS, asas buka sesi pertama.
 
