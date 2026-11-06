@@ -448,9 +448,6 @@ ALB,Albemarle Corporation Common Stock,NYSE,0,1,2026-10-27
 ALC,Alcon Inc. Ordinary Shares,NYSE,0,1,2026-10-27
 ALCO,"Alico, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 ALDB,Aptus Laddered Deep Buffer ETF,Cboe BZX,1,0,2026-10-27
-ALDF,Aldel Financial II Inc. - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
-ALDFU,Aldel Financial II Inc. - Units,NASDAQ,0,0,2026-10-27
-ALDFW,Aldel Financial II Inc. - Warrants,NASDAQ,0,0,2026-10-27
 ALDX,"Aldeyra Therapeutics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 ALEC,"Alector, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 ALF,Centurion Acquisition Corp. - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
@@ -10298,9 +10295,7 @@ SK,Corgi SK hynix 2x Daily ETF,Cboe BZX,1,0,2026-10-27
 SKDD,GraniteShares 2x Short SK Hynix Daily ETF,NASDAQ,1,0,2026-10-27
 SKE,Skeena Resources Limited Common Shares,NYSE,0,1,2026-10-27
 SKF,ProShares UltraShort Financials,NYSE Arca,1,0,2026-10-27
-SKHA,Tradr 2X Long SK hynix Daily ETF,Cboe BZX,1,0,2026-10-27
 SKHL,Direxion Daily SK Hynix Bull 2X ETF,NYSE Arca,1,0,2026-10-27
-SKHN,Tradr 2X Short SK hynix Daily ETF,Cboe BZX,1,0,2026-10-27
 SKHQ,Leverage Shares 2X Short Sk Hynix Daily ETF,Cboe BZX,1,0,2026-10-27
 SKHU,ProShares Ultra SK hynix,NYSE Arca,1,0,2026-10-27
 SKHX,Leverage Shares 2X Long SK Hynix Daily ETF,Cboe BZX,1,0,2026-10-27
@@ -11747,7 +11742,6 @@ USDE,StablecoinX Inc. - Class A Common Stock,NASDAQ,0,1,2026-10-27
 USDEW,StablecoinX Inc. - Warrants,NASDAQ,0,0,2026-10-27
 USDU,WisdomTree Bloomberg U.S. Dollar Bullish Fund,NYSE Arca,1,0,2026-10-27
 USDX,SGI Enhanced Core ETF,NASDAQ,1,0,2026-10-27
-USE,USCF Energy Commodity Strategy Absolute Return Fund,NYSE Arca,1,0,2026-10-27
 USEA,United Maritime Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 USEP,Innovator U.S. Equity Ultra Buffer ETF - September,Cboe BZX,1,0,2026-10-27
 USEW,Cambria US EW ETF,Cboe BZX,1,0,2026-10-27
@@ -12390,7 +12384,6 @@ WTG,Wintergreen Acquisition Corp. - Ordinary Shares,NASDAQ,0,0,2026-10-27
 WTGUR,Wintergreen Acquisition Corp. - Rights,NASDAQ,0,0,2026-10-27
 WTGUU,Wintergreen Acquisition Corp. - Unit,NASDAQ,0,0,2026-10-27
 WTI,"W&T Offshore, Inc. Common Stock",NYSE,0,1,2026-10-27
-WTIB,USCF Oil Plus Bitcoin Strategy Fund,NYSE Arca,1,0,2026-10-27
 WTID,MicroSectors Energy 3X Inverse Leveraged ETNs,NYSE Arca,1,0,2026-10-27
 WTIP,WisdomTree Inflation Plus Fund,NASDAQ,1,0,2026-10-27
 WTIU,MicroSectors Energy 3X Leveraged ETNs,NYSE Arca,1,0,2026-10-27
