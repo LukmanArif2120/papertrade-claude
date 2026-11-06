@@ -92,6 +92,8 @@ def susun(G, jenis, tarikh, benih=0):
     memberi cabutan rawak yang berbeza, diguna untuk JALUR rawak (lihat jalur_rawak)."""
     if jenis in ('RS_10', 'RISIKO_10'):
         return G.assign(_k=G.rs.fillna(-1.0)).sort_values('_k', ascending=False, kind='stable')
+    if jenis == 'RANK':   # lorong T4 satu-kaedah (portfolio_t4.py): susunan kaedah itu sendiri, rank tinggi dahulu
+        return G.assign(_k=pd.to_numeric(G['rank'], errors='coerce').fillna(-1e18)).sort_values('_k', ascending=False, kind='stable')
     rng = np.random.default_rng(int(tarikh.replace('-', '')) + int(benih) * 1_000_003)
     return G.iloc[rng.permutation(len(G))]
 
@@ -168,7 +170,7 @@ def bina(P, jenis, hari, tutup, cfg=None, gantung=None, atrp=None, benih=0):
     for d in hari:
         realisasi(True)
         if d in ikut_beli:
-            G = susun(ikut_beli[d], 'RAWAK_10' if cfg else jenis, d, benih).to_dict('records')
+            G = susun(ikut_beli[d], cfg.get('susun', 'RAWAK_10') if cfg else jenis, d, benih).to_dict('records')
             if cfg:
                 G = [r for r in G if not (r['id_kaedah'] in gantung and gantung[r['id_kaedah']] <= d)]
                 kini = {}

@@ -105,10 +105,25 @@ let gagal=0,nAudit=0;
         cb({docs:ds});return function(){};}};}};},
       doc:function(q){return {onSnapshot:function(cb){cb({exists:!!window.__D[q],data:function(){return window.__D[q];}});return function(){};}};}};}};},D);
     await p.goto('file://'+S+'/live.html');await p.waitForTimeout(2000);
-    const tabs=await p.$$eval('#mainTabs button',bs=>bs.map(b=>b.dataset.tab));
-    for(const tab of tabs){
-      const btn=await p.$(`#mainTabs button[data-tab="${tab}"]`);if(!btn)continue;
-      try{await btn.click({timeout:5000});}catch(e){continue;}await p.waitForTimeout(800);
+    /* v155 (6 Nov 2026): navigasi atas 5 tab dengan KUMPULAN (#kumpSeg: Posisi = Posisi + Watchlist;
+       Rujukan = Kaedah + Kombinasi N + Backtest + Sektor). Tanpa melawat setiap bahagian kumpulan,
+       pemeriksa ini mengaudit 10 jadual dan bukan 29 sambil melapor seperti biasa - kejatuhan liputan
+       yang sama seperti 2 Nov. Setiap pasangan (tab, bahagian) kini dilawati. `button[data-tab]`
+       kerana rel desktop meletakkan butang panel tanpa data-tab dalam #mainTabs. */
+    const tabsA=await p.$$eval('#mainTabs button[data-tab]',bs=>bs.map(b=>b.dataset.tab));
+    const tabs=[];
+    for(const ta of tabsA){
+      const btn=await p.$(`#mainTabs button[data-tab="${ta}"]`);if(!btn)continue;
+      try{await btn.click({timeout:5000});}catch(e){continue;}await p.waitForTimeout(500);
+      const ks=await p.$$eval('#kumpSeg:not([hidden]) button[data-k]',bs=>bs.map(b=>b.dataset.k)).catch(()=>[]);
+      if(ks.length)ks.forEach(k=>tabs.push([ta,k]));else tabs.push([ta,null]);}
+    for(const [ta,kb] of tabs){
+      const tab=kb||ta;
+      const btn=await p.$(`#mainTabs button[data-tab="${ta}"]`);if(!btn)continue;
+      try{await btn.click({timeout:5000});}catch(e){continue;}await p.waitForTimeout(500);
+      if(kb){const kk=await p.$(`#kumpSeg button[data-k="${kb}"]`);if(!kk)continue;
+        try{await kk.click({timeout:5000});}catch(e){continue;}}
+      await p.waitForTimeout(800);
       /* Had 6 melangkau panel 7+ secara SENYAP. Tab Kaedah N ada 9 panel rel, jadi
          Registry penuh dan Semua ujian dipradaftar tidak pernah diaudit (31 Okt 2026). */
       /* Pemilih MESTI diskop kepada paparan yang kelihatan. `.pnav-in button` sahaja
