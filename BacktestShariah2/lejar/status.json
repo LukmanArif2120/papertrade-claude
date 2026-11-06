@@ -41,8 +41,8 @@
    "sesi_terakhir_lama": "2026-10-30"
   }
  ],
- "sesi_terakhir": "2026-11-04",
- "kemaskini": "2026-11-05 15:07 MYT",
+ "sesi_terakhir": "2026-11-05",
+ "kemaskini": "2026-11-06 15:06 MYT",
  "bil_kaedah": 228,
  "larian": [
   {
@@ -290,6 +290,19 @@
    "ralat": [],
    "nota": [],
    "masa_s": 374
+  },
+  {
+   "sesi": "2026-11-05",
+   "beli": 5323,
+   "tutup": 2528,
+   "langkau": 213,
+   "isyarat": 14066,
+   "terbuka": 56304,
+   "tunggu": 2045,
+   "kaedah_isyarat": 185,
+   "ralat": [],
+   "nota": [],
+   "masa_s": 368
   }
  ],
  "tidak_layak_peraturan": "tidak_layak v3 (22 Okt 2026): tidak cair 3/2/100k, delist 10 sesi, kelas berganda; ambil_alih v1 (21 Okt 2026); kelas 430e7d7f; peristiwa v1 (22 Okt 2026); faktor 38506be4"
