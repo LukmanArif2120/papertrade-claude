@@ -5,3 +5,7 @@ curl_cffi==0.16.3
 exchange_calendars==4.13.2
 pandas==3.0.6
 numpy==2.4.6
+# 6 Nov 2026: standard/lift_kaedah.py (analisis.yml) memerlukan scipy.stats (t, norm) untuk
+# BH-FDR dan jadual kuasa. Dipin atas sebab yang sama seperti yang lain: ambang BH yang bergerak
+# secara senyap antara larian akan menukar kaedah mana dilapor "lulus".
+scipy==1.18.1

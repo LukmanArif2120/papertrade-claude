@@ -32,14 +32,22 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q -c kekangan.txt pandas numpy
+        run: pip install -q -c kekangan.txt pandas numpy scipy
       - name: Jana papan penganalisis
         run: python3 BacktestShariah2/standard/penganalisis.py
+      # Lift setiap kaedah atas kolam Lejar: ukuran yang tidak dicemari penapisan keluar, dan
+      # satu-satunya pangkat yang merangkumi Nxx (Nxx tiada backtest set 431, jadi papan di atas
+      # tidak boleh memangkatnya). Berasingan daripada papan supaya satu gagal tidak menjatuhkan
+      # yang lain; `|| true` TIDAK diguna kerana kegagalan senyap di sini bermakna laporan lapuk
+      # kelihatan segar.
+      - name: Jana lift kaedah
+        run: python3 BacktestShariah2/standard/lift_kaedah.py
       - name: Commit dan push
         run: |
           git config user.name "analisis[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add BacktestShariah2/laporan/PENGANALISIS.md BacktestShariah2/data/analisis/papan.json
+          git add BacktestShariah2/laporan/PENGANALISIS.md BacktestShariah2/data/analisis/papan.json \
+                  BacktestShariah2/laporan/LIFT_KAEDAH.md BacktestShariah2/data/analisis/lift.json
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "Papan penganalisis: data $(python3 -c "import json;print(json.load(open('BacktestShariah2/data/analisis/papan.json'))['kini'])")"
           for n in 1 2 3; do
