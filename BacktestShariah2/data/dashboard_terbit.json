@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793980318-366e",
-  "nombor": 187,
-  "sha256": "a12232df5468e6639f93b9a3cdadb0b96a54fc0cccde61e5dd96c1af5a9a55a5",
-  "bait": 600483,
-  "dikemas": "2026-11-06 15:52 UTC",
-  "nota": "v156 (6 Nov 2026, semakan semula laporan audit v154; keputusan pengguna: semua jurang sekarang + G4 ketat): senarai beli sebenar (papertrade/senarai_beli) dan Perlu perhatian dalam Hari ini; satu kosa kata status (kad skor); tab Sektor diarkib; kad skor + keluar/pegang, Backtest | Hadapan, REPLIKA, spec asal; G4 = hari-0 sifar; Peta saham unik; segmen Lorong 2 sahaja; Purata R 1R = ATR14 bagi kaedah tanpa henti; saringan Backtest langkah 6-7 = Papan Penganalisis."
+  "versi_artifact": "1793985123-4fbe",
+  "nombor": 188,
+  "sha256": "41a65ed3fc25ba78a8680883fadf4bb7d834ab196c8ce0b18c1d4107977266bb",
+  "bait": 608869,
+  "dikemas": "2026-11-06 17:12 UTC",
+  "nota": "v157 (keputusan pengguna 6 Nov 2026: data institusi SEC digabung ke Sektor): bahagian Rujukan -> Sektor kembali dengan panel Aliran institusi (13F) sahaja, db institusi/kumpulan (standard/institusi_13f.py, institusi.yml mingguan); paparan sahaja."
 }
