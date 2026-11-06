@@ -19,8 +19,12 @@
 #   * Pegangan pemfail = laporan asal terakhir ATAU pernyataan semula (RESTATEMENT) terakhir, mana lebih lewat, ditambah
 #     pindaan NEW HOLDINGS yang difail selepasnya. Baris SH sahaja, tanpa put/call; dijumlah ikut (CIK, ticker).
 #   * Pecahan saham: nisbah median saham P/P-1 pemegang berterusan; jika |log| > log 1.4 dan ia dekat (15%) dengan
-#     nisbah pecahan biasa DAN harga bergerak bertentangan, saham P-1 didarab faktor itu.
+#     nisbah pecahan biasa (dan, bila < 20 pemegang berterusan, harga bergerak bertentangan), saham P-1 didarab faktor.
 #   * aliran_usd = (saham_inst − saham_inst_lalu×faktor) × harga P; ubah_saham_pct = perubahan saham institusi (%).
+#   * Pembersihan (6 Nov 2026, diukur pada Q2 2026): baris dengan harga tersirat > 3x daripada median CUSIP dibuang
+#     (BRK.A dilapor dengan bilangan saham B: +78.6% -> +10.8%); CUSIP lama yang OpenFIGI tidak kenal (redomisil XOM:
+#     4 pemegang lalu -> 4,510) dipeta melalui nama penerbit 13F jika nama itu menunjuk kepada SATU ticker; `sah` =
+#     False bagi IPO tanpa asas, asas pemegang berubah > 2x, atau |ubah| > 300% — dikecualikan daripada agregat.
 #   * Kumpulan (industri = peta_industri, sektor = SEKTOR_INDUSTRI): aliran_pct = Σaliran ÷ Σnilai lalu (berat nilai,
 #     dikuasai saham besar) dan median ubah_saham_pct (berat sama, saham ≥ PEMEGANG_MIN pemegang lalu). skor = purata
 #     pangkat persentil kedua-duanya; gred A > 80 … E <= 20 (sama seperti gred_kumpulan). Kumpulan < MIN_SAHAM tiada skor.
@@ -53,7 +57,7 @@ PEMEGANG_MIN = 5     # saham masuk median kumpulan jika pemegang lalu >= 5
 MIN_SAHAM = 3
 TERATAS = 5
 LAJUR_SAHAM = ['tempoh', 'ticker', 'pemegang', 'pemegang_lalu', 'baru', 'keluar', 'bersih', 'saham_inst',
-               'saham_inst_lalu', 'ubah_saham_pct', 'harga', 'aliran_usd', 'nilai_inst_usd', 'faktor_pecahan']
+               'saham_inst_lalu', 'ubah_saham_pct', 'harga', 'aliran_usd', 'nilai_inst_usd', 'faktor_pecahan', 'sah']
 LAJUR_KUMP = ['tempoh', 'jenis', 'nama', 'sektor', 'n', 'aliran_usd', 'nilai_lalu_usd', 'aliran_pct',
               'median_ubah_pct', 'pct_bersih_positif', 'baru', 'keluar', 'skor', 'gred', 'teratas', 'dibina']
 
@@ -98,14 +102,17 @@ def pilih_akses(sub):
     return [a.akses] + list(tambah.akses)
 
 
-def faktor_pecahan(nisbah_saham, nisbah_harga):
-    """Nisbah median saham P/P-1 pemegang berterusan dan nisbah harga P/P-1 -> faktor pecahan (1 jika tiada)."""
+def faktor_pecahan(nisbah_saham, nisbah_harga, n_teru=0):
+    """Nisbah median saham P/P-1 pemegang berterusan dan nisbah harga P/P-1 -> faktor pecahan (1 jika tiada).
+    Semakan harga (harga mesti bergerak bertentangan) hanya bila pemegang berterusan < 20: pada saham dipegang luas
+    median itu sendiri sudah kukuh, dan semakan harga GAGAL apabila pecahan berlaku serentak dengan spin-off
+    (HON Q2 2026: penyatuan 1:2 + spin-off HONA, harga hampir rata)."""
     if not (nisbah_saham > 0 and math.isfinite(nisbah_saham)) or abs(math.log(nisbah_saham)) <= math.log(1.4):
         return 1.0
     f = min(PECAHAN, key=lambda k: abs(math.log(nisbah_saham / k)))
     if abs(math.log(nisbah_saham / f)) > math.log(1.15):
         return 1.0
-    if nisbah_harga > 0 and math.isfinite(nisbah_harga) and not (0.5 <= nisbah_harga * f <= 2.0):
+    if n_teru < 20 and nisbah_harga > 0 and math.isfinite(nisbah_harga) and not (0.5 <= nisbah_harga * f <= 2.0):
         return 1.0
     return float(f)
 
@@ -120,12 +127,13 @@ def aliran(kini, lalu):
     harga_l = (hl.nl / hl.sl).replace([np.inf, -np.inf], np.nan)
     teru = g[(g.saham > 0) & (g.saham_l > 0)]
     r_med = (teru.saham / teru.saham_l).groupby(teru.ticker).median()
+    n_teru = teru.groupby('ticker').size()
     ada, ada_l = g.saham > 0, g.saham_l > 0
     d = pd.DataFrame(dict(pemegang=ada, pemegang_lalu=ada_l, baru=ada & ~ada_l, keluar=~ada & ada_l,
                           saham_inst=g.saham, sl=g.saham_l, nilai_inst_usd=g.nilai)).groupby(g.ticker).sum()
     d = d.sort_index()
     nh = (harga_k / harga_l).reindex(d.index)
-    d['faktor_pecahan'] = [faktor_pecahan(r_med.get(t, np.nan), nh.get(t, np.nan)) for t in d.index]
+    d['faktor_pecahan'] = [faktor_pecahan(r_med.get(t, np.nan), nh.get(t, np.nan), n_teru.get(t, 0)) for t in d.index]
     d['saham_inst_lalu'] = d.sl * d.faktor_pecahan
     hrg = harga_k.reindex(d.index)
     d['harga'] = hrg.fillna(harga_l.reindex(d.index) / d.faktor_pecahan)
@@ -134,7 +142,42 @@ def aliran(kini, lalu):
     d['aliran_usd'] = (d.saham_inst - d.saham_inst_lalu) * d.harga
     for c in ['pemegang', 'pemegang_lalu', 'baru', 'keluar', 'bersih']:
         d[c] = d[c].astype(int)
-    return d.reset_index()[[c for c in LAJUR_SAHAM if c != 'tempoh']]
+    d = d.reset_index()
+    d['sah'] = tanda_sah(d)
+    return d[[c for c in LAJUR_SAHAM if c != 'tempoh']]
+
+
+_BUANG = r'\b(COM|COMMON|STOCK|SHS|SHARES|NEW|REGISTERED|ORD|ORDINARY|INC|CORP|CORPORATION|CO|COMPANY|LTD|PLC|THE|HLDGS|HOLDINGS|GROUP|NV|SA|AG|LP)\b'
+
+
+def nama_norm(n):
+    """Nama penerbit 13F -> kunci padanan: huruf besar, buang kata generik dan tanda baca ('EXXON MOBIL CORP COM' ->
+    'EXXONMOBIL'). Kelas saham (CL A/B) DIKEKALKAN supaya GOOG/GOOGL tidak bercampur."""
+    n = re.sub(r'\(.*?\)', ' ', str(n).upper())
+    return re.sub(r'[^A-Z0-9]', '', re.sub(_BUANG, ' ', n))
+
+
+def peta_nama(tick, nama):
+    """CUSIP tanpa ticker (cth. CUSIP lama selepas redomisil — OpenFIGI hanya kenal CUSIP semasa) -> ticker melalui nama
+    penerbit 13F yang SAMA dengan CUSIP yang sudah dipetakan, hanya jika nama itu menunjuk kepada SATU ticker.
+    tick: dict cusip -> ticker ('' = tiada); nama: Siri cusip -> nama_norm. Pulang dict cusip -> ticker (tambahan)."""
+    ada = pd.DataFrame({'nama': nama}).assign(ticker=lambda d: d.index.map(lambda c: tick.get(c, '')))
+    kenal = ada[(ada.ticker != '') & (ada.nama.str.len() >= 4)]
+    unik = kenal.groupby('nama').ticker.agg(lambda x: x.iloc[0] if x.nunique() == 1 else '')
+    unik = unik[unik != '']
+    asing = ada[(ada.ticker == '') & ada.nama.isin(unik.index)]
+    return {c: unik[n] for c, n in asing.nama.items()}
+
+
+def tanda_sah(d):
+    """Lajur `sah`: saham yang angka alirannya boleh dipercayai untuk agregat. Tidak sah jika (a) tiada asas suku lalu
+    (pemegang_lalu < PEMEGANG_MIN: IPO/penyenaraian baharu), (b) asas pemegang berubah > 2x dalam satu suku pada saham
+    yang dipegang luas (tanda tukar CUSIP yang tidak dipetakan, atau tindakan korporat), atau (c) |ubah saham| > 300%
+    (pecahan yang tidak dikesan)."""
+    hi = d[['pemegang', 'pemegang_lalu']].max(axis=1)
+    lo = d[['pemegang', 'pemegang_lalu']].min(axis=1)
+    goyah = (hi >= 20) & (lo < 0.5 * hi)
+    return (d.pemegang_lalu >= PEMEGANG_MIN) & ~goyah & ~(d.ubah_saham_pct.abs() > 300)
 
 
 def doc_db(saham, kump, peta, sektor_industri, ringkas):
@@ -143,7 +186,8 @@ def doc_db(saham, kump, peta, sektor_industri, ringkas):
     tp = ringkas['tempoh']
     s = saham[saham.tempoh.astype(str) == tp].merge(peta[['ticker', 'industri']], on='ticker', how='inner')
     s['sektor'] = s.industri.map(sektor_industri).fillna('Lain-lain')
-    s = s[s.pemegang_lalu >= PEMEGANG_MIN].sort_values('aliran_usd', ascending=False)
+    s = s[(s.pemegang_lalu >= PEMEGANG_MIN) & s.sah.astype(str).isin(['True', 'true', '1'])]
+    s = s.sort_values('aliran_usd', ascending=False)
 
     def r(v, n=2):
         return None if v is None or (isinstance(v, float) and not math.isfinite(v)) else round(float(v), n)
@@ -163,6 +207,16 @@ def doc_db(saham, kump, peta, sektor_industri, ringkas):
                 rows=rows)
 
 
+def buang_salah_lapor(d, gandaan=3.0):
+    """Baris pegangan (cusip, saham, nilai) yang harga tersiratnya (nilai/saham) lebih `gandaan` kali daripada median
+    CUSIP itu = salah lapor (cth. BRK.A dilapor dengan bilangan saham kelas B; nilai dalam ribuan ikut konvensyen lama).
+    Dibuang sebelum dijumlah ikut pemfail."""
+    px = d.nilai / d.saham
+    med = px.groupby(d.cusip).transform('median')
+    ok = (px >= med / gandaan) & (px <= med * gandaan)
+    return d[ok]
+
+
 def pangkat_gred(s):
     """Siri skor 0–100 -> gred A–E (sama seperti gred_kumpulan.gred)."""
     return s.map(lambda v: '' if pd.isna(v) else 'A' if v > 80 else 'B' if v > 60 else 'C' if v > 40
@@ -171,7 +225,8 @@ def pangkat_gred(s):
 
 def kumpulan(saham, peta, sektor_industri, dibina=''):
     """saham: output aliran() + tempoh; peta: DataFrame ticker, industri. Pulang LAJUR_KUMP."""
-    d = saham.merge(peta[['ticker', 'industri']], on='ticker', how='inner')
+    d = saham[saham.sah.astype(str).isin(['True', 'true', '1'])]
+    d = d.merge(peta[['ticker', 'industri']], on='ticker', how='inner')
     d['sektor'] = d.industri.map(sektor_industri).fillna('Lain-lain')
     keluar = []
     for jenis, kunci in [('Industri', 'industri'), ('Sektor', 'sektor')]:
@@ -276,15 +331,17 @@ def baca_pegangan(pilih, sub):
         mahu = {a for a, zz in pilih.items() if zz == z}
         with zipfile.ZipFile(z) as zf:
             for ch in pd.read_csv(zf.open('INFOTABLE.tsv'), sep='\t', dtype=str, chunksize=500_000,
-                                  usecols=['ACCESSION_NUMBER', 'CUSIP', 'VALUE', 'SSHPRNAMT', 'SSHPRNAMTTYPE',
-                                           'PUTCALL']):
+                                  usecols=['ACCESSION_NUMBER', 'NAMEOFISSUER', 'CUSIP', 'VALUE', 'SSHPRNAMT',
+                                           'SSHPRNAMTTYPE', 'PUTCALL']):
                 ch = ch[ch.ACCESSION_NUMBER.isin(mahu) & (ch.SSHPRNAMTTYPE == 'SH') & ch.PUTCALL.isna()]
                 out.append(pd.DataFrame(dict(cik=ch.ACCESSION_NUMBER.map(cik), cusip=ch.CUSIP.str.upper().str.strip(),
+                                             nama=ch.NAMEOFISSUER.fillna('').map(nama_norm),
                                              saham=pd.to_numeric(ch.SSHPRNAMT, errors='coerce'),
                                              nilai=pd.to_numeric(ch.VALUE, errors='coerce'))))
-    d = pd.concat(out, ignore_index=True).dropna()
-    d = d[(d.saham > 0) & (d.cusip.str.len() == 9)]
-    return d.groupby(['cik', 'cusip'], as_index=False)[['saham', 'nilai']].sum()
+    d = pd.concat(out, ignore_index=True).dropna(subset=['cik', 'saham', 'nilai'])
+    d = buang_salah_lapor(d[(d.saham > 0) & (d.nilai > 0) & (d.cusip.str.len() == 9)])
+    nama = d[d.nama != ''].groupby('cusip').nama.agg(lambda x: x.value_counts().index[0])
+    return d.groupby(['cik', 'cusip'], as_index=False)[['saham', 'nilai']].sum(), nama
 
 
 def peta_cusip(cusips, laluan, had_masa=None):
@@ -362,12 +419,17 @@ def jalan(a):
         pk, ck = akses_tempoh(sub, P)
         pl, cl = akses_tempoh(sub, L)
         dua = ck & cl
-        gk, gl = baca_pegangan(pk, sub), baca_pegangan(pl, sub)
+        (gk, nk), (gl, nl) = baca_pegangan(pk, sub), baca_pegangan(pl, sub)
         gk, gl = gk[gk.cik.isin(dua)], gl[gl.cik.isin(dua)]
         n = pd.concat([gk, gl]).groupby('cusip').cik.nunique()
         tick = peta_cusip(list(n[n >= PEMFAIL_MIN].index), a.cusip, a.had_figi)
-        f = lambda g: (g.assign(ticker=g.cusip.map(tick)).query('ticker in @univ')  # noqa: E731
-                       .groupby(['cik', 'ticker'], as_index=False)[['saham', 'nilai']].sum())
+        nama = pd.concat([nk, nl]).groupby(level=0).first()
+        tambah = peta_nama(tick, nama[nama.index.isin(n[n >= PEMFAIL_MIN].index)])
+        tick = {**tick, **tambah}
+        print(f'  CUSIP dipetakan melalui nama penerbit: {len(tambah)}', flush=True)
+        def f(g):
+            g = g.assign(ticker=g.cusip.map(tick))
+            return g[g.ticker.isin(univ)].groupby(['cik', 'ticker'], as_index=False)[['saham', 'nilai']].sum()
         s = aliran(f(gk), f(gl))
         s.insert(0, 'tempoh', P.isoformat())
         semua_saham.append(s)

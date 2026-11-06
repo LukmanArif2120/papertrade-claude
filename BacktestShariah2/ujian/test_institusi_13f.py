@@ -63,6 +63,15 @@ class TestPecahan(unittest.TestCase):
         # saham pemegang berganda tetapi harga juga naik: belian sebenar, bukan pecahan
         self.assertEqual(I.faktor_pecahan(2.0, 1.1), 1.0)
 
+    def test_pemegang_luas_abaikan_harga(self):
+        # penyatuan 1:2 serentak spin-off: harga hampir rata, median 0.5 pada 3,000 pemegang = pecahan
+        self.assertEqual(I.faktor_pecahan(0.5, 0.99, 3000), 0.5)
+        self.assertEqual(I.faktor_pecahan(0.5, 0.99, 5), 1.0)
+
+    def test_buang_salah_lapor(self):
+        d = pd.DataFrame(dict(cusip=['A'] * 4 + ['B'], saham=[10, 10, 10, 10_000, 5], nilai=[100, 110, 90, 100, 5]))
+        self.assertEqual(list(I.buang_salah_lapor(d).saham), [10, 10, 10, 5])
+
     def test_nisbah_janggal_bukan_pecahan(self):
         self.assertEqual(I.faktor_pecahan(2.6, 0.38), 1.0)
 
@@ -97,6 +106,29 @@ class TestAliran(unittest.TestCase):
         self.assertAlmostEqual(r.loc['X'].aliran_usd, -100.0)   # harga lalu dipakai bila tiada pegangan kini
 
 
+class TestNamaDanSah(unittest.TestCase):
+    def test_nama_norm(self):
+        self.assertEqual(I.nama_norm('EXXON MOBIL CORP COM'), 'EXXONMOBIL')
+        self.assertEqual(I.nama_norm('ExxonMobil Holdings Corp'), 'EXXONMOBIL')
+        self.assertEqual(I.nama_norm('EXXON MOBIL (REGISTERED)'), 'EXXONMOBIL')
+        self.assertNotEqual(I.nama_norm('ALPHABET INC CL A'), I.nama_norm('ALPHABET INC CL C'))
+
+    def test_peta_nama_unik_sahaja(self):
+        tick = {'NEW000001': 'XOM', 'OLD000001': '', 'GA0000001': 'GOOGL', 'GC0000001': 'GOOG', 'GX0000001': ''}
+        nama = pd.Series({'NEW000001': 'EXXONMOBIL', 'OLD000001': 'EXXONMOBIL', 'GA0000001': 'ALPHABET',
+                          'GC0000001': 'ALPHABET', 'GX0000001': 'ALPHABET'})
+        self.assertEqual(I.peta_nama(tick, nama), {'OLD000001': 'XOM'})   # ALPHABET -> 2 ticker: tidak dipeta
+
+    def test_tanda_sah(self):
+        d = pd.DataFrame(dict(pemegang=[100, 390, 106, 2452, 100], pemegang_lalu=[95, 4, 0, 2048, 3],
+                              ubah_saham_pct=[3.0, 9e4, np.nan, 920.0, 10.0]))
+        self.assertEqual(list(I.tanda_sah(d)), [True, False, False, False, False])
+
+    def test_aliran_ada_sah(self):
+        r = I.aliran(pg([(str(i), 'A', 10, 100) for i in range(6)]), pg([(str(i), 'A', 10, 100) for i in range(6)]))
+        self.assertTrue(bool(r.sah.iloc[0]))
+
+
 class TestKumpulan(unittest.TestCase):
     def test_skor_dan_teratas(self):
         rows = []
@@ -108,7 +140,7 @@ class TestKumpulan(unittest.TestCase):
                                  baru=3 if ubah > 0 else 0, keluar=3 if ubah < 0 else 0,
                                  bersih=3 if ubah > 0 else -3 if ubah < 0 else 0, saham_inst=sk, saham_inst_lalu=sl,
                                  ubah_saham_pct=(sk / sl - 1) * 100, harga=10.0, aliran_usd=(sk - sl) * 10,
-                                 nilai_inst_usd=sk * 10, faktor_pecahan=1.0))
+                                 nilai_inst_usd=sk * 10, faktor_pecahan=1.0, sah=True))
         s = pd.DataFrame(rows)
         peta = pd.DataFrame(dict(ticker=s.ticker, industri=[t for t in ['Semiconductors', 'Banks - Regional',
                                                                          'Oil & Gas E&P'] for _ in range(4)]))
@@ -131,7 +163,7 @@ class TestKumpulan(unittest.TestCase):
     def test_kumpulan_kecil_tiada_skor(self):
         s = pd.DataFrame([dict(tempoh='2026-06-30', ticker='A', pemegang=9, pemegang_lalu=9, baru=0, keluar=0,
                                bersih=0, saham_inst=1.0, saham_inst_lalu=1.0, ubah_saham_pct=0.0, harga=1.0,
-                               aliran_usd=0.0, nilai_inst_usd=1.0, faktor_pecahan=1.0)])
+                               aliran_usd=0.0, nilai_inst_usd=1.0, faktor_pecahan=1.0, sah=True)])
         k = I.kumpulan(s, pd.DataFrame(dict(ticker=['A'], industri=['Semiconductors'])), I_SEKTOR)
         self.assertTrue(k.skor.isna().all())
         self.assertTrue((k.gred == '').all())

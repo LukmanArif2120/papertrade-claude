@@ -2876,7 +2876,7 @@ function renderSektor(){
   const nm=r=>`<b>${esc(r.n)}</b> ${sg1(r.a)}`;
   const seg=`<div class="seg" id="instJ">${[['S','Sektor'],['I','Industri']].map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${sf.j===v}">${t}</button>`).join('')}</div>`;
   const sel=sf.j==='I'?`<select id="instSek" aria-label="Tapis sektor"><option value="">Semua sektor</option>${sek.map(r=>r.n).sort().map(n=>`<option ${sf.sek===n?'selected':''}>${esc(n)}</option>`).join('')}</select>`:'';
-  el.innerHTML=`<p class="headline">${ber.length?`Suku ${esc(d.tempoh)}: institusi paling banyak <b>menambah</b> ${sf.j==='S'?'sektor':'industri'} ${ber.slice(0,3).map(nm).join(', ')}; paling banyak <b>mengurangkan</b> ${ber.slice(-3).reverse().map(nm).join(', ')}.`:''} Data 13F, <b>paparan sahaja</b>, bukan penapis beli.</p>
+  el.innerHTML=`<p class="headline">${ber.length?`Suku ${esc(d.tempoh)}: ${sf.j==='S'?'sektor':'industri'} dengan skor aliran institusi <b>tertinggi</b> ${ber.slice(0,3).map(nm).join(', ')}; <b>terendah</b> ${ber.slice(-3).reverse().map(nm).join(', ')}. Skor adalah relatif: angka positif di bawah bermakna institusi tetap menambah, cuma kurang daripada kumpulan lain.`:''} Data 13F, <b>paparan sahaja</b>, bukan penapis beli.</p>
   <div class="panel">${h}<span class="sub">Pegangan ${esc(d.tempoh)} lawan ${esc(d.tempoh_lalu)} · ${fx(d.pemfail,0)} dana yang memfail kedua-dua suku · ${fx(d.saham,0)} saham · SEC Form 13F</span></div>
     <div class="filters" style="margin-bottom:10px">${seg}${sel}</div>
     ${sortTable({id:'inst-'+sf.j,rows,lp:LP_INST,limit:TELEFON?sf.shown||AWAL*2:0,foot:TELEFON?kakiLagi('instMore'):null,def:{k:'sk',dir:-1},cols:[
