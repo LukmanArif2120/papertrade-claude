@@ -25,25 +25,22 @@ Notifikasi: ntfy SAHAJA (`amaran_ntfy.yml`), dan **hanya** apabila sesuatu dipul
    (tanpa `--versi`; ini hanya untuk MEMBANDING, bukan menolak).
    Baca `<scratchpad>/db0/ringkas.json` → simpan senarai `kumpulan_terpecah`.
 
-3. Baca keadaan HIDUP tanpa memuatkan kandungan ke dalam perbualan:
-   `ArtifactData` `list` bagi koleksi `harian`, `papertrade`, `analisis`, `posisi`, `prestasi`
-   (query.limit 100; ulang dengan next_cursor) dengan `out_dir` `<scratchpad>/hidup`.
-   Kalau `out_dir` ditolak bagi sesuatu koleksi, guna `get` bagi dokumen yang diperlukan sahaja.
+3. Baca keadaan HIDUP: `ArtifactData` `get` koleksi `harian` doc_id `status` (TANPA out_dir; dokumen kecil)
+   dan koleksi `meta` doc_id `versi_db` (TANPA out_dir). `out_dir` dan `list` kini DITOLAK oleh alat bagi
+   dokumen db ini (6 Nov 2026) — jangan cuba.
 
-4. **Semakan A — kesegaran.** Banding `<scratchpad>/hidup/harian/status.json` dengan
+4. **Semakan A — kesegaran.** Banding `harian/status` hidup (langkah 3) dengan
    `<scratchpad>/db0/harian/status.json` pada tiga medan: `harga_tutup_pada`, `tarikh_data`,
    `beli_pada`. Ketiga-tiganya sama → db segar.
 
-5. **Semakan B — penghimpunan.** Bagi setiap nama dalam `kumpulan_terpecah` (langkah 2) dan
-   setiap dokumen dalam `jana_db.PECAH`, banding `bahagian.id` dokumen asas HIDUP dengan
-   `induk` bahagian bernombor TERTINGGI yang hidup. Sama → lengkap.
-   (Sah kerana `jana_db.batchkan` menolak dokumen asas TERAKHIR dalam kumpulan yang tidak muat
-   satu batch: kalau induk asas sudah baharu, setiap bahagiannya sudah ditulis sebelum itu.)
+5. **Semakan B — daftar versi.** `meta/versi_db` hidup: medan `data.sesi` mesti sama dengan `sesi` dalam
+   `<scratchpad>/db0/ringkas.json`. Daftar hanya ditulis selepas SEMUA batch diterima (tolak_db.md 5c), jadi
+   sesi yang sama bermakna tolakan 10:20 lengkap. (Semakan lama membaca bahagian dengan `out_dir`; ditolak.)
 
 6. **Kedua-dua semakan lulus** → tamat. Tiada tolakan, tiada notifikasi, tiada commit.
    Balas satu baris: `db segar (sesi <tarikh>), 0 tindakan`.
 
-7. **Mana-mana semakan gagal** → jalankan `BacktestShariah2/jadual/tolak_db.md` langkah 3–5b
+7. **Mana-mana semakan gagal** → jalankan `BacktestShariah2/jadual/tolak_db.md` langkah 3–5c
    sepenuhnya (versi dokumen → `jana_db.py --versi` → `ArtifactData batch` mengikut urutan
    `batch_0, batch_1, …` → sahkan penghimpunan). Kemudian cetus ntfy:
    `mcp__github__actions_run_trigger` (method `run_workflow`, owner `pedagangsenja`,

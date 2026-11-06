@@ -1454,9 +1454,20 @@ def main(argv=None):
     kn = kaedah_n(dibina)
     if kn:
         docs['kaedah_n/papan'] = kn
+    # SANDARAN TIDAK DITOLAK LAGI (6 Nov 2026; audit v154 pepijat #6). `papertrade/claude`, `claude_2…N` (1:1
+    # dengan claude*.csv) dan `papertrade/moomoo(+_2)` ialah ~62% bait tolakan harian, tetapi halaman hanya
+    # membacanya jika `ringkas_c`/`ringkas_m` TIADA (subRingkas -> lama()). Dengan daftar versi (lihat
+    # versi_selepas.json di bawah) setiap dokumen yang ditolak mesti diketahui versinya; menolak 170 dokumen yang
+    # tidak dibaca hanya menambah 30 batch dan 170 versi untuk dijejak. JANA_SANDARAN=1 memulihkannya.
+    if os.environ.get('JANA_SANDARAN') != '1':
+        for k in [k for k in docs if re.fullmatch(r'papertrade/(claude(_\d+)?|moomoo(_\d+)?)', k)]:
+            docs.pop(k)
     # tulis + bahagi + batch
     os.makedirs(a.keluar, exist_ok=True)
+    # --versi menerima peta rata {"koleksi/doc": versi} ATAU daftar db `meta/versi_db` ({"versi": {...}}).
     versi = json.load(open(a.versi)) if a.versi else {}
+    if isinstance(versi.get('versi'), dict):
+        versi = versi['versi']
     tulis = []
     semua = [(nama.split('/')[0], bahagi(d, nama.split('/')[1], 200000) if nama in PECAH
               else [(nama.split('/')[1], d)]) for nama, d in docs.items()]
@@ -1496,6 +1507,20 @@ def main(argv=None):
     ring = dict(dibina=dibina, sesi=S, dokumen=len(tulis), batch=fail, kumpulan_terpecah=terpecah, hampir_had=hampir, tanpa_versi=[f"{w['collection']}/{w['doc_id']}" for w, _, _ in tulis if 'if_version' not in w],
                 pengawas=pengawas(st, masa))
     json.dump(ring, open(os.path.join(a.keluar, 'ringkas.json'), 'w'), ensure_ascii=False, indent=1)
+    # DAFTAR VERSI (6 Nov 2026). ArtifactData kini enggan menyimpan dokumen db ke fail (`out_dir`)
+    # kerana dokumen itu "mungkin ditulis orang lain", jadi sesi berjadual tidak lagi boleh MEMBACA
+    # versi ~250 dokumen tanpa memuatkan 36 MB ke dalam perbualan - tolakan db gagal 4-6 Nov 2026.
+    # Penyelesaian: versi DIKIRA. Setiap tulisan menaikkan versi tepat 1 (diukur: 1->2, 12->13), dan
+    # hanya paip ini menulis dokumen ini (peraturan db: tulis = admin). Jadi selepas semua batch
+    # berjaya, versi baharu = pin + 1 (dokumen baharu = 1). Fail ini ditolak sebagai `meta/versi_db`
+    # (dokumen kecil, dibaca dengan `get` tanpa out_dir) dan menjadi --versi larian berikutnya.
+    baru = dict(versi)
+    for w, _, _ in tulis:
+        baru[f"{w['collection']}/{w['doc_id']}"] = int(w['if_version']) + 1 if 'if_version' in w else 1
+    json.dump(dict(versi=dict(sorted(baru.items())), dibina=dibina, sesi=S,
+                   nota='Daftar versi dokumen db yang ditulis jana_db.py (tolak_db.md langkah 3/5c). '
+                        'Sah HANYA jika setiap batch larian itu berjaya.'),
+              open(os.path.join(a.keluar, 'versi_selepas.json'), 'w'), ensure_ascii=False, indent=1)
     print(json.dumps(ring, ensure_ascii=False, indent=1))
 
 
