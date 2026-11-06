@@ -5,3 +5,11 @@ curl_cffi==0.16.3
 exchange_calendars==4.13.2
 pandas==3.0.6
 numpy==2.4.6
+# 6 Nov 2026: standard/lift_kaedah.py (analisis.yml) memerlukan scipy.stats (t, norm) untuk
+# BH-FDR dan jadual kuasa. Dipin atas sebab yang sama seperti yang lain: ambang BH yang bergerak
+# secara senyap antara larian akan menukar kaedah mana dilapor "lulus".
+# 1.17.1 ialah yang TERBARU yang menyokong Python 3.11, versi yang Actions jalankan. Pin 1.18.1
+# (versi sesi kerja, Python 3.13) menggagalkan `pip install -r requirements.txt` sepenuhnya kerana
+# scipy 1.18 memerlukan >= 3.12 dan scikit-learn menariknya masuk: run #396 ResolutionImpossible.
+# Jangan naikkan tanpa menyemak sokongan Python 3.11 dahulu.
+scipy==1.17.1

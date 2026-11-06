@@ -32,14 +32,48 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q -c kekangan.txt pandas numpy
+        run: pip install -q -c kekangan.txt pandas numpy scipy
       - name: Jana papan penganalisis
         run: python3 BacktestShariah2/standard/penganalisis.py
+      # Lift setiap kaedah atas kolam Lejar: ukuran yang tidak dicemari penapisan keluar, dan
+      # satu-satunya pangkat yang merangkumi Nxx (Nxx tiada backtest set 431, jadi papan di atas
+      # tidak boleh memangkatnya).
+      #
+      # `continue-on-error` + langkah semakan SELEPAS commit, mengikut pelajaran yang sama seperti
+      # `koordinator.py --semak` dalam harian.yml: kegagalan alat baharu TIDAK boleh menghalang
+      # papan penganalisis daripada dikomit malam itu. Tanpa ini, satu ralat dalam lift_kaedah.py
+      # menghentikan job sebelum langkah commit, dan PENGANALISIS.md + papan.json berhenti
+      # dikemas secara SENYAP sedangkan penjananya sendiri berjaya. `|| true` sahaja tidak cukup
+      # kerana kegagalan senyap bermakna laporan lapuk kelihatan segar — maka langkah terakhir
+      # tetap menggagalkan job supaya amaran_ntfy.yml berbunyi, selepas data selamat.
+      - name: Jana lift kaedah
+        id: lift
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/lift_kaedah.py
+      # KAEDAH_TERBAIK.md menjawab soalan yang mesti dijawab SEBELUM mana-mana pangkat boleh
+      # dipercayai (adakah pangkat backtest meramal hadapan; ada kaedah positif yang bertahan
+      # BH-FDR; bila pangkat boleh dipercayai). Sebelum 6 Nov 2026 ia tiada dalam mana-mana
+      # workflow — ia berjalan hanya apabila seseorang menaipnya, jadi ia bertarikh 29 Okt
+      # sementara datanya bergerak setiap malam, dan enam ayat dalam laporannya menjadi palsu
+      # tanpa sesiapa nampak. Teks tetap itu sudah dibuang, tetapi laporan yang hanya dijana
+      # dengan tangan tetap akan lapuk. Ia membaca data/analisis/papan.json, jadi ia mesti
+      # SELEPAS penganalisis.py.
+      - name: Jana laporan kaedah terbaik
+        id: terbaik
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/kaedah_terbaik.py
       - name: Commit dan push
         run: |
           git config user.name "analisis[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add BacktestShariah2/laporan/PENGANALISIS.md BacktestShariah2/data/analisis/papan.json
+          # Fail lift ditambah hanya jika ia WUJUD: pada larian pertama selepas gabung ia belum
+          # dijejak, dan `git add` pada laluan yang tiada menggagalkan langkah ini — iaitu tepat
+          # kegagalan yang baris continue-on-error di atas cuba elakkan.
+          for f in BacktestShariah2/laporan/LIFT_KAEDAH.md BacktestShariah2/data/analisis/lift.json \
+                   BacktestShariah2/laporan/KAEDAH_TERBAIK.md; do
+            if [ -f "$f" ]; then git add "$f"; fi
+          done
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "Papan penganalisis: data $(python3 -c "import json;print(json.load(open('BacktestShariah2/data/analisis/papan.json'))['kini'])")"
           for n in 1 2 3; do
@@ -48,4 +82,16 @@ jobs:
             sleep $((n * 15))
           done
           echo "Push gagal; larian seterusnya menjana semula." >&2
+          exit 1
+      # Dijalankan SELEPAS commit: data malam ini sudah selamat, jadi job boleh gagal dengan jujur.
+      - name: Semak laporan sampingan berjaya
+        if: steps.lift.outcome == 'failure' || steps.terbaik.outcome == 'failure'
+        run: |
+          if [ "${{ steps.lift.outcome }}" = "failure" ]; then
+            echo "lift_kaedah.py GAGAL (lihat langkah 'Jana lift kaedah'); analisis/lift lapuk." >&2
+          fi
+          if [ "${{ steps.terbaik.outcome }}" = "failure" ]; then
+            echo "kaedah_terbaik.py GAGAL (lihat langkah 'Jana laporan kaedah terbaik')." >&2
+          fi
+          echo "Papan penganalisis sudah dikomit; hanya laporan sampingan yang lapuk." >&2
           exit 1

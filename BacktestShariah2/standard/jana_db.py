@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
-# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, harian/status,
+# papertrade/watchlist(+_2…), prestasi/ringkasan, prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), harian/status,
 # harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
@@ -1363,6 +1363,15 @@ def main(argv=None):
     pa = os.path.join(BS2, 'data', 'analisis', 'papan.json')
     if os.path.exists(pa):
         docs['analisis/papan'] = json.load(open(pa, encoding='utf-8'))
+    # analisis/lift: lift setiap kaedah atas kolam Lejar (standard/lift_kaedah.py, analisis.yml).
+    # Dokumen BERASINGAN daripada `analisis/papan` dengan sengaja: papan memberi SKOR (backtest +
+    # hadapan) dan hanya boleh memangkat Mxx kerana Nxx tiada backtest set 431; dokumen ini tidak
+    # memakai backtest sama sekali, jadi ia memangkat kesemua Mxx + Nxx atas data hadapan sahaja.
+    # 64,569 bait pada 180 baris (6 Nov 2026) = 24.6% HAD_DB; ~300 bait setiap baris, jadi ia jauh
+    # daripada memerlukan PECAH. Jangan tambah ke PECAH sebelum halaman membacanya dengan subBhg().
+    pl = os.path.join(BS2, 'data', 'analisis', 'lift.json')
+    if os.path.exists(pl):
+        docs['analisis/lift'] = json.load(open(pl, encoding='utf-8'))
     # sektor/snapshot (dijana mingguan; medan posisi dikemas kini jika fail ada)
     snap = os.path.join(BS2, 'data', 'db', 'sektor_snapshot.json')
     if os.path.exists(snap):

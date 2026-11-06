@@ -113,6 +113,25 @@ aside.rail{display:none}
   aside.rail .pnav-in hr{margin:5px 3px}
   section.view.pnav.pn-luar{padding-left:0}
   section.view.pnav.pn-luar .pnav-rail{display:none}
+  /* v151 (5 Nov 2026, permintaan pengguna): blok status kanan atas (kemas kini, cip saluran, Padat, ?,
+     Langsung) dipindah ke KAKI rel kiri, di bawah tab terakhir. Nod .kanan yang sama dipindah oleh JS. */
+  /* v152 (5 Nov 2026): susunan SATU LAJUR yang tetap. Setiap baris bermula pada x yang sama dengan
+     label tab (12px), dan cip saluran mengambil lebar penuh — jadi tiada baris yang pecah bergantung
+     kepada lebar fon (v151 cuba memuatkan cip + Padat + ? pada satu baris dan "?" jatuh sendirian). */
+  aside.rail{display:flex;flex-direction:column}
+  aside.rail nav.tabs{flex:0 0 auto}
+  aside.rail .kanan{max-width:none;align-items:stretch;text-align:left;gap:0;margin:14px 0 0;padding:11px 12px 2px;border-top:1px solid var(--line)}
+  aside.rail .kini{align-items:flex-start;gap:1px}
+  aside.rail .kini b{font-size:.85rem}
+  aside.rail .kini .kd{display:block;line-height:1.35}
+  aside.rail .kini .kd .pill{display:inline-block;margin-top:4px}
+  aside.rail .kbar{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;margin-top:9px}
+  aside.rail .salh{flex:1 0 100%;text-align:left;border-radius:7px;padding:3px 9px;font-size:.73rem}
+  aside.rail .padbtn{width:auto;height:23px;border-radius:999px;padding:0 10px;font-size:.73rem;font-weight:600}
+  aside.rail .bantu{width:23px;height:23px;font-size:.85rem}
+  aside.rail .kanan .live{width:100%;margin-top:9px;font-size:.74rem;justify-content:flex-start;flex-wrap:nowrap;align-items:flex-start;gap:6px}
+  aside.rail .live .dot{flex:none;margin-top:5px}
+  aside.rail .live #liveTxt{min-width:0}
 }
 .subbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:10px 0}
 .subbar[hidden]{display:none}
@@ -1431,7 +1450,7 @@ function renderPapan(){
   $('#gayaChip').onclick=()=>{f.gaya=!f.gaya;if(f.gaya)SORT.papan={k:'avg',dir:-1};f.shown=40;renderAll();};
   $('#kepChips').onclick=e=>{const x=e.target.closest('button.chip');if(!x)return;const k=x.dataset.k;f.kep.has(k)?f.kep.delete(k):f.kep.add(k);f.shown=40;renderAll();};
   const q=$('#q');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.shown=40;renderAll();const n=$('#q');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
-  const m=$('#more');if(m)m.onclick=()=>{f.shown+=40;renderAll();};
+  const m=$('#more');if(m)m.onclick=()=>kekalSkrol(()=>{f.shown+=40;renderAll();});
 }
 /* baris backtest → helaian butiran (delegasi) */
 document.addEventListener('click',e=>{if(e.target.closest('th')||ketikLp(e))return;const t=e.target.closest&&e.target.closest('[data-dk]');if(t)openDetail(t.dataset.dk);});
@@ -1844,7 +1863,17 @@ function ptKpis(all,label){const rows=sahSahaja(all);const nv=all.length-rows.le
 const LAGI=TELEFON?25:100,AWAL=TELEFON?10:25;
 /* jadual panjang: papar 25 baris dahulu; "Papar lagi" menambah 100, "Papar semua" jika ≤ 400 baris */
 const kakiLagi=id=>(n,t)=>`<div class="tablefoot"><span>${n} daripada ${t}</span>${t>n?`<span style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="more" id="${id}">Papar ${Math.min(LAGI,t-n)} lagi</button>${t<=400?`<button type="button" class="more" id="${id}Semua">Papar semua</button>`:''}</span>`:''}</div>`;
-const bindLagi=(id,st,rr)=>{const b=$('#'+id),a=$('#'+id+'Semua');if(b)b.onclick=()=>{st.shown=(st.shown||AWAL)+LAGI;(rr||renderAll)();};if(a)a.onclick=()=>{st.shown=1e9;(rr||renderAll)();};};
+/* v153 (5 Nov 2026, permintaan pengguna): "Papar lagi" tidak boleh melompat ke atas. renderAll menulis
+   semula innerHTML paparan, jadi dokumen mengecut seketika dan pelayar MENGAPIT scrollY ke tinggi baharu;
+   bila kandungan kembali, skrol sudah hilang. Baris baharu ditambah DI BAWAH baris sedia ada, jadi
+   kedudukan skrol lama masih betul — simpan sebelum lukis dan kembalikan selepas (dua bingkai, kerana
+   topScrolls/muatLajur masih boleh menukar tinggi selepas lukisan pertama). */
+function kekalSkrol(fn){const sy=()=>window.scrollY||document.documentElement.scrollTop||0,y=sy();fn();
+  /* hanya betulkan apitan KE ATAS: jika pengguna sendiri menatal lebih ke bawah sementara carta dilukis,
+     jangan tarik dia balik. Dua bingkai + 150 ms kerana carta/peta boleh menukar tinggi selepas lukisan. */
+  const b=()=>{if(sy()<y-1)window.scrollTo(0,y);};
+  b();requestAnimationFrame(()=>{b();requestAnimationFrame(b);});setTimeout(b,150);}
+const bindLagi=(id,st,rr)=>{const b=$('#'+id),a=$('#'+id+'Semua');if(b)b.onclick=()=>kekalSkrol(()=>{st.shown=(st.shown||AWAL)+LAGI;(rr||renderAll)();});if(a)a.onclick=()=>kekalSkrol(()=>{st.shown=1e9;(rr||renderAll)();});};
 function ptFilterBar(id,rows,rr){rr=rr||renderAll;const st=S['pf_'+id]||(S['pf_'+id]={k:'',sk:'',ind:'',q:'',shown:AWAL});st.onUbah=()=>{st.shown=AWAL;};const kd=[...new Set(rows.filter(r=>okS(r,st)&&okI(r,st)).map(r=>r.kaedah))].sort((a,b)=>a.localeCompare(b,undefined,{numeric:true}));
   return {st,html:`<div class="filters" style="margin-bottom:10px"><select id="${id}K" aria-label="Tapis kaedah"><option value="">Semua kaedah</option>${kd.map(k=>`<option value="${esc(k)}" ${st.k===k?'selected':''}>${esc(k)}</option>`).join('')}</select>${selSI(id,rows,st)}<input type="search" id="${id}Q" placeholder="Cari saham atau sektor" value="${esc(st.q)}" aria-label="Cari"></div>`,
    apply:rs=>rs.filter(r=>(!st.k||r.kaedah===st.k)&&(!st.sk||r.sektor===st.sk)&&(!st.ind||r.industri===st.ind)&&(!st.q||[r.saham,r.sektor,r.industri].join(' ').toLowerCase().includes(st.q.toLowerCase()))),
@@ -1892,7 +1921,9 @@ function renderPos(){
   el.innerHTML=head+ptKpis(all,a==='m'?'Moomoo':a==='cm'?'Claude Mxx dibeli':a==='cn'?'Claude Nxx dibeli':'gabungan')+panelPeta(sahSahaja(peg),fb.st)+`
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>${rejimHtml()}
     ${panelPerhatian(peg)}
-    ${blokGredGrid(rows)}
+    ${''/* v152 (5 Nov 2026, permintaan pengguna): blok "Gred sekali pandang" dibuang SEMENTARA daripada
+         tab Posisi. Fungsi blokGredGrid kekal dan masih dipakai tab Watchlist (Hampir Signal);
+         panggil semula di sini untuk mengembalikannya. */}
     <div class="filters" style="margin-bottom:8px">${segH('posSt',ps.st,[['semua',`Semua (${all.length})`],['pegang',`Dipegang (${peg.length})`],['keluar',`Sudah keluar (${kel.length})`]],'Status')}${skrinKecil()?lajurSeg('pos'):pandSeg()}</div>
     ${fb.html}${(cols=>sortTable({id:'pos'+a,rows,cols,def:{k:cols.some(c=>c.k==='untung_pct')?'untung_pct':'isyarat_keluar',dir:-1},rcls:r=>rclsPT(r)+' click'+bukaC('p'+r._p),limit:fb.st.shown,attr:r=>`data-pos="${esc(r._p)}" tabindex="0"`,foot:kakiLagi('posMore')}))(pd?posColsP(pd,a==='gab'):rk?posColsR(a==='gab'):ptCols(a==='gab'))}</div>
   ${tdb.length?`<div class="panel"><div class="panel-h"><h2>Isyarat tidak dibeli</h2><span class="sub">${tdb.length} isyarat · dilangkau ikut peraturan kaedah · tidak dikira dalam Prestasi</span></div>${sortTable({id:'ptctdb',rows:tdb,def:{k:'kaedah',dir:1},limit:TELEFON?tdbS.shown:0,foot:TELEFON?kakiLagi('tdbMore'):null,lp:{key:r=>r.saham+'|'+r.kaedah+'|'+(r.tarikh_beli_dirancang||r.tarikh_beli),line:r=>`<b>${esc(r.saham)}</b><span class="mut">${esc(r.kaedah)}</span><span class="mlx">${esc(r.sebab_tidak_sah||'')}</span><span class="mlr mut">${esc(tkO(r.tarikh_beli_dirancang||r.tarikh_beli))}</span>${mlC}`},cols:[
@@ -4356,12 +4387,56 @@ function topScrolls(root){muatLajur();
    satu jadual semua kaedah, skor gabungan backtest dipotong + posisi hadapan matang. Rekod analisis sahaja. */
 const ANL_ST=Object.fromEntries(Object.entries(STA).map(([k,v])=>[k,v.cls]));
 const anlPill=s=>`<span class="pill ${ANL_ST[s]||'p-mute'}">${esc(s||'–')}</span>`;
+/* v154 (6 Nov 2026, soalan pengguna "kaedah mana nak pilih"): panel Lift dalam tab Analisis.
+   Ia MELENGKAPKAN jadual kedudukan di atas, bukan menggantikannya, dan menjawab soalan berbeza:
+     - Kedudukan kaedah = SKOR (backtest set 431 + hadapan matang). Hanya Mxx boleh dipangkat kerana
+       Nxx tiada backtest, jadi 94 kombinasi Nxx tiada nombor kedudukan di sana.
+     - Lift = hadapan SAHAJA, tiada backtest, jadi kesemua Mxx + Nxx dipangkat pada paksi sama.
+   Sumber: standard/lift_kaedah.py -> data/analisis/lift.json (db `analisis/lift`), dijana analisis.yml
+   selepas Lejar Penuh, sebelah penganalisis.py. */
+const panelLift=()=>{
+  const d=S.lift;
+  if(!d||!Array.isArray(d.rows)||!d.rows.length)
+    return `<div class="panel"><div class="panel-h"><h2>Lift atas kolam Lejar</h2><span class="sub">ukuran hadapan sahaja · Mxx + Nxx</span></div>
+      <div class="empty">${S.live?'Belum ditolak ke pangkalan data (analisis/lift).':'Memuatkan…'}${diagDok('lift')}</div></div>`;
+  const f=S.lf||(S.lf={shown:AWAL,q:''});
+  const all=d.rows,bes=all.filter(r=>r.n>=50);
+  let rows=bes;
+  if(f.q){const q=f.q.toLowerCase();rows=rows.filter(r=>[r.id,r.nama,r.status].join(' ').toLowerCase().includes(q));}
+  const cols=[
+    {k:'lift',t:'Lift',tip:'lift_lift',f:r=>`<b class="${cls(r.lift)}">${sg2(r.lift)}</b><span class="vv">${r.lulus?'lulus BH-FDR':`p ${fx(r.p,4)} &gt; ${fx(r.bh,4)}`}</span>`},
+    {k:'id',t:'Kaedah',l:1,f:r=>`<b>${esc(r.id)}</b> ${esc(r.nama||'')}`,c:()=>'name'},
+    {k:'n',t:'Posisi',f:r=>`<b>${r.n}</b><span class="vv">${fx(r.buka_pct,0)}% terbuka</span>`},
+    {k:'pul',t:'Pulangan',f:r=>`<span class="${cls(r.pul)}">${sg2(r.pul)}</span><span class="vv">menang ${fx(r.menang,0)}%</span>`},
+    {k:'sebulan',t:'Lift/bulan',tip:'lift_lift',f:r=>`<span class="${cls(r.sebulan)}">${sg2(r.sebulan)}</span><span class="vv">${fx(r.hari,0)} hari</span>`},
+    {k:'t',t:'t',f:r=>fx(r.t,2)},
+    {k:'hari_beli',t:'Hari beli',f:r=>fx(r.hari_beli,0)},
+    {k:'status',t:'Status',tip:'lift_status',f:r=>`<span class="pill ${r.status==='BELUM CUKUP'?'p-mute':'p-hold'}">${esc(r.status)}</span>`}];
+  const lp={key:r=>r.id,line:r=>`<b>${esc(r.id)}</b><span class="mlx">${esc(r.nama||'')}</span><b class="mlr ${cls(r.lift)}">${sg2(r.lift)}</b>`};
+  return `<div class="panel"><div class="panel-h"><h2>Lift atas kolam Lejar</h2><span class="sub">${d.diuji} kaedah diuji daripada ${d.kaedah} · ${Number(d.posisi).toLocaleString('en')} posisi · ${d.hari_beli} hari beli · data ${esc(tkP(d.kini))}</span></div>
+    <p class="headline">Ukuran ini tidak memakai backtest, jadi ia memangkat <b>Mxx dan Nxx</b> pada paksi sama. Setiap posisi dinilai — yang tutup pada untung akhir, yang <b>terbuka ditanda-ke-pasaran</b> — supaya peraturan keluar tidak lagi memilih sampel. Kemudian pulangan setiap kaedah ditolak purata posisi lain yang dibeli <b>hari sama</b> dan dipegang <b>baldi hari sama</b>.</p>
+    <div class="kpis kpis6">
+      <div class="kpi"><div class="lbl" data-tip="lift_lift">Lift positif bertahan BH-FDR</div><div class="v ${d.positif?'pos':''}">${d.positif}</div><div class="s">daripada ${d.diuji} diuji · negatif ${d.negatif}</div></div>
+      <div class="kpi"><div class="lbl">Positif lawan sifar sahaja</div><div class="v">${d.positif_lawan_sifar}</div><div class="s">hilang sebaik hari beli dipadankan = arah pasaran, bukan kemahiran</div></div>
+      <div class="kpi"><div class="lbl" data-tip="lift_status">Hari beli perlu (lift 2 mata)</div><div class="v">${d.perlu_2mata==null?'–':d.perlu_2mata}</div><div class="s">ada ${d.hari_beli} · SD lift ${fx(d.sd_lift,2)} mata</div></div>
+    </div>
+    <div class="filters" style="margin-bottom:10px"><input type="search" id="lfQ" placeholder="Cari ID atau nama, cth. M15, N57, Supertrend" value="${esc(f.q)}" aria-label="Cari kaedah"></div>
+    ${sortTable({id:'lift',rows,lp,def:{k:'lift',dir:-1},limit:f.shown,empty:'Tiada kaedah sepadan.',foot:kakiLagi('lfMore'),cols})}
+    <ul class="utama3" style="margin-top:14px">
+      <li>Disekat kepada <b>n ≥ 50</b> posisi (${bes.length} daripada ${all.length} kaedah diuji). Kos ${d.kos}% setiap pusingan ditolak.</li>
+      <li><b>Lift/bulan</b> = lift ÷ hari pegang × 21: lift setiap posisi jika modal dipusing penuh. Ia <b>bukan</b> pulangan portfolio — setiap kali kajian ini menukar jangkaan setiap-dagangan kepada portfolio sebenar, ia jatuh ke bawah indeks.</li>
+      <li><b>Had</b>: Lejar bermula ${esc(tkP(d.mula))}, jadi kaedah pegang-panjang masih majoriti terbuka dan liftnya untung kertas. Paksi cara dikunci beli-pada-buka-esok, jadi kecacatan henti hari-0 hadir. Alam Lejar tiada saham delist. Rekod analisis sahaja.</li>
+    </ul>
+    <div class="foot"><span>Sumber: standard/lift_kaedah.py · laporan/LIFT_KAEDAH.md · harga ${esc(tkP(d.harga_pada))}</span><span>Lejar sesi ${esc(tkP(d.sesi_terakhir))}</span></div></div>`;
+};
 const anlTk=v=>v==null?'<span class="mut">–</span>':v?'<b class="pos">✓</b>':'<b class="neg">✗</b>';
 const anlSem=r=>`${anlTk(r.lulus_subset)} ${anlTk(r.lulus_wfo)} ${anlTk(r.lulus_at)} <span class="mut">${r.lulus}/3</span>`;
 const anlJul=(m,a,b)=>`<b class="${cls(m)}">${sg2(m)}</b><span class="vv">${sg2(a)} … ${sg2(b)}</span>`;
 function renderAnalisis(){
   const el=$('#v-analisis'),d=S.anl;
-  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Papan penganalisis belum ditolak ke pangkalan data (analisis/papan).':'Memuatkan papan penganalisis…'}${diagDok('anl')}</div>`;return;}
+  /* v154: panel Lift dirender WALAUPUN analisis/papan tiada — ia dokumen db yang berasingan, jadi
+     satu yang hilang tidak boleh mengosongkan tab ini sepenuhnya. */
+  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Papan penganalisis belum ditolak ke pangkalan data (analisis/papan).':'Memuatkan papan penganalisis…'}${diagDok('anl')}</div>${panelLift()}`;liftBind();return;}
   const f=S.af2,all=d.rows,ruj=d.rujukan||{},sl=ruj.slot,pm=d.parameter||{};
   if(!f.fp)f.fp='bln';if(!f.fps)f.fps='k';
   const sw=all.filter(r=>r.kedudukan),mt=all.reduce((t,r)=>t+(r.h_matang||0),0),ps=all.reduce((t,r)=>t+(r.h_posisi||0),0);
@@ -4408,6 +4483,7 @@ function renderAnalisis(){
     <div class="filters" style="margin-bottom:10px">${segH('anlLihat',f.lihat,[['swing','Swing'],['lain','Bukan swing'],['semua','Semua']],'Tapis')}${lajurSeg('anl')}<input type="search" id="anlQ" placeholder="Cari ID, nama atau status, cth. M96, AMARAN" value="${esc(f.q)}" aria-label="Cari kaedah"></div>
     ${sortTable({id:'analisis',rows,lp:LP_ANL,def:{k:'kedudukan',dir:1},limit:f.shown,attr:r=>`data-anl="${esc(r.id)}" tabindex="0"`,rcls:()=>'click',empty:'Tiada kaedah sepadan.',foot:kakiLagi('anlMore'),cols})}
   </div>
+  ${panelLift()}
   ${prPilih('c')}
   <div class="panel"><div class="panel-h"><h2>Rujukan & cara skor dikira</h2><span class="sub">penanda aras tempoh sama · formula dan had</span></div>
     <ul class="utama3">${ref.map(x=>`<li>${x}</li>`).join('')}</ul>
@@ -4425,7 +4501,11 @@ function renderAnalisis(){
   {const fb=$('#anlForest');if(fb)fb.onclick=e=>{const g=e.target.closest('[data-anl]');if(g)openAnl(g.dataset.anl);};}
   const q=$('#anlQ');let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.shown=AWAL;renderAll();const n=$('#anlQ');n.focus();n.setSelectionRange(n.value.length,n.value.length);},220);};
   bindLagi('anlMore',f);prPilihBind('c');
+  liftBind();
 }
+function liftBind(){const lf=S.lf,lq=$('#lfQ');if(!lf||!lq)return;
+  let t2;lq.oninput=()=>{clearTimeout(t2);t2=setTimeout(()=>{lf.q=lq.value.trim();lf.shown=AWAL;renderAll();const n2=$('#lfQ');if(n2){n2.focus();n2.setSelectionRange(n2.value.length,n2.value.length);}},220);};
+  bindLagi('lfMore',lf);}
 const STATUS_ORD=STA_ORD;
 /* kad lipat telefon: baris = kedudukan · ID · status · nama · skor sebulan; kad = ringkasan; Butiran penuh = helaian */
 const LP_ANL={key:r=>r.id,btn:1,
@@ -4744,8 +4824,11 @@ function muatLajur(){
 }
 /* v142: rel tab kiri (desktop >= 1100px) — nod #mainTabs dipindah, bukan diduplikasi */
 const MQ_REL=window.matchMedia('(min-width:1100px)');
-{const rl=$('#rail'),hdr=document.querySelector('header.top'),sb=$('#subBar'),nv=$('#mainTabs');
-  const pindah=()=>{if(!nv||!rl||!hdr)return;if(MQ_REL.matches){if(nv.parentElement!==rl)rl.appendChild(nv);}else if(nv.parentElement!==hdr)hdr.insertBefore(nv,sb);};
+{const rl=$('#rail'),hdr=document.querySelector('header.top'),sb=$('#subBar'),nv=$('#mainTabs'),tr=document.querySelector('.titlerow'),kn=document.querySelector('.titlerow .kanan');
+  /* v151: blok status .kanan ikut sama ke rel kiri (di bawah tab terakhir); di bawah 1100px ia kembali ke bar tajuk */
+  const pindah=()=>{if(!nv||!rl||!hdr)return;
+    if(MQ_REL.matches){if(nv.parentElement!==rl)rl.appendChild(nv);if(kn&&kn.parentElement!==rl)rl.appendChild(kn);}
+    else{if(nv.parentElement!==hdr)hdr.insertBefore(nv,sb);if(kn&&kn.parentElement!==tr)tr.appendChild(kn);}};
   pindah();
   /* melintasi 1100px menukar DI MANA senarai bahagian duduk, jadi paparan dilukis semula */
   const tukar=()=>{pindah();try{renderAll();}catch(e){}};
@@ -4914,6 +4997,8 @@ const TIPS={
   isyarat_lengkap:{t:'Isyarat lengkap dalam watchlist',d:'Calon yang syarat belum cukupnya "Tiada (isyarat sah)": semua syarat entry dipenuhi pada tutup terakhir. Ia kekal dalam watchlist sehingga imbasan 8:02 malam (Isnin–Jumaat) memindahkannya ke senarai beli, kemudian dibeli maya pada buka hari dagangan berikutnya. Status disemak dalam Papertrade C: menunggu belian, dibeli, dilangkau kerana posisi kaedah dan saham yang sama masih dipegang, atau tidak dibeli walaupun sesi belian sudah berlalu.',e:'Lengkap pada tutup Jumaat → imbasan Isnin 8:02 malam → dibeli pada buka Isnin.'},
   anl_skor:{t:'Skor gabungan',d:'Purata pulangan bersih setiap dagangan yang dijangka, menggabungkan backtest (dipotong) dan posisi hadapan matang: (n0 × jangkaan backtest + n × purata matang) ÷ (n0 + n). n0 = berat backtest, maksimum 30 dagangan setara, kurang jika backtest ada sedikit dagangan. Makin banyak posisi matang, makin data sebenar menguasai skor. Julat = selang keyakinan 95%; julat yang merentasi 0 bermaksud belum terbukti untung.',e:'Jangkaan +1.2%, 0 posisi matang → skor +1.2%. Selepas 300 posisi matang dengan purata −0.5%, skor ≈ −0.3%.'},
   anl_bulan:{t:'Skor sebulan',d:'Skor gabungan ÷ purata hari pegang backtest × 21 hari dagangan: anggaran untung setiap posisi sebulan jika modal dipusing semula sebaik keluar. Membolehkan kaedah pegang pendek dan panjang dibanding secara adil. Kaedah yang jarang memberi isyarat tidak menggunakan modal sepenuhnya; lihat CAGR backtest dan Dagangan/tahun.',e:'Skor +2.0% setiap dagangan, pegang 10 hari → +4.2% sebulan.'},
+  lift_lift:{t:'Lift atas kolam Lejar',d:'Purata pulangan kaedah TOLAK purata semua posisi lain yang dibeli pada HARI SAMA dan dipegang baldi hari SAMA. Hari beli dipadankan supaya arah pasaran dibuang (tanpa itu setiap kaedah kelihatan positif dalam tingkap menaik); baldi hari pegang dipadankan supaya kesan lebar henti dibuang (henti lebar memegang lebih lama, jadi ia mengumpul lebih banyak pulangan tanpa apa-apa kemahiran memilih saham). Asas setiap sel mengecualikan baris kaedah itu sendiri. Semua posisi dinilai: yang tutup pada untung akhir, yang terbuka ditanda-ke-pasaran — jadi peraturan keluar tidak lagi memilih sampel.',e:'Lift +2.0 mata bermakna posisi kaedah itu purata 2 mata peratus lebih baik daripada posisi lain yang dibeli hari sama dan dipegang sama lama.'},
+  lift_status:{t:'Status lift',d:'BELUM CUKUP = hari beli berbeza masih kurang daripada yang diperlukan untuk melihat lift 2 mata peratus pada kuasa 80%, selepas mengambil kira bahawa ~180 kaedah dibanding serentak. Ambang itu dikira semula setiap larian daripada sebaran lift sebenar, bukan ditulis tetap. Selagi ia BELUM CUKUP, jadual ini senarai CALON — bukan pangkat yang boleh dipilih.',e:'SD lift 3.3 mata, 180 kaedah → ~56 hari beli (≈3 bulan) untuk lift 2 mata; 14 hari beli = belum cukup.'},
   anl_jangkaan:{t:'Jangkaan backtest',d:'Purata pulangan bersih setiap dagangan dalam backtest set 431 (2019–2026, varian aktif), dipotong kerana kaedah dipilih atas data yang sama: dikekalkan 25%, tambah 25% bagi setiap semakan luar sampel yang lulus (maksimum 100%).',e:'Backtest +4.0%, lulus 1 semakan → jangkaan +2.0%.'},
   anl_semakan:{t:'Semakan luar sampel',d:'Tiga ujian di luar data backtest asal. S1–S4: varian sama mengatasi beli-semua (EW) dalam sekurang-kurangnya 3 daripada 4 kumpulan saham kecil. WFO: walk-forward luar sampel 1 Jan 2023 – 2 Okt 2026, CAGR melebihi EW 423 dalam tempoh sama. 2000 AS: AUTOTUNE A01 atas 2000 saham AS lain (luar sampel 2013 – Sep 2024), CAGR melebihi SPY dalam kumpulan A dan B. ✓ lulus, ✗ gagal, – tiada data.',e:'✗ ✓ ✗ = lulus WFO sahaja (1/3).'},
   anl_hadapan:{t:'Data hadapan',d:'Posisi Lejar Penuh (semua isyarat setiap kaedah, seluruh alam Shariah, sejak 16 Okt 2026) dan Papertrade C sebelum Lejar bermula (8–15 Okt 2026). Hanya posisi MATANG dikira: dibeli sekurang-kurangnya maks(14 hari, 1.5 × hari pegang backtest) lalu; tutup = untung akhir, masih terbuka = untung semasa. Ini mengelak bias awal, kerana posisi yang tutup dahulu kebanyakannya kena henti rugi. Posisi Lejar yang isyaratnya jatuh semasa Papertrade C sebelum Lejar masih memegang kaedah dan saham yang sama tidak dikira (enjin mengabaikan isyarat itu), supaya laluan harga yang sama tidak dikira dua kali.',e:'92 posisi · 0 matang = belum ada bukti hadapan.'},
@@ -4975,9 +5060,12 @@ $('#foldAll').onclick=()=>foldAllNow(true);$('#openAll').onclick=()=>foldAllNow(
    Tab dengan >= 3 panel peringkat atas: rel kiri (telefon: jalur cip melekit di bawah pengepala) menyenaraikan Gambaran (tajuk
    ringkas, KPI, strip) dan setiap panel; satu bahagian dipapar, tapisan (.filters) dan kaki kekal. Kelas .pnav diset sebelum
    lukis supaya carta dilukis pada lebar sebenar (grid2 jadi satu lajur); pilihan disimpan setiap paparan. Butang "Papar senarai"
-   kembali ke susunan lama (lipat/buka). Ringkasan: telefon sahaja (v94; desktop dibaca sekali imbas). */
-/* Ringkasan: telefon sahaja (desktop dibaca sekali imbas) */
-const PNAV_MIN=3,PNAV_TELEFON=['v-utama'],PNAV_ADA={};
+   kembali ke susunan lama (lipat/buka). v151 (5 Nov 2026): Ringkasan tidak lagi telefon sahaja (v94). */
+/* v151 (5 Nov 2026, permintaan pengguna): Ringkasan dan Posisi pun memakai senarai bahagian, bukan lipat/buka.
+   PNAV_TELEFON dikosongkan (Ringkasan dahulunya telefon sahaja) dan ambang turun 3 -> 2 panel kerana tab
+   Posisi hanya ada DUA panel peringkat atas (Peta portfolio, Posisi & keputusan) jadi ambang 3 mematikannya.
+   Butang "Papar senarai" (#pnavTog) masih mengembalikan susunan lipat/buka bagi sesiapa yang mahu. */
+const PNAV_MIN=2,PNAV_TELEFON=[],PNAV_ADA={};
 /* tajuk kumpulan rel (desktop): [tajuk, kunci panel pertama kumpulan] ('' = panel pertama); kunci tiada = tajuk tidak dipapar */
 /* bahagian lalai jika belum dipilih (selainnya item pertama) */
 const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah','v-utama':'__g','v-pr-cm':'untung terkumpul lawan spy','v-pr-cn':'untung terkumpul lawan spy','v-pr-m':'untung terkumpul lawan spy','v-pr-gab':'untung terkumpul lawan spy'};
@@ -5249,6 +5337,7 @@ renderNav();renderAll();
      dipecah seperti biasa), jadi baris ini selamat diterbitkan SEBELUM jana_db.py mula
      memecahnya — dan ia MESTI diterbitkan dahulu, bukan selepas. */
   subBhg('analisis/papan','anl',['analisis']);
+  sub('analisis/lift','lift',['analisis']);
   sub('kaedah/katalog','kat',['kaedah']);
   /* 232,704 bait pada 489 baris ujian = 88.8% had 262,144, dan ia tumbuh setiap kali
      satu pradaftar ditambah (lonjakan terakhir: +67 baris daripada P94 + CARAK).
