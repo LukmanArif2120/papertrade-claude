@@ -1,0 +1,20 @@
+{
+ "dibina": "2026-11-07 01:06 MYT",
+ "tempoh_terkini": "2026-06-30",
+ "tempoh": [
+  {
+   "tempoh": "2026-06-30",
+   "tempoh_lalu": "2026-03-31",
+   "set": [
+    "01mar2026-31may2026_form13f.zip",
+    "01jun2026-31aug2026_form13f.zip"
+   ],
+   "pemfail_kini": 8857,
+   "pemfail_lalu": 8871,
+   "pemfail_dua": 8734,
+   "saham": 4143
+  }
+ ],
+ "set_terkini": "01jun2026-31aug2026_form13f.zip",
+ "nota": "Pegangan akhir suku 13F; difail sehingga 45 hari selepas suku; paparan sahaja, bukan penapis."
+}
