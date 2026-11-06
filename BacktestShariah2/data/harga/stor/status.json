@@ -1,8 +1,8 @@
 {
- "dikemaskini": "2026-11-06 06:22 UTC",
+ "dikemaskini": "2026-11-06 11:10 UTC",
  "bar_terakhir": 20261105,
  "laras": {
-  "SUPN": 1.28881
+  "SUPN": 1.288809
  },
  "perlu_sejarah": [],
  "harga_A.csv": {
@@ -19,8 +19,6 @@
  },
  "log_laras": 0,
  "faktor_dividen": [],
- "faktor_calon": [
-  "OESX 2026-11-05 -0.2232"
- ],
+ "faktor_calon": [],
  "moomoo": 0
 }
