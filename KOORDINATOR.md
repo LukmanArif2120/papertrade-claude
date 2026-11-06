@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-05 18:44 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-06 06:48 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| main | 2026-11-05 | 0 | 2026-11-05 |
+| main | 2026-11-06 | 0 | 2026-11-06 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -26,10 +26,10 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
-| RS pasaran | 30 | 2026-09-24 | 2026-11-04 | 0.5 |  | tidak |
-| Gred kumpulan | 29 | 2026-09-25 | 2026-11-04 | 0.5 |  | tidak |
-| SEC EPS/hasil | 4100 | 2009-04-15 | 2026-11-05 | 65.1 | 269892 | ya |
-| SEC earnings 8-K | 5453 | 2004-08-23 | 2026-11-05 | 86.6 | 179503 | ya |
+| RS pasaran | 30 | 2026-09-25 | 2026-11-05 | 0.5 |  | tidak |
+| Gred kumpulan | 30 | 2026-09-25 | 2026-11-05 | 0.5 |  | tidak |
+| SEC EPS/hasil | 4100 | 2009-04-15 | 2026-11-05 | 65.1 | 270601 | ya |
+| SEC earnings 8-K | 5453 | 2004-08-23 | 2026-11-05 | 86.6 | 179753 | ya |
 
 
 Leg **RS/gred**: terbaik **30 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
@@ -70,13 +70,13 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261104 | 1 | OK |
-| Trend D10H2-r2 | 20261104 | 1 | OK |
-| Lejar Penuh | 2026-11-04 | 1 | OK |
-| portfolio_slot | 2026-11-04 | 1 | OK |
-| Papan Penganalisis | 2026-11-06 | -1 | OK |
-| RS pasaran | 2026-11-04 | 1 | OK |
-| Gred kumpulan | 2026-11-04 | 1 | OK |
+| Stor harga | 20261105 | 1 | OK |
+| Trend D10H2-r2 | 20261105 | 1 | OK |
+| Lejar Penuh | 2026-11-04 | 2 | OK |
+| portfolio_slot | 2026-11-04 | 2 | OK |
+| Papan Penganalisis | 2026-11-06 | 0 | OK |
+| RS pasaran | 2026-11-05 | 1 | OK |
+| Gred kumpulan | 2026-11-05 | 1 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
 
