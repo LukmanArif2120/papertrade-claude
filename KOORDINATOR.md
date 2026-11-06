@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-06 16:46 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-06 17:58 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| main | 2026-11-07 | 0 | 2026-11-07 |
+| main | 2026-11-06 | 0 | 2026-11-06 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -79,7 +79,7 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 | Trend D10H2-r2 | 20261105 | 1 | OK |
 | Lejar Penuh | 2026-11-05 | 1 | OK |
 | portfolio_slot | 2026-11-05 | 1 | OK |
-| Papan Penganalisis | 2026-11-06 | 0 | OK |
+| Papan Penganalisis | 2026-11-07 | -1 | OK |
 | RS pasaran | 2026-11-05 | 1 | OK |
 | Gred kumpulan | 2026-11-05 | 1 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
@@ -100,6 +100,7 @@ Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau 
 | gred_kumpulan.yml | 17 4 * * 2-6, 17 8 * * 2-6 | ya |
 | harga_harian.yml | 37 21 * * 1-5, 23 0 * * 2-6 | ya |
 | harian.yml | 7 5 * * 2-6, 7 7 * * 2-6, 7 9 * * 2-6, 7 11 * * 2-6 | ya |
+| institusi.yml | 37 3 * * 1 | ya |
 | lejar.yml | 17 6 * * 2-6, 17 10 * * 2-6 | ya |
 | pengawal.yml | 35 12 * * 1-5, 0 16 * * 1-5 | ya |
 | penjaga_jadual.yml | 23 * * * *, 53 * * * * | **tidak** |
