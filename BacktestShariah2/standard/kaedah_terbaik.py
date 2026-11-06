@@ -131,7 +131,10 @@ def main():
     neg = R[(R.real < 0) & R.lulus_bh]
     A.append('## 1. Jawapan pendek')
     A.append('')
-    A.append(f'**Tiada.** Daripada {len(R)} kaedah yang mempunyai cukup posisi ditutup untuk '
+    buka = ('**Tiada.**' if not len(pos) else
+            f'**{len(pos)} kaedah lulus ujian itu — tetapi baca bahagian 3a sebelum '
+            'mempercayainya.**')
+    A.append(f'{buka} Daripada {len(R)} kaedah yang mempunyai cukup posisi ditutup untuk '
              f'diuji, **{len(neg)} terbukti NEGATIF** pada BH-FDR q ≤ {Q_FDR} dengan ralat '
              f'piawai berkelompok ikut hari beli, dan **{len(pos)} terbukti positif**.')
     A.append('')
@@ -193,8 +196,9 @@ def laporan2(A, B, C, G, R, d):
                  f'{r.p:.4f} | {tk[bool(r.lulus_bh)]} | {r.hari:.1f} |')
     A.append('')
     neg = R[(R.real < 0) & R.lulus_bh]
-    A.append(f'**{len(neg)} daripada {len(R)} kaedah terbukti negatif; 0 terbukti positif.** '
-             'Jadual di atas 10 teratas ikut p — kesemuanya negatif.')
+    npos = int(((R.real > 0) & R.lulus_bh).sum())
+    A.append(f'**{len(neg)} daripada {len(R)} kaedah terbukti negatif; {npos} terbukti '
+             'positif.** Jadual di atas 10 teratas ikut p.')
     A.append('')
     # Calon positif terbaik, dengan kaveat pelbagai ujian
     cal = R[R.real > 0].sort_values('p')
@@ -205,10 +209,44 @@ def laporan2(A, B, C, G, R, d):
                  f'{c0.hari_beli:.0f} hari beli, kadar menang {c0.menang:.0f}%, '
                  f'median {c0.median_pul:+.2f}%, t {c0.t:+.2f}, p {c0.p:.4f}.')
         A.append('')
-        A.append(f'**Ia TIDAK bertahan pembetulan pelbagai ujian.** p {c0.p:.4f} melepasi ambang '
-                 f'mentah 0.05 tetapi bukan ambang BH bagi pangkatnya merentas {len(R)} kaedah. '
-                 'Menguji 38 kaedah dan melaporkan yang terbaik adalah cara paling biasa untuk '
-                 'menipu diri sendiri. Ia **calon untuk diperhatikan**, bukan jawapan.')
+        if bool(c0.lulus_bh):
+            A.append(f'Ia **bertahan** pembetulan pelbagai ujian (p {c0.p:.4f} ≤ ambang BH '
+                     f'{c0.ambang_bh:.4f} merentas {len(R)} kaedah). Itu syarat statistik '
+                     'sahaja; bahagian 3a menunjukkan mengapa ia masih belum boleh dibaca '
+                     'sebagai kelebihan.')
+        else:
+            A.append(f'**Ia TIDAK bertahan pembetulan pelbagai ujian.** p {c0.p:.4f} melepasi '
+                     f'ambang mentah 0.05 tetapi bukan ambang BH {c0.ambang_bh:.4f} bagi '
+                     f'pangkatnya merentas {len(R)} kaedah. Menguji {len(R)} kaedah dan '
+                     'melaporkan yang terbaik adalah cara paling biasa untuk menipu diri '
+                     'sendiri. Ia **calon untuk diperhatikan**, bukan jawapan.')
+        A.append('')
+        A.append('### 3a. HAD YANG MENGIKAT: ujian ini melihat posisi DITUTUP sahaja')
+        A.append('')
+        A.append('Peraturan keluar itu sendiri yang memilih posisi mana ditutup dahulu, jadi '
+                 'sampel "ditutup" **bukan** sampel rawak bagi dagangan kaedah — dan arah '
+                 'biasnya bergantung pada jenis keluar:')
+        A.append('')
+        A.append('- Kaedah ber**sasaran untung** keluar awal bila MENANG; yang rugi kekal '
+                 'terbuka. Purata ditutupnya terlebih tinggi.')
+        A.append('- Kaedah ber**henti ketat** keluar awal bila RUGI; yang menang kekal '
+                 'terbuka. Purata ditutupnya terlebih rendah.')
+        A.append('')
+        A.append('Diukur pada Lejar Penuh (6 Nov 2026), tanda bertukar antara dua kumpulan '
+                 'itu pada kaedah yang sama:')
+        A.append('')
+        A.append('| Kaedah | Ditutup | Purata ditutup | Terbuka | Purata terbuka |')
+        A.append('|---|---|---|---|---|')
+        A.append('| `M82` sasaran 10% | 122 | **+4.19%** (menang 61%) | 359 | **−0.57%** |')
+        A.append('| `M15` henti ATR ketat | 108 | **−4.18%** (menang 6.5%) | 130 | **+9.48%** |')
+        A.append('| `M33` Supertrend + SMA10 | 23 | **−10.27%** (menang 4.3%) | 133 | **+7.66%** |')
+        A.append('')
+        A.append('Jadi mana-mana kaedah bersasaran yang muncul positif di sini, dan mana-mana '
+                 'kaedah berhenti-ketat yang muncul negatif, mesti dibaca sebagai **artifak '
+                 'penapisan keluar** sampai posisi terbukanya tutup. Ukuran tanpa bias ini '
+                 'ialah purata SEMUA posisi dengan yang terbuka ditanda-ke-pasaran; apabila '
+                 'itu dibuat dan lift dipadankan ikut hari beli (membuang arah pasaran), '
+                 '**0 daripada 180 kaedah Lejar mempunyai lift yang bertahan BH-FDR**.')
         A.append('')
 
     # ---------- 4. Mengapa pegang-panjang belum boleh dinilai ----------
@@ -225,7 +263,8 @@ def laporan2(A, B, C, G, R, d):
         A.append(f'| {nm} | {len(s)} | {s.pct.mean() * 100:.0f}% | '
                  f'{sr.real.mean():+.2f}% | {int((sr.real > 0).sum())}/{len(sr)} |')
     A.append('')
-    A.append('Kaedah pegang-panjang mempunyai **85% posisi masih terbuka**, jadi "realisasi" '
+    A.append(f'Kaedah pegang-panjang mempunyai **{J[J.hari > 20].pct.mean() * 100:.0f}% posisi '
+             'masih terbuka**, jadi "realisasi" '
              'bagi mereka hanyalah himpunan posisi yang dihentikan awal — yang paling buruk '
              'daripada taburan. Angka itu bukan prestasi kaedah; ia prestasi hentinya dalam '
              'tiga minggu.')
@@ -277,8 +316,9 @@ def laporan2(A, B, C, G, R, d):
     A.append('## 7. Syor')
     A.append('')
     A.append('1. **Jangan pilih kaedah sekarang.** Pangkat backtest tiada kuasa ramalan yang '
-             'boleh diukur (bahagian 2), dan tiada kaedah positif yang bertahan pembetulan '
-             'pelbagai ujian (bahagian 3).')
+             'boleh diukur (bahagian 2); mana-mana kaedah yang kelihatan positif pada posisi '
+             'ditutup tertakluk kepada penapisan keluar (bahagian 3a), dan lift yang dipadan '
+             'ikut hari beli tidak bertahan BH-FDR bagi satu kaedah pun.')
     A.append('2. **Betulkan kecacatan henti hari-0 dahulu.** `REVERSE/KOLAM_EKOR.md` §4a: 421 '
              'daripada 1,770 posisi dibeli dan dihentikan pada hari masuk dengan kadar menang '
              '0.00% kerana paras henti terletak dalam julat intrabar hari masuk. Itu bukan '
