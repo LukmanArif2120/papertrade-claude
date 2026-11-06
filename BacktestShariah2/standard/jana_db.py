@@ -5,7 +5,7 @@
 #   -> <folder>/<koleksi>/<doc>.json, <folder>/batch_<n>.json (senarai writes ArtifactData; <= 50 tulisan dan < 900 KB
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
-# Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), (senarai_beli tidak ditolak sejak 19 Okt 2026),
+# Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), papertrade/senarai_beli (dipulihkan 6 Nov 2026),
 # papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), harian/status,
 # harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
@@ -1318,9 +1318,32 @@ def main(argv=None):
         docs['papertrade/claude'].update(slot=dict(sorted(slot.items(), key=lambda kv: int(kv[0][1:]) if kv[0][1:].isdigit() else 9999)),
                                          batal=batal, nota_slot='claude_terbuka = posisi Papertrade C yang belum tutup kedua-dua lorong; '
                                          'moomoo = posisi Moomoo warisan (sumber harian) yang belum keluar.')
-    # senarai beli: tidak ditolak ke db sejak 19 Okt 2026 (halaman tidak membacanya); kiraan untuk harian/status sahaja
+    # senarai beli (dipulihkan 6 Nov 2026, audit dashboard v154 pepijat #7): isyarat pada tutup `tarikh_isyarat`,
+    # dibeli maya pada buka sesi berikutnya oleh beli.yml. Bentuk lajur padat (lajur + rows) kerana 1,000+ baris;
+    # hanya medan yang pemilik perlukan sebelum pasaran buka (henti, buka_maks, sasaran). Dipecah jika perlu (PECAH).
     sb = baca_csv(os.path.join(a.folder, 'senarai_beli.csv'))
     lihat = {r['saham'] for r in sb}
+    LAJUR_SB = ('saham', 'kaedah', 'harga_rujukan', 'buka_maks', 'henti', 'sasaran', 'belian_ke', 'asal',
+                'pct_dipenuhi', 'gred_keseluruhan')
+    NOMBOR_SB = {'harga_rujukan', 'buka_maks', 'henti', 'sasaran', 'pct_dipenuhi'}
+    def _sb(r, k):
+        v = (r.get(k) or '').strip()
+        if not v:
+            return None
+        if k in NOMBOR_SB:
+            try:
+                return round(float(v), 4)
+            except ValueError:
+                return None
+        if k == 'belian_ke':
+            return int(float(v)) if v.replace('.', '', 1).isdigit() else None
+        return v
+    docs['papertrade/senarai_beli'] = dict(
+        tarikh_isyarat=sb[0].get('tarikh_isyarat', '') if sb else '', tarikh_imbasan=sb[0].get('tarikh_imbasan', '') if sb else '',
+        dibina=dibina, lajur=list(LAJUR_SB), rows=[[_sb(r, k) for k in LAJUR_SB] for r in sb],
+        definisi='Isyarat lengkap pada tutup tarikh_isyarat; beli maya pada buka sesi berikutnya (beli.yml), dibatalkan jika '
+                 'buka <= henti atau buka > buka_maks. Bukan cadangan wang sebenar: hanya kaedah berstatus TERBUKTI dalam '
+                 'analisis/kad_skor bermakna untuk itu.')
     # watchlist (dibahagi bawah had saiz)
     import kalendar_earnings as KE
     KAL = KE.muat()   # tarikh earnings sebenar (earn_sebenar) bagi ringkas_c/m dan watchlist

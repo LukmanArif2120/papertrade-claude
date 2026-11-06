@@ -16,8 +16,9 @@ Gate (ambang di bawah ialah PRADAFTAR; `ujian/test_kad_skor.py::TestKunci` gagal
                   berkelompok ikut hari beli.
   G3 lift       : lift padan hari beli x baldi hari pegang > 0 DAN lulus BH-FDR q <= G3_Q pada penyebut
                   SEMUA kaedah diuji (`laporan/LIFT_KAEDAH.md`).
-  G4 hari-0     : henti hari-0 TIDAK BOLEH dikecualikan daripada jangkaan. Lulus jika bilangan 0, atau
-                  jika jangkaan semua posisi (termasuk hari-0) masih > 0.
+  G4 hari-0     : bilangan henti pada hari beli <= G4_HARI0_MAKS (= 0). PINDAAN 6 Nov 2026: versi asal
+                  ("0, ATAU jangkaan termasuk hari-0 > 0") tidak pernah mengubah status kerana G2 sudah
+                  mewajibkan jangkaan > 0; laporan audit menetapkan "hari-0 = 0 secara struktur".
   G5 pantau     : status pantau Papan Penganalisis bukan GANTUNG/BERSARA, dan kejatuhan kohort
                   p_dd <= p_dd_had jika had wujud.
   G6 portfolio  : lorong T4 L1 kaedah itu (`portfolio_t4.py`) ada >= G6_SESI sesi, pulangan > SPUS
@@ -60,6 +61,7 @@ G3_Q = 0.05                 # BH-FDR, sama dengan lift_kaedah.Q_FDR
 G6_SESI = 126               # ~6 bulan; BANDING_SPUS.md: tanda pertama kelebihan 20 mata/tahun
 G6_PERSENTIL = 95           # pulangan lorong > persentil ini dalam jalur rawak tingkap sama
 G6_MDD = -26.82             # MDD SPUS 2020-2025 (REVERSE/PENANDA_ARAS_SYARIAH.md, SISTEM.md)
+G4_HARI0_MAKS = 0           # PINDAAN 6 Nov 2026 (keputusan pengguna): henti hari-0 mesti sifar secara struktur
 STATUS = ('NEGATIF', 'GAGAL', 'BELUM CUKUP', 'CALON', 'TERBUKTI')
 # ---------------------------------------------------------------------------------------------------------------
 
@@ -68,6 +70,23 @@ LIFT = os.environ.get('KS_LIFT', os.path.join(AN, 'lift.json'))
 PAPAN = os.environ.get('KS_PAPAN', os.path.join(AN, 'papan.json'))
 T4 = os.environ.get('KS_T4', os.path.join(BS2, 'portfolio_slot', 't4_ringkasan.csv'))
 JSN = os.environ.get('KS_JSON', os.path.join(AN, 'kad_skor.json'))
+SPEC_SEMUA = os.path.join(BS2, 'spec', 'SPEC_SEMUA_KAEDAH.md')
+
+
+def bendera_kaedah():
+    """(set REPLIKA, {id: fail spec asal}) - asal-usul kaedah untuk tab Kaedah (audit v154: 13 REPLIKA dan
+    penanda `FAIL ASAL` tidak dipapar di mana-mana). REPLIKA = keluar/sasaran dinilai dengan dagangan replika
+    enjin (`kod/dagangan.py`); FAIL ASAL = bahagian spec yang disatukan daripada fail spec asal tersendiri."""
+    try:
+        sys.path.insert(0, os.path.join(BS2, 'kod'))
+        from dagangan import REPLIKA
+    except Exception:
+        REPLIKA = set()
+    asal = {}
+    if os.path.exists(SPEC_SEMUA):
+        for m in re.finditer(r'<!-- FAIL ASAL: (spec/(M\d+)_[^ ]+?\.md) -->', open(SPEC_SEMUA, encoding='utf-8').read()):
+            asal.setdefault(m.group(2), m.group(1))
+    return set(REPLIKA), asal
 MD = os.environ.get('KS_MD', os.path.join(BS2, 'laporan', 'KAD_SKOR.md'))
 
 
@@ -122,11 +141,10 @@ def g3(r):
 
 
 def g4(r):
-    if (r.get('hari0') or 0) == 0:
+    n = int(r.get('hari0') or 0)
+    if n <= G4_HARI0_MAKS:
         return True, ''
-    if _ada(r.get('jangkaan')) and r['jangkaan'] > 0:
-        return True, f"{r['hari0']} hari-0 termasuk dalam jangkaan"
-    return False, f"{r['hari0']} henti hari-0; jangkaan tidak positif"
+    return False, f"{n} henti hari-0 (mesti {G4_HARI0_MAKS})"
 
 
 def g5(r):
@@ -254,6 +272,7 @@ def main():
     perlu_hb = max(int(perlu_hb), G1_HARI_BELI_MIN) if perlu_hb else None
     nhb = int(P.tarikh_beli.nunique())
 
+    replika, spec_asal = bendera_kaedah()
     rows = []
     for mid, g in P.groupby('id_kaedah'):
         r = dict(id=mid, nama=nm.get(mid, '') or (papan.get(mid) or {}).get('nama', ''),
@@ -265,6 +284,9 @@ def main():
         pr = papan.get(mid) or {}
         r.update(pantau=pr.get('pantau'), p_dd=pr.get('p_dd'), p_dd_had=pr.get('p_dd_had'),
                  lintas_earnings=pr.get('h_lintas_earnings'), bt_hari=pr.get('hari'),
+                 # Backtest | Hadapan bersebelahan (audit v154, corak LEAN): purata setiap dagangan set 431
+                 bt_purata=pr.get('bt_purata'), bt_menang=pr.get('bt_menang'),
+                 replika=mid in replika, spec_asal=spec_asal.get(mid),
                  semakan=sum(bool(pr.get(k)) for k in ('lulus_subset', 'lulus_wfo', 'lulus_at'))
                  if pr.get('bt_cagr') is not None else None)
         for kod, pre in (('L1', 't4_'), ('L2', 't4b_')):

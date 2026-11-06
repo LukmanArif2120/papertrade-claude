@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793972778-64f6",
-  "nombor": 186,
-  "sha256": "326558c77c3febef49c1129cecaef92a1b409466b1977b40a6c30e123104cdae",
-  "bait": 621525,
-  "dikemas": "2026-11-06 13:50 UTC",
-  "nota": "v155 (keputusan pengguna 6 Nov 2026, audit v154 Pilihan B + T4): 5 tab (Hari ini, Pilih kaedah, Posisi, Akaun, Rujukan); kad skor keputusan analisis/kad_skor (standard/kad_skor.py, gate G1-G6 dipradaftar SPEC_KAD_SKOR.md) menggantikan tujuh pemangkatan lama; penanda aras hadapan SPUS (prestasi/garis.spus); registry backtest dimuat atas permintaan dalam Rujukan."
+  "versi_artifact": "1793980318-366e",
+  "nombor": 187,
+  "sha256": "a12232df5468e6639f93b9a3cdadb0b96a54fc0cccde61e5dd96c1af5a9a55a5",
+  "bait": 600483,
+  "dikemas": "2026-11-06 15:52 UTC",
+  "nota": "v156 (6 Nov 2026, semakan semula laporan audit v154; keputusan pengguna: semua jurang sekarang + G4 ketat): senarai beli sebenar (papertrade/senarai_beli) dan Perlu perhatian dalam Hari ini; satu kosa kata status (kad skor); tab Sektor diarkib; kad skor + keluar/pegang, Backtest | Hadapan, REPLIKA, spec asal; G4 = hari-0 sifar; Peta saham unik; segmen Lorong 2 sahaja; Purata R 1R = ATR14 bagi kaedah tanpa henti; saringan Backtest langkah 6-7 = Papan Penganalisis."
 }

@@ -33,6 +33,7 @@ class TestKunci(unittest.TestCase):
         self.assertEqual(KS.G6_SESI, 126)
         self.assertEqual(KS.G6_PERSENTIL, 95)
         self.assertEqual(KS.G6_MDD, -26.82)
+        self.assertEqual(KS.G4_HARI0_MAKS, 0)        # pindaan 6 Nov 2026: ketat
         self.assertEqual(KS.STATUS, ('NEGATIF', 'GAGAL', 'BELUM CUKUP', 'CALON', 'TERBUKTI'))
 
     def test_g3_sama_dengan_lift(self):
@@ -47,7 +48,8 @@ class TestKunci(unittest.TestCase):
         with open(os.path.join(AKAR, 'BacktestShariah2', 'standard', 'SPEC_KAD_SKOR.md'), encoding='utf-8') as f:
             s = f.read()
         for t in ('G1_HARI_BELI_MIN = 20', 'G2_ALPHA = 0.05', 'G3_Q = 0.05', 'G6_SESI = 126',
-                  'G6_PERSENTIL = 95', 'G6_MDD = -26.82', 'Dipradaftar 6 Nov 2026'):
+                  'G6_PERSENTIL = 95', 'G6_MDD = -26.82', 'Dipradaftar 6 Nov 2026',
+                  'G4_HARI0_MAKS = 0', 'Pindaan 6 Nov 2026'):
             self.assertIn(t, s)
 
 
@@ -86,10 +88,16 @@ class TestGate(unittest.TestCase):
     def test_g3(self):
         self.assertEqual(self.st(lift_lulus=False), 'GAGAL')
 
-    def test_g4_hari0_tidak_dikecualikan(self):
-        self.assertEqual(self.st(hari0=40), 'TERBUKTI')                     # jangkaan masih positif
-        ok, sebab = KS.g4(dict(hari0=40, jangkaan=-0.2))
-        self.assertFalse(ok)
+    def test_g4_ketat(self):
+        """Pindaan 6 Nov 2026: satu henti hari-0 sudah gagal, walaupun jangkaan positif."""
+        self.assertEqual(self.st(hari0=1), 'GAGAL')
+        self.assertEqual(self.st(hari0=40, hari_beli=5), 'BELUM CUKUP')    # G1 sebelum G4
+        self.assertTrue(KS.g4(dict(hari0=0))[0])
+        self.assertTrue(KS.g4(dict(hari0=None))[0])                         # Nxx: tiada henti
+
+    def test_g4_tidak_berlebihan_dengan_g2(self):
+        """G4 mesti boleh mengubah status apabila G2 lulus; versi asal tidak boleh."""
+        self.assertNotEqual(self.st(hari0=3), self.st(hari0=0))
 
     def test_g5(self):
         self.assertEqual(self.st(pantau='GANTUNG'), 'GAGAL')
