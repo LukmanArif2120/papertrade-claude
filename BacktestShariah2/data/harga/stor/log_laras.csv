@@ -4,3 +4,5 @@ masa,ticker,nisbah,bar,serak,keputusan,sumber
 2026-10-27 05:25 UTC,BUUU,0.1,9,0.0,laras,yfinance
 2026-11-04 05:45 UTC,SUPN,0.846397,9,0.030564,anomali,yfinance
 2026-11-04 07:16 UTC,SUPN,0.77591,388,0.0,faktor,dividen_khas 2026-11-03 (yfinance dividen)
+2026-11-07 10:28 UTC,ARLP,0.975659,391,0.0,faktor,dividen_khas 2026-11-06 (yfinance dividen)
+2026-11-07 10:28 UTC,BSM,0.97561,391,0.0,faktor,dividen_khas 2026-11-06 (yfinance dividen)
