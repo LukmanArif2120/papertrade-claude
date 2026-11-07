@@ -337,7 +337,8 @@ td .l2seg{margin-left:8px}
 .p-buy{background:var(--pos-soft);color:var(--pos)} .p-hold{background:var(--simpan-bg);color:var(--simpan)} .p-exit{background:var(--neg-soft);color:var(--neg-tx)} .p-near{background:var(--violet-soft);color:#c4b5fd} .p-mute{background:var(--sunk);color:var(--muted);box-shadow:inset 0 0 0 1px var(--line)}
 .p-warn{background:var(--warn-soft);color:var(--warn)}
 .pos{color:var(--pos)} .neg{color:var(--neg-tx)} .mut{color:var(--muted)}
-svg text{fill:var(--muted);font-family:var(--f-body);font-size:12px}
+svg:not(.v5s) text{fill:var(--muted);font-family:var(--f-body);font-size:12px}
+svg.v5s text{font-family:var(--f-body)}
 svg .grid line{stroke:var(--line)}
 .chartbox{width:100%;overflow:hidden}
 .legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:8px}
@@ -1058,24 +1059,164 @@ td.stc{white-space:nowrap}
 .kschip .kc{background:none;border:1px solid var(--line-2);border-radius:8px;padding:4px 8px;color:var(--fg);cursor:pointer;margin:0}
 .ksgl{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:4px 16px;margin:12px 0 0;padding-left:18px;font-size:.84rem;color:var(--fg-2)}
 @media (max-width:760px){.ksgl{grid-template-columns:1fr}.kstajuk .kpis{grid-template-columns:1fr 1fr}}
+
+/* ================= v158 (7 Nov 2026, keputusan pengguna): reka bentuk v5.1 =================
+   Warna kelabu arang + teal (contoh v5.1 yang dipilih pengguna), kerangka v4: rel kiri berjenama dengan ikon, blok
+   kesegaran data, kad Status kajian; jubin KPI dengan cip delta dan nombor mono; graf donut + bar + kawasan bergradien
+   (tanpa titik); bar tab bawah di telefon. Satu warna satu maksud: teal = untung/lulus, merah = rugi/tindakan,
+   kuning = hampir paras sahaja, ungu = SPUS sahaja, kelabu-biru = belum cukup. Blok ini sengaja di HUJUNG <style>
+   supaya ia mengatasi gaya lama tanpa menyentuh setiap peraturan lama satu per satu. */
+:root{
+  --bg:#15181D; --surface:#1A1E24; --card:#1F242B; --sunk:#191D23; --line:#2E353E; --line-2:#3A414C;
+  --fg:#EEF1F4; --fg-2:#B4BBC6; --muted:#8A93A0;
+  --accent:#1EE3B4; --accent-soft:rgba(30,227,180,.13); --violet:#8F7CFF; --violet-soft:rgba(143,124,255,.16);
+  --pos:#1EE3B4; --pos-soft:rgba(30,227,180,.13); --neg:#FF5D73; --neg-soft:rgba(255,93,115,.13); --neg-tx:#FF8C9C;
+  --warn:#FFC145; --warn-soft:rgba(255,193,69,.14); --slate:#6B7A99; --cyan:#22A3BA;
+  --r:12px; --f-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+}
+body{background:var(--bg)}
+.mo{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.panel,.kpi{border-radius:14px}
+.tablewrap{border-radius:12px;background:var(--card)}
+th{background:#232931}
+tbody tr:nth-child(even) td,tbody tr:nth-child(even) td.frz{background:color-mix(in srgb,var(--card) 96%,#fff 1.2%)}
+tbody tr:hover td{background:rgba(30,227,180,.05)}
+.seg button[aria-pressed="true"],.seg button[aria-selected="true"]{background:var(--accent);color:#06261F;box-shadow:none;font-weight:700}
+nav.tabs button[aria-selected="true"]{color:var(--accent)}
+/* rel kiri */
+aside.rail .v5brand{display:flex;align-items:center;gap:10px;padding:2px 6px 12px}
+aside.rail .v5brand i{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#2BEBC0,#12A8D6);display:grid;place-items:center;font-style:normal;font-weight:800;color:#04261E;flex:none}
+aside.rail .v5brand b{display:block;font-size:.88rem;color:var(--fg)}aside.rail .v5brand small{display:block;color:var(--muted);font-size:.7rem;line-height:1.3}
+aside.rail .rh{padding:12px 10px 6px}
+@media (min-width:1100px){
+  aside.rail{background:var(--surface)}
+  aside.rail nav.tabs>button{display:flex;align-items:center;gap:10px;font-weight:500}
+  aside.rail nav.tabs>button svg{flex:none;opacity:.85}
+  aside.rail nav.tabs>button[aria-selected="true"]{background:linear-gradient(90deg,rgba(30,227,180,.18),rgba(30,227,180,.05));color:var(--accent);box-shadow:inset 0 0 0 1px rgba(30,227,180,.28);font-weight:600}
+}
+nav.tabs>button svg{display:none}
+@media (min-width:1100px){nav.tabs>button svg{display:inline}}
+.v5fr{display:grid;grid-template-columns:1fr auto;gap:2px 8px;padding:6px 2px;font-size:.78rem;color:var(--fg-2)}
+.v5fr small{grid-column:1/-1;font-size:.68rem;color:var(--muted)}
+.v5ok,.v5lw,.v5mt{font-size:.68rem;font-weight:700;padding:2px 7px;border-radius:7px;white-space:nowrap;align-self:center}
+.v5ok{background:var(--accent-soft);color:var(--accent)}.v5lw{background:var(--warn-soft);color:var(--warn)}.v5mt{background:var(--line);color:var(--fg-2)}
+.v5promo{margin:14px 2px 4px;border:1px solid rgba(30,227,180,.28);background:linear-gradient(180deg,rgba(30,227,180,.09),rgba(30,227,180,.02));border-radius:12px;padding:11px}
+.v5promo .t{font-size:.64rem;letter-spacing:.1em;color:var(--accent);font-weight:700}
+.v5promo p{font-size:.76rem;color:var(--fg-2);margin:5px 0 9px;line-height:1.4}
+.v5btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:9px;padding:7px 12px;font-size:.8rem;font-weight:700;border:0;background:linear-gradient(180deg,#2BEBC0,#13BFA0);color:#04261E;cursor:pointer;width:100%}
+.v5pill{display:inline-flex;align-items:center;gap:6px;border:1.5px solid var(--accent);color:var(--accent);border-radius:999px;padding:3px 11px;font-size:.74rem;font-weight:700;white-space:nowrap}
+.v5pill.lw{border-color:var(--warn);color:var(--warn)}
+/* grid kad v5.1 */
+.k5row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:4px 0 14px}
+.k5{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.k5 .l{display:flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)}
+.k5 .v{font-family:var(--f-mono);font-size:1.6rem;font-weight:600;letter-spacing:-.02em;margin:6px 0 10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k5 .ln{height:3px;border-radius:3px;background:var(--line);display:flex;overflow:hidden;gap:2px}.k5 .ln i{display:block;height:100%}
+.k5 .f{display:flex;justify-content:space-between;gap:8px;margin-top:8px;font-family:var(--f-mono);font-size:.66rem;color:var(--muted)}
+.cp,.cn,.ca,.cm{margin-left:auto;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:7px;white-space:nowrap}
+.cp{background:var(--pos-soft);color:var(--pos);border:1px solid rgba(30,227,180,.3)}
+.cn{background:var(--neg-soft);color:var(--neg-tx);border:1px solid rgba(255,93,115,.3)}
+.ca{background:var(--warn-soft);color:var(--warn);border:1px solid rgba(255,193,69,.3)}
+.cm{background:var(--sunk);color:var(--fg-2);border:1px solid var(--line)}
+.v5g{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.v5c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;min-width:0}
+.v5c.c12{grid-column:span 12}.v5c.c8{grid-column:span 8}.v5c.c7{grid-column:span 7}.v5c.c6{grid-column:span 6}.v5c.c5{grid-column:span 5}.v5c.c4{grid-column:span 4}
+.v5h{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.v5h h3{font-size:.92rem;font-weight:700;margin:0;color:var(--fg)}.v5h .r{margin-left:auto;font-size:.72rem;color:var(--muted);text-align:right}
+.v5big{font-size:1.9rem;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.v5md{font-size:1.4rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.v5sm{font-size:.76rem;color:var(--fg-2)}.v5xs{font-size:.7rem;color:var(--muted)}
+.v5nums{display:flex;gap:26px;align-items:flex-end;flex-wrap:wrap;margin-bottom:8px}
+.v5lg{display:flex;flex-wrap:wrap;gap:14px;font-size:.72rem;color:var(--fg-2);margin-top:8px}
+.v5lg span{display:inline-flex;align-items:center;gap:6px}.v5lg i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.v5row{display:grid;grid-template-columns:12px minmax(0,1fr) auto auto;gap:10px;align-items:center;padding:5px 0;font-size:.8rem;color:var(--fg-2)}
+.v5row .dt{width:10px;height:10px;border-radius:3px}
+.v5hb{display:grid;grid-template-columns:minmax(0,130px) minmax(0,1fr) 64px;gap:10px;align-items:center;padding:6px 0}
+.v5hb .t{font-size:.8rem;color:var(--fg-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v5hb .v{text-align:right;font-weight:700;font-size:.8rem;font-family:var(--f-mono)}
+.v5bar{height:10px;border-radius:6px;background:#2A3038;overflow:hidden;display:flex;gap:2px}.v5bar i{display:block;height:100%;border-radius:6px}
+.v5li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.v5li:last-child{border-bottom:0}.v5li:hover{background:rgba(30,227,180,.04)}
+.v5bdg{min-width:64px;text-align:center;font-weight:800;font-size:.78rem;border-radius:8px;padding:6px 8px;color:#fff;font-family:var(--f-mono)}
+.b5c{background:linear-gradient(180deg,#FF6F82,#E8475F)}.b5a{background:linear-gradient(180deg,#FFCB5C,#F2A81F);color:#2A1C00}.b5t{background:linear-gradient(180deg,#2BEBC0,#13BFA0);color:#04261E}.b5g{background:#3A414C}.b5s{background:#56637D}
+.v5chip{font-size:.72rem;font-weight:700;color:var(--fg-2);background:var(--sunk);border:1px solid var(--line);border-radius:7px;padding:2px 7px;font-family:var(--f-mono)}
+.v5pick{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.v5pick select{background:var(--sunk);color:var(--fg-2);border:1px solid var(--line);border-radius:9px;padding:5px 8px;font:inherit;font-size:.78rem}
+.v5blk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 28px}
+@media (max-width:1099px){.v5c.c8,.v5c.c7,.v5c.c6,.v5c.c5,.v5c.c4{grid-column:span 12}}
+@media (max-width:760px){
+  .k5row{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .k5{padding:12px}.k5 .v{font-size:1.25rem}.k5 .l{flex-wrap:wrap;gap:4px}.k5 .l>span{margin-left:0}.k5 .f{flex-direction:column;gap:2px}
+  .v5c{padding:14px}.v5g{gap:10px}
+  .v5hb{grid-template-columns:minmax(0,96px) minmax(0,1fr) 56px}
+  .v5blk{grid-template-columns:1fr}
+  /* bar tab bawah (nod #mainTabs dipindah ke <body> oleh JS) */
+  body>nav#mainTabs{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:space-around;gap:0;margin:0;padding:6px 4px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(26,30,36,.97);backdrop-filter:blur(8px);border-top:1px solid var(--line);overflow:visible}
+  body>nav#mainTabs>button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:.66rem;padding:4px 2px;border:0;background:none;flex:1;min-width:0}
+  body>nav#mainTabs>button svg{display:block;width:34px;height:22px;padding:3px 9px;border-radius:11px}
+  body>nav#mainTabs>button[aria-selected="true"]{color:var(--accent);background:none}
+  body>nav#mainTabs>button[aria-selected="true"] svg{background:rgba(30,227,180,.16)}
+  div.wrap{padding-bottom:84px}
+  #v5fresh{display:none!important}
+}
+
+/* v159 (7 Nov 2026): helaian butiran posisi + kad telefon v2 */
+.sheet:has(.pv2)>.close{display:none}
+.pv2x{position:absolute;top:12px;right:14px;width:32px;height:32px;border-radius:50%;border:1px solid var(--line);background:var(--sunk);color:var(--fg);font-size:1.1rem;cursor:pointer}
+.pv2h{position:sticky;top:-18px;z-index:5;margin:-16px -16px 12px;padding:14px 56px 10px 16px;background:linear-gradient(180deg,var(--card) 88%,rgba(31,36,43,.94));border-bottom:1px solid var(--line)}
+.pv2r1{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.pv2r1 h3{font-size:1.4rem;margin:0;letter-spacing:-.01em}.pv2r1 h3 span{color:var(--muted);font-weight:600;font-size:1.05rem}
+.pv2r2{display:flex;align-items:flex-end;gap:16px;margin-top:6px;flex-wrap:wrap}
+.pv2big{font-size:1.85rem;font-weight:800;letter-spacing:-.02em;line-height:1}
+.pv2tabs{display:flex;gap:4px;margin-top:12px;overflow-x:auto;scrollbar-width:none}.pv2tabs::-webkit-scrollbar{display:none}
+.pv2tabs button{border:0;background:none;color:var(--muted);font:inherit;font-size:.8rem;font-weight:700;padding:7px 11px;border-radius:9px;white-space:nowrap;cursor:pointer}
+.pv2tabs button[aria-selected="true"]{background:rgba(30,227,180,.14);color:var(--accent);box-shadow:inset 0 0 0 1px rgba(30,227,180,.3)}
+.pv2v{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:12px;margin-bottom:12px;border:1px solid}
+.pv2v .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-weight:800;flex:none;font-size:.8rem;color:#fff}
+.pv2v b{font-size:.86rem}
+.pv2v-c{background:rgba(255,93,115,.10);border-color:rgba(255,93,115,.4)}.pv2v-c .ic{background:#E8475F}
+.pv2v-a{background:rgba(255,193,69,.09);border-color:rgba(255,193,69,.4)}.pv2v-a .ic{background:#C9901A}
+.pv2v-s{background:rgba(107,122,153,.14);border-color:rgba(107,122,153,.42)}.pv2v-s .ic{background:#56637D}
+.pv2v-g{background:var(--sunk);border-color:var(--line)}.pv2v-g .ic{background:#3A414C}
+.pv2k4{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.pv2k4 .k5 .v{font-size:1.35rem;margin:4px 0 4px}
+.pv2ln{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}.pv2ln b{font-size:.84rem}
+.pv2sib{display:grid;grid-template-columns:64px minmax(0,1fr) 64px auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);cursor:pointer}.pv2sib:last-child{border-bottom:0}.pv2sib:hover{background:rgba(30,227,180,.04)}
+.pv2gr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pv2gr>div{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-width:0}.pv2gr small{display:block;font-size:.66rem;color:var(--muted)}.pv2gr b{font-size:.95rem}
+.pv2pl{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.pv2c svg{display:block;touch-action:pan-y;cursor:crosshair}
+.pv2f{position:sticky;bottom:-24px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px -16px -24px;padding:10px 16px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(31,36,43,0),var(--card) 30%)}
+.pv2f .btn{padding:8px 12px}.pv2f .btn[disabled]{opacity:.4}
+.pv2kad .pv2kh{display:flex;align-items:flex-start;gap:10px;justify-content:space-between}.pv2kad .nm{font-size:1rem}
+.pv2ci{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-top:10px}
+.pv2ci>div{background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:7px 9px;min-width:0}.pv2ci small{display:block;font-size:.64rem;color:var(--muted)}.pv2ci b{font-size:.8rem}
+@media (min-width:761px){.pv2h{top:-20px;margin:-18px -20px 12px;padding:16px 60px 10px 20px}.pv2f{margin:14px -20px -24px;padding:10px 20px 16px}}
 </style>
 
-<aside class="rail" id="rail"><div class="rh">Papan</div></aside>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+ <linearGradient id="gPos" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1EE3B4"/><stop offset="1" stop-color="#12A8D6"/></linearGradient>
+ <linearGradient id="gNeg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FF8A5C"/><stop offset="1" stop-color="#FF4F6E"/></linearGradient>
+ <linearGradient id="gPosV" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#1EE3B4"/><stop offset="1" stop-color="#12A8D6"/></linearGradient>
+ <linearGradient id="gNegV" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FF4F6E"/><stop offset="1" stop-color="#FF8A5C"/></linearGradient>
+ <linearGradient id="shT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1EE3B4" stop-opacity=".42"/><stop offset="1" stop-color="#1EE3B4" stop-opacity="0"/></linearGradient>
+ <linearGradient id="shC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF5D73" stop-opacity=".40"/><stop offset="1" stop-color="#FF5D73" stop-opacity="0"/></linearGradient>
+</defs></svg>
+<aside class="rail" id="rail"><div class="v5brand"><i>C</i><div><b>Papertrade C</b><small>akaun maya · tiada wang sebenar</small></div></div><div class="rh">Ruang kerja</div></aside>
 <div class="wrap">
   <header class="top">
     <div class="titlerow">
-      <div class="brand"><span class="mk" aria-hidden="true"></span><h1>Papan Backtest Shariah</h1></div>
+      <div class="brand"><span class="mk" aria-hidden="true"></span><h1>Papan Backtest Shariah</h1><span class="v5pill" id="v5fresh" hidden></span></div>
       <div class="kanan">
         <div class="kini" data-tip="data_kini"><span class="kl">Kemas kini terakhir</span><b id="kiniMasa">–</b><span class="kd" id="kiniData"></span></div>
         <div class="kbar"><button type="button" class="salh" id="salH" data-sal hidden></button><button type="button" class="bantu padbtn" id="padTog" aria-pressed="true" title="Kepadatan jadual: Padat (satu baris, butiran bila hover) atau Biasa">Padat</button><button type="button" class="bantu" data-panduan aria-label="Panduan dan glosari" title="Panduan dan glosari">?</button><span class="live"><span class="dot" id="dot"></span><span id="liveTxt">Menyambung…</span></span></div>
       </div>
     </div>
     <nav class="tabs" role="tablist" id="mainTabs">
-      <button role="tab" data-tab="utama" aria-selected="true">Hari ini</button>
-      <button role="tab" data-tab="analisis" aria-selected="false">Pilih kaedah</button>
-      <button role="tab" data-tab="posisi" aria-selected="false">Posisi</button>
-      <button role="tab" data-tab="prestasi" aria-selected="false">Akaun</button>
-      <button role="tab" data-tab="rujukan" aria-selected="false">Rujukan</button>
+      <button role="tab" data-tab="utama" aria-selected="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Hari ini</span></button>
+      <button role="tab" data-tab="analisis" aria-selected="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5M4 19h16M8 15l4-5 3 3 5-6"/></svg><span>Pilih kaedah</span></button>
+      <button role="tab" data-tab="posisi" aria-selected="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4-9 4-9-4zm0 0v10l9 4 9-4V7"/></svg><span>Posisi</span></button>
+      <button role="tab" data-tab="prestasi" aria-selected="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span>Akaun</span></button>
+      <button role="tab" data-tab="rujukan" aria-selected="false"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/></svg><span>Rujukan</span></button>
     </nav>
     <div class="subbar" id="subBar">
       <div class="seg" role="tablist" id="kumpSeg" aria-label="Bahagian" hidden></div>
@@ -1250,7 +1391,7 @@ function tarikhData0(){const h=S.hst||{},iso=t=>/^\d{4}-\d\d-\d\d/.test(t||'')?S
   if(!t){const p=ptcRows();if(p)p.rows.forEach(r=>{[r.tarikh_beli,r.tarikh_keluar].forEach(x=>{x=iso(x);if(x>t)t=x;});});}
   return t;}
 const hargaPada=d=>d&&d.harga_pada?d.harga_pada:(tarikhData()?tarikhData()+' tutup':'–');
-function renderData(){const mEl=$('#kiniMasa'),dEl=$('#kiniData');if(!mEl)return;const h=S.hst;
+function renderData(){try{v5RenderRel();}catch(e){}const mEl=$('#kiniMasa'),dEl=$('#kiniData');if(!mEl)return;const h=S.hst;
   if(!h){mEl.textContent='–';mEl.className='';dEl.textContent='';return;}
   const t=h.dikemaskini||h.kemaskini_pagi||'';const m=/^(\d{4})-(\d\d)-(\d\d) (\d\d):(\d\d)/.exec(t);
   const kp=m?Date.UTC(+m[1],m[2]-1,+m[3],+m[4]-8,+m[5]):null;
@@ -1629,7 +1770,7 @@ function renderWatch(){
       {k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1,f:r=>`<b>${esc(r.kaedah)}</b>`},
       {k:'_bk',t:'Status belian',tip:'isyarat_lengkap',l:1,v:r=>({tiada:0,tunggu:1,pegang:2,beli:3})[r._b.k],f:r=>`${wStatusPill(r._b)}<span class="vv">${esc(r._b.t)}</span>`},
       {k:'sebab',t:'Catatan watchlist',l:1,ns:1,f:r=>`<span class="mut">${esc(r.sebab||'–')}</span>`,c:()=>'wrap'}]})}</div>`:'';
-  el.innerHTML=`
+  el.innerHTML=`${v5Watch()}
   <p class="headline">Calon <b>Hampir Signal</b> (90–100%): semua syarat entry selain pencetus sudah dipenuhi pada tutup <b>${esc(w.tarikh_data||'–')}</b>, dan pencetus dalam ≤ 2%. Disemak semula setiap hari selepas pasaran AS tutup; calon yang terkeluar signal dibuang. Jika isyarat lengkap, saham dibeli maya dalam Papertrade C pada buka esok.</p>
   <div class="kpis">
     <div class="kpi"><div class="lbl">Calon</div><div class="v">${all.length}</div><div class="s">${new Set(all.map(r=>r.saham)).size} saham unik · ${kd.length} kaedah</div></div>
@@ -1840,7 +1981,7 @@ function renderPos(){
   /* v155: KPI dan Peta mengikut tapisan kaedah/sektor/carian (dahulu KPI dikira atas semua posisi akaun walaupun
      jadual ditapis kepada satu kaedah). Segmen status (Dipegang/Keluar) hanya menapis jadual. */
   const fAll=fb.apply(all),fPeg=fb.apply(peg);
-  el.innerHTML=head+ptKpis(fAll,(a==='m'?'Moomoo':a==='cm'?'Claude Mxx dibeli':a==='cn'?'Claude Nxx dibeli':'gabungan')+(fb.st.k?' · '+fb.st.k:''))+panelPeta(sahSahaja(fPeg),fb.st)+`
+  el.innerHTML=head+v5Pos(fAll)+panelPeta(sahSahaja(fPeg),fb.st)+`
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>${rejimHtml()}
     ${''/* v152 (5 Nov 2026, permintaan pengguna): blok "Gred sekali pandang" dibuang SEMENTARA daripada
          tab Posisi. Fungsi blokGredGrid kekal dan masih dipakai tab Watchlist (Hampir Signal);
@@ -1851,7 +1992,7 @@ function renderPos(){
       {k:'tarikh_beli_dirancang',t:'Tarikh',l:1,f:r=>esc(r.tarikh_beli_dirancang||r.tarikh_beli||'–')},{k:'saham',t:'Saham',tip:'saham',l:1,f:r=>`<b>${esc(r.saham)}</b>`,c:()=>'tk'},{k:'kaedah',t:'Kaedah',tip:'kaedah_pt',l:1},
       {k:'harga_buka_rujukan',t:'Harga buka',f:r=>fx(r.harga_buka_rujukan,2)},{k:'henti',t:'Henti',f:r=>fx(r.henti,2)},
       {k:'sebab_tidak_sah',t:'Sebab tidak dibeli',l:1,f:r=>esc(r.sebab_tidak_sah||''),c:()=>'wrap'}]})}</div>`:''}`;
-  bindSegH('posSt',v=>{ps.st=v;fb.st.shown=AWAL;});fb.bind();bindLagi('posMore',fb.st);bindLagi('tdbMore',tdbS);drawPeta($('#posPeta'),sahSahaja(peg),fb.st);
+  bindSegH('posSt',v=>{ps.st=v;fb.st.shown=AWAL;});fb.bind();bindLagi('posMore',fb.st);bindLagi('tdbMore',tdbS);drawPeta($('#posPeta'),sahSahaja(peg),fb.st);v5Hist($('#v5phs'),v5Held(fAll).h.map(r=>r.untung_pct));
 }
 /* ================= Prestasi (P4): cari kaedah paling UNTUNG dan paling SELAMAT ================= */
 /* SATU sistem label sahaja (29 Okt 2026, keputusan pengguna): status Papan Penganalisis (analisis/papan, Lejar Penuh =
@@ -2036,7 +2177,7 @@ function renderPrestasi(which){
   const W4=[...all].filter(o=>o.exrugi>0).sort((a,b)=>b.exrugi-a.exrugi||a.exrugiAvg-b.exrugiAvg).slice(0,5);
   const nAm=all.filter(o=>o.amaran.length).length;
   const maeAda=!!(S.mae&&S.mae.rows);
-  el.innerHTML=`
+  el.innerHTML=`${v5Akaun(src)}
   <p class="headline">Tab ini menjawab satu soalan: <b>akaun ini untung atau rugi, dan mengapa</b>. ${nama}: <b>${src.length}</b> dagangan dalam <b>${all.length}</b> kaedah. Tab ini <b>tidak memangkat</b> kaedah: purata akaun ditapis oleh peraturan keluar setiap kaedah, jadi ia memberi pemenang yang salah (KAEDAH_TERBAIK.md §3a). Untuk <b>memilih</b> kaedah, lihat tab <button type="button" class="lnk" data-pergi="analisis">Pilih kaedah</button>.</p>
   ${prKpis(src)}
   ${prAnalisis(src,which)}
@@ -2370,11 +2511,6 @@ function mkNota(r){const L=[],sk=r.sektor||r.sektor_us,ind=r.industri||r.industr
   if(kw)L.push(['Kewangan',`${esc(kw[1])} · keyakinan ${esc(kw[3])}${+kw[2]?` · <span style="color:var(--warn)">${kw[2]} bendera</span>`:''}`]);
   if(r.rs_tanda)L.push(['RS',`<span style="color:var(--warn)">${esc(r.rs_tanda)}</span>`]);
   return L.length?`<div class="mkn">${L.map(([a,b])=>`<div><span>${a}</span><span>${b}</span></div>`).join('')}</div>`:'';}
-function kadPos(r,akaun){const ks=r.kaedah_kongsi&&r.kaedah_kongsi.length?r.kaedah_kongsi.join('+').split(/\s*[+,;]\s*/).filter(Boolean).join(' '):'';
-  return `<div class="mk"><div class="mk1"><span class="mkt">${titikPos(r)}<b>${esc(r.saham)}</b>${baruPos(r)}${earnH(r)}${akaun&&r.akaun?`<span class="pill p-mute">${r.akaun}</span>`:''}<span class="mkk">${esc(r.kaedah)} · ${fx(r.hari,0)} hari</span></span><b class="mku ${cls(r.untung_pct)}">${sg2(r.untung_pct)}</b></div>
-    <div class="mkr">${fx(r.harga_beli,2)} → <b style="color:var(--fg-2)">${fx(r.harga_terkini,2)}</b> · ${fx(r.unit,0)} unit · beli ${esc(tkO(r.tarikh_beli)||'–')}${ks?` · kongsi ${esc(ks)}`:''}</div><div class="mksp">${sparkPos(r,300,64,1)}${spyCip(r)}</div>
-    ${r.tidak_sah?`<div class="mkw"><span class="pill p-warn">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> ${esc(r.sebab_tidak_sah||'')}</div>`:''}
-    ${r.tidak_dibeli?'':`<div class="mkz">${mkLorong(r,'kaedah')}${mkLorong(r,'henti')}</div>`}${mkGred(r)}${mkNota(r)}</div>`;}
 /* kad lipat jadual lain (20 Okt 2026): Prestasi kedudukan, Backtest keputusan, katalog Kaedah, ranking Sektor */
 const mlC='<span class="mlc" aria-hidden="true">›</span>';
 const mkS=(a,v,t)=>`<div><span${t?` data-tip="${t}"`:''}>${a}</span><b>${v}</b></div>`;
@@ -2621,36 +2757,6 @@ function pdNombor(r,hr){const L=[['Tarikh isyarat',tkP(r.tarikh_isyarat)],['Tari
   [paNama()+' tempoh sama',spyPos(r)==null?'\u2013':`<span class="${cls(spyPos(r))}">${sg2(spyPos(r))}</span>`]];
   return `<table class="pdg"><tbody>${L.map(([k,v])=>`<tr><td class="mut">${k}</td><td class="n">${v}</td></tr>`).join('')}</tbody></table>`;}
 
-function openPos(id){const r=posRows('gab').find(x=>x._p===id);if(!r)return;
-  const hr=r.keluar?hariAntara(r.tarikh_beli,r.tarikh_keluar):r.hari,V=pdVerdikt(r),kk=kongsiOf(r);
-  const t=trendOf(r.saham),atrH=t&&t.atr_pct!=null?atrCip(r.saham):'';
-  const trH=trSec(r.saham),stH=stSec(r.saham),rpH=rpPos(r);
-  sheet(`<div class="lbl">${r.akaun==='M'?'Moomoo lama':'Papertrade C'}${r.sektor?' \u00b7 '+esc(r.sektor):''}${r.industri?' \u00b7 '+esc(r.industri):''}</div>
-    <h3 id="shTitle">${esc(r.saham)} \u00b7 ${esc(r.kaedah)}</h3>
-    <div class="pdpl">${titikPos(r)}${trPill(r.saham)}${stPill(r.saham)}${atrH}${baruPos(r)}</div>
-    ${r.tidak_sah?`<p class="ln"><span class="pill p-warn">Luar peraturan</span> ${esc(r.sebab_tidak_sah||'')}</p>`:''}
-    <div class="pdv v-${V[0]}"><span class="pdot"></span><div><b>${V[1]}</b><p>${V[2]}</p></div></div>
-    ${r.tidak_dibeli?'':pdKpi(r,hr)}
-    ${r.tidak_dibeli?'':`<div class="sec" id="posTanggaSec"><h4 data-tip="carta_kecil">Di mana harga berdiri</h4><div class="pdt" id="posTangga"></div>
-      <div class="pdlg"><span><i style="background:var(--neg);opacity:.6"></i>Zon keluar</span><span><i style="background:var(--pos);opacity:.6"></i>Jarak selamat sekarang</span></div></div>`}
-    ${rpH||`<div class="sec"><h4 data-tip="carta_kecil">Harga sejak beli</h4><div id="posSpark"></div></div>`}
-    ${jlPos(r)}
-    <div class="sec"><h4 data-tip="isyarat_keluar">Dua lorong keluar</h4><div class="pdlane">
-      <div class="pdl"><h5>Lorong 1 \u00b7 kaedah</h5>${selLorong(r,'kaedah')}${pdJarak1(r)}</div>
-      <div class="pdl"><h5 data-tip="keluar_henti">Lorong 2 \u00b7 pegang selagi naik</h5>${selLorong(r,'henti')}</div></div></div>
-    ${pdKecekapan(r)}
-    ${pdGred(r)}
-    <div class="sec"><h4>Butiran lain</h4>
-      <details class="pdd"><summary>Nombor mentah<span class="r">10 medan</span></summary><div class="pdb">${pdNombor(r,hr)}</div></details>
-      ${kk.length?`<details class="pdd"><summary>Isyarat sama daripada kaedah lain<span class="r">${kk.length} kaedah</span></summary><div class="pdb">${kk.map(k=>`<p class="ln"><b>${esc(k)}</b> ${esc(katNama(k))}${katMasuk(k)?`<br><span class="mut">Masuk: ${esc(katMasuk(k))}</span>`:''}</p>`).join('')}</div></details>`:''}
-      ${trH||stH?`<details class="pdd"><summary>Trend &amp; Stage penuh<span class="r">${esc(((x)=>x.length>44?x.slice(0,42)+'\u2026':x)([trBaris(r.saham),stBaris(r.saham)].filter(Boolean).join(' \u00b7 '))||'takrif penuh')}</span></summary><div class="pdb">${trH}${stH}</div></details>`:''}
-    </div>
-    <div class="acts"><button type="button" class="btn" data-kd="${esc(r.kaedah)}">Lihat kaedah ${esc(r.kaedah)}</button><button type="button" class="btn ghost" data-tutup>Tutup</button></div>`);
-  {const bx=$('#posSpark');if(bx){const W=Math.max(260,bx.clientWidth||340);bx.innerHTML=sparkPos(r,W,120,1);silangSpark(bx,r,W);}}
-  {const tg=$('#posTangga');if(tg){const W=Math.max(280,tg.clientWidth||340),h=pdTangga(r,W);
-    if(h)tg.innerHTML=h;else{const sc=$('#posTanggaSec');if(sc)sc.hidden=true;}}}
-  {const rp=$('#rpPos'),m=l2Map();if(rp&&m&&m.get(rp.dataset.k))initRp(rp,m.get(rp.dataset.k));}
-  {const jw=document.querySelector('.jlw'),jm=jlMap();if(jw&&jm&&jm.get(jw.dataset.k)){const W=Math.max(260,jw.clientWidth||340);jw.innerHTML=jlSvg(jm.get(jw.dataset.k),null,W);}}}
 function openWatch(i){const r=watchRows()[i];if(!r)return;const lk=wLengkap(r)?wBeli(r):null;
   sheet(`<div class="lbl">Watchlist · Hampir Signal${r.sektor?' · '+esc(r.sektor):''}${r.industri?' · '+esc(r.industri):''}</div>
     <h3 id="shTitle">${esc(r.saham)} · ${esc(r.kaedah)}</h3><p class="sub" style="margin-top:2px">${esc(r.nama||'')}</p>
@@ -3751,6 +3857,352 @@ document.addEventListener('click',e=>{
   if(t.dataset.kd||t.dataset.hk)openKaedah(t.dataset.kd||t.dataset.hk);else if(t.dataset.pos)openPos(t.dataset.pos);else if(t.dataset.wl!=null)openWatch(+t.dataset.wl);});
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('tr[data-kd],tr[data-hk],tr[data-pos],tr[data-wl]')){e.preventDefault();e.target.click();}});
 
+/* ================= v158 (7 Nov 2026, keputusan pengguna): reka bentuk v5.1 — komponen dan blok skrin =================
+   Satu warna satu maksud (disahkan dengan pengguna melalui contoh v1–v5.1): teal = untung/lulus, merah = rugi/tindakan,
+   kuning = hampir paras lorong 2 SAHAJA, ungu = SPUS SAHAJA, kelabu-biru = belum cukup data. Palet donut kategori
+   (sektor) lulus validator dataviz pada permukaan kad (#1F242B): kecerahan, kepekatan, CVD bersebelahan >= 15.
+   Blok-blok di bawah ialah "Gambaran" setiap tab (bukan .panel), jadi rel bahagian (pnav) memaparkannya bersama. */
+const V5PAL=['#12A886','#5C83E4','#058A72','#2E74E0','#22A3BA','#4A5260'];
+const V5SEK={'Healthcare':'Kesihatan','Technology':'Teknologi','Industrials':'Perindustrian','Consumer Cyclical':'Pengguna kitaran','Energy':'Tenaga','Basic Materials':'Bahan asas','Communication Services':'Komunikasi','Consumer Defensive':'Pengguna asas','Utilities':'Utiliti','Real Estate':'Hartanah','Financial Services':'Kewangan'};
+/* dua taksonomi sektor bercampur dalam data posisi (sektor lama "Industrial"/"Materials" lawan sektor_us yfinance) */
+const V5SEKT={'Consumer':'Consumer Cyclical','Industrial':'Industrials','Materials':'Basic Materials','Transportation':'Industrials'};
+const v5Sek=r=>r.sektor_us||V5SEKT[r.sektor]||r.sektor||'Tiada data';
+const v5n=v=>v==null?'–':Number(v).toLocaleString('en');
+const v5pc=(a,b)=>b?fx(a/b*100,1)+'%':'–';
+const v5sg=(v,d=2)=>v==null||!isFinite(v)?'–':(v>0?'+':v<0?'−':'')+fx(Math.abs(v),d);
+const v5j1=r=>/jual pada buka esok/.test(r.isyarat_keluar||'');
+const v5j2=r=>!r.keluar_henti&&/jual pada buka esok/.test(r.status_henti||'');
+/* zon lorong 2 daripada teks status_henti (paras keluar X) dan harga terkini */
+function v5Zon(r){const s=r.status_henti||'';if(r.keluar_henti||/^Keluar/.test(s))return {z:'keluar'};
+  const m=/paras keluar ([\d.]+)/.exec(s),p=m?+m[1]:null,c=nomb(r.harga_terkini),j=p&&c?(c/p-1)*100:null;
+  if(/jual pada buka esok/.test(s))return {z:'merah',p,j};if(j==null)return {z:'tiada'};return {z:j<3?'merah':j<10?'kuning':'hijau',p,j};}
+/* posisi dipegang pada tutup data: lorong kaedah belum keluar dan dibeli <= tarikh data (belian hari ini pada harga
+   buka sementara bernilai 0% dan memesongkan statistik, jadi dikira berasingan) */
+function v5Held(rows){const td=tarikhData()||'9999';const h=[],baru=[];rows.forEach(r=>{if(r.keluar||r.tidak_dibeli)return;(r.tarikh_beli>td?baru:h).push(r);});return {h,baru};}
+function k5(l,v,chip,cc,ln,f1,f2){return `<div class="k5"><div class="l">${l}${chip?`<span class="${cc}">${chip}</span>`:''}</div><div class="v">${v}</div><div class="ln">${(ln||[]).map(([w,c])=>`<i style="width:${Math.max(0,Math.min(1,w))*100}%;background:${c}"></i>`).join('')}</div><div class="f"><span>${f1||''}</span><span>${f2||''}</span></div></div>`;}
+const k5Row=a=>`<div class="k5row">${a.join('')}</div>`;
+const v5Card=(c,h,r,b)=>`<div class="v5c ${c}"><div class="v5h"><h3>${h}</h3>${r?`<span class="r">${r}</span>`:''}</div>${b}</div>`;
+function v5Donut(sz,parts,top,mid,bot){const r=sz/2-14,c=sz/2,C=2*Math.PI*r,T=parts.reduce((a,b)=>a+b[0],0)||1;let o=0,s=`<svg class="v5s" width="${sz}" height="${sz}" role="img" aria-label="${esc(top+' '+mid)}"><circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="#2A3038" stroke-width="22"/>`;
+  parts.forEach(([v,col])=>{if(!v)return;const L=v/T*C;s+=`<circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="${col}" stroke-width="22" stroke-dasharray="${Math.max(1.5,L-2.5)} ${C}" stroke-dashoffset="${-o}" transform="rotate(-90 ${c} ${c})"/>`;o+=L;});
+  return s+`<text x="${c}" y="${c-16}" fill="#8A93A0" font-size="10.5" text-anchor="middle" letter-spacing="1">${esc(top)}</text><text x="${c}" y="${c+11}" fill="#EEF1F4" font-size="${String(mid).length>7?21:25}" font-weight="700" text-anchor="middle">${esc(mid)}</text><text x="${c}" y="${c+29}" fill="#8A93A0" font-size="10.5" text-anchor="middle">${esc(bot)}</text></svg>`;}
+const v5Lg=(col,t,a,b,bc)=>`<div class="v5row"><span class="dt" style="background:${col}"></span><span>${t}</span><span class="mo mut">${a}</span><span class="mo ${bc||''}" style="min-width:52px;text-align:right">${b}</span></div>`;
+function v5DonutCard(parts,top,mid,bot,tot){return `<div style="display:flex;justify-content:center;margin:2px 0 10px">${v5Donut(176,parts.map(p=>[p[1],p[2]]),top,mid,bot)}</div>${parts.map(p=>v5Lg(p[2],esc(p[0]),v5pc(p[1],tot),v5n(p[1]))).join('')}`;}
+const v5ZonParts=Z=>[['Tercetus / < 3%',Z.merah,'#FF5D73'],['Hampir 3–10%',Z.kuning,'#FFC145'],['Jauh > 10%',Z.hijau,'#12A886'],['Sudah keluar L2',Z.keluar,'#4A5260']];
+const v5StatParts=k=>[['Belum cukup data',k['BELUM CUKUP']||0,'#6B7A99'],['Terbukti negatif',k.NEGATIF||0,'#FF5D73'],['Gagal',k.GAGAL||0,'#4A5260'],['Calon',k.CALON||0,'#12A886'],['Terbukti',k.TERBUKTI||0,'#1EE3B4']];
+/* carta kawasan: garis a (teal, bayang gradien penuh, tanpa titik) + garis b putus-putus (ungu, SPUS) + jalur pilihan */
+function v5Area(el,o){if(!el)return;const n=o.a.length;if(n<2){el.innerHTML='<div class="v5xs">Belum cukup sesi.</div>';return;}
+  const W=Math.max(260,el.clientWidth||600),H=o.H||(skrinKecil()?190:220),pl=40,pr=10,pt=10,pb=22;
+  const vals=[...o.a,...(o.b||[]),...(o.band?[...o.band.lo,...o.band.hi]:[])].filter(v=>v!=null&&isFinite(v));
+  let mn=Math.min(0,...vals),mx=Math.max(0,...vals);const pad=(mx-mn)*.08||1;mn-=pad;mx+=pad;
+  const X=i=>pl+i/(n-1)*(W-pl-pr),Y=v=>pt+(mx-v)/(mx-mn)*(H-pt-pb),st=(mx-mn)>12?5:(mx-mn)>5?2:1;
+  let s=`<svg class="v5s" width="${W}" height="${H}" role="img" aria-label="${esc(o.lbl||'carta')}">`;
+  for(let v=Math.ceil(mn/st)*st;v<=mx;v+=st)s+=`<line x1="${pl}" x2="${W-pr}" y1="${Y(v)}" y2="${Y(v)}" stroke="${v===0?'#4A5260':'#2A3038'}" stroke-dasharray="${v===0?'':'2 4'}"/><text x="${pl-8}" y="${Y(v)+4}" fill="#8A93A0" font-size="10.5" text-anchor="end">${v>0?'+':''}${v}%</text>`;
+  const P=a=>a.map((v,i)=>v==null?null:[X(i),Y(v)]).filter(Boolean),pth=a=>P(a).map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join('');
+  if(o.band)s+=`<path d="${pth(o.band.hi)}${P(o.band.lo).reverse().map(p=>'L'+p[0]+','+p[1]).join('')}Z" fill="#8A93A0" opacity=".14"/>`;
+  const la=pth(o.a),pa=P(o.a);s+=`<path d="${la}L${pa[pa.length-1][0]},${Y(mn)}L${pa[0][0]},${Y(mn)}Z" fill="url(#shT)"/><path d="${la}" fill="none" stroke="#1EE3B4" stroke-width="2.4"/>`;
+  if(o.b)s+=`<path d="${pth(o.b)}" fill="none" stroke="#8F7CFF" stroke-width="2.2" stroke-dasharray="6 4"/>`;
+  (o.xl||[]).forEach(([i,t])=>{s+=`<text x="${X(i)}" y="${H-5}" fill="#8A93A0" font-size="10.5" text-anchor="${i===0?'start':i===n-1?'end':'middle'}">${esc(t)}</text>`;});
+  const L=pa[pa.length-1];s+=`<circle cx="${L[0]}" cy="${L[1]}" r="4.5" fill="#1EE3B4"/>`;
+  if(o.b){const B=P(o.b);if(B.length){const q=B[B.length-1];s+=`<circle cx="${q[0]}" cy="${q[1]}" r="4.5" fill="#8F7CFF"/>`;}}
+  el.innerHTML=s+'</svg>';}
+/* bar bertindan: dibeli (teal) atas dijual (kelabu-biru), setiap sesi */
+function v5Aliran(el,t,b,j){if(!el||!t.length)return;const n=t.length,W0=Math.max(260,el.clientWidth||600),pr=40,W=W0-pr,H=skrinKecil()?190:220,pb=22,pt=8,mx=Math.max(1,...b.map((v,i)=>v+j[i])),bw=W/n;
+  let s=`<svg class="v5s" width="${W0}" height="${H}" role="img" aria-label="Belian dan jualan setiap sesi">`;
+  [.25,.5,.75,1].forEach(f=>{const y=pt+(H-pb-pt)*(1-f);s+=`<line x1="0" x2="${W}" y1="${y}" y2="${y}" stroke="#2A3038" stroke-dasharray="2 4"/><text x="${W0}" y="${y+4}" fill="#8A93A0" font-size="10" text-anchor="end" font-family="ui-monospace,Menlo,monospace">${v5n(Math.round(mx*f))}</text>`;});
+  b.forEach((v,i)=>{const hb=v/mx*(H-pb-pt),hj=j[i]/mx*(H-pb-pt),x=i*bw+bw*.2,w=bw*.6,y0=H-pb;
+    s+=`<rect x="${x}" y="${y0-hj}" width="${w}" height="${hj}" rx="2" fill="#6B7A99"><title>${esc(tkO(t[i]))}: dijual ${v5n(j[i])}</title></rect><rect x="${x}" y="${y0-hj-hb-(hj?2:0)}" width="${w}" height="${hb}" rx="2" fill="url(#gPosV)"><title>${esc(tkO(t[i]))}: dibeli ${v5n(v)}</title></rect>`;
+    if((i%(skrinKecil()?6:4)===0&&i<n-3)||i===n-1)s+=`<text x="${x+w/2}" y="${H-5}" fill="#8A93A0" font-size="10.5" text-anchor="middle">${esc(tkO(t[i]))}</text>`;});
+  const k=n-1;s+=`<g transform="translate(8,${pt+4})"><rect width="146" height="58" rx="8" fill="#15181D" stroke="#2E353E"/><text x="10" y="17" fill="#B4BBC6" font-size="11">${esc(tkO(t[k]))} (sesi terakhir)</text><rect x="10" y="26" width="8" height="8" rx="2" fill="#1EE3B4"/><text x="24" y="34" fill="#EEF1F4" font-size="11">Dibeli</text><text x="136" y="34" fill="#EEF1F4" font-size="11" text-anchor="end" font-weight="700">${v5n(b[k])}</text><rect x="10" y="40" width="8" height="8" rx="2" fill="#6B7A99"/><text x="24" y="48" fill="#EEF1F4" font-size="11">Dijual</text><text x="136" y="48" fill="#EEF1F4" font-size="11" text-anchor="end" font-weight="700">${v5n(j[k])}</text></g>`;
+  el.innerHTML=s+'</svg>';}
+/* histogram untung: lajur 2 mata, merah bawah sifar, teal atas sifar */
+function v5Hist(el,us){if(!el)return;const h=new Array(32).fill(0);us.forEach(u=>{if(u==null)return;h[u<-30?0:u>=30?31:Math.floor((u+30)/2)+1]++;});
+  const n=h.length,W=Math.max(260,el.clientWidth||600),H=skrinKecil()?150:180,pb=20,mx=Math.max(1,...h),bw=W/n;let s=`<svg class="v5s" width="${W}" height="${H}" role="img" aria-label="Taburan untung">`;
+  h.forEach((v,i)=>{const lo=-30+(i-1)*2,neg=i===0||lo<0,bh=Math.max(2,v/mx*(H-pb-10));s+=`<rect x="${i*bw+bw*.18}" y="${H-pb-bh}" width="${bw*.64}" height="${bh}" rx="${Math.min(4,bw*.3)}" fill="url(#${neg?'gNegV':'gPosV'})" opacity="${i===0||i===n-1?.6:1}"><title>${i===0?'≤ −30%':i===n-1?'≥ +30%':v5sg(lo,0)+' hingga '+v5sg(lo+2,0)+'%'}: ${v5n(v)} posisi</title></rect>`;});
+  [['≤−30',0],['−20',6],['−10',11],['0',16],['+10',21],['+20',26],['≥+30',31]].forEach(([t,i])=>{s+=`<text x="${i===0?2:i===31?W-2:i*bw}" y="${H-4}" fill="#8A93A0" font-size="10.5" text-anchor="${i===0?'start':i===31?'end':'middle'}">${t}</text>`;});
+  s+=`<line x1="${16*bw}" x2="${16*bw}" y1="0" y2="${H-pb}" stroke="#EEF1F4" stroke-opacity=".45" stroke-dasharray="3 3"/>`;el.innerHTML=s+'</svg>';}
+/* bar mendatar ringkas */
+const v5HB=(t,v,mx,grad,lab,cls_)=>`<div class="v5hb"><span class="t">${t}</span><div class="v5bar"><i style="width:${mx?Math.max(1.5,Math.abs(v)/mx*100):0}%;background:${grad}"></i></div><span class="v ${cls_||''}">${lab}</span></div>`;
+const V5G={pos:'linear-gradient(90deg,#12A886,#22A3BA)',neg:'linear-gradient(90deg,#FF8A5C,#FF4F6E)'};
+/* senarai Perlu perhatian dikumpul ikut saham (satu saham boleh dipegang oleh banyak kaedah) */
+function v5Kump(rows,n){const g=new Map();rows.forEach(r=>{const x=g.get(r.saham)||{s:r.saham,R:[]};x.R.push(r);g.set(r.saham,x);});
+  return [...g.values()].map(x=>{const u=x.R.map(r=>r.untung_pct).filter(v=>v!=null);x.u=u.length?u.reduce((a,b)=>a+b,0)/u.length:null;x.R.sort((a,b)=>(a.untung_pct??0)-(b.untung_pct??0));return x;}).sort((a,b)=>(a.u??0)-(b.u??0)).slice(0,n);}
+function v5Perh(rows,kanan){const G=v5Kump(rows,5),nS=new Set(rows.map(r=>r.saham)).size;
+  if(!rows.length)return '<div class="v5xs">Tiada.</div>';
+  return G.map(x=>{const r0=x.R[0];return `<div class="v5li" data-pos="${esc(r0._p)}" tabindex="0"><span class="v5bdg ${x.u>=0?'b5t':'b5c'}">${v5sg(x.u,1)}%</span><div style="min-width:0"><b>${esc(x.s)}</b> <span class="v5xs">${x.R.length} posisi · ${esc(x.R.slice(0,2).map(r=>r.kaedah).join(', '))}${x.R.length>2?'…':''}</span><div class="v5xs" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r0.industri_us||r0.industri||'')}</div></div><span class="v5xs" style="text-align:right">${kanan(x)}</span></div>`;}).join('')
+    +`<div class="v5xs" style="padding-top:8px">${nS} saham · ${v5n(rows.length)} posisi · papar ${G.length} rugi terbesar · ketik untuk butiran</div>`;}
+function v5Ringkas(H){const n=H.length,Z={merah:0,kuning:0,hijau:0,keluar:0,tiada:0},sek={},us=[];let naik=0,turun=0,j1=0,j2=0;
+  H.forEach(r=>{const z=v5Zon(r);Z[z.z]++;r._z=z;const u=r.untung_pct;if(u!=null){us.push(u);if(u>0)naik++;else if(u<0)turun++;}
+    if(v5j1(r))j1++;if(v5j2(r))j2++;const k=v5Sek(r);(sek[k]=sek[k]||[]).push(u??0);});
+  const SEK=Object.entries(sek).map(([k,v])=>[k,v.length,v.reduce((a,b)=>a+b,0)/v.length,v.filter(x=>x>0).length/v.length*100]).sort((a,b)=>b[1]-a[1]);
+  const so=us.slice().sort((a,b)=>a-b),med=so.length?(so.length%2?so[(so.length-1)/2]:(so[so.length/2-1]+so[so.length/2])/2):null;
+  return {n,Z,SEK,us,naik,turun,j1,j2,mean:us.length?us.reduce((a,b)=>a+b,0)/us.length:null,med};}
+function v5SekDonut(Rk){const S5=Rk.SEK.filter(s=>s[0]!=='Tiada data'),top=S5.slice(0,5),lain=S5.slice(5).reduce((a,b)=>a+b[1],0),parts=top.map((s,i)=>[s[1],V5PAL[i]]).concat([[lain,V5PAL[5]]]);
+  if(!top.length)return '<div class="v5xs">Tiada data sektor.</div>';
+  const w=S5.slice().sort((a,b)=>a[2]-b[2])[0];
+  return `<div style="display:flex;justify-content:center;margin:2px 0 10px">${v5Donut(176,parts,(V5SEK[top[0][0]]||top[0][0]).toUpperCase(),v5pc(top[0][1],Rk.n),v5n(top[0][1])+' posisi')}</div>`+top.map((s,i)=>v5Lg(V5PAL[i],esc(V5SEK[s[0]]||s[0]),v5pc(s[1],Rk.n),v5sg(s[2])+'%',s[2]>=0?'pos':'neg')).join('')+(lain?v5Lg(V5PAL[5],'Lain-lain ('+(S5.length-5)+')',v5pc(lain,Rk.n),''):'')
+    +`<div class="v5xs" style="margin-top:6px">Lajur kanan = untung purata. Paling teruk: <b class="neg">${esc(V5SEK[w[0]]||w[0])} ${v5sg(w[2])}%</b> (${v5n(w[1])} posisi, ${fx(w[3],1)}% naik).</div>`;}
+/* aliran belian/jualan lorong kaedah setiap sesi, daripada baris posisi sendiri */
+function v5AliranData(rows){const b={},j={};rows.forEach(r=>{if(r.tidak_dibeli)return;if(r.tarikh_beli)b[r.tarikh_beli]=(b[r.tarikh_beli]||0)+1;if(r.keluar&&r.tarikh_keluar)j[r.tarikh_keluar]=(j[r.tarikh_keluar]||0)+1;});
+  const td=tarikhData()||'9999',t=[...new Set([...Object.keys(b),...Object.keys(j)])].filter(d=>d<=td).sort().slice(-24);return {t,b:t.map(d=>b[d]||0),j:t.map(d=>j[d]||0)};}
+/* kesegaran: dibanding dengan tarikh data harga (harian/status); kad skor dijana selepas Lejar jadi boleh ketinggalan */
+function v5Segar(){const td=tarikhData(),ks=S.ks,kh=ks&&ks.harga_pada?String(ks.harga_pada).slice(0,10):'',ph=S.ptc&&S.ptc.harga_pada?String(S.ptc.harga_pada).slice(0,10):td;
+  return {td,kh,ph,ksLewat:!!(td&&kh&&kh<td),nx:td?hariDagBerikut(td):''};}
+function v5RenderRel(){const rl=$('#rail');if(!rl)return;const g=v5Segar(),K=S.ks&&S.ks.kira;
+  let fr=$('#v5fr');if(!fr){fr=document.createElement('div');fr.id='v5fr';}
+  fr.innerHTML=`<div class="rh" style="padding:12px 8px 4px">Kesegaran data</div>
+    <div class="v5fr">Harga tutup<span class="${g.td?'v5ok':'v5mt'}">${g.td?'✓ '+esc(tkO(g.td)):'–'}</span><small>sesi terakhir dalam pangkalan data</small></div>
+    <div class="v5fr">Kad skor<span class="${g.ksLewat?'v5lw':'v5ok'}">${g.kh?(g.ksLewat?'⚠ ':'✓ ')+esc(tkO(g.kh)):'–'}</span><small>${g.ksLewat?'lewat '+(g.td>g.kh?'1+ sesi':'')+' · dijana selepas Lejar':'harga sama dengan posisi'}</small></div>
+    <div class="v5fr">Sesi seterusnya<span class="v5mt">${g.nx?esc(tkO(g.nx)):'–'}</span></div>`;
+  let pr=$('#v5promo');if(!pr){pr=document.createElement('div');pr.id='v5promo';pr.className='v5promo';}
+  const lay=K?(K.TERBUKTI||0):null;
+  pr.innerHTML=`<div class="t">● STATUS KAJIAN</div><p>${K?(lay?`<b>${lay}</b> kaedah TERBUKTI.`:`Tiada kaedah layak wang sebenar lagi (${v5n(K['BELUM CUKUP']||0)} belum cukup data, ${K.NEGATIF||0} negatif).`)+(S.ks.tarikh_g1?` Jawapan lift paling awal ~${esc(tkO(S.ks.tarikh_g1))} ${String(S.ks.tarikh_g1).slice(0,4)}.`:''):'Memuatkan kad skor…'}</p><button type="button" class="v5btn" data-pergi="analisis">Lihat kad skor</button>`;
+  if(MQ_REL&&MQ_REL.matches){const nv=$('#mainTabs');if(nv&&nv.parentElement===rl){if(fr.previousElementSibling!==nv)nv.after(fr);}else if(fr.parentElement!==rl)rl.appendChild(fr);if(pr.parentElement!==rl)rl.appendChild(pr);}
+  else{if(fr.parentElement)fr.remove();if(pr.parentElement)pr.remove();}
+  const pill=$('#v5fresh');if(pill){pill.hidden=!g.td;pill.className='v5pill'+(g.ksLewat&&S.tab==='analisis'?' lw':'');pill.textContent=g.ksLewat&&S.tab==='analisis'?`⚠ Kad skor: harga ${tkO(g.kh)} · lewat`:`● Harga ${tkO(g.td)} · terkini`;}}
+
+/* ---- Hari ini ---- */
+function v5Utama(){const all=posRows('c'),{h:H,baru}=v5Held(all),Rk=v5Ringkas(H),n=Rk.n,K=S.ks&&S.ks.kira,us=S.us,sb=sbRows(S.sb)||[],sbK=new Set(sb.map(r=>r.kaedah)).size;
+  const al=v5AliranData(all),pv=al.b.length>1?null:null;
+  const prev=(()=>{const td=tarikhData();return all.filter(r=>!r.tidak_dibeli&&r.tarikh_beli<td&&!(r.keluar&&r.tarikh_keluar&&r.tarikh_keluar<td)).length;})();
+  const lift=us&&us.u&&us.u.length?us.u[us.u.length-1]-us.s[us.s.length-1]:null;
+  const nx=hariDagBerikut(tarikhData()||'');
+  return k5Row([
+    k5('Posisi dipegang',`<span class="mo">${v5n(n)}</span>`,(n-prev>=0?'↗ +':'↘ ')+v5n(n-prev),n-prev>=0?'cp':'cn',[[prev/Math.max(n,prev),'#0E6F5E'],[Math.max(0,n-prev)/Math.max(n,prev),'#1EE3B4']],'sesi lepas '+v5n(prev),v5n(new Set(H.map(r=>r.saham)).size)+' saham'),
+    k5('Untung purata',v5sg(Rk.mean)+'%','median '+v5sg(Rk.med)+'%',(Rk.med??0)>=0?'cp':'cn',[[Rk.naik/Math.max(1,n),'#1EE3B4'],[Rk.turun/Math.max(1,n),'#FF5D73']],'naik '+v5pc(Rk.naik,n),'turun '+v5pc(Rk.turun,n)),
+    k5('Jual pada buka '+esc(tkO(nx)),v5n(Rk.j1+Rk.j2),Rk.j1+' + '+Rk.j2,'ca',[[(Rk.j1+Rk.j2)/Math.max(1,n),'#FFC145']],'kaedah + lorong 2',v5pc(Rk.j1+Rk.j2,n)),
+    k5('Kaedah layak',K?`${K.TERBUKTI||0} / ${S.ks.kaedah||'–'}`:'–',K?'↘ '+(K.NEGATIF||0)+' negatif':'',(K&&K.TERBUKTI)?'cp':'cn',S.ks&&S.ks.hari_beli_perlu?[[S.ks.hari_beli/S.ks.hari_beli_perlu,'#1EE3B4']]:[],S.ks?'hari beli '+S.ks.hari_beli+'/'+S.ks.hari_beli_perlu:'',S.ks&&S.ks.tarikh_g1?'~'+tkO(S.ks.tarikh_g1)+' '+String(S.ks.tarikh_g1).slice(0,4):'')])
+  +`<div class="v5g">
+  ${v5Card('c8','Untung purata semua posisi lawan SPUS',us&&us.n&&us.n.length?`${v5n(us.n[us.n.length-1])} posisi sejak belian pertama · yang dijual pada harga jualan · SPUS tempoh sama`:'prestasi/untung_siri',
+    us&&us.u&&us.u.length?`<div class="v5nums"><div><div class="v5big ${cls(us.u[us.u.length-1])}">${v5sg(us.u[us.u.length-1])}%</div><div class="v5sm">posisi Papertrade C</div></div><div><div class="v5md" style="color:var(--violet)">${v5sg(us.s[us.s.length-1])}%</div><div class="v5sm">SPUS tempoh sama</div></div><div><span class="${lift>=0?'cp':'cn'}" style="margin:0">${lift>=0?'▲':'▼'} ${v5sg(lift)} mata</span><div class="v5xs" style="margin-top:4px">bukan bukti kelebihan: kad skor yang memutuskan</div></div></div><div id="v5ar"></div><div class="v5lg"><span><i style="background:#1EE3B4"></i>posisi</span><span><i style="background:#8F7CFF"></i>SPUS tempoh sama</span></div>`:`<div class="v5xs">${S.live?'Belum ditolak ke pangkalan data.':'Memuatkan…'}</div>`)}
+  ${v5Card('c4','Posisi ikut sektor',v5n(n)+' posisi',v5SekDonut(Rk))}
+  ${v5Card('c8','Aliran posisi setiap sesi','sesi seterusnya '+esc(tkO(nx)),`<div class="v5nums"><div><div class="v5big neg">${v5n(Rk.j1)}</div><div class="v5sm">jual ${esc(tkO(nx))} · lorong kaedah</div></div><div><div class="v5big" style="color:var(--warn)">${v5n(Rk.j2)}</div><div class="v5sm">jual ${esc(tkO(nx))} · lorong 2</div></div><div><div class="v5big pos">${v5n(sb.length)}</div><div class="v5sm">senarai beli · ${sbK} kaedah</div></div>${baru.length?`<div><div class="v5md">${v5n(baru.length)}</div><div class="v5sm">dibeli sesi ini · harga buka sementara</div></div>`:''}</div><div id="v5al"></div><div class="v5lg"><span><i style="background:#1EE3B4"></i>dibeli</span><span><i style="background:#6B7A99"></i>dijual (lorong kaedah)</span></div>`)}
+  ${v5Card('c4','Kaedah untuk wang sebenar',S.ks&&S.ks.harga_pada?`<span class="${v5Segar().ksLewat?'v5lw':'v5ok'}">harga ${esc(tkO(String(S.ks.harga_pada).slice(0,10)))}</span>`:'',K?v5DonutCard(v5StatParts(K).filter(p=>p[1]||p[0]==='Calon'||p[0]==='Terbukti'),'LAYAK',`${K.TERBUKTI||0} / ${S.ks.kaedah||'–'}`,S.ks.tarikh_g1?'lift ~'+tkO(S.ks.tarikh_g1)+' '+String(S.ks.tarikh_g1).slice(0,4):'',S.ks.kaedah||1):`<div class="v5xs">Memuatkan kad skor…</div>`)}
+  ${v5Card('c6','Perlu perhatian · jual lorong kaedah '+esc(tkO(nx)),'ikut saham',v5Perh(H.filter(v5j1),x=>`hari ${Math.max(...x.R.map(r=>r.hari||0))}`))}
+  ${v5Card('c6','Perlu perhatian · lorong 2 tercetus','tutup di bawah paras',v5Perh(H.filter(v5j2),x=>{const j=Math.min(...x.R.map(r=>r._z&&r._z.j!=null?r._z.j:99));return j<99?`<span class="neg">${v5sg(j,1)}% paras</span>`:'';}))}
+  ${v5Card('c8',`Taburan untung ${v5n(n)} posisi`,'setiap bar 2 mata',`<div id="v5hs"></div><div class="v5lg"><span><i style="background:#1EE3B4"></i>naik ${v5pc(Rk.naik,n)}</span><span><i style="background:#FF5D73"></i>turun ${v5pc(Rk.turun,n)}</span><span>purata <b class="${cls(Rk.mean)}">&nbsp;${v5sg(Rk.mean)}%</b></span><span>median <b class="${cls(Rk.med)}">&nbsp;${v5sg(Rk.med)}%</b></span></div>`)}
+  ${v5Card('c4','Risiko lorong 2','jarak tutup ke paras keluar',v5DonutCard(v5ZonParts(Rk.Z),'DALAM 10%',v5pc(Rk.Z.merah+Rk.Z.kuning,n),v5n(Rk.Z.merah+Rk.Z.kuning)+' posisi',n))}
+  </div>`;}
+function v5UtamaLukis(){const all=posRows('c'),us=S.us;
+  if(us&&us.u&&us.u.length>1){const t=us.t.map(x=>{x=String(x);return x.slice(0,4)+'-'+x.slice(4,6)+'-'+x.slice(6,8);}),n=t.length;v5Area($('#v5ar'),{a:us.u,b:us.s,lbl:'Untung purata semua posisi lawan SPUS',xl:[[0,tkO(t[0])],[Math.round((n-1)/2),tkO(t[Math.round((n-1)/2)])],[n-1,tkO(t[n-1])]]});}
+  const al=v5AliranData(all);v5Aliran($('#v5al'),al.t,al.b,al.j);
+  v5Hist($('#v5hs'),v5Held(all).h.map(r=>r.untung_pct));}
+
+/* ---- Pilih kaedah ---- */
+function v5Analisis(R){const d=S.ks,K=d.kira||{},N=d.kaedah||R.length,G=[0,0,0,0,0,0];R.forEach(r=>{[...r.gate].forEach((c,i)=>{if(c==='1')G[i]++;});});
+  const pos=R.filter(r=>r.jangkaan>0).length,t4=S.t4s,pick=t4&&t4.k?(S.t4p&&t4.k[S.t4p]?S.t4p:(t4.pil[0]||[])[0]):null;
+  const NM=['G1 Kematangan','G2 Jangkaan','G3 Lift','G4 Henti hari-0','G5 Pantau','G6 Portfolio'],SB=['hari beli & posisi cukup','> 0 dan CI bawah > 0','lulus BH-FDR','sifar','bukan GANTUNG/BERSARA','126 sesi, > SPUS & p95'];
+  const WH={0:d.tarikh_g1?'~'+tkO(d.tarikh_g1)+' '+String(d.tarikh_g1).slice(0,4):'',5:d.tarikh_g6?'~'+tkO(d.tarikh_g6)+' '+String(d.tarikh_g6).slice(0,4):''};
+  const ord=[0,1,5,2,3,4].sort((a,b)=>(G[a]===0)===(G[b]===0)?0:G[a]===0?-1:1);
+  const kk=t4&&pick?t4.k[pick]:null,ks=pick?ksRow(pick):null;
+  const t4card=t4&&kk?`<div class="v5pick"><span class="v5xs">Pilih:</span><div class="seg" id="v5t4seg">${t4.pil.slice(0,skrinKecil()?3:5).map(p=>`<button type="button" data-v="${esc(p[0])}" aria-pressed="${p[0]===pick}">${esc(p[0])}</button>`).join('')}</div><select id="v5t4sel" aria-label="Pilih kaedah lain">${t4.pil.map(p=>`<option value="${esc(p[0])}"${p[0]===pick?' selected':''}>${esc(p[0])} · ${v5sg(p[1])} mata atas SPUS</option>`).join('')}</select><span class="v5xs">disusun ikut jarak atas SPUS</span></div>
+    <div class="v5nums"><div><div class="v5big ${cls(kk[kk.length-1])}">${v5sg(kk[kk.length-1])}%</div><div class="v5sm">${esc(pick)} · ${kk.length} sesi</div></div><div><div class="v5md" style="color:var(--violet)">${v5sg(t4.spus[t4.spus.length-1])}%</div><div class="v5sm">SPUS</div></div><div><div class="v5md">${v5sg(t4.p95[t4.p95.length-1])}%</div><div class="v5sm">rawak p95</div></div>${ks?`<div>${ksPill(ks.status)}<div class="v5xs" style="margin-top:4px">${ks.t4_sesi||kk.length}/126 sesi</div></div>`:''}</div>
+    <div id="v5t4"></div><div class="v5lg"><span><i style="background:#1EE3B4"></i>${esc(pick)}</span><span><i style="background:#8F7CFF"></i>SPUS</span><span><i style="background:#4A5260"></i>jalur rawak p50–p95</span><span class="mut">Persentil sebelum 126 sesi tidak bermakna.</span></div>`:`<div class="v5xs">${S.live?'Siri T4 belum ditolak (analisis/t4_siri).':'Memuatkan…'}</div>`;
+  const T10=R.slice().sort((a,b)=>(b.jangkaan??-99)-(a.jangkaan??-99)).slice(0,10),mx10=Math.max(0.01,...T10.map(r=>r.jangkaan||0));
+  return k5Row([
+    k5('Layak wang sebenar',`${K.TERBUKTI||0} / ${N}`,(K.TERBUKTI||0)+' lulus 6 gate',(K.TERBUKTI||0)?'cp':'cn',[],'calon '+(K.CALON||0),'terbukti '+(K.TERBUKTI||0)),
+    k5('Belum cukup data',v5n(K['BELUM CUKUP']||0),v5pc(K['BELUM CUKUP']||0,N),'cm',d.hari_beli_perlu?[[d.hari_beli/d.hari_beli_perlu,'#6B7A99']]:[],'hari beli '+d.hari_beli+'/'+(d.hari_beli_perlu||'–'),WH[0]),
+    k5('Jangkaan > 0',v5n(pos),'daripada '+N,'cm',[[pos/N,'#12A886']],'CI bawah > 0: '+R.filter(r=>r.ci_bawah>0).length,''),
+    k5('Terbukti negatif',v5n(K.NEGATIF||0),'↘ jangkaan < 0','cn',[[(K.NEGATIF||0)/N,'#FF5D73']],'daripada '+N,'')])
+  +`<div class="v5g">${v5Card('c8','Lorong T4: kaedah lawan SPUS','pulangan % · 10 slot · sejak belian pertama'+(t4&&t4.dibina?'':''),t4card)}
+  ${v5Card('c4','Layak wang sebenar','',v5DonutCard(v5StatParts(K).filter(p=>p[1]||p[0]==='Calon'||p[0]==='Terbukti'),'LAYAK',`${K.TERBUKTI||0} / ${N}`,(K.NEGATIF||0)+' negatif · '+(K.CALON||0)+' calon',N))}
+  ${v5Card('c12','Enam gate · berapa kaedah lulus','mesti lulus kesemua enam · penghalang di atas',`<div style="display:grid;grid-template-columns:${skrinKecil()?'minmax(0,1fr)':'minmax(0,1fr) minmax(0,1fr)'};gap:4px 28px">${ord.map(i=>{const v=G[i],blk=v===0;return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 70px;gap:4px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><div style="font-size:.84rem;font-weight:${blk?700:500}">${NM[i]} <span class="v5xs">· ${SB[i]}</span>${blk&&WH[i]?` <span class="v5lw">${WH[i]}</span>`:''}</div><span class="mo ${blk?'neg':''}" style="text-align:right;font-weight:700">${v}<span class="mut" style="font-weight:400">/${N}</span></span><div class="v5bar" style="height:8px;grid-column:1/-1"><i style="width:${Math.max(blk?1.5:0,v/N*100)}%;background:${blk?'#FF5D73':V5G.pos}"></i></div></div>`;}).join('')}</div>`)}
+  ${v5Card('c7','Jangkaan setiap kaedah',N+' disusun · semua posisi lorong 1, terbuka ditanda ke pasaran',`<div id="v5jb"></div><div class="v5lg"><span><i style="background:#12A886"></i>${pos} di atas sifar</span><span><i style="background:#B9505F"></i>${R.filter(r=>r.jangkaan<=0&&r.status!=='NEGATIF').length} di bawah sifar</span><span><i style="background:#FF5D73"></i>${K.NEGATIF||0} status NEGATIF</span></div>`)}
+  ${v5Card('c5','10 jangkaan tertinggi','jangkaan setiap posisi',T10.map((r,i)=>`<div data-kd="${esc(r.id)}" tabindex="0" style="cursor:pointer;display:grid;grid-template-columns:18px ${skrinKecil()?'64px':'78px'} minmax(0,1fr) 58px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)"><span class="mo mut" style="font-size:.7rem">${i+1}</span><span class="v5chip" style="text-align:center">${esc(r.id)}</span><div style="min-width:0"><div class="v5xs" style="margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.nama||'')}</div><div class="v5bar" style="height:8px"><i style="width:${Math.max(0,(r.jangkaan||0)/mx10*100)}%;background:${V5G.pos}"></i></div></div><span class="mo ${cls(r.jangkaan)}" style="text-align:right;font-weight:700">${v5sg(r.jangkaan)}%</span></div>`).join('')+`<div class="v5xs" style="margin-top:8px">${T10.every(r=>(r.ci_bawah??-1)<=0)?'⚠ Belum pasti: selang keyakinan 95% kesemua sepuluh masih merangkumi sifar.':''}</div>`)}
+  </div>`;}
+function v5AnalisisLukis(R){const t4=S.t4s;
+  if(t4&&t4.k){const pick=S.t4p&&t4.k[S.t4p]?S.t4p:(t4.pil[0]||[])[0],kk=t4.k[pick];if(kk){const n=kk.length;v5Area($('#v5t4'),{a:kk,b:t4.spus,band:t4.p50&&t4.p50.length===n?{lo:t4.p50,hi:t4.p95}:null,lbl:'Lorong T4 '+pick,xl:[[0,tkO(t4.t[0])],[n-1,tkO(t4.t[n-1])]]});}
+    const sg_=$('#v5t4seg'),sl=$('#v5t4sel'),pilih=v=>{S.t4p=v;renderAll();};if(sg_)sg_.onclick=e=>{const b=e.target.closest('button');if(b)pilih(b.dataset.v);};if(sl)sl.onchange=()=>pilih(sl.value);}
+  const el=$('#v5jb');if(el&&R){const K=R.slice().sort((a,b)=>(b.jangkaan??-99)-(a.jangkaan??-99)),n=K.length,W0=Math.max(260,el.clientWidth||600),W=W0-36,H=skrinKecil()?190:240,vals=K.map(r=>r.jangkaan??0),mx=Math.max(1,...vals)+.5,mn=Math.min(-1,...vals)-.5,pt=8,pb=20,Y=v=>pt+(mx-v)/(mx-mn)*(H-pt-pb),bw=W/n;
+    let s=`<svg class="v5s" width="${W0}" height="${H}" role="img" aria-label="Jangkaan setiap kaedah disusun">`;[...new Set([Math.ceil(mn/5)*5,-5,0].filter(v=>v>=mn&&v<=mx))].forEach(v=>{s+=`<line x1="0" x2="${W}" y1="${Y(v)}" y2="${Y(v)}" stroke="${v?'#2A3038':'#56637D'}" stroke-dasharray="${v?'2 4':''}"/><text x="${W0}" y="${Y(v)+4}" fill="#8A93A0" font-size="10" text-anchor="end">${v}%</text>`;});
+    K.forEach((k,i)=>{const v=k.jangkaan??0,y0=Y(0),y1=Y(v),c=k.status==='NEGATIF'?'#FF5D73':v>0?'#12A886':'#B9505F';s+=`<rect x="${i*bw+bw*.12}" y="${Math.min(y0,y1)}" width="${Math.max(1,bw*.76)}" height="${Math.max(1,Math.abs(y1-y0))}" rx="1" fill="${c}"><title>${esc(k.id)} ${v5sg(v)}% · ${esc(k.status)}</title></rect>`;});
+    s+=`<text x="2" y="${H-5}" fill="#8A93A0" font-size="10.5">tertinggi</text><text x="${W}" y="${H-5}" fill="#8A93A0" font-size="10.5" text-anchor="end">terendah</text>`;el.innerHTML=s+'</svg>';}}
+
+/* ---- Posisi ---- */
+function v5Pos(all){const {h:H}=v5Held(all),Rk=v5Ringkas(H),n=Rk.n,dk=Rk.Z.merah+Rk.Z.kuning,nx=hariDagBerikut(tarikhData()||'');
+  const hdK=['0–2','3–5','6–10','11–15','16+'],hd=[0,0,0,0,0];H.forEach(r=>{const x=r.hari||0;hd[x<=2?0:x<=5?1:x<=10?2:x<=15?3:4]++;});const hm=Math.max(1,...hd);
+  return k5Row([
+    k5('Posisi dipegang',`<span class="mo">${v5n(n)}</span>`,v5n(new Set(H.map(r=>r.saham)).size)+' saham','cm',[],'lorong kaedah',''),
+    k5('Naik',v5pc(Rk.naik,n),v5n(Rk.naik),'cp',[[Rk.naik/Math.max(1,n),'#1EE3B4']],'untung > 0',''),
+    k5('Turun',v5pc(Rk.turun,n),v5n(Rk.turun),'cn',[[Rk.turun/Math.max(1,n),'#FF5D73']],'untung < 0',''),
+    k5('Dalam 10% paras L2',v5n(dk),v5pc(dk,n),'ca',[[Rk.Z.merah/Math.max(1,n),'#FF5D73'],[Rk.Z.kuning/Math.max(1,n),'#FFC145']],Rk.Z.merah+' tercetus',v5n(Rk.Z.kuning)+' hampir')])
+  +`<div class="v5g">${v5Card('c8','Hari dipegang',v5n(n)+' posisi',`<div style="display:flex;gap:8px;align-items:flex-end;height:${skrinKecil()?96:120}px">${hd.map(v=>`<div style="flex:1;height:${Math.max(4,v/hm*(skrinKecil()?96:120))}px;background:linear-gradient(180deg,#12A8D6,#1EE3B4);border-radius:6px 6px 2px 2px"></div>`).join('')}</div><div style="display:flex;gap:8px;margin-top:6px" class="v5xs">${hdK.map((t,i)=>`<span style="flex:1;text-align:center;white-space:nowrap">${t} hari<br><b class="mo" style="color:var(--fg-2)">${v5n(hd[i])}</b></span>`).join('')}</div>`)}
+  ${v5Card('c4','Jual pada buka '+esc(tkO(nx)),v5pc(Rk.j1+Rk.j2,n)+' daripada dipegang',`<div style="display:flex;gap:28px;margin:4px 0 14px"><div><div class="v5big neg mo">${v5n(Rk.j1)}</div><div class="v5xs">lorong kaedah</div></div><div><div class="v5big mo" style="color:var(--warn)">${v5n(Rk.j2)}</div><div class="v5xs">lorong 2</div></div></div><div class="v5bar" style="height:14px"><i style="flex:${Rk.j1};background:${V5G.neg}"></i><i style="flex:${Math.max(Rk.j2,Rk.j1*.08)};background:linear-gradient(90deg,#FFD166,#FFB020)"></i><i style="flex:${Math.max(0,n-Rk.j1-Rk.j2)};background:#16413C"></i></div><div class="v5lg"><span><i style="background:#FF5D73"></i>kaedah</span><span><i style="background:#FFC145"></i>lorong 2</span><span><i style="background:#16413C"></i>kekal ${v5n(n-Rk.j1-Rk.j2)}</span></div>`)}
+  ${v5Card('c8','Taburan untung','purata '+v5sg(Rk.mean)+'% · median '+v5sg(Rk.med)+'%','<div id="v5phs"></div>')}
+  ${v5Card('c4','Lorong 2 · jarak ke paras',v5n(n)+' posisi',v5DonutCard(v5ZonParts(Rk.Z),'DALAM 10%',v5pc(dk,n),v5n(dk)+' posisi',n))}</div>`;}
+
+/* ---- Watchlist ---- */
+function v5Watch(){const W=(S.watch&&S.watch.rows)||[],n=W.length,p95=W.filter(r=>(r.pct_dipenuhi??0)>=95).length,p80=W.filter(r=>(r.pct_dipenuhi??0)>=80&&(r.pct_dipenuhi??0)<95).length,sb=sbRows(S.sb)||[];
+  if(!n)return '';return k5Row([
+    k5('Baris watchlist',v5n(n),v5n(new Set(W.map(r=>r.saham)).size)+' saham','cm',[],v5n(new Set(W.map(r=>r.kaedah)).size)+' kaedah',''),
+    k5('Hampir ≥ 95%',v5n(p95),v5pc(p95,n),'cp',[[p95/n,'#12A886']],'satu syarat lagi',''),
+    k5('80–95%',v5n(p80),v5pc(p80,n),'cm',[[p80/n,'#6B7A99']],'',''),
+    k5('Senarai beli',v5n(sb.length),new Set(sb.map(r=>r.kaedah)).size+' kaedah','ca',[],'isyarat lengkap','')]);}
+
+/* ---- Akaun: posisi ditutup ---- */
+function v5Akaun(src){const ex=src.filter(r=>r.keluar&&r.untung_akhir_pct!=null);if(!ex.length)return '';
+  const A=analisis(src),n=ex.length,CL={henti:'#FF5D73',isyarat:'#5C83E4',sasaran:'#12A886',masa:'#22A3BA'};
+  const h0=ex.filter(r=>r.tarikh_keluar===r.tarikh_beli&&jenisKeluar(r.isyarat_keluar)==='henti').length,nH=A.sebab.henti?A.sebab.henti.n:0;
+  const parts=SEBAB.map(([k,t])=>[t,A.sebab[k].n,CL[k]]).sort((a,b)=>b[1]-a[1]);
+  const by=SEBAB.map(([k,t])=>[t,A.sebab[k].n,avgOf(A.sebab[k].u)]).filter(x=>x[1]),mx=Math.max(0.01,...by.map(x=>Math.abs(x[2]||0)));
+  const tdk=tarikhData(),nH0=ex.filter(r=>r.tarikh_keluar===tdk).length;
+  return k5Row([
+    k5('Posisi ditutup',v5n(n),nH0?'+'+v5n(nH0)+' sesi terakhir':'','cm',[],'lorong kaedah',''),
+    k5('Menang',A.winEx==null?'–':fx(A.winEx*100,1)+'%','untung > 0',(A.winEx||0)>=.5?'cp':'cn',[[A.winEx||0,'#12A886']],'',''),
+    k5('Untung purata',v5sg(A.avgEx)+'%','',(A.avgEx||0)>=0?'cp':'cn',[],'setiap posisi ditutup',''),
+    k5('Henti hari-0',v5n(h0),v5pc(h0,nH)+' henti',h0?'cn':'cp',[[h0/Math.max(1,nH),'#FF5D73']],'kena henti hari beli','G4 = 0')])
+  +`<div class="v5g">${v5Card('c5','Sebab keluar',v5n(n)+' posisi ditutup',v5DonutCard(parts,parts[0][0].toUpperCase(),v5pc(parts[0][1],n),v5n(parts[0][1])+' posisi',n))}
+  ${v5Card('c7','Untung purata ikut sebab keluar','setiap posisi ditutup',by.map(([t,c,v])=>`<div class="v5hb" style="grid-template-columns:minmax(0,${skrinKecil()?120:170}px) minmax(0,1fr) 64px"><span class="t">${esc(t)} <span class="v5xs mo">· ${v5n(c)}</span></span><div style="position:relative;height:12px"><div style="position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:#56637D"></div><div style="position:absolute;top:0;height:12px;border-radius:6px;${(v||0)>=0?'left:50%':'right:50%'};width:${Math.abs(v||0)/mx*50}%;background:${(v||0)>=0?V5G.pos:V5G.neg}"></div></div><span class="v ${cls(v)}">${v5sg(v)}%</span></div>`).join('')+`<div class="v5xs" style="margin-top:10px">${nH?`Kena henti: ${v5pc(nH,n)} jualan; ${v5n(h0)} daripadanya tercetus pada hari beli sendiri.`:''}</div>`)}</div>`;}
+
+/* ================= v159 (7 Nov 2026, keputusan pengguna): helaian butiran posisi + kad telefon v2 =================
+   Contoh yang diluluskan: kepala melekit (status, untung, jarak ke paras keluar), tab dalam helaian, carta lilin
+   berzon (hijau selamat / kuning hampir paras <= 10% / merah zon keluar lorong 2) dengan bacaan sentuh, bar jarak satu
+   baris tanpa label bertindih, jubin bahasa mudah, "berapa jauh sebelum keluar", saham sama dalam kaedah lain, kaedah
+   (kad skor) dan gred; leret kiri/kanan atau butang ‹ › untuk posisi seterusnya. Helaian lama (pdKpi, pdTangga,
+   ulang tayang lorong 2, jalur jangkaan) dikekalkan di tab Keluar supaya tiada fungsi hilang. */
+const pvU=r=>r.keluar?r.untung_akhir_pct:r.untung_pct;
+const pvBB=t=>String(t||'').slice(5).replace('-','')|0;  /* YYYY-MM-DD -> MMDD (format siri posisi/lorong2) */
+const pvTk=b=>{const m=Math.floor(b/100),d=b%100;return m&&d?d+' '+BLN[m-1]:'';};
+function pvSenarai(r){const L=posRows('gab').filter(x=>x.akaun===r.akaun&&!x.keluar&&!x.tidak_dibeli).sort((a,b)=>(pvU(b)??-1e9)-(pvU(a)??-1e9));
+  const i=L.findIndex(x=>x._p===r._p);return {L,i};}
+function pvLorong(r){const out=[],u=nomb(r.harga_terkini);
+  const ln=(t,sub,j,lab)=>`<div class="pv2ln"><div><b>${t}</b> <span class="v5xs">${sub}</span></div><span class="mo ${j==null?'mut':j<-10?'pos':j<-3?'amb':'neg'}" style="font-weight:700">${lab}</span><div class="v5bar" style="grid-column:1/-1;height:8px"><i style="width:${j==null?0:Math.max(3,Math.min(1,Math.abs(j)/30)*100)}%;background:${j==null?'#3A414C':j<-10?V5G.pos:j<-3?'linear-gradient(90deg,#FFD166,#FFB020)':V5G.neg}"></i></div></div>`;
+  if(r.keluar)out.push(`<div class="pv2ln"><div><b>Lorong 1 · kaedah</b> <span class="v5xs">sudah keluar</span></div>${selLorong(r,'kaedah')}</div>`);
+  else{const h=parasL(r,'kaedah'),j=jarakL(r,'kaedah'),sa=nomb(r.sasaran);out.push(ln('Lorong 1 · kaedah',`${h!=null?'henti '+fx(h,2):'tiada henti'}${sa?' · sasaran '+fx(sa,2)+(u?' ('+v5sg((sa/u-1)*100,1)+'%)':''):' · tiada sasaran'}`,/menunggu/.test(r.isyarat_keluar||'')?0:j,/menunggu/.test(r.isyarat_keluar||'')?'jual buka':j==null?'–':v5sg(j,1)+'%'));}
+  if(r.keluar_henti)out.push(`<div class="pv2ln"><div><b>Lorong 2 · Chandelier</b> <span class="v5xs">sudah keluar</span></div>${selLorong(r,'henti')}</div>`);
+  else{const p=parasL(r,'henti'),j=jarakL(r,'henti'),mn=/menunggu/.test(r.status_henti||'');out.push(ln('Lorong 2 · Chandelier',p!=null?'paras '+fx(p,2)+' · naik sahaja':'paras belum ada',mn?0:j,mn?'jual buka':j==null?'–':v5sg(j,1)+'%'));}
+  return out.join('')+'<div class="v5xs" style="margin-top:6px">Jarak harga kini ke paras keluar. Bar penuh = 30% atau lebih ruang; kuning = dalam 10%, merah = dalam 3%.</div>';}
+function pvJarak(r){const kini=nomb(r.harga_terkini),hb=nomb(r.harga_beli),hen=r.keluar?null:parasL(r,'kaedah'),par=r.keluar_henti?null:parasL(r,'henti');
+  if(!kini||!hb)return '';const A=l2Map()&&l2Map().get(l2Key(r)),pk=A&&A.length?Math.max(...A.map(x=>x[3]||0)):null;
+  const vs=[kini,hb,hen,par].filter(v=>v!=null),lo=Math.min(...vs)*.96,hi=Math.max(...vs,pk||0)*1.02;
+  const ayat=[];if(par)ayat.push(`<b class="${kini/par-1<.03?'neg':kini/par-1<.1?'amb':'pos'}">${v5sg((kini/par-1)*100,1)}%</b> dari paras keluar lorong 2`);if(hen)ayat.push(`<b class="${kini/hen-1<.03?'neg':'pos'}">${v5sg((kini/hen-1)*100,1)}%</b> dari henti kaedah`);if(pk&&pk>=kini)ayat.push(`<b>${fx((1-kini/pk)*100,1)}%</b> di bawah puncak ${fx(pk,2)}`);
+  return `<div class="pv2jr" data-lo="${lo}" data-hi="${hi}" data-kini="${kini}" data-hb="${hb}" data-hen="${hen??''}" data-par="${par??''}"></div><div class="v5sm" style="margin-top:4px">${ayat.join(' · ')}</div>`;}
+function pvJarakLukis(el){if(!el)return;const g=k=>el.dataset[k]===''?null:+el.dataset[k],lo=g('lo'),hi=g('hi'),kini=g('kini'),hb=g('hb'),hen=g('hen'),par=g('par');
+  const W=Math.max(260,el.clientWidth||320),H=100,X=v=>18+(v-lo)/(hi-lo)*(W-36),y0=52;
+  let s=`<svg class="v5s" width="${W}" height="${H}" role="img" aria-label="Kedudukan harga berbanding paras keluar">`;
+  if(par){s+=`<rect x="${X(lo)}" y="${y0-6}" width="${Math.max(0,X(par)-X(lo))}" height="12" rx="6" fill="rgba(255,93,115,.45)"/><rect x="${X(par)}" y="${y0-6}" width="${Math.max(0,Math.min(X(hi),X(par*1.1))-X(par))}" height="12" fill="rgba(255,193,69,.55)"/>${par*1.1<hi?`<rect x="${X(par*1.1)}" y="${y0-6}" width="${X(hi)-X(par*1.1)}" height="12" rx="6" fill="rgba(30,227,180,.45)"/>`:''}`;}
+  else s+=`<rect x="${X(lo)}" y="${y0-6}" width="${X(hi)-X(lo)}" height="12" rx="6" fill="#3A414C"/>`;
+  [[hen,'henti kaedah',1,'#FF8C9C'],[hb,'beli',0,'#B4BBC6'],[par,'paras L2',1,'#FFC145'],[kini,'kini',0,'#1EE3B4']].forEach(([v,t,dn,c])=>{if(v==null)return;
+    s+=`<line x1="${X(v)}" x2="${X(v)}" y1="${y0-10}" y2="${y0+10}" stroke="${c}" stroke-width="2"/><text x="${X(v)}" y="${dn?y0+25:y0-14}" fill="${c}" font-size="10.5" font-weight="700" text-anchor="middle">${fx(v,2)}</text><text x="${X(v)}" y="${dn?y0+38:y0-27}" fill="#8A93A0" font-size="10" text-anchor="middle">${t}</text>`;});
+  s+=`<circle cx="${X(kini)}" cy="${y0}" r="7" fill="#15181D" stroke="#1EE3B4" stroke-width="3"/>`;el.innerHTML=s+'</svg>';}
+/* carta lilin berzon + bacaan sentuh (posisi/lorong2: [bbhh, tutup, paras, puncak, status, buka_jual, buka, tinggi, rendah]) */
+function pvCarta(el,r){if(!el)return;const A=l2Map()&&l2Map().get(l2Key(r));if(!A||A.length<2){el.innerHTML=`<div class="v5xs">${S.l2s?'Tiada siri harian bagi posisi ini.':'Memuatkan siri harga…'}</div>`;return;}
+  const garis=el.dataset.mod==='garis',hb=nomb(r.harga_beli),n=A.length,W=Math.max(280,el.clientWidth||520),H=skrinKecil()?230:270,pl=4,pr=54,pt=12,pb=22;
+  const vals=[];A.forEach(b=>{[b[1],b[7],b[8],b[2]].forEach(v=>{if(v!=null)vals.push(v);});});if(hb)vals.push(hb);
+  let lo=Math.min(...vals),hi=Math.max(...vals);const pad=(hi-lo)*.06||1;lo-=pad;hi+=pad;
+  const cw=(W-pl-pr)/n,x=i=>pl+cw*(i+.5),y=v=>pt+(hi-v)/(hi-lo)*(H-pt-pb);
+  let s=`<svg class="v5s" width="${W}" height="${H}" role="img" aria-label="Harga ${esc(r.saham)} sejak beli dengan zon keluar">`;
+  A.forEach((b,i)=>{const p=b[2];if(p==null||b[4]==='lepas')return;const a=x(i)-cw/2,y1=Math.max(pt,y(p*1.1)),y2=y(p);
+    s+=`<rect x="${a}" y="${pt}" width="${cw+.6}" height="${Math.max(0,y1-pt)}" fill="rgba(30,227,180,.09)"/><rect x="${a}" y="${y1}" width="${cw+.6}" height="${Math.max(0,y2-y1)}" fill="rgba(255,193,69,.13)"/><rect x="${a}" y="${y2}" width="${cw+.6}" height="${Math.max(0,H-pb-y2)}" fill="rgba(255,93,115,.10)"/>`;});
+  const st=(hi-lo)/4,mag=Math.pow(10,Math.floor(Math.log10(st))),step=Math.ceil(st/mag)*mag;
+  for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step)s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#2A3038" stroke-dasharray="2 4"/><text x="${W-pr+6}" y="${y(v)+4}" fill="#8A93A0" font-size="10.5">${fx(v,v<10?2:0)}</text>`;
+  let pp='';A.forEach((b,i)=>{if(b[2]==null||b[4]==='lepas')return;const a=x(i)-cw/2,c=x(i)+cw/2;pp+=(pp?'L':'M')+a+','+y(b[2])+'L'+c+','+y(b[2]);});if(pp)s+=`<path d="${pp}" fill="none" stroke="#FFC145" stroke-width="2"/>`;
+  const ib=Math.max(0,A.findIndex(b=>b[4]==='beli'));if(hb)s+=`<line x1="${x(ib)-cw/2}" x2="${W-pr}" y1="${y(hb)}" y2="${y(hb)}" stroke="#B4BBC6" stroke-dasharray="5 4" stroke-opacity=".7"/>`;
+  if(garis){const d=A.map((b,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(b[1]).toFixed(1)).join('');s+=`<path d="${d}L${x(n-1)},${H-pb}L${x(0)},${H-pb}Z" fill="url(#${(pvU(r)??0)>=0?'shT':'shC'})"/><path d="${d}" fill="none" stroke="${(pvU(r)??0)>=0?'#1EE3B4':'#FF5D73'}" stroke-width="2"/>`;}
+  else A.forEach((b,i)=>{const c=b[1],o=b[6]??c,h=b[7]??Math.max(o,c),l=b[8]??Math.min(o,c),col=c>=o?'#1EE3B4':'#FF5D73',bw=Math.max(3,cw*.55);
+    s+=`<line x1="${x(i)}" x2="${x(i)}" y1="${y(h)}" y2="${y(l)}" stroke="${col}" stroke-width="1.3"/><rect x="${x(i)-bw/2}" y="${y(Math.max(o,c))}" width="${bw}" height="${Math.max(1.5,Math.abs(y(o)-y(c)))}" rx="1.5" fill="${col}"/>`;});
+  const lb=skrinKecil()?6:4;A.forEach((b,i)=>{if((i%lb===0&&i>0&&i<n-2)||i===n-1)s+=`<text x="${x(i)}" y="${H-5}" fill="#8A93A0" font-size="10.5" text-anchor="middle">${pvTk(b[0])}</text>`;});
+  if(hb)s+=`<circle cx="${x(ib)}" cy="${y(hb)}" r="5" fill="#15181D" stroke="#EEF1F4" stroke-width="2"/><text x="${x(ib)}" y="${y(hb)+18}" fill="#EEF1F4" font-size="10.5" font-weight="700" text-anchor="middle">beli</text>`;
+  let ip=-1,pv=-1e9;A.forEach((b,i)=>{if(i>=ib&&b[4]!=='lepas'&&b[1]>pv){pv=b[1];ip=i;}});if(ip>ib)s+=`<path d="M${x(ip)-5},${y(A[ip][7]??pv)-11}L${x(ip)+5},${y(A[ip][7]??pv)-11}L${x(ip)},${y(A[ip][7]??pv)-4}Z" fill="#EEF1F4"/><text x="${x(ip)}" y="${y(A[ip][7]??pv)-15}" fill="#EEF1F4" font-size="10" text-anchor="middle">puncak</text>`;
+  const jual=(t,hg,lab)=>{const k=A.findIndex(b=>b[0]===pvBB(t));if(k<0||hg==null)return;s+=`<path d="M${x(k)-6},${y(hg)-16}L${x(k)+6},${y(hg)-16}L${x(k)},${y(hg)-6}Z" fill="#FF5D73"/><text x="${x(k)}" y="${y(hg)-20}" fill="#FF8C9C" font-size="10" font-weight="700" text-anchor="middle">${lab}</text>`;};
+  if(r.keluar)jual(r.tarikh_keluar,nomb(r.harga_keluar),'jual L1');if(r.keluar_henti)jual(r.tarikh_keluar_henti,nomb(r.harga_keluar_henti),'jual L2');
+  const L=A[n-1],par=L[2];if(par!=null&&L[4]!=='lepas')s+=`<rect x="${W-pr+2}" y="${y(par)-8}" width="${pr-4}" height="17" rx="5" fill="#FFC145"/><text x="${W-pr/2}" y="${y(par)+4}" fill="#2A1C00" font-size="10.5" font-weight="700" text-anchor="middle">${fx(par,2)}</text>`;
+  const ky=Math.abs(y(L[1])-y(par??-1e9))<18?y(L[1])+(L[1]>=(par??0)?-18:18):y(L[1]);s+=`<rect x="${W-pr+2}" y="${ky-8}" width="${pr-4}" height="17" rx="5" fill="${L[1]>=(hb||0)?'#1EE3B4':'#FF5D73'}"/><text x="${W-pr/2}" y="${ky+4}" fill="#06120F" font-size="10.5" font-weight="700" text-anchor="middle">${fx(L[1],2)}</text>`;
+  s+=`<g class="pvx" style="display:none"><line y1="${pt}" y2="${H-pb}" stroke="#EEF1F4" stroke-opacity=".55"/><circle r="4" fill="#EEF1F4"/><g class="pvt"><rect width="164" height="56" rx="8" fill="#15181D" stroke="#3A414C"/><text x="10" y="17" fill="#B4BBC6" font-size="11"></text><text x="10" y="33" fill="#EEF1F4" font-size="11.5"></text><text x="10" y="48" font-size="11.5" font-weight="700"></text></g></g>`;
+  el.innerHTML=s+'</svg>';
+  /* bacaan sentuh / tetikus */
+  const svg=el.querySelector('svg'),gx=svg.querySelector('.pvx'),ln=gx.querySelector('line'),ci=gx.querySelector('circle'),tg=gx.querySelector('.pvt'),tx=tg.querySelectorAll('text');
+  const papar=cx=>{const rc=svg.getBoundingClientRect(),i=Math.max(0,Math.min(n-1,Math.floor((cx-rc.left-pl)/cw))),b=A[i];gx.style.display='';
+    ln.setAttribute('x1',x(i));ln.setAttribute('x2',x(i));ci.setAttribute('cx',x(i));ci.setAttribute('cy',y(b[1]));
+    const tx0=Math.max(pl,x(i)+10+164>W-pr?x(i)-174:x(i)+10);tg.setAttribute('transform',`translate(${tx0},${pt+4})`);
+    tx[0].textContent=`${pvTk(b[0])}${i>=ib?' · hari ke-'+(i-ib+1):' · sebelum beli'}`;tx[1].textContent=`Tutup ${fx(b[1],2)}${b[2]!=null&&b[4]!=='lepas'?' · paras '+fx(b[2],2):''}`;
+    const u=hb?(b[1]/hb-1)*100:null;tx[2].textContent=i>=ib&&u!=null?v5sg(u)+'% sejak beli':'';tx[2].setAttribute('fill',u>=0?'#1EE3B4':'#FF8C9C');};
+  svg.addEventListener('pointermove',e=>papar(e.clientX));svg.addEventListener('pointerdown',e=>papar(e.clientX));svg.addEventListener('pointerleave',()=>{gx.style.display='none';});}
+function pvSama(r){const L=posRows('gab').filter(x=>x.saham===r.saham&&x.akaun===r.akaun&&!x.tutup_semua&&!x.tidak_dibeli&&x._p!==r._p).sort((a,b)=>(pvU(b)??0)-(pvU(a)??0));
+  if(!L.length)return '';const mx=Math.max(1,...L.map(x=>Math.abs(pvU(x)||0)));
+  return v5Card('c12',`${esc(r.saham)} dalam kaedah lain`,`${L.length} posisi lain · ketik untuk tukar`,L.slice(0,12).map(x=>{const u=pvU(x);return `<div class="pv2sib" data-pos="${esc(x._p)}" tabindex="0"><span class="v5chip" style="text-align:center">${esc(x.kaedah)}</span><div style="min-width:0"><div class="v5bar" style="height:7px"><i style="width:${Math.abs(u||0)/mx*100}%;background:${(u||0)>=0?V5G.pos:V5G.neg}"></i></div><div class="v5xs" style="margin-top:3px">beli ${esc(tkO(x.tarikh_beli))}${x.keluar?' · lorong 2 sahaja':''}</div></div><span class="mo ${cls(u)}" style="text-align:right;font-weight:700">${v5sg(u)}%</span>${v5j1(x)?'<span class="pill p-exit">Jual buka</span>':'<span class="pill p-mute">Pegang</span>'}</div>`;}).join(''));}
+function pvKaedah(r){const k=ksRow(r.kaedah),u=pvU(r);if(!k)return v5Card('c12','Kaedah '+esc(r.kaedah),'',`<div class="v5xs">${esc(katNama(r.kaedah)||'')} · kad skor belum dimuat.</div>`);
+  const kec=u!=null&&k.jangkaan!=null&&((u>5&&k.jangkaan<=0)||(u<-5&&k.jangkaan>0));
+  return v5Card('c12',`Kaedah ${esc(r.kaedah)} · ${esc(k.nama||'')}`,ksPill(k.status),`<div class="pv2gr"><div><small>Jangkaan</small><b class="mo ${cls(k.jangkaan)}">${v5sg(k.jangkaan)}%</b></div><div><small>Menang</small><b class="mo">${fx(k.menang,1)}%</b></div><div><small>Biasa pegang</small><b class="mo">${k.hari_pegang==null?'–':fx(k.hari_pegang,0)+' hari'}</b></div><div><small>Posisi</small><b class="mo">${v5n(k.n)}</b></div><div><small>Henti hari-0</small><b class="mo ${k.hari0?'neg':''}">${k.hari0}</b></div><div><small>Gate lulus</small><b class="mo">${[...k.gate].filter(c=>c==='1').length}/6</b></div></div>`
+    +(kec?`<div class="v5sm" style="margin-top:8px">${u>0?'Kaedah ini secara purata tidak untung; posisi ini pengecualian, jadi jangan baca untungnya sebagai bukti kaedah.':'Kaedah ini secara purata untung; posisi ini salah satu yang rugi.'}</div>`:'')
+    +`<div style="margin-top:10px"><button type="button" class="v5btn" data-kd="${esc(r.kaedah)}" style="width:auto;padding:7px 14px">Peraturan & kad skor ${esc(r.kaedah)}</button></div>`);}
+function pvGred(r){const t=PDGL.map(([tip,nama,fg,fs,fv])=>{const g=fg(r);if(GORD[g]==null)return '';return `<div><small>${nama}</small><b class="${g==='A'||g==='B'?'pos':g==='D'||g==='E'?'neg':''}">${esc(g)}</b> <span class="v5xs">${fv(r)}</span></div>`;}).filter(Boolean).join('');
+  const tr=trendOf(r.saham),j52=tr&&tr.j52!=null?`<span class="pill p-mute">52W ${v5sg(tr.j52,1)}%</span>`:'';
+  return v5Card('c12','Gred pada isyarat',GORD[r.gred_keseluruhan]!=null?`keseluruhan <span class="grc">${grB(r.gred_keseluruhan)}</span>`:'',(t?`<div class="pv2gr">${t}</div>`:'<div class="v5xs">Tiada gred.</div>')+`<div class="pv2pl">${trPill(r.saham)}${stPill(r.saham)}${j52}${tr&&tr.atr_pct!=null?atrCip(r.saham):''}</div>`);}
+function pvMasa(r){const E=[],A=l2Map()&&l2Map().get(l2Key(r));
+  if(r.tarikh_isyarat)E.push([r.tarikh_isyarat,'b5g','Isyarat '+esc(r.kaedah)+(kongsiOf(r).length?` (& ${esc(kongsiOf(r).slice(0,3).join(', '))})`:'')]);
+  E.push([r.tarikh_beli,'b5t',`Beli pada buka ${fx(r.harga_beli,2)}`]);
+  if(A&&A.length){let ip=-1,pv=-1e9;const ib=Math.max(0,A.findIndex(b=>b[4]==='beli'));A.forEach((b,i)=>{if(i>ib&&b[4]!=='lepas'&&b[1]>pv){pv=b[1];ip=i;}});
+    if(ip>0&&nomb(r.harga_beli)){const y0=String(r.tarikh_beli).slice(0,4),bb=A[ip][0];E.push([`${y0}-${String(Math.floor(bb/100)).padStart(2,'0')}-${String(bb%100).padStart(2,'0')}`,'b5t',`Puncak tutup ${fx(pv,2)} · ${v5sg((pv/nomb(r.harga_beli)-1)*100,1)}%`]);}}
+  const te=String(r.tarikh_earnings||'').slice(0,10);if(/^\d{4}-\d\d-\d\d$/.test(te))E.push([te,'b5s','Earnings'+(te>(tarikhData()||'')?' (akan datang)':'')]);
+  if(r.keluar)E.push([r.tarikh_keluar,'b5c',`Keluar lorong kaedah @ ${fx(r.harga_keluar,2)} · ${v5sg(r.untung_akhir_pct)}%`]);
+  else if(/menunggu/.test(r.isyarat_keluar||''))E.push([hariDagBerikut(tarikhData()||''),'b5c','Jual pada buka (lorong kaedah, menunggu)']);
+  if(r.keluar_henti)E.push([r.tarikh_keluar_henti,'b5c',`Keluar lorong 2 @ ${fx(r.harga_keluar_henti,2)} · ${v5sg(r.untung_henti_pct)}%`]);
+  else if(/menunggu/.test(r.status_henti||''))E.push([hariDagBerikut(tarikhData()||''),'b5c','Jual pada buka (lorong 2, menunggu)']);
+  E.sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0);
+  return v5Card('c12','Garis masa','isyarat hingga hari ini',E.map(([d,b,t])=>`<div class="v5li" style="cursor:default;grid-template-columns:auto 1fr"><span class="v5bdg ${b}" style="font-size:.72rem">${esc(tkO(d))}</span><span class="v5sm">${t}</span></div>`).join(''))
+    +`<div class="v5c c12" style="margin-bottom:12px"><div class="v5h"><h3>Nombor mentah</h3></div>${pdNombor(r,r.keluar?hariAntara(r.tarikh_beli,r.tarikh_keluar):r.hari)}</div>`;}
+function openPos(id){const r=posRows('gab').find(x=>x._p===id);if(!r)return;
+  const u=pvU(r),hr=r.keluar?hariAntara(r.tarikh_beli,r.tarikh_keluar):r.hari,V=pdVerdikt(r),{L,i}=pvSenarai(r),par=r.keluar_henti?null:parasL(r,'henti'),kini=nomb(r.harga_terkini);
+  const jp=par&&kini?(kini/par-1)*100:null,stP=r.tutup_semua?'<span class="pill p-mute">Ditutup</span>':(v5j1(r)||v5j2(r))?'<span class="pill p-exit">↓ Jual buka</span>':r.keluar?'<span class="pill p-mute">Lorong 2 sahaja</span>':'<span class="pill p-buy">● Pegang</span>';
+  const sp=spyPos(r),lw=u!=null&&sp!=null?u-sp:null,rm=rOf(r),q=riskR(r),mf=mfeOf(r),ma=maeOf(r),k=ksRow(r.kaedah),aa=typeof trAA==='function'&&trAA(r.saham);
+  const VC={m:'pv2v-c',h:'pv2v-a',k:'pv2v-g'}[V[0]]||'pv2v-s';
+  const ring=`<div class="${VC} pv2v"><span class="ic">${V[0]==='m'?'!':V[0]==='h'?'⚠':'i'}</span><div><b>${V[1]}</b><div class="v5sm" style="margin-top:2px">${V[2]}</div></div></div>`
+    +(aa?`<div class="pv2v pv2v-s"><span class="ic">i</span><div><b>Sasaran ambil alih</b><div class="v5sm" style="margin-top:2px">Saham ini dalam senarai ambil alih (<code>data/ambil_alih.csv</code>). Harga cenderung terkunci berhampiran harga tawaran, jadi untung tambahan terhad. Posisi yang dibeli sebelum pengumuman kekal sah.</div></div></div>`:'')
+    +(r.tidak_sah?`<div class="pv2v pv2v-a"><span class="ic">⚠</span><div><b>${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</b><div class="v5sm">${esc(r.sebab_tidak_sah||'')}</div></div></div>`:'');
+  const jubin=`<div class="pv2k4">
+    <div class="k5"><div class="l">Lawan ${paNama()} tempoh sama</div><div class="v ${cls(lw)}">${lw==null?'–':v5sg(lw)}</div><div class="v5xs">${sp==null?'tiada data '+paNama():`${esc(r.saham)} ${v5sg(u)}% · ${paNama()} ${v5sg(sp)}%`}</div></div>
+    <div class="k5"><div class="l">Untung berbanding risiko awal</div><div class="v ${cls(rm)}">${rm==null?'–':(rm<0?'−':'')+fx(Math.abs(rm),1)+'×'}</div><div class="v5xs">${q?(q.atr?'1 risiko = ATR14 ':'henti awal ')+fx(q.k,1)+'% di bawah harga beli':'tiada henti awal'}</div></div>
+    <div class="k5"><div class="l">Kenaikan maks ditangkap</div><div class="v">${mf!=null&&mf>.5&&u!=null?fx(Math.max(0,Math.min(100,u/mf*100)),0)+'%':'–'}</div><div class="v5xs">${mf!=null?'maks '+v5sg(mf)+'%':''}${ma!=null?' · penurunan maks '+v5sg(ma)+'%':''}</div></div>
+    <div class="k5"><div class="l">Hari dipegang</div><div class="v">${fx(hr,0)}</div><div class="v5xs">${k&&k.hari_pegang!=null?'biasa '+esc(r.kaedah)+': '+fx(k.hari_pegang,0)+' hari':'beli '+esc(tkO(r.tarikh_beli))}</div></div></div>`;
+  const tabs=[['ringkasan','Ringkasan'],['keluar','Keluar'],['gred','Gred'],['kaedah','Kaedah'],['masa','Garis masa']];
+  sheet(`<div class="pv2" data-pv="${esc(id)}">
+   <div class="pv2h"><button type="button" class="pv2x" data-tutup aria-label="Tutup">×</button><div class="pv2r1"><h3 id="shTitle">${esc(r.saham)} <span>· ${esc(r.kaedah)}</span></h3>${stP}${r.akaun==='M'?'<span class="pill p-mute">Moomoo lama</span>':''}</div>
+    <div class="v5xs">${esc(r.industri_us||r.industri||'')}${r.sektor?' · '+esc(V5SEK[v5Sek(r)]||v5Sek(r)):''} · beli ${esc(tkO(r.tarikh_beli))} @ ${fx(r.harga_beli,2)} · ${fx(hr,0)} hari</div>
+    <div class="pv2r2"><div><div class="pv2big mo ${cls(u)}">${v5sg(u)}%</div><div class="v5xs">${fx(r.harga_beli,2)} → ${fx(r.harga_terkini,2)}</div></div>${jp!=null?`<div><span class="${jp<3?'cn':jp<10?'ca':'cp'}" style="margin:0">${v5sg(jp,1)}% dari paras keluar</span><div class="v5xs" style="margin-top:4px">lorong 2 · paras ${fx(par,2)}</div></div>`:''}</div>
+    <div class="pv2tabs" role="tablist">${tabs.map(([kk,t],j)=>`<button type="button" role="tab" data-pvt="${kk}" aria-selected="${j===0}">${t}</button>`).join('')}</div></div>
+   <section data-pvs="ringkasan">${ring}
+    <div class="v5c c12" style="margin-bottom:12px"><div class="v5h"><h3>Harga sejak beli</h3><span class="r"><span class="seg" id="pvMod"><button type="button" data-v="lilin" aria-pressed="true">Lilin</button><button type="button" data-v="garis" aria-pressed="false">Garis</button></span></span></div><div class="pv2c" data-mod="lilin"></div>
+     <div class="v5lg"><span><i style="background:rgba(30,227,180,.35)"></i>selamat</span><span><i style="background:rgba(255,193,69,.45)"></i>hampir paras (≤ 10%)</span><span><i style="background:rgba(255,93,115,.4)"></i>zon keluar lorong 2</span><span><i style="background:#FFC145;height:3px"></i>paras lorong 2</span><span class="mut">sentuh &amp; seret untuk baca</span></div></div>
+    ${v5Card('c12','Di mana harga sekarang','tutup '+esc(tkO(tarikhData()||'')),pvJarak(r))}
+    ${jubin}
+    ${v5Card('c12','Berapa jauh sebelum keluar','jarak harga kini ke paras',pvLorong(r))}
+    ${pvSama(r)}</section>
+   <section data-pvs="keluar" hidden>${v5Card('c12','Dua lorong keluar','',`<div class="pdlane"><div class="pdl"><h5>Lorong 1 · kaedah</h5>${selLorong(r,'kaedah')}${pdJarak1(r)}</div><div class="pdl"><h5 data-tip="keluar_henti">Lorong 2 · pegang selagi naik</h5>${selLorong(r,'henti')}</div></div>`)}
+    ${r.tidak_dibeli?'':`<div class="v5c c12" style="margin-bottom:12px" id="posTanggaSec"><div class="v5h"><h3>Tangga paras</h3></div><div class="pdt" id="posTangga"></div></div>`}
+    ${rpPos(r)||`<div class="v5c c12" style="margin-bottom:12px"><div class="v5h"><h3>Harga sejak beli</h3></div><div id="posSpark"></div></div>`}${jlPos(r)}${pdKecekapan(r)}</section>
+   <section data-pvs="gred" hidden>${pvGred(r)}${pdGred(r)}${(()=>{const a=trSec(r.saham),b=stSec(r.saham);return a||b?v5Card('c12','Trend & Stage','',a+b):'';})()}</section>
+   <section data-pvs="kaedah" hidden>${pvKaedah(r)}${kongsiOf(r).length?v5Card('c12','Isyarat sama daripada kaedah lain',kongsiOf(r).length+' kaedah',kongsiOf(r).map(kk=>`<p class="ln"><b>${esc(kk)}</b> ${esc(katNama(kk))}</p>`).join('')):''}</section>
+   <section data-pvs="masa" hidden>${pvMasa(r)}</section>
+   <div class="pv2f">${L.length>1&&i>=0?`<div class="v5xs" style="width:100%;text-align:center">‹ leret kiri/kanan untuk posisi lain · ${i+1} daripada ${v5n(L.length)} ›</div>`:''}<button type="button" class="btn ghost" data-pvn="-1" ${i<=0?'disabled':''} style="min-width:40px" aria-label="Posisi sebelum">‹</button><button type="button" class="v5btn" data-kd="${esc(r.kaedah)}" style="flex:1">Lihat kaedah ${esc(r.kaedah)}</button><button type="button" class="btn ghost" data-pvt2="keluar">Ulang tayang</button><button type="button" class="btn ghost" data-pvn="1" ${i<0||i>=L.length-1?'disabled':''} style="min-width:40px" aria-label="Posisi seterusnya">›</button></div></div>`);
+  const sh=$('#sheet'),root=sh.querySelector('.pv2');
+  pvCarta(root.querySelector('.pv2c'),r);pvJarakLukis(root.querySelector('.pv2jr'));
+  let kel=false;const initKeluar=()=>{if(kel)return;kel=true;
+    {const bx=$('#posSpark');if(bx){const W=Math.max(260,bx.clientWidth||340);bx.innerHTML=sparkPos(r,W,120,1);silangSpark(bx,r,W);}}
+    {const tg=$('#posTangga');if(tg){const W=Math.max(280,tg.clientWidth||340),h=pdTangga(r,W);if(h)tg.innerHTML=h;else{const sc=$('#posTanggaSec');if(sc)sc.hidden=true;}}}
+    {const rp=$('#rpPos'),m=l2Map();if(rp&&m&&m.get(rp.dataset.k))initRp(rp,m.get(rp.dataset.k));}
+    {const jw=sh.querySelector('.jlw'),jm=jlMap();if(jw&&jm&&jm.get(jw.dataset.k)){const W=Math.max(260,jw.clientWidth||340);jw.innerHTML=jlSvg(jm.get(jw.dataset.k),null,W);}}};
+  const tukar=t=>{root.querySelectorAll('[data-pvt]').forEach(b=>b.setAttribute('aria-selected',b.dataset.pvt===t));root.querySelectorAll('[data-pvs]').forEach(s=>s.hidden=s.dataset.pvs!==t);if(t==='keluar')initKeluar();applyTips(sh);};
+  root.querySelectorAll('[data-pvt]').forEach(b=>b.onclick=()=>tukar(b.dataset.pvt));root.querySelectorAll('[data-pvt2]').forEach(b=>b.onclick=()=>{tukar(b.dataset.pvt2);sh.scrollTop=0;});
+  const md=root.querySelector('#pvMod');if(md)md.onclick=e=>{const b=e.target.closest('button');if(!b)return;md.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===b));const c=root.querySelector('.pv2c');c.dataset.mod=b.dataset.v;pvCarta(c,r);};
+  const pergi=d=>{const j=i+d;if(i<0||j<0||j>=L.length)return;openPos(L[j]._p);};
+  root.querySelectorAll('[data-pvn]').forEach(b=>b.onclick=()=>pergi(+b.dataset.pvn));
+  let x0=null,y0=null;root.addEventListener('touchstart',e=>{if(e.target.closest('svg'))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY;},{passive:true});
+  root.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5)pergi(dx<0?1:-1);},{passive:true});}
+/* kad telefon jadual Posisi (dibuka dengan ketik baris) */
+function pvSpark(r,W,H){const s=siriPos(r);if(!s||s.v.length<2)return '';const hb=nomb(r.harga_beli),par=r.keluar_henti?null:parasL(r,'henti'),c=s.v,all=c.concat([hb,par].filter(v=>v!=null));
+  const mn=Math.min(...all),mx=Math.max(...all),X=i=>i/(c.length-1)*(W-70),Y=v=>H-4-(v-mn)/((mx-mn)||1)*(H-12),d=c.map((v,i)=>(i?'L':'M')+X(i).toFixed(1)+','+Y(v).toFixed(1)).join(''),u=pvU(r)??0;
+  let o=`<svg class="v5s" width="${W}" height="${H}" role="img" aria-label="Harga sejak beli"><path d="${d}L${X(c.length-1)},${H}L0,${H}Z" fill="url(#${u>=0?'shT':'shC'})"/><path d="${d}" fill="none" stroke="${u>=0?'#1EE3B4':'#FF5D73'}" stroke-width="1.8"/>`;
+  [[hb,'beli '+fx(hb,2),'#B4BBC6','4 3'],[par,'L2 '+fx(par,2),'#FFC145','']].forEach(([v,t,col,da])=>{if(v==null)return;o+=`<line x1="0" x2="${W-70}" y1="${Y(v)}" y2="${Y(v)}" stroke="${col}" stroke-dasharray="${da}" stroke-width="1.5"/><text x="${W-66}" y="${Y(v)+4}" fill="${col}" font-size="10" font-weight="700">${t}</text>`;});
+  return o+'</svg>';}
+function kadPos(r,akaun){const u=pvU(r),j1=v5j1(r),par=r.keluar_henti?null:parasL(r,'henti'),jp=jarakL(r,'henti'),eh=hariKeEarn(r),tr=trendOf(r.saham),stg=typeof stageOf==='function'?stageOf(r.saham):null;
+  const W=Math.min(380,Math.max(260,(window.innerWidth||390)-64));
+  return `<div class="pv2kad"><div class="pv2kh"><div style="min-width:0"><b class="nm">${esc(r.saham)}</b> <span class="v5chip">${esc(r.kaedah)}</span>${j1?' <span class="pill p-exit">↓ Jual buka</span>':''}${akaun&&r.akaun?` <span class="pill p-mute">${r.akaun}</span>`:''}<div class="v5xs">${fx(r.hari,0)} hari · beli ${esc(tkO(r.tarikh_beli))} @ ${fx(r.harga_beli,2)}</div></div><span class="${(u??0)>=0?'cp':'cn'} mo" style="font-size:.86rem">${v5sg(u)}%</span></div>
+   ${r.tidak_sah?`<div class="v5xs" style="margin-top:6px"><span class="pill p-warn">${r.tidak_dibeli?'Tidak dibeli':'Luar peraturan'}</span> ${esc(r.sebab_tidak_sah||'')}</div>`:''}
+   <div style="margin-top:10px">${pvSpark(r,W,110)}</div>
+   <div class="pv2ci"><div><small>Lorong 1</small><b class="${j1?'neg':''}">${r.keluar?'Keluar':j1?'Jual buka':'Pegang'}</b><small>${r.keluar?v5sg(r.untung_akhir_pct)+'%':parasL(r,'kaedah')!=null?'henti '+fx(parasL(r,'kaedah'),2):'tiada henti'}</small></div>
+    <div><small>Lorong 2</small><b class="${r.keluar_henti?'':jp==null?'':-jp<3?'neg':-jp<10?'amb':'pos'}">${r.keluar_henti?'Keluar':jp==null?'–':v5sg(-jp*100/(100+jp),1)+'%'}</b><small>${par!=null?'paras '+fx(par,2):r.keluar_henti?v5sg(r.untung_henti_pct)+'%':'–'}</small></div>
+    <div><small>Earnings</small><b class="${eh!=null&&eh<=10?'amb':''}">${eh==null?'tiada':eh+' hari'}</b><small>${tr&&tr.s!=null?['Bearish','Neutral','Bullish'][tr.s+1]||'':''}${stg&&stg.label?' · stage '+esc(stg.label):''}</small></div></div></div>`;}
+
 /* ================= Ringkasan: jawapan harian dalam 1–2 skrin (Papertrade C) ================= */
 /* v138: satu angka utama + penunjuk perubahan + penanda aras + ayat biasa + carta lebar.
    SPY tempoh sama = purata pulangan SPY merentas tingkap pegang setiap posisi (spyPos), iaitu perbandingan
@@ -3780,21 +4232,14 @@ function renderUtama(){
   p3.push(`Ikut keluarga: <b>Mxx</b> purata <b class="${cls(kM.a)}">${sg2(kM.a)}</b> (${nf(kM.n)} posisi) · <b>Nxx</b> purata <b class="${cls(kN.a)}">${sg2(kN.a)}</b> (${nf(kN.n)} posisi, bermula 3 Nov, tiada henti). Purata akaun bukan jawapan "kaedah mana" — itu kad skor di tab <button type="button" class="lnk" data-pergi="analisis">Pilih kaedah</button>.`);
   el.innerHTML=`
   ${salStrip()}
-  ${tj}
+  ${v5Utama()}
   <div class="grid2 eq">${panelEsok()}${panelBerubah(src)}</div>
-  ${(h=>h?`<div class="panel"><div class="panel-h"><h2>Perlu perhatian</h2><span class="sub">posisi Papertrade C yang dipegang · ketik saham untuk butiran</span></div>${h}</div>`:'')(panelPerhatian(posRows('c').filter(r=>!r.keluar)))}
   ${panelBeli()}
-  <div class="kpis">
-    <div class="kpi"><div class="lbl" data-tip="selesai">Dagangan selesai</div><div class="v ${cls(A.avgEx)}">${sg2(A.avgEx)}</div>${As?delta(A.avgEx,As.avgEx):''}${kpiSpark('kum','--accent','Untung terkumpul Papertrade C')}<div class="s">menang ${A.winEx==null?'–':fx(A.winEx*100,0)+'%'} · ${nf(A.nEx)} dagangan</div></div>
-    <div class="kpi"><div class="lbl" data-tip="dipegang">Masih dipegang</div><div class="v ${cls(A.avgOp)}">${sg2(A.avgOp)}</div>${As?delta(A.avgOp,As.avgOp):''}${kpiSpark('n','--violet','Bilangan posisi dipegang setiap sesi')}<div class="s">${A.upOp==null?'–':fx(A.upOp*100,0)+'%'} sedang untung · ${nf(A.nOp)} posisi</div></div>
-    <div class="kpi"><div class="lbl" data-tip="untung_purata">Keseluruhan akaun C</div><div class="v ${cls(a)}">${sg2(a)}</div>${delta(a,aS)}<div class="s">menang (semua) ${v.length?Math.round(up/v.length*100):0}% · <span data-tip="usd_sama">USD1,000 setiap belian</span>: <b class="${cls(usd)}">${usdTxt(usd)}</b></div></div>
-    <div class="kpi"><div class="lbl">Aktiviti terkini</div><div class="v" style="font-size:1.35rem;white-space:normal">${nf(nB)} <span class="mut" style="font-size:.9rem">dibeli</span> · ${nf(nK)} <span class="mut" style="font-size:.9rem">keluar</span></div>${kpiSpark('beli','--simpan','Bilangan belian setiap sesi')}<div class="s">Belian ${esc(tkO(dB))} · keluar ${esc(tkO(dK)||'–')}</div></div>
-  </div>
   <div class="panel"><div class="panel-h"><h2>3 perkara utama</h2><span class="sub">Ditulis automatik daripada data terkini</span></div>
     <ol class="utama3">${p3.map(x=>`<li>${x}</li>`).join('')}</ol>${blokExplainer(src)}</div>
   <div class="strip next"><b class="t">Cara baca</b><span><b>Pilih kaedah</b> = satu jawapan, satu kad skor, gate yang dipradaftar; hanya status TERBUKTI bermakna untuk wang sebenar. <b>Posisi</b> = apa yang dipegang dan watchlist. <b>Akaun</b> = untung rugi akaun lawan ${paNama()}. <b>Rujukan</b> = peraturan kaedah, backtest dan kajian. <button type="button" class="lnk" data-panduan>Buka panduan & glosari</button></span></div>
   <div class="foot"><span>Papertrade C sahaja. Moomoo lama (${nf(prSrc('m').length)} posisi, tiada belian baharu sejak 13 Okt 2026): tab Akaun.</span><span>Tiada order · tiada wang sebenar</span></div>`;
-  beliBind();
+  beliBind();v5UtamaLukis();
 }
 
 function emptyState(){return `<div class="panel empty">${S.live?'Belum ada keputusan backtest dalam pangkalan data.':'Memuatkan keputusan backtest…'}</div>`;}
@@ -3918,7 +4363,7 @@ function renderAnalisis(){
   /* telefon: satu baris = ID · status · 3 nombor (hari beli/perlu · jangkaan · payoff); ketik = kad penuh */
   const KS_P={'TERBUKTI':'TERBUKTI','CALON':'CALON','BELUM CUKUP':'BELUM','GAGAL':'GAGAL','NEGATIF':'NEG'};
   const lp={key:r=>r.id,btn:1,line:r=>`<b>${esc(r.id)}</b><span class="pill ${KS_ST[r.status]||'p-mute'}" title="${esc(r.status)}">${KS_P[r.status]||esc(r.status)}</span><span class="mlx" title="hari beli / perlu · payoff">${r.hari_beli}/${d.hari_beli_perlu??'–'} · ${fx(r.payoff,1)}×</span><b class="mlr ${cls(r.jangkaan)}">${ksSg(r.jangkaan)}</b>`};
-  el.innerHTML=`${ksTajuk(d,R)}
+  el.innerHTML=`${v5Analisis(R)}
   <div class="panel"><div class="panel-h"><h2>Kad skor setiap kaedah</h2><span class="sub">${rows.length} daripada ${R.length} · disusun ikut status, kemudian bilangan gate lulus · ketik baris untuk peraturan kaedah</span></div>
     <p class="headline">Satu penyebut untuk semua: <b>setiap posisi Lejar Penuh</b> lorong keluar kaedah, yang <b>terbuka ditanda-ke-pasaran</b>, kos 0.2% ditolak. Menang % tidak pernah dibaca tanpa <b>payoff</b> (untung purata ÷ rugi purata; di telefon ditulis <b>1.7×</b>) — sasaran anda ialah rugi kecil, untung besar, iaitu payoff tinggi walaupun menang rendah. <b>tanpa5</b> = jangkaan selepas membuang 5% posisi terbaik; negatif bermaksud kelebihan bergantung pada beberapa pemenang besar.</p>
     <div class="filters" style="margin-bottom:10px">
@@ -3934,7 +4379,7 @@ function renderAnalisis(){
     </ul>
     <div class="foot"><span>Sumber: standard/kad_skor.py · standard/portfolio_t4.py · laporan/KAD_SKOR.md · laporan/T4_KAEDAH.md</span><span>Data ${esc(tkP(d.kini))}</span></div></div>
   ${panelLift()}`;
-  liftBind();
+  liftBind();v5AnalisisLukis(R);
   const qq=$('#ksQ');let t2;if(qq)qq.oninput=()=>{clearTimeout(t2);t2=setTimeout(()=>{f.q=qq.value.trim();f.shown=AWAL;renderAll();const n2=$('#ksQ');if(n2){n2.focus();n2.setSelectionRange(n2.value.length,n2.value.length);}},220);};
   [['ksSt','st'],['ksKel','kel']].forEach(([id,k])=>{const g=$('#'+id);if(g)g.onclick=e=>{const b=e.target.closest('button');if(!b)return;f[k]=b.dataset.v;f.shown=AWAL;renderAll();};});
   el.querySelectorAll('[data-ksst]').forEach(b=>{b.onclick=()=>{f.st=b.dataset.ksst;f.shown=AWAL;renderAll();};});
@@ -4196,7 +4641,7 @@ function renderKaedahN(){
   bindLagi('knMore',f);
 }
 const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-cm':()=>renderPrestasi('cm'),'pr-cn':()=>renderPrestasi('cn'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis,kaedahn:renderKaedahN,sektor:renderSektor};
-function renderAll(){try{sorotLepasLukis();}catch(e){}const vid=viewId();const el=document.getElementById(vid);el.classList.toggle('pnav',pnavBoleh(vid));
+function renderAll(){try{sorotLepasLukis();}catch(e){}try{v5RenderRel();}catch(e){}const vid=viewId();const el=document.getElementById(vid);el.classList.toggle('pnav',pnavBoleh(vid));
   const sx={},sy={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;sy[t.dataset.st]=t.parentElement.scrollTop;});
   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
   /* Teks "(bahagian k/N …)" dibawa ke rangka: ia satu-satunya petunjuk bahawa dokumen padat
@@ -4241,16 +4686,20 @@ function muatLajur(){
   });
 }
 /* v142: rel tab kiri (desktop >= 1100px) — nod #mainTabs dipindah, bukan diduplikasi */
-const MQ_REL=window.matchMedia('(min-width:1100px)');
+const MQ_REL=window.matchMedia('(min-width:1100px)');const MQ_PH=window.matchMedia('(max-width:760px)');
 {const rl=$('#rail'),hdr=document.querySelector('header.top'),sb=$('#subBar'),nv=$('#mainTabs'),tr=document.querySelector('.titlerow'),kn=document.querySelector('.titlerow .kanan');
   /* v151: blok status .kanan ikut sama ke rel kiri (di bawah tab terakhir); di bawah 1100px ia kembali ke bar tajuk */
   const pindah=()=>{if(!nv||!rl||!hdr)return;
     if(MQ_REL.matches){if(nv.parentElement!==rl)rl.appendChild(nv);if(kn&&kn.parentElement!==rl)rl.appendChild(kn);}
-    else{if(nv.parentElement!==hdr)hdr.insertBefore(nv,sb);if(kn&&kn.parentElement!==tr)tr.appendChild(kn);}};
+    /* v158: telefon = bar tab BAWAH. #mainTabs mesti keluar dari header.top kerana backdrop-filter header menjadikannya
+       blok pengandung bagi position:fixed (bar akan melekat pada header, bukan skrin). */
+    else if(MQ_PH.matches){if(nv.parentElement!==document.body)document.body.appendChild(nv);if(kn&&kn.parentElement!==tr)tr.appendChild(kn);}
+    else{if(nv.parentElement!==hdr)hdr.insertBefore(nv,sb);if(kn&&kn.parentElement!==tr)tr.appendChild(kn);}
+    const pr=$('#v5promo');if(pr&&MQ_REL.matches&&pr.parentElement!==rl)rl.appendChild(pr);};
   pindah();
   /* melintasi 1100px menukar DI MANA senarai bahagian duduk, jadi paparan dilukis semula */
   const tukar=()=>{pindah();try{renderAll();}catch(e){}};
-  try{MQ_REL.addEventListener('change',tukar);}catch(e){try{MQ_REL.addListener(tukar);}catch(e2){}}}
+  try{MQ_REL.addEventListener('change',tukar);MQ_PH.addEventListener('change',tukar);}catch(e){try{MQ_REL.addListener(tukar);MQ_PH.addListener(tukar);}catch(e2){}}}
 {const hd=document.querySelector('header.top');const set=()=>document.documentElement.style.setProperty('--hdr',(hd?hd.offsetHeight:0)+'px');set();
   try{new ResizeObserver(set).observe(hd);}catch(e){}}
 let rzm;window.addEventListener('resize',()=>{clearTimeout(rzm);rzm=setTimeout(muatLajur,150);});
@@ -4492,7 +4941,8 @@ $('#foldAll').onclick=()=>foldAllNow(true);$('#openAll').onclick=()=>foldAllNow(
 const PNAV_MIN=2,PNAV_TELEFON=[],PNAV_ADA={};
 /* tajuk kumpulan rel (desktop): [tajuk, kunci panel pertama kumpulan] ('' = panel pertama); kunci tiada = tajuk tidak dipapar */
 /* bahagian lalai jika belum dipilih (selainnya item pertama) */
-const PNAV_LALAI={'v-pos':'posisi & keputusan','v-analisis':'kedudukan kaedah','v-utama':'__g','v-pr-cm':'untung terkumpul lawan spy','v-pr-cn':'untung terkumpul lawan spy','v-pr-m':'untung terkumpul lawan spy','v-pr-gab':'untung terkumpul lawan spy'};
+/* v158: Posisi dan Akaun dibuka pada Gambaran (jubin KPI + graf v5.1), seperti Hari ini */
+const PNAV_LALAI={'v-pos':'__g','v-analisis':'kedudukan kaedah','v-utama':'__g','v-pr-cm':'__g','v-pr-cn':'__g','v-pr-m':'__g','v-pr-gab':'__g'};
 /* v146 (2 Nov 2026): kunci kumpulan boleh jadi AWALAN, dan boleh jadi senarai calon (calon pertama
    yang wujud dipakai). Perlu kerana tajuk panel tab Kombinasi N dijana daripada data — cth
    "Produksi: 94 kombinasi yang BELUM diimbas" — jadi kunci tepat akan putus bila nombor berubah,
@@ -4764,6 +5214,8 @@ renderNav();renderAll();
      memecahnya — dan ia MESTI diterbitkan dahulu, bukan selepas. */
   subBhg('analisis/papan','anl',['analisis']);
   sub('analisis/lift','lift',['analisis']);
+  /* v158: siri untung semua posisi lawan SPUS (Hari ini) dan siri lorong T4 setiap kaedah (Pilih kaedah) */
+  sub('prestasi/untung_siri','us',['utama']);sub('analisis/t4_siri','t4s',['analisis']);
   /* v155: kad skor keputusan (standard/kad_skor.py) - tab Pilih kaedah + tajuk tab Hari ini */
   sub('analisis/kad_skor','ks',['analisis','utama','kaedah']);
   sub('kaedah/katalog','kat',['kaedah']);

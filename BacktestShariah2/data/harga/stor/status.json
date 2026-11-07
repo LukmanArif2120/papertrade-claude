@@ -1,12 +1,12 @@
 {
- "dikemaskini": "2026-11-07 06:18 UTC",
+ "dikemaskini": "2026-11-07 10:28 UTC",
  "bar_terakhir": 20261106,
  "laras": {
   "SUPN": 1.288809
  },
  "perlu_sejarah": [],
  "harga_A.csv": {
-  "ticker_dikemaskini": 430,
+  "ticker_dikemaskini": 429,
   "bar_terakhir": 20261106
  },
  "harga_B.csv": {
@@ -17,18 +17,8 @@
   "ticker_dikemaskini": 2,
   "bar_terakhir": 20261106
  },
- "log_laras": 0,
- "faktor_dividen": [
-  "ARLP 2026-11-06 D=0.6 P=24.65 (2.4%)",
-  "BSM 2026-11-06 D=0.35 P=14.35 (2.4%)"
- ],
- "faktor_calon": [
-  "TEAM 2026-11-06 -0.1548",
-  "WK 2026-11-06 -0.1626",
-  "ICFI 2026-11-06 -0.1560",
-  "KRT 2026-11-06 -0.1831",
-  "NRDS 2026-11-06 -0.3080",
-  "TILE 2026-11-06 -0.2076"
- ],
- "moomoo": 0
+ "log_laras": 2,
+ "faktor_dividen": [],
+ "faktor_calon": [],
+ "moomoo": 9
 }

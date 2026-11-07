@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1793985123-4fbe",
-  "nombor": 188,
-  "sha256": "41a65ed3fc25ba78a8680883fadf4bb7d834ab196c8ce0b18c1d4107977266bb",
-  "bait": 608869,
-  "dikemas": "2026-11-06 17:12 UTC",
-  "nota": "v157 (keputusan pengguna 6 Nov 2026: data institusi SEC digabung ke Sektor): bahagian Rujukan -> Sektor kembali dengan panel Aliran institusi (13F) sahaja, db institusi/kumpulan (standard/institusi_13f.py, institusi.yml mingguan); paparan sahaja."
+  "versi_artifact": "1794052946-0cda",
+  "nombor": 190,
+  "sha256": "26adfd3cb313164da9a38a9ccaf5447e6ca78c457c86e68ccb83acddd3301b2c",
+  "bait": 681715,
+  "dikemas": "2026-11-07 12:02 UTC",
+  "nota": "v159 (keputusan pengguna 7 Nov 2026): helaian butiran posisi v2 — pengepala melekat, tab Ringkasan/Keluar/Gred/Kaedah/Garis masa, kotak keputusan + amaran ambil alih, carta lilin berzon dengan rambut silang, lorong keluar, posisi sekandung; kad telefon v2 dengan carta berlabel beli/L2 dan tiga jubin."
 }

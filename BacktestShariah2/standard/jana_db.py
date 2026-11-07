@@ -1394,6 +1394,24 @@ def main(argv=None):
                                                    'harian % sejajar tarikh (null = tiada posisi), n: posisi dipegang, ev: [[indeks hari, beli, keluar untung, '
                                                    'keluar rugi]]}; k Semua = semua kaedah; spy: untung harian % SPY. Untung harian = '
                                                    'Σ perubahan nilai ÷ Σ nilai awal hari (posisi USD sama; keluar ikut lorong kaedah).')
+    # v158 (reka bentuk v5.1, 7 Nov 2026): prestasi/untung_siri = untung purata SEMUA posisi C lawan SPUS tempoh sama
+    # setiap sesi (yang dijual pada harga jualan; posisi terbuka sahaja berat sebelah ke atas - siri_v158.py);
+    # analisis/t4_siri = pulangan lorong T4 L1 setiap kaedah + jalur rawak + SPUS (carta Pilih kaedah).
+    try:
+        import siri_v158 as SV
+        sp = spus_siri()
+        mula = min((int(r['tarikh_beli'].replace('-', '')) for r in C if r.get('tarikh_beli')), default=0)
+        docs['prestasi/untung_siri'] = dict(SV.untung_semua(C, SV.harga_tutup(a.stor, TERKINI if a.stor == STOR else None, mula), sp),
+                                            dibina=dibina, harga_hingga=f'{S} tutup',
+                                            definisi='t: sesi; u: untung purata % SEMUA posisi Papertrade C yang dibeli hingga sesi itu '
+                                                     '(dijual = harga jualan, terbuka = tutup sesi); s: purata SPUS tempoh sama %; n: posisi.')
+        t4 = SV.t4_siri(sp, had_bait=int(HAD_DB * 0.7), bait=bait)
+        if t4:
+            docs['analisis/t4_siri'] = dict(t4, dibina=dibina,
+                                            definisi='k: pulangan % lorong T4 L1 (10 slot) setiap kaedah sejak mula; p50/p95: jalur 20 cabutan rawak; '
+                                                     'spus: buka sesi pertama hingga tutup; pil: [id, lebih SPUS mata] menurun.')
+    except Exception as e:  # noqa: BLE001
+        print(f'amaran: prestasi/untung_siri / analisis/t4_siri gagal: {e!r}', file=sys.stderr)
     # harian/trend (pill Trend D10+H2, ATR14% + kuintil, rejim SPY), harian/stage (lajur Stage Analysis mingguan) dan
     # posisi/lorong2 (candlestick + paras lorong 2 setiap saham|tarikh_beli); kegagalan di sini tidak menghalang dokumen lain
     try:
