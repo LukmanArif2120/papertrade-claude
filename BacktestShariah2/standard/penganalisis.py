@@ -37,6 +37,8 @@ from datetime import datetime, timedelta, timezone
 import numpy as np
 import pandas as pd
 
+import status_kad  # baris status kad skor di atas laporan (audit 7 Nov 2026)
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 BS2 = os.path.dirname(HERE)
 REPO = os.path.dirname(BS2)
@@ -614,8 +616,9 @@ def penemuan(rows, meta, ruj):
     out = []
     if sw:
         t = sw[0]
-        out.append(f"Swing teratas ikut skor gabungan: {t['id']} {t['nama']} — {sg(t['skor_bulan'])} sebulan "
-                   f"setiap posisi (julat {sg(t['skor_bulan_bawah'])} hingga {sg(t['skor_bulan_atas'])}), {t['lulus']}/3 semakan luar sampel, "
+        out.append(f"Swing teratas ikut skor gabungan papan (BUKAN status keputusan): {t['id']} {t['nama']} — skor "
+                   f"{sg(t['skor_bulan'])} 'sebulan' setiap posisi = pusingan modal teori, BUKAN pulangan akaun "
+                   f"(julat {sg(t['skor_bulan_bawah'])} hingga {sg(t['skor_bulan_atas'])}), {t['lulus']}/3 semakan luar sampel, "
                    f"status {t['status']}; CAGR backtest bersendirian {p(t['bt_cagr'])} ({t['bt_setahun']} dagangan setahun). "
                    'Tiga seterusnya: ' + ', '.join(r['id'] for r in sw[1:4]) + '.')
     dinilai = [r for r in rows if r['h_matang'] >= N_MIN]
@@ -656,6 +659,7 @@ def jana_md(rows, meta, ruj, pen, dibina):
          f"Dijana {dibina} oleh `standard/penganalisis.py` (GitHub Actions `analisis.yml`, selepas Lejar Penuh). Data harga hingga "
          f"{tarikh_ms(meta['harga_pada'])}; Lejar sesi terakhir {tarikh_ms(meta['lejar_sesi'])}. Rekod analisis sahaja: tiada order, "
          'tiada wang sebenar. Dashboard: tab Analisis (db `analisis/papan`).', '',
+         status_kad.baris(), '',
          '## 3 penemuan utama', ''] + [f'{i}. {x}' for i, x in enumerate(pen, 1)] + ['',
          '## Cara skor dikira', '',
          f'- Jangkaan backtest = purata pulangan bersih setiap dagangan, set 431 dalam sampel (varian aktif), dikekalkan '

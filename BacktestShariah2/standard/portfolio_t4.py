@@ -48,6 +48,7 @@ BS2 = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(BS2, 'kod')); sys.path.insert(0, HERE)
 import portfolio_slot as ps  # noqa: E402
 from stor import muat, frames_dict  # noqa: E402
+import status_kad  # noqa: E402
 
 STOR = ps.STOR
 KELUAR = ps.KELUAR
@@ -216,6 +217,7 @@ def laporan(R, sesi_akhir, n_jalur):
     A = ['# Lorong T4 satu-kaedah (jejak hadapan; rekod sahaja)', '',
          f'Dijana {pd.Timestamp.now(tz="UTC"):%Y-%m-%d %H:%M} UTC oleh `standard/portfolio_t4.py` '
          '(Actions `analisis.yml`). Tiada order, tiada wang sebenar. Jangan ubah secara manual.', '',
+         status_kad.baris(), '',
          f'Sesi terakhir {sesi_akhir}. **{L1.id.nunique()} kaedah**, setiap satu dua lorong (L1 = keluar kaedah, '
          f'L2 = Chandelier 4xATR14). Kawalan: {n_jalur} cabutan rawak 10 slot atas seluruh kolam Lejar, '
          'diasas semula pada tarikh mula setiap lorong. Penanda aras: SPUS, asas buka sesi pertama.', '',

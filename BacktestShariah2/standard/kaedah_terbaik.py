@@ -114,7 +114,12 @@ def main():
     G = G.dropna(subset=['real', 'bt_purata'])
     R = uji_kaedah(k, B)
 
-    A = ['# Kaedah mana terbaik buat masa sekarang?', '']
+    import status_kad
+    A = ['# Kaedah mana terbaik buat masa sekarang?', '', status_kad.baris(), '',
+         '> Ujian dalam laporan ini memakai posisi DITUTUP sahaja dengan SE berkelompok ikut hari beli. Ujian plasebo '
+         '7 Nov 2026 (`laporan/PLASEBO_GATE.md`) mengukur SE jenis itu meluluskan pemilihan rawak sehingga 45% masa, dan '
+         'penapisan keluar memesongkan sampel ditutup. Bilangan "terbukti NEGATIF/positif" di bawah ialah DIAGNOSTIK, '
+         'bukan label kaedah; label yang sah hanya dalam kad skor.', '']
     A.append(f'Dijana {pd.Timestamp.now(tz="UTC"):%Y-%m-%d %H:%M} UTC oleh '
              '`standard/kaedah_terbaik.py`. Rekod analisis sahaja.')
     A.append('')
