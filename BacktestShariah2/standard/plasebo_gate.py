@@ -74,6 +74,8 @@ def panel():
 
 def pilih(P, jenis, rng):
     by = P.groupby('hi').indices
+    qv = P.q.to_numpy()
+    tv = P.ticker.to_numpy(dtype=object)          # sekali sahaja: to_numpy setiap hari terlalu perlahan
     out, aktif = [], set()
     for d in range(int(P.hi.max()) + 1):
         ix = by.get(d)
@@ -82,10 +84,10 @@ def pilih(P, jenis, rng):
         if jenis == 'bebas':
             out.extend(rng.choice(ix, min(K, len(ix)), replace=False))
         elif jenis == 'condong':
-            c = ix[P.q.to_numpy()[ix] == 2]
+            c = ix[qv[ix] == 2]
             out.extend(rng.choice(c, min(K, len(c)), replace=False))
         else:  # lekit
-            tk = P.ticker.to_numpy()[ix]
+            tk = tv[ix]
             ada = {t: i for t, i in zip(tk, ix)}
             aktif = {t for t in aktif if t in ada and rng.random() < 0.8}
             while len(aktif) < K:
