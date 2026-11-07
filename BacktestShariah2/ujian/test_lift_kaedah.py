@@ -5,10 +5,9 @@ Dua sifat yang MESTI dikunci, kerana kedua-duanya ialah sebab skrip ini ada:
 1. `nilai()` menilai posisi TERBUKA dengan tanda-ke-pasaran, bukan meninggalkannya. Jika ia
    tergelincir kembali kepada posisi ditutup sahaja, laporan ini menjadi pendua
    `KAEDAH_TERBAIK.md` dengan bias penapisan keluar yang sama.
-2. `lift_tsk()` mengeluarkan baris kaedah itu sendiri daripada asas selnya. Tanpa itu, kaedah
-   yang menguasai selnya mencairkan asasnya sendiri dan liftnya ditarik ke sifar secara
-   mekanikal — ia akan kelihatan seperti "tiada kelebihan" pada data yang direka khusus untuk
-   mempunyai kelebihan.
+2. Lift MASUK (pindaan 7 Nov 2026): ufuk tetap bebas keluar, saham-hari unik, asas tinggal-satu-
+   kaedah-keluar dipadan hari x tercile ATR, SE dua hala (saham, minggu) dan BH step-up. Reka bentuk
+   ini dipilih kerana ia lulus plasebo (`laporan/PLASEBO_GATE.md`); mengubahnya mesti lulus semula.
 """
 import os
 import sys
@@ -60,76 +59,164 @@ class TestNilai(unittest.TestCase):
         self.assertEqual(len(P), 0)
 
 
-class TestLiftTinggalSatuKeluar(unittest.TestCase):
-    def rangka(self, ids, pul):
-        return pd.DataFrame(dict(id_kaedah=ids, pul=pul, tarikh_beli=['d1'] * len(ids),
-                                 baldi=['3-5'] * len(ids)))
+class TestLangsung(unittest.TestCase):
+    """Hanya isyarat selepas peraturan kaedah dibekukan dikira data hadapan (pindaan 7 Nov 2026)."""
 
-    def test_asas_mengecualikan_kaedah_sendiri(self):
-        # M01 = +10 (satu baris), M02 = 0 (tiga baris). Asas M01 = purata M02 = 0 -> lift +10.
-        P = self.rangka(['M01', 'M02', 'M02', 'M02'], [10.0, 0.0, 0.0, 0.0])
-        lf = LK.lift_tsk(P, ['tarikh_beli', 'baldi'])
-        self.assertAlmostEqual(float(lf[0]), 10.0, places=6)
-        # Purata sel biasa ialah 2.5, jadi lift tanpa pengecualian hanya +7.5.
-        self.assertNotAlmostEqual(float(lf[0]), 7.5, places=3)
+    def test_mula_ikut_keluarga(self):
+        self.assertEqual(LK.mula_langsung('M15'), '2026-10-15')
+        self.assertEqual(LK.mula_langsung('N19X13'), '2026-11-03')
+        self.assertEqual(LK.mula_langsung('GB02_atau3X13'), '2026-11-03')
 
-    def test_kaedah_menguasai_sel_tidak_ditarik_ke_sifar(self):
-        # M01 memegang 9 daripada 10 baris sel dan mengatasi satu baris lain sebanyak 5 mata.
-        P = self.rangka(['M01'] * 9 + ['M02'], [5.0] * 9 + [0.0])
-        lf = LK.lift_tsk(P, ['tarikh_beli', 'baldi'])
-        self.assertAlmostEqual(float(lf[0]), 5.0, places=6)
+    def test_isian_nxx_dibuang(self):
+        P = pd.DataFrame(dict(id_kaedah=['M01', 'N19X13', 'N19X13'],
+                              tarikh_isyarat=['2026-10-20', '2026-10-20', '2026-11-04']))
+        self.assertEqual(list(LK.langsung(P)), [True, False, True])
 
-    def test_sel_satu_kaedah_sahaja_jadi_nan(self):
-        # Tiada asas untuk dibanding: baris itu mesti dibuang, bukan dikira lift sifar.
-        P = self.rangka(['M01', 'M01'], [5.0, 7.0])
-        lf = LK.lift_tsk(P, ['tarikh_beli', 'baldi'])
-        self.assertTrue(np.isnan(lf).all())
 
-    def test_sel_berbeza_tidak_bercampur(self):
-        P = pd.DataFrame(dict(id_kaedah=['M01', 'M02', 'M01', 'M02'], pul=[10.0, 0.0, 1.0, 100.0],
-                              tarikh_beli=['d1', 'd1', 'd2', 'd2'], baldi=['3-5'] * 4))
-        lf = LK.lift_tsk(P, ['tarikh_beli', 'baldi'])
-        self.assertAlmostEqual(float(lf[0]), 10.0, places=6)    # d1: asas = M02 d1 = 0
-        self.assertAlmostEqual(float(lf[2]), -99.0, places=6)   # d2: asas = M02 d2 = 100
+def panel(n_sesi=14, tutup=None):
+    """Stor tiruan: sesi YYYYMMDD berturut, tutup = 100 kecuali ditetapkan, ATR% ikut saham."""
+    sesi = [f'202611{d:02d}' for d in range(1, n_sesi + 1)]
+    sh = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF']
+    C = pd.DataFrame(100.0, index=sh, columns=sesi)
+    for (t, i), v in (tutup or {}).items():
+        C.loc[t, sesi[i]] = v
+    A = pd.DataFrame({s: [1.0, 2.0, 3.0, 4.0, 5.0, 6.0] for s in sesi}, index=sh)
+    return sesi, C, A
+
+
+def baris(mid, saham, hari_beli, hari_isyarat):
+    n = len(saham)
+    return pd.DataFrame(dict(id_kaedah=[mid] * n, saham=saham, harga_beli=[100.0] * n,
+                             tarikh_beli=[hari_beli] * n, tarikh_isyarat=[hari_isyarat] * n))
+
+
+class TestSahamHari(unittest.TestCase):
+
+    def test_ufuk_tetap_bebas_keluar(self):
+        # Beli sesi index 1; tutup sesi ke-10 = index 10 -> 110 -> +10% tolak kos.
+        sesi, C, A = panel(tutup={('AAA', 10): 110.0})
+        P = baris('M01', ['AAA'], '2026-11-02', '2026-11-01')
+        Q = LK.saham_hari(P, sesi, C, A)
+        self.assertAlmostEqual(float(Q.r.iloc[0]), 10.0 - LK.KOS, places=6)
+
+    def test_ufuk_belum_lengkap_dibuang(self):
+        sesi, C, A = panel(n_sesi=9)
+        P = baris('M01', ['AAA'], '2026-11-01', '2026-10-31')
+        self.assertEqual(len(LK.saham_hari(P, sesi, C, A)), 0)
+
+    def test_pendua_kaedah_sama_dibuang(self):
+        sesi, C, A = panel()
+        P = pd.concat([baris('M01', ['AAA', 'AAA'], '2026-11-02', '2026-11-01')])
+        self.assertEqual(len(LK.saham_hari(P, sesi, C, A)), 1)
+
+    def test_tercile_atr_dalam_kolam_hari(self):
+        sesi, C, A = panel()
+        P = baris('M01', ['AAA', 'BBB', 'CCC', 'DDD', 'EEE', 'FFF'], '2026-11-02', '2026-11-01')
+        Q = LK.saham_hari(P, sesi, C, A).set_index('saham')
+        self.assertEqual(list(Q.q), [0, 0, 1, 1, 2, 2])
+
+    def test_kuarantin_dibuang(self):
+        sesi, C, A = panel()
+        P = baris('M01', ['AAA', 'BBB'], '2026-11-02', '2026-11-01')
+        Q = LK.saham_hari(P, sesi, C, A, kuarantin=lambda t, d: t == 'AAA')
+        self.assertEqual(list(Q.saham), ['BBB'])
+
+
+class TestLiftMasuk(unittest.TestCase):
+
+    def q(self, rows):
+        return pd.DataFrame(rows, columns=['id_kaedah', 'saham', 'tarikh_beli', 'q', 'r'])
+
+    def test_asas_tanpa_kaedah_sendiri_dan_saham_hari_unik(self):
+        # Kolam hari d1 tercile 0: AAA (M01, M02, M03 beli = SATU saham-hari, r 10), BBB (M02, r 0).
+        Q = self.q([('M01', 'AAA', 'd1', 0, 10.0), ('M02', 'AAA', 'd1', 0, 10.0), ('M03', 'AAA', 'd1', 0, 10.0),
+                    ('M02', 'BBB', 'd1', 0, 0.0)])
+        X = LK.lift_masuk(Q).set_index(['id_kaedah', 'saham'])
+        self.assertAlmostEqual(float(X.loc[('M01', 'AAA'), 'lift']), 10.0)   # asas = BBB sahaja
+        # M02 memegang kedua-dua saham-hari: tiada asas -> dibuang, bukan lift sifar
+        self.assertNotIn(('M02', 'AAA'), X.index)
+
+    def test_tercile_berbeza_tidak_bercampur(self):
+        Q = self.q([('M01', 'AAA', 'd1', 2, 10.0), ('M02', 'BBB', 'd1', 2, 4.0), ('M02', 'CCC', 'd1', 0, -50.0)])
+        X = LK.lift_masuk(Q).set_index(['id_kaedah', 'saham'])
+        self.assertAlmostEqual(float(X.loc[('M01', 'AAA'), 'lift']), 6.0)    # bukan lawan CCC tercile 0
+
+
+class TestSeDuaHala(unittest.TestCase):
+
+    def test_tidak_pernah_lebih_kecil_daripada_satu_hala(self):
+        """Lantai max(V1, V2) sebahagian reka bentuk yang lulus plasebo (konservatif)."""
+        rng = np.random.default_rng(1)
+        x = rng.normal(size=200)
+        k1 = np.repeat(np.arange(20), 10)
+        k2 = np.arange(200)                       # setiap baris kluster sendiri
+        se, df = LK.se_dua_hala(x, k1, k2)
+        se1, _ = LK._se_kl(x - x.mean(), k1)
+        se2, _ = LK._se_kl(x - x.mean(), k2)
+        self.assertAlmostEqual(se, max(se1, se2), places=10)
+        self.assertEqual(df, 19)
+
+    def test_saham_berulang_meluaskan_se(self):
+        # Saham sama dibeli berulang dengan pulangan sama: SE mesti lebih besar daripada andaian bebas.
+        x = np.repeat([3.0, -1.0, 2.0, -2.0, 4.0], 20)
+        saham = np.repeat(list('ABCDE'), 20)
+        minggu = np.tile(np.arange(20), 5)
+        se, _ = LK.se_dua_hala(x, saham, minggu)
+        self.assertGreater(se, x.std(ddof=1) / np.sqrt(len(x)))
+
+
+class TestBhStepUp(unittest.TestCase):
+
+    def test_step_up_meluluskan_p_atas_ambang_sendiri(self):
+        # p kedua 0.03 > 0.05*2/3 = 0.033? tidak; contoh klasik: [0.01, 0.04, 0.045] m=3, q=0.05
+        # ambang = [0.0167, 0.0333, 0.05]: p(3)=0.045 <= 0.05 -> k=3 -> SEMUA lulus, walaupun p(2) > ambang(2).
+        self.assertEqual(list(LK.bh_lulus([0.045, 0.01, 0.04])), [True, True, True])
+
+    def test_tiada_lulus(self):
+        self.assertFalse(LK.bh_lulus([0.5, 0.2, 0.9]).any())
 
 
 class TestUji(unittest.TestCase):
-    def rangka(self, mid, pul, hari_beli):
-        n = len(pul)
-        return pd.DataFrame(dict(id_kaedah=[mid] * n + ['ASAS'] * n, pul=list(pul) + [0.0] * n,
-                                 tarikh_beli=list(hari_beli) * 2, baldi=['3-5'] * 2 * n,
-                                 hari_pegang=[5.0] * 2 * n, terbuka=[False] * 2 * n))
 
-    def test_n_bawah_minimum_dilangkau(self):
-        P = self.rangka('M01', [3.0] * (LK.MIN_N - 1), [f'd{i}' for i in range(LK.MIN_N - 1)])
-        self.assertNotIn('M01', LK.uji(P, ['tarikh_beli', 'baldi']).index)
+    def rangka(self, mid, n, minggu, lift_asas=2.0):
+        tb = pd.to_datetime('2026-11-02') + pd.to_timedelta(np.arange(n) % minggu * 7, unit='D')
+        lift = [lift_asas + (0.5 if i % 2 else -0.5) for i in range(n)]
+        return pd.DataFrame(dict(id_kaedah=[mid] * n, saham=[f'S{i % 17}' for i in range(n)],
+                                 tarikh_beli=tb.strftime('%Y-%m-%d'), r=lift, lift=lift))
 
-    def test_kluster_bawah_minimum_dilangkau(self):
-        n = LK.MIN_N + 10
-        hari = [f'd{i % (LK.MIN_KLUSTER - 1)}' for i in range(n)]
-        P = self.rangka('M01', [3.0] * n, hari)
-        self.assertNotIn('M01', LK.uji(P, ['tarikh_beli', 'baldi']).index)
+    def test_bawah_minimum_dilangkau(self):
+        self.assertNotIn('M01', LK.uji(self.rangka('M01', LK.MIN_N - 1, 8)).index)
+        self.assertNotIn('M01', LK.uji(self.rangka('M01', 60, LK.MIN_MINGGU - 1)).index)
 
-    def test_lift_dan_sebulan_dikira(self):
-        # Sedikit variasi diperlukan: SE berkelompok sifar bermakna t tidak tertakrif, dan uji()
-        # melangkau kaedah itu (sengaja) — jadi sampel pemalar tidak boleh menguji lift.
-        n = LK.MIN_N + 20
-        pul = [2.0 + (0.1 if i % 2 else -0.1) for i in range(n)]
-        P = self.rangka('M01', pul, [f'd{i}' for i in range(n)])
-        R = LK.uji(P, ['tarikh_beli', 'baldi'])
+    def test_lift_dikira(self):
+        R = LK.uji(self.rangka('M01', 60, 8))
         self.assertAlmostEqual(float(R.loc['M01', 'lift']), 2.0, places=6)
-        # hari pegang 5 -> lift sebulan = 2.0 / 5 * 21
-        self.assertAlmostEqual(float(R.loc['M01', 'sebulan']), 2.0 / 5 * 21, places=6)
+        self.assertTrue(((R.lift > 0) & R.lulus).all())
 
-    def test_ambang_bh_menaik_dan_lulus_konsisten(self):
-        n = LK.MIN_N + 20
-        P = pd.concat([self.rangka(f'M{i:02d}',
-                                   [float(i) + (0.1 if j % 2 else -0.1) for j in range(n)],
-                                   [f'd{j}' for j in range(n)])
-                       for i in (1, 2, 3)], ignore_index=True)
-        R = LK.uji(P, ['tarikh_beli', 'baldi'])
-        self.assertTrue(R.bh.is_monotonic_increasing)
-        self.assertTrue(((R.p <= R.bh) == R.lulus).all())
+
+class TestSelarasStor(unittest.TestCase):
+    """Audit 7 Nov 2026: stor dan Lejar mesti pada sesi sama; stor basi mesti GAGAL, bukan senyap."""
+
+    def setUp(self):
+        import tempfile
+        self.d = tempfile.TemporaryDirectory()
+        self.asal = LK.LEJAR
+        LK.LEJAR = self.d.name
+        with open(os.path.join(self.d.name, 'status.json'), 'w') as f:
+            f.write('{"sesi_terakhir": "2026-11-05"}')
+
+    def tearDown(self):
+        LK.LEJAR = self.asal
+        self.d.cleanup()
+
+    def test_bar_selepas_lejar_dibuang(self):
+        H = pd.DataFrame(dict(date=['20261104', '20261105', '20261106'], close=[1.0, 2.0, 3.0]))
+        self.assertEqual(list(LK.potong_sesi(H).date), ['20261104', '20261105'])
+
+    def test_stor_basi_gagal(self):
+        H = pd.DataFrame(dict(date=['20261103', '20261104'], close=[1.0, 2.0]))
+        with self.assertRaises(SystemExit):
+            LK.potong_sesi(H)
 
 
 class TestHariPerlu(unittest.TestCase):

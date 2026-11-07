@@ -28,8 +28,10 @@ Peraturan (sama dengan `portfolio_slot.py` supaya lorong boleh dibanding):
     pilihan berat ditangguh sehingga G6 lulus (nisbah CAGR/MDD SPUS+tunai hampir pemalar merentas
     berat, `REVERSE/SISTEM.md`, jadi ia soalan toleransi drawdown, bukan soalan data).
 
-Skrip ini MENGUKUR sahaja. Ambang G6 (sesi >= 126, persentil > 95, MDD >= -26.82%) dikunci dalam
-`standard/kad_skor.py`, satu tempat, supaya ia tidak boleh dilonggarkan di sini tanpa ujian gagal.
+Skrip ini MENGUKUR sahaja. Ambang G6 (pindaan 7 Nov 2026: sesi >= 126; pulangan > 0; pulangan pada MDD -10%
+> SPUS pada MDD sama; nisbah pulangan/|MDD| > MAKSIMUM jalur rawak) dikunci dalam `standard/kad_skor.py`,
+satu tempat, supaya ia tidak boleh dilonggarkan di sini tanpa ujian gagal. Maksimum 20 cabutan = ujian
+pangkat dengan kadar palsu 1/21 (persentil 95 daripada 20 cabutan ialah cabutan ke-2 terbesar: 9.2%).
 
 Rekod sahaja: tiada order, tiada wang sebenar. Jangan ubah fail keluaran secara manual.
   python3 BacktestShariah2/standard/portfolio_t4.py   (dijalankan oleh analisis.yml selepas Lejar)
@@ -120,6 +122,16 @@ def mdd(x):
     return ps.mdd(np.asarray(x, float)) * 100
 
 
+def nisbah(pul, mdd_pct):
+    """Pulangan ÷ |MDD| (kedua-dua %). MDD sifar -> pulangan × 1e6 (tiada kejatuhan: nisbah sangat besar)."""
+    return float(pul) / abs(mdd_pct) if mdd_pct < 0 else float(pul) * 1e6
+
+
+def berat_mdd(mdd_pct, had=-10.0):
+    """Pecahan pendedahan supaya MDD = `had` (baki tunai), dihadkan 1.0. Sama dengan kad_skor.pada_mdd."""
+    return 1.0 if mdd_pct >= 0 or abs(mdd_pct) <= abs(had) else abs(had) / abs(mdd_pct)
+
+
 def campur(e_l, e_s, w):
     """Ekuiti campuran w SPUS + (1-w) lorong, imbang semula sesi pertama setiap bulan kalendar.
 
@@ -148,18 +160,24 @@ def ukur(E, Sx, J0):
     e = pd.Series(E.ekuiti.to_numpy(), index=E.tarikh.to_numpy())
     d = dict(mula=e.index[0], sesi=int(len(e)), pul=round(100 * (e.iloc[-1] - 1), 4), mdd=round(mdd(e), 4),
              dipegang=int(E.bil_posisi.iloc[-1]), tunai=round(float(E.tunai.iloc[-1]), 4))
+    d['nisbah'] = round(nisbah(d['pul'], d['mdd']), 4)
+    d['w10'] = round(berat_mdd(d['mdd']), 4)
+    d['r10'] = round(d['pul'] * d['w10'], 4)
     if Sx is not None and len(Sx) and Sx.notna().all():
         d.update(spus=round(100 * (Sx.iloc[-1] - 1), 4), spus_mdd=round(mdd(Sx), 4))
         d['lebih_spus'] = round(d['pul'] - d['spus'], 4)
+        d['spus_r10'] = round(d['spus'] * berat_mdd(d['spus_mdd']), 4)
         for w in BERAT:
             c = campur(e, Sx, w)
             k = f'c{int(round(w * 100))}'
             d[k + '_pul'] = round(100 * (c.iloc[-1] - 1), 4)
             d[k + '_mdd'] = round(mdd(c), 4)
     if J0:
-        akhir = np.array([asas_semula(s, e.index[0]).iloc[-1] for s in J0.values()
-                          if len(asas_semula(s, e.index[0]))])
+        jj = [asas_semula(s, e.index[0]) for s in J0.values()]
+        jj = [x for x in jj if len(x)]
+        akhir = np.array([x.iloc[-1] for x in jj])
         if len(akhir):
+            d['jalur_nisbah_maks'] = round(max(nisbah(100 * (x.iloc[-1] - 1), mdd(x)) for x in jj), 4)
             d['jalur_n'] = int(len(akhir))
             d['jalur_p50'] = round(100 * (np.median(akhir) - 1), 4)
             d['jalur_p95'] = round(100 * (np.quantile(akhir, 0.95) - 1), 4)
@@ -202,25 +220,28 @@ def laporan(R, sesi_akhir, n_jalur):
          f'L2 = Chandelier 4xATR14). Kawalan: {n_jalur} cabutan rawak 10 slot atas seluruh kolam Lejar, '
          'diasas semula pada tarikh mula setiap lorong. Penanda aras: SPUS, asas buka sesi pertama.', '',
          '## Gate G6 (dikunci dalam `standard/kad_skor.py`)', '',
-         f'Lorong L1 mesti: sesi >= {ks.G6_SESI}; pulangan > SPUS tingkap sama; pulangan > persentil '
-         f'{ks.G6_PERSENTIL} jalur rawak; MDD >= {ks.G6_MDD}%. ']
+         f'Lorong L1 mesti (pindaan 7 Nov 2026): sesi >= {ks.G6_SESI}; pulangan > 0; pulangan pada MDD '
+         f'{ks.G6_MDD_HAD:.0f}% > SPUS pada MDD sama; nisbah pulangan/|MDD| > maksimum jalur rawak. ']
     lulus = [r for r in L1.to_dict('records') if ks.g6(r)[0]]
     maks = int(L1.sesi.max()) if len(L1) else 0
     A += [f'**{len(lulus)} lulus.** Lorong paling lama ada {maks} sesi; G6 tidak boleh lulus sebelum '
           f'{ks.G6_SESI} sesi (anggaran {ks.tarikh_sesi(sesi_akhir, ks.G6_SESI - maks)}).', '',
           '## 15 lorong L1 teratas ikut pulangan (BUKAN pangkat: semuanya BELUM CUKUP sehingga G6 dinilai)', '',
-          '| Kaedah | Mula | Sesi | Pul % | MDD % | SPUS % | Lebih SPUS | Persentil jalur | T4 80/20 % | T4 70/30 % | T4 50/50 % |',
+          '| Kaedah | Mula | Sesi | Pul % | MDD % | Berat utk MDD -10% | Pul pada MDD -10% | SPUS pada MDD -10% | '
+          'Nisbah pul/MDD | Maks jalur | T4 70/30 % |',
           '|---|---|---|---|---|---|---|---|---|---|---|']
 
     def f(v, fmt='{:+.2f}'):
         return '–' if v is None or (isinstance(v, float) and np.isnan(v)) else fmt.format(v)
     for r in L1.sort_values('pul', ascending=False).head(15).to_dict('records'):
         A.append(f"| `{r['id']}` | {r['mula']} | {r['sesi']} | {f(r.get('pul'))} | {f(r.get('mdd'), '{:.2f}')} | "
-                 f"{f(r.get('spus'))} | {f(r.get('lebih_spus'))} | {f(r.get('persentil'), '{:.0f}')} | "
-                 f"{f(r.get('c80_pul'))} | {f(r.get('c70_pul'))} | {f(r.get('c50_pul'))} |")
+                 f"{f(r.get('w10'), '{:.2f}')} | {f(r.get('r10'))} | {f(r.get('spus_r10'))} | "
+                 f"{f(r.get('nisbah'), '{:.2f}')} | {f(r.get('jalur_nisbah_maks'), '{:.2f}')} | {f(r.get('c70_pul'))} |")
     A += ['', '## Cara membaca', '',
           '- Pulangan beberapa sesi ialah hingar. `REVERSE/KEPEKATAN_BENIH.md`: SD pemilihan 4.15 mata/tahun pada 8 slot; '
           'kelebihan 20 mata/tahun perlu ~122 sesi untuk dilihat, 10 mata ~489 sesi (`laporan/BANDING_SPUS.md`).',
+          '- "Pada MDD -10%" = pulangan jika pendedahan dikecilkan (baki tunai) sehingga MDD tepat -10%, toleransi '
+          'pengguna. Membanding pada MDD yang sama ialah satu-satunya bandingan adil dengan SPUS.',
           '- Lajur T4 = teras SPUS + satelit kaedah, imbang bulanan. Nisbah CAGR/MDD SPUS+tunai hampir pemalar merentas '
           'berat (`REVERSE/SISTEM.md`), jadi berat ialah soalan toleransi drawdown, bukan soalan data.',
           '- Kawalan rawak diambil daripada SELURUH kolam (Mxx + Nxx), jadi kaedah yang dibeli dalam tingkap menaik '

@@ -1,6 +1,6 @@
 """Ujian unit bagi standard/kad_skor.py dan standard/portfolio_t4.py.
 
-TestKunci ialah PRADAFTAR (standard/SPEC_KAD_SKOR.md, 6 Nov 2026). Ia sengaja menyalin setiap ambang
+TestKunci ialah PRADAFTAR (standard/SPEC_KAD_SKOR.md, 6 Nov 2026; pindaan 7 Nov 2026). Ia sengaja menyalin setiap ambang
 sebagai literal: melonggarkan gate selepas melihat data mesti menyentuh DUA fail dan satu spec
 bertarikh, jadi ia kelihatan dalam semakan dan tidak boleh berlaku secara senyap.
 """
@@ -21,69 +21,86 @@ import lift_kaedah as LK  # noqa: E402
 
 
 class TestKunci(unittest.TestCase):
-    """Ambang dipradaftar 6 Nov 2026. JANGAN ubah tanpa keputusan pengguna + pradaftar baharu."""
+    """Ambang dipradaftar 6 Nov 2026, dipinda 7 Nov 2026. JANGAN ubah tanpa keputusan pengguna + pradaftar baharu."""
 
     def test_ambang(self):
         self.assertEqual(KS.G1_HARI_BELI_MIN, 20)
-        self.assertEqual(KS.G1_BEZA_MATA, 1.0)
         self.assertEqual(KS.G1_LIFT_MATA, 2.0)
+        self.assertEqual(KS.G1_REJIM_MIN, 10)                 # pindaan 7 Nov
         self.assertEqual((KS.Z_ALPHA, KS.Z_KUASA), (1.96, 0.84))
         self.assertEqual(KS.G2_ALPHA, 0.05)
+        self.assertEqual(KS.G2_NW_LAG, 5)                     # pindaan 7 Nov
         self.assertEqual(KS.G3_Q, 0.05)
         self.assertEqual(KS.G6_SESI, 126)
-        self.assertEqual(KS.G6_PERSENTIL, 95)
-        self.assertEqual(KS.G6_MDD, -26.82)
-        self.assertEqual(KS.G4_HARI0_MAKS, 0)        # pindaan 6 Nov 2026: ketat
+        self.assertEqual(KS.G6_MDD_HAD, -10.0)                # pindaan 7 Nov: toleransi pengguna
+        self.assertEqual(KS.G4_HARI0_MAKS, 0)                 # pindaan 6 Nov 2026: ketat
         self.assertEqual(KS.STATUS, ('NEGATIF', 'GAGAL', 'BELUM CUKUP', 'CALON', 'TERBUKTI'))
+        self.assertFalse(hasattr(KS, 'G6_MDD'))               # MDD SPUS -26.82% bukan lagi gate
+        self.assertFalse(hasattr(KS, 'G6_PERSENTIL'))         # p95 daripada 20 cabutan = cabutan ke-2
 
-    def test_g3_sama_dengan_lift(self):
-        """G3 menilai lulus BH-FDR yang lift_kaedah kira; q mesti sama atau gate itu bohong."""
+    def test_lift_masuk_dikunci(self):
+        """G3 = lift masuk yang lulus plasebo (laporan/PLASEBO_GATE.md); mengubah reka bentuk mesti lulus semula."""
         self.assertEqual(KS.G3_Q, LK.Q_FDR)
+        self.assertEqual(LK.UFUK, 10)
+        self.assertEqual(LK.MIN_N, 30)
+        self.assertEqual(LK.MIN_MINGGU, 5)
+        self.assertEqual(LK.TERCILE, 3)
+        self.assertEqual(LK.MULA_LANGSUNG, {'M': '2026-10-15', 'N': '2026-11-03', 'GB': '2026-11-03'})
 
     def test_berat_t4(self):
         self.assertEqual(T4.BERAT, (0.8, 0.7, 0.5))
         self.assertEqual(T4.LORONG, {'L1': 'kaedah', 'L2': 'henti'})
+        self.assertAlmostEqual(T4.berat_mdd(-20.0), 0.5)      # sama dengan kad_skor.pada_mdd
+        self.assertAlmostEqual(KS.pada_mdd(8.0, -20.0), 4.0)
 
     def test_spec_menyebut_ambang(self):
         with open(os.path.join(AKAR, 'BacktestShariah2', 'standard', 'SPEC_KAD_SKOR.md'), encoding='utf-8') as f:
             s = f.read()
         for t in ('G1_HARI_BELI_MIN = 20', 'G2_ALPHA = 0.05', 'G3_Q = 0.05', 'G6_SESI = 126',
-                  'G6_PERSENTIL = 95', 'G6_MDD = -26.82', 'Dipradaftar 6 Nov 2026',
-                  'G4_HARI0_MAKS = 0', 'Pindaan 6 Nov 2026'):
+                  'Dipradaftar 6 Nov 2026', 'G4_HARI0_MAKS = 0', 'Pindaan 6 Nov 2026',
+                  'Pindaan 7 Nov 2026', 'Dipradaftar 7 Nov 2026', 'G1_REJIM_MIN = 10', 'G2_NW_LAG = 5',
+                  'G3_UFUK = 10', 'G6_MDD_HAD = -10.0', 'N/GB: 2026-11-03'):
             self.assertIn(t, s)
 
 
 def baris(**k):
-    r = dict(hari_beli=60, tutup=700, jangkaan=1.5, ci_bawah=0.3, lift=1.2, lift_lulus=True, hari0=0,
-             pantau='OK', p_dd=5.0, p_dd_had=20.0, t4_sesi=130, t4_pul=30.0, t4_spus=10.0, t4_jalur_p95=20.0,
-             t4_mdd=-12.0)
+    r = dict(hari_beli=60, hari_on=12, hari_off=12, buku_harian=0.05, buku_ci_bawah=0.01, lift=1.2,
+             lift_lulus=True, hari0=0, pantau='OK', p_dd=5.0, p_dd_had=20.0, t4_sesi=130, t4_pul=30.0,
+             t4_mdd=-12.0, t4_spus=10.0, t4_spus_mdd=-15.0, t4_jalur_nisbah_maks=1.5)
     r.update(k)
     return r
 
 
 class TestGate(unittest.TestCase):
 
-    def st(self, **k):
-        return KS.tentukan(baris(**k), 610, 59)[0]
+    def st(self, perlu=59, **k):
+        return KS.tentukan(baris(**k), perlu)[0]
 
     def test_terbukti(self):
         self.assertEqual(self.st(), 'TERBUKTI')
 
-    def test_g6_belum_jadi_calon(self):
+    def test_g6_pada_mdd_pengguna(self):
         self.assertEqual(self.st(t4_sesi=125), 'CALON')
-        self.assertEqual(self.st(t4_pul=9.0), 'CALON')          # kalah SPUS
-        self.assertEqual(self.st(t4_pul=19.0), 'CALON')         # dalam jalur rawak
-        self.assertEqual(self.st(t4_mdd=-27.0), 'CALON')
+        self.assertEqual(self.st(t4_pul=-1.0), 'CALON')
+        # pul 30 MDD -12 -> 25.0 pada MDD -10; SPUS 10 MDD -15 -> 6.67. Lorong MDD -40: 30 x 0.25 = 7.5 (masih menang)
+        self.assertEqual(self.st(t4_mdd=-40.0, t4_jalur_nisbah_maks=0.5), 'TERBUKTI')
+        # lorong MDD -50: 30 x 0.2 = 6.0 < SPUS 6.67 -> kalah SPUS pada MDD sama walaupun pulangan mentah 3x
+        self.assertEqual(self.st(t4_mdd=-50.0, t4_jalur_nisbah_maks=0.5), 'CALON')
+        # nisbah 30/12 = 2.5 tidak melepasi maksimum jalur 3.0
+        self.assertEqual(self.st(t4_jalur_nisbah_maks=3.0), 'CALON')
 
-    def test_g1(self):
-        self.assertEqual(self.st(hari_beli=19), 'BELUM CUKUP')
-        self.assertEqual(self.st(hari_beli=30, tutup=100), 'BELUM CUKUP')   # tiada laluan n atau hari beli
-        self.assertEqual(self.st(hari_beli=59, tutup=0), 'TERBUKTI')        # laluan hari beli
-        self.assertEqual(self.st(hari_beli=20, tutup=610), 'TERBUKTI')      # laluan n
+    def test_g1_hari_langsung_dan_rejim(self):
+        self.assertEqual(self.st(hari_beli=58), 'BELUM CUKUP')
+        self.assertEqual(self.st(hari_on=9), 'BELUM CUKUP')      # satu fasa pasaran sahaja
+        self.assertEqual(self.st(hari_off=9), 'BELUM CUKUP')
+        self.assertEqual(self.st(perlu=None), 'BELUM CUKUP')    # kuasa belum boleh dianggar
+        self.assertEqual(self.st(perlu=10, hari_beli=20), 'TERBUKTI')   # lantai 20
+        self.assertEqual(self.st(perlu=10, hari_beli=19), 'BELUM CUKUP')
 
-    def test_g2_had_bawah(self):
-        self.assertEqual(self.st(ci_bawah=-0.01), 'GAGAL')
-        self.assertEqual(self.st(jangkaan=-0.1, ci_bawah=-1.0), 'GAGAL')
+    def test_g2_buku(self):
+        self.assertEqual(self.st(buku_ci_bawah=-0.01), 'GAGAL')
+        self.assertEqual(self.st(buku_harian=-0.1, buku_ci_bawah=-0.3), 'GAGAL')
+        self.assertEqual(self.st(buku_harian=None, buku_ci_bawah=None), 'GAGAL')
 
     def test_g3(self):
         self.assertEqual(self.st(lift_lulus=False), 'GAGAL')
@@ -95,23 +112,52 @@ class TestGate(unittest.TestCase):
         self.assertTrue(KS.g4(dict(hari0=0))[0])
         self.assertTrue(KS.g4(dict(hari0=None))[0])                         # Nxx: tiada henti
 
-    def test_g4_tidak_berlebihan_dengan_g2(self):
-        """G4 mesti boleh mengubah status apabila G2 lulus; versi asal tidak boleh."""
-        self.assertNotEqual(self.st(hari0=3), self.st(hari0=0))
-
     def test_g5(self):
         self.assertEqual(self.st(pantau='GANTUNG'), 'GAGAL')
         self.assertEqual(self.st(pantau='BERSARA', hari_beli=5), 'GAGAL')   # G5 sebelum G1
         self.assertEqual(self.st(p_dd=25.0), 'GAGAL')
         self.assertEqual(self.st(p_dd=25.0, p_dd_had=None), 'TERBUKTI')     # tiada had (Nxx)
 
-    def test_negatif_mendahului(self):
-        self.assertEqual(self.st(lift=-2.0, lift_lulus=True, hari_beli=3), 'NEGATIF')
-        self.assertEqual(self.st(lift=-2.0, lift_lulus=False, hari_beli=3), 'BELUM CUKUP')
+    def test_negatif_perlukan_g1(self):
+        """Pindaan 7 Nov: NEGATIF tidak diberi pada data belum matang / satu fasa pasaran."""
+        self.assertEqual(self.st(lift=-2.0, lift_lulus=True), 'NEGATIF')
+        self.assertEqual(self.st(lift=-2.0, lift_lulus=True, hari_beli=3), 'BELUM CUKUP')
+        self.assertEqual(self.st(lift=-2.0, lift_lulus=True, hari_on=1), 'BELUM CUKUP')
+        self.assertEqual(self.st(lift=-2.0, lift_lulus=False), 'GAGAL')
 
     def test_n_perlu(self):
-        self.assertEqual(KS.n_perlu(3.95), 123)      # KAEDAH_TERBAIK.md §6: ~122 pada SD 3.95
+        self.assertEqual(KS.n_perlu(3.95), 123)      # maklumat sahaja sejak 7 Nov
         self.assertIsNone(KS.n_perlu(None))
+
+
+class TestBuku(unittest.TestCase):
+    """G2: buku berat sama, ditanda setiap hari, SE Newey-West."""
+
+    def setUp(self):
+        self.sesi = ['20261102', '20261103', '20261104']
+        self.C = pd.DataFrame({'20261102': [110.0, 100.0], '20261103': [121.0, 90.0], '20261104': [121.0, 90.0]},
+                              index=['AAA', 'BBB'])
+
+    def test_buku_dua_posisi(self):
+        P = pd.DataFrame(dict(id_kaedah=['M01', 'M01'], saham=['AAA', 'BBB'], tarikh_beli=['2026-11-02'] * 2,
+                              harga_beli=[100.0, 100.0], tarikh_keluar=['', '2026-11-03'], untung_pct=[np.nan, -5.0]))
+        r = KS.buku_harian(P, self.sesi, self.C, kos=0.0)['M01']
+        # Hari 1: AAA 1.10, BBB 1.00 -> (0.10 + 0.0) / 2 = +5%.
+        self.assertAlmostEqual(float(r.iloc[0]), 5.0)
+        # Hari 2: AAA 1.10 -> 1.21 (+0.11); BBB keluar pada -5% (1.00 -> 0.95, -0.05) -> 0.06 / 2.10
+        self.assertAlmostEqual(float(r.iloc[1]), 0.06 / 2.10 * 100)
+        # Hari 3: hanya AAA, rata
+        self.assertAlmostEqual(float(r.iloc[2]), 0.0)
+
+    def test_kos_ditolak(self):
+        P = pd.DataFrame(dict(id_kaedah=['M01'], saham=['AAA'], tarikh_beli=['2026-11-02'], harga_beli=[100.0],
+                              tarikh_keluar=[''], untung_pct=[np.nan]))
+        r = KS.buku_harian(P, self.sesi, self.C, kos=0.1)['M01']
+        self.assertAlmostEqual(float(r.iloc[0]), 10.0 - 0.1)
+
+    def test_nw_lebih_luas_bila_autokorelasi(self):
+        x = np.repeat([1.0, -1.0], 30)                  # sangat berautokorelasi
+        self.assertGreater(KS.nw_se(x, 5), x.std(ddof=0) / np.sqrt(len(x)))
 
 
 class TestStatistik(unittest.TestCase):
@@ -130,7 +176,7 @@ class TestStatistik(unittest.TestCase):
         self.assertAlmostEqual(d['pul_buka'], -1.5)
         self.assertAlmostEqual(d['payoff'], (16 / 3) / (11 / 3))
         self.assertAlmostEqual(d['tanpa5'], np.mean([-5.0, -5.0, 2.0, 4.0, -1.0]))   # buang 1 terbaik
-        self.assertLess(d['ci_bawah'], d['jangkaan'])
+        self.assertIsNone(d['ci_bawah'])                  # CI setiap-posisi dibuang 7 Nov (tanda dikongsi)
 
 
 class TestJsonLajur(unittest.TestCase):

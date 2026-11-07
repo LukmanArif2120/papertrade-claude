@@ -21,7 +21,9 @@ concurrency:
 
 jobs:
   analisis:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion != 'cancelled'
+    # Hanya selepas Lejar BERJAYA (audit 7 Nov 2026): larian selepas Lejar gagal menjana laporan bertarikh hari ini
+    # daripada lejar semalam. Penjaga dispatch tetap boleh mencetus secara manual.
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     # 30 minit (asal 15): portfolio_t4.py membina 444 lorong + 20 cabutan jalur setiap malam, ~1 minit pada
     # 15 sesi dan bertambah linear dengan bilangan sesi (~8 minit pada 126 sesi).
@@ -72,8 +74,11 @@ jobs:
         id: t4
         continue-on-error: true
         run: python3 BacktestShariah2/standard/portfolio_t4.py
+      # Kad skor hanya jika lift DAN T4 malam ini berjaya: jika tidak ia akan menilai gate G3/G6 dengan fail
+      # larian lalu (audit 7 Nov 2026). kad_skor.py juga menyemak sendiri tarikh lift.json lawan sesi Lejar.
       - name: Jana kad skor keputusan
         id: kad
+        if: steps.lift.outcome == 'success' && steps.t4.outcome == 'success'
         continue-on-error: true
         run: python3 BacktestShariah2/standard/kad_skor.py
       - name: Commit dan push
@@ -104,7 +109,7 @@ jobs:
       - name: Semak laporan sampingan berjaya
         if: >-
           steps.lift.outcome == 'failure' || steps.terbaik.outcome == 'failure' ||
-          steps.t4.outcome == 'failure' || steps.kad.outcome == 'failure'
+          steps.t4.outcome == 'failure' || steps.kad.outcome == 'failure' || steps.kad.outcome == 'skipped'
         run: |
           if [ "${{ steps.lift.outcome }}" = "failure" ]; then
             echo "lift_kaedah.py GAGAL (lihat langkah 'Jana lift kaedah'); analisis/lift lapuk." >&2
@@ -115,7 +120,7 @@ jobs:
           if [ "${{ steps.t4.outcome }}" = "failure" ]; then
             echo "portfolio_t4.py GAGAL (lihat langkah 'Jana lorong T4 setiap kaedah'); G6 lapuk." >&2
           fi
-          if [ "${{ steps.kad.outcome }}" = "failure" ]; then
+          if [ "${{ steps.kad.outcome }}" = "failure" ] || [ "${{ steps.kad.outcome }}" = "skipped" ]; then
             echo "kad_skor.py GAGAL (lihat langkah 'Jana kad skor keputusan'); analisis/kad_skor lapuk." >&2
           fi
           echo "Papan penganalisis sudah dikomit; hanya laporan sampingan yang lapuk." >&2
