@@ -1,15 +1,15 @@
 # Banding Papertrade C dengan Lejar Penuh (fasa 1)
 
-Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-11-05. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
+Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir 2026-11-06. Kunci: kaedah + saham + tarikh_isyarat. Beza dijangka: sumber harga (C: Moomoo; lejar: yfinance), had 10 sekaedah dan keutamaan 431 dalam C (lejar membeli semua isyarat).
 
-- Posisi C (isyarat >= 2026-10-15): 14317; ada dalam lejar: 10036; tiada: 4281 {'isyarat ada, dipegang lejar': 3552, 'isyarat batal pada buka (peraturan kaedah)': 6, 'isyarat ada, belum diproses': 709, 'tiada isyarat dalam lejar': 14}
-- Posisi lejar: 62018 (C hanya 14317; lejar 4.3×)
-- Harga beli berbeza > 0.5%: 50 daripada 10036
-- Status keluar sama: 10034 daripada 10036; berbeza: 2
+- Posisi C (isyarat >= 2026-10-15): 14317; ada dalam lejar: 10730; tiada: 3587 {'isyarat ada, dipegang lejar': 3550, 'tiada isyarat dalam lejar': 20, 'isyarat batal pada buka (peraturan kaedah)': 6, 'isyarat ada, belum diproses': 11}
+- Posisi lejar: 64010 (C hanya 14317; lejar 4.5×)
+- Harga beli berbeza > 0.5%: 53 daripada 10730
+- Status keluar sama: 10728 daripada 10730; berbeza: 2
 
 ## Harga beli berbeza > 0.5%
 
-- M106 SUPN 2026-10-29: C 42.07 / lejar 26.9861 (+55.90%)
+- M115 ARLP 2026-10-29: C 27.0 / lejar 26.3428 (+2.49%)
 - M01 PLPC 2026-10-30: C 301.87 / lejar 300.01 (+0.62%)
 - M08 INTA 2026-10-30: C 41.78 / lejar 42.03 (-0.59%)
 - M20 CF 2026-10-30: C 118.55 / lejar 120.78 (-1.85%)
@@ -58,7 +58,10 @@ Dijana oleh `standard/lejar.py banding`. Lejar bermula 2026-10-15; sesi terakhir
 - N24X36 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
 - N75X17 AUGO 2026-10-30: C 67.62 / lejar 68.005 (-0.57%)
 - N07X36 LFST 2026-10-30: C 13.6 / lejar 13.5 (+0.74%)
+- M70 BSM 2026-10-15: C 14.75 / lejar 14.3902 (+2.50%)
 - M19 INDV 2026-10-20: C 27.0948 / lejar 34.92 (-22.41%)
+- M31 ARLP 2026-10-26: C 25.7769 / lejar 26.42 (-2.43%)
+- M34 BSM 2026-10-15: C 14.75 / lejar 14.3902 (+2.50%)
 
 ## Status keluar berbeza
 
