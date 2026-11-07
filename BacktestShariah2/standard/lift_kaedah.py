@@ -12,7 +12,7 @@ Mengapa versi lama (lift padan hari beli x baldi hari pegang, SE ikut hari beli)
   2. SE berkelompok ikut hari beli meluluskan plasebo "lekit" (saham sama dibeli berulang) 51% masa dan
      plasebo condong ATR 30% masa, lawan sasaran 5%.
 
-Reka bentuk sekarang (lulus plasebo: kadar lulus palsu 1.0-1.9% pada ketiga-tiga plasebo):
+Reka bentuk sekarang (lulus plasebo: kadar lulus palsu 1.9-3.4% pada ketiga-tiga plasebo, kod produksi):
   - Pulangan UFUK TETAP: beli pada buka `tarikh_beli` (harga_beli Lejar) -> tutup sesi ke-UFUK
     (sesi beli = sesi 1), tolak kos KOS. Bebas peraturan keluar. Hanya posisi dengan ufuk lengkap.
   - Unit = saham-hari UNIK. Kolam = setiap saham-hari yang dibeli mana-mana kaedah hari itu (Nxx yang
@@ -327,7 +327,7 @@ def laporan(M, R, nm):
          'Nilai keluar diukur oleh G2 (buku harian) dan G6 (portfolio).', '',
          'Versi lama (padanan baldi hari pegang, SE ikut hari beli) dibuang kerana ia meluluskan belian RAWAK: '
          'henti + sasaran rawak mendapat lift +2.17 mata, dan SE lama meluluskan plasebo sehingga 51% masa. '
-         'Reka bentuk ini lulus plasebo pada kadar 1.0–1.9% (`laporan/PLASEBO_GATE.md`).', '',
+         'Reka bentuk ini lulus plasebo pada kadar 1.9–3.4% (`laporan/PLASEBO_GATE.md`).', '',
          '## Data', '',
          f"Hari beli LANGSUNG sahaja (Mxx sejak isyarat {MULA_LANGSUNG['M']}, Nxx/GB sejak {MULA_LANGSUNG['N']}). "
          f"**{M['saham_hari']:,} saham-hari** dengan ufuk {UFUK} sesi lengkap, {M['hari_beli']} hari beli, "

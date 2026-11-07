@@ -98,7 +98,7 @@ Mana-mana gate yang mendakwa mengukur KEMAHIRAN (G3, NEGATIF) mesti memberi kada
 | lekit | hari × tercile ATR | saham + minggu | 1.9% | 0.96 |
 | condong ATR | hari × tercile ATR | saham + minggu | 1.4% | 0.85 |
 
-Reka bentuk terpilih (baris tiga terakhir) konservatif: kadar lulus palsu di bawah 2% pada ketiga-tiga plasebo.
+Reka bentuk terpilih (baris tiga terakhir) konservatif: kadar lulus palsu di bawah 2% pada ketiga-tiga plasebo (penerokaan). **Pengesahan dengan kod produksi** (`standard/plasebo_gate.py`, benih berbeza, 7 Nov 2026 12:26 UTC): **1.9% · 3.4% · 1.9%** (bebas · lekit · condong) lawan reka bentuk lama 5.3% · 45.4% · 28.5% — lulus had ≤ 5% (`laporan/PLASEBO_GATE.md`).
 
 ### Had yang diketahui
 
