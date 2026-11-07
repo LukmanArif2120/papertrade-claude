@@ -1,6 +1,6 @@
 # Kaedah mana terbaik buat masa sekarang?
 
-Dijana 2026-11-07 14:17 UTC oleh `standard/kaedah_terbaik.py`. Rekod analisis sahaja.
+Dijana 2026-11-07 16:28 UTC oleh `standard/kaedah_terbaik.py`. Rekod analisis sahaja.
 
 Papan Penganalisis (`laporan/PENGANALISIS.md`) sudah membanding semua kaedah dan dijana semula setiap malam. Dokumen ini tidak mengulanginya — ia menjawab soalan yang mesti dijawab **dahulu** sebelum mana-mana pangkat boleh dipercayai.
 
