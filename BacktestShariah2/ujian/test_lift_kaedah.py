@@ -118,7 +118,7 @@ class TestSahamHari(unittest.TestCase):
     def test_kuarantin_dibuang(self):
         sesi, C, A = panel()
         P = baris('M01', ['AAA', 'BBB'], '2026-11-02', '2026-11-01')
-        Q = LK.saham_hari(P, sesi, C, A, kuarantin=lambda t, d: t == 'AAA')
+        Q = LK.saham_hari(P, sesi, C, A, kuarantin=lambda t, a, b=None: t == 'AAA')
         self.assertEqual(list(Q.saham), ['BBB'])
 
 

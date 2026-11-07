@@ -331,6 +331,13 @@ def main():
     P0 = lk.nilai(lk.posisi(), akhir, idx)
     P0['sebab_keluar'] = P0.sebab_keluar.fillna('').astype(str)
     P = P0[lk.langsung(P0)].copy()                       # penyebut: posisi LANGSUNG sahaja (pindaan 7 Nov)
+    try:                                                 # data harga tercemar (standard/kuarantin.py, 7 Nov 2026)
+        import kuarantin as KR
+        cemar = KR.topeng_posisi(P).to_numpy()
+    except Exception:
+        cemar = np.zeros(len(P), bool)
+    n_cemar = int(cemar.sum())
+    P = P[~cemar].copy()
     sesi_h, C, _ = lk.panel_harga()
     buku = buku_harian(P, sesi_h, C)
     rj = lk.rejim_qqq()
@@ -414,7 +421,8 @@ def main():
     rows.sort(key=lambda r: (ord_st[r['status']], -sum(r['gate'][k] for k in ('G1', 'G2', 'G3', 'G4', 'G5')),
                              -(r['lift'] if r['lift'] is not None else -99)))
     meta = dict(kini=str(pd.Timestamp.now(tz='UTC').date()), harga_pada=akhir_sesi, hari_beli=nhb,
-                hari_on=hb_on, hari_off=hb_off, posisi=int(len(P)), posisi_isian=int(len(P0) - len(P)),
+                hari_on=hb_on, hari_off=hb_off, posisi=int(len(P)), posisi_isian=int(len(P0) - len(P) - n_cemar),
+                posisi_tercemar=n_cemar,
                 kaedah=len(rows), sd=bulat(sd), n_perlu=n_perlu(sd), hari_beli_perlu=perlu_g1,
                 t4_sesi_maks=t4_maks, tarikh_g1=tarikh_g1, tarikh_g6=tarikh_g6, kira=kira, tajuk=tajuk,
                 pradaftar='2026-11-06; pindaan 2026-11-07', spec='standard/SPEC_KAD_SKOR.md',
@@ -471,7 +479,7 @@ def laporan(M, rows):
          f"## {M['tajuk']}", '',
          f"Penyebut: **{M['posisi']:,} posisi LANGSUNG** Lejar Penuh lorong 1 merentas {M['kaedah']} kaedah, "
          f"{M['hari_beli']} hari beli (rejim ON {M['hari_on']}, OFF {M['hari_off']}); {M['posisi_isian']:,} posisi "
-         f"isian bina semula tidak dikira (Mxx sejak isyarat {M['mula_langsung']['M']}, Nxx/GB sejak "
+         f"isian bina semula dan {M.get('posisi_tercemar', 0):,} posisi dengan data harga dikuarantin tidak dikira (Mxx sejak isyarat {M['mula_langsung']['M']}, Nxx/GB sejak "
          f"{M['mula_langsung']['N']}). Harga pada tutup {M['harga_pada']}.", '',
          '| Status | Bilangan |', '|---|---|']
     A += [f'| {k} | {v} |' for k, v in M['kira'].items()]

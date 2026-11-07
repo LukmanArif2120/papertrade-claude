@@ -158,13 +158,14 @@ def rejim_qqq(stor=None):
 
 
 def _kuarantin():
-    """Fungsi dikuarantin(ticker, 'YYYY-MM-DD') jika modul kuarantin wujud; jika tidak, sentiasa False."""
+    """Fungsi tercemar(ticker, mula, tamat) daripada standard/kuarantin.py (data harga tercemar, cth. SUPN/INDV
+    7 Nov 2026); jika modul tiada, sentiasa False."""
     try:
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-        from kuarantin import dikuarantin  # noqa: WPS433
-        return dikuarantin
+        from kuarantin import tercemar  # noqa: WPS433
+        return tercemar
     except Exception:
-        return lambda t, d: False
+        return lambda t, a, b=None: False
 
 
 def bh_lulus(p, q=Q_FDR):
@@ -206,8 +207,9 @@ def se_dua_hala(x, k1, k2):
 
 def saham_hari(P, sesi, C, A, kuarantin=None):
     """Baris saham-hari unik setiap kaedah (langsung, ufuk lengkap): id_kaedah, saham, tarikh_beli, r, q.
-    r = pulangan UFUK sesi (%) tolak KOS; q = tercile ATR14% hari isyarat dalam kolam hari itu."""
-    kuarantin = kuarantin or (lambda t, d: False)
+    r = pulangan UFUK sesi (%) tolak KOS; q = tercile ATR14% hari isyarat dalam kolam hari itu.
+    kuarantin(ticker, mula, tamat) -> True membuang saham-hari yang ufuknya menyentuh data harga tercemar."""
+    kuarantin = kuarantin or (lambda t, a, b=None: False)
     Q = P.loc[langsung(P), ['id_kaedah', 'saham', 'tarikh_isyarat', 'tarikh_beli', 'harga_beli']].copy()
     Q['harga_beli'] = pd.to_numeric(Q.harga_beli, errors='coerce')
     Q = Q.dropna(subset=['harga_beli'])
@@ -227,7 +229,8 @@ def saham_hari(P, sesi, C, A, kuarantin=None):
     Av = A.to_numpy()
     Q['atrp'] = np.where(ci >= 0, Av[ri, np.maximum(ci, 0)], np.nan)
     Q = Q[np.isfinite(Q.r) & np.isfinite(Q.atrp)]
-    bebas = np.array([not kuarantin(t, d) for t, d in zip(Q.saham, Q.tarikh_beli.astype(str))], dtype=bool)
+    tamat = [f'{sesi[i][:4]}-{sesi[i][4:6]}-{sesi[i][6:]}' for i in (Q.hb + UFUK - 1)]
+    bebas = np.array([not kuarantin(t, a, b) for t, a, b in zip(Q.saham, Q.tarikh_beli.astype(str), tamat)], dtype=bool)
     Q = Q.loc[bebas].copy()
     if Q.empty:
         return Q.drop(columns='atrp').assign(q=[])

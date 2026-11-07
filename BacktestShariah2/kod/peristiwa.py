@@ -9,6 +9,8 @@
 #     yang merentasi tarikh_ex kekal seragam.
 # Lejar dibina semula apabila jadual berubah (tidak_layak.versi); posisi Lejar dilaras oleh mekanisme `laras` sedia ada;
 # posisi Papertrade C yang merentasi tarikh_ex dilaras oleh laras_c() (tidak_layak.py posisi).
+# Pengawal faktor KEMBAR (7 Nov 2026, asing_kembar): baris dengan (tarikh_ex, faktor) sama pada >= 2 saham = data satu saham
+# disajikan di bawah simbol lain (INDV/SUPN 2026-11-03); tidak digunakan di mana-mana dan saham dikuarantin oleh harga_yf.
 # Sumber: (1) dividen yfinance (`actions=True` dalam harga_yf terkini -> data/harga/dividen.csv): D/P >= 2% ditambah automatik;
 # (2) calon jurang buka <= −15% tanpa earnings (faktor_calon.csv) disahkan rutin 6:02 dengan Moomoo
 # `quote_corporate_actions_rehab` (SPINOFF / SPECIALDIVIDEND) melalui CLI `tambah` / `tolak`.
@@ -57,6 +59,22 @@ def _int(t):
     return int(str(t).replace('-', ''))
 
 
+def asing_kembar(rows):
+    """Pengawal faktor KEMBAR (7 Nov 2026): baris yang (tarikh_ex, faktor) SAMA pada >= 2 saham berbeza -> (sah, kembar).
+
+    Dua syarikat tidak mungkin mendapat dividen D dan harga P yang sama sehingga 6 titik perpuluhan pada hari yang sama;
+    baris kembar bermakna data satu saham disajikan di bawah simbol lain (2026-11-03: dividen palsu D=8.13 P=36.28 pada
+    INDV DAN SUPN, faktor 0.775910 didarab pada 388 bar SUPN). Baris kembar TIDAK digunakan (stor, bar baharu, posisi C);
+    harga_yf.gabung mengkuarantin saham itu (standard/kuarantin.py). faktor.csv tidak diubah (cincangannya kunci bina
+    semula Lejar melalui versi())."""
+    if not len(rows):
+        return rows, rows.iloc[0:0]
+    f = pd.to_numeric(rows.faktor, errors='coerce').round(6)
+    n = rows.assign(_f=f).groupby(['tarikh_ex', '_f']).saham.transform('nunique')
+    k = (n > 1).values
+    return rows[~k], rows[k]
+
+
 def _diguna(folder):
     p = os.path.join(folder, 'faktor_diguna.csv')
     return p, ({(r.saham, r.tarikh_ex) for r in pd.read_csv(p, dtype=str).itertuples()} if os.path.exists(p) else set())
@@ -65,7 +83,7 @@ def _diguna(folder):
 def guna_stor(stor, folder, rows=None):
     """Darab bar stor sebelum tarikh_ex dengan faktor bagi peristiwa yang belum diguna pada stor `folder` dan tarikh_ex-nya
     sudah ada dalam stor (bar >= tarikh_ex wujud). stor = {nama fail: DataFrame LAJ}. Ubah di tempat; pulang log."""
-    rows = muat() if rows is None else rows
+    rows = asing_kembar(muat() if rows is None else rows)[0]
     p, sudah = _diguna(folder)
     log = []
     for r in rows.itertuples():
@@ -90,7 +108,7 @@ def guna_stor(stor, folder, rows=None):
 def laras_baru(baru, rows=None, akhir=None):
     """Bar baharu mentah (LAJ) -> bar sebelum tarikh_ex didarab hasil darab faktor semua peristiwa yang tarikh_ex-nya sudah
     berlaku (<= bar terakhir saham itu dalam `baru` atau `akhir` {ticker: tarikh int}). Pulang salinan."""
-    rows = muat() if rows is None else rows
+    rows = asing_kembar(muat() if rows is None else rows)[0]
     if not len(rows) or not len(baru):
         return baru
     b = baru.copy()
@@ -215,7 +233,7 @@ def laras_c(folder, rows=None, frames=None):
     tarikh_ex..tarikh_keluar tidak sampai henti dilaras (jurang peristiwa, bukan kejatuhan) dibuka semula ('dibuka semula').
     Pulang senarai perubahan; posisi lain yang keluar pada tarikh_ex dibenderakan 'semak'."""
     import sahkan as SH
-    rows = muat() if rows is None else rows
+    rows = asing_kembar(muat() if rows is None else rows)[0]
     if not len(rows):
         return []
     ev = {}

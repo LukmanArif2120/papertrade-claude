@@ -28,8 +28,10 @@ Peraturan setiap sesi S (data dipotong <= S; modul kaedah = kod/kaedah/Mxx.py, l
 5. Saham tidak layak pada sesi S (sejak 21 Okt 2026, kod/tidak_layak.py: diambil alih — corak harga terkunci atau
    data/ambil_alih.csv — atau tidak cair): isyarat direkod (`tidak_layak` = sebab) tetapi tidak masuk menunggu; isyarat
    menunggu dilangkau ('saham <sebab>'). Posisi saham tanpa bar >= tidak_layak.DELIST_SESI sesi (delist) ditutup pada tutup
-   bar terakhir (sebab_keluar / lorong 2 'delist'). Peraturan atau senarai berubah (status.json `tidak_layak`) -> bina
-   semula seperti peraturan 4.
+   bar terakhir (sebab_keluar / lorong 2 'delist') — sejak 7 Nov 2026 HANYA jika saham itu benar-benar delist
+   (tidak_layak.sah_delist: peristiwa direktori Nasdaq 'buang' <= S, tiada dalam semasa.csv, atau ambil alih selesai);
+   saham yang masih tersenarai kekal terbuka dan terus ditanda ke pasaran (9 posisi NEGG ditutup palsu 2026-11). Peraturan
+   atau senarai berubah (status.json `tidak_layak`) -> bina semula seperti peraturan 4.
 Harga: stor repo `data/harga/stor/` (format kod/stor.py; yfinance, semakan silang Moomoo oleh rutin 6:02).
 Jika harga lama dilaras (split), posisi terbuka dilaras dengan nisbah sama (lajur `laras`).
 """
@@ -45,10 +47,15 @@ from stor import muat, frames_dict, LAJ, tulis_log_laras  # noqa: E402
 import keluar_lorong  # noqa: E402
 import tidak_layak  # noqa: E402
 import dagangan  # noqa: E402
+import kuarantin as KR  # noqa: E402
 
 HARGA = os.path.join(BS2, 'data', 'harga')
 STOR = os.environ.get('LEJAR_STOR', os.path.join(HARGA, 'stor'))
 LEJAR = os.environ.get('LEJAR_DIR', os.path.join(BS2, 'lejar'))
+# Kuarantin data harga (7 Nov 2026; standard/kuarantin.py): fail repo hanya bagi stor repo; stor lain (kotak pasir) dapat
+# fail sendiri dalam folder stornya supaya larian ujian tidak menulis rekod kuarantin repo.
+KUARANTIN = os.environ.get('LEJAR_KUARANTIN') or (
+    KR.FAIL if os.path.realpath(STOR) == os.path.realpath(os.path.join(HARGA, 'stor')) else os.path.join(STOR, 'kuarantin.csv'))
 HARGA_MIN = 10.0
 TAMAT_TUNGGU = 5      # sesi maksimum isyarat menunggu bar masuk (saham digantung / data lewat)
 TOLERANSI_LARAS = 0.003
@@ -256,8 +263,9 @@ def cmd_stor(a):
     ada = {t: n for d in stor.values() for t, n in d.groupby('ticker').size().items()}
     fail = []
     sj = os.path.join(HARGA, 'sejarah.csv')
-    if os.path.exists(sj):   # sejarah hanya bagi saham yang belum cukup sejarah dalam stor
-        s = pd.read_csv(sj); s = s[s.ticker.map(lambda t: ada.get(t, 0) < 260)]
+    aktif = KR.aktif(KUARANTIN)   # kuarantin aktif: sejarah penuh segarnya disemak oleh harga_yf.semak_kuarantin
+    if os.path.exists(sj):   # sejarah hanya bagi saham yang belum cukup sejarah dalam stor, atau dikuarantin
+        s = pd.read_csv(sj); s = s[s.ticker.map(lambda t: ada.get(t, 0) < 260 or t in aktif)]
         if len(s): fail.append(s)
     tk = os.path.join(HARGA, 'terkini.csv')
     if os.path.exists(tk): fail.append(pd.read_csv(tk))
@@ -275,8 +283,9 @@ def cmd_stor(a):
     import peristiwa
     sem = pd.concat([d for d in stor.values()] + [baru[LAJ]], ignore_index=True).drop_duplicates(['ticker', 'date'], keep='last')
     fr_sem, _ = frames_dict({'harga_A.csv': sem})
+    fr_sem = {t: g for t, g in fr_sem.items() if t not in aktif}   # bar ticker kuarantin tidak dipercayai: tiada faktor baharu
     nota_div = peristiwa.tambah_dari_dividen(fr_sem)
-    stor, nota = harga_yf.gabung(stor, baru, STOR)
+    stor, nota = harga_yf.gabung(stor, baru, STOR, kuarantin=KUARANTIN, bursa=KR.PERISTIWA_BURSA)
     nota['log_laras'] = tulis_log_laras(STOR, nota.pop('log_laras'))   # keputusan laras/anomali/faktor (tambah sahaja)
     nota['faktor_dividen'] = [f"{x['saham']} {x['tarikh_ex']} {x['catatan']}" for x in nota_div]
     try:   # calon spin-off / pengagihan (jurang <= −15% tanpa earnings) untuk disahkan rutin 6:02 (Moomoo rehab)
@@ -292,6 +301,9 @@ def cmd_stor(a):
     u = univ_layak() or set()
     n = {t: c for d in stor.values() for t, c in d.groupby('ticker').size().items()}
     perlu = sorted(t for t in u if n.get(t, 0) < 60)
+    # ticker kuarantin aktif yang masih tersenarai: muat turun SEMULA sejarah penuh (harga_yf.py sejarah) setiap larian
+    # sehingga semak_kuarantin melepaskannya
+    perlu = sorted(set(perlu) | set(KR.perlu_muat_semula(KUARANTIN)))
     if perlu:
         p = os.path.join(HARGA, 'perlu_sejarah.txt')
         lama = {x.strip() for x in open(p)} if os.path.exists(p) else set()
@@ -350,8 +362,8 @@ def tutup_posisi(g, p, k):
 
 
 def tutup_delist(g, p):
-    """Saham tanpa bar >= tidak_layak.DELIST_SESI sesi (delist selepas ambil alih / tiada data): lorong yang masih terbuka
-    ditutup pada tutup bar terakhir (anggaran nilai tunai)."""
+    """Saham tanpa bar >= tidak_layak.DELIST_SESI sesi DAN delist (pemanggil menyemak tidak_layak.sah_delist sejak 7 Nov
+    2026): lorong yang masih terbuka ditutup pada tutup bar terakhir (anggaran nilai tunai)."""
     ix = g.index; c = float(g.close.iloc[-1]); e = float(p['harga_beli'])
     if not p.get('tarikh_keluar'):
         p = tutup_posisi(g, p, dict(tarikh_keluar=tkh(ix[-1]), harga_keluar=c, sebab_keluar='delist', j=len(g) - 1))
@@ -394,6 +406,7 @@ def nilai_posisi(g, p, tmax):
 
 # ---------------------------------------------------------------- satu kaedah, satu sesi (proses anak)
 FR = {}; IDX = {}
+BURSA = None   # status direktori Nasdaq (tidak_layak.muat_bursa), dimuat cmd_jalan; None = peraturan delist lama (ujian)
 
 
 def kerja(arg):
@@ -445,7 +458,10 @@ def kerja(arg):
         if pd.Timestamp(p['tarikh_isyarat']) not in g.index:
             nota.append(f"{mid} {p['saham']}: bar isyarat {p['tarikh_isyarat']} tiada dalam stor; keluar tidak dinilai")
         p, habis = nilai_posisi(g, p, tmax)
-        if not habis and tidak_layak.sesi_tanpa_bar(g, IDX['SPY'].index if 'SPY' in IDX else [], St) >= tidak_layak.DELIST_SESI:
+        # delist (7 Nov 2026): tiada bar >= DELIST_SESI sesi DAN saham benar-benar delist (direktori / ambil alih selesai);
+        # saham yang masih tersenarai kekal terbuka dan ditanda ke bar terakhir
+        if not habis and tidak_layak.sesi_tanpa_bar(g, IDX['SPY'].index if 'SPY' in IDX else [], St) >= tidak_layak.DELIST_SESI \
+                and tidak_layak.sah_delist(p['saham'], St, BURSA)[0]:
             p = tutup_delist(g, p); habis = True
         (tutup if habis else kekal).append(p)
     # isyarat kaedah+saham sama disekat selagi lorong 1 terbuka, termasuk hari ia keluar (seperti enjin); lorong 2 tidak menyekat
@@ -543,6 +559,18 @@ def bina_semula(st):
 
 
 def cmd_jalan(a):
+    """Status direktori Nasdaq (peraturan delist, tidak_layak.sah_delist) dipasang pada BURSA hanya sepanjang larian ini:
+    proses anak (fork) mewarisinya, dan ia dipulihkan selepas itu supaya pemanggil lain (ujian kerja()) tidak terjejas."""
+    global BURSA
+    lama = BURSA
+    BURSA = tidak_layak.muat_bursa()
+    try:
+        return _jalan(a)
+    finally:
+        BURSA = lama
+
+
+def _jalan(a):
     global FR, IDX
     os.makedirs(LEJAR, exist_ok=True)
     st, T, W, bil = keadaan()

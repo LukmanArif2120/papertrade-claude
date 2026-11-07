@@ -1,0 +1,3 @@
+ticker,tarikh_mula,sebab,dicatat,status
+SUPN,2026-10-21,tercemar: bar SUPN 2026-10-21..2026-11-02 = bar INDV x 0.775910 dengan volum sama (data INDV di bawah simbol SUPN); direktori Nasdaq 2026-11-03 SUPN tukar_nama + INDV buang; log_laras 2026-11-04 05:45 anomali 0.846397 tetapi bar ditimpa (gabung_satu); faktor dividen_khas 2026-11-03 x0.775910 kembar dengan INDV didarab pada 388 bar,2026-11-07 12:03 UTC,aktif
+INDV,2026-11-03,delist 2026-11-03 (direktori Nasdaq buang; ambil alih EDGAR 425 umum 2026-10-29); faktor dividen_khas 2026-11-03 x0.775910 kembar dengan SUPN TIDAK SAH (dividen INDV disajikan di bawah dua simbol) — posisi C INDV yang dilaras faktor itu menunjukkan untung palsu,2026-11-07 12:03 UTC,aktif
