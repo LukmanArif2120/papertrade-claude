@@ -257,6 +257,51 @@ def buku_harian(P, sesi, C, kos=0.1):
     return out
 
 
+def rejim_semasa(stor=None):
+    """Rejim pasaran SEMASA untuk paparan (bar indeks terakhir, tidak dihadkan kepada sesi Lejar):
+    ON = QQQ tutup > SMA50 DAN SMA10 > SMA20 (sama dengan G1). None jika data tiada."""
+    import lift_kaedah as lk
+    p = os.path.join(stor or lk.STOR, 'harga_idx.csv')
+    if not os.path.exists(p):
+        return None
+    d = pd.read_csv(p)
+    out = {}
+    for t in ('QQQ', 'SPY'):
+        x = d[d.ticker == t].assign(date=lambda z: z.date.astype(str)).sort_values('date').set_index('date').close
+        if len(x) < 200:
+            continue
+        s10, s20, s50, s200 = (x.rolling(n).mean() for n in (10, 20, 50, 200))
+        on = ((x > s50) & (s10 > s20))[s50.notna()]
+        t0 = on.index[-1]
+        ubah = on[on != on.iloc[-1]]
+        sejak = on.index[on.index > ubah.index[-1]][0] if len(ubah) else on.index[0]
+        puncak = x.rolling(252, min_periods=1).max()
+        out[t] = dict(on=bool(on.iloc[-1]), tarikh=f'{t0[:4]}-{t0[4:6]}-{t0[6:]}',
+                      sejak=f'{sejak[:4]}-{sejak[4:6]}-{sejak[6:]}', sesi=int((on.index >= sejak).sum()),
+                      tutup=round(float(x.iloc[-1]), 2), sma10=round(float(s10.iloc[-1]), 2),
+                      sma20=round(float(s20.iloc[-1]), 2), sma50=round(float(s50.iloc[-1]), 2),
+                      sma200=round(float(s200.iloc[-1]), 2),
+                      dari_puncak=round(float(x.iloc[-1] / puncak.iloc[-1] - 1) * 100, 2))
+    if 'QQQ' not in out:
+        return None
+    q = out['QQQ']
+    return dict(on=q['on'], label='ON' if q['on'] else 'OFF', tarikh=q['tarikh'], sejak=q['sejak'], sesi=q['sesi'],
+                qqq=q, spy=out.get('SPY'), takrif='ON = QQQ tutup > SMA50 DAN SMA10 > SMA20 (gate G1 kad skor)')
+
+
+def tindakan_hari_ini(kira, rj):
+    """Satu ayat keputusan untuk skrin pertama dashboard. Wang sebenar hanya untuk TERBUKTI."""
+    if kira.get('TERBUKTI'):
+        a = (f"{kira['TERBUKTI']} kaedah TERBUKTI — calon wang sebenar; saiz ikut had MDD -10% "
+             '(lihat lajur berat T4).')
+    else:
+        a = 'JANGAN guna wang sebenar: tiada kaedah TERBUKTI. Papertrade C dan Lejar terus mengumpul data.'
+    if rj is not None and not rj['on']:
+        a += (f" Rejim OFF sejak {rj['sejak']} ({rj['sesi']} sesi): saham momentum paling terjejas dalam "
+              'fasa ini; data hari ini dikira dalam baldi OFF.')
+    return a
+
+
 def statistik_buku(r):
     """(purata harian %, had bawah, had atas, bilangan sesi) bagi siri buku r."""
     if r is None or len(r) < 2:
@@ -420,7 +465,9 @@ def main():
     ord_st = {s: i for i, s in enumerate(('TERBUKTI', 'CALON', 'BELUM CUKUP', 'GAGAL', 'NEGATIF'))}
     rows.sort(key=lambda r: (ord_st[r['status']], -sum(r['gate'][k] for k in ('G1', 'G2', 'G3', 'G4', 'G5')),
                              -(r['lift'] if r['lift'] is not None else -99)))
+    rj = rejim_semasa()
     meta = dict(kini=str(pd.Timestamp.now(tz='UTC').date()), harga_pada=akhir_sesi, hari_beli=nhb,
+                rejim=rj, tindakan=tindakan_hari_ini(kira, rj),
                 hari_on=hb_on, hari_off=hb_off, posisi=int(len(P)), posisi_isian=int(len(P0) - len(P) - n_cemar),
                 posisi_tercemar=n_cemar,
                 kaedah=len(rows), sd=bulat(sd), n_perlu=n_perlu(sd), hari_beli_perlu=perlu_g1,
@@ -477,6 +524,7 @@ def laporan(M, rows):
          f"Dijana {M['kini']} oleh `standard/kad_skor.py` (Actions `analisis.yml`). Gate: `{M['spec']}` "
          f"(pradaftar {M['pradaftar']}). Rekod analisis sahaja: tiada order, tiada wang sebenar.", '',
          f"## {M['tajuk']}", '',
+         f"**Tindakan hari ini:** {M.get('tindakan', '–')}", '',
          f"Penyebut: **{M['posisi']:,} posisi LANGSUNG** Lejar Penuh lorong 1 merentas {M['kaedah']} kaedah, "
          f"{M['hari_beli']} hari beli (rejim ON {M['hari_on']}, OFF {M['hari_off']}); {M['posisi_isian']:,} posisi "
          f"isian bina semula dan {M.get('posisi_tercemar', 0):,} posisi dengan data harga dikuarantin tidak dikira (Mxx sejak isyarat {M['mula_langsung']['M']}, Nxx/GB sejak "
