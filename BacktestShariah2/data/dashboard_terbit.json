@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794099163-8657",
-  "nombor": 192,
-  "sha256": "0f5d2bc517f90837dc9f93549a3542bac7d7257d0128e6859280665566776da4",
-  "bait": 734378,
-  "dikemas": "2026-11-08 00:53 UTC",
-  "nota": "v161 (keputusan pengguna 8 Nov 2026, contoh M14): helaian kaedah v2 — kepala melekit, tab Ringkasan/Peraturan/Hadapan/Backtest/Posisi, kotak keputusan + enam syarat G1–G6 dengan kemajuan (format kad skor pindaan 7 Nov dan lama), langkah peraturan + contoh dagangan sebenar atas lilin, bagaimana posisi berakhir + taburan, posisi terbuka; db baharu analisis/kaedah_siri (dipecah, atas permintaan)."
+  "versi_artifact": "1794105899-7455",
+  "nombor": 193,
+  "sha256": "f953f2e727d9818cb4961a41b563fdd27e114e3ee129977c714c97d86ab8c85d",
+  "bait": 748268,
+  "dikemas": "2026-11-08 02:45 UTC",
+  "nota": "v162 (keputusan pengguna 8 Nov 2026): helaian Watchlist v2 (jarak ke pencetus ×ATR, syarat sebagai langkah, tangga harga, kaedah, gred) + kad telefon Watchlist; kad telefon kad skor (enam titik gate); Backtest butiran dan Status data gaya v5.1; kad lipat jadual lain jadi petak; Perlu perhatian gaya SST dipulihkan di Hari ini."
 }
