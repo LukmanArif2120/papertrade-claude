@@ -114,7 +114,12 @@ def main():
     G = G.dropna(subset=['real', 'bt_purata'])
     R = uji_kaedah(k, B)
 
-    A = ['# Kaedah mana terbaik buat masa sekarang?', '']
+    import status_kad
+    A = ['# Kaedah mana terbaik buat masa sekarang?', '', status_kad.baris(), '',
+         '> Ujian dalam laporan ini memakai posisi DITUTUP sahaja dengan SE berkelompok ikut hari beli. Ujian plasebo '
+         '7 Nov 2026 (`laporan/PLASEBO_GATE.md`) mengukur SE jenis itu meluluskan pemilihan rawak sehingga 45% masa, dan '
+         'penapisan keluar memesongkan sampel ditutup. Bilangan "terbukti NEGATIF/positif" di bawah ialah DIAGNOSTIK, '
+         'bukan label kaedah; label yang sah hanya dalam kad skor.', '']
     A.append(f'Dijana {pd.Timestamp.now(tz="UTC"):%Y-%m-%d %H:%M} UTC oleh '
              '`standard/kaedah_terbaik.py`. Rekod analisis sahaja.')
     A.append('')
@@ -243,10 +248,10 @@ def laporan2(A, B, C, G, R, d):
         A.append('')
         A.append('Jadi mana-mana kaedah bersasaran yang muncul positif di sini, dan mana-mana '
                  'kaedah berhenti-ketat yang muncul negatif, mesti dibaca sebagai **artifak '
-                 'penapisan keluar** sampai posisi terbukanya tutup. Ukuran tanpa bias ini '
-                 'ialah purata SEMUA posisi dengan yang terbuka ditanda-ke-pasaran; apabila '
-                 'itu dibuat dan lift dipadankan ikut hari beli (membuang arah pasaran), '
-                 '**0 daripada 180 kaedah Lejar mempunyai lift yang bertahan BH-FDR**.')
+                 'penapisan keluar** sampai posisi terbukanya tutup. Jawapan yang sah ialah '
+                 '**kad skor** (`laporan/KAD_SKOR.md`): lift masuk ufuk tetap yang lulus ujian '
+                 'plasebo (`laporan/LIFT_KAEDAH.md`, `laporan/PLASEBO_GATE.md`). Laporan ini '
+                 'tidak memberi status kaedah.')
         A.append('')
 
     # ---------- 4. Mengapa pegang-panjang belum boleh dinilai ----------

@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794052946-0cda",
-  "nombor": 190,
-  "sha256": "26adfd3cb313164da9a38a9ccaf5447e6ca78c457c86e68ccb83acddd3301b2c",
-  "bait": 681715,
-  "dikemas": "2026-11-07 12:02 UTC",
-  "nota": "v159 (keputusan pengguna 7 Nov 2026): helaian butiran posisi v2 — pengepala melekat, tab Ringkasan/Keluar/Gred/Kaedah/Garis masa, kotak keputusan + amaran ambil alih, carta lilin berzon dengan rambut silang, lorong keluar, posisi sekandung; kad telefon v2 dengan carta berlabel beli/L2 dan tiga jubin."
+  "versi_artifact": "1794098028-ab5a",
+  "nombor": 191,
+  "sha256": "2324889aafcb809ae523b7861d8acd4451c1646f8504e786fba7ea30729de9da",
+  "bait": 704604,
+  "dikemas": "2026-11-08 00:36 UTC",
+  "nota": "v160 (keputusan pengguna 8 Nov 2026, audit penuh 7 Nov): sepanduk keputusan 3 baris di atas Hari ini (status kad skor, tindakan hari ini, rejim QQQ + data hadapan ON/OFF); Esok membaca senarai_beli (kertas); kad skor ikut gate pindaan 7 Nov (buku harian, lift masuk 10 sesi, T4 pada MDD -10%); Lift/bulan dibuang; purata setiap posisi dilabel bukan akaun; Kombinasi N ada status kad skor."
 }

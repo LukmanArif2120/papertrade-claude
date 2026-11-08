@@ -63,6 +63,12 @@ jobs:
         run: |
           python3 BacktestShariah2/standard/lejar.py ringkas
           python3 BacktestShariah2/standard/lejar.py banding
+      # Konteks isyarat dibekukan (7 Nov 2026): rejim pasaran + ciri saham pada malam isyarat, ditulis TAMBAH-SAHAJA
+      # ke data/konteks/ (di luar lejar/ kerana bina semula Lejar memadam fail di bawah lejar/). continue-on-error:
+      # kegagalan di sini tidak boleh menghalang sesi Lejar disimpan.
+      - name: Bekukan konteks isyarat
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/konteks_isyarat.py
       - name: Portfolio maya 10 slot (RS_10, RAWAK_10; gabungan beku GABUNGAN_10, TOP1_10, RAWAK_KAEDAH_10; jejak hadapan)
         continue-on-error: true
         run: python3 BacktestShariah2/standard/portfolio_slot.py
@@ -79,6 +85,9 @@ jobs:
           [ -d BacktestShariah2/portfolio_slot ] && git add BacktestShariah2/portfolio_slot
           [ -f BacktestShariah2/data/harga/perlu_sejarah.txt ] && git add BacktestShariah2/data/harga/perlu_sejarah.txt
           git add BacktestShariah2/data/harga/faktor.csv BacktestShariah2/data/harga/faktor_calon.csv 2>/dev/null || true
+          # kuarantin data harga (standard/kuarantin.py; ditulis oleh `lejar.py stor` melalui harga_yf.gabung)
+          git add BacktestShariah2/data/harga/kuarantin.csv 2>/dev/null || true
+          [ -d BacktestShariah2/data/konteks ] && git add BacktestShariah2/data/konteks
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           SESI=$(python3 -c "import json;print(json.load(open('BacktestShariah2/lejar/status.json')).get('sesi_terakhir'))")
           git commit -q -m "Lejar penuh: sesi $SESI"

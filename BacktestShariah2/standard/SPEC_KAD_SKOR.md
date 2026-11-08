@@ -1,5 +1,7 @@
 # Pradaftar kad skor keputusan — gate G1–G6
 
+> **Gate yang berkuat kuasa sejak 7 Nov 2026 ialah versi dalam bahagian "Pindaan 7 Nov 2026" di hujung fail ini.** Jadual asal di bawah dikekalkan sebagai rekod pradaftar 6 Nov 2026.
+
 **Dipradaftar 6 Nov 2026**, sebelum mana-mana kaedah matang (Lejar Penuh: 15 hari beli; lorong paling lama 15 sesi). Keputusan pengguna pada tarikh yang sama: Pilihan B + T4 daripada `reports/Audit dashboard v154 pilih kaedah.md`, dengan jawapan "Kunci apa adanya" bagi gate di bawah.
 
 Pelaksana: `standard/kad_skor.py` (gate + status), `standard/portfolio_t4.py` (lorong T4). Kunci: `ujian/test_kad_skor.py::TestKunci` gagal jika mana-mana ambang di bawah berubah. **Mengubah ambang memerlukan keputusan pengguna DAN pradaftar baharu bertarikh dalam fail ini, sebelum data yang terkesan dilihat** — pelajaran `REVERSE/AUDIT_JEJAK_N.md` (`gate2` m=8 melonggarkan ambang selepas keputusan dilihat) dan prinsip `REVERSE/STRATEGI.md` §3.
@@ -52,3 +54,55 @@ Menang %, untung purata, rugi purata, payoff, CVaR 10%, terburuk, MAE/MFE median
 ## Keadaan pada pradaftar (6 Nov 2026)
 
 222 kaedah: TERBUKTI 0 · CALON 0 · BELUM CUKUP 212 · GAGAL 0 · NEGATIF 10. Paling awal G1 (lift 2 mata) ~6 Jan 2027; paling awal G6 ~9 Apr 2027.
+
+## Pindaan 7 Nov 2026 — gate disahkan plasebo dan diselaraskan dengan toleransi MDD pengguna
+
+**Dipradaftar 7 Nov 2026**, sebelum mana-mana kaedah melepasi G1 dan **sebelum status di bawah pindaan ini dikira**. Keputusan pengguna 7 Nov 2026 selepas audit penuh ("saya mengharapkan anda untuk tolong saya"; toleransi MDD akaun **-10%**, matlamat untung bersih > rugi).
+
+### Mengapa (diukur, bukan pendapat)
+
+1. **G3 lama mengukur bentuk keluar, bukan pemilihan saham.** Belian RAWAK daripada kolam Lejar sebenar dengan henti 2×ATR + sasaran 6% mendapat lift **+2.17 mata** (p < 0.05 dalam 95% cabutan); tanpa henti **-2.00 mata**. Punca: padanan baldi hari pegang (yang ditentukan oleh peraturan keluar) dan kolam yang 65% Nxx tanpa henti ditanda-ke-pasaran semasa pembetulan.
+2. **SE berkelompok ikut hari beli terlalu sempit.** Plasebo pada panel A02 2010–2026 (207 tingkap × 60 hari beli): kadar lulus palsu **51%** bagi plasebo yang membeli saham sama berulang kali dan **30%** bagi plasebo condong ATR, lawan sasaran 5%. Posisi terbuka semua hari beli juga ditanda pada SATU tutup yang sama; menanda sehari lewat menukar NEGATIF 10 → 4.
+3. **G1 lama boleh lulus ~12 Nov 2026** melalui laluan "≥ 610 posisi ditutup" sedangkan posisi sehari berkorelasi (varians 2.9–7× andaian bebas) dan kesemua 15 hari beli berada dalam satu fasa pasaran (QQQ di bawah SMA50 dan SMA10 < SMA20 sejak 16 Okt 2026). 88.9% posisi Nxx bertarikh isyarat sebelum larian malam langsung pertama Nxx (bina semula 3 Nov 2026 mengisi 15 Okt–2 Nov).
+4. **G6 lama memakai MDD -26.82% (MDD SPUS)**, sedangkan toleransi pengguna ialah -10%; dan "p95 daripada 20 cabutan" ialah cabutan ke-2 terbesar (kadar lulus palsu disimulasi 9.2%).
+
+### Peraturan tetap baharu: gate kemahiran mesti lulus plasebo
+
+Mana-mana gate yang mendakwa mengukur KEMAHIRAN (G3, NEGATIF) mesti memberi kadar lulus palsu **≤ 5%** pada tiga plasebo (pilihan rawak bebas, rawak "lekit" yang membeli saham sama berulang kali, rawak condong ke tercile ATR tertinggi) pada panel A02 2010–2026, sebelum dikunci. Skrip pengesahan: `standard/plasebo_gate.py`; keputusan: `laporan/PLASEBO_GATE.md`. Gate yang lulus ujian ini tidak diubah lagi tanpa keputusan pengguna.
+
+### Gate berkuat kuasa (menggantikan G1, G2, G3, G6 dan syarat NEGATIF)
+
+| Gate | Syarat lulus | Ambang dikunci |
+|---|---|---|
+| G1 kematangan | hari beli **LANGSUNG** ≥ maks(`G1_HARI_BELI_MIN`, hari beli perlu untuk lift `G1_LIFT_MATA` mata) **DAN** ≥ `G1_REJIM_MIN` hari beli langsung dalam rejim ON **DAN** ≥ `G1_REJIM_MIN` dalam rejim OFF. Laluan "posisi ditutup ≥ n_perlu" **dibuang**. | `G1_HARI_BELI_MIN = 20`, `G1_LIFT_MATA = 2.0`, `G1_REJIM_MIN = 10`, `MULA_LANGSUNG = M: 2026-10-15, N/GB: 2026-11-03` |
+| G2 jangkaan | **buku** kaedah (berat sama setiap posisi pada belian, keluar lorong 1, kos 0.2% setiap pusingan, ditanda setiap hari): purata pulangan harian > 0 **DAN** had bawah selang 95% > 0, SE **Newey-West** lag `G2_NW_LAG`, tingkap langsung. | `G2_ALPHA = 0.05`, `G2_NW_LAG = 5` |
+| G3 lift masuk | pulangan ufuk TETAP `G3_UFUK` sesi (beli buka → tutup sesi ke-10, kos 0.2%), **bebas peraturan keluar**; asas = purata saham-hari UNIK kolam Lejar pada hari beli sama **DAN tercile ATR14% sama**, tidak termasuk saham-hari kaedah itu sendiri; SE **dua hala (saham, minggu ISO beli)**, df = kluster terkecil − 1; lift > 0 **DAN** lulus BH-FDR step-up q `G3_Q` atas semua kaedah diuji. Hanya posisi langsung dengan ufuk lengkap. | `G3_Q = 0.05`, `G3_UFUK = 10`, `G3_MIN_N = 30`, `G3_MIN_MINGGU = 5` |
+| G4 hari-0 | tidak berubah | `G4_HARI0_MAKS = 0` |
+| G5 pantau | tidak berubah | — |
+| G6 portfolio | lorong T4 L1: sesi ≥ `G6_SESI` **DAN** pulangan > 0 **DAN** pulangan pada MDD `G6_MDD_HAD` (= pulangan × min(1, 10 ÷ \|MDD\|)) > SPUS pada MDD sama, tingkap sama **DAN** nisbah pulangan ÷ \|MDD\| > **maksimum** jalur rawak (ujian pangkat: kadar palsu 1/21 = 4.8% dengan 20 cabutan). | `G6_SESI = 126`, `G6_MDD_HAD = -10.0` |
+
+**NEGATIF** = G1 lulus **DAN** lift masuk < 0 yang lulus BH-FDR. Sebelum G1 tiada label NEGATIF (data belum matang dan satu fasa pasaran sahaja).
+
+**Rejim** (untuk G1 dan lajur maklumat): ON = QQQ tutup > SMA50 **DAN** SMA10 > SMA20 pada tarikh isyarat (`data/harga/stor/harga_idx.csv`). Asas: kelebihan relatif saham pemimpin bertukar tanda ikut rejim ini dalam kedua-dua tingkap 2010–19 dan 2020–26, 12/17 tahun (kajian 7 Nov 2026).
+
+**Hari beli langsung**: tarikh isyarat ≥ tarikh larian malam langsung pertama selepas peraturan kaedah dibekukan. Mxx: 2026-10-15 (permulaan Lejar). Nxx/GBxx: 2026-11-03 (bina semula 3 Nov mengisi semula 15 Okt–2 Nov dengan kod baharu; itu isian, bukan rekod hadapan).
+
+### Keputusan plasebo yang menentukan reka bentuk G3 (panel A02, 207 tingkap × 60 hari beli × 15 pilihan/hari)
+
+| Plasebo | Asas | Kluster | Lulus palsu | Kalibrasi SD/SE |
+|---|---|---|---|---|
+| bebas | hari | hari beli (lama) | 5.3% | 1.01 |
+| lekit | hari | hari beli (lama) | **51.2%** | 2.56 |
+| condong ATR | hari | hari beli (lama) | **29.5%** | 2.29 |
+| bebas | hari × tercile ATR | saham + minggu | 1.0% | 0.90 |
+| lekit | hari × tercile ATR | saham + minggu | 1.9% | 0.96 |
+| condong ATR | hari × tercile ATR | saham + minggu | 1.4% | 0.85 |
+
+Reka bentuk terpilih (baris tiga terakhir) konservatif: kadar lulus palsu di bawah 2% pada ketiga-tiga plasebo (penerokaan). **Pengesahan dengan kod produksi** (`standard/plasebo_gate.py`, benih berbeza, 7 Nov 2026 12:26 UTC): **1.9% · 3.4% · 1.9%** (bebas · lekit · condong) lawan reka bentuk lama 5.3% · 45.4% · 28.5% — lulus had ≤ 5% (`laporan/PLASEBO_GATE.md`).
+
+### Had yang diketahui
+
+- G3 baharu mengukur kemahiran MASUK pada ufuk 10 sesi; nilai peraturan keluar diukur oleh G2 (mutlak) dan G6 (portfolio). Ini pemisahan yang disengajakan.
+- Jalur rawak G6 masih mencampur keluar semua kaedah; nisbah pulangan ÷ \|MDD\| mengurangkan, tetapi tidak menghapuskan, kesan gaya keluar.
+- G5 tidak boleh mengikat Nxx (tiada kalibrasi backtest); tidak berubah.
+- Dashboard memaparkan lajur yang sama nama; teks penerangan dashboard dikemas dalam fasa persembahan.

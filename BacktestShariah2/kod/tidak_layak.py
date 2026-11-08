@@ -11,11 +11,17 @@
 # 3. Delist / tiada data: tiada bar bagi >= 10 sesi pasaran berturut (5 sebelum 22 Okt 2026) (saham ditarik selepas ambil alih siap, cth. ATKR
 #    16 Okt 2026, SLP, QRVO). Saham ini tidak lagi beri isyarat; posisi terbuka tersangkut -> kedua-dua lorong ditutup pada
 #    tutup bar terakhir (anggaran nilai tunai; posisi kekal sah). Liputan data pasaran disemak dahulu oleh pemanggil.
+#    Sejak 7 Nov 2026 (sah_delist): ditutup HANYA jika saham benar-benar delist pada sesi S — peristiwa direktori Nasdaq
+#    terakhir <= S ialah 'buang' (data/senarai_bursa/peristiwa.csv), atau tiada peristiwa <= S dan simbol tiada dalam
+#    semasa.csv, atau ambil alih dalam data/ambil_alih.csv selesai (tarikh_tamat <= S). Bar yang berhenti kerana saham
+#    keluar daripada univ.txt (NEGG di bawah skrin $10, 23 Okt 2026: 9 posisi Lejar ditutup 'delist' palsu) atau kerana
+#    ticker dikuarantin (standard/kuarantin.py) TIDAK lagi menutup posisi: ia kekal terbuka dan ditanda ke bar terakhir.
+#    Tanpa data direktori (bursa=None: ujian, fail tiada) peraturan lama dipakai.
 #
 #   python3 kod/tidak_layak.py senarai [--stor DIR] [--sesi S]
 #   python3 kod/tidak_layak.py posisi [--folder PT] [--stor DIR] [--tulis]
-#       Papertrade C: (a) ambil_alih.tanda_posisi (isyarat palsu -> tidak_sah, tutup); (b) posisi saham delist -> tutup
-#       pada tutup bar terakhir; (c) saham tidak cair pada sesi isyarat -> tidak_sah (22 Okt 2026). Tanpa --tulis = cuba. Dijalankan setiap pagi selepas langkah keluar (rutin 6:02 langkah 2c).
+#       Papertrade C: (a) ambil_alih.tanda_posisi (isyarat palsu -> tidak_sah, tutup); (b) posisi saham delist (menurut
+#       direktori Nasdaq, sah_delist) -> tutup pada tutup bar terakhir; (c) saham tidak cair pada sesi isyarat -> tidak_sah (22 Okt 2026). Tanpa --tulis = cuba. Dijalankan setiap pagi selepas langkah keluar (rutin 6:02 langkah 2c).
 import argparse, json, os, sys
 
 import numpy as np
@@ -27,7 +33,12 @@ sys.path.insert(0, HERE); sys.path.insert(0, os.path.join(BS2, 'standard'))
 import ambil_alih as AA  # noqa: E402
 
 VERSI = 'tidak_layak v3 (22 Okt 2026): tidak cair 3/2/100k, delist 10 sesi, kelas berganda'
+# Peraturan delist ikut direktori (7 Nov 2026). SENGAJA tidak dimasukkan ke VERSI / versi_peraturan(): menukarnya mencetus
+# bina semula PENUH Lejar (berjam-jam; lihat lejar.cmd_jalan). Ia dicatat dalam versi() (status sahaja); posisi yang sudah
+# ditutup 'delist' palsu (NEGG) hanya dibuka semula oleh bina semula — keputusan pengguna.
+VERSI_DELIST = 'delist ikut direktori Nasdaq v1 (7 Nov 2026)'
 KELAS = os.path.join(BS2, 'data', 'kelas_berganda.csv')
+BURSA = os.path.join(BS2, 'data', 'senarai_bursa')
 BAR_CAIR = 20
 JULAT0_MAKS = 3        # bar tanpa julat dalam 20 bar -> tidak cair
 VOL0_MAKS = 2          # bar tanpa volum dalam 20 bar -> tidak cair
@@ -40,7 +51,7 @@ def versi():
     import hashlib
     h = hashlib.sha1(open(KELAS, 'rb').read()).hexdigest()[:8] if os.path.exists(KELAS) else '-'
     import peristiwa
-    return f'{VERSI}; {AA.versi()}; kelas {h}; {peristiwa.versi()}'
+    return f'{VERSI}; {VERSI_DELIST}; {AA.versi()}; kelas {h}; {peristiwa.versi()}'
 
 
 def versi_peraturan():
@@ -107,6 +118,41 @@ def tidak_cair(g):
     return None
 
 
+def muat_bursa(folder=BURSA, senarai=None):
+    """Status direktori Nasdaq untuk sah_delist: dict(semasa=set simbol, peristiwa={simbol: [(tarikh, jenis)]} bagi
+    asas/tambah/buang, tamat={saham: tarikh_tamat ambil alih selesai}). None jika semasa.csv tiada (tidak diketahui)."""
+    sm, pr = os.path.join(folder, 'semasa.csv'), os.path.join(folder, 'peristiwa.csv')
+    if not os.path.exists(sm):
+        return None
+    semasa = set(pd.read_csv(sm, dtype=str, keep_default_na=False, usecols=['simbol']).simbol)
+    ev = {}
+    if os.path.exists(pr):
+        p = pd.read_csv(pr, dtype=str, keep_default_na=False, usecols=['tarikh', 'simbol', 'peristiwa'])
+        for r in p[p.peristiwa.isin(['asas', 'tambah', 'buang'])].itertuples():
+            ev.setdefault(r.simbol, []).append((r.tarikh, r.peristiwa))
+    sen = AA.baca_senarai() if senarai is None else senarai
+    tamat = {r['saham']: r['tarikh_tamat'] for r in sen
+             if (r.get('tarikh_tamat') or '').strip() and (r.get('bayaran') or '').strip().lower() != 'bukan'}
+    return dict(semasa=semasa, peristiwa={t: sorted(v) for t, v in ev.items()}, tamat=tamat)
+
+
+def sah_delist(t, S, bursa):
+    """(boleh_tutup, sebab): adakah saham t delist pada sesi S (titik masa bagi peristiwa direktori)?
+    bursa None -> (True, ...) = peraturan lama (tiada data direktori)."""
+    if bursa is None:
+        return True, 'tiada data direktori (peraturan lama)'
+    S = str(pd.Timestamp(S).date())
+    tm = bursa['tamat'].get(t)
+    if tm and tm <= S:
+        return True, f'ambil alih selesai {tm}'
+    ev = [x for x in bursa['peristiwa'].get(t, ()) if x[0] <= S]
+    if ev:
+        return (True, f'buang direktori {ev[-1][0]}') if ev[-1][1] == 'buang' else (False, f'masih tersenarai ({ev[-1][1]} {ev[-1][0]})')
+    if t not in bursa['semasa']:
+        return True, 'tiada dalam direktori semasa'
+    return False, 'masih tersenarai (direktori semasa)'
+
+
 def sesi_tanpa_bar(g, sesi, S):
     """Bilangan sesi pasaran (senarai `sesi`) selepas bar terakhir g hingga S."""
     akhir = g.index[-1] if g is not None and len(g) else None
@@ -133,9 +179,11 @@ def tapis(frames, S=None, senarai=None):
     return out
 
 
-def tutup_delist(folder, frames, sesi, tulis=True):
-    """Posisi Papertrade C yang masih terbuka (lorong 1 atau 2) bagi saham tanpa bar >= DELIST_SESI sesi: tutup lorong yang
-    terbuka pada tutup bar terakhir. Pulang senarai perubahan."""
+def tutup_delist(folder, frames, sesi, tulis=True, bursa=None, ditahan=None):
+    """Posisi Papertrade C yang masih terbuka (lorong 1 atau 2) bagi saham tanpa bar >= DELIST_SESI sesi DAN delist
+    (sah_delist dengan `bursa`; None = peraturan lama): tutup lorong yang terbuka pada tutup bar terakhir. Posisi saham yang
+    masih tersenarai kekal terbuka; (fail, saham, kaedah, sesi tanpa bar, sebab) ditambah ke senarai `ditahan` jika diberi.
+    Pulang senarai perubahan."""
     import sahkan as SH
     S = pd.DatetimeIndex(sesi)[-1]
     out = []
@@ -154,6 +202,11 @@ def tutup_delist(folder, frames, sesi, tulis=True):
                 continue
             n = sesi_tanpa_bar(g, sesi, S)
             if n < DELIST_SESI:
+                continue
+            boleh, sebab = sah_delist(r['saham'], S, bursa)
+            if not boleh:
+                if ditahan is not None:
+                    ditahan.append((os.path.basename(p), r['saham'], r.get('kaedah'), n, sebab))
                 continue
             tk = str(g.index[-1].date()); hk = float(g.close.iloc[-1]); hb = float(r['harga_beli'])
             u = f'{(hk / hb - 1) * 100:.2f}'; ht = AA.nombor_teks(hk)
@@ -233,10 +286,17 @@ def tanda_kelas_berganda(folder, frames, tulis=True, kump=None):
     return out
 
 
-def posisi(folder, frames, sesi, tulis=True):
-    """Langkah pagi/malam: isyarat palsu ambil alih (tidak_sah, tutup) kemudian posisi delist (tutup). Pulang ringkasan."""
+LALAI = object()
+
+
+def posisi(folder, frames, sesi, tulis=True, bursa=LALAI):
+    """Langkah pagi/malam: isyarat palsu ambil alih (tidak_sah, tutup) kemudian posisi delist (tutup; hanya saham yang
+    benar-benar delist menurut direktori Nasdaq, `bursa` lalai = muat_bursa()). Pulang ringkasan."""
+    if bursa is LALAI:
+        bursa = muat_bursa()
     aa = AA.tanda_posisi(folder, frames, tulis)
-    dl = tutup_delist(folder, frames, sesi, tulis)
+    tahan = []
+    dl = tutup_delist(folder, frames, sesi, tulis, bursa, tahan)
     tc = tanda_tidak_cair(folder, frames, tulis)
     kb = tanda_kelas_berganda(folder, frames, tulis)
     import peristiwa   # posisi merentasi tarikh_ex peristiwa besar yang sudah berlaku: harga beli/henti/sasaran x faktor
@@ -245,7 +305,8 @@ def posisi(folder, frames, sesi, tulis=True):
     fk = peristiwa.laras_c(folder, rows[rows.tarikh_ex <= akhir], frames) if tulis and len(rows) else []
     return dict(ambil_alih=dict(ditutup=sum(x[4] != 'menunggu' for x in aa), menunggu=sum(x[4] == 'menunggu' for x in aa),
                                 saham=sorted({x[1] for x in aa})),
-                delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl})),
+                delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl}),
+                            ditahan_tersenarai=sorted({f'{x[1]} ({x[3]} sesi tanpa bar; {x[4]})' for x in tahan})),
                 tidak_cair=dict(tidak_sah=len(tc), saham=sorted({x[1] for x in tc})),
                 kelas_berganda=dict(tidak_sah=len(kb), saham=sorted({x[1] for x in kb})),
                 faktor=dict(dilaras=sum(x[5] == 'dilaras' for x in fk), semak=[x[:5] for x in fk if x[5] == 'semak'],

@@ -59,7 +59,8 @@ jobs:
             BacktestShariah2/data/sec \
             BacktestShariah2/data/analisis \
             BacktestShariah2/data/harga/stor \
-            BacktestShariah2/koordinator
+            BacktestShariah2/koordinator \
+            $( [ -d BacktestShariah2/data/konteks ] && echo BacktestShariah2/data/konteks )
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "fail=$FAIL" >> "$GITHUB_OUTPUT"
           ls -l "$FAIL" | awk '{printf "arkib %.1f MB\n", $5/1e6}'

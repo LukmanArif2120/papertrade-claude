@@ -35,6 +35,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 BS2 = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(BS2, 'kod')); sys.path.insert(0, HERE)
 from stor import muat, frames_dict  # noqa: E402
+import status_kad  # noqa: E402  (baris status kad skor di atas laporan, audit 7 Nov 2026)
 
 LEJAR = os.environ.get('LEJAR_DIR', os.path.join(BS2, 'lejar'))
 STOR = os.environ.get('LEJAR_STOR', os.path.join(BS2, 'data', 'harga', 'stor'))
@@ -281,8 +282,10 @@ def ringkasan(hasil, spy_mula, spy_akhir, hari, CFG=None, J=None):
     L = [f'# Portfolio maya 10 slot (jejak hadapan; rekod sahaja)', '',
          'Dibina semula daripada Lejar Penuh oleh `standard/portfolio_slot.py`; kajian `kajian/KAJIAN_PORTFOLIO.md`. '
          'Tiada order, tiada wang sebenar. Jangan ubah secara manual.', '',
+         status_kad.baris(), '',
          f'Tempoh: {hari[0] if hari else "-"} hingga {hari[-1] if hari else "-"} ({len(hari)} sesi). '
-         f'SPY dalam tempoh sama: {100 * (spy_akhir / spy_mula - 1):+.2f}%.' if spy_mula else 'SPY: tiada data.', '',
+         + (f'SPY dalam tempoh sama: {100 * (spy_akhir / spy_mula - 1):+.2f}% (rujukan sahaja; penanda aras yang sah '
+            'ialah SPUS: `laporan/BANDING_SPUS.md`).' if spy_mula else 'SPY: tiada data.'), '',
          '| Portfolio | Pulangan % | MDD % | Posisi dipegang | Dagangan keluar | Kadar menang % | Purata untung keluar % |',
          '|---|---|---|---|---|---|---|']
     for k, (R, E) in hasil.items():
