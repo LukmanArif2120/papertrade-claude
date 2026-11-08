@@ -312,6 +312,21 @@ def statistik_buku(r):
     return m, m - tc * se, m + tc * se, int(len(r))
 
 
+def pul_slip(P, rendah):
+    """Pulangan konservatif bagi posisi yang keluar melalui HENTI intrahari dan diisi TEPAT pada paras henti
+    (|harga_keluar/henti - 1| < 0.2%): diandaikan diisi pada titik tengah antara henti dan rendah hari itu.
+    Audit 8 Nov 2026: 82.6% keluar henti Lejar diisi tepat pada henti sedangkan rendah hari itu di bawah henti
+    pada 95% kes (median 1.63%). Maklumat sahaja, bukan gate. rendah: {(ticker, 'YYYYMMDD'): low}."""
+    hk = pd.to_numeric(P.get('harga_keluar'), errors='coerce')
+    ht = pd.to_numeric(P.get('henti'), errors='coerce')
+    hb = pd.to_numeric(P.get('harga_beli'), errors='coerce')
+    tk = P.tarikh_keluar.fillna('').astype(str).str.replace('-', '', regex=False)
+    lo = pd.Series([rendah.get((t, d), np.nan) for t, d in zip(P.saham, tk)], index=P.index, dtype=float)
+    kena = (~P.terbuka) & (P.sebab_keluar.astype(str) == 'henti') & ((hk / ht - 1).abs() < 0.002) & (lo < ht)
+    rugi_lebih = ((ht - (ht + lo) / 2) / hb * 100).where(kena, 0.0).fillna(0.0)
+    return P.pul - rugi_lebih
+
+
 def statistik(g):
     """Lajur setiap kaedah daripada posisi lorong 1 (DataFrame dengan pul, terbuka, tarikh_beli...)."""
     p = g.pul.to_numpy(float)
@@ -339,6 +354,7 @@ def statistik(g):
     for c in ('mae_pct', 'mfe_pct'):
         v = pd.to_numeric(g.get(c), errors='coerce').dropna() if c in g else pd.Series(dtype=float)
         d[c[:3]] = float(v.median()) if len(v) else None
+    d['jangkaan_slip'] = float(g.pul_slip.mean()) if 'pul_slip' in g else None
     h0 = (~g.terbuka) & (g.tarikh_keluar == g.tarikh_beli.astype(str)) & (g.sebab_keluar.astype(str) == 'henti')
     d['hari0'] = int(h0.sum())
     d['hari0_pct'] = float(h0.mean() * 100)
@@ -384,6 +400,10 @@ def main():
     n_cemar = int(cemar.sum())
     P = P[~cemar].copy()
     sesi_h, C, _ = lk.panel_harga()
+    import glob as _glob
+    _H = pd.concat([pd.read_csv(x, usecols=['ticker', 'date', 'low']) for x in
+                    _glob.glob(os.path.join(lk.STOR, 'harga_[AB].csv'))], ignore_index=True)
+    P['pul_slip'] = pul_slip(P, {(t, str(d)): v for t, d, v in zip(_H.ticker, _H.date, _H.low)})
     buku = buku_harian(P, sesi_h, C)
     rj = lk.rejim_qqq()
     P['on'] = P.tarikh_isyarat.astype(str).str.replace('-', '', regex=False).map(rj)
@@ -539,14 +559,14 @@ def laporan(M, rows):
           f"- **G6 portfolio:** {G6_SESI} sesi lorong T4 (paling lama {M['t4_sesi_maks']}); ~{M['tarikh_g6']}. "
           f"Dibanding dengan SPUS **pada MDD {G6_MDD_HAD:.0f}%** (toleransi anda), bukan pada MDD SPUS penuh.",
           '', '## 20 kaedah teratas ikut lift masuk (calon, BUKAN pangkat sehingga status berubah)', '',
-          '| Kaedah | Status | Posisi / tutup | Hari beli (ON/OFF) | Jangkaan % | Buku harian % [95%] | Lift masuk | '
-          'Menang % | Payoff | tanpa5 | Hari-0 | T4 sesi | T4 pada MDD -10% vs SPUS |',
-          '|---|---|---|---|---|---|---|---|---|---|---|---|---|']
+          '| Kaedah | Status | Posisi / tutup | Hari beli (ON/OFF) | Jangkaan % | Jika henti tergelincir % | '
+          'Buku harian % [95%] | Lift masuk | Menang % | Payoff | tanpa5 | Hari-0 | T4 sesi | T4 pada MDD -10% vs SPUS |',
+          '|---|---|---|---|---|---|---|---|---|---|---|---|---|---|']
     top = sorted(rows, key=lambda r: -(r['lift'] if r['lift'] is not None else -99))[:20]
     for r in top:
         t4 = ('–' if r.get('t4_r10') is None else f"{r['t4_r10']:+.2f} vs {f(r.get('t4_spus_r10'))}")
         A.append(f"| `{r['id']}` {str(r['nama'])[:28]} | {r['status']} | {r['n']} / {r['tutup']} | "
-                 f"{r['hari_beli']} ({r['hari_on']}/{r['hari_off']}) | {f(r['jangkaan'])} | "
+                 f"{r['hari_beli']} ({r['hari_on']}/{r['hari_off']}) | {f(r['jangkaan'])} | {f(r.get('jangkaan_slip'))} | "
                  f"{f(r['buku_harian'], '{:+.3f}')} [{f(r['buku_ci_bawah'], '{:+.3f}')}, {f(r['buku_ci_atas'], '{:+.3f}')}] | "
                  f"{f(r['lift'])} | {f(r['menang'], '{:.0f}')} | {f(r['payoff'], '{:.2f}')} | {f(r['tanpa5'])} | "
                  f"{r['hari0']} | {f(r['t4_sesi'], '{}')} | {t4} |")
@@ -557,6 +577,9 @@ def laporan(M, rows):
           '`laporan/PLASEBO_GATE.md`.',
           '- **Buku harian** = pulangan harian purata jika setiap isyarat kaedah itu diberi modal sama dan keluar ikut '
           'peraturannya sendiri. Selang 95% Newey-West mengambil kira bahawa semua posisi bergerak bersama pasaran.',
+          '- **Jika henti tergelincir** = jangkaan jika setiap keluar henti intrahari diisi pada titik tengah antara '
+          'paras henti dan harga rendah hari itu (Lejar mengandaikan isian tepat pada henti; rendah hari itu di bawah '
+          'henti pada ~95% kes). Maklumat sahaja: anggaran kos realistik pelaksanaan, bukan gate.',
           '- Menang % sentiasa dibaca bersama payoff: `X10` menang 94.1% dengan jangkaan negatif.',
           '- `tanpa5` = jangkaan selepas membuang 5% posisi terbaik. Negatif bermaksud kelebihan hidup dalam ekor kanan.',
           '- Jangan ubah ambang gate selepas melihat data. Ia dikunci oleh ujian unit.', '']
