@@ -179,6 +179,23 @@ class TestStatistik(unittest.TestCase):
         self.assertIsNone(d['ci_bawah'])                  # CI setiap-posisi dibuang 7 Nov (tanda dikongsi)
 
 
+class TestSlip(unittest.TestCase):
+    """Sensitiviti slippage henti (maklumat, 8 Nov 2026)."""
+
+    def test_hanya_henti_intrahari_diisi_tepat(self):
+        P = pd.DataFrame(dict(
+            saham=['AAA', 'BBB', 'CCC', 'DDD'], terbuka=[False, False, False, True],
+            sebab_keluar=['henti', 'henti', 'isyarat keluar', ''], harga_beli=[100.0] * 4,
+            henti=[95.0, 95.0, 95.0, 95.0], harga_keluar=[95.0, 90.0, 95.0, np.nan],
+            tarikh_keluar=['2026-11-05', '2026-11-05', '2026-11-05', ''], pul=[-5.2, -10.2, -5.2, 1.0]))
+        rendah = {('AAA', '20261105'): 91.0, ('BBB', '20261105'): 89.0, ('CCC', '20261105'): 91.0}
+        s = KS.pul_slip(P, rendah)
+        self.assertAlmostEqual(s[0], -5.2 - 2.0)     # isian tengah (95+91)/2 = 93 -> rugi lebih 2 mata
+        self.assertAlmostEqual(s[1], -10.2)           # jurang buka (diisi 90, bukan pada henti): tidak diubah
+        self.assertAlmostEqual(s[2], -5.2)            # bukan keluar henti
+        self.assertAlmostEqual(s[3], 1.0)             # masih terbuka
+
+
 class TestJsonLajur(unittest.TestCase):
 
     def test_pergi_balik(self):

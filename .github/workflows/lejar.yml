@@ -69,6 +69,11 @@ jobs:
       - name: Bekukan konteks isyarat
         continue-on-error: true
         run: python3 BacktestShariah2/standard/konteks_isyarat.py
+      # Saksi Lejar tambah-sahaja (8 Nov 2026): bila setiap posisi mula-mula direkod, sha kod kaedah, versi peraturan,
+      # dan hasil tutup yang dibekukan; hanyut selepas bina semula dilapor dalam data/konteks/rekod_status.json.
+      - name: Rekod Lejar tambah-sahaja (saksi bina semula)
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/rekod_lejar.py
       - name: Portfolio maya 10 slot (RS_10, RAWAK_10; gabungan beku GABUNGAN_10, TOP1_10, RAWAK_KAEDAH_10; jejak hadapan)
         continue-on-error: true
         run: python3 BacktestShariah2/standard/portfolio_slot.py
