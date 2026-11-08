@@ -1,0 +1,19 @@
+{
+ "dikemas": "2026-11-08 08:05 UTC",
+ "versi_peraturan": "0d74247296",
+ "rekod": 64010,
+ "tutup_beku": 29209,
+ "baharu": 0,
+ "tutup_baharu": 0,
+ "hanyut": {
+  "berubah": 0,
+  "hilang": 0,
+  "dibuka_semula": 0
+ },
+ "contoh": {
+  "berubah": [],
+  "hilang": [],
+  "dibuka_semula": []
+ },
+ "nota": "Hanyut = posisi yang hasil tutup PERTAMA yang direkod kini berbeza dalam Lejar (bina semula, pembetulan peraturan atau data). Diukur sahaja; Lejar tidak diubah."
+}
