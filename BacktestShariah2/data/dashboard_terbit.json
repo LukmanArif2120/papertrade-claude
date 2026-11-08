@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794108137-efd0",
-  "nombor": 194,
-  "sha256": "c2f4b327fe61fbfb520f3dbf1daaf675087d2b1f30be84830a18b050a2a8509f",
-  "bait": 748341,
-  "dikemas": "2026-11-08 03:22 UTC",
-  "nota": "v163 (8 Nov 2026): Backtest butiran — peratus CAGR setiap set kini berwarna ikut menang/kalah lawan beli semua (sama dengan bar); garis ungu beli semua disahkan dengan meta/info hidup. Asas v162: Watchlist v2, kad telefon kad skor, Status data, Perlu perhatian SST."
+  "versi_artifact": "1794115908-a72a",
+  "nombor": 195,
+  "sha256": "c9228638619ae6ba1367ad3c98ce1055549df1012e1f06053813276cf0668cb9",
+  "bait": 733982,
+  "dikemas": "2026-11-08 05:32 UTC",
+  "nota": "v164 (keputusan pengguna 8 Nov 2026, \"semua\"): helaian Panduan v2 (tab Mula/Simbol/Konsep/Glosari/Tetapan; teks lapuk dibetulkan); kod mati dibuang (~6.5 KB JS + 144 peraturan CSS ~11.6 KB, banding piksel 86 paparan); kad skor format pindaan 7 Nov kini dalam db (analisis.yml dicetus manual)."
 }
