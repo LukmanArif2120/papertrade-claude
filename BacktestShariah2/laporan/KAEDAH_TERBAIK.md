@@ -1,6 +1,10 @@
 # Kaedah mana terbaik buat masa sekarang?
 
-Dijana 2026-11-07 16:28 UTC oleh `standard/kaedah_terbaik.py`. Rekod analisis sahaja.
+> **Status keputusan (kad skor, harga 2026-11-06):** TERBUKTI 0 · CALON 0 · BELUM CUKUP 215 · GAGAL 0 · NEGATIF 8. Hanya **TERBUKTI** layak untuk wang sebenar (`laporan/KAD_SKOR.md`); nombor dalam laporan ini BUKAN keputusan dan tidak boleh dibaca sebagai pangkat untuk wang sebenar.
+
+> Ujian dalam laporan ini memakai posisi DITUTUP sahaja dengan SE berkelompok ikut hari beli. Ujian plasebo 7 Nov 2026 (`laporan/PLASEBO_GATE.md`) mengukur SE jenis itu meluluskan pemilihan rawak sehingga 45% masa, dan penapisan keluar memesongkan sampel ditutup. Bilangan "terbukti NEGATIF/positif" di bawah ialah DIAGNOSTIK, bukan label kaedah; label yang sah hanya dalam kad skor.
+
+Dijana 2026-11-08 05:15 UTC oleh `standard/kaedah_terbaik.py`. Rekod analisis sahaja.
 
 Papan Penganalisis (`laporan/PENGANALISIS.md`) sudah membanding semua kaedah dan dijana semula setiap malam. Dokumen ini tidak mengulanginya — ia menjawab soalan yang mesti dijawab **dahulu** sebelum mana-mana pangkat boleh dipercayai.
 
@@ -68,7 +72,7 @@ Diukur pada Lejar Penuh (6 Nov 2026), tanda bertukar antara dua kumpulan itu pad
 | `M15` henti ATR ketat | 108 | **−4.18%** (menang 6.5%) | 130 | **+9.48%** |
 | `M33` Supertrend + SMA10 | 23 | **−10.27%** (menang 4.3%) | 133 | **+7.66%** |
 
-Jadi mana-mana kaedah bersasaran yang muncul positif di sini, dan mana-mana kaedah berhenti-ketat yang muncul negatif, mesti dibaca sebagai **artifak penapisan keluar** sampai posisi terbukanya tutup. Ukuran tanpa bias ini ialah purata SEMUA posisi dengan yang terbuka ditanda-ke-pasaran; apabila itu dibuat dan lift dipadankan ikut hari beli (membuang arah pasaran), **0 daripada 180 kaedah Lejar mempunyai lift yang bertahan BH-FDR**.
+Jadi mana-mana kaedah bersasaran yang muncul positif di sini, dan mana-mana kaedah berhenti-ketat yang muncul negatif, mesti dibaca sebagai **artifak penapisan keluar** sampai posisi terbukanya tutup. Jawapan yang sah ialah **kad skor** (`laporan/KAD_SKOR.md`): lift masuk ufuk tetap yang lulus ujian plasebo (`laporan/LIFT_KAEDAH.md`, `laporan/PLASEBO_GATE.md`). Laporan ini tidak memberi status kaedah.
 
 ## 4. Mengapa separuh papan belum boleh dinilai
 

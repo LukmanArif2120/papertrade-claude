@@ -1,10 +1,12 @@
 # Papan Penganalisis — banding semua kaedah (backtest + papertrade)
 
-Dijana 2026-11-07 22:17 MYT oleh `standard/penganalisis.py` (GitHub Actions `analisis.yml`, selepas Lejar Penuh). Data harga hingga 6 Nov 2026; Lejar sesi terakhir 6 Nov 2026. Rekod analisis sahaja: tiada order, tiada wang sebenar. Dashboard: tab Analisis (db `analisis/papan`).
+Dijana 2026-11-08 13:15 MYT oleh `standard/penganalisis.py` (GitHub Actions `analisis.yml`, selepas Lejar Penuh). Data harga hingga 6 Nov 2026; Lejar sesi terakhir 6 Nov 2026. Rekod analisis sahaja: tiada order, tiada wang sebenar. Dashboard: tab Analisis (db `analisis/papan`).
+
+> **Status keputusan (kad skor, harga 2026-11-06):** TERBUKTI 0 · CALON 0 · BELUM CUKUP 215 · GAGAL 0 · NEGATIF 8. Hanya **TERBUKTI** layak untuk wang sebenar (`laporan/KAD_SKOR.md`); nombor dalam laporan ini BUKAN keputusan dan tidak boleh dibaca sebagai pangkat untuk wang sebenar.
 
 ## 3 penemuan utama
 
-1. Swing teratas ikut skor gabungan: M153 Range Leader — +5.27% sebulan setiap posisi (julat +2.80% hingga +7.73%), 0/3 semakan luar sampel, status BELUM CUKUP; CAGR backtest bersendirian 18.6% (6177.9 dagangan setahun). Tiga seterusnya: M25, M21, M70.
+1. Swing teratas ikut skor gabungan papan (BUKAN status keputusan): M153 Range Leader — skor +5.27% 'sebulan' setiap posisi = pusingan modal teori, BUKAN pulangan akaun (julat +2.80% hingga +7.73%), 0/3 semakan luar sampel, status BELUM CUKUP; CAGR backtest bersendirian 18.6% (6177.9 dagangan setahun). Tiga seterusnya: M25, M21, M70.
 2. 79 kaedah ada ≥ 20 posisi hadapan matang; KUAT (0): tiada; AMARAN, jauh di bawah jangkaan (2): M76, M28.
 3. Ketahanan backtest lemah: lulus S1–S4 6, WFO 22, 2000 saham AS 0 kaedah; ≥ 2 daripada 3 semakan: tiada. Portfolio 10 slot sejak 16 Okt 2026: RS_10 -24.19%, RAWAK_10 -8.95%, SPY -4.91%.
 
@@ -95,7 +97,7 @@ Dijana 2026-11-07 22:17 MYT oleh `standard/penganalisis.py` (GitHub Actions `ana
 | 64 | M132 Ascending Scallop (Bulkowski) | 28.5 | 309.3 | 17.8% · -22.8% · 42% · +0.98% | ✗ 0/4 · ✗ 0.9% · ✗ 1.9%/1.0% | +0.24% | 88 · 0 · – · – · – · – | 0.0 · 0 | 0 · – | – | 81 · -3.06% | +0.24% [-3.81%, +4.30%] | +0.18% | BELUM CUKUP | 20 Dis 2026 | BELUM CUKUP |
 | 65 | M47 Holy Grail Raschke | 5.5 | 207.6 | 6.0% · -18.6% · 51% · +0.25% | ✗ 0/4 · ✗ 7.6% · ✗ -2.1%/-4.4% | +0.06% | 24 · 5 · -0.17% · -0.17% · +2.61% · 60% | 3.0 · 3 | 0 · -0.17% | -21.05% | 24 · -3.27% | +0.04% [-1.68%, +1.76%] | +0.16% | BELUM CUKUP | 19 Nov 2026 | BELUM CUKUP |
 | 66 | M44 Tapak Rata IBD | 28.0 | 74.0 | 8.2% · -18.9% · 30% · +0.39% | ✗ 0/4 · ✗ 6.2% · ✗ -1.2%/4.4% | +0.10% | 12 · 0 · – · – · – · – | 0.0 · 0 | 0 · – | – | 12 · -3.82% | +0.10% [-3.52%, +3.72%] | +0.07% | BELUM CUKUP | – | BELUM CUKUP |
-| 67 | M19 Sneaky Pivot (proksi harian) | 10.9 | 1563.9 | 25.8% · -37.0% · 44% · +0.27% | ✗ 0/4 · ✗ 20.3% · ✗ -6.4%/6.1% | +0.07% | 296 · 29 · -0.29% · -0.74% · -4.37% · 45% | 4.0 · 4 | 4 · -0.32% | -1.15% | 159 · -1.99% | +0.02% [-2.60%, +2.65%] | +0.05% | BELUM CUKUP | 5 Nov 2026 | BELUM CUKUP |
+| 67 | M19 Sneaky Pivot (proksi harian) | 10.9 | 1563.9 | 25.8% · -37.0% · 44% · +0.27% | ✗ 0/4 · ✗ 20.3% · ✗ -6.4%/6.1% | +0.07% | 296 · 29 · -0.29% · -0.74% · -4.37% · 45% | 4.0 · 4 | 4 · -0.32% | -1.15% | 158 · -2.22% | +0.02% [-2.60%, +2.65%] | +0.05% | BELUM CUKUP | 5 Nov 2026 | BELUM CUKUP |
 | 68 | M23 Breitstein Kapitulasi + Kesinambungan | 10.1 | 480.9 | 16.8% · -40.8% · 22% · +0.55% | ✗ 0/4 · ✗ 20.3% · ✗ -9.3%/-6.7% | +0.14% | 108 · 1 · -4.28% · -4.28% · -4.28% · 0% | 1.0 · 1 | 0 · -4.28% | -15.82% | 76 · -0.77% | -0.01% [-2.51%, +2.50%] | -0.01% | BELUM CUKUP | 14 Nov 2026 | BELUM CUKUP |
 | 69 | M73 ADX(5) > 40 + Julat Terkecil 6 Hari | 4.8 | 4422.7 | 20.6% · -45.1% · 63% · +0.18% | ✗ 0/4 · ✓ 41.1% · ✗ -12.6%/-16.4% | +0.09% | 680 · 331 · -0.05% · +0.39% · +0.89% · 66% | 138.6 · 12 | 27 · +0.33% | -4.97% | 195 · -1.18% | -0.03% [-0.78%, +0.73%] | -0.11% | PERHATI | 27 Okt 2026 | OK |
 | 70 | M20 EMA10/15 Crossover + Sudut | 6.5 | 2999.6 | 19.7% · -22.4% · 39% · +0.22% | ✗ 0/4 · ✗ 25.5% · ✗ 8.5%/4.3% | +0.06% | 403 · 201 · -0.12% · -0.31% · -2.41% · 37% | 96.6 · 12 | 20 · -0.11% | -3.62% | 181 · -0.40% | -0.08% [-1.30%, +1.14%] | -0.25% | PERHATI | 26 Okt 2026 | OK |
