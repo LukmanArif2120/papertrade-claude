@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794115908-a72a",
-  "nombor": 195,
-  "sha256": "c9228638619ae6ba1367ad3c98ce1055549df1012e1f06053813276cf0668cb9",
-  "bait": 733982,
-  "dikemas": "2026-11-08 05:32 UTC",
-  "nota": "v164 (keputusan pengguna 8 Nov 2026, \"semua\"): helaian Panduan v2 (tab Mula/Simbol/Konsep/Glosari/Tetapan; teks lapuk dibetulkan); kod mati dibuang (~6.5 KB JS + 144 peraturan CSS ~11.6 KB, banding piksel 86 paparan); kad skor format pindaan 7 Nov kini dalam db (analisis.yml dicetus manual)."
+  "versi_artifact": "1794128715-45ba",
+  "nombor": 196,
+  "sha256": "28d3c50fd5771fcc789260d5b989a60432c59dfe766e51d4f25e358f28fc4382",
+  "bait": 737253,
+  "dikemas": "2026-11-08 09:05 UTC",
+  "nota": "v165 (keputusan pengguna 8 Nov 2026): \"Gred sekali pandang\" dipulihkan di tab Posisi (grid gred 10 saham teratas, skala teal→kelabu→merah, kekal grid di telefon); Akaun, Watchlist dan Rujukan (Kaedah, Kombinasi N, Backtest, Sektor) kini dalam rupa v5.1."
 }
