@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794098028-ab5a",
-  "nombor": 191,
-  "sha256": "2324889aafcb809ae523b7861d8acd4451c1646f8504e786fba7ea30729de9da",
-  "bait": 704604,
-  "dikemas": "2026-11-08 00:36 UTC",
-  "nota": "v160 (keputusan pengguna 8 Nov 2026, audit penuh 7 Nov): sepanduk keputusan 3 baris di atas Hari ini (status kad skor, tindakan hari ini, rejim QQQ + data hadapan ON/OFF); Esok membaca senarai_beli (kertas); kad skor ikut gate pindaan 7 Nov (buku harian, lift masuk 10 sesi, T4 pada MDD -10%); Lift/bulan dibuang; purata setiap posisi dilabel bukan akaun; Kombinasi N ada status kad skor."
+  "versi_artifact": "1794099163-8657",
+  "nombor": 192,
+  "sha256": "0f5d2bc517f90837dc9f93549a3542bac7d7257d0128e6859280665566776da4",
+  "bait": 734378,
+  "dikemas": "2026-11-08 00:53 UTC",
+  "nota": "v161 (keputusan pengguna 8 Nov 2026, contoh M14): helaian kaedah v2 — kepala melekit, tab Ringkasan/Peraturan/Hadapan/Backtest/Posisi, kotak keputusan + enam syarat G1–G6 dengan kemajuan (format kad skor pindaan 7 Nov dan lama), langkah peraturan + contoh dagangan sebenar atas lilin, bagaimana posisi berakhir + taburan, posisi terbuka; db baharu analisis/kaedah_siri (dipecah, atas permintaan)."
 }
