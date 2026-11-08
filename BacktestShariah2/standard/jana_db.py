@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), papertrade/senarai_beli (dipulihkan 6 Nov 2026),
-# papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), harian/status,
+# papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), analisis/kaedah_siri (kaedah_siri.py; dibahagi), harian/status,
 # harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py), institusi/kumpulan (institusi_13f.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
@@ -1207,6 +1207,8 @@ PECAH = frozenset((
     # "pembaca dahulu, baru pemecah" memang sudah dipenuhi dan baris ini selamat sekarang.
     'kaedah_n/papan',
     'papertrade/moomoo',
+    # 8 Nov 2026 (v161): ringkasan setiap kaedah + lilin contoh, ~580 KB. Dibaca subBhg() sejak v161.
+    'analisis/kaedah_siri',
 ))
 
 
@@ -1454,6 +1456,13 @@ def main(argv=None):
     pk = os.path.join(BS2, 'data', 'analisis', 'kad_skor.json')
     if os.path.exists(pk):
         docs['analisis/kad_skor'] = json.load(open(pk, encoding='utf-8'))
+    # analisis/kaedah_siri: ringkasan setiap kaedah untuk helaian kaedah v161 (standard/kaedah_siri.py,
+    # analisis.yml; 8 Nov 2026): sebab keluar, taburan, 3 contoh dagangan dengan lilin. ~580 KB pada
+    # 223 kaedah, jadi ia DIPECAH (PECAH) dan halaman membacanya dengan subBhg() atas permintaan
+    # (S.muatRujukan, hanya bila helaian kaedah dibuka).
+    pks = os.path.join(BS2, 'data', 'analisis', 'kaedah_siri.json')
+    if os.path.exists(pks):
+        docs['analisis/kaedah_siri'] = json.load(open(pks, encoding='utf-8'))
     # institusi/kumpulan: aliran institusi 13F setiap sektor/industri (standard/institusi_13f.py, institusi.yml
     # mingguan; 6 Nov 2026). Paparan sahaja dalam tab Sektor. ~170 baris, jauh di bawah HAD_DB.
     pi = os.path.join(BS2, 'data', 'institusi', 'db.json')

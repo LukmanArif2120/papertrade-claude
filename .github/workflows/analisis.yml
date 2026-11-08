@@ -81,6 +81,13 @@ jobs:
         if: steps.lift.outcome == 'success' && steps.t4.outcome == 'success'
         continue-on-error: true
         run: python3 BacktestShariah2/standard/kad_skor.py
+      # Ringkasan setiap kaedah untuk helaian kaedah dashboard v161 (keputusan pengguna 8 Nov 2026):
+      # sebab keluar, taburan pulangan dan tiga contoh dagangan sebenar dengan lilin. Populasi SAMA
+      # seperti kad skor (Lejar Penuh lorong 1, terbuka ditanda-ke-pasaran); paparan sahaja.
+      - name: Jana ringkasan setiap kaedah
+        id: siri
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/kaedah_siri.py
       - name: Commit dan push
         run: |
           git config user.name "analisis[bot]"
@@ -93,7 +100,7 @@ jobs:
                    BacktestShariah2/laporan/KAEDAH_TERBAIK.md \
                    BacktestShariah2/portfolio_slot/t4_ringkasan.csv BacktestShariah2/portfolio_slot/t4_siri.csv \
                    BacktestShariah2/laporan/T4_KAEDAH.md BacktestShariah2/data/analisis/kad_skor.json \
-                   BacktestShariah2/laporan/KAD_SKOR.md; do
+                   BacktestShariah2/laporan/KAD_SKOR.md BacktestShariah2/data/analisis/kaedah_siri.json; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
@@ -109,7 +116,8 @@ jobs:
       - name: Semak laporan sampingan berjaya
         if: >-
           steps.lift.outcome == 'failure' || steps.terbaik.outcome == 'failure' ||
-          steps.t4.outcome == 'failure' || steps.kad.outcome == 'failure' || steps.kad.outcome == 'skipped'
+          steps.t4.outcome == 'failure' || steps.kad.outcome == 'failure' || steps.kad.outcome == 'skipped' ||
+          steps.siri.outcome == 'failure'
         run: |
           if [ "${{ steps.lift.outcome }}" = "failure" ]; then
             echo "lift_kaedah.py GAGAL (lihat langkah 'Jana lift kaedah'); analisis/lift lapuk." >&2
@@ -122,6 +130,9 @@ jobs:
           fi
           if [ "${{ steps.kad.outcome }}" = "failure" ] || [ "${{ steps.kad.outcome }}" = "skipped" ]; then
             echo "kad_skor.py GAGAL (lihat langkah 'Jana kad skor keputusan'); analisis/kad_skor lapuk." >&2
+          fi
+          if [ "${{ steps.siri.outcome }}" = "failure" ]; then
+            echo "kaedah_siri.py GAGAL (lihat langkah 'Jana ringkasan setiap kaedah'); analisis/kaedah_siri lapuk." >&2
           fi
           echo "Papan penganalisis sudah dikomit; hanya laporan sampingan yang lapuk." >&2
           exit 1
