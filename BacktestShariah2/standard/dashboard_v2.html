@@ -1105,6 +1105,32 @@ nav.tabs>button svg{display:none}
 .kd2ps{display:grid;grid-template-columns:64px 62px minmax(0,1fr) 70px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer}.kd2ps:last-child{border-bottom:0}.kd2ps:hover{background:rgba(30,227,180,.04)}
 .kd2 .v5h .seg{flex-wrap:wrap}
 @media (max-width:760px){.kd2pr{grid-template-columns:minmax(0,96px) minmax(0,1fr) 70px 58px}.kd2gn small{font-size:.58rem}.kd2gn b{font-size:.66rem}.kd2eta{grid-template-columns:minmax(0,1fr)}}
+/* v165 (8 Nov 2026): komponen lama (panel, kpi, strip, nota, grid gred) dalam rupa v5.1 — Akaun, Watchlist, Rujukan */
+.view .panel{background:#1F242B;border-color:#2E353E;border-radius:14px;padding:16px 18px}
+.view .panel-h{margin:-16px -18px 14px;padding:13px 18px;border-bottom-color:#2E353E}
+.view .panel.lipat>.panel-h{margin-bottom:-16px}
+.view .panel-h h2{font-size:.92rem;font-weight:700;letter-spacing:0;text-transform:none;color:var(--fg)}
+.view .panel-h h2::before{display:none}
+.view .panel-h .sub{font-size:.72rem}
+.view .kpi{background:#1F242B;border-color:#2E353E;border-radius:14px;padding:14px 16px;gap:4px}
+.view .kpi::before{display:none}
+.view .kpi .lbl{font-size:.78rem;font-weight:500;letter-spacing:0;text-transform:none}
+.view .kpi .v{font-family:var(--f-mono);font-size:1.6rem;font-weight:600;letter-spacing:-.02em}
+.view .kpi .s{font-size:.72rem}
+.view .strip{background:#1F242B;border-color:#2E353E;border-radius:14px;padding:12px 16px;font-size:.86rem}
+.view .strip b.t{font-size:.68rem}
+.view .headline{font-size:.92rem}
+.view .note{background:#191D23;border:1px solid #2E353E;border-radius:10px}
+.ggw{background:#191D23;border:1px solid #2E353E;border-radius:12px;padding:10px 12px}
+.ggtw{overflow-x:auto}.ggtw table{width:100%;border-collapse:collapse}.ggtw th{font-size:.66rem;font-weight:600;color:var(--muted);padding:4px 5px;border-bottom:1px solid #2E353E;white-space:nowrap}
+.ggtw td{padding:4px 5px;border-bottom:1px solid #262C34}.ggtw tr:last-child td{border-bottom:0}
+.ggtw .gS,.ggk{display:none}.ggtw td.l b{white-space:nowrap}
+@media (max-width:760px){.ggtw .gL{display:none}.ggtw .gS{display:inline}.ggk{display:block;font-size:.66rem;color:var(--muted);margin:6px 0 0}.ggtw th{font-size:.62rem;padding:3px 2px}.ggtw td{padding:3px 2px}.ggc{width:1.6em;height:1.6em;font-size:.72rem}.ggw td.r{font-size:.74rem}}
+.view .kpi .v{white-space:normal;line-height:1.15}
+.ggw .kbh{font-size:.8rem;color:var(--muted);margin:0 0 8px}.ggw .kbh b{color:var(--fg-2)}
+.ggc.g-A{background:rgba(30,227,180,.22);color:#1EE3B4;box-shadow:none}.ggc.g-B{background:rgba(30,227,180,.10);color:#7FE9CF;box-shadow:none}.ggc.g-C{background:#262C34;color:#B4BBC6;box-shadow:none}
+.ggc.g-D{background:rgba(255,93,115,.12);color:#FF8C9C;box-shadow:none}.ggc.g-E{background:rgba(255,93,115,.24);color:#FF5D73;box-shadow:none}.ggc.g-x{background:transparent;color:#4A5260;box-shadow:none}
+@media (max-width:760px){.view .panel{padding:14px}.view .panel-h{margin:-14px -14px 12px;padding:12px 14px}.view .panel.lipat>.panel-h{margin-bottom:-14px}.view .kpi .v{font-size:1.35rem}}
 /* v164 (8 Nov 2026): Panduan v2 */
 .pd2k{border-bottom:1px solid var(--line);padding:9px 0}.pd2k:last-child{border-bottom:0}.pd2k>summary{cursor:pointer;list-style:none;font-size:.86rem}.pd2k>summary::-webkit-details-marker{display:none}.pd2k>summary::before{content:"▸ ";color:var(--muted)}.pd2k[open]>summary::before{content:"▾ "}.pd2k .v5sm{margin-top:6px}
 .pd2 .gl{border-bottom:1px solid var(--line);padding:8px 0}.pd2 .gl:last-child{border-bottom:0}.pd2 .gl p{margin:3px 0 0;font-size:.82rem;color:var(--fg-2)}
@@ -1927,9 +1953,9 @@ function renderPos(){
   const fAll=fb.apply(all),fPeg=fb.apply(peg);
   el.innerHTML=head+v5Pos(fAll)+panelPeta(sahSahaja(fPeg),fb.st)+`
   <div class="panel"><div class="panel-h"><h2>Posisi & keputusan</h2><span class="sub">${rows.length} posisi · ketik baris untuk butiran · ketik tajuk lajur untuk susun</span></div>${rejimHtml()}
-    ${''/* v152 (5 Nov 2026, permintaan pengguna): blok "Gred sekali pandang" dibuang SEMENTARA daripada
-         tab Posisi. Fungsi blokGredGrid kekal dan masih dipakai tab Watchlist (Hampir Signal);
-         panggil semula di sini untuk mengembalikannya. */}
+    ${''/* v152 (5 Nov 2026): blok "Gred sekali pandang" dibuang sementara daripada tab Posisi.
+         v165 (8 Nov 2026, keputusan pengguna): DIPULIHKAN, disusun ikut untung (susunan lalai jadual). */}
+    ${blokGredGrid(rows.slice().sort((x,y)=>(pvU(y)??-1e9)-(pvU(x)??-1e9)))}
     <div class="filters" style="margin-bottom:8px">${segH('posSt',ps.st,[['semua',`Semua (${all.length})`],['pegang',`Dipegang (${peg.length})`],['l2',`Lorong 2 sahaja (${l2b.length})`],['keluar',`Ditutup (${kel.length})`]],'Status')}${skrinKecil()?lajurSeg('pos'):pandSeg()}</div>
     ${fb.html}${(cols=>sortTable({id:'pos'+a,rows,cols,def:{k:cols.some(c=>c.k==='untung_pct')?'untung_pct':'isyarat_keluar',dir:-1},rcls:r=>rclsPT(r)+' click'+bukaC('p'+r._p),limit:fb.st.shown,attr:r=>`data-pos="${esc(r._p)}" tabindex="0"`,foot:kakiLagi('posMore')}))(pd?posColsP(pd,a==='gab'):rk?posColsR(a==='gab'):ptCols(a==='gab'))}</div>
   ${tdb.length?`<div class="panel"><div class="panel-h"><h2>Isyarat tidak dibeli</h2><span class="sub">${tdb.length} isyarat · dilangkau ikut peraturan kaedah · tidak dikira dalam Prestasi</span></div>${sortTable({id:'ptctdb',rows:tdb,def:{k:'kaedah',dir:1},limit:TELEFON?tdbS.shown:0,foot:TELEFON?kakiLagi('tdbMore'):null,lp:{key:r=>r.saham+'|'+r.kaedah+'|'+(r.tarikh_beli_dirancang||r.tarikh_beli),line:r=>`<b>${esc(r.saham)}</b><span class="mut">${esc(r.kaedah)}</span><span class="mlx">${esc(r.sebab_tidak_sah||'')}</span><span class="mlr mut">${esc(tkO(r.tarikh_beli_dirancang||r.tarikh_beli))}</span>${mlC}`},cols:[
@@ -2455,15 +2481,18 @@ document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest
 const grSatu=r=>GORD[r.gred_keseluruhan]!=null?grB(r.gred_keseluruhan,'','Gred keseluruhan'):'<span class="mut">–</span>';
 /* v139: grid gred padat (gaya grid faktor) — satu baris satu saham, satu lajur satu dimensi.
    Menjawab "mana antara ini paling kukuh" tanpa membaca enam lajur gred yang bertaburan dalam jadual lebar. */
+const GGS={Sektor:'S',Industri:'I',RS:'RS',Pemangkin:'P',QR:'QR',Kewangan:'K'};
 function blokGredGrid(rows,had){
-  const L=(rows||[]).filter(r=>r.saham&&SNW.some(([k])=>snwNil(r[k])!=null)).slice(0,had||10);
+  /* v165: satu baris setiap SAHAM (saham sama boleh dipegang banyak kaedah); jadual sendiri (bukan .tablewrap) supaya
+     di telefon ia kekal grid, tidak bertindan satu sel setiap baris */
+  const sd=new Set(),L=(rows||[]).filter(r=>r.saham&&SNW.some(([k])=>snwNil(r[k])!=null)&&!sd.has(r.saham)&&sd.add(r.saham)).slice(0,had||10);
   if(L.length<3)return '';
   const sel=g=>{const h=String(g||'').trim().charAt(0).toUpperCase(),ok=snwNil(g)!=null;
     return `<span class="ggc g-${ok?h:'x'}">${ok?esc(h):'–'}</span>`;};
   const u=r=>nomb(r.keluar?(r.untung_akhir_pct??r.untung_pct):r.untung_pct);
-  return `<div class="ggw"><p class="kbh"><b data-tip="gred">Gred sekali pandang</b> — ${L.length} baris teratas jadual di bawah, satu huruf satu dimensi</p>
-    <div class="tablewrap"><table><thead><tr><th class="l">Saham</th>${SNW.map(([,l])=>`<th>${esc(l)}</th>`).join('')}<th>Gred</th><th>Untung</th></tr></thead>
-    <tbody>${L.map(r=>`<tr>${''}<td class="l"><b>${esc(r.saham)}</b></td>${SNW.map(([k])=>`<td>${sel(r[k])}</td>`).join('')}<td>${sel(r.gred_keseluruhan)}</td><td class="r ${cls(u(r))}">${u(r)==null?'–':sg2(u(r))}</td></tr>`).join('')}</tbody></table></div></div>`;}
+  return `<div class="ggw"><p class="kbh"><b data-tip="gred">Gred sekali pandang</b> — ${L.length} saham teratas jadual di bawah, satu huruf satu dimensi</p>
+    <div class="ggtw"><table><thead><tr><th class="l">Saham</th>${SNW.map(([,l])=>`<th title="${esc(l)}"><span class="gL">${esc(l)}</span><span class="gS">${esc(GGS[l]||l)}</span></th>`).join('')}<th title="Gred keseluruhan"><span class="gL">Gred</span><span class="gS">G</span></th><th><span class="gL">Untung</span><span class="gS">%</span></th></tr></thead>
+    <tbody>${L.map(r=>`<tr>${''}<td class="l"><b>${esc(r.saham)}</b></td>${SNW.map(([k])=>`<td>${sel(r[k])}</td>`).join('')}<td>${sel(r.gred_keseluruhan)}</td><td class="r ${cls(u(r))}">${u(r)==null?'–':sg2(u(r))}</td></tr>`).join('')}</tbody></table></div><p class="ggk">S sektor · I industri · RS kekuatan relatif · P pemangkin · QR laporan suku · K kewangan · G gred keseluruhan</p></div>`;}
 
 /* v139: lencana kepekatan — aplikasi portfolio menanda kedudukan yang melepasi ambang, bukan hanya menyenaraikannya */
 const KEP_SEK=25,KEP_SAH=8,KEP_KAE=8;
