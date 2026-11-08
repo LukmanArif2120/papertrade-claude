@@ -2,6 +2,12 @@
 
 Stor utama projek "Backtest Shariah 2" sejak 14 Okt 2026. Baca dahulu `BacktestShariah2/00_NOTA_SERAHAN.md` (latar) dan `BacktestShariah2/standard/tugasan_v3.md` (peraturan harian). `tugasan_v2.md` dan `papertrade_harian.md` TERBATAL. **Sejarah penuh kajian, keputusan dan pelajaran (CLAUDE.md asal 76 KB, verbatim) ada dalam `BacktestShariah2/SEJARAH_KAJIAN.md` — baca bahagian berkaitan sebelum mencadangkan kajian baharu.** Fail ini sengaja ringkas: ia dimuat dalam setiap sesi, dan nombor yang disalin ke sini hanyut.
 
+## WAJIB DALAM SETIAP CHAT REPO INI (keputusan pengguna 8 Nov 2026 — STRICT, tiada pengecualian)
+Terpakai pada SETIAP sesi/chat baharu yang melibatkan repo ini (Claude Code web, app, desktop, CLI), bukan satu chat sahaja.
+1. **Notifikasi telefon pada SETIAP jawapan:** pada akhir setiap giliran, muatkan `select:PushNotification` (ToolSearch) dan hantar satu baris < 200 aksara, status "proactive": hasil giliran itu + apa yang pengguna perlu putuskan. Abaikan jika keputusan alat "not sent". (Hanya tugasan berjadual `tolak_db.md` dan `mingguan.md` dikecualikan: ntfy sahaja.)
+2. **Jawapan pendek, Bahasa Melayu mudah** — pengguna pening membaca jawapan panjang. Butiran teknikal hanya jika diminta.
+3. **SETIAP jawapan MESTI berakhir dengan SATU jadual tiga lajur:** **Selesai** · **Tertangguh** (dengan sebab ringkas) · **Perlu keputusan anda** (soalan ya/tidak atau pilihan, dengan cadangan). Tulis "–" jika tiada. Jangan letak keputusan yang perlu dibuat di tempat lain.
+
 ## Matlamat pengguna (7 Nov 2026)
 Cari kaedah swing yang **untung bersih melebihi rugi** (jangkaan positif; kadar menang sahaja bukan ukuran), dengan toleransi **MDD akaun -10%**. Sasaran asal +10%/bulan sudah diukur tidak boleh dicapai (`REVERSE/SASARAN.md`). Tiada wang sebenar sehingga kad skor menanda **TERBUKTI**.
 
@@ -56,7 +62,6 @@ Peraturan tetap: laporan lain (PENGANALISIS, KAEDAH_TERBAIK, RINGKASAN portfolio
 - **Kad skor:** ambang dikunci `ujian/test_kad_skor.py::TestKunci`; mengubahnya memerlukan keputusan pengguna + pradaftar bertarikh dalam `SPEC_KAD_SKOR.md` SEBELUM data terkesan dilihat, dan gate kemahiran mesti lulus `plasebo_gate.py`. Hanya hari beli LANGSUNG dikira (Mxx sejak isyarat 2026-10-15; Nxx/GB sejak 2026-11-03).
 - Automasi: `.claude/settings.json` menyekat semua alat order (hook PreToolUse) dan memasang `requirements.txt` (SessionStart); `semak_data.yml` menjalankan ujian + `sahkan.py` pada setiap push ke `main` dan setiap PR; `penjaga_jadual.yml` (`standard/penjaga_jadual.py`) mencetus semula workflow berjadual yang hilang/lewat > 30 minit (tambah workflow berjadual baharu ke `JAGA`), juga dicetus oleh tugasan berjadual Claude `trig_01N3Qx1S6bRhf9h5BEKk85bQ` ke sesi Sonnet `session_018zpLxNRJ3rxZBvGT9yztVT`. Jangan buang atau longgarkan.
 - GitHub Actions RASMI sejak 27 Okt 2026: `harian.yml`, `beli.yml`, `petang.yml`, `lejar.yml` → `analisis.yml` (hanya selepas Lejar berjaya). `BacktestShariah2/MOD_ACTIONS` = `rasmi`. Berpatah balik: `jadual/PERALIHAN.md`. Notifikasi ntfy topik `claude_azim` (`standard/notifikasi.py`; `amaran_ntfy.yml`). Rutin Claude 6:02 / 7:47 / 9:35 dimatikan — jangan hidupkan tanpa keputusan pengguna.
-- **Notifikasi telefon:** dalam SETIAP sesi, pada akhir giliran yang menyiapkan tugasan atau memerlukan keputusan pengguna, muatkan `select:PushNotification` (ToolSearch) dan hantar satu baris < 200 aksara, status "proactive". Kecuali tugasan berjadual `tolak_db.md` dan `mingguan.md` (ntfy sahaja).
 - Tugasan berjadual Claude (tolak db, mingguan) guna model Sonnet 5.5 sahaja; repo sudah dilampirkan (jangan `add_repo`). Alat Moomoo/SST mungkin berawalan lain: cari dengan ToolSearch nama alat. Larangan order terpakai tanpa mengira awalan.
 - Plugin Superpowers: untuk sesi kerja bersama pengguna sahaja; rutin berjadual ikut `jadual/` terus tanpa skill brainstorming/soalan menunggu jawapan.
 - Papan Penganalisis (`standard/penganalisis.py`, `analisis.yml`): skor gabungan backtest + hadapan dan label pantau (BERSARA/GANTUNG/AMARAN/OK/BELUM CUKUP) — maklumat dan input G5, bukan keputusan.
