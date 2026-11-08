@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794105899-7455",
-  "nombor": 193,
-  "sha256": "f953f2e727d9818cb4961a41b563fdd27e114e3ee129977c714c97d86ab8c85d",
-  "bait": 748268,
-  "dikemas": "2026-11-08 02:45 UTC",
-  "nota": "v162 (keputusan pengguna 8 Nov 2026): helaian Watchlist v2 (jarak ke pencetus ×ATR, syarat sebagai langkah, tangga harga, kaedah, gred) + kad telefon Watchlist; kad telefon kad skor (enam titik gate); Backtest butiran dan Status data gaya v5.1; kad lipat jadual lain jadi petak; Perlu perhatian gaya SST dipulihkan di Hari ini."
+  "versi_artifact": "1794108137-efd0",
+  "nombor": 194,
+  "sha256": "c2f4b327fe61fbfb520f3dbf1daaf675087d2b1f30be84830a18b050a2a8509f",
+  "bait": 748341,
+  "dikemas": "2026-11-08 03:22 UTC",
+  "nota": "v163 (8 Nov 2026): Backtest butiran — peratus CAGR setiap set kini berwarna ikut menang/kalah lawan beli semua (sama dengan bar); garis ungu beli semua disahkan dengan meta/info hidup. Asas v162: Watchlist v2, kad telefon kad skor, Status data, Perlu perhatian SST."
 }
