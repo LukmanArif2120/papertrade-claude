@@ -1244,6 +1244,39 @@ nav.tabs button,.seg button,.chip,.btn,.more,.fold-btn,.v5btn,.pv2tabs button,.s
   .k5 .v,.view .kpi .v{font-size:1.7rem}
 }
 @media (max-width:520px){h1{font-size:1.3rem}}
+/* ================= v170 (9 Nov 2026, keputusan pengguna "tak nak ada yang terlalu kecil"): LANTAI SAIZ FON =================
+   Audit automatik (Playwright, setiap tab + setiap bahagian + helaian posisi/kaedah, komputer 1440px dan telefon 390px)
+   menjumpai ~100 jenis teks di bawah 12.5px (paling kecil 8.3px pada carta telefon). Lantai:
+     L1 12.5px — cip, pil, lencana, label huruf besar, kepala jadual, butang kecil
+     L2 13px   — teks penerangan/sekunder (nota kecil, kaki kad, sub-tajuk panel, petunjuk)
+     carta     — teks SVG >= 12px SEBENAR pada skrin (carta yang mengecil ikut skala diberi saiz unit lebih besar)
+   !important di sini SENGAJA: ia lantai yang mesti menang ke atas peraturan lama yang lebih khusus. Jangan tambah saiz
+   bawah lantai ini; semak semula dengan audit fon (lihat dashboard.md) selepas mengubah gaya. */
+/* L1 */
+.pill,.v5ok,.v5lw,.v5mt,.cp,.cn,.ca,.cm,.v5chip,.kprj,.lrb,.pg,.gate,.kng,.trd,.stg,.atk,.l2j,.kcnt,.cl,.kx,.salh,
+.kini .kl,th,th span,.pnav-in .pn-k,.crg-h,.strip b.t,.pdl h5,.p-baru,.ggc,.ksd,.stq,.cipn.sm,.v5bdg,
+.kputus .kpst .pill,.kputus.j30 .j30h .kpst .pill,.kadk>.kk,.kadk>.kk span,.kadk>.kk i,.ksg i,
+.gr:not(.grc>.gr),.lbl,.tablewrap tbody td::before,.kputus .kpt,aside.rail .rh,.v5promo .t,
+.kd2gn .o.tg,.kd2gn b,.ggtw th,.ggw th,.kskor small,.tip-h{font-size:12.5px!important}
+.ksg i{width:17px;height:17px;line-height:17px}
+.ksd{width:24px;height:24px}
+/* L2 */
+small,.v5xs,.v5fr small,.kd2gn small,.ggk,.k5 .f,.kpi .s,.view .kpi .s,.panel-h .sub,.view .panel-h .sub,.sub,.v5h .r,
+.j30h span,.j30x,.j30x .kptj,.j30x .kprj,.v5lg,.tablefoot,.foot,.kad .kf,.kad .kn,.pdcap,.lgl,.v5hb .t,.v5hb .v,
+.v5row,.kd2eta small,.pv2gr small,.pv2ci small,.pv2ci b,.pdk .s,.pdk .k,.sheet .vv,td .vv,td.grd .vv,
+table[data-st^="skw-"] td .vv,.kcnr,.wsub,.xpr,.nleg,.legend,.sleg,.adil,.v5sm,.kputus .kptj,.tip-e{font-size:13px!important}
+.k5 .f{line-height:1.35}
+/* cip lantai lebih besar boleh memecah label KPI kepada dua baris: semua jubin sebaris menempah dua baris supaya nombor kekal sejajar */
+@media (min-width:761px){.k5row .k5 .l{min-height:2.95em;align-items:flex-start}}
+code{font-family:var(--f-semi);font-weight:600;font-size:.95em}
+/* carta: teks SVG */
+svg text:where(:not([font-size="21"],[font-size="25"],[font-size="13.5"],.pm-n)){font-size:12px!important}
+/* radar gred dilukis lebih besar daripada viewBox (skala ~1.13): 11 unit = ~12.4px sebenar */
+svg.snw text{font-size:11px!important}
+svg .pm-s{font-size:12px!important}svg .pm-v{font-size:12.5px!important}
+/* carta lebar tetap (.rpsv: ulang tayang, nasib makmal) mengecil ~0.69x di telefon: 17.5 unit = ~12px sebenar */
+@media (max-width:760px){svg.rpsv text{font-size:17.5px!important}}
+/* nama industri treemap (.pm-n): saiz 12/13px ditetapkan oleh drawPeta, yang menyembunyikan label dalam kotak terlalu kecil */
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
@@ -3540,9 +3573,9 @@ function drawPeta(box,rows,st){if(!box)return;if(!rows.length){box.innerHTML='<p
   const W=Math.max(280,box.clientWidth||800),H=Math.round(Math.max(240,Math.min(400,W*0.42))),lim=10;
   const ptg=(t,w,f)=>{const m=Math.floor((w-10)/(f*0.58));return t.length>m?t.slice(0,Math.max(2,m-1))+'…':t;};
   let o='';squarify(petaData(rows),0,0,W,H).forEach(s=>{const hd=s.w>70&&s.h>48?16:0;
-    o+=`<g data-pmk="${esc(s.k)}" tabindex="0" role="button" aria-label="Tapis sektor ${esc(s.k)}"><rect x="${s.x.toFixed(1)}" y="${s.y.toFixed(1)}" width="${Math.max(0,s.w-1).toFixed(1)}" height="${Math.max(0,s.h-1).toFixed(1)}" fill="var(--sunk)" stroke="var(--bg)" stroke-width="2"/>${hd?`<text x="${(s.x+5).toFixed(1)}" y="${(s.y+12).toFixed(1)}" class="pm-s">${esc(ptg(s.k.toUpperCase(),s.w,10))}</text>`:''}<title>${esc(s.k)}: ${s.v} saham (${s.np} posisi) · purata ${sg2(s.u)}</title></g>`;
+    o+=`<g data-pmk="${esc(s.k)}" tabindex="0" role="button" aria-label="Tapis sektor ${esc(s.k)}"><rect x="${s.x.toFixed(1)}" y="${s.y.toFixed(1)}" width="${Math.max(0,s.w-1).toFixed(1)}" height="${Math.max(0,s.h-1).toFixed(1)}" fill="var(--sunk)" stroke="var(--bg)" stroke-width="2"/>${hd?`<text x="${(s.x+5).toFixed(1)}" y="${(s.y+12).toFixed(1)}" class="pm-s">${esc(ptg(s.k.toUpperCase(),s.w,12.5))}</text>`:''}<title>${esc(s.k)}: ${s.v} saham (${s.np} posisi) · purata ${sg2(s.u)}</title></g>`;
     squarify(Object.entries(s.ind).map(([k,a])=>({k,v:nSaham(a),np:a.length,rs:a,u:avgOf(a.map(r=>r.untung_pct))})),s.x+1,s.y+hd+1,s.w-3,s.h-hd-3).forEach(t=>{
-      const pil=st&&st.sk===s.k&&st.ind===t.k,f=t.w>90&&t.h>40?12:10.5,vt=`${t.v} · ${sg2(t.u)}`,dua=t.w>vt.length*6.3+10&&t.h>34,satu=t.w>34&&t.h>16;
+      const pil=st&&st.sk===s.k&&st.ind===t.k,f=t.w>90&&t.h>40?13:12,vt=`${t.v} · ${sg2(t.u)}`,dua=t.w>vt.length*6.8+10&&t.h>36,satu=t.w>40&&t.h>18;
       const sh=[...t.rs].sort((x,y)=>(y.untung_pct??-1e9)-(x.untung_pct??-1e9)).map(r=>`${r.saham} ${sg2(r.untung_pct)}`);
       o+=`<g class="pm-t" data-pmk="${esc(s.k)}" data-pmi="${esc(t.k)}" tabindex="0" role="button" aria-label="Tapis industri ${esc(t.k)}: ${t.v} saham, purata ${sg2(t.u)}"><rect x="${(t.x+1).toFixed(1)}" y="${(t.y+1).toFixed(1)}" width="${Math.max(0,t.w-2).toFixed(1)}" height="${Math.max(0,t.h-2).toFixed(1)}" rx="2" fill="${heatCol(t.u,lim)}"${pil?' stroke="var(--accent)" stroke-width="2.5"':''}/>
         ${satu?`<text x="${(t.x+5).toFixed(1)}" y="${(t.y+(dua?15:Math.min(13,t.h-3))).toFixed(1)}" class="pm-n" style="font-size:${f}px">${esc(ptg(t.k,t.w,f))}</text>`:''}
@@ -4230,7 +4263,7 @@ function v5Analisis(R){const d=S.ks,K=d.kira||{},N=d.kaedah||R.length,G=[0,0,0,0
   +`<div class="v5g">${v5Card('c12','Lorong T4: kaedah lawan SPUS','pulangan % · 10 slot · sejak belian pertama'+(t4&&t4.dibina?'':''),t4card)}
   ${v5Card('c12 v5kekal','Enam syarat · berapa kaedah lulus','mesti lulus kesemua enam · penghalang di atas',`<div style="display:grid;grid-template-columns:${skrinKecil()?'minmax(0,1fr)':'minmax(0,1fr) minmax(0,1fr)'};gap:4px 28px">${ord.map(i=>{const v=G[i],blk=v===0;return `<div style="display:grid;grid-template-columns:minmax(0,1fr) 70px;gap:4px 10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)"><div style="font-size:.84rem;font-weight:${blk?700:500}">${NM[i]} <span class="v5xs">· ${SB[i]}</span>${blk&&WH[i]?` <span class="v5lw">${WH[i]}</span>`:''}</div><span class="mo ${blk?'neg':''}" style="text-align:right;font-weight:700">${v}<span class="mut" style="font-weight:400">/${N}</span></span><div class="v5bar" style="height:8px;grid-column:1/-1"><i style="width:${Math.max(blk?1.5:0,v/N*100)}%;background:${blk?'#FF5D73':V5G.pos}"></i></div></div>`;}).join('')}</div>`)}
   ${v5Card('c7','Jangkaan setiap kaedah',N+' disusun · semua posisi lorong 1, terbuka ditanda ke pasaran',`<div id="v5jb"></div><div class="v5lg"><span><i style="background:#12A886"></i>${pos} di atas sifar</span><span><i style="background:#B9505F"></i>${R.filter(r=>r.jangkaan<=0&&r.status!=='NEGATIF').length} di bawah sifar</span><span><i style="background:#FF5D73"></i>${K.NEGATIF||0} status NEGATIF</span></div>`)}
-  ${v5Card('c5','10 jangkaan tertinggi','jangkaan setiap posisi',T10.map((r,i)=>`<div data-kd="${esc(r.id)}" tabindex="0" style="cursor:pointer;display:grid;grid-template-columns:18px ${skrinKecil()?'64px':'78px'} minmax(0,1fr) 58px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)"><span class="mo mut" style="font-size:.7rem">${i+1}</span><span class="v5chip" style="text-align:center">${esc(r.id)}</span><div style="min-width:0"><div class="v5xs" style="margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.nama||'')}</div><div class="v5bar" style="height:8px"><i style="width:${Math.max(0,(r.jangkaan||0)/mx10*100)}%;background:${V5G.pos}"></i></div></div><span class="mo ${cls(r.jangkaan)}" style="text-align:right;font-weight:700">${v5sg(r.jangkaan)}%</span></div>`).join('')+`<div class="v5xs" style="margin-top:8px">${bru?(T10.every(r=>(r.buku_ci_bawah??-1)<=0)?'⚠ Belum pasti: had bawah 95% buku harian (G2) kesemua sepuluh ≤ 0. Purata setiap posisi bukan bukti.':'Purata setiap posisi bukan bukti: lihat Buku harian (G2) dan Lift masuk (G3).'):(T10.every(r=>(r.ci_bawah??-1)<=0)?'⚠ Belum pasti: selang keyakinan 95% kesemua sepuluh masih merangkumi sifar.':'')}</div>`)}
+  ${v5Card('c5','10 jangkaan tertinggi','jangkaan setiap posisi',T10.map((r,i)=>`<div data-kd="${esc(r.id)}" tabindex="0" style="cursor:pointer;display:grid;grid-template-columns:18px ${skrinKecil()?'64px':'78px'} minmax(0,1fr) 58px;gap:10px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)"><span class="mo mut" style="font-size:12.5px">${i+1}</span><span class="v5chip" style="text-align:center">${esc(r.id)}</span><div style="min-width:0"><div class="v5xs" style="margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(r.nama||'')}</div><div class="v5bar" style="height:8px"><i style="width:${Math.max(0,(r.jangkaan||0)/mx10*100)}%;background:${V5G.pos}"></i></div></div><span class="mo ${cls(r.jangkaan)}" style="text-align:right;font-weight:700">${v5sg(r.jangkaan)}%</span></div>`).join('')+`<div class="v5xs" style="margin-top:8px">${bru?(T10.every(r=>(r.buku_ci_bawah??-1)<=0)?'⚠ Belum pasti: had bawah 95% buku harian (G2) kesemua sepuluh ≤ 0. Purata setiap posisi bukan bukti.':'Purata setiap posisi bukan bukti: lihat Buku harian (G2) dan Lift masuk (G3).'):(T10.every(r=>(r.ci_bawah??-1)<=0)?'⚠ Belum pasti: selang keyakinan 95% kesemua sepuluh masih merangkumi sifar.':'')}</div>`)}
   </div>`;}
 function v5AnalisisLukis(R){const t4=S.t4s;
   if(t4&&t4.k){const pick=S.t4p&&t4.k[S.t4p]?S.t4p:(t4.pil[0]||[])[0],kk=t4.k[pick];if(kk){const n=kk.length;v5Area($('#v5t4'),{a:kk,b:t4.spus,band:t4.p50&&t4.p50.length===n?{lo:t4.p50,hi:t4.p95}:null,lbl:'Lorong T4 '+pick,xl:[[0,tkO(t4.t[0])],[n-1,tkO(t4.t[n-1])]]});}
