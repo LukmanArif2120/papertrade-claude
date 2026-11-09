@@ -1274,6 +1274,16 @@ table[data-st^="skw-"] td .vv,.kcnr,.wsub,.xpr,.nleg,.legend,.sleg,.adil,.v5sm,.
 .tablewrap td.wrap .kpl .pill{max-width:100%;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
 body.padat .tablewrap table[data-st="katalog"] tbody td.tk,table[data-st="katalog"] td.tk{white-space:normal}
 table[data-st="katalog"] td.tk .pill{margin-top:3px}
+/* v172 (9 Nov 2026, laporan pengguna dari iPhone): kaki helaian (.pv2f) dahulu bergradien dari lut sinar dan tanpa
+   z-index, jadi (1) bulatan gate G1–G6 (z-index:1) terapung DI ATAS butang kaki, (2) petunjuk "‹ leret ›" menindih
+   kandungan di belakangnya, dan (3) di iPhone, padding ruang selamat (env(safe-area-inset-bottom)) meninggalkan jalur
+   kandungan kelihatan DI BAWAH kaki. Kaki kini legap, di atas kandungan, dan melekat rapat ke tepi bawah. */
+.pv2f{z-index:6;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -10px 18px -10px rgba(0,0,0,.5);
+  bottom:calc(-24px - env(safe-area-inset-bottom,0px));margin-bottom:calc(-24px - env(safe-area-inset-bottom,0px))}
+/* label carta di tepi (puncak, bilangan bar, paksi) tidak lagi diklip oleh sempadan SVG */
+svg.v5s,svg.rpsv{overflow:visible}
+/* kepala helaian legap sepenuhnya (dahulu 6% lut sinar di bahagian bawah, kandungan berbayang di bawah tab) */
+.pv2h{background:var(--card)}
 code{font-family:var(--f-semi);font-weight:600;font-size:.95em}
 /* carta: teks SVG */
 svg text:where(:not([font-size="21"],[font-size="25"],[font-size="13.5"],.pm-n)){font-size:12px!important}
@@ -2180,15 +2190,15 @@ function drawKumulatif(box,H,B){if(!box)return;if(!H.length){box.innerHTML='<p c
   silang(box,W,H.map((h,i)=>X(i)),i=>`<div class="mut">${esc(tkO(H[i].d))} · ${H[i].n} keluar</div>${slB('Purata hari itu',`<span class="${cls(H[i].avg)}">${sg2(H[i].avg)}</span>`)}${slB('Terkumpul',`<span class="${cls(H[i].kum)}">${sg2(H[i].kum)}</span>`)}${sp.length?slB(`${paNama()} tempoh sama`,sg2(sp[i])):''}`);}
 function drawTaburan(box,vals){if(!box)return;const v=vals.filter(x=>x!=null&&!isNaN(x));if(!v.length){box.innerHTML='<p class="empty">Tiada data.</p>';return;}
   const cnt=new Array(12).fill(0);v.forEach(x=>{cnt[x<-10?0:x>=10?11:1+Math.floor((x+10)/2)]++;});
-  const W=Math.max(280,box.clientWidth||520),H=210,P={l:40,r:12,t:18,b:30},n=12,st=Math.max(1,langkahBulat(Math.max(...cnt),3)),mx=Math.ceil(Math.max(...cnt)/st)*st,bw=(W-P.l-P.r)/n;
+  const W=Math.max(280,box.clientWidth||520),H=222,P={l:40,r:12,t:18,b:40},n=12,st=Math.max(1,langkahBulat(Math.max(...cnt),3)),mx=Math.ceil(Math.max(...cnt)/st)*st,bw=(W-P.l-P.r)/n;
   const X=i=>P.l+i*bw,Y=c=>P.t+(1-c/mx)*(H-P.t-P.b),y0=Y(0);
   let g='<g class="grid">',t='';for(let c=0;c<=mx;c+=st){const y=Y(c).toFixed(1);g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}"/>`;t+=`<text x="${P.l-6}" y="${(+y+4).toFixed(1)}" text-anchor="end">${c}</text>`;}g+='</g>';
   const bt=x=>x>0?'+'+x:x<0?'−'+(-x):'0',jul=i=>i===0?'bawah −10%':i===11?'+10% ke atas':`${bt(-10+2*(i-1))}% hingga ${bt(-10+2*i)}%`;
   let b='';cnt.forEach((c,i)=>{const x=X(i)+1,w=bw-2,y=Y(c),h=y0-y,r=Math.min(4,w/2,h);
     b+=`<g class="hit"><rect x="${X(i).toFixed(1)}" y="${P.t}" width="${bw.toFixed(1)}" height="${(H-P.t-P.b).toFixed(1)}" fill="transparent"/>${c?`<path d="M${x.toFixed(1)},${y0.toFixed(1)}V${(y+r).toFixed(1)}Q${x.toFixed(1)},${y.toFixed(1)} ${(x+r).toFixed(1)},${y.toFixed(1)}H${(x+w-r).toFixed(1)}Q${(x+w).toFixed(1)},${y.toFixed(1)} ${(x+w).toFixed(1)},${(y+r).toFixed(1)}V${y0.toFixed(1)}Z" fill="var(${i<=5?'--neg':'--pos'})"/>`:''}<title>${jul(i)}: ${c} dagangan (${fx(c/v.length*100,0)}%)</title></g>`;});
-  const sk=W<480?2:1;for(let i=1;i<=11;i++){if(sk>1&&(i-6)%sk)continue;const val=-10+2*(i-1);t+=`<text x="${X(i).toFixed(1)}" y="${H-12}" text-anchor="middle" style="font-size:10.5px">${val>0?'+':''}${val}</text>`;}
+  const sk=W<480?2:1;for(let i=1;i<=11;i++){if(sk>1&&(i-6)%sk)continue;const val=-10+2*(i-1);t+=`<text x="${X(i).toFixed(1)}" y="${H-22}" text-anchor="middle" style="font-size:10.5px">${val>0?'+':''}${val}</text>`;}
   const cM=Math.max(...cnt),iM=cnt.indexOf(cM);t+=`<text x="${(X(iM)+bw/2).toFixed(1)}" y="${(Y(cM)-5).toFixed(1)}" text-anchor="middle" style="fill:var(--fg);font-weight:600">${cM}</text>`;
-  t+=`<text x="${W-P.r}" y="${H-1}" text-anchor="end" style="font-size:10px">untung % →</text>`;
+  t+=`<text x="${W-P.r}" y="${H-3}" text-anchor="end" style="font-size:10px">untung % →</text>`;
   const z=`<line x1="${X(6).toFixed(1)}" x2="${X(6).toFixed(1)}" y1="${P.t-6}" y2="${y0.toFixed(1)}" stroke="var(--fg-2)" stroke-dasharray="3 3" opacity=".6"/>`;
   box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Taburan untung dagangan">${g}${b}${z}${t}</svg>`;}
 function prKpis(rows){const sm=semalam(rows),As=sm?analisis(sm.rows):null,aS=sm?avgOf(sm.rows.map(r=>r.hasil)):null;const v=rows.map(r=>r.hasil).filter(x=>x!=null);const w=minOf(v);const wr=rows.find(r=>r.hasil===w)||{};
@@ -4356,7 +4366,8 @@ function pvCarta(el,r){if(!el)return;const A=l2Map()&&l2Map().get(l2Key(r));if(!
   A.forEach((b,i)=>{const p=b[2];if(p==null||b[4]==='lepas')return;const a=x(i)-cw/2,y1=Math.max(pt,y(p*1.1)),y2=y(p);
     s+=`<rect x="${a}" y="${pt}" width="${cw+.6}" height="${Math.max(0,y1-pt)}" fill="rgba(30,227,180,.09)"/><rect x="${a}" y="${y1}" width="${cw+.6}" height="${Math.max(0,y2-y1)}" fill="rgba(255,193,69,.13)"/><rect x="${a}" y="${y2}" width="${cw+.6}" height="${Math.max(0,H-pb-y2)}" fill="rgba(255,93,115,.10)"/>`;});
   const st=(hi-lo)/4,mag=Math.pow(10,Math.floor(Math.log10(st))),step=Math.ceil(st/mag)*mag;
-  for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step)s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#2A3038" stroke-dasharray="2 4"/><text x="${W-pr+6}" y="${y(v)+4}" fill="#8A93A0" font-size="10.5">${fx(v,v<10?2:0)}</text>`;
+  const LL=A[n-1],kyy=Math.abs(y(LL[1])-y(LL[2]??-1e9))<18?y(LL[1])+(LL[1]>=(LL[2]??0)?-18:18):y(LL[1]),tgY=[kyy].concat(LL[2]!=null&&LL[4]!=='lepas'?[y(LL[2])]:[]);
+  for(let v=Math.ceil(lo/step)*step;v<=hi;v+=step)s+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="#2A3038" stroke-dasharray="2 4"/>${tgY.some(q=>Math.abs(q-y(v))<16)?'':`<text x="${W-pr+6}" y="${y(v)+4}" fill="#8A93A0" font-size="10.5">${fx(v,v<10?2:0)}</text>`}`;
   let pp='';A.forEach((b,i)=>{if(b[2]==null||b[4]==='lepas')return;const a=x(i)-cw/2,c=x(i)+cw/2;pp+=(pp?'L':'M')+a+','+y(b[2])+'L'+c+','+y(b[2]);});if(pp)s+=`<path d="${pp}" fill="none" stroke="#FFC145" stroke-width="2"/>`;
   const ib=Math.max(0,A.findIndex(b=>b[4]==='beli'));if(hb)s+=`<line x1="${x(ib)-cw/2}" x2="${W-pr}" y1="${y(hb)}" y2="${y(hb)}" stroke="#B4BBC6" stroke-dasharray="5 4" stroke-opacity=".7"/>`;
   if(garis){const d=A.map((b,i)=>(i?'L':'M')+x(i).toFixed(1)+','+y(b[1]).toFixed(1)).join('');s+=`<path d="${d}L${x(n-1)},${H-pb}L${x(0)},${H-pb}Z" fill="url(#${(pvU(r)??0)>=0?'shT':'shC'})"/><path d="${d}" fill="none" stroke="${(pvU(r)??0)>=0?'#1EE3B4':'#FF5D73'}" stroke-width="2"/>`;}

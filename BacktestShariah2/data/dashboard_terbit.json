@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794220238-a6dc",
-  "nombor": 202,
-  "sha256": "00d411418253ca80b30709d5594f725f78c641eb10f1ab8f25e1c827d75c923a",
-  "bait": 761477,
-  "dikemas": "2026-11-09 10:30 UTC",
-  "nota": "v171 (keputusan pengguna 9 Nov 2026 \"cek untuk both telefon dan desktop\"): semakan penuh telefon + komputer termasuk Rujukan (Katalog, Kombinasi N, Backtest, Sektor) dan helaian kaedah telefon; cip mod Padat dipendekkan dengan elipsis; label REPLIKA/spec asal di lajur ID Katalog turun ke baris bawah (dahulu menindih nama); label 0% histogram Taburan pulangan dialih ke kiri garis (dahulu menindih bilangan bar). Audit fon LULUS."
+  "versi_artifact": "1794228509-f136",
+  "nombor": 203,
+  "sha256": "3d692343e5e6b81188ade9779d32a8466b4b4c31d1221aa394ae80fa1f0a5fae",
+  "bait": 762654,
+  "dikemas": "2026-11-09 12:48 UTC",
+  "nota": "v172 (laporan pengguna 9 Nov 2026 dari iPhone, \"cuba check keseluruhan dashboard\"): kaki helaian legap, z-index di atas kandungan dan rapat ke bawah dengan ruang selamat iPhone (dahulu bulatan G1–G6 terapung di atas butang, petunjuk leret menindih kandungan, kandungan kelihatan di bawah kaki); kepala helaian legap; label carta tidak diklip (SVG overflow visible), label paksi carta harga tidak di bawah tag harga, histogram Taburan untung diberi ruang paksi. Audit tindihan baharu ujian/audit_tindih.js: 0 cacat (komputer 1440x1000, telefon 390x660 dengan ruang selamat iPhone)."
 }
