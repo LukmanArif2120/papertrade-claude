@@ -24,65 +24,8 @@ const D = {};
 for (const c of fs.readdirSync(DB)) { const p = path.join(DB, c); if (!fs.statSync(p).isDirectory()) continue;
   for (const f of fs.readdirSync(p)) if (f.endsWith('.json')) D[c + '/' + f.slice(0, -5)] = JSON.parse(fs.readFileSync(path.join(p, f), 'utf8')); }
 
-/* dijalankan dalam halaman: pulangkan senarai cacat pada keadaan skrin semasa */
-const semak = (label) => {
-  const W = innerWidth, H = innerHeight, out = [];
-  // kelegapan warna: rgb()/rgba(), dan color(srgb r g b / a) yang dipulangkan Chromium untuk color-mix()
-  const alfa = c => { if (!c || c === 'transparent') return 0;
-    let m = c.match(/^rgba?\(([^)]+)\)/); if (m) { const p = m[1].split(/[\s,\/]+/).filter(Boolean).map(Number); return p.length > 3 ? p[3] : 1; }
-    m = c.match(/^color\([^)]*?\/\s*([\d.]+)\s*\)$/); if (m) return +m[1]; return /^color\(/.test(c) ? 1 : 0; };
-  // lapisan legap: warna latar legap, ATAU gradien yang setiap hentian warnanya legap (kaki helaian bergradien dari
-  // lut sinar TIDAK dikira legap - itulah pepijat kaki helaian), ATAU backdrop-filter dengan latar separa legap
-  const legap = c => { if (alfa(c.backgroundColor) >= 0.85) return true;
-    if (/gradient/.test(c.backgroundImage)) { const w = c.backgroundImage.match(/(rgba?\([^)]*\)|color\([^)]*\))/g) || []; if (w.length && Math.min(...w.map(alfa)) >= 0.85) return true; }
-    return c.backdropFilter && c.backdropFilter !== 'none' && alfa(c.backgroundColor) >= 0.6; };
-  const nama = el => { const c = (el.getAttribute && el.getAttribute('class') || '').trim().split(/\s+/).slice(0, 2).join('.');
-    return el.tagName.toLowerCase() + (c ? '.' + c : ''); };
-  // kotak teks: setiap nod teks langsung, satu kotak setiap baris
-  const T = [];
-  const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => n.textContent.trim() ? 1 : 2 });
-  let n; while ((n = tw.nextNode())) {
-    const el = n.parentElement; if (!el || el.closest('script,style,title,option,#tip,.tip,.toast')) continue;
-    const cs = getComputedStyle(el); if (cs.visibility === 'hidden' || +cs.opacity === 0) continue;
-    const rg = document.createRange(); rg.selectNodeContents(n);
-    for (const r of rg.getClientRects()) {
-      if (r.width < 2 || r.height < 2 || r.right <= 0 || r.bottom <= 0 || r.left >= W || r.top >= H) continue;
-      T.push({ el, r, t: n.textContent.trim().slice(0, 30) });
-      // POTONG: teks melepasi induk overflow:hidden/clip (bukan bekas skrol, bukan elipsis)
-      for (let a = el; a && a !== document.body; a = a.parentElement) {
-        const ac = getComputedStyle(a);
-        if (/(auto|scroll)/.test(ac.overflowX + ac.overflowY)) break;
-        if (/(hidden|clip)/.test(ac.overflowX) || /(hidden|clip)/.test(ac.overflowY)) {
-          const ar = a.getBoundingClientRect();
-          const keluar = r.right > ar.right + 1.5 || r.left < ar.left - 1.5 || (/(hidden|clip)/.test(ac.overflowY) && (r.bottom > ar.bottom + 1.5 || r.top < ar.top - 1.5));
-          const elip = ac.textOverflow === 'ellipsis' || getComputedStyle(el).textOverflow === 'ellipsis';
-          const lineclamp = ac.webkitLineClamp && ac.webkitLineClamp !== 'none';
-          if (keluar && !elip && !lineclamp && ar.width > 0 && ar.height > 0)
-            out.push({ jenis: 'POTONG', a: nama(el) + ' "' + n.textContent.trim().slice(0, 24) + '"', b: 'oleh ' + nama(a), label });
-          break;
-        }
-      }
-    }
-  }
-  // TINDIH: pasangan kotak teks bersilang, kedua-duanya kelihatan (tiada lapisan legap di antara)
-  for (let i = 0; i < T.length; i++) for (let j = i + 1; j < T.length; j++) {
-    const A = T[i], B = T[j]; if (A.el === B.el || A.el.contains(B.el) || B.el.contains(A.el)) continue;
-    const x1 = Math.max(A.r.left, B.r.left), x2 = Math.min(A.r.right, B.r.right), y1 = Math.max(A.r.top, B.r.top), y2 = Math.min(A.r.bottom, B.r.bottom);
-    if (x2 - x1 < 3 || y2 - y1 < 3) continue;
-    const st = document.elementsFromPoint((x1 + x2) / 2, (y1 + y2) / 2);
-    const ia = st.findIndex(e => e === A.el || A.el.contains(e)), ib = st.findIndex(e => e === B.el || B.el.contains(e));
-    if (ia < 0 || ib < 0) continue;            // salah satu terklip / tidak dilukis di titik itu
-    const [atas, bawah] = ia < ib ? [ia, ib] : [ib, ia];
-    const elBawah = st[bawah];
-    let tertutup = false;
-    for (let k = atas; k < bawah; k++) { const e = st[k]; if (e.contains(elBawah)) continue;
-      if (legap(getComputedStyle(e))) { tertutup = true; break; } }
-    if (tertutup) continue;
-    out.push({ jenis: 'TINDIH', a: nama(A.el) + ' "' + A.t + '"', b: nama(B.el) + ' "' + B.t + '"', label });
-  }
-  if (document.documentElement.scrollWidth > W + 1) out.push({ jenis: 'LEBAR', a: 'halaman ' + document.documentElement.scrollWidth + 'px', b: 'skrin ' + W + 'px', label });
-  return out;
-};
+/* pemeriksa dalam halaman: semak_papar.js (dikongsi dengan audit_terperinci.js) */
+const { semak } = require('./semak_papar.js');
 
 (async () => {
   const S = fs.mkdtempSync(path.join(os.tmpdir(), 'tindih-'));
