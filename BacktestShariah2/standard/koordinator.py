@@ -207,7 +207,7 @@ def kajian():
         out.append(('Kajian SATELIT (satelit GB02_atau3 x Chandelier 15% atas teras indeks 35% + tunai; '
                     'kebenaran tunggal 9 Nov 2026)', 'DITUTUP — GAGAL',
                     'P1/P2/P3/P5 gagal: CAGR tahan +6.12% lawan indeks 50% +7.59% dan satelit rawak +7.82%; '
-                    'MDD -13.7%. Satelit kekal 0%; pelan teras SPUS 30-35% + tunai (kajian/FABLE_PENILAIAN.md §9)'))
+                    'MDD -13.7%. Satelit kekal 0%; tunai sepenuhnya sehingga TERBUKTI, tiada ETF pasif (keputusan pengguna 9 Nov; kajian/FABLE_PENILAIAN.md §9)'))
     if os.path.exists(os.path.join(AKAR, 'REVERSE', 'SPEC_FASA2.md')):
         out.append(('REVERSE fasa 2 leg RS/gred', 'SPEC DIKUNCI — menunggu masa',
                     'RS/gred dikira harian, tiada sejarah; anggaran ~Okt 2027'))
@@ -352,8 +352,8 @@ def ringkasan_mingguan(ks_json=None, idx_csv=None, spus_csv=None, keputusan_csv=
                 x = cl / asas
                 puncak = max(puncak, x)
                 mdd = min(mdd, (x / puncak - 1) * 100)
-            b3 = (f"SPUS minggu ini {minggu:+.2f}% (tutup {rows[-1][0]}; MDD sejak {mula_jejak} {mdd:.2f}%). "
-                  f"Teras SPUS 35% + tunai: {minggu * 0.35:+.2f}% minggu ini.")
+            b3 = (f"SPUS (kayu ukur) minggu ini {minggu:+.2f}% (tutup {rows[-1][0]}; MDD sejak {mula_jejak} "
+                  f"{mdd:.2f}%).")
     except (OSError, ValueError, IndexError):
         pass
     # lorong T4 teratas (bukan pangkat) dan median
