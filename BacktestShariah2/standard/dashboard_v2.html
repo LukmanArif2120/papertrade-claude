@@ -1,7 +1,7 @@
 <title>Papan Backtest Shariah</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Semi+Condensed:wght@500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap">
 <style>
 /* Susun atur: konsol terminal satu lajur; pengepala melekit (tab utama + sub-tab), paparan bertab, helaian bawah untuk butiran.
    Gaya SST Terminal: navy gelap sahaja (pilihan sengaja, satu tema). */
@@ -953,7 +953,7 @@ td.stc{white-space:nowrap}
 @media (min-width:761px){body.padat .tablewrap td .tra{display:none}body.padat .tablewrap td .trd{padding:1px 5px}}
 /* v155 kad skor (tab Pilih kaedah) */
 .ksg{display:inline-flex;gap:2px;margin-left:6px;vertical-align:middle}
-.ksg i{display:inline-block;width:15px;height:15px;border-radius:3px;font:600 .62rem/15px Inter,system-ui,sans-serif;text-align:center;font-style:normal;color:var(--muted);background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line-2)}
+.ksg i{display:inline-block;width:15px;height:15px;border-radius:3px;font:600 .62rem/15px "Barlow Semi Condensed",system-ui,sans-serif;text-align:center;font-style:normal;color:var(--muted);background:var(--sunk);box-shadow:inset 0 0 0 1px var(--line-2)}
 .ksg i.on{color:#062b14;background:var(--pos);box-shadow:none}
 .ksbar{display:block;height:5px;margin:6px 0 4px;border-radius:3px;background:var(--sunk);overflow:hidden}
 .ksbar i{display:block;height:100%;background:var(--accent)}
@@ -1189,31 +1189,61 @@ nav.tabs>button svg{display:none}
 .kprj{display:inline-block;font-weight:700;border-radius:7px;padding:0 8px;white-space:nowrap}
 .kprj.off{background:var(--warn-soft);color:var(--warn)}.kprj.on{background:var(--pos-soft);color:var(--pos)}.kprj.na{background:var(--sunk);color:var(--muted)}
 @media (max-width:760px){.kputus{font-size:.8rem;padding:9px 11px;gap:7px}.kputus .kpl{display:block}.kputus .kpt{display:inline-block;margin-right:6px}}
-/* ================= v168 (9 Nov 2026, keputusan pengguna): fon tajuk "sukan" =================
-   Warna, ikon dan susun atur v5.1 KEKAL; hanya gaya huruf berubah: tajuk, label dan nombor besar guna Barlow Condensed
-   (tebal, sempit, huruf besar). Teks ayat kekal Inter supaya mudah dibaca; jadual dan nombor kecil kekal mono. */
-:root{--f-cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif}
-header.top h1{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;letter-spacing:.01em;font-size:1.7rem;line-height:1}
-.view .panel-h h2,.v5h h3,.j30h b,.kstajuk h2,.pv2r1 h3,aside.rail .v5brand b{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+/* ================= v169 (9 Nov 2026, keputusan pengguna "terbitkan A untuk keseluruhan dashboard") =================
+   SATU keluarga fon, tiga lebar (menggantikan v168 Barlow Condensed + Inter + mono):
+     Barlow Condensed      — tajuk dan nombor besar (huruf besar, tebal)
+     Barlow Semi Condensed — label, sub-tajuk baris, tab, butang, cip, pil, kepala jadual, nombor kecil (.mo)
+     Barlow                — ayat dan sel jadual
+   Semua nombor guna angka sama lebar (tabular-nums) supaya lajur selari tanpa fon mono. Warna, ikon dan susun atur
+   v5.1 TIDAK berubah. Blok ini sengaja di HUJUNG <style>. */
+:root{
+  --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  --f-semi:"Barlow Semi Condensed","Barlow",system-ui,sans-serif;
+  --f-cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-mono:var(--f-semi);
+}
+/* Barlow lebih kecil daripada Inter pada saiz sama (tinggi-x lebih rendah): skala rem dinaikkan 16 -> 17px */
+html{font-size:17px}
+body{font-family:var(--f-body);font-size:15.5px;font-feature-settings:normal}
+td,.mo,.num,.kini b,svg text{font-variant-numeric:tabular-nums lining-nums}
+/* tajuk: Barlow Condensed */
+h1,h2,.view .panel-h h2,.v5h h3,.j30h b,.kstajuk h2,.pv2r1 h3,.sheet h3,.ph h3,aside.rail .v5brand b{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+header.top h1{font-weight:800;letter-spacing:.01em;font-size:1.7rem;line-height:1}
+h2{font-size:.95rem;color:var(--fg)}
 .view .panel-h h2,.v5h h3{font-size:1.08rem}
 .j30h b{font-size:1.25rem}
+.sheet h3{font-size:1.45rem}
 aside.rail .v5brand b{font-size:1.05rem}
-aside.rail .rh,.v5promo .t,.kputus .kpt{font-family:var(--f-cond);font-weight:700;letter-spacing:.1em;font-size:.78rem}
-.v5pill{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.05em;font-size:.82rem}
-.k5 .l,.view .kpi .lbl{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.06em;font-size:.86rem;font-weight:600}
-.k5 .v,.view .kpi .v{font-family:var(--f-cond);font-weight:700;font-size:2.15rem;letter-spacing:0;font-variant-numeric:lining-nums}
-.k5 .v .mo,.view .kpi .v .mo{font-family:inherit;font-variant-numeric:lining-nums}
-.v5big{font-family:var(--f-cond);font-weight:800;font-size:2.4rem;letter-spacing:0}
+.k5 .v,.view .kpi .v,.kpi .v,.pdk .v{font-family:var(--f-cond);font-weight:700;font-size:2.15rem;letter-spacing:0}
+.v5big,.pv2big{font-family:var(--f-cond);font-weight:800;font-size:2.4rem;letter-spacing:0}
 .v5md{font-family:var(--f-cond);font-weight:700;font-size:1.7rem;letter-spacing:0}
-.v5btn{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.06em;font-size:.92rem}
+.k5 .v .mo,.view .kpi .v .mo{font-family:inherit}
+/* label & sub-tajuk: Barlow Semi Condensed */
+.j30r b,.kputus .kpl>b,.v5li b,.wrow b,.kad .ks,.kadr b,.pv2ln b,.kd2st h4,.sec h4,.gl b,.pd2k>summary,.v5lagi>summary,.bd2n>summary,.v5perl>summary{font-family:var(--f-semi);font-weight:700;letter-spacing:.01em}
+.j30r b{font-size:1rem}
+.k5 .l,.view .kpi .lbl,.kpi .lbl,.lbl,.kini .kl,.kputus .kpt,aside.rail .rh,.v5promo .t,.pnav-in .pn-k,.crg-h,.kcnt,.pdk .k,.kadk>.kk,.hero .hl,.tip-h{font-family:var(--f-semi);font-weight:600;text-transform:uppercase;letter-spacing:.07em}
+.k5 .l,.view .kpi .lbl{font-size:.8rem;letter-spacing:.05em}
+aside.rail .rh,.v5promo .t,.kputus .kpt{font-weight:700;letter-spacing:.1em;font-size:.78rem}
+th{font-family:var(--f-semi);font-weight:600;letter-spacing:.05em;font-size:.74rem}
+.tablewrap tbody td::before{font-family:var(--f-semi);letter-spacing:.06em;font-size:.68rem}
+.pill,.v5pill,.v5ok,.v5lw,.v5mt,.cp,.cn,.ca,.cm,.v5chip,.v5bdg,.kprj,.gr,.ggc,.cipn,.lrb,.pg,.gate,.ksd,.kd2gn .o,.kd2st .n{font-family:var(--f-semi);letter-spacing:.03em}
+.v5pill{text-transform:uppercase;letter-spacing:.05em;font-size:.82rem}
+.kputus .kpst .pill,.j30h span{font-weight:600;letter-spacing:.06em}
+.kputus.j30 .j30h .kpst .pill{font-size:.68rem}
+.ksg i{font-family:var(--f-semi)}
+/* navigasi & butang */
+nav.tabs button,.seg button,.chip,.btn,.more,.fold-btn,.v5btn,.pv2tabs button,.salh,.padbtn,.lnk,.kschip .kc{font-family:var(--f-semi);letter-spacing:.02em}
+.v5btn{text-transform:uppercase;letter-spacing:.06em;font-size:.92rem}
 @media (min-width:1100px){
-  aside.rail nav.tabs>button,aside.rail nav.tabs>button[aria-selected="true"]{font-family:var(--f-cond);font-size:1.02rem;text-transform:uppercase;letter-spacing:.04em}
+  aside.rail nav.tabs>button,aside.rail nav.tabs>button[aria-selected="true"]{font-family:var(--f-cond);font-size:1.05rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+  aside.rail nav.tabs>button[aria-selected="true"]{font-weight:700}
 }
 @media (max-width:760px){
   header.top h1{font-size:1.3rem}
-  body>nav#mainTabs>button{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.05em;font-size:.72rem}
-  .k5 .v{font-size:1.7rem}
+  body>nav#mainTabs>button{font-family:var(--f-cond);font-weight:600;text-transform:uppercase;letter-spacing:.05em;font-size:.76rem}
+  .k5 .v,.view .kpi .v{font-size:1.7rem}
 }
+@media (max-width:520px){h1{font-size:1.3rem}}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>

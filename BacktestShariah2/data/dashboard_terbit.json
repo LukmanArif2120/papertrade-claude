@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794209793-3468",
-  "nombor": 199,
-  "sha256": "13ef00880701b1ca6fdc7f73990e3e9ecfc7cc21738c67c7f52b58cfd938034a",
-  "bait": 755986,
-  "dikemas": "2026-11-09 07:36 UTC",
-  "nota": "v168 (keputusan pengguna 9 Nov 2026 \"terbitkan v2\"): fon tajuk Barlow Condensed (tebal, sempit, huruf besar) pada tajuk, label, menu dan nombor besar; warna, ikon dan susun atur v5.1 kekal."
+  "versi_artifact": "1794217669-23ea",
+  "nombor": 200,
+  "sha256": "1496f3fefa6711a2732b3211a62543c5c1dfa605a87bdc806fd5ac78b1c92d0b",
+  "bait": 758046,
+  "dikemas": "2026-11-09 09:47 UTC",
+  "nota": "v169 (keputusan pengguna 9 Nov 2026 \"terbitkan A untuk keseluruhan dashboard\"): satu keluarga fon Barlow di seluruh dashboard — Barlow Condensed tajuk dan nombor besar, Barlow Semi Condensed label/tab/butang/cip/kepala jadual/nombor kecil, Barlow ayat dan sel jadual (angka sama lebar); Inter dan mono dibuang; skala rem 17px; warna, ikon dan susun atur v5.1 kekal."
 }
