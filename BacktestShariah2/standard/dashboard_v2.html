@@ -182,12 +182,14 @@ section.view.pnav .panel.pn-a>.panel-h{cursor:default}section.view.pnav .panel-h
 .pnav-in div.pn-k:nth-of-type(3){--kk:var(--k3)}
 .pnav-in div.pn-k:nth-of-type(4){--kk:var(--k4)}
 .pnav-in .pn-k:first-child{border-top:0;margin-top:0;padding-top:2px}
-@media (min-width:761px){
+/* v173 (audit tablet): rel bahagian kiri (232px) hanya dari 1100px; tablet 761–1099px guna jalur cip mendatar seperti
+   telefon, supaya jadual posisi muat (di 768px rel itu memakan 30% lebar dan jadual terkeluar dari kad). */
+@media (min-width:1100px){
   section.view.pnav{padding-left:232px;position:relative}
   .pnav-rail{position:absolute;left:0;top:18px;bottom:0;width:216px}
   .pnav-in{position:sticky;top:calc(var(--hdr,0px) + 12px);max-height:calc(100vh - var(--hdr,0px) - 24px);overflow-y:auto;padding:2px 4px 2px 0;scrollbar-width:thin}
 }
-@media (max-width:760px){
+@media (max-width:1099px){
   .pnav-rail{position:sticky;top:var(--hdr,0px);z-index:6;margin:-6px calc(-1*max(16px,env(safe-area-inset-left,0px))) 0;background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
   .pnav-in{flex-direction:row;overflow-x:auto;gap:6px;padding:8px 16px;scrollbar-width:none}.pnav-in::-webkit-scrollbar{display:none}
   .pnav-in button{width:auto;flex:none;white-space:nowrap;border-color:var(--line);padding:6px 11px;border-radius:999px;font-size:.8rem}
@@ -1073,7 +1075,7 @@ nav.tabs>button svg{display:none}
 .pv2v{display:flex;gap:10px;align-items:flex-start;padding:11px 13px;border-radius:12px;margin-bottom:12px;border:1px solid}
 .pv2v .ic{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font-weight:800;flex:none;font-size:.8rem;color:#fff}
 .pv2v b{font-size:.86rem}
-.pv2v-c{background:rgba(255,93,115,.10);border-color:rgba(255,93,115,.4)}.pv2v-c .ic{background:#E8475F}
+.pv2v-c{background:rgba(255,93,115,.10);border-color:rgba(255,93,115,.4)}.pv2v-c .ic{background:#C42F48}
 .pv2v-a{background:rgba(255,193,69,.09);border-color:rgba(255,193,69,.4)}.pv2v-a .ic{background:#C9901A}
 .pv2v-s{background:rgba(107,122,153,.14);border-color:rgba(107,122,153,.42)}.pv2v-s .ic{background:#56637D}
 .pv2v-g{background:var(--sunk);border-color:var(--line)}.pv2v-g .ic{background:#3A414C}
@@ -1823,13 +1825,16 @@ function renderBanding(){
 }
 
 /* ================= Sector (P3) ================= */
-function heatCol(v,lim){if(v==null||isNaN(v))return 'var(--sunk)';const t=Math.max(-1,Math.min(1,v/lim));const a=(0.18+0.72*Math.abs(t)).toFixed(2);
+/* v173 (audit kontras): pada keamatan sederhana, teks putih DAN gelap kedua-duanya < 4.5:1 di atas petak (luminans
+   ~0.16–0.20). heatA menggelapkan sedikit petak dalam jalur itu sehingga teks putih lulus; heatCol dan heatTeks berkongsi. */
+function heatA(v,lim){const t=Math.max(-1,Math.min(1,v/lim)),c=t>=0?[34,197,94]:[239,68,68],b=[15,23,42];let a=0.18+0.72*Math.abs(t);
+  const L=a=>{const m=c.map((x,i)=>x*a+b[i]*(1-a)),f=x=>{x/=255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4);};return 0.2126*f(m[0])+0.7152*f(m[1])+0.0722*f(m[2]);};
+  while(a>0.18&&L(a)>0.155&&L(a)<0.205)a-=0.01;return {t,a,L:L(a)};}
+function heatCol(v,lim){if(v==null||isNaN(v))return 'var(--sunk)';const {t,a}=heatA(v,lim);
   return t>=0?`color-mix(in srgb,#22c55e ${Math.round(a*100)}%,#0f172a)`:`color-mix(in srgb,#ef4444 ${Math.round(a*100)}%,#0f172a)`;}
 /* v173 (audit kontras): nama/nilai di atas petak heatCol diberi warna putih ATAU gelap, mana yang kontrasnya lebih tinggi.
    Dahulu `svg:not(.v5s) text` (kelabu pudar) mengatasi .pm-n, jadi nama industri kelabu di atas hijau terang (~2:1). */
-function heatTeks(v,lim){if(v==null||isNaN(v))return '#F1F5F9';const t=Math.max(-1,Math.min(1,v/lim)),a=0.18+0.72*Math.abs(t),c=t>=0?[34,197,94]:[239,68,68],b=[15,23,42];
-  const m=c.map((x,i)=>x*a+b[i]*(1-a)),f=x=>{x/=255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4);},L=0.2126*f(m[0])+0.7152*f(m[1])+0.0722*f(m[2]);
-  return 0.96/(L+0.05)>=(L+0.05)/0.055?'#F1F5F9':'#06120F';}
+function heatTeks(v,lim){if(v==null||isNaN(v))return '#F1F5F9';const {L}=heatA(v,lim);return 0.96/(L+0.05)>=(L+0.05)/0.055?'#F1F5F9':'#06120F';}
 function squarify(items,x,y,w,h){const out=[];let rest=items.filter(d=>d.v>0).sort((a,b)=>b.v-a.v);const tot=rest.reduce((s,d)=>s+d.v,0);if(!tot)return out;
   const sc=w*h/tot;rest=rest.map(d=>Object.assign({},d,{a:d.v*sc}));
   const worst=(row,len)=>{const s=row.reduce((t,d)=>t+d.a,0),mx=Math.max(...row.map(d=>d.a)),mn=Math.min(...row.map(d=>d.a));return Math.max(len*len*mx/(s*s),(s*s)/(len*len*mn));};
@@ -3420,7 +3425,7 @@ function drawDD(box,H){if(!box)return;if(!H.length){box.innerHTML='<p class="emp
   const W=Math.max(280,box.clientWidth||520),Ht=180,P={l:56,r:16,t:12,b:28},n=dd.length,st=langkahBulat(-lo0,3),lo=Math.floor(lo0/st)*st;
   const X=i=>P.l+(n===1?(W-P.l-P.r)/2:i/(n-1)*(W-P.l-P.r)),Y=v=>P.t+(v/lo)*(Ht-P.t-P.b);
   let g='<g class="grid">',t='';for(let v=0;v>=lo-st/2;v-=st){const y=Y(v).toFixed(1);g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}"/>`;t+=`<text x="${P.l-6}" y="${(+y+4).toFixed(1)}" text-anchor="end">${pcAks(v,st)}</text>`;}g+='</g>';
-  const lg=Math.max(1,Math.ceil(n/Math.max(2,Math.floor((W-P.l-P.r)/64))));dd.forEach((h,i)=>{if(i%lg&&i!==n-1)return;t+=`<text x="${X(i).toFixed(1)}" y="${Ht-8}" text-anchor="middle">${esc(tkO(h.d))}</text>`;});
+  const lg=Math.max(1,Math.ceil(n/Math.max(2,Math.floor((W-P.l-P.r)/64))));dd.forEach((h,i)=>{if((i%lg&&i!==n-1)||(i!==n-1&&n-1-i<Math.ceil(lg*0.75)))return;t+=`<text x="${X(i).toFixed(1)}" y="${Ht-8}" text-anchor="middle">${esc(tkO(h.d))}</text>`;});
   const pts=dd.map((h,i)=>X(i).toFixed(1)+','+Y(h.v).toFixed(1)).join(' ');
   const ar=`<polygon points="${X(0).toFixed(1)},${Y(0).toFixed(1)} ${pts} ${X(n-1).toFixed(1)},${Y(0).toFixed(1)}" fill="var(--neg-soft)"/><polyline points="${pts}" fill="none" stroke="var(--neg)" stroke-width="1.8" stroke-linejoin="round"/>`;
   box.innerHTML=`<svg viewBox="0 0 ${W} ${Ht}" width="100%" height="${Ht}" role="img" aria-label="Kejatuhan untung terkumpul dari puncak">${g}${ar}${t}</svg>`;
