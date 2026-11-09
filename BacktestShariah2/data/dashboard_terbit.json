@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794228509-f136",
-  "nombor": 203,
-  "sha256": "3d692343e5e6b81188ade9779d32a8466b4b4c31d1221aa394ae80fa1f0a5fae",
-  "bait": 762654,
-  "dikemas": "2026-11-09 12:48 UTC",
-  "nota": "v172 (laporan pengguna 9 Nov 2026 dari iPhone, \"cuba check keseluruhan dashboard\"): kaki helaian legap, z-index di atas kandungan dan rapat ke bawah dengan ruang selamat iPhone (dahulu bulatan G1–G6 terapung di atas butang, petunjuk leret menindih kandungan, kandungan kelihatan di bawah kaki); kepala helaian legap; label carta tidak diklip (SVG overflow visible), label paksi carta harga tidak di bawah tag harga, histogram Taburan untung diberi ruang paksi. Audit tindihan baharu ujian/audit_tindih.js: 0 cacat (komputer 1440x1000, telefon 390x660 dengan ruang selamat iPhone)."
+  "versi_artifact": "1794230762-d7fb",
+  "nombor": 204,
+  "sha256": "f4edb196a6b5a797f697557e25e9ef150ce2d424485d64f51845dad014727b70",
+  "bait": 777197,
+  "dikemas": "2026-11-09 13:26 UTC",
+  "nota": "v173 (9 Nov 2026, keputusan pengguna \"ya saya luluskan\"): empat tambahan rekod/maklumat — panel Jejak 10 slot di Akaun (persentil jalur rawak + SPUS tingkap sama), panel Kepekatan industri/sektor di Posisi (saham unik; merah > 1 saham satu industri atau sektor > 30%), baris Kuarantin data dalam kad Saluran, baris Keputusan terbuka KOORDINATOR di Hari ini. Dibina di atas v172 hidup (terbitan #203, sesi lain, pembetulan kaki helaian iPhone + label carta, belum dikomit) yang digabung ke dalam sumber ini. Medan db baharu (harian/status.kuarantin, keputusan_terbuka; prestasi/portfolio_slot.jalur/persentil/spus_pct) muncul selepas tolakan db seterusnya."
 }

@@ -417,12 +417,59 @@ def pengawas(st, masa):
     return out
 
 
-def portfolio_slot(dibina, folder=os.path.join(BS2, 'portfolio_slot')):
+def _jalur_tingkap(J, t0, t1):
+    """Pulangan % setiap cabutan jalur rawak atas tingkap [t0, t1] (teks YYYY-MM-DD).
+
+    Salinan logik `jalur_tingkap` dalam standard/banding_spus.py main() (fungsi bersarang, tidak boleh diimport):
+    jalur berasas 1.0 pada buka sesi pertamanya; bagi lorong yang bermula lebih lewat (lorong beku), asas = ekuiti
+    cabutan pada sesi terakhir SEBELUM t0. Bagi lorong yang bermula bersama jalur ini sama dengan "Persentil dalam
+    jalur" `banding_jalur` portfolio_slot.py (RINGKASAN.md)."""
+    out = []
+    for _, g in J.groupby('benih'):
+        g = g.sort_values('tarikh')
+        sblm = g[g.tarikh < t0]
+        asas = float(sblm.ekuiti.iloc[-1]) if len(sblm) else 1.0
+        akhir = g[g.tarikh <= t1]
+        if len(akhir) and asas > 0:
+            out.append((float(akhir.ekuiti.iloc[-1]) / asas - 1) * 100)
+    return np.array(out)
+
+
+def _spus_tingkap(sp, t0, t1):
+    """(pulangan %, MDD %) SPUS asas BUKA sesi t0 hingga TUTUP sesi t1 (peraturan laporan/BANDING_SPUS.md: lorong beli pada
+    buka sesi pertama). sp = spus_siri(); (None, None) jika liputan tiada."""
+    try:
+        a, b = int(str(t0).replace('-', '')), int(str(t1).replace('-', ''))
+    except (TypeError, ValueError):
+        return None, None
+    if not sp or a not in sp or b not in sp:
+        return None, None
+    asas = sp[a][0]
+    if not asas:
+        return None, None
+    W = np.array([asas] + [sp[t][1] for t in sorted(sp) if a <= t <= b], float)
+    return round((W[-1] / asas - 1) * 100, 2), round(100 * float((W / np.maximum.accumulate(W) - 1).min()), 2)
+
+
+def portfolio_slot(dibina, folder=os.path.join(BS2, 'portfolio_slot'), spus=None):
     """prestasi/portfolio_slot: portfolio maya 10 slot (standard/portfolio_slot.py, daripada Lejar Penuh) untuk kad Eksperimen
     dalam tab Ringkasan dan panel Skor kaedah swing (gabungan beku). Portfolio tanpa fail dilangkau; None jika RS_10 belum dijana.
-    Setiap portfolio: mula, sesi dan spy_pct tempoh sama (portfolio beku bermula pada mula_jejak)."""
+    Setiap portfolio: mula, sesi dan spy_pct tempoh sama (portfolio beku bermula pada mula_jejak).
+    v172 (9 Nov 2026, keputusan pengguna; rekod sahaja): `jalur` = kuantil ekuiti terakhir rawak_jalur_ekuiti.csv (20 cabutan),
+    setiap lorong `persentil` (% cabutan rawak di bawah lorong atas tingkap lorong itu, cara banding_spus.py) dan `spus_pct` /
+    `spus_mdd_pct` (SPUS buka sesi mula -> tutup sesi terakhir; None jika liputan tiada). `spus` = spus_siri() jika None."""
     import portfolio_slot as PS
     out = {}
+    J = None
+    pj = os.path.join(folder, 'rawak_jalur_ekuiti.csv')
+    if os.path.exists(pj):
+        try:
+            J = pd.read_csv(pj, dtype={'tarikh': str})
+            if J.empty or not {'benih', 'tarikh', 'ekuiti'} <= set(J.columns):
+                J = None
+        except (OSError, ValueError):
+            J = None
+    sp = spus_siri() if spus is None else spus
     for k, nama in PS.PORTFOLIO.items():
         pe, pp = os.path.join(folder, f'{k}_ekuiti.csv'), os.path.join(folder, f'{k}_posisi.csv')
         if not (os.path.exists(pe) and os.path.exists(pp)):
@@ -439,19 +486,73 @@ def portfolio_slot(dibina, folder=os.path.join(BS2, 'portfolio_slot')):
                       spy_pct=round(100 * (float(E.spy.iloc[-1]) - 1), 2) if len(E) and pd.notna(E.spy.iloc[-1]) else None,
                       ekuiti=[[t, round(float(e), 5)] for t, e in zip(E.tarikh, E.ekuiti)],
                       posisi=json.loads(R.round(4).to_json(orient='records')))
+        if len(E):
+            t0, t1 = str(E.tarikh.iloc[0]), str(E.tarikh.iloc[-1])
+            jp = _jalur_tingkap(J, t0, t1) if J is not None else np.array([])
+            pul = 100 * (float(E.ekuiti.iloc[-1]) - 1)
+            out[k]['persentil'] = round(100 * float((jp < pul).mean()), 1) if jp.size else None
+            out[k]['spus_pct'], out[k]['spus_mdd_pct'] = _spus_tingkap(sp, t0, t1)
     rs = out.get('RS_10')
     if not rs or not rs['sesi']:
         return None
+    jalur = None
+    if J is not None:
+        akhir = J[J.tarikh == J.tarikh.max()].ekuiti.to_numpy('float64')
+        if akhir.size:
+            jalur = dict(sesi=str(J.tarikh.max()), n=int(akhir.size), min=round(float(akhir.min()), 4),
+                         p10=round(float(np.quantile(akhir, 0.10)), 4), median=round(float(np.median(akhir)), 4),
+                         p90=round(float(np.quantile(akhir, 0.90)), 4), maks=round(float(akhir.max()), 4),
+                         definisi='Ekuiti terakhir 20 cabutan RAWAK_10 berbenih berbeza (rawak_jalur_ekuiti.csv). Persentil lorong = '
+                                  '% cabutan yang pulangannya di bawah lorong atas tingkap lorong itu (cara banding_spus.py; lorong '
+                                  'beku bermula lewat diasaskan pada ekuiti cabutan sesi sebelum mulanya).')
     beku = None
     try:
         beku = json.load(open(os.path.join(BS2, 'data', 'analisis', 'gabungan_beku.json'), encoding='utf-8'))
     except (OSError, ValueError):
         pass
     return dict(dibina=dibina, mula=rs['mula'], sesi_terakhir=rs['ekuiti'][-1][0], sesi=rs['sesi'], spy_pct=rs['spy_pct'], portfolio=out,
-                beku=beku,
+                beku=beku, jalur=jalur,
                 nota='Rekod sahaja (kajian/KAJIAN_PORTFOLIO.md). 10 slot x 10% ekuiti, satu posisi setiap saham. RS_10 = RS pasaran '
                      'tertinggi, RAWAK_10 = kawalan rawak (lorong 2). GABUNGAN_10 / TOP1_10 / RAWAK_KAEDAH_10 = gabungan kaedah beku '
                      '(data/analisis/gabungan_beku.json) lawan #1 sahaja lawan kaedah rawak, sejak mula_jejak. Dibina semula setiap malam oleh lejar.yml.')
+
+
+def kuarantin_aktif(path=None, had=80):
+    """harian/status.kuarantin: [{ticker, tarikh_mula, sebab}] baris data/harga/kuarantin.csv yang MASIH aktif
+    (status terakhir bagi (ticker, tarikh_mula) = aktif; standard/kuarantin.py keadaan()). sebab dipotong ke `had` aksara.
+    Gagal-lembut: [] jika fail tiada/rosak. Maklumat sahaja (kuarantin.py lepas = keputusan manusia)."""
+    try:
+        import kuarantin as KU
+        d = KU.muat(path)
+        K = KU.keadaan(d)
+        out, dilihat = [], set()
+        for r in d.itertuples():
+            k = (r.ticker, r.tarikh_mula)
+            if k in dilihat or K.get(k, ('',))[0] != 'aktif':
+                continue
+            dilihat.add(k)
+            sebab = str(r.sebab or '').strip()
+            out.append(dict(ticker=r.ticker, tarikh_mula=r.tarikh_mula,
+                            sebab=sebab if len(sebab) <= had else sebab[:had - 1].rstrip() + '…'))
+        return sorted(out, key=lambda x: (x['tarikh_mula'], x['ticker']))
+    except Exception:  # noqa: BLE001
+        return []
+
+
+def keputusan_terbuka_db(path=None):
+    """harian/status.keputusan_terbuka: [{tarikh, perkara}] baris `status == terbuka` koordinator/keputusan.csv melalui
+    standard/koordinator.keputusan_terbuka() (tiada kesan sampingan pada import); `path` membaca CSV lain (ujian).
+    Gagal-lembut: []. Ini maklumat KOORDINATOR, bukan keputusan kad skor."""
+    try:
+        if path is None:
+            import koordinator as KO
+            rows = KO.keputusan_terbuka()
+        else:
+            with open(path, encoding='utf-8') as f:
+                rows = [r for r in csv.DictReader(f) if (r.get('status') or '').strip() == 'terbuka']
+        return [dict(tarikh=(r.get('tarikh') or '').strip(), perkara=(r.get('perkara') or '').strip()) for r in rows]
+    except Exception:  # noqa: BLE001
+        return []
 
 
 def sesi_stor(path=STATUS_HARGA):
@@ -1488,7 +1589,10 @@ def main(argv=None):
                                     tidak_dibeli_baru=len(rk.get('tidak_dibeli') or []), watchlist_dibuang=rk.get('watchlist_dibuang', 0)),
         senarai_beli=dict(claude=len(sb), jumlah=len(sb), moomoo=0, saham_unik=len(lihat), watchlist=len(wl)),
         beli_dirancang=len(sb), beli_pada=beli.get('masa', ''), beli_ringkas=dict(direkod=beli.get('direkod', 0), dilangkau=beli.get('dilangkau', 0)),
-        gred_pada=st.get('gred', {}).get('masa', ''), ralat=(rk.get('ralat_kaedah') or [])[:20])
+        gred_pada=st.get('gred', {}).get('masa', ''), ralat=(rk.get('ralat_kaedah') or [])[:20],
+        # v172 (9 Nov 2026, keputusan pengguna; maklumat sahaja): ticker yang datanya dikuarantin (kad Saluran) dan
+        # keputusan terbuka KOORDINATOR (baris di bawah jalur keputusan Hari ini; BUKAN keputusan kad skor).
+        kuarantin=kuarantin_aktif(), keputusan_terbuka=keputusan_terbuka_db())
     kn = kaedah_n(dibina)
     if kn:
         docs['kaedah_n/papan'] = kn

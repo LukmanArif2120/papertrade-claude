@@ -23,6 +23,8 @@ Cari kaedah swing yang **untung bersih melebihi rugi** (jangkaan positif; kadar 
 | Kajian REVERSE: apa yang sudah diuji / tinggal | `python3 REVERSE/strategi.py` + `REVERSE/STRATEGI.md`, `REVERSE/KEPUTUSAN_AKHIR.md` |
 | Keadaan repo, keputusan terbuka, kesegaran data | `KOORDINATOR.md` (dijana; jangan sunting) |
 | Penanda aras | SPUS, bukan SPY (`REVERSE/PENANDA_ARAS_SYARIAH.md`, `laporan/BANDING_SPUS.md`) |
+| Penilaian keseluruhan 223 kaedah, kelas PANTAU/BUANG/BELUM, satu pelan terukur (9 Nov 2026) | `BacktestShariah2/kajian/FABLE_PENILAIAN.md`; cadangan `kajian/FABLE_CADANGAN.md` |
+| Kaedah calon berhenti direkod (label maklumat bulanan C1–C5, BUKAN tindakan) | `BacktestShariah2/laporan/CANTAS.md` (`standard/cantas.py`, pradaftar `standard/SPEC_CANTAS.md`) |
 
 Peraturan tetap: laporan lain (PENGANALISIS, KAEDAH_TERBAIK, RINGKASAN portfolio, T4) memaparkan baris status kad skor (`standard/status_kad.py`) dan BUKAN keputusan.
 
@@ -49,6 +51,9 @@ Peraturan tetap: laporan lain (PENGANALISIS, KAEDAH_TERBAIK, RINGKASAN portfolio
 - Kelebihan relatif saham pemimpin bertukar tanda ikut rejim QQQ (12/17 tahun, kajian 7 Nov 2026) — sebab G1 mewajibkan data dalam kedua-dua rejim.
 - Ujian statistik setiap kaedah: SE berkelompok ikut hari beli meluluskan plasebo sehingga 45%; gunakan reka bentuk dalam `standard/lift_kaedah.py` (dua hala saham+minggu, asas hari × tercile ATR).
 - Alam kajian A02 tiada saham delist (bias survivorship); setiap CAGR kajian condong ke atas.
+- **Had pegang 10 sesi** atas gabungan terbaik (`GB02_atau3`) terburuk pada setiap slot: kos pusingan 14 mata/tahun, 8 slot CAGR +2.0% MDD -60% (`REVERSE/PEGANG_SLOT.md`). Sasaran "+5% setiap dagangan dalam 10 sesi" tidak disokong data (`kajian/FABLE_PENILAIAN.md` §3).
+- **Satelit kaedah 15% atas teras indeks 35% + tunai** (kajian tunggal 9 Nov 2026, `REVERSE/SATELIT.md`): kalah indeks 50% dan satelit RAWAK; MDD -13.7%. Satelit kekal 0% sehingga TERBUKTI. Pelan terukur yang disokong: teras SPUS 30–35% + tunai (`FABLE_PENILAIAN.md` §9).
+- Pangkat backtest tidak bertahan pada data langsung (Spearman jangkaan −0.23); RS tinggi dan pemimpin rugi paling teruk dalam rejim OFF; sektor/industri berguna sebagai **kawalan risiko** (had 1 saham setiap industri), bukan skor pemilihan.
 
 ## Peraturan
 - **Dashboard:** artifact sedia ada https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e (db melalui ArtifactData); jangan cipta artifact baharu. Selepas SETIAP terbitan: `python3 BacktestShariah2/standard/semak_terbit.py --kemas --versi <version id> --nombor <n>` dan komit `data/dashboard_terbit.json` bersama `dashboard_v2.html` (`semak_data.yml` gagal tanpanya; `jadual/tolak_db.md` langkah 7 menyemak arah terbit-tanpa-komit). Jika penerbitan ditolak kerana versi lebih baharu hidup: GABUNG ke atas HTML hidup, jangan tulis ganti. Butiran: `standard/dashboard.md`.
@@ -63,6 +68,7 @@ Peraturan tetap: laporan lain (PENGANALISIS, KAEDAH_TERBAIK, RINGKASAN portfolio
 - **Kad skor:** ambang dikunci `ujian/test_kad_skor.py::TestKunci`; mengubahnya memerlukan keputusan pengguna + pradaftar bertarikh dalam `SPEC_KAD_SKOR.md` SEBELUM data terkesan dilihat, dan gate kemahiran mesti lulus `plasebo_gate.py`. Hanya hari beli LANGSUNG dikira (Mxx sejak isyarat 2026-10-15; Nxx/GB sejak 2026-11-03).
 - Automasi: `.claude/settings.json` menyekat semua alat order (hook PreToolUse) dan memasang `requirements.txt` (SessionStart); `semak_data.yml` menjalankan ujian + `sahkan.py` pada setiap push ke `main` dan setiap PR; `penjaga_jadual.yml` (`standard/penjaga_jadual.py`) mencetus semula workflow berjadual yang hilang/lewat > 30 minit (tambah workflow berjadual baharu ke `JAGA`), juga dicetus oleh tugasan berjadual Claude `trig_01N3Qx1S6bRhf9h5BEKk85bQ` ke sesi Sonnet `session_018zpLxNRJ3rxZBvGT9yztVT`. Jangan buang atau longgarkan.
 - GitHub Actions RASMI sejak 27 Okt 2026: `harian.yml`, `beli.yml`, `petang.yml`, `lejar.yml` → `analisis.yml` (hanya selepas Lejar berjaya). `BacktestShariah2/MOD_ACTIONS` = `rasmi`. Berpatah balik: `jadual/PERALIHAN.md`. Notifikasi ntfy topik `claude_azim` (`standard/notifikasi.py`; `amaran_ntfy.yml`). Rutin Claude 6:02 / 7:47 / 9:35 dimatikan — jangan hidupkan tanpa keputusan pengguna.
+- Ringkasan mingguan 5 baris: `python3 BacktestShariah2/standard/koordinator.py --mingguan` (`jadual/mingguan.md` langkah 8b). Label cantas: `standard/cantas.py` dalam `analisis.yml` (maklumat; cantas sebenar = baris baharu `koordinator/keputusan.csv`).
 - Tugasan berjadual Claude (tolak db, mingguan) guna model Sonnet 5.5 sahaja; repo sudah dilampirkan (jangan `add_repo`). Alat Moomoo/SST mungkin berawalan lain: cari dengan ToolSearch nama alat. Larangan order terpakai tanpa mengira awalan.
 - Plugin Superpowers: untuk sesi kerja bersama pengguna sahaja; rutin berjadual ikut `jadual/` terus tanpa skill brainstorming/soalan menunggu jawapan.
 - Papan Penganalisis (`standard/penganalisis.py`, `analisis.yml`): skor gabungan backtest + hadapan dan label pantau (BERSARA/GANTUNG/AMARAN/OK/BELUM CUKUP) — maklumat dan input G5, bukan keputusan.

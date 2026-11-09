@@ -234,6 +234,7 @@ diambil, dan sebabnya. Ini rekod *mengapa* kita berada di langkah semasa.
 | E5 | KORELASI `KR03` (96, `AL04` titik-masa) | **T1 0 · T3 0**; P1 23, **P2 0**; **`E5a` LULUS dua-dua** — had 1 beri **+1.65 CAGR DAN +1.60 MDD** | **E6** |
 | E6 | GABUNGAN `GB07` (60, `AL04` titik-masa) | **T1 0 · T3 0**; P1 38, **P2 0**; **`E6a` LULUS 19/48** — saringan berdiri perbaiki dua-dua paksi | **BERHENTI–TUTUP** |
 | — | **JUMLAH baris gilir** | **724 konfigurasi · 6,994 larian · P1 161 · P2 24 · T1 0 · T3 0** | `KEPUTUSAN_AKHIR.md` |
+| SAT | **Kajian TUNGGAL luar baris gilir** (kebenaran pengguna 9 Nov 2026): satelit `GB02_atau3` × `X15` 15% atas teras indeks 35% + tunai, had 1 industri, rejim ON; 14 sel, 90 larian (`SPEC_SATELIT.md`) | **GAGAL P1/P2/P3/P5**: CAGR tahan +6.12% lawan indeks 50% +7.59% dan satelit RAWAK +7.82%; MDD -13.7% (`SATELIT.md`) | satelit kekal 0%; teras SPUS 30–35% + tunai (`kajian/FABLE_PENILAIAN.md` §9); kebenaran tunggal terbelanja |
 
 ## 7. Peraturan proses — supaya kesilapan yang sama tidak berulang
 

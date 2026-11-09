@@ -82,6 +82,14 @@ EKSPERIMEN = [
          fail='korelasi_ringkas.csv', gate='T1', pf=True, giliran=True),
     dict(id='E6', nama='GABUNGAN GB07 - hierarki merentas paksi',
          fail='hierarki_ringkas.csv', gate='T1', pf=True, giliran=True),
+    # Kajian TUNGGAL di luar baris gilir (kebenaran pengguna 9 Nov 2026; pradaftar SPEC_SATELIT.md):
+    # satelit GB02_atau3 x X15 15% akaun atas teras indeks 35% + tunai, dalam toleransi MDD -10%.
+    # Gate P1-P5 ialah gate AKAUN (lawan K1 indeks 50% dan satelit rawak), bukan T1/T3 SPUS penuh,
+    # jadi T1/T2/T3 di bawah dijangka 0 secara struktur (teras 35%); baca `lulus`.
+    dict(id='SAT', nama='SATELIT - GB02_atau3 x Chandelier 15% atas teras indeks 35% + tunai (14 sel)',
+         fail='satelit_ringkas.csv', gate='lulus', pf=True,
+         amaran='GAGAL P1/P2/P3/P5: CAGR tahan +6.12% lawan indeks 50% +7.59% dan satelit RAWAK +7.82%; '
+                'MDD -13.7%. Satelit kekal 0%. Kebenaran kajian tunggal 9 Nov 2026 dianggap terbelanja.'),
 ]
 
 
