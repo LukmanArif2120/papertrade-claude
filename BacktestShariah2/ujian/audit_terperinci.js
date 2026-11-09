@@ -122,7 +122,8 @@ const SAIZ = [
         const ok = await pg.evaluate(() => { const r = [...document.querySelectorAll('.tw-lp tr[data-lp], .tw-grd tr[data-pos]')].find(x => x.getClientRects().length); if (!r) return false; r.scrollIntoView({ block: 'start' }); r.click(); return true; });
         await tunggu(700); if (ok) await periksa('kad posisi telefon dibuka');
       }
-      // ===== 4. helaian =====
+      // ===== 4. helaian ===== (muat semula dahulu: keadaan penapis/segmen daripada langkah sebelum tidak dibawa)
+      await pg.reload(); await tunggu(6000); await pg.addStyleTag({ content: '*{scroll-behavior:auto!important}' });
       const bukaHelaian = async (tab, kumpI, rx, sel) => {
         await klikSel(`#mainTabs button[data-tab="${tab}"]`);
         if (kumpI != null) await pg.evaluate(i => { const b = document.querySelectorAll('#kumpSeg:not([hidden]) button')[i]; if (b) b.click(); }, kumpI);

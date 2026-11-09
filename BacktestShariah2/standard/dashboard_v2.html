@@ -1294,8 +1294,11 @@ tbody tr.skw-x td{opacity:.75}
 .pill.p-exit{color:#FFA3AF}
 .b5c{color:#2A0710}
 .kd2st .n{color:var(--fg)!important}
-/* v173 SASARAN KETIK di telefon (WCAG 2.5.8: >= 24px) */
-@media (max-width:760px){
+/* v173 jubin KPI di tablet (761–1099px): empat sebaris terlalu sempit, cip terkeluar dari jubin -> dua sebaris */
+@media (min-width:761px) and (max-width:1099px){.k5row{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.k5 .l{flex-wrap:wrap}
+/* v173 SASARAN KETIK di telefon DAN skrin sentuh lain (tablet) (WCAG 2.5.8: >= 24px) */
+@media (max-width:760px),(pointer:coarse){
   button.lnk{padding-block:3px}
   .salh{min-height:26px}
   summary{padding-block:4px}
@@ -1822,6 +1825,11 @@ function renderBanding(){
 /* ================= Sector (P3) ================= */
 function heatCol(v,lim){if(v==null||isNaN(v))return 'var(--sunk)';const t=Math.max(-1,Math.min(1,v/lim));const a=(0.18+0.72*Math.abs(t)).toFixed(2);
   return t>=0?`color-mix(in srgb,#22c55e ${Math.round(a*100)}%,#0f172a)`:`color-mix(in srgb,#ef4444 ${Math.round(a*100)}%,#0f172a)`;}
+/* v173 (audit kontras): nama/nilai di atas petak heatCol diberi warna putih ATAU gelap, mana yang kontrasnya lebih tinggi.
+   Dahulu `svg:not(.v5s) text` (kelabu pudar) mengatasi .pm-n, jadi nama industri kelabu di atas hijau terang (~2:1). */
+function heatTeks(v,lim){if(v==null||isNaN(v))return '#F1F5F9';const t=Math.max(-1,Math.min(1,v/lim)),a=0.18+0.72*Math.abs(t),c=t>=0?[34,197,94]:[239,68,68],b=[15,23,42];
+  const m=c.map((x,i)=>x*a+b[i]*(1-a)),f=x=>{x/=255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4);},L=0.2126*f(m[0])+0.7152*f(m[1])+0.0722*f(m[2]);
+  return 0.96/(L+0.05)>=(L+0.05)/0.055?'#F1F5F9':'#06120F';}
 function squarify(items,x,y,w,h){const out=[];let rest=items.filter(d=>d.v>0).sort((a,b)=>b.v-a.v);const tot=rest.reduce((s,d)=>s+d.v,0);if(!tot)return out;
   const sc=w*h/tot;rest=rest.map(d=>Object.assign({},d,{a:d.v*sc}));
   const worst=(row,len)=>{const s=row.reduce((t,d)=>t+d.a,0),mx=Math.max(...row.map(d=>d.a)),mn=Math.min(...row.map(d=>d.a));return Math.max(len*len*mx/(s*s),(s*s)/(len*len*mn));};
@@ -2202,7 +2210,7 @@ function drawKumulatif(box,H,B){if(!box)return;if(!H.length){box.innerHTML='<p c
   if(Lk<0&&Lk-lo<(hi-lo)*0.12)lo-=st;if(Lk>=0&&hi-Lk<(hi-lo)*0.12)hi+=st;
   const X=i=>P.l+(n===1?(W-P.l-P.r)/2:i/(n-1)*(W-P.l-P.r)),Y=v=>P.t+(hi-v)/(hi-lo)*(Ht-P.t-P.b);
   let g='<g class="grid">',t='';for(let v=lo;v<=hi+st/2;v+=st){const y=Y(v).toFixed(1);g+=`<line x1="${P.l}" x2="${W-P.r}" y1="${y}" y2="${y}"/>`;t+=`<text x="${P.l-6}" y="${(+y+4).toFixed(1)}" text-anchor="end">${pcAks(v,st)}</text>`;}g+='</g>';
-  const lg=Math.max(1,Math.ceil(n/Math.max(2,Math.floor((W-P.l-P.r)/64))));H.forEach((h,i)=>{if(i%lg&&i!==n-1)return;t+=`<text x="${X(i).toFixed(1)}" y="${Ht-8}" text-anchor="middle">${esc(tkO(h.d))}</text>`;});
+  const lg=Math.max(1,Math.ceil(n/Math.max(2,Math.floor((W-P.l-P.r)/64))));H.forEach((h,i)=>{if((i%lg&&i!==n-1)||(i!==n-1&&n-1-i<Math.ceil(lg*0.75)))return;t+=`<text x="${X(i).toFixed(1)}" y="${Ht-8}" text-anchor="middle">${esc(tkO(h.d))}</text>`;});
   const col=H[n-1].kum>=0?'--pos':'--neg',z=`<line x1="${P.l}" x2="${W-P.r}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--line-2)"/>`;
   const ln=`<polyline points="${H.map((h,i)=>X(i).toFixed(1)+','+Y(h.kum).toFixed(1)).join(' ')}" fill="none" stroke="var(${col})" stroke-width="2" stroke-linejoin="round"/>`;
   const ln2=sp.length?`<polyline points="${sp.map((v,i)=>X(i).toFixed(1)+','+Y(v).toFixed(1)).join(' ')}" fill="none" stroke="var(--violet)" stroke-width="1.6" stroke-dasharray="4 3"><title>${paNama()} dalam tempoh sama: ${sg2(sp[n-1])}</title></polyline>`:'';
@@ -2934,7 +2942,7 @@ function pdKecekapan(r){const m=mfeOf(r),u=r.keluar?r.untung_akhir_pct:r.untung_
   const p=Math.max(0,Math.min(100,u/m*100));
   return `<div class="sec"><h4 data-tip="mfe">Kecekapan keluar</h4>
   <div class="pdcap"><div class="f" style="width:${p.toFixed(1)}%"></div><div class="g" style="left:${p.toFixed(1)}%"></div>
-  <span style="left:0;color:${p>=30?'#052e16':'var(--fg)'}">${sg2(u)}</span><span style="right:0;color:var(--neg-tx)">&minus;${fx(m-u,2)} mata</span></div>
+  <span style="left:0;color:${p>=30?'#052e16':'var(--fg)'}">${sg2(u)}</span><span style="right:0;color:var(--neg-tx)${p>=70?';background:var(--sunk);border-left:1px solid var(--line-2)':''}">&minus;${fx(m-u,2)} mata</span></div>
   <p class="pdnota">Menangkap <b>${fx(p,0)}%</b> daripada kenaikan maksimum ${sg2(m)}${ma==null?'':` &middot; penurunan maks ${sg2(ma)}`}. Jurang = untung yang terlepas sebelum keluar.</p></div>`;}
 
 /* jadual gred: huruf + bar kedudukan + nilai ringkas. Bar guna skor berangka apabila ada
@@ -3614,11 +3622,11 @@ function drawPeta(box,rows,st){if(!box)return;if(!rows.length){box.innerHTML='<p
   let o='';squarify(petaData(rows),0,0,W,H).forEach(s=>{const hd=s.w>70&&s.h>48?16:0;
     o+=`<g data-pmk="${esc(s.k)}" tabindex="0" role="button" aria-label="Tapis sektor ${esc(s.k)}"><rect x="${s.x.toFixed(1)}" y="${s.y.toFixed(1)}" width="${Math.max(0,s.w-1).toFixed(1)}" height="${Math.max(0,s.h-1).toFixed(1)}" fill="var(--sunk)" stroke="var(--bg)" stroke-width="2"/>${hd?`<text x="${(s.x+5).toFixed(1)}" y="${(s.y+12).toFixed(1)}" class="pm-s">${esc(ptg(s.k.toUpperCase(),s.w,12.5))}</text>`:''}<title>${esc(s.k)}: ${s.v} saham (${s.np} posisi) · purata ${sg2(s.u)}</title></g>`;
     squarify(Object.entries(s.ind).map(([k,a])=>({k,v:nSaham(a),np:a.length,rs:a,u:avgOf(a.map(r=>r.untung_pct))})),s.x+1,s.y+hd+1,s.w-3,s.h-hd-3).forEach(t=>{
-      const pil=st&&st.sk===s.k&&st.ind===t.k,f=t.w>90&&t.h>40?13:12,vt=`${t.v} · ${sg2(t.u)}`,dua=t.w>vt.length*6.8+10&&t.h>36,satu=t.w>40&&t.h>18;
+      const pil=st&&st.sk===s.k&&st.ind===t.k,tc=heatTeks(t.u,lim),f=t.w>90&&t.h>40?13:12,vt=`${t.v} · ${sg2(t.u)}`,dua=t.w>vt.length*6.8+10&&t.h>36,satu=t.w>40&&t.h>18;
       const sh=[...t.rs].sort((x,y)=>(y.untung_pct??-1e9)-(x.untung_pct??-1e9)).map(r=>`${r.saham} ${sg2(r.untung_pct)}`);
       o+=`<g class="pm-t" data-pmk="${esc(s.k)}" data-pmi="${esc(t.k)}" tabindex="0" role="button" aria-label="Tapis industri ${esc(t.k)}: ${t.v} saham, purata ${sg2(t.u)}"><rect x="${(t.x+1).toFixed(1)}" y="${(t.y+1).toFixed(1)}" width="${Math.max(0,t.w-2).toFixed(1)}" height="${Math.max(0,t.h-2).toFixed(1)}" rx="2" fill="${heatCol(t.u,lim)}"${pil?' stroke="var(--accent)" stroke-width="2.5"':''}/>
-        ${satu?`<text x="${(t.x+5).toFixed(1)}" y="${(t.y+(dua?15:Math.min(13,t.h-3))).toFixed(1)}" class="pm-n" style="font-size:${f}px">${esc(ptg(t.k,t.w,f))}</text>`:''}
-        ${dua?`<text x="${(t.x+5).toFixed(1)}" y="${(t.y+29).toFixed(1)}" class="pm-v">${vt}</text>`:''}
+        ${satu?`<text x="${(t.x+5).toFixed(1)}" y="${(t.y+(dua?15:Math.min(13,t.h-3))).toFixed(1)}" class="pm-n" style="font-size:${f}px;fill:${tc}">${esc(ptg(t.k,t.w,f))}</text>`:''}
+        ${dua?`<text x="${(t.x+5).toFixed(1)}" y="${(t.y+29).toFixed(1)}" class="pm-v" style="fill:${tc}">${vt}</text>`:''}
         <title>${esc(t.k)} · ${esc(s.k)}&#10;${t.v} saham (${t.np} posisi) · purata ${sg2(t.u)}&#10;${esc(sh.slice(0,12).join(', '))}${sh.length>12?' …':''}</title></g>`;});});
   box.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="group" aria-label="Peta portfolio ikut sektor dan industri">${o}</svg>`;}
 function panelPeta(peg,st){if(!peg.length)return '';const sk=new Set(peg.map(r=>r.sektor||'Tiada sektor')).size,nu=nSaham(peg);
