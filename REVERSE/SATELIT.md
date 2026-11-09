@@ -1,6 +1,6 @@
 # SATELIT — GB02_atau3 × Chandelier 15% akaun di atas teras indeks 35% + tunai
 
-Dijana 2026-11-09 11:57 UTC oleh `REVERSE/step41_satelit.py`. Pradaftar `REVERSE/SPEC_SATELIT.md` (dikomit sebelum larian). Alam A02 cair, kos penuh, teras SPY (proksi, spec §2), tahan 2020–2025, latih 2012–2019. Rekod analisis sahaja: tiada order, tiada wang sebenar.
+Dijana 2026-11-09 14:23 UTC oleh `REVERSE/step41_satelit.py`. Pradaftar `REVERSE/SPEC_SATELIT.md` (dikomit sebelum larian). Alam A02 cair, kos penuh, teras SPY (proksi, spec §2), tahan 2020–2025, latih 2012–2019. Rekod analisis sahaja: tiada order, tiada wang sebenar.
 
 ## Keputusan sel utama `S1` slot 8: **GAGAL** — P1 ✗ · P2 ✗ · P3 ✗ · P4 ✓ · P5 ✗
 Slot 10: P1 ✗ · P2 ✗ · P3 ✗ · P4 ✓ · P5 ✗ · LULUS ✗
@@ -11,7 +11,7 @@ Gate (spec §4): P1 CAGR > `K1` dua tingkap · P2 MDD tahan ≥ -10% dan ≥ `K1
 
 | Lengan | Slot | Benih | CAGR % | p5–p95 | MDD % | Nisbah | Pada MDD -10% | CAGR latih % | MDD latih % | Dedah satelit % | Dagangan | Pul/dagangan % | Menang % | Untung % | Rugi % | Payoff | tanpa5 % | Pegang bar | Pusing/slot/thn |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| `K0` | 8 | 1 | +5.34 | – | -12.56 | 0.43 | +4.25 | +5.05 | -6.84 | 0.0 | 0 | +nan | nan | +nan | +nan | nan | +nan | nan | 0.0 |
+| `K0` | 8 | 1 | +5.34 | – | -12.56 | 0.43 | +4.25 | +5.04 | -6.84 | 0.0 | 0 | +nan | nan | +nan | +nan | nan | +nan | nan | 0.0 |
 | `K1` | 8 | 1 | +7.59 | – | -17.66 | 0.43 | +4.30 | +7.23 | -9.72 | 0.0 | 0 | +nan | nan | +nan | +nan | nan | +nan | nan | 0.0 |
 | `R1` | 8 | 20 | +7.82 | +5.2–+9.7 | -14.86 | 0.53 | +5.26 | +6.76 | -8.93 | 13.3 | 187 | +4.39 | 44.4 | +24.22 | -12.16 | 1.97 | -0.85 | 52.6 | 3.9 |
 | `R1` | 10 | 20 | +7.39 | +5.7–+9.2 | -14.57 | 0.51 | +5.07 | +6.53 | -8.42 | 13.4 | 234 | +4.00 | 43.0 | +24.90 | -12.27 | 2.12 | -1.35 | 53.3 | 3.9 |
@@ -28,7 +28,7 @@ Gate (spec §4): P1 CAGR > `K1` dua tingkap · P2 MDD tahan ≥ -10% dan ≥ `K1
 
 ## Rujukan pasif
 
-- `K0` teras SPY 35% + tunai: CAGR +5.34% / MDD -12.56% (tahan); +5.05% / -6.84% (latih).
+- `K0` teras SPY 35% + tunai: CAGR +5.34% / MDD -12.56% (tahan); +5.04% / -6.84% (latih).
 - `K1` teras SPY 50% + tunai: CAGR +7.59% / MDD -17.66% (tahan); +7.23% / -9.72% (latih).
 - SPUS bulanan + tunai 2020–2025 (maklumat, konvensyen `SISTEM.md`): 35% → +6.33% / -9.88%; 50% → +9.03% / -13.96%.
 

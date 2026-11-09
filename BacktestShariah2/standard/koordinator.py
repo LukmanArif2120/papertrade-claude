@@ -203,6 +203,11 @@ def kajian():
         out.append(('REVERSE fasa 1b (saiz berskala risiko)', 'DITUTUP — DITOLAK',
                     'pulangan ditolak; MDD bertambah baik 6/6 tahun -> diuji hadapan '
                     'sebagai lorong RISIKO_10'))
+    if os.path.exists(os.path.join(AKAR, 'REVERSE', 'SATELIT.md')):
+        out.append(('Kajian SATELIT (satelit GB02_atau3 x Chandelier 15% atas teras indeks 35% + tunai; '
+                    'kebenaran tunggal 9 Nov 2026)', 'DITUTUP — GAGAL',
+                    'P1/P2/P3/P5 gagal: CAGR tahan +6.12% lawan indeks 50% +7.59% dan satelit rawak +7.82%; '
+                    'MDD -13.7%. Satelit kekal 0%; pelan teras SPUS 30-35% + tunai (kajian/FABLE_PENILAIAN.md §9)'))
     if os.path.exists(os.path.join(AKAR, 'REVERSE', 'SPEC_FASA2.md')):
         out.append(('REVERSE fasa 2 leg RS/gred', 'SPEC DIKUNCI — menunggu masa',
                     'RS/gred dikira harian, tiada sejarah; anggaran ~Okt 2027'))
@@ -502,8 +507,12 @@ def main():
       '20,640 ujian ENTRY → tiada signal lulus gate keras dalam lebih daripada satu tahun; '
       'portfolio signal kalah kepada entri rawak pada 3 daripada 5 tahun yang diuji.\n'
       '- **Signal EXIT berasaskan indikator.** FDR 0 pada setiap satu daripada enam tahun.\n'
-      '- Baca `REVERSE/KEPUTUSAN_FASA1.md` dan `REVERSE/DIAGNOSIS_FASA1.md` sebelum mencadangkan '
-      'kajian indikator baharu.\n')
+      '- **Had pegang 10 sesi** atas gabungan terbaik (`GB02_atau3`): terburuk pada setiap slot, kos pusingan '
+      '14 mata/tahun, 8 slot CAGR +2.0% MDD -60% (`REVERSE/PEGANG_SLOT.md`). **Satelit kaedah 15% atas teras '
+      'indeks**: kalah indeks 50% dan satelit rawak (`REVERSE/SATELIT.md`, 9 Nov 2026). Penapis RS/pemimpin: '
+      'terbalik dalam rejim OFF (`kajian/FABLE_PENILAIAN.md` §5–6).\n'
+      '- Baca `REVERSE/KEPUTUSAN_FASA1.md`, `REVERSE/DIAGNOSIS_FASA1.md` dan `kajian/FABLE_PENILAIAN.md` sebelum '
+      'mencadangkan kajian baharu.\n')
     with open(KELUAR, 'w', encoding='utf-8') as f:
         f.write('\n'.join(L))
     print(f'KOORDINATOR.md: {len("".join(L)):,} aksara | keputusan terbuka {len(kt)} | '
