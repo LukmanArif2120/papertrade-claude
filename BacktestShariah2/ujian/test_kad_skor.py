@@ -49,6 +49,7 @@ class TestKunci(unittest.TestCase):
 
     def test_berat_t4(self):
         self.assertEqual(T4.BERAT, (0.8, 0.7, 0.5))
+        self.assertIs(T4.LANGSUNG_SAHAJA, True)               # pindaan 9 Nov 2026: lorong LANGSUNG sahaja
         self.assertEqual(T4.LORONG, {'L1': 'kaedah', 'L2': 'henti'})
         self.assertAlmostEqual(T4.berat_mdd(-20.0), 0.5)      # sama dengan kad_skor.pada_mdd
         self.assertAlmostEqual(KS.pada_mdd(8.0, -20.0), 4.0)
@@ -59,7 +60,8 @@ class TestKunci(unittest.TestCase):
         for t in ('G1_HARI_BELI_MIN = 20', 'G2_ALPHA = 0.05', 'G3_Q = 0.05', 'G6_SESI = 126',
                   'Dipradaftar 6 Nov 2026', 'G4_HARI0_MAKS = 0', 'Pindaan 6 Nov 2026',
                   'Pindaan 7 Nov 2026', 'Dipradaftar 7 Nov 2026', 'G1_REJIM_MIN = 10', 'G2_NW_LAG = 5',
-                  'G3_UFUK = 10', 'G6_MDD_HAD = -10.0', 'N/GB: 2026-11-03'):
+                  'G3_UFUK = 10', 'G6_MDD_HAD = -10.0', 'N/GB: 2026-11-03',
+                  'Pindaan 9 Nov 2026', 'LANGSUNG_SAHAJA = True'):
             self.assertIn(t, s)
 
 

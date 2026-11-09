@@ -81,6 +81,14 @@ jobs:
         if: steps.lift.outcome == 'success' && steps.t4.outcome == 'success'
         continue-on-error: true
         run: python3 BacktestShariah2/standard/kad_skor.py
+      # Skor Kaedah 0-100 (keputusan pengguna 9 Nov 2026; pradaftar standard/SPEC_SKOR_KAEDAH.md): pangkat
+      # maklumat empat tiang atas penyebut kad skor, BUKAN keputusan. Membaca kad_skor.json + t4_siri.csv,
+      # jadi hanya selepas kad skor malam ini berjaya (jika tidak ia menskor fail larian lalu).
+      - name: Jana skor kaedah
+        id: skor
+        if: steps.kad.outcome == 'success'
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/skor_kaedah.py
       # Ringkasan setiap kaedah untuk helaian kaedah dashboard v161 (keputusan pengguna 8 Nov 2026):
       # sebab keluar, taburan pulangan dan tiga contoh dagangan sebenar dengan lilin. Populasi SAMA
       # seperti kad skor (Lejar Penuh lorong 1, terbuka ditanda-ke-pasaran); paparan sahaja.
@@ -100,7 +108,9 @@ jobs:
                    BacktestShariah2/laporan/KAEDAH_TERBAIK.md \
                    BacktestShariah2/portfolio_slot/t4_ringkasan.csv BacktestShariah2/portfolio_slot/t4_siri.csv \
                    BacktestShariah2/laporan/T4_KAEDAH.md BacktestShariah2/data/analisis/kad_skor.json \
-                   BacktestShariah2/laporan/KAD_SKOR.md BacktestShariah2/data/analisis/kaedah_siri.json; do
+                   BacktestShariah2/laporan/KAD_SKOR.md BacktestShariah2/data/analisis/kaedah_siri.json \
+                   BacktestShariah2/data/analisis/skor_kaedah.json BacktestShariah2/laporan/SKOR_KAEDAH.md \
+                   BacktestShariah2/data/analisis/skor_kaedah_sejarah.csv; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
@@ -117,7 +127,7 @@ jobs:
         if: >-
           steps.lift.outcome == 'failure' || steps.terbaik.outcome == 'failure' ||
           steps.t4.outcome == 'failure' || steps.kad.outcome == 'failure' || steps.kad.outcome == 'skipped' ||
-          steps.siri.outcome == 'failure'
+          steps.skor.outcome == 'failure' || steps.skor.outcome == 'skipped' || steps.siri.outcome == 'failure'
         run: |
           if [ "${{ steps.lift.outcome }}" = "failure" ]; then
             echo "lift_kaedah.py GAGAL (lihat langkah 'Jana lift kaedah'); analisis/lift lapuk." >&2
@@ -130,6 +140,9 @@ jobs:
           fi
           if [ "${{ steps.kad.outcome }}" = "failure" ] || [ "${{ steps.kad.outcome }}" = "skipped" ]; then
             echo "kad_skor.py GAGAL (lihat langkah 'Jana kad skor keputusan'); analisis/kad_skor lapuk." >&2
+          fi
+          if [ "${{ steps.skor.outcome }}" = "failure" ] || [ "${{ steps.skor.outcome }}" = "skipped" ]; then
+            echo "skor_kaedah.py GAGAL (lihat langkah 'Jana skor kaedah'); SKOR_KAEDAH.md lapuk." >&2
           fi
           if [ "${{ steps.siri.outcome }}" = "failure" ]; then
             echo "kaedah_siri.py GAGAL (lihat langkah 'Jana ringkasan setiap kaedah'); analisis/kaedah_siri lapuk." >&2

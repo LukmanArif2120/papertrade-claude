@@ -106,3 +106,17 @@ Reka bentuk terpilih (baris tiga terakhir) konservatif: kadar lulus palsu di baw
 - Jalur rawak G6 masih mencampur keluar semua kaedah; nisbah pulangan ÷ \|MDD\| mengurangkan, tetapi tidak menghapuskan, kesan gaya keluar.
 - G5 tidak boleh mengikat Nxx (tiada kalibrasi backtest); tidak berubah.
 - Dashboard memaparkan lajur yang sama nama; teks penerangan dashboard dikemas dalam fasa persembahan.
+
+## Pindaan 9 Nov 2026 — lorong T4 (G6) daripada posisi LANGSUNG sahaja
+
+**Dipradaftar 9 Nov 2026**, sebelum mana-mana kaedah melepasi G1 (paling awal ~12 Nov 2026) dan sebelum mana-mana lorong
+mencapai `G6_SESI` (paling lama 16 sesi). Keputusan pengguna 9 Nov 2026 ("ya") selepas semakan semula Skor Kaedah
+(`SPEC_SKOR_KAEDAH.md` pindaan (a)) menemui: `portfolio_t4.py` membina lorong setiap kaedah daripada SEMUA posisi Lejar
+sejak 16 Okt 2026, termasuk posisi isian bina semula Nxx/GB (15 Okt–2 Nov) yang bukan rekod hadapan — bercanggah dengan
+penyebut "hari beli LANGSUNG" G1–G3. Contoh: `N50X14` lorong penuh +10.75 % (16 sesi) lawan +3.18 % (4 sesi LANGSUNG).
+
+Pembetulan: `portfolio_t4.calon()` menapis `lift_kaedah.langsung` (`LANGSUNG_SAHAJA = True`, dikunci `TestKunci`), jadi
+lorong L1/L2 setiap kaedah bermula pada belian LANGSUNG pertamanya dan jalur rawak dibina daripada kolam LANGSUNG yang
+sama. Lorong Mxx tidak berubah (LANGSUNG sejak 15 Okt; lorong bermula 16 Okt). Ambang G6 (`G6_SESI`, `G6_MDD_HAD`) TIDAK
+berubah; ini mengetatkan penyebut, bukan melonggarkan gate. Kesan: lorong Nxx/GB kini ~4 sesi, jadi anggaran G6 Nxx/GB
+beralih ~12 sesi kemudian (~akhir April 2027).

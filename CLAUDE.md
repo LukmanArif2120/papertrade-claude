@@ -16,6 +16,7 @@ Cari kaedah swing yang **untung bersih melebihi rugi** (jangkaan positif; kadar 
 |---|---|
 | Kaedah mana boleh guna wang sebenar? (satu jawapan) | `BacktestShariah2/laporan/KAD_SKOR.md` (`standard/kad_skor.py`) |
 | Gate G1–G6, ambang terkunci, pindaan | `BacktestShariah2/standard/SPEC_KAD_SKOR.md` (pindaan 7 Nov 2026 berkuat kuasa) |
+| Pangkat 0–100 semua kaedah dari semua segi (maklumat, BUKAN keputusan) | `BacktestShariah2/laporan/SKOR_KAEDAH.md` (`standard/skor_kaedah.py`; berat/sauh dipradaftar 9 Nov 2026 `standard/SPEC_SKOR_KAEDAH.md`, dikunci `ujian/test_skor_kaedah.py::TestKunci`; percayai sebagai pangkat hanya selepas semakan Spearman 8–12 minggu positif) |
 | Gate kemahiran sah? | `BacktestShariah2/laporan/PLASEBO_GATE.md` (`standard/plasebo_gate.py`; peraturan: lulus palsu ≤ 5%) |
 | Lift masuk setiap kaedah | `BacktestShariah2/laporan/LIFT_KAEDAH.md` |
 | Portfolio setiap kaedah lawan SPUS pada MDD -10% | `BacktestShariah2/laporan/T4_KAEDAH.md` |

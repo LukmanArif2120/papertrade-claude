@@ -10,7 +10,10 @@ bagi setiap kaedah.
 
 Peraturan (sama dengan `portfolio_slot.py` supaya lorong boleh dibanding):
   - 10 slot, saiz = min(tunai, ekuiti semalam x 10%), satu posisi setiap saham, kos 0.1% setiap belah.
-  - Calon = posisi Lejar kaedah itu SAHAJA, bermula pada belian pertama kaedah itu (tingkap sendiri).
+  - Calon = posisi Lejar kaedah itu SAHAJA yang direkod LANGSUNG (`lift_kaedah.langsung`: tarikh isyarat
+    >= MULA_LANGSUNG kaedahnya; pindaan 9 Nov 2026 SPEC_KAD_SKOR.md), bermula pada belian LANGSUNG pertama
+    kaedah itu (tingkap sendiri). Posisi isian bina semula (Nxx/GB 15 Okt-2 Nov) bukan rekod hadapan dan
+    tidak masuk lorong mahupun jalur rawak.
   - Susunan bila isyarat > slot = `rank` kaedah itu sendiri (tinggi dahulu) - iaitu cara kaedah itu
     memang memilih, bukan rawak dan bukan RS.
   - Dua lorong keluar dikira berasingan:
@@ -57,6 +60,7 @@ MD = os.environ.get('T4_MD', os.path.join(BS2, 'laporan', 'T4_KAEDAH.md'))
 BERAT = (0.8, 0.7, 0.5)          # pecahan SPUS dalam campuran T4
 LORONG = {'L1': 'kaedah', 'L2': 'henti'}
 N_JALUR = 20
+LANGSUNG_SAHAJA = True           # PINDAAN 9 Nov 2026: lorong + jalur daripada posisi LANGSUNG sahaja (dikunci TestKunci)
 
 
 def calon():
@@ -71,6 +75,9 @@ def calon():
     P['harga_keluar1'] = pd.to_numeric(P.harga_keluar, errors='coerce')
     P['keluar1'] = P.tarikh_keluar.ne('') & P.harga_keluar1.notna()
     P['rs'] = np.nan
+    if LANGSUNG_SAHAJA and len(P):
+        import lift_kaedah as lk
+        P = P[lk.langsung(P)].copy()
     return P.sort_values(['tarikh_beli', 'saham', 'id_kaedah']).reset_index(drop=True)
 
 
