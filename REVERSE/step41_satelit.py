@@ -466,7 +466,6 @@ def laporan(R, DG):
     g['nisbah'] = g.cagr / g.mdd.abs()
     g['nisbah_latih'] = g.cagr_latih / g.mdd_latih.abs()
     g['pada_mdd10'] = g.cagr * np.minimum(1.0, 10.0 / g.mdd.abs())
-    g.to_csv(KELUAR / 'satelit_ringkas.csv', index=False, float_format='%.4f')
 
     def sel(n, s=8):
         return g[(g.lengan == n) & (g.slot == s)].iloc[0]
@@ -481,6 +480,10 @@ def laporan(R, DG):
         P5 = (S1.pul_dag > 0) and (S1.pul_dag_latih > 0) and (S1.pul_dag > R1.pul_dag)
         gate[s] = dict(P1=bool(P1), P2=bool(P2), P3=bool(P3), P4=bool(P4), P5=bool(P5))
         gate[s]['LULUS'] = all(gate[s].values())
+    # lajur `lulus` = sel utama S1 lulus P1-P5 pada slot itu (registry REVERSE/strategi.py membaca gate ini)
+    g['lulus'] = [bool(gate.get(int(r.slot), {}).get('LULUS', False)) if r.lengan == 'S1' else False
+                  for r in g.itertuples()]
+    g.to_csv(KELUAR / 'satelit_ringkas.csv', index=False, float_format='%.4f')
     sp35, sp50 = _camp_spus(0.35), _camp_spus(0.50)
 
     L = ['# SATELIT — GB02_atau3 × Chandelier 15% akaun di atas teras indeks 35% + tunai', '']
