@@ -46,8 +46,9 @@ for(const [nm,vp,mob] of [['desk',{width:1440,height:1000},false],['fon',{width:
   await pg.evaluate(()=>{const b=document.querySelector('#kumpSeg:not([hidden]) button');if(b)b.click();});await pg.waitForTimeout(800);
   await pg.evaluate(rx=>{const b=[...document.querySelectorAll('.pnav-in button')].find(x=>x.getClientRects().length&&new RegExp(rx,'i').test(x.textContent));if(b)b.click();},nmS==='pos'?'keputusan':'Kad skor setiap');await pg.waitForTimeout(1200);
   const ada=await pg.evaluate(sel=>{const e=[...document.querySelectorAll(sel)].find(x=>x.getClientRects().length);if(!e)return false;e.scrollIntoView();e.click();
-    if(!document.querySelector('#sheet .pv2')){const b=e.querySelector('.mbtn-b');if(b)b.click();}
-    return !!document.querySelector('#sheet .pv2')||'tiada-helaian:'+e.tagName+'.'+e.className;},sel);
+    const buka=()=>!!document.querySelector('#sheet:not([hidden]) .pv2');
+    if(!buka()){const b=e.querySelector('.mbtn-b')||(e.closest('tr')&&e.closest('tr').querySelector('.mbtn-b'));if(b)b.click();}
+    return buka()||'tiada-helaian:'+e.tagName+'.'+e.className;},sel);
   await pg.waitForTimeout(1200);
   if(ada){const nt=await pg.$$eval('#sheet .pv2tabs button',bs=>bs.length);
    for(let i=0;i<Math.max(1,nt);i++){await pg.evaluate(i=>{const b=document.querySelectorAll('#sheet .pv2tabs button')[i];if(b)b.click();},i);await pg.waitForTimeout(600);await pg.evaluate(kumpul);}
