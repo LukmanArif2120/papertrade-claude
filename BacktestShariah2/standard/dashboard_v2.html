@@ -1280,6 +1280,29 @@ table[data-st="katalog"] td.tk .pill{margin-top:3px}
    kandungan kelihatan DI BAWAH kaki. Kaki kini legap, di atas kandungan, dan melekat rapat ke tepi bawah. */
 .pv2f{z-index:6;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -10px 18px -10px rgba(0,0,0,.5);
   bottom:calc(-24px - env(safe-area-inset-bottom,0px));margin-bottom:calc(-24px - env(safe-area-inset-bottom,0px))}
+/* v173 (audit mendalam): jadual Katalog ada 7 lajur teks; lajur pengisi (.isi, width:100%) menyerap ~550px dan
+   menghimpit lajur lain ke lebar minimum - cip terpotong ("BELI BUKA E…") dalam mod Padat, dan dalam mod Biasa teks
+   lajur Pegang menindih lajur Henti rugi. Katalog tidak memerlukan pengisi: lebar dibahagi antara lajur kandungan. */
+table[data-st="katalog"] th.isi,table[data-st="katalog"] td.isi{display:none}
+body:not(.padat) table[data-st="katalog"] td.wrap{min-width:120px}
+/* v173 KONTRAS (WCAG AA: teks biasa >= 4.5): teks yang sengaja dipudarkan kekal pudar tetapi boleh dibaca */
+.pnav-in .pn-k{opacity:1}
+tbody tr.skw-x td{opacity:.75}
+.pudar{opacity:1}
+.gate.no{color:var(--neg-tx)}
+.ggc.g-E{color:#FFB0BA!important}.ggc.g-x{color:var(--muted)!important}
+.pill.p-exit{color:#FFA3AF}
+.b5c{color:#2A0710}
+.kd2st .n{color:var(--fg)!important}
+/* v173 SASARAN KETIK di telefon (WCAG 2.5.8: >= 24px) */
+@media (max-width:760px){
+  button.lnk{padding-block:3px}
+  .salh{min-height:26px}
+  summary{padding-block:4px}
+  input[type=range]{height:28px}
+}
+/* Corong saringan (Kombinasi N) di telefon: "sendiri 1,494" turun ke bawah nombor, bukan terkeluar dari kad */
+@media (max-width:620px){.crg{grid-template-columns:minmax(0,1fr) auto}.crg .nm span{display:block;margin-left:0}}
 /* label carta di tepi (puncak, bilangan bar, paksi) tidak lagi diklip oleh sempadan SVG */
 svg.v5s,svg.rpsv{overflow:visible}
 /* kepala helaian legap sepenuhnya (dahulu 6% lut sinar di bahagian bawah, kandungan berbayang di bawah tab) */
@@ -4134,6 +4157,10 @@ function v5DonutCard(parts,top,mid,bot,tot){return `<div style="display:flex;jus
 const v5ZonParts=Z=>[['Tercetus / < 3%',Z.merah,'#FF5D73'],['Hampir 3–10%',Z.kuning,'#FFC145'],['Jauh > 10%',Z.hijau,'#12A886'],['Sudah keluar L2',Z.keluar,'#4A5260']];
 const v5StatParts=k=>[['Belum cukup data',k['BELUM CUKUP']||0,'#6B7A99'],['Terbukti negatif',k.NEGATIF||0,'#FF5D73'],['Gagal',k.GAGAL||0,'#4A5260'],['Calon',k.CALON||0,'#12A886'],['Terbukti',k.TERBUKTI||0,'#1EE3B4']];
 /* carta kawasan: garis a (teal, bayang gradien penuh, tanpa titik) + garis b putus-putus (ungu, SPUS) + jalur pilihan */
+/* v173 (9 Nov 2026, audit mendalam): carta v5 mengukur lebar bekas SEBELUM susun atur muktamad - di telefon SVG dilukis
+   328px dalam bekas 300px dan terkeluar 13px dari kad. Selepas bingkai susun atur seterusnya, jika mana-mana SVG lebih
+   lebar daripada bekasnya, lukis semula sekali (ukuran ketika itu betul). */
+function v5Semula(sel,lukis){requestAnimationFrame(()=>{if([...document.querySelectorAll(sel)].some(s=>{const p=s.parentElement;return p&&p.clientWidth>0&&+s.getAttribute('width')>p.clientWidth+1;}))lukis();});}
 function v5Area(el,o){if(!el)return;const n=o.a.length;if(n<2){el.innerHTML='<div class="v5xs">Belum cukup sesi.</div>';return;}
   const W=Math.max(260,el.clientWidth||600),H=o.H||(skrinKecil()?190:220),pl=40,pr=10,pt=10,pb=22;
   const vals=[...o.a,...(o.b||[]),...(o.band?[...o.band.lo,...o.band.hi]:[])].filter(v=>v!=null&&isFinite(v));
@@ -4511,7 +4538,7 @@ function renderUtama(){
     <ol class="utama3">${p3.map(x=>`<li>${x}</li>`).join('')}</ol>${blokExplainer(src)}</div>
   <div class="strip next"><b class="t">Cara baca</b><span><b>Pilih kaedah</b> = satu jawapan, satu kad skor, gate yang dipradaftar; hanya status TERBUKTI bermakna untuk wang sebenar. <b>Posisi</b> = apa yang dipegang dan watchlist. <b>Akaun</b> = untung rugi akaun lawan ${paNama()}. <b>Rujukan</b> = peraturan kaedah, backtest dan kajian. <button type="button" class="lnk" data-panduan>Buka panduan & glosari</button></span></div>
   <div class="foot"><span>Papertrade C sahaja. Moomoo lama (${nf(prSrc('m').length)} posisi, tiada belian baharu sejak 13 Okt 2026): tab Akaun.</span><span>Tiada order · tiada wang sebenar</span></div>`;
-  beliBind();v5UtamaLukis();
+  beliBind();v5UtamaLukis();v5Semula('#v5ar>svg,#v5al>svg,#v5hs>svg',v5UtamaLukis);
 }
 
 function emptyState(){return `<div class="panel empty">${S.live?'Belum ada keputusan backtest dalam pangkalan data.':'Memuatkan keputusan backtest…'}</div>`;}
@@ -4800,7 +4827,7 @@ function renderAnalisis(){
     <div class="foot"><span>Sumber: standard/kad_skor.py · standard/portfolio_t4.py · laporan/KAD_SKOR.md · laporan/T4_KAEDAH.md</span><span>Data ${esc(tkP(d.kini))}</span></div></div>
   ${panelSkor()}
   ${panelLift()}`;
-  skBind();liftBind();v5AnalisisLukis(R);
+  skBind();liftBind();v5AnalisisLukis(R);v5Semula('#v5t4>svg',()=>v5AnalisisLukis(R));
   const qq=$('#ksQ');let t2;if(qq)qq.oninput=()=>{clearTimeout(t2);t2=setTimeout(()=>{f.q=qq.value.trim();f.shown=AWAL;renderAll();const n2=$('#ksQ');if(n2){n2.focus();n2.setSelectionRange(n2.value.length,n2.value.length);}},220);};
   [['ksSt','st'],['ksKel','kel']].forEach(([id,k])=>{const g=$('#'+id);if(g)g.onclick=e=>{const b=e.target.closest('button');if(!b)return;f[k]=b.dataset.v;f.shown=AWAL;renderAll();};});
   el.querySelectorAll('[data-ksst]').forEach(b=>{b.onclick=()=>{f.st=b.dataset.ksst;f.shown=AWAL;renderAll();};});
