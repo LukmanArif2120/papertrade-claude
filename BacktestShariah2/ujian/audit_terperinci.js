@@ -73,6 +73,7 @@ const SAIZ = [
       const kump = await pg.evaluate(() => [...document.querySelectorAll('section.view:not([hidden]) .seg')].filter(s => s.getClientRects().length && !s.closest('#subBar'))
         .map((s, gi) => { s.dataset.auditSeg = gi; const bs = [...s.querySelectorAll('button')]; return { gi, n: bs.length, asal: bs.findIndex(b => b.getAttribute('aria-pressed') === 'true' || b.getAttribute('aria-selected') === 'true') }; }));
       for (const g of kump.slice(0, 8)) {
+        if (g.asal < 0) continue;   // kumpulan tanpa pilihan aktif = butang tindakan, bukan togol (tidak boleh dipulihkan)
         for (let i = 0; i < Math.min(g.n, 6); i++) {
           if (i === g.asal) continue;
           const t = await pg.evaluate(([gi, i]) => { const s = document.querySelector(`[data-audit-seg="${gi}"]`); if (!s) return null; const b = s.querySelectorAll('button')[i]; if (!b) return null; b.scrollIntoView({ block: 'center' }); b.click(); return b.textContent.trim().slice(0, 20); }, [g.gi, i]);

@@ -75,6 +75,9 @@ const semakLanjut = ({ label, mob }) => {
     let m = c.match(/^rgba?\(([^)]+)\)/); if (m) { const p = m[1].split(/[\s,\/]+/).filter(Boolean).map(Number); return [p[0], p[1], p[2], p.length > 3 ? p[3] : 1]; }
     m = c.match(/^color\(srgb\s+([-\d.e]+)\s+([-\d.e]+)\s+([-\d.e]+)(?:\s*\/\s*([\d.]+))?\)/); if (m) return [m[1] * 255, m[2] * 255, m[3] * 255, m[4] != null ? +m[4] : 1];
     return null; };
+  const legapC = c => { const a = warna(c.backgroundColor); if (a && a[3] >= 0.85) return true;
+    if (/gradient/.test(c.backgroundImage)) { const w = (c.backgroundImage.match(/(rgba?\([^)]*\)|color\([^)]*\))/g) || []).map(warna).filter(Boolean); if (w.length && Math.min(...w.map(x => x[3])) >= 0.85) return true; }
+    return c.backdropFilter && c.backdropFilter !== 'none' && a && a[3] >= 0.6; };
   const campur = (a, b) => [a[0] * a[3] + b[0] * (1 - a[3]), a[1] * a[3] + b[1] * (1 - a[3]), a[2] * a[3] + b[2] * (1 - a[3]), 1];
   const lum = c => { const f = v => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); };
   const latar = el => { const lap = [];
@@ -84,6 +87,19 @@ const semakLanjut = ({ label, mob }) => {
         if (w.length) bg = [0, 1, 2, 3].map(i => w.reduce((s, x) => s + x[i], 0) / w.length); }
       if (bg && bg[3] > 0) { lap.push(bg); if (bg[3] >= 0.99) break; } }
     let c = [21, 24, 29, 1]; for (let i = lap.length - 1; i >= 0; i--) c = campur(lap[i], c); return c; };
+  // latar sebenar di bawah teks: timbunan elementsFromPoint dari unsur teks ke bawah (warna latar CSS, gradien, atau
+  // isian bentuk SVG seperti tag harga), digabung sehingga legap
+  const latarTitik = (el, r) => {
+    const st = document.elementsFromPoint(Math.min(W - 1, Math.max(0, r.left + r.width / 2)), Math.min(H - 1, Math.max(0, r.top + r.height / 2)));
+    let i = st.indexOf(el); if (i < 0) return latar(el);
+    const lap = [];
+    for (let k = i; k < st.length; k++) { const e = st[k], cs = getComputedStyle(e); let bg = null;
+      if (e instanceof SVGGeometryElement && !(e instanceof SVGTextContentElement)) { bg = warna(cs.fill); if (bg) bg[3] *= (+cs.fillOpacity || 1) * (+cs.opacity || 1); }
+      else if (!(e instanceof SVGElement)) { bg = warna(cs.backgroundColor);
+        if ((!bg || bg[3] === 0) && /gradient/.test(cs.backgroundImage)) { const w = (cs.backgroundImage.match(/(rgba?\([^)]*\)|color\([^)]*\))/g) || []).map(warna).filter(Boolean);
+          if (w.length) bg = [0, 1, 2, 3].map(j => w.reduce((s, x) => s + x[j], 0) / w.length); } }
+      if (bg && bg[3] > 0) { lap.push(bg); if (bg[3] >= 0.99) break; } }
+    let c = [21, 24, 29, 1]; for (let j = lap.length - 1; j >= 0; j--) c = campur(lap[j], c); return c; };
   // teks: DATA dan KONTRAS
   const dilihat = new Set();
   const tw = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, { acceptNode: n => n.textContent.trim() ? 1 : 2 });
@@ -93,14 +109,15 @@ const semakLanjut = ({ label, mob }) => {
     if (!dlmSkrin(r)) continue;
     const cs = getComputedStyle(el); if (cs.visibility === 'hidden' || cs.display === 'none') continue;
     const t = n.textContent.trim();
-    if (/(^|[^A-Za-z])(undefined|NaN|null|Infinity)([^A-Za-z]|$)|\[object |\$\{/.test(t)) out.push({ jenis: 'DATA', a: nama(el) + ' "' + t.slice(0, 40) + '"', b: '', label });
+    // "stop = NaN" / "tgt = NaN" ialah penerangan sengaja dalam katalog (NaN = tiada henti/sasaran), bukan pepijat paparan
+    if (/(^|[^A-Za-z])(undefined|NaN|null|Infinity)([^A-Za-z]|$)|\[object |\$\{/.test(t.replace(/\b(stop|tgt) = NaN\b/g, ''))) out.push({ jenis: 'DATA', a: nama(el) + ' "' + t.slice(0, 40) + '"', b: '', label });
     if (dilihat.has(el) || !kena(el, r)) continue; dilihat.add(el);
     if (el.closest('[disabled],[aria-disabled="true"]')) continue;
     const svg = el instanceof SVGElement;
     let fg = warna(svg ? cs.fill : cs.color); if (!fg) continue;
     let op = 1; for (let a = el; a && a.nodeType === 1; a = a.parentElement) op *= +getComputedStyle(a).opacity;
     fg = [fg[0], fg[1], fg[2], fg[3] * op * (svg && cs.fillOpacity ? +cs.fillOpacity : 1)];
-    const bg = latar(el), f2 = campur(fg, bg), L1 = lum(f2), L2 = lum(bg), nisbah = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
+    const bg = latarTitik(el, r), f2 = campur(fg, bg), L1 = lum(f2), L2 = lum(bg), nisbah = (Math.max(L1, L2) + 0.05) / (Math.min(L1, L2) + 0.05);
     const px = parseFloat(cs.fontSize), besar = px >= 24 || (px >= 18.66 && +cs.fontWeight >= 700), had = besar ? 3 : 4.5;
     if (nisbah < had) out.push({ jenis: 'KONTRAS', a: nama(el) + ' "' + t.slice(0, 26) + '"', b: nisbah.toFixed(2) + ' < ' + had + ' (' + px.toFixed(1) + 'px)', label });
   }
@@ -112,12 +129,19 @@ const semakLanjut = ({ label, mob }) => {
   if (mob) for (const k of K) {
     if (k.el.tagName === 'A' && k.cs.display === 'inline') continue;      // pautan dalam ayat dikecualikan (WCAG 2.5.8)
     if (k.el.matches('tr,td')) continue;
+    if (k.el.closest('.kmb')) continue;   // segmen bar komposisi sektor: tapisan sama ada pada treemap (WCAG 2.5.8 setara)
     if (k.r.width < 24 || k.r.height < 24) out.push({ jenis: 'SENTUH', a: nama(k.el) + ' "' + (k.el.textContent || '').trim().slice(0, 20) + '"', b: Math.round(k.r.width) + '×' + Math.round(k.r.height) + 'px', label });
   }
   for (let i = 0; i < K.length; i++) for (let j = i + 1; j < K.length; j++) {
     const A = K[i], B = K[j]; if (A.el.contains(B.el) || B.el.contains(A.el)) continue;
     const x1 = Math.max(A.r.left, B.r.left), x2 = Math.min(A.r.right, B.r.right), y1 = Math.max(A.r.top, B.r.top), y2 = Math.min(A.r.bottom, B.r.bottom);
     if (x2 - x1 < 4 || y2 - y1 < 4) continue;
+    const st = document.elementsFromPoint((x1 + x2) / 2, (y1 + y2) / 2);
+    const ia = st.findIndex(e => e === A.el || A.el.contains(e)), ib = st.findIndex(e => e === B.el || B.el.contains(e));
+    if (ia < 0 || ib < 0) continue;
+    const [atas, bawah] = ia < ib ? [ia, ib] : [ib, ia]; let tertutup = false;
+    for (let k = atas; k <= bawah; k++) { const e = st[k]; if (e.contains(st[bawah])) continue; if (legapC(getComputedStyle(e))) { tertutup = true; break; } }
+    if (tertutup) continue;
     out.push({ jenis: 'BUTANG', a: nama(A.el) + ' "' + (A.el.textContent || '').trim().slice(0, 18) + '"', b: nama(B.el) + ' "' + (B.el.textContent || '').trim().slice(0, 18) + '"', label });
   }
   // LIMPAH: unsur terkeluar dari sisi kad (tanpa bekas skrol/klip di antara); laporkan unsur paling luar sahaja
