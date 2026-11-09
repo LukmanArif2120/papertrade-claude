@@ -125,3 +125,20 @@ Mana-mana ujian gagal → keputusan tidak dilaporkan; kod dibetulkan dan larian 
 Alam A02 tiada saham delist (CAGR satelit condong ke atas); kolam GB02 dan X15 dipilih daripada
 data yang sama; proksi teras SPY bukan SPUS; `CARA` kekal `C01`; tiada impak pasaran dalam kos;
 tingkap tahan satu rejim teknologi dominan. Tiada dakwaan +10%/bulan.
+
+## Pindaan 9 Nov 2026 (sebelum larian; selepas semakan kod bebas, sebelum sebarang keputusan)
+
+Penyemak kod konteks baharu menemui tiga perkara; semuanya dibetulkan **sebelum** larian penuh
+dan tiada satu pun mengubah peraturan satelit, lengan atau gate §4:
+
+1. `step24.keluar` mempunyai fallback (buka bar keluar tiada → tutup sah terakhir panel) yang boleh
+   memegang posisi melepasi `CAP`. Belian dengan `kx − d > CAP` kini dilangkau; ujian asap menegaskan
+   `pegang ≤ CAP` atas semua dagangan.
+2. §6.2 ditafsir semula: "paras Chandelier di atas harga masuk pada bar masuk" boleh berlaku secara
+   sah apabila tutup hari masuk melonjak > 4 ATR (untung terkunci). Mod kegagalan `X25` yang sebenar
+   ialah **keluar dicetus pada bar masuk itu sendiri**; itulah yang mesti 0. Bilangan paras di atas
+   buka masuk dilapor sebagai maklumat.
+3. §6.3 dan §6.5: SEMUA dagangan dikira semula bebas (bukan 50 sampel); kes rosak sengaja disuap
+   kepada pemeriksa yang sama yang meluluskan §6.2–6.3, termasuk ATR dipaksa negatif.
+Kecil: `--laporan-sahaja` membaca tarikh dengan betul; buka/tutup indeks mesti wujud pada setiap
+tarikh panel (gagal nyaring, tiada isian).

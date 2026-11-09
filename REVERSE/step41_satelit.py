@@ -35,6 +35,7 @@ LATIH0, LATIH1 = '2012-01-01', '2019-12-31'
 W_TERAS, W_SAT, W_TERAS_K1 = 0.35, 0.15, 0.50     # spec §2–3
 CAP = 126                                          # had masa SOP
 RULE = 'X15'
+assert RULE == 'X15', 'keluar X15 sahaja: RSI tidak dibekalkan kepada step24.keluar'
 KOS_TERAS = 0.001 + 0.0005                         # komisen + slippage >= USD50j
 N_BENIH = 20
 SLOT = [8, 10]
@@ -112,8 +113,9 @@ def siri_indeks(P, tk):
     ix = pd.read_parquet(PB.CACHE / 'idx.parquet')
     q = ix[ix.ticker == tk].sort_values('date').set_index('date')
     q = q.reindex(pd.DatetimeIndex(P.tarikh))
-    c = q.close.astype('float64').ffill()
-    o = q.open.astype('float64').fillna(c)
+    assert q.open.notna().all() and q.close.notna().all(), f'{tk}: buka/tutup tiada pada tarikh panel'
+    c = q.close.astype('float64')
+    o = q.open.astype('float64')
     return o.to_numpy(), c.to_numpy()
 
 
@@ -189,7 +191,9 @@ def simulasi(P, ATRP, CAL, IND, TO, TC, cfg, slot, benih, cache, rejim_on, m0, l
                     if belanja <= 1e-12:
                         break
                     kx, _, pkeluar = S24.keluar(P, None, ti, a, RULE, CAP, cache)
-                    if kx <= d:
+                    # kx <= d mustahil bagi X15; kx - d > CAP = fallback tutup-terakhir step24
+                    # (buka bar keluar tiada) yang melanggar had SOP -> langkau (semakan kod 9 Nov)
+                    if kx <= d or kx - d > CAP:
                         continue
                     unit = belanja * (1 - K.kos_sisi(P.N[ti, a])) / float(P.O[ti, d])
                     tunai -= belanja
@@ -251,6 +255,23 @@ def semak_dagangan(P, D):
     return n
 
 
+def semak_chandelier(P, D):
+    """Bilangan dagangan yang keluarnya dicetus pada bar masuk itu sendiri (mod kegagalan X25):
+    pegang == 1 selain hujung data, atau paras Chandelier pada bar masuk sudah di atas tutup
+    (C[e] < C[e] - 4*ATR[a], hanya mungkin jika ATR rosak/negatif)."""
+    akhir = len(P.tarikh) - 1
+    n = 0
+    for r in D.itertuples():
+        e, kx, ti = int(r.i_masuk), int(r.i_keluar), int(r.ti)
+        if kx - e == 1 and kx < akhir:
+            n += 1
+            continue
+        c, atr = float(P.C[ti, e]), float(P.A[ti, e - 1])
+        if c < c - 4 * atr:
+            n += 1
+    return n
+
+
 def asap(P, ATRP, CAL, IND, TO, TC, rejim_on, m0, l0, l1):
     print('UJIAN ASAP (spec §6)', flush=True)
     hari = pd.DatetimeIndex(P.tarikh)
@@ -284,27 +305,21 @@ def asap(P, ATRP, CAL, IND, TO, TC, rejim_on, m0, l0, l1):
     assert (D.i_keluar > D.i_masuk).all(), 'keluar <= masuk'
     assert (D.pegang >= 1).all(), 'pegang 0'
     assert nb.max() <= 8, 'posisi > slot'
-    # paras Chandelier pada bar masuk < harga masuk, dan harga keluar daripada ticker sama
-    n_atas = 0
-    rng = np.random.default_rng(7)
-    sampel = D.sample(min(50, len(D)), random_state=7) if len(D) else D
-    beza_maks = 0.0
-    for r in sampel.itertuples():
-        e, kx, ti = int(r.i_masuk), int(r.i_keluar), int(r.ti)
-        a = e - 1
-        atr = float(P.A[ti, a])
-        if float(P.C[ti, e]) - 4 * atr >= float(P.O[ti, e]):
-            n_atas += 1
-        # kira semula bebas: buka e -> buka kx, kos penuh dua sisi (ticker SAMA)
-        kasar = float(P.O[ti, kx]) / float(P.O[ti, e])
-        bersih = kasar * (1 - K.kos_sisi(P.N[ti, a])) * (1 - K.kos_sisi(P.N[ti, kx])) - 1
-        beza_maks = max(beza_maks, abs(bersih - r.pul))
-        assert rejim_on[a], 'belian pada sauh OFF dalam lengan rejim'
-    print(f'  2. paras Chandelier di atas masuk pada bar masuk: {n_atas}/{len(sampel)} '
-          f'(mesti 0); keluar <= masuk: 0; pegang 0: 0', flush=True)
-    print(f'  3. 50 dagangan dikira semula bebas: beza maks {beza_maks:.2e} (mesti < 1e-6)',
-          flush=True)
-    if n_atas or beza_maks > 1e-6:
+    assert (D.pegang <= CAP).all(), 'pegang > CAP (fallback tutup-terakhir)'
+    # 2. mod kegagalan X25 (keluar dicetus pada bar masuk) atas SEMUA dagangan; bilangan paras
+    # Chandelier di atas buka masuk pada bar masuk (tutup melonjak > 4 ATR) dilapor sebagai
+    # maklumat sahaja — ia untung terkunci, bukan pepijat (pindaan spec §6.2, 9 Nov 2026)
+    n_x25 = semak_chandelier(P, D)
+    n_atas = int(sum(float(P.C[int(r.ti), int(r.i_masuk)]) - 4 * float(P.A[int(r.ti), int(r.i_masuk) - 1])
+                     >= float(P.O[int(r.ti), int(r.i_masuk)]) for r in D.itertuples()))
+    assert all(rejim_on[int(e) - 1] for e in D.i_masuk), 'belian pada sauh OFF dalam lengan rejim'
+    print(f'  2. keluar dicetus pada bar masuk (X25): {n_x25}/{len(D)} (mesti 0); keluar <= masuk: 0; '
+          f'pegang 0: 0; pegang > {CAP}: 0; [maklumat] paras trailing di atas buka masuk pada bar '
+          f'masuk: {n_atas}/{len(D)}', flush=True)
+    # 3. SEMUA dagangan dikira semula bebas (buka->buka ticker sama, kos penuh)
+    n_salah = semak_dagangan(P, D)
+    print(f'  3. {len(D)} dagangan dikira semula bebas: {n_salah} tidak sepadan (mesti 0)', flush=True)
+    if n_x25 or n_salah:
         gagal.append('asap2/3')
     # 4. had industri: tiada dua posisi industri sama pada mana-mana hari -> semak semula
     # dengan simulasi ringkas: jejak set industri terbuka
@@ -323,14 +338,19 @@ def asap(P, ATRP, CAL, IND, TO, TC, rejim_on, m0, l0, l1):
           f'assert dalam simulasi', flush=True)
     if langgar:
         gagal.append('asap4')
-    # 5. ujian mesti boleh gagal: salinan rekod dirosakkan dengan sengaja (keluar = masuk, dan
-    # pulangan ditulis semula) mesti dikesan oleh pemeriksa yang sama yang meluluskan langkah 2–3
+    # 5. ujian mesti boleh gagal: rekod rosak (keluar = masuk, pulangan diubah) dan ATR dipaksa
+    # negatif (paras Chandelier di atas tutup masuk) mesti dikesan oleh pemeriksa SAMA langkah 2–3
     rosak = D.head(5).copy()
     rosak['i_keluar'] = rosak['i_masuk']
     rosak['pul'] = rosak['pul'] + 0.01
-    n_rosak = semak_dagangan(P, rosak)
-    print(f'  5. rekod rosak sengaja: {n_rosak} pelanggaran dikesan (mesti >= 5)', flush=True)
-    if n_rosak < 5:
+    n1 = semak_dagangan(P, rosak)
+    A_asal = P.A.copy()
+    P.A[:] = -np.abs(P.A)
+    n2 = semak_chandelier(P, D.head(5))
+    P.A[:] = A_asal
+    print(f'  5. rekod rosak sengaja dikesan: pulangan/keluar {n1}/5, paras di atas masuk {n2}/5 '
+          f'(mesti 5 dan 5)', flush=True)
+    if n1 < 5 or n2 < 5:
         gagal.append('asap5')
     if gagal:
         print(f'UJIAN ASAP GAGAL: {gagal} — keputusan TIDAK dilaporkan', flush=True)
@@ -349,7 +369,7 @@ def main(argv=None):
     f = KELUAR / 'satelit.csv'
     fd = KELUAR / 'satelit_dagangan.csv'
     if a.laporan_sahaja and f.exists():
-        return laporan(pd.read_csv(f), pd.read_csv(fd))
+        return laporan(pd.read_csv(f), pd.read_csv(fd, parse_dates=['tarikh_masuk']))
 
     t0 = time.time()
     print('1/5 isyarat GB02_atau3...', flush=True)
