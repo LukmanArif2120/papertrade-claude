@@ -290,7 +290,107 @@ def semak_segar(lewat=SEMAK_HARI):
     return (1 if buruk else 0), buruk
 
 
+
+# ---------------------------------------------------------------- ringkasan mingguan 5 baris
+# Cadangan kajian/FABLE_CADANGAN.md §3 (9 Nov 2026): lima baris tetap, <= 120 aksara setiap satu, nombor daripada
+# fail analisis sedia ada; tiada tafsiran bebas. Dipanggil jadual/mingguan.md langkah 9 (ntfy topik claude_azim).
+RINGKASAN_MINGGUAN = os.path.join(BS2, 'laporan', 'RINGKASAN_MINGGUAN.md')
+HAD_AKSARA = 120
+
+
+def _potong(t, n=HAD_AKSARA):
+    return t if len(t) <= n else t[:n - 1] + '…'
+
+
+def ringkasan_mingguan(ks_json=None, idx_csv=None, spus_csv=None, keputusan_csv=None, mula_jejak='2026-10-16'):
+    """Lima baris teks; setiap pembaca gagal-lembut ('tiada')."""
+    ks = _json(ks_json or os.path.join(BS2, 'data', 'analisis', 'kad_skor.json'), {}) or {}
+    k = ks.get('kira') or {}
+    rj = ks.get('rejim') or {}
+    b1 = (f"Kad: TERBUKTI {k.get('TERBUKTI', 0)} · CALON {k.get('CALON', 0)} · BELUM CUKUP "
+          f"{k.get('BELUM CUKUP', 0)} · GAGAL {k.get('GAGAL', 0)} · NEGATIF {k.get('NEGATIF', 0)}. Hari beli "
+          f"{ks.get('hari_beli', 'tiada')} (ON {ks.get('hari_on', '?')}/OFF {ks.get('hari_off', '?')}); "
+          f"G1 awal {ks.get('tarikh_g1', 'tiada')}.") if ks else 'Kad skor: tiada (kad_skor.json tiada).'
+    # QQQ lawan SMA50
+    qqq = 'tiada'
+    try:
+        c = []
+        with open(idx_csv or os.path.join(BS2, 'data', 'harga', 'stor', 'harga_idx.csv'), encoding='utf-8') as f:
+            for r in csv.DictReader(f):
+                if r['ticker'] == 'QQQ':
+                    c.append((r['date'], float(r['close'])))
+        c.sort()
+        v = [x[1] for x in c]
+        if len(v) >= 50:
+            sma = sum(v[-50:]) / 50
+            qqq = f"QQQ {v[-1]:.0f} lawan SMA50 {sma:.0f} ({(v[-1] / sma - 1) * 100:+.1f}%)"
+    except (OSError, KeyError, ValueError):
+        pass
+    b2 = f"Rejim QQQ: {rj.get('label', 'tiada')} sejak {rj.get('sejak', 'tiada')}; {qqq}."
+    # SPUS minggu ini dan MDD sejak mula jejak; teras 35% + tunai
+    b3 = 'SPUS: tiada (spus_harian.csv tiada).'
+    try:
+        rows = []
+        with open(spus_csv or os.path.join(BS2, 'data', 'penanda_aras', 'spus_harian.csv'), encoding='utf-8') as f:
+            for ln in f:
+                if ln.startswith('#') or ln.startswith('tarikh'):
+                    continue
+                t, o, cl = ln.strip().split(',')[:3]
+                rows.append((t, float(o), float(cl)))
+        rows.sort()
+        if len(rows) >= 6:
+            minggu = (rows[-1][2] / rows[-6][2] - 1) * 100
+            seg = [r for r in rows if r[0] >= mula_jejak]
+            asas = seg[0][1]
+            puncak, mdd = 1.0, 0.0
+            for _, _, cl in seg:
+                x = cl / asas
+                puncak = max(puncak, x)
+                mdd = min(mdd, (x / puncak - 1) * 100)
+            b3 = (f"SPUS minggu ini {minggu:+.2f}% (tutup {rows[-1][0]}; MDD sejak {mula_jejak} {mdd:.2f}%). "
+                  f"Teras SPUS 35% + tunai: {minggu * 0.35:+.2f}% minggu ini.")
+    except (OSError, ValueError, IndexError):
+        pass
+    # lorong T4 teratas (bukan pangkat) dan median
+    b4 = 'Lorong T4: tiada.'
+    try:
+        kol = ks['kol']
+        rows = [dict(zip(kol, r)) for r in ks['rows']]
+        rows = [r for r in rows if r.get('t4_pul') is not None]
+        if rows:
+            atas = max(rows, key=lambda r: r['t4_pul'])
+            med = sorted(r['t4_pul'] for r in rows)[len(rows) // 2]
+            b4 = (f"Lorong T4 teratas (BUKAN pangkat): {atas['id']} {atas['t4_pul']:+.1f}% MDD {atas['t4_mdd']:.1f}% "
+                  f"p-jalur {atas.get('t4_persentil', '?')}; median {len(rows)} lorong {med:+.1f}%; SPUS {atas.get('t4_spus', float('nan')):+.1f}%.")
+    except (KeyError, TypeError, ValueError):
+        pass
+    kt = []
+    try:
+        asal = globals()['KEPUTUSAN']
+        if keputusan_csv:
+            globals()['KEPUTUSAN'] = keputusan_csv
+        kt = keputusan_terbuka()
+    finally:
+        globals()['KEPUTUSAN'] = asal
+    b5 = 'Tindakan: tiada wang sebenar (0 TERBUKTI); ' + (f"tertunda: {kt[0]['perkara'][:55]}" if kt else
+                                                          'tiada keputusan tertunda') + '.'
+    return [_potong(x) for x in (b1, b2, b3, b4, b5)]
+
+
+def tulis_ringkasan_mingguan(baris, keluar=None):
+    L = ['# Ringkasan mingguan 5 baris (dijana `standard/koordinator.py --mingguan`; cadangan FABLE_CADANGAN.md §3)',
+         '', f'Dijana {datetime.now().strftime("%Y-%m-%d %H:%M")} (waktu pelayan). Nombor daripada kad_skor.json, '
+         'harga_idx.csv, spus_harian.csv, koordinator/keputusan.csv. Bukan keputusan.', '']
+    L += [f'{i + 1}. {b}' for i, b in enumerate(baris)]
+    with open(keluar or RINGKASAN_MINGGUAN, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(L) + '\n')
+
 def main():
+    if '--mingguan' in sys.argv:
+        b = ringkasan_mingguan()
+        tulis_ringkasan_mingguan(b)
+        print('\n'.join(b))
+        return 0
     if '--semak' in sys.argv:
         lewat = SEMAK_HARI
         if '--lewat' in sys.argv:

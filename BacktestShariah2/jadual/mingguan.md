@@ -40,6 +40,9 @@ Alat (ToolSearch; jika `select:mcp__Moo_Moo__…` gagal, cari ikut nama alat, ct
    biarkan calon dan catat). Posisi C dilaras oleh `harian_c.py malam` seterusnya (`tidak_layak.py posisi`), stor/Lejar oleh `lejar.py stor`.
 8. `python3 BacktestShariah2/standard/sahkan.py` → mesti 0. Catatan dalam `standard/binaan_v2_log.md`
    (bilangan universe, sektor_pasaran, SST, perbezaan Moomoo, kewangan, peristiwa). Commit `Mingguan Moomoo/SST <tarikh>: <ringkas>` + push.
+8b. Ringkasan mingguan 5 baris (cadangan `kajian/FABLE_CADANGAN.md` §3, 9 Nov 2026): `python3 BacktestShariah2/standard/koordinator.py --mingguan`
+   → cetak 5 baris dan tulis `laporan/RINGKASAN_MINGGUAN.md` (komit bersama langkah 8). Baris 1 dan 5 dimasukkan ke mesej ntfy
+   langkah 9 di hadapan ringkasan data (jumlah mesej tetap < 200 aksara; potong jika perlu). Bukan keputusan.
 9. Notifikasi (langkah terakhir, juga jika gagal): `mcp__github__actions_run_trigger` (method `run_workflow`, owner `pedagangsenja`,
    repo `papertrade-claude`, workflow_id `amaran_ntfy.yml`, ref `main`, inputs {"tajuk": "mingguan <tarikh>", "mesej":
    "universe <n>, sektor <tarikh>, SST <ok/ralat>, kewangan <n>, Moomoo <beza>"} — satu baris < 200 aksara).

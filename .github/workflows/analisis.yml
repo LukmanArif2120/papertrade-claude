@@ -92,6 +92,13 @@ jobs:
       # Ringkasan setiap kaedah untuk helaian kaedah dashboard v161 (keputusan pengguna 8 Nov 2026):
       # sebab keluar, taburan pulangan dan tiga contoh dagangan sebenar dengan lilin. Populasi SAMA
       # seperti kad skor (Lejar Penuh lorong 1, terbuka ditanda-ke-pasaran); paparan sahaja.
+      # CANTAS (pradaftar standard/SPEC_CANTAS.md, 9 Nov 2026): label maklumat bulanan kaedah calon berhenti
+      # direkod (C1-C5 atas kad_skor.json). Tidak mengubah Lejar/kad skor; keputusan cantas = pengguna.
+      - name: Jana label cantas
+        id: cantas
+        if: steps.kad.outcome == 'success'
+        continue-on-error: true
+        run: python3 BacktestShariah2/standard/cantas.py
       - name: Jana ringkasan setiap kaedah
         id: siri
         continue-on-error: true
@@ -110,7 +117,8 @@ jobs:
                    BacktestShariah2/laporan/T4_KAEDAH.md BacktestShariah2/data/analisis/kad_skor.json \
                    BacktestShariah2/laporan/KAD_SKOR.md BacktestShariah2/data/analisis/kaedah_siri.json \
                    BacktestShariah2/data/analisis/skor_kaedah.json BacktestShariah2/laporan/SKOR_KAEDAH.md \
-                   BacktestShariah2/data/analisis/skor_kaedah_sejarah.csv; do
+                   BacktestShariah2/data/analisis/skor_kaedah_sejarah.csv \
+                   BacktestShariah2/laporan/CANTAS.md BacktestShariah2/data/analisis/cantas.json; do
             if [ -f "$f" ]; then git add "$f"; fi
           done
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi

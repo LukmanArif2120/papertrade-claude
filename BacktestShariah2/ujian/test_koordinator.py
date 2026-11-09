@@ -92,3 +92,38 @@ class TestKoordinator(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class TestRingkasanMingguan(unittest.TestCase):
+    def test_lima_baris_gagal_lembut_dan_had_aksara(self):
+        with tempfile.TemporaryDirectory() as d:
+            b = ko.ringkasan_mingguan(ks_json=os.path.join(d, 'x.json'), idx_csv=os.path.join(d, 'y.csv'),
+                                      spus_csv=os.path.join(d, 'z.csv'), keputusan_csv=os.path.join(d, 'k.csv'))
+            self.assertEqual(len(b), 5)
+            self.assertTrue(all(len(x) <= ko.HAD_AKSARA for x in b))
+            self.assertIn('tiada', b[0])
+            out = os.path.join(d, 'R.md')
+            ko.tulis_ringkasan_mingguan(b, out)
+            self.assertIn('1. ', open(out, encoding='utf-8').read())
+
+    def test_nombor_dibaca(self):
+        with tempfile.TemporaryDirectory() as d:
+            ks = os.path.join(d, 'ks.json')
+            import json
+            json.dump(dict(kira={'TERBUKTI': 0, 'CALON': 0, 'BELUM CUKUP': 2, 'GAGAL': 0, 'NEGATIF': 0},
+                           hari_beli=16, hari_on=1, hari_off=15, tarikh_g1='2026-11-12',
+                           rejim=dict(label='OFF', sejak='2026-10-16'),
+                           kol=['id', 't4_pul', 't4_mdd', 't4_persentil', 't4_spus'],
+                           rows=[['M1', 5.0, -2.0, 90, -5.8], ['M2', -1.0, -3.0, 20, -5.8]]), open(ks, 'w'))
+            sp = os.path.join(d, 'sp.csv')
+            with open(sp, 'w') as f:
+                f.write('# nota\ntarikh,buka,tutup\n')
+                for i, c in enumerate([100, 101, 102, 100, 99, 98, 97]):
+                    f.write(f'2026-10-{16 + i:02d},{c},{c}\n')
+            b = ko.ringkasan_mingguan(ks_json=ks, idx_csv=os.path.join(d, 'y.csv'), spus_csv=sp,
+                                      keputusan_csv=os.path.join(d, 'k.csv'))
+            self.assertIn('BELUM CUKUP 2', b[0])
+            self.assertIn('OFF sejak 2026-10-16', b[1])
+            self.assertIn('SPUS minggu ini', b[2])
+            self.assertIn("M1 +5.0%", b[3])
+            self.assertIn('tiada wang sebenar', b[4])
