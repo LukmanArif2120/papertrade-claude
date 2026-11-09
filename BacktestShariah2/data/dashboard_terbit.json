@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794195341-9dd1",
-  "nombor": 198,
-  "sha256": "caab94a970e99bd155193de6eb5efa7c94b921165f74d8f8f43456841c3a3ce8",
-  "bait": 753899,
-  "dikemas": "2026-11-09 03:36 UTC",
-  "nota": "v167 (keputusan pengguna 9 Nov 2026 \"laksanakan apa yg tertangguh\"): panel Skor Kaedah 0–100 (pangkat maklumat, BUKAN keputusan; db analisis/skor_kaedah, standard/skor_kaedah.py, pradaftar SPEC_SKOR_KAEDAH.md) di Pilih kaedah + jubin helaian kaedah + glosari."
+  "versi_artifact": "1794209793-3468",
+  "nombor": 199,
+  "sha256": "13ef00880701b1ca6fdc7f73990e3e9ecfc7cc21738c67c7f52b58cfd938034a",
+  "bait": 755986,
+  "dikemas": "2026-11-09 07:36 UTC",
+  "nota": "v168 (keputusan pengguna 9 Nov 2026 \"terbitkan v2\"): fon tajuk Barlow Condensed (tebal, sempit, huruf besar) pada tajuk, label, menu dan nombor besar; warna, ikon dan susun atur v5.1 kekal."
 }

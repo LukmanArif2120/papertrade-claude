@@ -1,7 +1,7 @@
 <title>Papan Backtest Shariah</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Barlow+Condensed:wght@600;700;800&display=swap">
 <style>
 /* Susun atur: konsol terminal satu lajur; pengepala melekit (tab utama + sub-tab), paparan bertab, helaian bawah untuk butiran.
    Gaya SST Terminal: navy gelap sahaja (pilihan sengaja, satu tema). */
@@ -1189,6 +1189,31 @@ nav.tabs>button svg{display:none}
 .kprj{display:inline-block;font-weight:700;border-radius:7px;padding:0 8px;white-space:nowrap}
 .kprj.off{background:var(--warn-soft);color:var(--warn)}.kprj.on{background:var(--pos-soft);color:var(--pos)}.kprj.na{background:var(--sunk);color:var(--muted)}
 @media (max-width:760px){.kputus{font-size:.8rem;padding:9px 11px;gap:7px}.kputus .kpl{display:block}.kputus .kpt{display:inline-block;margin-right:6px}}
+/* ================= v168 (9 Nov 2026, keputusan pengguna): fon tajuk "sukan" =================
+   Warna, ikon dan susun atur v5.1 KEKAL; hanya gaya huruf berubah: tajuk, label dan nombor besar guna Barlow Condensed
+   (tebal, sempit, huruf besar). Teks ayat kekal Inter supaya mudah dibaca; jadual dan nombor kecil kekal mono. */
+:root{--f-cond:"Barlow Condensed","Arial Narrow",system-ui,sans-serif}
+header.top h1{font-family:var(--f-cond);font-weight:800;text-transform:uppercase;letter-spacing:.01em;font-size:1.7rem;line-height:1}
+.view .panel-h h2,.v5h h3,.j30h b,.kstajuk h2,.pv2r1 h3,aside.rail .v5brand b{font-family:var(--f-cond);font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+.view .panel-h h2,.v5h h3{font-size:1.08rem}
+.j30h b{font-size:1.25rem}
+aside.rail .v5brand b{font-size:1.05rem}
+aside.rail .rh,.v5promo .t,.kputus .kpt{font-family:var(--f-cond);font-weight:700;letter-spacing:.1em;font-size:.78rem}
+.v5pill{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.05em;font-size:.82rem}
+.k5 .l,.view .kpi .lbl{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.06em;font-size:.86rem;font-weight:600}
+.k5 .v,.view .kpi .v{font-family:var(--f-cond);font-weight:700;font-size:2.15rem;letter-spacing:0;font-variant-numeric:lining-nums}
+.k5 .v .mo,.view .kpi .v .mo{font-family:inherit;font-variant-numeric:lining-nums}
+.v5big{font-family:var(--f-cond);font-weight:800;font-size:2.4rem;letter-spacing:0}
+.v5md{font-family:var(--f-cond);font-weight:700;font-size:1.7rem;letter-spacing:0}
+.v5btn{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.06em;font-size:.92rem}
+@media (min-width:1100px){
+  aside.rail nav.tabs>button,aside.rail nav.tabs>button[aria-selected="true"]{font-family:var(--f-cond);font-size:1.02rem;text-transform:uppercase;letter-spacing:.04em}
+}
+@media (max-width:760px){
+  header.top h1{font-size:1.3rem}
+  body>nav#mainTabs>button{font-family:var(--f-cond);text-transform:uppercase;letter-spacing:.05em;font-size:.72rem}
+  .k5 .v{font-size:1.7rem}
+}
 </style>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
