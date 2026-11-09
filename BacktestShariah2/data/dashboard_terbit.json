@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794220238-a6dc",
-  "nombor": 202,
-  "sha256": "00d411418253ca80b30709d5594f725f78c641eb10f1ab8f25e1c827d75c923a",
-  "bait": 761477,
-  "dikemas": "2026-11-09 10:30 UTC",
-  "nota": "v171 (keputusan pengguna 9 Nov 2026 \"cek untuk both telefon dan desktop\"): semakan penuh telefon + komputer termasuk Rujukan (Katalog, Kombinasi N, Backtest, Sektor) dan helaian kaedah telefon; cip mod Padat dipendekkan dengan elipsis; label REPLIKA/spec asal di lajur ID Katalog turun ke baris bawah (dahulu menindih nama); label 0% histogram Taburan pulangan dialih ke kiri garis (dahulu menindih bilangan bar). Audit fon LULUS."
+  "versi_artifact": "1794230762-d7fb",
+  "nombor": 204,
+  "sha256": "f4edb196a6b5a797f697557e25e9ef150ce2d424485d64f51845dad014727b70",
+  "bait": 777197,
+  "dikemas": "2026-11-09 13:26 UTC",
+  "nota": "v173 (9 Nov 2026, keputusan pengguna \"ya saya luluskan\"): empat tambahan rekod/maklumat — panel Jejak 10 slot di Akaun (persentil jalur rawak + SPUS tingkap sama), panel Kepekatan industri/sektor di Posisi (saham unik; merah > 1 saham satu industri atau sektor > 30%), baris Kuarantin data dalam kad Saluran, baris Keputusan terbuka KOORDINATOR di Hari ini. Dibina di atas v172 hidup (terbitan #203, sesi lain, pembetulan kaki helaian iPhone + label carta, belum dikomit) yang digabung ke dalam sumber ini. Medan db baharu (harian/status.kuarantin, keputusan_terbuka; prestasi/portfolio_slot.jalur/persentil/spus_pct) muncul selepas tolakan db seterusnya."
 }
