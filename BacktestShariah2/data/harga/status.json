@@ -1,32 +1,82 @@
 {
  "terkini": {
-  "dijana": "2026-11-07 16:50 UTC",
-  "sesi": 20261106,
-  "bil_ticker": 930,
+  "dijana": "2026-11-09 22:18 UTC",
+  "sesi": 20261109,
+  "bil_ticker": 929,
   "bil_universe": 931,
   "tiada_data": [
+   "BLFS",
    "QRVO"
   ],
   "tiada_bar_sesi": [
    "ACA",
+   "AEO",
+   "ANF",
+   "AS",
    "ATKR",
-   "BLFS",
+   "AU",
+   "AYI",
+   "AZZ",
+   "BCC",
+   "BNED",
+   "BRC",
+   "BSM",
+   "BTU",
+   "CDE",
+   "CECO",
+   "CRS",
+   "DAC",
+   "DQ",
+   "EFOR",
+   "FC",
+   "GIC",
+   "GLW",
+   "HNI",
+   "IFF",
    "INDV",
+   "KAI",
+   "KNX",
    "KVUE",
-   "RAMP"
+   "LNN",
+   "MAYS",
+   "MSA",
+   "MTRN",
+   "MTUS",
+   "NPKI",
+   "PEN",
+   "PHIN",
+   "PHR",
+   "POLE",
+   "PSO",
+   "PVH",
+   "RAMP",
+   "REX",
+   "RHI",
+   "SENEB",
+   "SITE",
+   "SKY",
+   "SLVM",
+   "TNC",
+   "UI",
+   "USNA",
+   "VPG",
+   "VSH",
+   "WLK",
+   "WLYB",
+   "ZTO"
   ],
-  "bil_tiada_bar_sesi": 6,
+  "bil_tiada_bar_sesi": 55,
   "dividen_baharu": 0
  },
  "sejarah": {
-  "dijana": "2026-10-23 07:48 UTC",
-  "bil_ticker": 4,
+  "dijana": "2026-11-09 22:18 UTC",
+  "bil_ticker": 1,
   "diminta": [
-   "BB",
-   "EFOR",
-   "LITE",
-   "VIAV"
+   "SUPN"
   ],
-  "tiada_data": []
+  "tiada_data": [],
+  "kuarantin": [
+   "SUPN"
+  ]
  }
 }
