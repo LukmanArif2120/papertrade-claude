@@ -26,7 +26,7 @@ Semua mesti benar pada hari belian pertama; satu gagal = tiada belian.
 
 1. **TERBUKTI**: `laporan/KAD_SKOR.md` menanda sekurang-kurangnya satu kaedah TERBUKTI (G1–G6), dan status itu kekal dua larian berturut-turut.
 2. **Rejim**: hari beli dalam kedua-dua rejim sudah ≥ 10 (G1) dan hari itu rejim QQQ ON (belian satelit hanya dalam ON, `FABLE_PENILAIAN.md` §6).
-3. **Had risiko akaun ditulis dahulu**: teras SPUS ≤ 35% akaun, satelit ≤ 15% akaun, 8–10 slot, 1 saham setiap industri, saiz = 0.25% akaun ÷ (4 × ATR14%), had rugi akaun **-10% dari puncak = berhenti semua belian satelit dan semak semula** (bukan jual teras). Nombor ini disalin ke `koordinator/keputusan.csv` sebelum order pertama.
+3. **Had risiko akaun ditulis dahulu** (keputusan pengguna 9 Nov 2026: tiada ETF pasif; baki akaun tunai): pendedahan kaedah ≤ 15% akaun pada permulaan, 8–10 slot, 1 saham setiap industri, saiz = 0.25% akaun ÷ (4 × ATR14%), had rugi akaun **-10% dari puncak = berhenti semua belian satelit dan semak semula** (bukan jual teras). Nombor ini disalin ke `koordinator/keputusan.csv` sebelum order pertama.
 4. **Kos broker**: komisen dan yuran platform diketahui dalam peratus setiap sisi; jika > 0.1% setiap sisi, jangkaan kaedah dikira semula dengan kos itu dan G2 mesti masih lulus.
 5. **Slippage**: hanya saham dengan nilai dagangan median 20 hari ≥ USD 10 juta (slippage model 0.10%); saham < USD 10 juta (model 0.25%) dikecualikan daripada wang sebenar walaupun Lejar membelinya.
 6. **Cukai**: status cukai pelabur asing atas saham AS (dividen dipotong 30% atau kadar perjanjian; untung modal) disemak dengan penasihat; jejak dividen SPUS diambil kira dalam jangkaan teras.

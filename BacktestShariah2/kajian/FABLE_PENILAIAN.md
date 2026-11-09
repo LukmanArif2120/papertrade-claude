@@ -6,7 +6,7 @@ Ditulis 9 Nov 2026 (sesi Claude Code, cawangan `claude/spus-swing-strategy-eval-
 
 ## 0. Jawapan satu perenggan
 
-**Tiada kaedah atau gabungan dalam repo ini yang disokong data untuk swing 10 sesi pada +5% setiap dagangan dengan MDD akaun -10%.** Daripada 223 kaedah, 10 (4.5%) berjangkaan positif pada data langsung, kesemuanya dengan selang keyakinan yang merangkumi sifar; angka backtest tidak bertahan (korelasi pangkat backtest lawan langsung **negatif**, rho -0.23). Kadar menang 70% hanya tercapai dengan sasaran untung, dan setiap sasaran untung yang diukur (lima kali, bebas) memberi jangkaan negatif. Had pegang 10 sesi pernah diuji atas gabungan terbaik repo (`GB02_atau3`) dan memberi CAGR +2.0% dengan MDD -60% pada 8 slot (`REVERSE/PEGANG_SLOT.md`). Satu-satunya pembinaan yang pernah mematuhi MDD -10% pada data harian 2020–2025 ialah **SPUS 35% + tunai 65%** (CAGR +6.4%, MDD -10.0%, `REVERSE/SISTEM.md`). Itu pelan yang disokong; satelit kaedah menunggu kad skor.
+**Tiada kaedah atau gabungan dalam repo ini yang disokong data untuk swing 10 sesi pada +5% setiap dagangan dengan MDD akaun -10%.** Daripada 223 kaedah, 10 (4.5%) berjangkaan positif pada data langsung, kesemuanya dengan selang keyakinan yang merangkumi sifar; angka backtest tidak bertahan (korelasi pangkat backtest lawan langsung **negatif**, rho -0.23). Kadar menang 70% hanya tercapai dengan sasaran untung, dan setiap sasaran untung yang diukur (lima kali, bebas) memberi jangkaan negatif. Had pegang 10 sesi pernah diuji atas gabungan terbaik repo (`GB02_atau3`) dan memberi CAGR +2.0% dengan MDD -60% pada 8 slot (`REVERSE/PEGANG_SLOT.md`). Satu-satunya pembinaan yang pernah mematuhi MDD -10% pada data harian 2020–2025 ialah campuran SPUS + tunai (`REVERSE/SISTEM.md`), tetapi **keputusan pengguna 9 Nov 2026: tiada ETF pasif; sistem ini tentang saham syarikat.** Pelan: tunai sepenuhnya dan tiada wang sebenar sehingga satu kaedah saham menanda TERBUKTI; SPUS kekal kayu ukur sahaja (§9).
 
 ## 1. Kenapa setiap pengukuran tiada keputusan
 
@@ -192,18 +192,18 @@ Nota: M76 dan M28 berlabel AMARAN pada Papan Penganalisis (purata matang jauh di
 
 **Tiada pelan swing (pegang ≤ 10 sesi, +5% setiap dagangan) yang disokong data dalam repo ini.** Bukti terus: (i) had pegang 10 bar atas gabungan terbaik memberi +0.32% setiap dagangan dan kos 14 mata/tahun (`PEGANG_SLOT.md`); (ii) sasaran +5% dicapai 4.7% dagangan C; (iii) 10/223 kaedah positif pada data langsung, semua dalam hingar; (iv) setiap portfolio 8–10 slot pendedahan penuh mempunyai MDD -40% hingga -60%.
 
-**Pelan yang disokong (satu-satunya pembinaan yang mematuhi MDD -10% pada data harian 2020–2025):**
+**Pelan (keputusan pengguna 9 Nov 2026: fokus saham syarikat, tiada ETF pasif):**
 
 | Komponen | Peraturan | Sumber |
 |---|---|---|
-| Teras | **SPUS 30–35% akaun, baki tunai**, imbang semula sesi pertama setiap bulan | `SISTEM.md` (tutup bulanan): 35% → CAGR +6.44%, MDD -10.00% (2020–2025). Pada tutup HARIAN, SPY 35% memberi MDD -12.6% (`REVERSE/SATELIT.md` lengan K0); untuk MDD harian -10%, berat ~28–30%. |
-| Satelit kaedah | **0% sehingga kad skor menanda TERBUKTI** (paling awal ~Apr 2027). Selepas itu maks 15% akaun, diambil daripada bahagian tunai | `SPEC_KAD_SKOR.md` G6 pada MDD -10% |
-| Masuk satelit (bila dibenarkan) | hanya kaedah TERBUKTI, hanya rejim QQQ ON, had 1 saham setiap industri, kolam calon ≥ 10× slot | §6; `KEPUTUSAN_AKHIR.md` dapatan 2–3 |
-| Keluar satelit | Chandelier 4 × ATR14 pada tutup, jual buka esok; tiada sasaran untung, tiada henti peratus; had masa 126 sesi | `NXX_KELUAR.md`, `CARA_94.md` |
-| Saiz satelit | saiz = 0.25% akaun ÷ (4 × ATR14%), had 1–3% akaun setiap saham, 8–10 slot | `SPEC_1B.md`, RISIKO_10 |
-| Jangkaan terukur | teras: ~+6% setahun, MDD -10%, bulan positif ~70% (sifat indeks, `SETUP.md`: SPY menang 76.7% atas 63 sesi). Satelit: belum ada angka yang boleh dipercayai | — |
+| Wang sebenar | **Tunai sepenuhnya sehingga kad skor menanda sekurang-kurangnya satu kaedah TERBUKTI** (paling awal ~Apr 2027). SPUS hanya kayu ukur (G6), bukan pegangan | `SPEC_KAD_SKOR.md`; keputusan pengguna 9 Nov 2026 |
+| Sementara menunggu | Lejar dan Papertrade C terus merekod; baca ringkasan mingguan 5 baris; label cantas dinilai sebulan sekali | `laporan/RINGKASAN_MINGGUAN.md`, `laporan/CANTAS.md` |
+| Masuk (bila TERBUKTI) | hanya kaedah TERBUKTI, hanya rejim QQQ ON, had 1 saham setiap industri, kolam calon ≥ 10× slot | §6; `KEPUTUSAN_AKHIR.md` dapatan 2–3 |
+| Keluar | Chandelier 4 × ATR14 pada tutup, jual buka esok; tiada sasaran untung, tiada henti peratus; had masa 126 sesi | `NXX_KELUAR.md`, `CARA_94.md` |
+| Saiz dan had akaun | 8–10 slot; saiz = 0.25% akaun ÷ (4 × ATR14%), had 1–3% akaun setiap saham; jumlah pendedahan kaedah ≤ 15% akaun pada permulaan; had rugi akaun -10% dari puncak = berhenti belian baharu | `SPEC_1B.md`, RISIKO_10; `FABLE_CADANGAN.md` §2 |
+| Jangkaan terukur | belum ada angka kaedah yang boleh dipercayai; angka pertama datang daripada kad skor, bukan daripada laporan ini | — |
 
-Jangkaan ke hadapan teras lebih rendah daripada +6.44% jika SPUS tidak mengulangi 2020–2025 (26%/tahun ialah tempoh teknologi luar biasa, `PENANDA_ARAS_SYARIAH.md`). Ini pelan "untung bersih melebihi rugi" yang terukur; ia bukan pelan +5% setiap dagangan, dan saya tidak boleh mengesyorkan pelan sedemikian dengan jujur daripada data ini.
+Maklumat yang kekal direkod (bukan cadangan): campuran SPUS 35% + tunai memberi CAGR +6.4% / MDD -10.0% pada 2020–2025 (`SISTEM.md`; tutup harian SPY 35% MDD -12.6%, `REVERSE/SATELIT.md` K0). Ia ialah garis yang mesti dikalahkan oleh mana-mana kaedah saham pada risiko sama, dan setakat ini belum ada yang mengalahkannya.
 
 ## 10. Implikasi untuk Bahagian 2 (belum dijalankan; perlu keputusan anda)
 
@@ -452,4 +452,8 @@ Kajian tunggal yang dibenarkan sudah dijalankan: satelit `GB02_atau3` × Chandel
 
 **GAGAL** pada sel utama (slot 8) dan slot 10: P1 ✗ (CAGR tahan +6.12% lawan `K1` indeks 50% +7.59%), P2 ✗ (MDD -13.7% melepasi -10%), P3 ✗ (satelit RAWAK 20 benih +7.82%, p95 +9.7%, mengalahkan isyarat GB02), P4 ✓, P5 ✗ (+1.38% setiap dagangan lawan rawak +4.39%). Dapatan sampingan: dalam pembinaan ini isyarat GB02 lebih buruk daripada pemilihan rawak dari kolam yang sama, dan urutan ATR rendah dahulu (U08) menurunkan CAGR 1.6 mata berbanding urutan rawak (S3 +7.75%). Rejim ON tidak menambah jangkaan setiap dagangan (ON +1.71% lawan OFF +0.99%, kedua-dua kecil) tetapi memotong MDD 2.7 mata. Jangkaan priori saya betul pada keseluruhan (GAGAL) dan salah pada tiga gate — selaras rekod repo.
 
-**Akibat:** satelit kekal 0%; pelan §9 (teras SPUS 30–35% + tunai, tiada satelit sehingga TERBUKTI) tidak berubah; kebenaran kajian tunggal dianggap terbelanja. Tiada kaedah didaftar untuk jejak langsung.
+**Akibat:** satelit kekal 0%; pelan §9 (tunai sepenuhnya, tiada wang sebenar sehingga TERBUKTI; keputusan pengguna 9 Nov 2026: tiada ETF pasif) tidak berubah; kebenaran kajian tunggal dianggap terbelanja. Tiada kaedah didaftar untuk jejak langsung.
+
+## 12. Keputusan pengguna 9 Nov 2026: tiada ETF pasif
+
+Pengguna menolak cadangan teras SPUS pasif ("sistem ini tentang saham syarikat"). §9 dikemas: wang sebenar kekal tunai sepenuhnya sehingga satu kaedah saham TERBUKTI; SPUS hanya kayu ukur. Pengukuran SPUS + tunai dalam §6 dan §9 kekal sebagai rekod perbandingan, bukan cadangan.

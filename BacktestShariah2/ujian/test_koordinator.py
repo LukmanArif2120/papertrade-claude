@@ -124,6 +124,6 @@ class TestRingkasanMingguan(unittest.TestCase):
                                       keputusan_csv=os.path.join(d, 'k.csv'))
             self.assertIn('BELUM CUKUP 2', b[0])
             self.assertIn('OFF sejak 2026-10-16', b[1])
-            self.assertIn('SPUS minggu ini', b[2])
+            self.assertIn("SPUS (kayu ukur) minggu ini", b[2])
             self.assertIn("M1 +5.0%", b[3])
             self.assertIn('tiada wang sebenar', b[4])
