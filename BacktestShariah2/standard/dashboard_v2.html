@@ -2697,7 +2697,8 @@ function openKaedah(id,tab){if(S.muatRujukan)S.muatRujukan();const k=(S.kat&&S.k
     <div class="pv2k4">${q.buku_harian!=null?`<div class="k5"><div class="l">Buku harian (G2) · 95% Newey-West</div><div class="v mo ${cls(q.buku_harian)}">${v5sg(q.buku_harian,3)}% <span class="v5xs">sehari</span></div><div class="kd2ci"></div></div>`:`<div class="k5"><div class="l">Jangkaan setiap posisi · 95%</div><div class="v mo ${cls(q.jangkaan)}">${v5sg(q.jangkaan)}%</div><div class="kd2ci"></div></div>`}
      <div class="k5"><div class="l">Menang · payoff ${q.payoff==null?'–':fx(q.payoff,2)}</div><div class="v mo">${fx(q.menang,1)}%</div><div class="kd2wl"></div></div>
      <div class="k5"><div class="l">${ksBaru(S.ks)?`Lift masuk ${(S.ks.ambang||{}).G3_UFUK??10} sesi (G3)`:'Lift atas kolam (G3)'}</div><div class="v mo ${cls(q.lift)}">${q.lift==null?'–':v5sg(q.lift)} <span class="v5xs">mata</span></div><div class="v5xs">${q.lift==null?(ksBaru(S.ks)?'belum diuji: perlu ≥ 30 posisi langsung dengan ufuk 10 sesi lengkap':'belum diuji (posisi < 30)'):`t ${fx(q.lift_t,2)} · p ${fx(q.lift_p,4)} · ambang BH ${fx(q.lift_bh,4)}<br>${q.lift_lulus?'<b class="pos">lulus FDR</b>':q.lift>0?'positif tetapi belum melepasi FDR':'tidak positif'}`}</div></div>
-     ${(()=>{const r10=q.t4_r10!=null&&q.t4_spus_r10!=null,a=r10?q.t4_r10:q.t4_pul,c=r10?q.t4_spus_r10:q.t4_spus,d=a!=null&&c!=null?a-c:null,mh=fx(((S.ks&&S.ks.ambang)||{}).G6_MDD_HAD??-10,0);return `<div class="k5"><div class="l">T4 10 slot lawan SPUS${r10?` pada MDD ${mh}%`:''}</div><div class="v mo ${cls(d)}">${d==null?'–':v5sg(d)} <span class="v5xs">mata</span></div><div class="v5xs">${q.t4_sesi?`kaedah ${v5sg(a)}% · SPUS ${v5sg(c)}% · ${q.t4_sesi} sesi<br>MDD ${v5sg(q.t4_mdd)}%${q.t4_nisbah!=null?` · nisbah ${fx(q.t4_nisbah,2)} lawan maks jalur ${fx(q.t4_jalur_nisbah_maks,2)}`:q.t4_persentil!=null?` · persentil jalur ${fx(q.t4_persentil,0)}`:''}`:'lorong belum bermula'}</div></div>`;})()}</div>
+     ${(()=>{const r10=q.t4_r10!=null&&q.t4_spus_r10!=null,a=r10?q.t4_r10:q.t4_pul,c=r10?q.t4_spus_r10:q.t4_spus,d=a!=null&&c!=null?a-c:null,mh=fx(((S.ks&&S.ks.ambang)||{}).G6_MDD_HAD??-10,0);return `<div class="k5"><div class="l">T4 10 slot lawan SPUS${r10?` pada MDD ${mh}%`:''}</div><div class="v mo ${cls(d)}">${d==null?'–':v5sg(d)} <span class="v5xs">mata</span></div><div class="v5xs">${q.t4_sesi?`kaedah ${v5sg(a)}% · SPUS ${v5sg(c)}% · ${q.t4_sesi} sesi<br>MDD ${v5sg(q.t4_mdd)}%${q.t4_nisbah!=null?` · nisbah ${fx(q.t4_nisbah,2)} lawan maks jalur ${fx(q.t4_jalur_nisbah_maks,2)}`:q.t4_persentil!=null?` · persentil jalur ${fx(q.t4_persentil,0)}`:''}`:'lorong belum bermula'}</div></div>`;})()}
+    ${(()=>{const sk=skRow(id);if(!sk)return '';return `<div class="k5"><div class="l">Skor Kaedah 0–100 <span class="v5xs">(maklumat, bukan keputusan)</span></div><div class="v mo" style="color:${skWarna(sk.skor)}">${fx(sk.skor,1)} <span class="v5xs">#${sk.pangkat}/${(skRows(S.skk)||[]).length}</span></div><div class="v5xs">${skTiang(sk).map(([t,v])=>`${t} ${fx(v,0)}`).join(' · ')}<br>berat data ${fx((sk.berat_data||0)*100,0)}% · mentah ${fx(sk.skor_mentah,1)}${sk.siling?' · siling kad skor':''}</div></div>`;})()}</div>
     ${v5Card('c12',`Lorong T4 · 10 slot${q.t4_mula?' sejak '+esc(tkO(q.t4_mula)):''}`,ksBaru(S.ks)?`G6: atas SPUS pada MDD ${fx((S.ks.ambang||{}).G6_MDD_HAD??-10,0)}% dan nisbah > maks jalur`:'G6 perlu atas SPUS dan atas p95 rawak',`<div class="kd2t4"></div><div class="v5lg"><span><i style="background:#1EE3B4"></i>${esc(id)}</span><span><i style="background:#8F7CFF"></i>SPUS</span><span><i style="background:rgba(138,147,160,.35)"></i>jalur rawak p50–p95 (20 cabutan)</span></div>
      <div class="pv2gr" style="margin-top:10px">${[['Campuran SPUS 80/20',q.t4_c80_pul],['70/30',q.t4_c70_pul],['50/50',q.t4_c50_pul]].map(([t,v])=>`<div><small>${t}</small><b class="mo ${cls(v)}">${v5sg(v)}%</b></div>`).join('')}</div>`)}`
     :`<div class="pv2v pv2v-g"><span class="ic">i</span><div><b>Tiada dalam kad skor</b><div class="v5sm">${S.ks?'Kaedah ini belum ada posisi Lejar Penuh.':'Memuatkan kad skor…'}</div></div></div>`;
@@ -4585,9 +4586,56 @@ function rejimTip(){const R=S.ks&&S.ks.rejim;if(!R)return '';const q=R.qqq||{},y
 const ksSusun=memo(R=>R.slice().sort((x,y)=>{const a=KS_ORD.indexOf(x.status)-KS_ORD.indexOf(y.status);if(a)return a;
   const n=(u,v)=>u==null&&v==null?0:u==null?1:v==null?-1:v-u;
   return n(x.lift,y.lift)||n(x.buku_ci_bawah??x.ci_bawah,y.buku_ci_bawah??y.ci_bawah)||n(x.jangkaan,y.jangkaan)||(x.id<y.id?-1:x.id>y.id?1:0);}));
+/* ================= Skor Kaedah 0–100 (v167, 9 Nov 2026) =================
+   Keputusan pengguna 9 Nov 2026: satu skor 0–100 setiap kaedah "dari semua segi" — PANGKAT MAKLUMAT, BUKAN keputusan.
+   Sumber: standard/skor_kaedah.py -> data/analisis/skor_kaedah.json (db `analisis/skor_kaedah`, bentuk lajur kol + baris).
+   Empat tiang Untung 35 / Tahan 30 / Bukti 25 / Konsisten 10, 13 metrik dengan sauh TETAP (pradaftar
+   standard/SPEC_SKOR_KAEDAH.md, dikunci ujian/test_skor_kaedah.py::TestKunci), min geometri berberat, dikecut ke 50 ikut
+   hari beli, siling ikut status kad skor. Halaman hanya memapar nombor dokumen; ia tidak mengira skor sendiri.
+   Skor dipercayai sebagai pangkat hanya selepas semakan Spearman 8–12 minggu positif (meta `spearman`). */
+const skRows=memo(d=>{if(!d||!Array.isArray(d.kol)||!Array.isArray(d.rows))return null;
+  return d.rows.map(v=>{const r={};d.kol.forEach((k,i)=>{r[k]=v[i];});r.markah=r.markah||{};r.mentah=r.mentah||{};return r;});});
+const skRowM=memo(R=>{const m={};(R||[]).forEach((r,i)=>{m[r.id]=Object.assign({pangkat:i+1},r);});return m;});
+const skRow=id=>skRowM(skRows(S.skk))[id]||null;
+const skWarna=v=>v==null?'#8A93A0':v>=60?'#1EE3B4':v>=50?'#8A93A0':'#FF5C5C';
+const skBar=v=>`<span class="ksbar" title="${fx(v,1)} / 100"><i style="width:${Math.max(2,Math.min(100,v||0)).toFixed(0)}%;background:${skWarna(v)}"></i></span>`;
+const skTiang=r=>[['Untung',r.untung],['Tahan',r.tahan],['Bukti',r.bukti],['Konsisten',r.konsisten]];
+function skSpearman(d){const sp=d.spearman;
+  if(!sp)return `Belum ada snapshot skor ≥ 7 hari lalu (sejarah bermula ${esc(tkO(d.harga_pada||''))}). Skor dipercayai sebagai pangkat hanya selepas 8–12 minggu semakan positif.`;
+  if(sp.rho==null)return `Snapshot ${esc(tkO(sp.tarikh))}: hanya ${sp.n} kaedah berpasangan; belum boleh dikira.`;
+  const ok=sp.rho>0&&sp.p<0.05;
+  return `Skor pada ${esc(tkO(sp.tarikh))} lawan pulangan lorong T4 sejak itu (${sp.n} kaedah): Spearman ρ <b class="${ok?'pos':''}">${sg2(sp.rho)}</b> (p ${fx(sp.p,3)}). ${ok?'Positif dan p &lt; 0.05: skor meramal pangkat.':'Belum ada bukti skor meramal pangkat — jangan pilih kaedah dengannya.'}`;}
+function panelSkor(){const d=S.skk,R=skRows(d);
+  if(!R||!R.length)return `<div class="panel empty">${S.live?'Skor Kaedah belum ditolak ke pangkalan data (analisis/skor_kaedah).':'Memuatkan Skor Kaedah…'}${diagDok('skk')}</div>`;
+  const f=S.skf||(S.skf={kel:'semua',q:'',shown:AWAL});
+  let rows=R;
+  if(f.kel!=='semua')rows=rows.filter(r=>f.kel==='N'?/^N/.test(r.id):!/^N/.test(r.id));
+  if(f.q){const q=f.q.toLowerCase();rows=rows.filter(r=>[r.id,r.nama,r.status].join(' ').toLowerCase().includes(q));}
+  const B=d.berat_tiang||{A:.35,B:.3,C:.25,D:.1},M=skRowM(R);
+  const cId={k:'id',t:'Kaedah',l:1,frz:1,v:r=>r.id,f:r=>`<b>${esc(r.id)}</b> <span class="mut">${esc(r.nama||'')}</span><span class="vv">#${M[r.id].pangkat} · ${ksPill(r.status)}</span>`,c:()=>'name'};
+  const cSk={k:'skor',t:'Skor',tip:'skor_kaedah',f:r=>`<b class="mo" style="color:${skWarna(r.skor)}">${fx(r.skor,1)}</b>${r.siling?'<span class="mut" title="siling ikut status kad skor">⌈</span>':''} ${skBar(r.skor)}<span class="vv">mentah ${fx(r.skor_mentah,1)} · berat data ${fx((r.berat_data||0)*100,0)}%</span>`};
+  const cT=(k,t,w)=>({k,t:`${t} ${Math.round(w*100)}`,f:r=>`<b class="mo">${fx(r[k],0)}</b> ${skBar(r[k])}`});
+  const cHb={k:'hari_beli',t:'Hari beli',f:r=>`<b>${r.hari_beli}</b><span class="vv">${r.n} posisi · ${r.tutup} ditutup</span>`};
+  /* bukan .vv: mod Padat (lalai desktop) menyembunyikan .vv, dan lajur ini ialah satu-satunya tempat metrik mentah dipapar */
+  const cM={k:'_m',t:'Metrik utama',ns:1,l:1,f:r=>{const m=r.mentah;return `<span class="mut nw">jangkaan <b class="${cls(m.A1)}">${ksSg(m.A1)}</b> · T4 pul/|MDD| ${m.B1==null?'–':fx(m.B1,2)}</span><br><span class="mut nw">Ulcer ${m.B2==null?'–':fx(m.B2,1)} · t buku ${m.C1==null?'–':fx(m.C1,2)} · WFE ${m.D3==null?'–':fx(m.D3,2)}</span>`;}};
+  const cols=[cId,cSk,cT('untung','Untung',B.A),cT('tahan','Tahan',B.B),cT('bukti','Bukti',B.C),cT('konsisten','Konsisten',B.D),cHb,cM];
+  const lp={key:r=>r.id,line:r=>`<b>${esc(r.id)}</b><span class="pill ${KS_ST[r.status]||'p-mute'}">${esc(r.status==='BELUM CUKUP'?'BELUM':r.status)}</span><span class="mlx" title="Untung · Tahan · Bukti · Konsisten">${skTiang(r).map(([,v])=>fx(v,0)).join(' · ')}</span><b class="mlr mo" style="color:${skWarna(r.skor)}">${fx(r.skor,1)}</b>`,
+    kad:r=>`<div class="pv2kad"><div class="pv2kh"><div style="min-width:0"><b class="nm">${esc(r.id)}</b> ${ksPill(r.status)}<div class="v5xs">${esc(r.nama||'')} · #${M[r.id].pangkat}</div></div><b class="mo" style="font-size:1.1rem;color:${skWarna(r.skor)}">${fx(r.skor,1)}</b></div>
+      <div class="pv2ci">${skTiang(r).map(([t,v])=>`<div><small>${t}</small><b class="mo">${fx(v,0)}</b><small>${skBar(v)}</small></div>`).join('')}</div>
+      <div class="v5xs" style="margin-top:8px">hari beli ${r.hari_beli} · berat data ${fx((r.berat_data||0)*100,0)}% · skor mentah ${fx(r.skor_mentah,1)}${r.siling?' · siling kad skor':''}</div></div>`};
+  return `<div class="panel"><div class="panel-h"><h2>Skor Kaedah 0–100</h2><span class="sub">pangkat maklumat, BUKAN keputusan · ${rows.length} daripada ${R.length} · harga ${esc(tkP(d.harga_pada))} · pradaftar ${esc(d.pradaftar||'')} · ketik baris untuk helaian kaedah</span></div>
+    <p class="headline"><b>100 = unggul semua segi; 50 = neutral/tiada bukti.</b> Empat tiang (Untung ${Math.round(B.A*100)} · Tahan ${Math.round(B.B*100)} · Bukti ${Math.round(B.C*100)} · Konsisten ${Math.round(B.D*100)}) digabung sebagai min geometri — satu tiang hampir sifar menarik jumlah ke bawah — kemudian <b>dikecut ke 50</b> ikut hari beli (berat data = hari beli ÷ (hari beli + ${d.kecut_h??20})), jadi kaedah baharu tidak boleh menjauhi 50. Siling: NEGATIF ≤ 20, GANTUNG/BERSARA ≤ 30, GAGAL ≤ 40. <b>Hanya status TERBUKTI kad skor di atas yang membenarkan wang sebenar</b>; skor tinggi dengan BELUM CUKUP bermaksud "paling menjanjikan setakat ini". Sauh dari pakar (Tharp, Minervini, Schwager, Radge, Carver, López de Prado, Pardo, Davey, Kestner, Martin, Clenow); deflasi ujian berganda t_sauh ${fx(d.t_sauh,2)}.</p>
+    <p class="headline"><b>Semakan kebolehramalan:</b> ${skSpearman(d)}</p>
+    <div class="filters" style="margin-bottom:10px">
+      <div class="seg" id="skKel">${[['semua','Semua'],['M','Mxx'],['N','Nxx']].map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${f.kel===v}">${t}</button>`).join('')}</div>
+      <input type="search" id="skQ" placeholder="Cari ID atau nama" value="${esc(f.q)}" aria-label="Cari kaedah dalam Skor Kaedah"></div>
+    ${sortTable({id:'skorkaedah',rows,lp,attr:r=>`data-kd="${esc(r.id)}" tabindex="0"`,limit:f.shown,empty:'Tiada kaedah sepadan.',foot:kakiLagi('skMore'),def:{k:'skor',dir:-1},cols})}
+    <div class="foot"><span>Sumber: standard/skor_kaedah.py · laporan/SKOR_KAEDAH.md · standard/SPEC_SKOR_KAEDAH.md</span><span>Data ${esc(tkP(d.kini))}</span></div></div>`;}
+function skBind(){const f=S.skf;if(!f)return;const q=$('#skQ');let t2;if(q)q.oninput=()=>{clearTimeout(t2);t2=setTimeout(()=>{f.q=q.value.trim();f.shown=AWAL;renderAll();const n2=$('#skQ');if(n2){n2.focus();n2.setSelectionRange(n2.value.length,n2.value.length);}},220);};
+  const g=$('#skKel');if(g)g.onclick=e=>{const b=e.target.closest('button');if(!b)return;f.kel=b.dataset.v;f.shown=AWAL;renderAll();};bindLagi('skMore',f);}
 function renderAnalisis(){
   const el=$('#v-analisis'),d=S.ks,R=ksRows(d);
-  if(!R||!R.length){el.innerHTML=`<div class="panel empty">${S.live?'Kad skor belum ditolak ke pangkalan data (analisis/kad_skor).':'Memuatkan kad skor…'}${diagDok('ks')}</div>${panelLift()}`;liftBind();return;}
+  if(!R||!R.length){el.innerHTML=`<div class="panel empty">${S.live?'Kad skor belum ditolak ke pangkalan data (analisis/kad_skor).':'Memuatkan kad skor…'}${diagDok('ks')}</div>${panelSkor()}${panelLift()}`;skBind();liftBind();return;}
   const f=S.ksf||(S.ksf={st:'semua',kel:'semua',q:'',shown:AWAL});
   let rows=ksSusun(R);
   if(f.st!=='semua')rows=rows.filter(r=>r.status===f.st);
@@ -4645,8 +4693,9 @@ function renderAnalisis(){
       <li>Kohort setiap dagangan yang lulus pernah gagal sebagai portfolio (REVERSE/KEPUTUSAN_AKHIR.md: 0/36 lawan SPUS). Itu sebab G6 wujud. Rekod analisis sahaja: tiada order, tiada wang sebenar.</li>
     </ul>
     <div class="foot"><span>Sumber: standard/kad_skor.py · standard/portfolio_t4.py · laporan/KAD_SKOR.md · laporan/T4_KAEDAH.md</span><span>Data ${esc(tkP(d.kini))}</span></div></div>
+  ${panelSkor()}
   ${panelLift()}`;
-  liftBind();v5AnalisisLukis(R);
+  skBind();liftBind();v5AnalisisLukis(R);
   const qq=$('#ksQ');let t2;if(qq)qq.oninput=()=>{clearTimeout(t2);t2=setTimeout(()=>{f.q=qq.value.trim();f.shown=AWAL;renderAll();const n2=$('#ksQ');if(n2){n2.focus();n2.setSelectionRange(n2.value.length,n2.value.length);}},220);};
   [['ksSt','st'],['ksKel','kel']].forEach(([id,k])=>{const g=$('#'+id);if(g)g.onclick=e=>{const b=e.target.closest('button');if(!b)return;f[k]=b.dataset.v;f.shown=AWAL;renderAll();};});
   el.querySelectorAll('[data-ksst]').forEach(b=>{b.onclick=()=>{f.st=b.dataset.ksst;f.shown=AWAL;renderAll();};});
@@ -5147,6 +5196,7 @@ const TIPS={
   rejim_qqq:{t:'Rejim pasaran QQQ (ON / OFF)',d:'ON = QQQ tutup > SMA50 DAN SMA10 > SMA20; OFF selainnya. Gate G1 kad skor memerlukan ≥ 10 hari beli langsung dalam SETIAP rejim, kerana kelebihan relatif saham pemimpin bertukar tanda ikut rejim ini dalam kedua-dua tingkap 2010–19 dan 2020–26 (12/17 tahun). Paparan dan gate kematangan sahaja: ia bukan penapis belian papertrade.',e:'Data yang dikumpul semasa OFF belum menjawab bagaimana kaedah berprestasi semasa ON, jadi G1 menunggu kedua-duanya.'},
   beli_kertas:{t:'Belian papertrade esok',d:'Isyarat lengkap pada tutup sesi terakhir daripada SEMUA kaedah (papertrade/senarai_beli, sama dengan panel Senarai beli). beli.yml membelinya secara MAYA pada buka sesi berikutnya, dan membatalkan jika buka ≤ henti atau buka > buka maks. Ini belian kertas: tiada order, tiada wang sebenar. Hanya kaedah berstatus TERBUKTI dalam kad skor bermakna untuk wang sebenar.',e:'Senarai 1,000 isyarat = sehingga 1,000 posisi kertas baharu pada buka esok; tiada satu pun order sebenar.'},
   buku_harian:{t:'Buku harian (G2)',d:'Satu buku bagi setiap kaedah: setiap posisi lorong 1 diberi berat sama pada belian, ditanda pada tutup setiap sesi, keluar ikut peraturan kaedah, kos 0.2% setiap pusingan. Nombor = purata pulangan harian buku itu (% sehari); [had bawah … had atas] = selang 95% dengan SE Newey-West (lag 5), kerana posisi sehari berkorelasi. G2 lulus jika purata > 0 DAN had bawah > 0. Ganti selang setiap posisi lama yang terlalu sempit.',e:'+0.05% [−0.10 … +0.20] = purata positif tetapi selang merangkumi sifar: belum terbukti.'},
+  skor_kaedah:{t:'Skor Kaedah 0–100',d:'Pangkat MAKLUMAT semua kaedah dari semua segi (standard/skor_kaedah.py; pradaftar 9 Nov 2026 SPEC_SKOR_KAEDAH.md). Empat tiang: Untung 35 (jangkaan, lebihan T4 lawan SPUS, payoff), Tahan 30 (pulangan/|MDD| T4, Ulcer, CVaR10, tanpa5), Bukti 25 (t Newey-West buku harian dideflasi N ujian, saiz sampel, liputan rejim), Konsisten 10 (K-ratio, lift, kecekapan jalan-ke-depan). Setiap metrik dipetakan 0–100 dengan sauh tetap daripada pakar, tiang digabung sebagai min geometri berberat, kemudian dikecut ke 50 ikut hari beli. BUKAN keputusan wang sebenar: hanya TERBUKTI kad skor.',e:'61 dengan 11 hari beli = tiang kuat tetapi data sedikit; selepas 60 hari beli skor yang sama akan ~80.'},
   t4_r10:{t:'T4 pada MDD −10% (G6)',d:'Lorong T4 = portfolio maya 10 slot yang membeli isyarat kaedah itu SAHAJA. Supaya setara dengan toleransi kejatuhan anda (−10%), pulangannya diskala: pulangan × min(1, 10 ÷ |MDD|) — berat yang akan memegang kejatuhan pada −10% — dan dibanding SPUS yang diskala sama dalam tingkap sama. G6 lulus jika T4 ≥ 126 sesi, pulangan > 0, nilai berskala > SPUS berskala, DAN nisbah pulangan ÷ |MDD| melebihi MAKSIMUM 20 cabutan rawak.',e:'T4 +12% dengan MDD −20% → +6% pada MDD −10%; SPUS +8% dengan MDD −8% → +8%; G6 gagal.'},
   anl_jangkaan:{t:'Jangkaan backtest',d:'Purata pulangan bersih setiap dagangan dalam backtest set 431 (2019–2026, varian aktif), dipotong kerana kaedah dipilih atas data yang sama: dikekalkan 25%, tambah 25% bagi setiap semakan luar sampel yang lulus (maksimum 100%).',e:'Backtest +4.0%, lulus 1 semakan → jangkaan +2.0%.'},
   anl_semakan:{t:'Semakan luar sampel',d:'Tiga ujian di luar data backtest asal. S1–S4: varian sama mengatasi beli-semua (EW) dalam sekurang-kurangnya 3 daripada 4 kumpulan saham kecil. WFO: walk-forward luar sampel 1 Jan 2023 – 2 Okt 2026, CAGR melebihi EW 423 dalam tempoh sama. 2000 AS: AUTOTUNE A01 atas 2000 saham AS lain (luar sampel 2013 – Sep 2024), CAGR melebihi SPY dalam kumpulan A dan B. ✓ lulus, ✗ gagal, – tiada data.',e:'✗ ✓ ✗ = lulus WFO sahaja (1/3).'},
@@ -5496,6 +5546,8 @@ renderNav();renderAll();
   sub('prestasi/untung_siri','us',['utama']);sub('analisis/t4_siri','t4s',['analisis']);
   /* v155: kad skor keputusan (standard/kad_skor.py) - tab Pilih kaedah + tajuk tab Hari ini */
   sub('analisis/kad_skor','ks',['analisis','utama','kaedah']);
+  /* v167: Skor Kaedah 0–100 (standard/skor_kaedah.py) — panel di Pilih kaedah + jubin helaian kaedah; maklumat, bukan keputusan */
+  sub('analisis/skor_kaedah','skk',['analisis','kaedah']);
   sub('kaedah/katalog','kat',['kaedah']);
   /* (2 Nov 2026) 232,704 bait pada 489 baris ujian = 88.8% had 262,144, dan ia tumbuh setiap kali
      satu pradaftar ditambah (lonjakan terakhir: +67 baris daripada P94 + CARAK).

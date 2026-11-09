@@ -6,7 +6,7 @@
 #      setiap batch) dan <folder>/ringkas.json. --versi: {"papertrade/claude": 14, …} (daripada senarai ArtifactData list)
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), papertrade/senarai_beli (dipulihkan 6 Nov 2026),
-# papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), analisis/kaedah_siri (kaedah_siri.py; dibahagi), harian/status,
+# papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), analisis/skor_kaedah (skor_kaedah.py), analisis/kaedah_siri (kaedah_siri.py; dibahagi), harian/status,
 # harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py), institusi/kumpulan (institusi_13f.py). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
@@ -1456,6 +1456,12 @@ def main(argv=None):
     pk = os.path.join(BS2, 'data', 'analisis', 'kad_skor.json')
     if os.path.exists(pk):
         docs['analisis/kad_skor'] = json.load(open(pk, encoding='utf-8'))
+    # analisis/skor_kaedah: Skor Kaedah 0-100 (standard/skor_kaedah.py, analisis.yml selepas kad_skor.py;
+    # pradaftar 9 Nov 2026 standard/SPEC_SKOR_KAEDAH.md) = pangkat MAKLUMAT, bukan keputusan; dibaca v167
+    # (panel Pilih kaedah + jubin helaian kaedah). Bentuk lajur (kol + baris): ~87 KB pada 223 kaedah = 33% HAD_DB.
+    psk = os.path.join(BS2, 'data', 'analisis', 'skor_kaedah.json')
+    if os.path.exists(psk):
+        docs['analisis/skor_kaedah'] = json.load(open(psk, encoding='utf-8'))
     # analisis/kaedah_siri: ringkasan setiap kaedah untuk helaian kaedah v161 (standard/kaedah_siri.py,
     # analisis.yml; 8 Nov 2026): sebab keluar, taburan, 3 contoh dagangan dengan lilin. ~580 KB pada
     # 223 kaedah, jadi ia DIPECAH (PECAH) dan halaman membacanya dengan subBhg() atas permintaan

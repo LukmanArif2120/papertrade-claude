@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794144489-18d0",
-  "nombor": 197,
-  "sha256": "7ba65b8ec69040bd7ad7fdc446b64661c41a9283e6f448c28b9df64b19bc7c18",
-  "bait": 744891,
-  "dikemas": "2026-11-08 13:28 UTC",
-  "nota": "v165 (keputusan pengguna 8 Nov 2026): \"Gred sekali pandang\" dipulihkan di tab Posisi (grid gred 10 saham teratas, skala teal→kelabu→merah, kekal grid di telefon); Akaun, Watchlist dan Rujukan (Kaedah, Kombinasi N, Backtest, Sektor) kini dalam rupa v5.1."
+  "versi_artifact": "1794195341-9dd1",
+  "nombor": 198,
+  "sha256": "caab94a970e99bd155193de6eb5efa7c94b921165f74d8f8f43456841c3a3ce8",
+  "bait": 753899,
+  "dikemas": "2026-11-09 03:36 UTC",
+  "nota": "v167 (keputusan pengguna 9 Nov 2026 \"laksanakan apa yg tertangguh\"): panel Skor Kaedah 0–100 (pangkat maklumat, BUKAN keputusan; db analisis/skor_kaedah, standard/skor_kaedah.py, pradaftar SPEC_SKOR_KAEDAH.md) di Pilih kaedah + jubin helaian kaedah + glosari."
 }
