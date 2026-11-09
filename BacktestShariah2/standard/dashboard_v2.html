@@ -182,7 +182,7 @@ section.view.pnav .panel.pn-a>.panel-h{cursor:default}section.view.pnav .panel-h
 .pnav-in div.pn-k:nth-of-type(3){--kk:var(--k3)}
 .pnav-in div.pn-k:nth-of-type(4){--kk:var(--k4)}
 .pnav-in .pn-k:first-child{border-top:0;margin-top:0;padding-top:2px}
-/* v173 (audit tablet): rel bahagian kiri (232px) hanya dari 1100px; tablet 761–1099px guna jalur cip mendatar seperti
+/* v174 (audit tablet): rel bahagian kiri (232px) hanya dari 1100px; tablet 761–1099px guna jalur cip mendatar seperti
    telefon, supaya jadual posisi muat (di 768px rel itu memakan 30% lebar dan jadual terkeluar dari kad). */
 @media (min-width:1100px){
   section.view.pnav{padding-left:232px;position:relative}
@@ -1291,12 +1291,12 @@ table[data-st="katalog"] td.tk .pill{margin-top:3px}
    kandungan kelihatan DI BAWAH kaki. Kaki kini legap, di atas kandungan, dan melekat rapat ke tepi bawah. */
 .pv2f{z-index:6;background:var(--card);border-top:1px solid var(--line);box-shadow:0 -10px 18px -10px rgba(0,0,0,.5);
   bottom:calc(-24px - env(safe-area-inset-bottom,0px));margin-bottom:calc(-24px - env(safe-area-inset-bottom,0px))}
-/* v173 (audit mendalam): jadual Katalog ada 7 lajur teks; lajur pengisi (.isi, width:100%) menyerap ~550px dan
+/* v174 (audit mendalam): jadual Katalog ada 7 lajur teks; lajur pengisi (.isi, width:100%) menyerap ~550px dan
    menghimpit lajur lain ke lebar minimum - cip terpotong ("BELI BUKA E…") dalam mod Padat, dan dalam mod Biasa teks
    lajur Pegang menindih lajur Henti rugi. Katalog tidak memerlukan pengisi: lebar dibahagi antara lajur kandungan. */
 table[data-st="katalog"] th.isi,table[data-st="katalog"] td.isi{display:none}
 body:not(.padat) table[data-st="katalog"] td.wrap{min-width:120px}
-/* v173 KONTRAS (WCAG AA: teks biasa >= 4.5): teks yang sengaja dipudarkan kekal pudar tetapi boleh dibaca */
+/* v174 KONTRAS (WCAG AA: teks biasa >= 4.5): teks yang sengaja dipudarkan kekal pudar tetapi boleh dibaca */
 .pnav-in .pn-k{opacity:1}
 tbody tr.skw-x td{opacity:.75}
 .pudar{opacity:1}
@@ -1305,10 +1305,10 @@ tbody tr.skw-x td{opacity:.75}
 .pill.p-exit{color:#FFA3AF}
 .b5c{color:#2A0710}
 .kd2st .n{color:var(--fg)!important}
-/* v173 jubin KPI di tablet (761–1099px): empat sebaris terlalu sempit, cip terkeluar dari jubin -> dua sebaris */
+/* v174 jubin KPI di tablet (761–1099px): empat sebaris terlalu sempit, cip terkeluar dari jubin -> dua sebaris */
 @media (min-width:761px) and (max-width:1099px){.k5row{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .k5 .l{flex-wrap:wrap}
-/* v173 SASARAN KETIK di telefon DAN skrin sentuh lain (tablet) (WCAG 2.5.8: >= 24px) */
+/* v174 SASARAN KETIK di telefon DAN skrin sentuh lain (tablet) (WCAG 2.5.8: >= 24px) */
 @media (max-width:760px),(pointer:coarse){
   button.lnk{padding-block:3px}
   .salh{min-height:26px}
@@ -1317,6 +1317,9 @@ tbody tr.skw-x td{opacity:.75}
 }
 /* Corong saringan (Kombinasi N) di telefon: "sendiri 1,494" turun ke bawah nombor, bukan terkeluar dari kad */
 @media (max-width:620px){.crg{grid-template-columns:minmax(0,1fr) auto}.crg .nm span{display:block;margin-left:0}}
+/* v174: lantai saiz untuk panel v173 (Jejak 10 slot, Kepekatan) */
+.kpkt,.pslg>div>span{font-size:12.5px!important}
+.pslg .mut,.kpc{font-size:13px!important}
 /* label carta di tepi (puncak, bilangan bar, paksi) tidak lagi diklip oleh sempadan SVG */
 svg.v5s,svg.rpsv{overflow:visible}
 /* kepala helaian legap sepenuhnya (dahulu 6% lut sinar di bahagian bawah, kandungan berbayang di bawah tab) */
@@ -1834,14 +1837,14 @@ function renderBanding(){
 }
 
 /* ================= Sector (P3) ================= */
-/* v173 (audit kontras): pada keamatan sederhana, teks putih DAN gelap kedua-duanya < 4.5:1 di atas petak (luminans
+/* v174 (audit kontras): pada keamatan sederhana, teks putih DAN gelap kedua-duanya < 4.5:1 di atas petak (luminans
    ~0.16–0.20). heatA menggelapkan sedikit petak dalam jalur itu sehingga teks putih lulus; heatCol dan heatTeks berkongsi. */
 function heatA(v,lim){const t=Math.max(-1,Math.min(1,v/lim)),c=t>=0?[34,197,94]:[239,68,68],b=[15,23,42];let a=0.18+0.72*Math.abs(t);
   const L=a=>{const m=c.map((x,i)=>x*a+b[i]*(1-a)),f=x=>{x/=255;return x<=0.03928?x/12.92:Math.pow((x+0.055)/1.055,2.4);};return 0.2126*f(m[0])+0.7152*f(m[1])+0.0722*f(m[2]);};
   while(a>0.18&&L(a)>0.155&&L(a)<0.205)a-=0.01;return {t,a,L:L(a)};}
 function heatCol(v,lim){if(v==null||isNaN(v))return 'var(--sunk)';const {t,a}=heatA(v,lim);
   return t>=0?`color-mix(in srgb,#22c55e ${Math.round(a*100)}%,#0f172a)`:`color-mix(in srgb,#ef4444 ${Math.round(a*100)}%,#0f172a)`;}
-/* v173 (audit kontras): nama/nilai di atas petak heatCol diberi warna putih ATAU gelap, mana yang kontrasnya lebih tinggi.
+/* v174 (audit kontras): nama/nilai di atas petak heatCol diberi warna putih ATAU gelap, mana yang kontrasnya lebih tinggi.
    Dahulu `svg:not(.v5s) text` (kelabu pudar) mengatasi .pm-n, jadi nama industri kelabu di atas hijau terang (~2:1). */
 function heatTeks(v,lim){if(v==null||isNaN(v))return '#F1F5F9';const {L}=heatA(v,lim);return 0.96/(L+0.05)>=(L+0.05)/0.055?'#F1F5F9':'#06120F';}
 function squarify(items,x,y,w,h){const out=[];let rest=items.filter(d=>d.v>0).sort((a,b)=>b.v-a.v);const tot=rest.reduce((s,d)=>s+d.v,0);if(!tot)return out;
@@ -4230,7 +4233,7 @@ function v5DonutCard(parts,top,mid,bot,tot){return `<div style="display:flex;jus
 const v5ZonParts=Z=>[['Tercetus / < 3%',Z.merah,'#FF5D73'],['Hampir 3–10%',Z.kuning,'#FFC145'],['Jauh > 10%',Z.hijau,'#12A886'],['Sudah keluar L2',Z.keluar,'#4A5260']];
 const v5StatParts=k=>[['Belum cukup data',k['BELUM CUKUP']||0,'#6B7A99'],['Terbukti negatif',k.NEGATIF||0,'#FF5D73'],['Gagal',k.GAGAL||0,'#4A5260'],['Calon',k.CALON||0,'#12A886'],['Terbukti',k.TERBUKTI||0,'#1EE3B4']];
 /* carta kawasan: garis a (teal, bayang gradien penuh, tanpa titik) + garis b putus-putus (ungu, SPUS) + jalur pilihan */
-/* v173 (9 Nov 2026, audit mendalam): carta v5 mengukur lebar bekas SEBELUM susun atur muktamad - di telefon SVG dilukis
+/* v174 (9 Nov 2026, audit mendalam): carta v5 mengukur lebar bekas SEBELUM susun atur muktamad - di telefon SVG dilukis
    328px dalam bekas 300px dan terkeluar 13px dari kad. Selepas bingkai susun atur seterusnya, jika mana-mana SVG lebih
    lebar daripada bekasnya, lukis semula sekali (ukuran ketika itu betul). */
 function v5Semula(sel,lukis){requestAnimationFrame(()=>{if([...document.querySelectorAll(sel)].some(s=>{const p=s.parentElement;return p&&p.clientWidth>0&&+s.getAttribute('width')>p.clientWidth+1;}))lukis();});}

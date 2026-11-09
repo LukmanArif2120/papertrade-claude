@@ -1,4 +1,4 @@
-/* Audit paparan MENDALAM dashboard (v173, 9 Nov 2026, keputusan pengguna "cuba check lebih detail lagi").
+/* Audit paparan MENDALAM dashboard (v174, 9 Nov 2026, keputusan pengguna "cuba check lebih detail lagi").
  *
  * Lapan saiz skrin (telefon kecil 360, iPhone dalam app 390×660 dengan ruang selamat 34px, telefon besar 430,
  * tablet potret 768, tablet landskap 1024, komputer kecil 1280, komputer 1440, skrin lebar 1920). Setiap saiz:
