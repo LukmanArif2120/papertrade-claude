@@ -196,7 +196,7 @@ Nota: M76 dan M28 berlabel AMARAN pada Papan Penganalisis (purata matang jauh di
 
 | Komponen | Peraturan | Sumber |
 |---|---|---|
-| Teras | **SPUS 35% akaun, tunai 65%**, imbang semula sesi pertama setiap bulan | `SISTEM.md`: CAGR +6.44%, MDD -10.00% (2020–2025) |
+| Teras | **SPUS 30–35% akaun, baki tunai**, imbang semula sesi pertama setiap bulan | `SISTEM.md` (tutup bulanan): 35% → CAGR +6.44%, MDD -10.00% (2020–2025). Pada tutup HARIAN, SPY 35% memberi MDD -12.6% (`REVERSE/SATELIT.md` lengan K0); untuk MDD harian -10%, berat ~28–30%. |
 | Satelit kaedah | **0% sehingga kad skor menanda TERBUKTI** (paling awal ~Apr 2027). Selepas itu maks 15% akaun, diambil daripada bahagian tunai | `SPEC_KAD_SKOR.md` G6 pada MDD -10% |
 | Masuk satelit (bila dibenarkan) | hanya kaedah TERBUKTI, hanya rejim QQQ ON, had 1 saham setiap industri, kolam calon ≥ 10× slot | §6; `KEPUTUSAN_AKHIR.md` dapatan 2–3 |
 | Keluar satelit | Chandelier 4 × ATR14 pada tutup, jual buka esok; tiada sasaran untung, tiada henti peratus; had masa 126 sesi | `NXX_KELUAR.md`, `CARA_94.md` |
@@ -445,3 +445,11 @@ Lajur: kelas · sebab (satu baris) · skor · hari beli · posisi/tutup · jangk
 | `M09` Volumatic VIDYA Pivot Retest | BELUM BOLEH KATA | {'G1': 'hari beli 9; kuasa lift belum boleh dianggar; rejim ON 1/10, OFF 8/10', 'G2': 'buku harian -0.906%', 'G3': 'lift belum diuji', 'G4': '1 henti hari-0 (mesti 0)', 'G6': 'sesi 16/126'} | 38.3 | 9 | 23/14 | -5.47 | 13 | 0.54 | 4 | -11.7 / -11.7 (-5.8) |
 | `M122` Moving Momentum (ChartSchool | BELUM BOLEH KATA | {'G1': 'hari beli 16; kuasa lift belum boleh dianggar; rejim ON 1/10, OFF 15/10', 'G2': 'buku harian -0.555%', 'G3': 'lift belum diuji', 'G4': '6 henti hari-0 (mesti 0)', 'G6': 'sesi 16/126'} | 37.2 | 16 | 92/56 | -3.86 | 24 | 0.96 | 7 | -8.6 / -8.6 (-5.8) |
 | `M01` Bollinger Band + RSI | BELUM BOLEH KATA | {'G1': 'hari beli 16; kuasa lift belum boleh dianggar; rejim ON 1/10, OFF 15/10', 'G2': 'buku harian -0.502%', 'G3': 'lift belum diuji', 'G6': 'sesi 16/126'} | 37.0 | 16 | 101/12 | -2.45 | 38 | 0.82 | 0 | -7.2 / -10.8 (-5.8) |
+
+## 11. Keputusan Bahagian 2 (9 Nov 2026, selepas pilihan B dan pradaftar `REVERSE/SPEC_SATELIT.md`)
+
+Kajian tunggal yang dibenarkan sudah dijalankan: satelit `GB02_atau3` × Chandelier 4×ATR14, 15% akaun, urutan ATR% menaik, had 1 saham setiap industri, belian hanya rejim QQQ ON, di atas teras indeks 35% + tunai; latih 2012–2019, tahan 2020–2025, kos penuh, kawalan rawak 20 benih. Laporan: `REVERSE/SATELIT.md`.
+
+**GAGAL** pada sel utama (slot 8) dan slot 10: P1 ✗ (CAGR tahan +6.12% lawan `K1` indeks 50% +7.59%), P2 ✗ (MDD -13.7% melepasi -10%), P3 ✗ (satelit RAWAK 20 benih +7.82%, p95 +9.7%, mengalahkan isyarat GB02), P4 ✓, P5 ✗ (+1.38% setiap dagangan lawan rawak +4.39%). Dapatan sampingan: dalam pembinaan ini isyarat GB02 lebih buruk daripada pemilihan rawak dari kolam yang sama, dan urutan ATR rendah dahulu (U08) menurunkan CAGR 1.6 mata berbanding urutan rawak (S3 +7.75%). Rejim ON tidak menambah jangkaan setiap dagangan (ON +1.71% lawan OFF +0.99%, kedua-dua kecil) tetapi memotong MDD 2.7 mata. Jangkaan priori saya betul pada keseluruhan (GAGAL) dan salah pada tiga gate — selaras rekod repo.
+
+**Akibat:** satelit kekal 0%; pelan §9 (teras SPUS 30–35% + tunai, tiada satelit sehingga TERBUKTI) tidak berubah; kebenaran kajian tunggal dianggap terbelanja. Tiada kaedah didaftar untuk jejak langsung.
