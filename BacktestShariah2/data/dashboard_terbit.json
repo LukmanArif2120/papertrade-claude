@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794237836-b2d6",
-  "nombor": 205,
-  "sha256": "df167989c6a998bf85206a2c7f6fcd2b82e2fd3f7b2149818d53c64b433238c8",
-  "bait": 780969,
-  "dikemas": "2026-11-09 15:24 UTC",
-  "nota": "v174 (keputusan pengguna 9 Nov 2026 \"cuba check lebih detail lagi\"; dibina di atas v173 #204): audit mendalam 8 saiz skrin (ujian/audit_terperinci.js) 0 cacat — carta v5 dilukis semula ikut lebar bekas; lajur pengisi Katalog dibuang (cip terpotong / teks bertindih mod Biasa); corong Kombinasi N telefon; teks peta portfolio putih/gelap ikut petak + warna petak keluar jalur kontras rendah; bar tangkapan untung; kontras WCAG (label kumpulan, baris ditolak, gate gagal, gred E, lencana merah, ikon amaran, simbol pudar); sasaran ketik >= 24px (telefon + skrin sentuh); jubin KPI 2 sebaris di tablet; rel bahagian tablet jadi jalur cip; label paksi carta untung/kejatuhan; lantai saiz panel v173."
+  "versi_artifact": "1794279818-4a78",
+  "nombor": 206,
+  "sha256": "f0edf97709a6355e8bb1c8bc6a635ac74479ea5f8bbc1b2bf7110a1072796d74",
+  "bait": 785898,
+  "dikemas": "2026-11-10 03:03 UTC",
+  "nota": "v175 (keputusan pengguna 10 Nov 2026 \"laksanakan 3 tempat\"): gaya tonjol — tajuk besar dua warna (.j30hero), cip sorotan (mark.tj) dan nombor penting berwarna (b.nk) di kad Jawapan 30 saat (Hari ini, Pilih kaedah, Posisi, Akaun); tajuk kotak keputusan helaian (.pv2v) besar berwarna ikut jenis; baris jawapan kad lipat dibuka (.kadjwp: posisi, watchlist, kad skor). Warna ikut maksud sedia ada. Audit fon dan audit mendalam 8 saiz skrin 0 cacat."
 }
