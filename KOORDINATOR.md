@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-14 14:07 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-14 15:49 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -104,6 +104,7 @@ Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau 
 | harian.yml | 7 5 * * 2-6, 7 7 * * 2-6, 7 9 * * 2-6, 7 11 * * 2-6 | ya |
 | institusi.yml | 37 3 * * 1 | ya |
 | lejar.yml | 17 6 * * 2-6, 17 10 * * 2-6 | ya |
+| mesin_carian.yml | 23 2 * * 0 | ya |
 | pengawal.yml | 35 12 * * 1-5, 0 16 * * 1-5 | ya |
 | penjaga_jadual.yml | 23 * * * *, 53 * * * * | **tidak** |
 | petang.yml | 47 11 * * 1-5, 17 12 * * 1-5 | ya |
