@@ -17,4 +17,5 @@ Dijana `kajian/carian_setup/cs_hadapan.py`; harga hingga 20261113; isyarat sejak
 
 - "Lari" = naik ≥ 5 % minggu pertama, capai ≥ 10 % sebelum henti −8 %, masih ≥ 10 % pada minggu ke-4; hanya dikira selepas 20 sesi berlalu. "Rawak" = saham layak lain pada hari yang sama dan tahap turun-naik yang sama.
 - Bacaan awal tidak bermakna: perlu sekurang-kurangnya 100 belian dengan tetingkap lengkap bagi setiap setup sebelum kadar tangkap boleh dibandingkan dengan backtest (`kajian/CARIAN_SETUP.md`).
+- Pegang minimum (pindaan 14 Nov 2026 (p)): tiada jualan pada hari beli; indikator keluar hanya menjual mulai buka sesi ke-4; henti rugi kekal aktif sejak sesi ke-2.
 - Senarai penuh: `jejak_f/lejar.csv`. Alam: stor harga (senarai Shariah semasa).
