@@ -99,18 +99,46 @@ def main(kerja):
             x = x[teras.satu_posisi(x, np.full(len(x), TMAX - 1), pan['tid'])]
         return float((Y[x, 1] - Y[x, 4]).mean()) if len(x) >= 100 else np.nan
 
-    baris, tangkap, langkau = [], {}, []
+    # Pindaan (p): SEMUA setup dinilai di bawah pegang minimum (indikator keluar menjual paling awal pada buka sesi ke-4),
+    # dengan kernel cs_keluar7; keluar lama dipetakan ke atom yang setara (cs_pegang.lama_ke_baharu, pariti diuji).
+    import cs_cs07 as c7
+    import cs_keluar7 as k7
+    import cs_pegang as pg
+    import cs_tala7 as t7
+    XA = k7.siri_set(kerja, 'B')
+    calon, langkau = [], []
     for r in reg.itertuples():
-        if '@' in r.takrif or r.pusingan == 'CS04':
+        cs07 = r.pusingan == 'CS07'
+        if not cs07 and ('@' in r.takrif or r.pusingan == 'CS04'):
             langkau.append(r.id)
             continue
-        d = p6.dari_takrif5(r.takrif)
-        if d['pencetus'] not in EV:
+        try:
+            if cs07:
+                d = c7.dari_takrif7(r.takrif)
+                ev = t7.ev_satu(kerja, 'B', d['pencetus'])
+            else:
+                d = p6.dari_takrif5(r.takrif)
+                ev = EV[d['pencetus']]
+                d['s'], d['kol'] = pg.lama_ke_baharu(d['lajur'])
+        except (KeyError, FileNotFoundError):
             langkau.append(r.id)
             continue
-        ev = EV[d['pencetus']]
+        calon.append((r, cs07, d, ev))
+    kolom = sorted({(d['s'], d['kol']) for _, _, d, _ in calon})
+    TT7 = {c: np.zeros(len(ng)) for c in kolom}                    # asas rawak tangkap penuh di bawah mekanik yang sama
+    for a in range(0, len(sah), 150_000):
+        evc = sah[a:a + 150_000]
+        Sc = k7.sedia_pan(pan, XA, evc)
+        m5c = Sc[7][:, 0] > 0
+        for c in kolom:
+            Rc = k7.hasil(*Sc[:7], k7.A1, k7.A2, k7.OP, c[0], c[1])[0]
+            TT7[c] += np.bincount(g[evc], (m5c & (Rc >= lg.JADI)).astype(float), minlength=len(ng))
+    baris, tangkap = [], {}
+    for r, cs07, d, ev in calon:
         e0 = ev[c5.topeng(pan, Lr, ev, d['q1'], d['q2'], d['f1'], d['f2'])]
-        R, sk = p6.hasil(pan, e0, d['lajur'])
+        St = k7.sedia_pan(pan, XA, e0)
+        R, sk = k7.hasil(*St[:7], k7.A1, k7.A2, k7.OP, d['s'], d['kol'])
+        R00 = k7.hasil(*St[:7], k7.A1, k7.A2, k7.OP, d['s'], 0)[0]
         amb = teras.satu_posisi(e0, sk, pan['tid'])
         e, R = e0[amb], R[amb]
         if len(e) < 30:
@@ -118,12 +146,14 @@ def main(kerja):
             continue
         m5, trs = X[e, 0] > 0, Y[e, 1] > 0
         tp, tpd, ms = pan['tempoh'][e], pan['tarikh'][e], shariah[e]
-        pen, keluar = cs_ringkas.bahagi(r.penapis)[1], c5.kod_keluar(d['lajur'])
+        pen = cs_ringkas.bahagi(r.penapis)[1]
+        keluar = f"{c7.HENTI_KOD[d['s']]} · {k7.kod_peraturan(d['kol'])}" if cs07 else c5.kod_keluar(d['lajur'])
         b = {'id': r.id, 'pusingan': r.pusingan, 'prasyarat': r.prasyarat, 'pencetus': cs_ringkas.nama_pendek(r.masuk),
              'penapis': r.syarat if r.syarat else pen, 'keluar': keluar, 'jejak_hadapan': 'ya' if r.id in kohort else '',
              'belian': len(e), 'hari': int(len(np.unique(tpd))), 'm5': m5.mean(), 'a_m5': X[e, 5].mean(), 'm10': Y[e, 0].mean(),
              'a_m10': Y[e, 3].mean(), 'terus': trs.mean(), 'a_terus': Y[e, 4].mean(), 'tp': (m5 & (R >= lg.JADI)).mean(),
-             'a_tp': (Tb['TT'][g[e], d['lajur']] / ng[g[e]]).mean(), 'menang': (R > 0).mean(), 'rugi8': (R <= lg.RUGI).mean(),
+             'a_tp': (TT7[(d['s'], d['kol'])][g[e]] / ng[g[e]]).mean(), 'menang': (R > 0).mean(), 'rugi8': (R <= lg.RUGI).mean(),
+             'jual_awal': float((sk[amb] < k7.PEGANG_MIN).mean()),
              'purata': R.mean(), 'belian_setahun': len(e) / n_tahun, 'tangkap_setahun': trs.sum() / n_tahun,
              'tahun_aktif': int(len(np.unique(tpd // 10000))), 'bulan_beli': len(np.unique(tpd // 100)) / n_bulan,
              'liputan': len(np.unique(ep[e[trs]])) / n_ep}
@@ -141,7 +171,7 @@ def main(kerja):
         # mutu pegang: antara belian yang naik lagi
         k = e[trs]
         b.update(R_pelari=float(R[trs].mean()) if len(k) else np.nan, puncak_pelari=float(Y[k, 2].mean()) if len(k) else np.nan,
-                 R_pelari_x00=float(p6.hasil(pan, k, (d['lajur'] // cari.NR) * cari.NR)[0].mean()) if len(k) else np.nan)
+                 R_pelari_x00=float(R00[amb][trs].mean()) if len(k) else np.nan)
         # saham Shariah (senarai semasa)
         b.update(n_shariah=int(ms.sum()), terus_shariah=float(trs[ms].mean()) if ms.sum() >= 30 else np.nan,
                  a_terus_shariah=float(Y[e[ms], 4].mean()) if ms.sum() >= 30 else np.nan,
@@ -174,6 +204,9 @@ def main(kerja):
          f'henti dan keluarnya sendiri pada kumpulan B (saham yang carian tidak lihat), {tm[0][1]} – {tm[-1][2]}. Lajur corong = '
          'daripada 100 belian, berapa yang sampai ke setiap peringkat; angka dalam kurungan = saham rawak pada hari dan tahap '
          'turun-naik yang sama.', '',
+         '- **Pegang minimum (pindaan (p), syarat pengguna 14 Nov 2026):** tiada jualan pada hari beli; indikator keluar hanya '
+         'boleh menjual mulai buka sesi ke-4 (beli Isnin → paling awal Khamis); henti rugi kekal aktif sejak sesi ke-2. Semua '
+         'angka di bawah dikira dengan peraturan ini. Lajur "jual awal" = belian yang dijual sebelum sesi ke-4 (henti rugi sahaja).',
          f"- Saham rawak (mana-mana hari): naik ≥ 5 % minggu pertama {p(asas['m5'])} %; ≥ 10 % minggu pertama {p(asas['m10'])} %; "
          f"**naik lagi hingga minggu ke-4 {p(asas['terus'])} %**.",
          f'- **Dipercayai** = belian ≥ {MIN_BELIAN} DAN berdagang dalam ≥ {MIN_TAHUN} tahun DAN mengatasi rawak dalam K1 (2010–19), K2 '
@@ -182,12 +215,12 @@ def main(kerja):
          'Tangkapan setahun = bilangan belian setahun yang benar-benar naik lagi.', '',
          f'## 2. Kedudukan ({len(T)} setup; {len(yakin)} dipercayai)', '',
          '| # | ID | Prasyarat | Pencetus | Penapis saham | Henti · keluar | Belian (setahun) | Naik ≥ 5 % minggu 1 % | ≥ 10 % minggu 1 % | '
-         '**Naik lagi hingga minggu 4 %** | Tangkap penuh % | Menang % | Rugi ≥ 8 % % | Tangkapan setahun | Tahun aktif | Liputan % | '
-         'Dipercayai | Jejak hadapan |', '|---' * 18 + '|']
+         '**Naik lagi hingga minggu 4 %** | Tangkap penuh % | Menang % | Rugi ≥ 8 % % | Jual awal % | Tangkapan setahun | Tahun aktif | Liputan % | '
+         'Dipercayai | Jejak hadapan |', '|---' * 19 + '|']
     for r in T.itertuples():
         A.append(f"| {r.kedudukan} | `{r.id}` | {tx(r.prasyarat)} | {r.pencetus} | {tx(r.penapis)} | {r.keluar} | "
                  f"{r.belian:,} ({r.belian_setahun:.0f}) | {p(r.m5)} ({p(r.a_m5)}) | {p(r.m10)} ({p(r.a_m10)}) | "
-                 f"**{p(r.terus)}** ({p(r.a_terus)}) | {p(r.tp)} ({p(r.a_tp)}) | {p(r.menang, 0)} | {p(r.rugi8, 0)} | "
+                 f"**{p(r.terus)}** ({p(r.a_terus)}) | {p(r.tp)} ({p(r.a_tp)}) | {p(r.menang, 0)} | {p(r.rugi8, 0)} | {p(r.jual_awal)} | "
                  f"{r.tangkap_setahun:.1f} | {r.tahun_aktif} | {p(r.liputan, 2)} | {'**ya**' if r.dipercayai else 'tidak'} | "
                  f"{r.jejak_hadapan} |")
     A += ['', f"Tidak dinilai ({len(langkau)}): {', '.join(langkau)} (anak tala `F31`–`F38`, `F70`–`F87`: memerlukan varian tala; tala "

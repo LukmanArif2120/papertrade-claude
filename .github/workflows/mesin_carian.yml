@@ -1,0 +1,68 @@
+# Mesin carian setup (BacktestShariah2/kajian/carian_setup/cs_mesin.py): "mesin sentiasa mencari dan menala" (matlamat
+# pengguna item 7; kajian/SPEC_CARIAN_SETUP.md pindaan 14 Nov 2026 (n)(c)). Setiap larian menarik kelompok varian BAHARU
+# (benih = nombor larian), menskor pada kumpulan A, menilai yang terbaik pada kumpulan B dan MENAMBAH ke papan terkumpul
+# hasil/MESIN/papan.csv. Backtest sahaja: tidak menyentuh Lejar, Papertrade C, kad skor, kohort jejak F atau dashboard.
+# Tanpa LLM, tiada order. Data = Release autotune-data-a02 (awam) + data/sec dalam repo.
+name: Mesin carian setup
+
+on:
+  schedule:
+    - cron: '23 2 * * 0'   # Ahad 02:23 UTC (10:23 MYT)
+  workflow_dispatch:
+    inputs:
+      larian:
+        description: 'Bilangan larian berturut dalam satu job (lalai 1)'
+        required: false
+        default: '1'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mesin-carian
+  cancel-in-progress: false
+
+jobs:
+  mesin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 330
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Pasang pakej
+        run: pip install -q -c kekangan.txt -r requirements.txt pyarrow
+      - name: Cache panel dan lapisan prasyarat
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ runner.temp }}/kerja_mesin/panel_A.pkl
+            ${{ runner.temp }}/kerja_mesin/panel_B.pkl
+            ${{ runner.temp }}/kerja_mesin/lapis_A.pkl
+            ${{ runner.temp }}/kerja_mesin/lapis_B.pkl
+          key: cs-mesin-a02-${{ hashFiles('BacktestShariah2/kajian/carian_setup/cs_atom.py', 'BacktestShariah2/kajian/carian_setup/cs_cari.py', 'BacktestShariah2/kajian/carian_setup/cs_lapis.py') }}
+      - name: Larian mesin
+        env:
+          CS_PEKERJA: '3'
+          N_LARIAN: ${{ github.event.inputs.larian || '1' }}
+        run: |
+          for i in $(seq 1 "$N_LARIAN"); do
+            python3 BacktestShariah2/kajian/carian_setup/cs_mesin.py "$RUNNER_TEMP/kerja_mesin"
+          done
+      - name: Commit dan push
+        run: |
+          git config user.name "mesin-carian[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add BacktestShariah2/kajian/carian_setup/hasil/MESIN
+          if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
+          git commit -q -m "Mesin carian setup: larian $(tail -n 1 BacktestShariah2/kajian/carian_setup/hasil/MESIN/papan.csv | cut -d, -f1)"
+          for n in 1 2 3; do
+            if git pull -q --rebase origin main && git push -q origin HEAD:main; then exit 0; fi
+            git rebase --abort 2>/dev/null || true
+            sleep $((n * 15))
+          done
+          echo "Push gagal; papan larian ini hilang (larian seterusnya menarik kelompok yang sama)." >&2
+          exit 1

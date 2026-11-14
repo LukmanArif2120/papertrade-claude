@@ -8,7 +8,7 @@ Dijana `kajian/carian_setup/cs_ringkas.py` daripada `data/registry_F.csv` dan fa
 
 **Baca bersama purata setiap dagangan.** Kadar menang sahaja tidak menunjukkan saiz untung dan rugi: setup yang menang 4 daripada 10 masih boleh untung jika untungnya besar, dan setup yang menang 6 daripada 10 boleh rugi jika ruginya besar (`CLAUDE.md`: kadar menang sahaja bukan ukuran).
 
-Ringkasan: 87 setup; median kadar menang 52 %; 56 setup menang ≥ 50 %; 56 setup menang ≥ 50 % DAN purata positif; 22 setup menang < 50 % tetapi purata positif.
+Ringkasan: 95 setup; median kadar menang 52 %; 61 setup menang ≥ 50 %; 61 setup menang ≥ 50 % DAN purata positif; 24 setup menang < 50 % tetapi purata positif.
 
 Kadar menang tertinggi (≥ 300 belian): `F55` 74 % (purata +7.7 %, 484 belian); `F62` 73 % (purata +9.9 %, 1,387 belian); `F79` 73 % (purata +10.1 %, 1,205 belian); `F43` 70 % (purata +5.8 %, 515 belian); `F57` 70 % (purata +6.7 %, 542 belian).
 
@@ -101,6 +101,14 @@ Kadar menang tertinggi (≥ 300 belian): `F55` 74 % (purata +7.7 %, 484 belian);
 | `F85` | CS06 | turun-naik SPY 21 hari >= 20% setahun + kejutan untung terkini positif (SUE > 0) | N75 RSI14 < 40 tanpa penapis | MACD > isyarat + >= 30% di bawah puncak 52 minggu | 1,024 | **59** | 6 / 4 | +4.24 | 33 | 54 / 63 / 52 |  |
 | `F86` | CS06 | breadth thrust Zweig aktif (20 sesi) | N73 Tutup bawah jalur bawah BB(20,2) | ADX < 20 + >= 20% di bawah puncak 52 minggu | 1,203 | **59** | 6 / 4 | +3.23 | 29 | 58 / 60 / 67 |  |
 | `F87` | CS06 | turun-naik SPY 21 hari >= 20% setahun | M28 VWAP Separator + Kiss Pivot | >= 50% di bawah puncak 52 minggu + volum hari isyarat >= 1.5x purata 50 | 740 | **64** | 6 / 4 | +6.54 | 43 | 65 / 61 / 79 |  |
+| `F88` | CS07 | QQQ naik >= 3% dalam 5 sesi + earnings dalam 1-5 sesi akan datang | M03 BB Break + Divergence RSI (ditala 3) | – | 461 | **60** | 6 / 4 | +2.42 | 27 | 62 / 56 / 71 |  |
+| `F89` | CS07 | QQQ dalam 3% dari puncak 52 minggu + earnings dalam 1-5 sesi akan datang | M20 EMA10/15 Crossover + Sudut | >= 30% di bawah puncak 52 minggu + hari naik (tutup > buka) | 383 | **54** | 5 / 5 | +1.99 | 26 | 45 / 57 / 56 |  |
+| `F90` | CS07 | rejim ON baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang | M50 Elder Triple Screen | MACD > isyarat + >= 30% di bawah puncak 52 minggu | 303 | **48** | 5 / 5 | +0.58 | 23 | 48 / 50 / 42 |  |
+| `F91` | CS07 | QQQ dalam 3% dari puncak 52 minggu + earnings dalam 1-5 sesi akan datang | M20 EMA10/15 Crossover + Sudut | >= 30% di bawah puncak 52 minggu | 366 | **54** | 5 / 5 | +2.85 | 28 | 47 / 57 / 57 |  |
+| `F92` | CS07 | QQQ naik >= 3% dalam 5 sesi + earnings dalam 1-5 sesi akan datang | M03 BB Break + Divergence RSI | – | 377 | **59** | 6 / 4 | +2.25 | 25 | 57 / 59 / 67 |  |
+| `F93` | CS07 | keluasan naik >= 10 mata dalam 10 sesi + earnings dalam 1-5 sesi akan datang | M02 MACD + SMA200 | tutup > MA200 + MA50 naik (lawan 20 bar lalu) | 363 | **49** | 5 / 5 | +0.99 | 16 | 49 / 47 / 57 |  |
+| `F94` | CS07 | QQQ SMA10 > SMA20 + earnings dalam 1-5 sesi akan datang | K11.016 Supertrend(20, 1.5) bertukar naik | RS >= 90 + dalam 15% dari puncak 52 minggu | 380 | **44** | 4 / 6 | -0.44 | 19 | 48 / 40 / 44 |  |
+| `F95` | CS07 | >= 60% saham di atas MA50 + earnings dalam 1-5 sesi akan datang | K19.011 pecah atas Keltner(30, 1.0) | RSI14 > 60 + RS >= 90 | 330 | **52** | 5 / 5 | +1.69 | 24 | 52 / 54 / 45 |  |
 
 - K1 = 2010–2019, K2 = 2020–2024 (CS01: 2020 – Ogo 2026), K3 = 2025 – Ogo 2026 (tiada bagi CS01).
 - Cara pegang dan keluar setiap setup: lajur `henti` dan `keluar` dalam `KADAR_MENANG.csv` dan `data/registry_F.csv`.

@@ -11,6 +11,7 @@ import pandas as pd
 BENIH = 20261113
 TMAX = 20                     # sesi pegang maksimum (sesi 1 = hari beli)
 KOS = 0.005                   # kos pusingan
+PEGANG_MIN = 3                # pindaan 14 Nov 2026 (p): indikator keluar hanya menjual mulai buka sesi ke-4
 HENTI = ['H1 -8%', 'H2 -10%', 'H3 3xATR14', 'H4 4xATR14']
 
 PENCETUS = [

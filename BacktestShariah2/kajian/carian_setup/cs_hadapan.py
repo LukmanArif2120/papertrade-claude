@@ -129,9 +129,13 @@ def isyarat_modul(fr, idx, nama, modul, P):
 
 
 # ---------- mekanik hadapan (tetingkap belum tentu lengkap) ----------
-def simulasi(pan, i, s, r):
+def simulasi(pan, i, s, r, pegang_min=None):
     """Satu isyarat bar i, henti s, peraturan keluar r. Status: TUNGGU_BELI, TERBUKA, JUAL_ESOK atau TUTUP.
-    Bagi tetingkap lengkap hasilnya sama dengan `cs_teras.hasil_satu` (diuji)."""
+    Pegang minimum (pindaan 14 Nov 2026 (p)): indikator keluar hanya dinilai mulai tutup sesi `pegang_min`, iaitu jualan
+    indikator paling awal pada buka sesi pegang_min + 1 (lalai atom.PEGANG_MIN = 3: beli Isnin -> paling awal Khamis). Henti
+    rugi kekal aktif sejak sesi ke-2; tiada jualan pada hari beli. Bagi tetingkap lengkap, pegang_min=1 sama dengan
+    `cs_teras.hasil_satu` dan lalai sama dengan kernel `cs_keluar7` (kedua-duanya diuji)."""
+    pm = atom.PEGANG_MIN if pegang_min is None else pegang_min
     o, lo, c, atr, X = pan['o'], pan['l'], pan['c'], pan['atr'], pan['X']
     akhir = int(pan['mula'][pan['tid'][i] + 1])
     e = i + 1
@@ -170,6 +174,8 @@ def simulasi(pan, i, s, r):
             sebab = ''
             if d == 0 and c[b] <= L:
                 sebab = 'henti (tutup hari beli)'
+            elif d < pm - 1:
+                pass                                              # pegang minimum: indikator belum boleh menjual
             elif op == 1 and benar(a1, b, hc):
                 sebab = 'keluar indikator'
             elif op == 2 and (benar(a1, b, hc) or benar(a2, b, hc)):
@@ -259,6 +265,8 @@ def jejak(stor=STOR, keluar=KELUAR):
           'selepas 20 sesi berlalu. "Rawak" = saham layak lain pada hari yang sama dan tahap turun-naik yang sama.',
           '- Bacaan awal tidak bermakna: perlu sekurang-kurangnya 100 belian dengan tetingkap lengkap bagi setiap setup sebelum '
           'kadar tangkap boleh dibandingkan dengan backtest (`kajian/CARIAN_SETUP.md`).',
+          '- Pegang minimum (pindaan 14 Nov 2026 (p)): tiada jualan pada hari beli; indikator keluar hanya menjual mulai buka '
+          'sesi ke-4; henti rugi kekal aktif sejak sesi ke-2.',
           '- Senarai penuh: `jejak_f/lejar.csv`. Alam: stor harga (senarai Shariah semasa).', '']
     open(os.path.join(keluar, 'RINGKASAN.md'), 'w', encoding='utf-8').write('\n'.join(A))
     print(f'jejak F: {len(L)} isyarat sejak {K["mula"]}; harga hingga {akhir_data}; '

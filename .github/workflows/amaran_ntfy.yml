@@ -22,6 +22,7 @@ on:
       - Senarai bursa
       # Mingguan, jadi kegagalan senyap bermakna SEMINGGU tanpa salinan di luar repo.
       - Sandaran mingguan
+      - Mesin carian setup
     types: [completed]
   workflow_dispatch:
     inputs:

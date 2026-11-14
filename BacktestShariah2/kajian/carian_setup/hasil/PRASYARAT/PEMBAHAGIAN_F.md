@@ -6,7 +6,7 @@ Dijana `kajian/carian_setup/cs_ringkas.py` daripada `data/registry_F.csv` dan `j
 
 Prasyarat = isyarat yang BUKAN daripada saham itu sendiri. Ruang carian CS01–CS04 hanya ada tiga: **QQQ ON** (QQQ di atas SMA50 dan SMA10 di atas SMA20), **QQQ OFF** (selain itu) dan **SPY > SMA200**. CS05 (pindaan (i)) menambah 33 prasyarat pasaran dan 15 prasyarat kumpulan/syarikat (`cs_lapis.py`). RS diletak di bawah syarat saham (dikira daripada harga saham itu, dipangkatkan lawan saham lain).
 
-Bilangan (CS01–CS04): – = 20 · QQQ OFF = 14 · QQQ ON = 2 · SPY > SMA200 = 2 (jumlah 38); CS05: 19 setup; CS06: 30 setup.
+Bilangan (CS01–CS04): – = 20 · QQQ OFF = 14 · QQQ ON = 2 · SPY > SMA200 = 2 · QQQ naik >= 3% dalam 5 sesi + earnings dalam 1-5 sesi akan datang = 2 · QQQ dalam 3% dari puncak 52 minggu + earnings dalam 1-5 sesi akan datang = 2 · rejim ON baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang = 1 · keluasan naik >= 10 mata dalam 10 sesi + earnings dalam 1-5 sesi akan datang = 1 · QQQ SMA10 > SMA20 + earnings dalam 1-5 sesi akan datang = 1 · >= 60% saham di atas MA50 + earnings dalam 1-5 sesi akan datang = 1 (jumlah 46); CS05: 19 setup; CS06: 30 setup.
 
 | ID | Pusingan | Prasyarat (pasaran) | Syarat saham: pencetus | Syarat saham: penapis | Henti | Keluar | Jejak hadapan |
 |---|---|---|---|---|---|---|---|
@@ -97,6 +97,14 @@ Bilangan (CS01–CS04): – = 20 · QQQ OFF = 14 · QQQ ON = 2 · SPY > SMA200 =
 | F85 | CS06 | turun-naik SPY 21 hari >= 20% setahun + kejutan untung terkini positif (SUE > 0) | N75 RSI14 < 40 tanpa penapis | MACD > isyarat + >= 30% di bawah puncak 52 minggu | H3 3xATR14 | X12 RSI14 silang turun bawah 70 |  |
 | F86 | CS06 | breadth thrust Zweig aktif (20 sesi) | N73 Tutup bawah jalur bawah BB(20,2) | ADX < 20 + >= 20% di bawah puncak 52 minggu | H3 3xATR14 | X21 Stochastic silang turun di atas 80 |  |
 | F87 | CS06 | turun-naik SPY 21 hari >= 20% setahun | M28 VWAP Separator + Kiss Pivot | >= 50% di bawah puncak 52 minggu + volum hari isyarat >= 1.5x purata 50 | H3 3xATR14 | X21 Stochastic silang turun di atas 80 |  |
+| F88 | CS07 | QQQ naik >= 3% dalam 5 sesi + earnings dalam 1-5 sesi akan datang | M03 BB Break + Divergence RSI (ditala 3) | tiada | G7 5xATR14 | RSI14 silang turun bawah 80 ATAU RSI7 > 85 [aktif selepas +10%] |  |
+| F89 | CS07 | QQQ dalam 3% dari puncak 52 minggu + earnings dalam 1-5 sesi akan datang | M20 EMA10/15 Crossover + Sudut | >= 30% di bawah puncak 52 minggu + hari naik (tutup > buka) | G7 5xATR14 | X00 tiada keluar indikator (henti + 20 sesi) |  |
+| F90 | CS07 | rejim ON baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang | M50 Elder Triple Screen | MACD > isyarat + >= 30% di bawah puncak 52 minggu | G7 5xATR14 | X00 tiada keluar indikator (henti + 20 sesi) |  |
+| F91 | CS07 | QQQ dalam 3% dari puncak 52 minggu + earnings dalam 1-5 sesi akan datang | M20 EMA10/15 Crossover + Sudut | >= 30% di bawah puncak 52 minggu | G7 5xATR14 | X00 tiada keluar indikator (henti + 20 sesi) |  |
+| F92 | CS07 | QQQ naik >= 3% dalam 5 sesi + earnings dalam 1-5 sesi akan datang | M03 BB Break + Divergence RSI | tiada | G7 5xATR14 | RSI14 silang turun bawah 80 ATAU RSI7 > 85 [aktif selepas +10%] |  |
+| F93 | CS07 | keluasan naik >= 10 mata dalam 10 sesi + earnings dalam 1-5 sesi akan datang | M02 MACD + SMA200 | tutup > MA200 + MA50 naik (lawan 20 bar lalu) | G5 3xATR14 | X00 tiada keluar indikator (henti + 20 sesi) |  |
+| F94 | CS07 | QQQ SMA10 > SMA20 + earnings dalam 1-5 sesi akan datang | K11.016 Supertrend(20, 1.5) bertukar naik | RS >= 90 + dalam 15% dari puncak 52 minggu | G7 5xATR14 | X00 tiada keluar indikator (henti + 20 sesi) |  |
+| F95 | CS07 | >= 60% saham di atas MA50 + earnings dalam 1-5 sesi akan datang | K19.011 pecah atas Keltner(30, 1.0) | RSI14 > 60 + RS >= 90 | G7 5xATR14 | X00 tiada keluar indikator (henti + 20 sesi) |  |
 
 ## Kaveat
 

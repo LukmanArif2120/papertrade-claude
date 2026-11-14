@@ -245,10 +245,28 @@ class TestHadapan(unittest.TestCase):
         for s, r in [(0, 0), (1, 5), (2, 18), (3, 19), (0, 20), (1, 300), (2, 400), (3, NR - 1)]:
             R, hp, sk = teras.hasil_satu(ev, p['o'], p['h'], p['l'], p['c'], p['atr'], p['X'], JENIS, PAR, A1, A2, OP, s, r)
             for k, i in enumerate(ev):
-                x = self.H.simulasi(p, int(i), s, r)
+                x = self.H.simulasi(p, int(i), s, r, pegang_min=1)              # tanpa pegang minimum = enjin lama
                 self.assertEqual(x['status'], 'TUTUP')
                 self.assertAlmostEqual(x['R'], R[k], places=10, msg=(s, r, i))
                 self.assertEqual((x['sesi'], x['bar_keluar']), (hp[k], i + 1 + sk[k]), (s, r, i))
+
+    def test_pegang_minimum_penjejak(self):
+        """Pindaan (p): indikator keluar hanya menjual mulai buka sesi ke-4; henti rugi tidak berubah."""
+        self.assertEqual(atom.PEGANG_MIN, 3)
+        p = self.pan
+        awal = 0
+        for s, r in [(1, 5), (2, 18), (0, 20), (1, 300), (3, NR - 1)]:
+            for i in range(30, 360):
+                x1, x3 = self.H.simulasi(p, i, s, r, pegang_min=1), self.H.simulasi(p, i, s, r)
+                if x3['sebab'] == 'keluar indikator':
+                    self.assertGreaterEqual(x3['sesi'], 3, (s, r, i))           # dipegang penuh 3 sesi
+                self.assertGreaterEqual(x3['bar_keluar'], i + 2)                # tiada jualan pada hari beli
+                if x1['sebab'] == 'keluar indikator' and x1['sesi'] < 3:
+                    awal += 1
+                    self.assertGreaterEqual(x3['bar_keluar'], x1['bar_keluar'])
+                else:                                                           # henti, had masa atau indikator lewat: sama
+                    self.assertEqual((x3['sebab'], x3['sesi'], x3['R']), (x1['sebab'], x1['sesi'], x1['R']), (s, r, i))
+        self.assertGreater(awal, 0)                                             # ujian benar-benar menyentuh kes jualan awal
 
     def test_status_tetingkap_belum_lengkap(self):
         p = dict(self.pan)
@@ -343,7 +361,7 @@ class TestRingkas(unittest.TestCase):
         import cs_ringkas
         t = cs_ringkas.pembahagian()
         self.assertEqual(t.id.tolist()[:3], ['F01', 'F02', 'F03'])
-        lama = t[~t.pusingan.isin(['CS05', 'CS06'])]
+        lama = t[~t.pusingan.isin(['CS05', 'CS06', 'CS07'])]
         self.assertEqual(len(lama), 38)
         self.assertTrue(set(lama.prasyarat_pasaran) <= {'–', 'QQQ ON', 'QQQ OFF', 'SPY > SMA200'})
         self.assertEqual(int((t.jejak_hadapan == 'ya').sum()), 8)
@@ -530,7 +548,7 @@ class TestCS05(unittest.TestCase):
         self.assertEqual(list(reg.columns)[-6:], ['prasyarat', 'syarat', 'menang_K1', 'menang_K2', 'menang_K3', 'menang'])
         self.assertTrue((reg.prasyarat != '').all() and (reg.syarat != '').all())
         self.assertEqual(reg.id.tolist(), [f'F{i:02d}' for i in range(1, len(reg) + 1)])
-        lama = reg[~reg.pusingan.isin(['CS05', 'CS06'])]
+        lama = reg[~reg.pusingan.isin(['CS05', 'CS06', 'CS07'])]
         self.assertEqual(len(lama), 38)
         self.assertTrue(set(lama.prasyarat) <= {'tiada', 'QQQ ON', 'QQQ OFF', 'SPY > SMA200'})
         for t in reg[reg.pusingan == 'CS05'].itertuples():
@@ -840,8 +858,11 @@ class TestAkhir(unittest.TestCase):
         d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil')
         t = pd.read_csv(os.path.join(d, 'KEDUDUKAN_AKHIR.csv'))
         reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str)
-        mahu = [i for i, p in zip(reg.id, reg.pusingan) if p != 'CS04' and int(i[1:]) <= 69]
-        self.assertEqual(sorted(t.id), sorted(mahu))                            # F01-F30 dan F39-F69
+        mahu = [i for i, p in zip(reg.id, reg.pusingan) if p == 'CS07' or (p != 'CS04' and int(i[1:]) <= 69)]
+        self.assertEqual(sorted(t.id), sorted(mahu))                            # F01-F30, F39-F69 dan setup CS07
+        self.assertTrue(t[t.pusingan == 'CS07'].dipercayai.all())               # penjelasan (n)-2: hanya yang dipercayai didaftarkan
+        self.assertTrue(t.jual_awal.between(0, 0.5).all())                      # pindaan (p): lajur jualan sebelum sesi ke-4 (henti rugi)
+        self.assertLess(float(t[t.dipercayai].jual_awal.median()), 0.05)
         self.assertEqual(t.kedudukan.tolist(), list(range(1, len(t) + 1)))
         for r in t.itertuples():                                                # takrif "dipercayai" dikunci pindaan (m)
             self.assertEqual(bool(r.dipercayai), bool(r.belian >= ak.MIN_BELIAN and r.tahun_aktif >= ak.MIN_TAHUN
@@ -853,6 +874,240 @@ class TestAkhir(unittest.TestCase):
         for blok in (t[:n], t[n:]):                                             # kemudian ikut kadar naik lagi
             self.assertTrue((np.diff(blok.terus) <= 1e-9).all())
         self.assertTrue(os.path.exists(os.path.join(d, 'KEDUDUKAN_AKHIR.md')))
+
+
+class TestCS07(unittest.TestCase):
+    """SPEC pindaan 14 Nov 2026 (n): keluarga pencetus berparameter, enjin keluar baharu, mesin berkala."""
+
+    def test_grid_keluarga_dan_asal(self):
+        import cs_param as kp
+        G = kp.grid()
+        self.assertEqual((len(G), len({x[0] for x in G}), len({x[1] for x in G})), (656, 656, 25))
+        self.assertEqual(tuple(sorted({x[1] for x in G})), kp.KELUARGA)
+        asal = kp.asal()
+        self.assertEqual(len(asal), 41)
+        g = _saham(700, 3)
+        rs = pd.Series(np.random.default_rng(1).uniform(0, 100, len(g)), index=g.index).rolling(5).mean()
+        on = pd.Series(1.0, index=g.index)
+        M = kp.kira(g, rs, G)
+        P = atom.indikator(g, rs, on, on)[0]
+        nama = [x[0] for x in G]
+        for k, a in asal.items():                                               # ahli asal = pencetus P asal, tepat
+            if a.startswith('P'):
+                self.assertTrue((M[nama.index(k)] == P[a]).all(), (k, a))
+
+    def test_keluarga_tiada_pandang_hadapan(self):
+        import cs_param as kp
+        g = _saham(600, 5)
+        rs = pd.Series(np.random.default_rng(2).uniform(0, 100, len(g)), index=g.index)
+        G = kp.grid()
+        penuh, potong = kp.kira(g, rs, G), kp.kira(g.iloc[:520], rs.iloc[:520], G)
+        self.assertTrue((penuh[:, :520] == potong).all())
+        rng = np.random.default_rng(9)
+        Gr = [(f'{f}.r', f, kp.rawak(f, rng)) for f in kp.KELUARGA for _ in range(3)]
+        self.assertTrue((kp.kira(g, rs, Gr)[:, :520] == kp.kira(g.iloc[:520], rs.iloc[:520], Gr)).all())
+        self.assertTrue(all(isinstance(kp.teks(f, p), str) for _, f, p in Gr))
+
+    def test_atom_keluar_dan_peraturan(self):
+        import cs_keluar7 as k7
+        self.assertEqual((k7.NA, int((k7.JENIS == 0).sum()), k7.NR, k7.NG, k7.NH), (97, 78, 9410, 3, 8))
+        self.assertEqual((k7.N_SEJAGAT, k7.SIMPAN_MIN), (30, 0.90))
+        self.assertEqual(len({a[0] for a in k7.ATOM}), 97)
+        self.assertEqual(k7.kod_peraturan(0), 'X00')
+        g = _saham(500, 7)
+        self.assertEqual(k7.siri(g).shape, (78, 500))
+        self.assertTrue((k7.siri(g)[:, :430] == k7.siri(g.iloc[:430])).all())      # tiada pandang hadapan
+        teks = [a[3] for a in k7.ATOM]                                          # setiap atom lama ada dalam ruang baharu
+        for t in ('tutup < MA10', 'MA10 < MA20', 'RSI14 silang turun bawah 70', 'Supertrend(10, 3.0) turun',
+                  'Chandelier 3.0xATR14 dari tutup tertinggi', 'tutup < 92% tutup tertinggi sejak beli', '+DI14 < -DI14'):
+            self.assertIn(t, teks)
+
+    def _pan7(self):
+        import cs_keluar7 as k7
+        g = _saham(420, 11)
+        rs = pd.Series(50.0, index=g.index)
+        on = pd.Series(1.0, index=g.index)
+        P, F, X, atr = atom.indikator(g, rs, on, on)
+        pan = {k: g[n].to_numpy(float) for k, n in (('o', 'open'), ('h', 'high'), ('l', 'low'), ('c', 'close'))}
+        pan['atr'] = atr
+        pan['X'] = np.stack([X[n[:3]] for n in atom.KELUAR]).astype(np.uint8)
+        return pan, k7.siri(g).astype(np.uint8), np.arange(260, 380)
+
+    def test_kernel_keluar_pariti_enjin_lama(self):
+        import cs_keluar7 as k7
+        pan, XA, ev = self._pan7()
+        S = k7.sedia_pan(pan, XA, ev, pegang_min=1)                 # tanpa pegang minimum = enjin lama
+        teks = [a[3] for a in k7.ATOM]
+        for lama, baharu in ((0, 'tutup < MA10'), (8, 'MACD(12,26,9) < isyarat'), (13, 'Supertrend(10, 3.0) turun'),
+                             (17, 'Chandelier 3.0xATR14 dari tutup tertinggi'), (19, 'tutup < 92% tutup tertinggi sejak beli'),
+                             (21, 'hari turun dengan volum >= 1.5x')):
+            for s_lama, s_baharu in ((0, 0), (1, 1), (2, 4), (3, 5)):
+                Ro = teras.hasil_satu(ev, pan['o'], pan['h'], pan['l'], pan['c'], pan['atr'], pan['X'], JENIS, PAR,
+                                      A1, A2, OP, s_lama, _peraturan(lama))[0]
+                Rn = k7.hasil(*S[:7], k7.A1, k7.A2, k7.OP, s_baharu, (1 + teks.index(baharu)) * k7.NG)[0]
+                self.assertTrue(np.allclose(Ro, Rn), (baharu, s_lama))
+        Ro = teras.hasil_satu(ev, pan['o'], pan['h'], pan['l'], pan['c'], pan['atr'], pan['X'], JENIS, PAR, A1, A2, OP, 3, 0)[0]
+        self.assertTrue(np.allclose(Ro, k7.hasil(*S[:7], k7.A1, k7.A2, k7.OP, 5, 0)[0]))          # X00, 4xATR14
+
+    def test_syarat_aktif_dan_kumpul(self):
+        import cs_keluar7 as k7
+        pan, XA, ev = self._pan7()
+        S = k7.sedia_pan(pan, XA, ev)
+        M, ARM = S[0], S[1]
+        self.assertTrue(((ARM[:, 1] & ~ARM[:, 0]) == 0).all())                  # aktif +10 % sebahagian daripada aktif +5 %
+        r = 1 + [a[3] for a in k7.ATOM].index('tutup < MA10')
+        R0, s0 = k7.hasil(*S[:7], k7.A1, k7.A2, k7.OP, 5, r * k7.NG)
+        R2, s2 = k7.hasil(*S[:7], k7.A1, k7.A2, k7.OP, 5, r * k7.NG + 2)
+        self.assertTrue((s2 >= s0).all())                                       # syarat aktif hanya melewatkan keluar
+        tiada = ARM[:, 1] == 0                                                  # tidak pernah +10 %: sama seperti X00
+        self.assertTrue(np.allclose(R2[tiada], k7.hasil(*S[:7], k7.A1, k7.A2, k7.OP, 5, 0)[0][tiada]))
+        Acc = k7.kumpul(*S, np.zeros(len(ev), np.int64), 1, k7.A1, k7.A2, k7.OP)
+        self.assertEqual(Acc.shape, (k7.NH, k7.NKOL, 1, k7.NST))
+        self.assertTrue((Acc[..., 0] == len(ev)).all())
+        self.assertAlmostEqual(float(Acc[5, r * k7.NG, 0, 5]), float(R0.sum()), places=3)
+        self.assertAlmostEqual(float(Acc[5, r * k7.NG, 0, 2]), float((R0 >= 0.10).sum()))
+        lab = S[7]
+        self.assertTrue((lab[:, 1] <= lab[:, 0]).all())                         # terus sebahagian daripada m5
+
+    def test_pegang_minimum(self):
+        import cs_keluar7 as k7
+        self.assertEqual(k7.PEGANG_MIN, 3)                                      # dikunci pindaan (p)
+        pan, XA, ev = self._pan7()
+        S, S1 = k7.sedia_pan(pan, XA, ev), k7.sedia_pan(pan, XA, ev, pegang_min=1)
+        self.assertTrue(((S[0] & 3) == 0).all())                                # tiada bit indikator bagi tutup sesi 1 dan 2
+        self.assertTrue(((S1[0] & ~3) == S[0]).all())
+        for kol in (k7.NG * 5, k7.NG * 40, k7.NG * 90):
+            R, sk = k7.hasil(*S[:7], k7.A1, k7.A2, k7.OP, 5, kol)
+            R1, sk1 = k7.hasil(*S1[:7], k7.A1, k7.A2, k7.OP, 5, kol)
+            henti = S[2][:, 5]                                                  # indeks sesi henti (99 = tiada)
+            awal = sk < 3                                                       # dijual sebelum buka sesi ke-4
+            self.assertTrue((sk >= 1).all())                                    # tiada jualan pada hari beli
+            self.assertTrue(((henti[awal] == sk[awal]) | S[4][awal, 5]).all())  # jualan awal hanya kerana henti rugi
+            self.assertTrue((sk >= np.minimum(sk1, 3)).all())                   # tidak pernah lebih awal daripada enjin lama
+            self.assertTrue((sk[~awal] >= 3).all())
+
+    def test_rekod_cs07(self):
+        import cs_cs07 as c7
+        import cs_keluar7 as k7
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS07')
+        P = pd.read_csv(os.path.join(d, 'tala_masuk.csv'))
+        pas = P[P.ibu.notna() & ~P.sama & P.kl_anak.notna() & P.kl_ibu.notna()]
+        self.assertGreater(len(pas), 100)
+        self.assertGreater(int((pas.kl_anak > pas.kl_ibu).sum()), len(pas) / 2)  # bacaan dikunci (n)(a): tala menolong
+        self.assertGreater(float((pas.kl3_anak - pas.kl3_ibu).median()), 0)
+        K = pd.read_csv(os.path.join(d, 'keluar.csv'))
+        L = K[K.tp_lama.notna()]
+        menolong = int(((L.tp_pilih > L.tp_x00) & (L.tp_pilih > L.tp_lama)).sum())
+        self.assertLessEqual(menolong, len(L) / 2)                              # bacaan dikunci (n)(b): keluar TIDAK menolong
+        self.assertTrue(set(K.henti) <= set(k7.HENTI))
+        pb = pd.read_csv(os.path.join(d, 'papan_masuk.csv'))
+        self.assertLessEqual(len(pb), 12)
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('')
+        r7 = reg[reg.pusingan == 'CS07']
+        self.assertEqual(len(r7), 8)
+        self.assertEqual(r7.id.tolist(), [f'F{n}' for n in range(88, 96)])
+        for tk in r7.takrif:                                                    # takrif CS07 boleh dihurai dan dijana semula
+            x = c7.dari_takrif7(tk)
+            self.assertEqual(c7.takrif7(x['pencetus'], x['q1'], x['q2'], x['f1'], x['f2'], x['s'], x['kol']), tk)
+        self.assertEqual(reg.id.tolist()[:87], [f'F{n:02d}' for n in range(1, 88)])   # F lama kekal
+
+    def test_mesin_kelompok_tetap(self):
+        import cs_mesin as ms
+        import cs_tala7 as t7
+        G1, T1 = ms.kelompok(3, n_m=5)
+        G2, T2 = ms.kelompok(3, n_m=5)
+        self.assertEqual((G1, T1), (G2, T2))                                    # benih = nombor larian
+        self.assertEqual((len(G1), ms.N_K, ms.N_NILAI_B), (25 * 12, 12, 15))
+        self.assertNotEqual(ms.kelompok(4, n_m=5)[0], G1)
+        self.assertTrue(all(t[0].endswith(f'.{ms.V_ASAS + 3}') and t[2] for t in T1))
+        self.assertEqual((t7.induk('K07.012'), t7.induk('M73.5s3'), t7.induk('N16')), ('K07', 'M73', 'N16'))
+        self.assertEqual((len(t7.varian_m1()), t7.V_RAWAK, t7.N_M_SETEMPAT, t7.N_SETEMPAT), (1072, tuple(range(3, 11)), 50, 8))
+
+
+class TestCS08(unittest.TestCase):
+    """SPEC pindaan 14 Nov 2026 (q): lorong kedua (beli selepas pengesahan uptrend, pegang sampai trend tamat)."""
+
+    def test_dikunci(self):
+        import cs_trend8 as t8
+        self.assertEqual((t8.H_MAX, t8.NAIK, t8.NAIK2, t8.JATUH, t8.TB), (126, 0.50, 1.00, 0.15, 0.30))
+        self.assertEqual((t8.NA, t8.NH, t8.NG, t8.NKOL), (38, 6, 3, 115))
+        self.assertEqual((t8.N_PAPAN, t8.MAKS_INDUK, t8.MAKS_PRA, t8.N_SEJAGAT, t8.MIN_BELIAN, t8.MIN_TAHUN), (12, 2, 3, 10, 200, 8))
+        self.assertEqual(t8.PEGANG_MIN, 3)
+        self.assertEqual(len({a[0] for a in t8.ATOM}), 38)
+
+    def test_label_besar(self):
+        import cs_trend8 as t8
+        n = t8.H_MAX + 3
+        c = np.full(n, 100.0)
+        o = c.copy()
+        ev = np.array([0])
+        c1 = c.copy(); c1[60:] = 155.0                                          # +55 % tanpa jatuh dahulu
+        c2 = c.copy(); c2[10] = 84.0; c2[60:] = 160.0                           # jatuh -16 % dahulu: bukan pelari besar
+        c3 = c.copy(); c3[40:] = 210.0                                          # +110 %
+        for cc, (b50, b100) in ((c1, (1, 0)), (c2, (0, 0)), (c3, (1, 1))):
+            r = t8.label8(ev, o, cc)[0]
+            self.assertEqual((int(r[0]), int(r[1])), (b50, b100))
+        self.assertAlmostEqual(float(t8.label8(ev, o, c3)[0, 2]), 1.10, places=5)
+
+    def test_kernel_keluar_lawan_kiraan_kasar(self):
+        import cs_trend8 as t8
+        rng = np.random.default_rng(5)
+        n = 520
+        c = 50 * np.exp(np.cumsum(rng.normal(0.001, 0.03, n)))
+        o = c * (1 + rng.normal(0, 0.006, n))
+        g = pd.DataFrame({'open': o, 'high': np.maximum(o, c) * 1.006, 'low': np.minimum(o, c) * 0.994, 'close': c,
+                          'volume': rng.integers(2e5, 3e6, n).astype(float)}, index=pd.bdate_range('2019-01-02', periods=n))
+        k1 = pd.Series(1.0, index=g.index)
+        atr = atom.indikator(g, k1 * 50, k1, k1)[3]
+        lo = g.low.to_numpy()
+        XT = t8.siri(g).astype(np.uint8)
+        self.assertTrue((t8.siri(g)[:, :450] == t8.siri(g.iloc[:450])).all())      # tiada pandang hadapan
+        ev = np.arange(260, 380)
+        R, SK = t8._hasil({'o': o, 'l': lo, 'c': c, 'atr': atr}, XT, ev)
+
+        def kasar(i, s, kol):
+            e = i + 1
+            P = o[e]
+            L = [P * .9, P * .85, P * .8, P - 4 * atr[i], P - 6 * atr[i], min(P * .85, P - 5 * atr[i])][s]
+            if c[e] <= L:
+                return o[e + 1] / P - 1 - t8.KOS, 1
+            hc = c[e]
+            a, gk = divmod(kol - 1, t8.NG) if kol else (None, None)
+            for d in range(t8.H_MAX):
+                b = e + d
+                if d >= 1 and o[b] <= L:
+                    return o[b] / P - 1 - t8.KOS, d
+                if d >= 1 and lo[b] <= L:
+                    return L / P - 1 - t8.KOS, d
+                hc = max(hc, c[b])
+                if kol and 2 <= d <= t8.H_MAX - 2:
+                    j = t8.JENIS[a]
+                    ya = (XT[t8.BARIS[a], b] != 0 if j == 0 else c[b] < hc - t8.PAR[a] * atr[b] if j == 1
+                          else c[b] < t8.PAR[a] * hc if j == 2 else (d + 1 >= t8.PAR[a] and c[b] < P))
+                    if ya and (gk == 0 or hc >= P * (1.10 if gk == 1 else 1.20)):
+                        return o[b + 1] / P - 1 - t8.KOS, d + 1
+            return c[e + t8.H_MAX - 1] / P - 1 - t8.KOS, t8.H_MAX - 1
+        for s, kol in [(0, 0), (1, 1), (2, 5), (3, 40), (4, 77), (5, 100), (1, 114), (0, 60)]:
+            for k in range(0, len(ev), 9):
+                r, sk = kasar(int(ev[k]), s, kol)
+                self.assertAlmostEqual(r, float(R[k, s, kol]), places=5, msg=(s, kol, k))
+                self.assertEqual(sk, int(SK[k, s, kol]), (s, kol, k))
+        self.assertTrue((SK >= 1).all())                                        # tiada jualan pada hari beli
+        self.assertTrue(((SK[:, :, 1:] < 3) == (SK[:, :, :1] < 3)).all())       # sebelum sesi ke-4 hanya henti rugi
+
+    def test_rekod_cs08(self):
+        import cs_trend8 as t8
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS08')
+        D = pd.read_csv(os.path.join(d, 'papan.csv'))
+        self.assertEqual(D.id.tolist(), [f'T{i:02d}' for i in range(1, 13)])
+        for r in D.itertuples():                                                # takrif Dipercayai-T dikunci pindaan (q)
+            self.assertEqual(bool(r.dipercayai), bool(r.n >= t8.MIN_BELIAN and r.tahun >= t8.MIN_TAHUN
+                                                      and min(r.kl_K1, r.kl_K2, r.kl_K3) > 0), r.id)
+            self.assertLessEqual(r.besar100, r.besar + 1e-9)
+            self.assertIn(r.henti, t8.HENTI)
+        self.assertGreaterEqual(int(D.dipercayai.sum()), len(D) / 2)            # bacaan dikunci: lorong trend ada kelebihan
+        self.assertLessEqual(int((D.tb_semua > D.tb_semua_x00).sum()), len(D) / 2)   # keluar TIDAK menolong
+        self.assertTrue(os.path.exists(os.path.join(d, 'LAPORAN.md')))
 
 
 if __name__ == '__main__':
