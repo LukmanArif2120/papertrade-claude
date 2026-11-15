@@ -786,6 +786,89 @@ maklumat baharu, bukan menjanjikan hasil.
 **Selepas bacaan:** registry F, kedudukan akhir dan kohort jejak TIDAK diubah oleh pusingan ini. Jika bacaan 1 atau 2
 "MENOLONG", penukaran keluar mana-mana setup memerlukan keputusan pengguna dan pindaan bertarikh berasingan.
 
+### Pindaan 15 Nov 2026 (s) — pusingan CS10: keluar daripada maklumat baharu pada LORONG TREND `T01`–`T12` (sebelum dijalankan)
+
+Sebab: CS08 (q) mencari "trend tamat" dengan 38 atom TUNGGAL daripada harga saham itu sendiri sahaja (0 daripada 12 menolong;
+33–50 % dagangan rugi ≥ 15 %). CS09 (r) menunjukkan kelas maklumat baharu tidak menolong dalam bingkai 4 minggu; bagi pegangan
+6 bulan keluar ikut pasaran dan peristiwa lebih munasabah dan BELUM diukur. Keputusan pengguna 15 Nov 2026: "ya" (uji jenis
+keluar baharu pada lorong trend). Tiada jejak hadapan, tiada order, tiada perubahan papan `T01`–`T12`, registry atau kohort.
+
+Kod `carian_setup/cs_keluar10.py`; keluaran `hasil/CS10/KELUAR.md`, `keluar.csv`, `sejagat.csv`. Setup = 12 setup papan CS08
+seperti direkod dalam `hasil/CS08/papan.csv` (pencetus, prasyarat, penapis dibaca semula daripada fail itu; pariti dengan angka
+CS08 disemak sebelum hasil keluar dibaca).
+
+**Tidak berubah daripada (q) dan (p):** had pegang 126 sesi (tetingkap lengkap); mekanik (atom pada tutup sesi d → jual buka
+sesi d + 1; henti intrahari; kos 0.5 %); pegang minimum 3 sesi; 6 henti {−10 %, −15 %, −20 %, 4×ATR14, 6×ATR14,
+min(−15 %, 5×ATR14)}; 3 syarat aktif {sentiasa, selepas tutup tertinggi ≥ +10 %, selepas ≥ +20 %}; ukuran `tb` = dijual dengan
+untung ≥ +30 %; label `besar` (tutup ≥ +50 % sebelum tutup ≤ −15 %); statistik atas SEMUA isyarat setup (berpasangan); carian
+pada kumpulan A sahaja. Kernel baharu (topeng bit 125 sesi supaya pasangan boleh dinilai); pariti dengan `cs_trend8` pada
+atom tunggal lama diuji.
+
+**90 atom baharu dalam enam kelas, diskala untuk pegangan 6 bulan:**
+- **P — pasaran (22):** sama seperti (r).
+- **S — sektor/industri (2):** sama seperti (r).
+- **E — peristiwa syarikat (10):** earnings pada sesi berikutnya; reaksi earnings terakhir (0–5 sesi lalu) ≤ −10 % / ≤ −5 % /
+  ≤ 0 %; hari reaksi (0–5 sesi lalu) tutup < buka; 0–10 sesi selepas reaksi DAN tutup < tutup sebelum earnings; **premis masuk
+  hilang:** hasil suku terkini (diumumkan sebelum hari itu) tumbuh < 20 % / < 10 % / < 0 %; kejutan untung terkini negatif
+  (SUE < 0).
+- **R — relatif kepada pasaran (6):** pulangan k sesi saham − QQQ ≤ −x: (20, 10 %), (20, 20 %), (60, 15 %), (60, 30 %);
+  RS < 70; RS < 90.
+- **K — kemuncak / terlalu panas (24):** 17 atom (r) ditambah tutup ≥ 30 % / 50 % / 70 % di atas SMA50; (tutup − SMA50) ÷
+  ATR14 ≥ 6 / 8 / 10; tutup ≥ 100 % di atas SMA200.
+- **L — keadaan laluan/saham (26):** tiada tutup tertinggi baharu selama k sesi, k ∈ {20, 40, 60}; pulang ≥ f daripada untung
+  puncak, f ∈ {1/3, 1/2, 2/3}; gagal corak (selepas d sesi, tutup < P × (1 + x)): (20, +5 %), (40, +10 %), (60, +10 %),
+  (60, +20 %), (90, +20 %); lantai untung (selepas tutup tertinggi ≥ +a, tutup < +b): (20 %, 5 %), (30 %, 10 %), (50 %, 20 %),
+  (50 %, 30 %), (100 %, 50 %); tutup < rendah bar tutup tertinggi; Chandelier mengetat ikut masa (k0 × ATR14 hingga sesi 60,
+  kemudian k1): (8 → 4), (6 → 3), (5 → 3); Chandelier mengetat ikut untung (k0 hingga tutup tertinggi ≥ +a, kemudian k1):
+  (8 → 4, +50 %), (6 → 3, +50 %), (8 → 5, +30 %); distribution day saham ≥ k dalam 25 sesi, k ∈ {4, 5, 6}.
+
+**Peraturan:** `X00`; setiap atom tunggal (38 lama + 90 baharu); SEMUA pasangan (ATAU, DAN) antara 128 atom, termasuk lama ×
+lama (CS08 hanya menguji atom tunggal). 16,385 peraturan × 3 syarat aktif × 6 henti = 294,930 cara keluar setiap setup.
+
+**Pilihan pada kumpulan A (dua peringkat, 10 sejagat seperti (q)), dua senarai, dengan syarat "tidak jual awal" BAHARU bagi
+lorong ini:** nisbah simpan = jumlah untung terealisasi pada belian berlabel `besar` ÷ jumlah yang sama bagi `X00` (henti sama)
+≥ 0.90.
+- Senarai T: 10 teratas ikut purata merentas 12 setup bagi [min dua era (tb − tb `X00` henti sama)], lulus simpan (jumlah
+  merentas setup). Setiap setup memilih antara `X00` (6 henti) dan 10 itu (lulus simpan setup itu) ikut min dua era tb, seri
+  dipecah ikut rugi ≥ 15 % terendah.
+- Senarai R ("sisi rugi"): 10 teratas ikut purata merentas setup bagi [min dua era (purata dagangan − purata `X00` henti
+  sama)], lulus simpan DAN purata merentas setup [min dua era (tb − tb `X00`)] ≥ 0. Setiap setup memilih antara `X00` dan 10
+  itu (lulus simpan setup itu dan tb min dua era ≥ tb `X00` henti sama) ikut min dua era purata.
+
+**Bacaan dikunci (kumpulan B, 12 setup):**
+1. **Keluar lorong trend (item 14), "keluar baharu MENOLONG"** jika (i) tb terpilih-T > tb `X00` (henti sama) DAN > tb keluar
+   CS08 setup itu (`papan.csv`: semuanya `X00` pada henti terpilih CS08), bagi lebih separuh setup; (ii) median nisbah simpan
+   ≥ 0.90; (iii) median beza rugi ≥ 15 % lawan keluar CS08 ≤ +1 mata; (iv) dalam K3 (isyarat 2025–26, digabung merentas 12
+   setup kerana sedikit): tb terpilih-T − tb `X00` (henti sama) > 0.
+2. **Sisi rugi, "potong rugi MENOLONG"** jika bagi lebih separuh setup: purata terpilih-R > purata `X00` (henti sama) DAN rugi
+   ≥ 15 % terpilih-R < `X00` DAN tb terpilih-R ≥ tb `X00` − 0.5 mata; median nisbah simpan ≥ 0.90; dan dalam K3 (digabung)
+   purata terpilih-R − purata `X00` > 0.
+
+**Dilaporkan sebagai maklumat:** atom tunggal terbaik setiap kelas (A, B, K3) dan plasebo kelas P, S, E (anjak 437
+sesi/bar); komposisi kelas kedua-dua senarai; keluar sejagat pada B; bagi setiap setup: tb, menang, rugi ≥ 15 %, purata,
+median, sesi pegang, untung pada pelari besar.
+
+**Kaveat dikunci:** 12 setup sahaja (bacaan "lebih separuh" = ≥ 7) dan beberapa berkongsi pencetus/prasyarat (bukan 12 ujian
+bebas); kumpulan B berkongsi HARI yang sama dengan A (kelas P bukan ujian bebas; K3 pendek, tetingkap 126 sesi berakhir ~April
+2026); tiada saham delist — bias LEBIH besar bagi pegangan 6 bulan; kumpulan B sudah dilihat; ratusan ribu calon atas beberapa
+ratus isyarat setiap setup = risiko padanan lampau tinggi, sebab itu pilihan dua peringkat dan bacaan pada B.
+
+**Selepas bacaan:** papan `T01`–`T12` tidak diubah; penukaran keluar memerlukan keputusan pengguna dan pindaan berasingan.
+
+### Keputusan pengguna 15 Nov 2026 (selepas CS09 dan CS10) — prinsip keluar diterima; carian keluar manual dihentikan
+
+Selepas enam pusingan dengan arah yang sama (CS04, (j), CS06, CS07, CS09, CS10) pengguna memutuskan ("1.ya 2.x 3.ya"):
+- **Keluar yang diterima bagi kedua-dua lorong = pegang hingga had masa (20 sesi swing; 126 sesi trend) + henti rugi
+  longgar.** Item 4 matlamat ("indikator yang memberitahu kenaikan sudah tamat") DITUTUP sebagai "dicari, tiada yang
+  menolong" — bukan sebagai "capai".
+- **Keluar `T01`–`T12` TIDAK ditukar** kepada "terlalu panas selepas untung ≥ 20 %": bacaan 1 (s) lulus, tetapi purata
+  dagangan tidak naik dan pelari besar dijual awal.
+- Pusingan CS baharu khusus untuk KELUAR dihentikan. Mesin berkala boleh mencuba keluar jika diperluas (perlu pindaan
+  bertarikh kerana ruang mesin (n)(c) berubah). Pusingan keluar manual baharu hanya dengan sebab baharu (cth. data baharu)
+  dan keputusan pengguna.
+- Tiada perubahan pada registry F, kedudukan akhir, papan T atau kohort jejak: setup sedia ada kekal dengan keluar yang
+  didaftarkan. Tiada jejak hadapan atau papertrade tanpa keputusan pengguna berasingan.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

@@ -1,8 +1,8 @@
-# Serahan: Carian Setup (CS) dan keluarga F — keadaan pada 15 Nov 2026 (selepas CS09: keluar daripada maklumat yang belum dicuba)
+# Serahan: Carian Setup (CS) dan keluarga F — keadaan pada 15 Nov 2026 (selepas CS09 dan CS10: keluar daripada maklumat yang belum dicuba, lorong swing dan lorong trend)
 
 Ditulis pada akhir sesi kerja 13–14 Nov 2026 dan dikemas kini pada 14 Nov 2026 selepas pusingan CS05 dan CS06, supaya chat baharu boleh menyambung tanpa membaca chat lama. Fail ini ialah nota serahan (ditulis tangan, bertarikh); nombor di sini dipetik daripada fail hasil yang dinamakan, dan fail hasil itulah sumber kebenaran.
 
-**Baca mengikut susunan ini:** fail ini → `kajian/SPEC_CARIAN_SETUP.md` (pradaftar + pindaan (a)–(r)) → **`kajian/carian_setup/hasil/KEDUDUKAN_AKHIR.md` (SATU jadual semua setup lawan matlamat, §9c)** → `kajian/CARIAN_SETUP.md` (papan semasa = CS06) → `kajian/carian_setup/hasil/CS06/SEMUA_PENCETUS_LENGKAP.md` (setiap kaedah) dan `hasil/CS06/TALA.md` → `kajian/KAJIAN_PRASYARAT_PAKAR.md` → `jejak_f/RINGKASAN.md`.
+**Baca mengikut susunan ini:** fail ini → `kajian/SPEC_CARIAN_SETUP.md` (pradaftar + pindaan (a)–(s)) → **`kajian/carian_setup/hasil/KEDUDUKAN_AKHIR.md` (SATU jadual semua setup lawan matlamat, §9c)** → `kajian/CARIAN_SETUP.md` (papan semasa = CS06) → `kajian/carian_setup/hasil/CS06/SEMUA_PENCETUS_LENGKAP.md` (setiap kaedah) dan `hasil/CS06/TALA.md` → `kajian/KAJIAN_PRASYARAT_PAKAR.md` → `jejak_f/RINGKASAN.md`.
 
 **Ringkasan CS05 dalam lima baris (butiran §9):** (1) prasyarat MENOLONG kadar tangkap bagi hampir semua kaedah, jauh melebihi plasebo; (2) hampir semuanya datang daripada SATU prasyarat: earnings dalam 1–5 sesi akan datang; (3) prasyarat pasaran panik menaikkan kadar lari SEMUA saham (bila membeli), bukan kemahiran memilih, dan kena henti naik bersama; prasyarat aliran ikut trend dan sektor/industri kuat tidak menolong; (4) pencetus (kaedah M/N/indikator) menambah sedikit sahaja di atas prasyarat + penapis; (5) pegang/keluar (pindaan (j)): pegang hampir 20 sesi dengan henti longgar; indikator keluar jarang mengatasi "tiada keluar indikator".
 
@@ -16,7 +16,11 @@ Ditulis pada akhir sesi kerja 13–14 Nov 2026 dan dikemas kini pada 14 Nov 2026
 
 **CS09, keluar daripada maklumat yang BELUM dicuba (pindaan (r), 15 Nov 2026; butiran §9g):** (19) 80 atom keluar baharu dalam enam kelas (pasaran, sektor/industri, peristiwa earnings, relatif kepada QQQ, kemuncak/"terlalu panas", keadaan laluan sejak beli) × 97 atom lama = 526,128 cara keluar setiap setup, 69 setup; (20) **kedua-dua bacaan dikunci: TIDAK menolong** (bacaan 1: mengatasi pegang sahaja DAN keluar terbaik CS07 bagi 25 daripada 69 setup; bacaan 2 "potong rugi tanpa jual pelari": 2 daripada 69); (21) keluar ikut pasaran, sektor, earnings, relatif dan laluan semuanya lebih BURUK daripada pegang sahaja (pasaran sebenar lebih buruk daripada plasebonya); (22) hanya kelas "terlalu panas selepas untung ≥ 10 %" menambah: peraturan sejagat terbaik +1.3 mata tangkap penuh pada B (90 % setup; 2025–26 +1.5) lawan +0.95 bagi peraturan RSI CS07, tetapi nisbah simpan 0.88–0.91 (menjual pelari sedikit lebih awal) — keluarga yang sama dengan dapatan CS07, bukan maklumat baharu.
 
-**Status (keputusan pengguna 14 Nov 2026): backtest dahulu. JANGAN mula jejak hadapan bagi setup CS05/CS06/CS07.**
+**CS10, kelas keluar yang sama pada LORONG TREND `T01`–`T12` (pindaan (s), 15 Nov 2026; butiran §9h):** (23) 90 atom baharu (diskala untuk 6 bulan) + 38 atom CS08, SEMUA pasangan = 294,930 cara keluar setiap setup; pariti dengan CS08 tepat; (24) **bacaan 1 (dijual dengan untung ≥ +30 %): MENOLONG, 8 daripada 12** — tetapi hanya satu jenis: "jual bila terlalu jauh di atas SMA50 selepas untung ≥ 20 %" (median 24.0 % → 27.0 %; kadar menang naik 1.5–5 mata); (25) **purata setiap dagangan TIDAK naik** (median beza ≤ 0 bagi 8 setup yang memilihnya) dan 4 daripada 8 menjual pelari besar terlalu awal (simpan 0.81–0.89): lebih kerap untung, untung besar lebih kecil; kes MXL: peraturan itu menjual pada $60.94 (+79 %) dan terlepas $128; (26) **bacaan 2 (potong rugi): TIDAK** (4 daripada 12); keluar ikut pasaran panik (turun-naik SPY ≥ 25 % DAN QQQ < SMA50) menambah purata +0.3–0.4 mata dan memotong rugi ≥ 15 % hingga 3 mata pada B, tetapi tidak lulus bacaan; pasaran, sektor, earnings, premis hasil, relatif dan laluan sebagai atom tunggal: negatif.
+
+**Keputusan pengguna 15 Nov 2026 selepas CS10 ("1.ya 2.x 3.ya"; direkod dalam spec selepas pindaan (s)):** (27) CS10 digabung ke `main` (PR #52); (28) keluar `T01`–`T12` TIDAK ditukar; (29) **keluar yang diterima bagi kedua-dua lorong = pegang hingga had masa (20 sesi swing; 126 sesi trend) + henti rugi longgar; carian keluar manual DIHENTIKAN** (mesin boleh terus mencuba jika diperluas). Item 4 ditutup sebagai "dicari, tiada yang menolong".
+
+**Status (keputusan pengguna 14 Nov 2026): backtest dahulu. JANGAN mula jejak hadapan bagi setup CS05/CS06/CS07** (masih berkuat kuasa: tiada jejak hadapan tanpa keputusan pengguna berasingan).
 
 ## 1. Apa yang pengguna cari (disahkan pengguna 13 Nov 2026)
 
@@ -49,7 +53,7 @@ Pengguna: "cuba check dan baca betul-betul matlamat saya" (selepas Claude menuli
 | 1 Saham dicari | capai | diukur (`lari` sejak CS03; `terus` dalam pindaan (m)) |
 | 2 Masuk: indikator + parameter | capai (CS07) | 134 kaedah M × 8 varian rawak + 400 varian setempat; 25 keluarga indikator berparameter (656 varian) meliputi 41 takrif `P`/`N`; baki corak kompleks (VCP, Qullamaggie, Ichimoku, ...) kekal takrif asal → kerja mesin |
 | 3 Pegang | capai | tiada sasaran jual; pegang hingga 20 sesi |
-| 4 Keluar: indikator kenaikan tamat | dicari penuh (CS07) + kelas maklumat baharu (CS09); TIADA yang menolong | 97 atom berparameter × syarat aktif × 8 henti = 225,840 cara setiap setup: keluar terpilih mengatasi kedua-dua "pegang sahaja" dan keluar lama bagi hanya 20 daripada 61 setup. Terbaik yang diketahui = pegang 20 sesi + henti longgar; peraturan sejagat RSI-terlebih-beli-selepas-+10 % menambah ~+0.9 mata. CS09 (15 Nov): pasaran, sektor, earnings, relatif, kemuncak dan laluan (526,128 cara setiap setup) — kedua-dua bacaan TIDAK; hanya "terlalu panas selepas +10 %" menambah sedikit (§9g). Matlamat item ini belum tercapai pada data ini; mesin boleh terus mencuba |
+| 4 Keluar: indikator kenaikan tamat | **DITUTUP oleh pengguna 15 Nov 2026**: dicari enam pusingan (CS04, (j), CS06, CS07, CS09, CS10), TIADA yang menolong; keluar diterima = pegang hingga had + henti longgar | 97 atom berparameter × syarat aktif × 8 henti = 225,840 cara setiap setup: keluar terpilih mengatasi kedua-dua "pegang sahaja" dan keluar lama bagi hanya 20 daripada 61 setup. Terbaik yang diketahui = pegang 20 sesi + henti longgar; peraturan sejagat RSI-terlebih-beli-selepas-+10 % menambah ~+0.9 mata. CS09 (15 Nov): pasaran, sektor, earnings, relatif, kemuncak dan laluan (526,128 cara setiap setup) — kedua-dua bacaan TIDAK; hanya "terlalu panas selepas +10 %" menambah sedikit (§9g). Matlamat item ini belum tercapai pada data ini; mesin boleh terus mencuba |
 | 5 Henti rugi | capai | H1–H4 |
 | 6 Swing | capai | ≤ 20 sesi, tiada jual hari beli |
 | 7 Mesin sentiasa mencari dan menala; tiada dibekukan | dibina (CS07) | `cs_mesin.py` + `.github/workflows/mesin_carian.yml` (Ahad 02:23 UTC; setiap larian 300 varian keluarga + 134 varian M BAHARU → `hasil/MESIN/papan.csv`); larian 1 dibuat dalam sesi; aktif berjadual hanya selepas digabung ke `main` |
@@ -59,9 +63,9 @@ Pengguna: "cuba check dan baca betul-betul matlamat saya" (selepas Claude menuli
 | 11 Prasyarat → syarat | capai | CS05/CS06 |
 | 12 Semua kaedah, prasyarat + syarat | capai | `hasil/CS05|CS06/SEMUA_PENCETUS*.md` |
 | 13 Pegang minimum 3 sesi; tiada jual hari beli | capai (pindaan (p)) | enjin keluar, kedudukan akhir dan penjejak hadapan F; `hasil/PEGANG_MIN.md` |
-| 14 Lorong kedua: pengesahan uptrend → beli → pegang sampai trend tamat | dicari (CS08) | `hasil/CS08/LAPORAN.md`: papan `T01`–`T12` (BUKAN kod F), 11 dipercayai; keluar indikator tidak menolong; belum dijejak ke hadapan |
+| 14 Lorong kedua: pengesahan uptrend → beli → pegang sampai trend tamat | dicari (CS08); keluar dicari semula (CS10) | `hasil/CS08/LAPORAN.md`: papan `T01`–`T12` (BUKAN kod F), 11 dipercayai; indikator "trend tamat" tidak menolong. CS10 (`hasil/CS10/KELUAR.md`): "jual bila terlalu panas selepas +20 %" menaikkan dijual ≥ +30 % (8 daripada 12) tetapi BUKAN purata dagangan, dan memotong pelari besar; papan tidak diubah; belum dijejak ke hadapan |
 
-Kerja seterusnya yang SELARI dengan matlamat: (i) mesin belum meliputi lorong trend (hanya lorong swing) dan belum mencuba keluar; (ii) CS07/CS08 sudah di `main` (PR #50), CS09 di branch sehingga pengguna meminta PR; (iii) kelas keluar baharu CS09 belum diuji pada lorong trend `T01`–`T12` (pegang 6 bulan: keluar ikut pasaran lebih munasabah di situ); (iv) mesin terus mencuba varian dan keluar baharu.
+Kerja seterusnya yang SELARI dengan matlamat: (i) mesin belum meliputi lorong trend (hanya lorong swing) dan belum mencuba keluar; (ii) CS07/CS08 sudah di `main` (PR #50), CS09 di branch sehingga pengguna meminta PR; (iii) kelas keluar baharu sudah diuji pada lorong trend (CS10, §9h); (iv) mesin terus mencuba varian masuk; keluar dalam mesin hanya jika diperluas (pindaan dahulu). **Semakan item demi item pada 15 Nov 2026 selepas keputusan pengguna:** item 1–3, 5, 6, 8, 11–13 capai; item 4 ditutup oleh pengguna; item 7 mesin berjalan mingguan (larian 3 di `main`) tetapi hanya lorong swing dan masuk; item 14 dicari (masuk + keluar) tetapi **lorong trend BELUM diukur pada peringkat akaun** (portfolio slot, MDD — seperti pindaan (l) bagi lorong swing) dan belum dijejak ke hadapan; item 9 (backtest dahulu) kekal: papertrade/jejak hadapan memerlukan keputusan pengguna berasingan.
 
 ## 2. Cara bekerja dengan pengguna (pelajaran sesi ini)
 
@@ -162,7 +166,7 @@ Diukur ad hoc daripada stor harga (930–947 saham Shariah, Sep 2024 – Okt 202
 
 ## 7. Keadaan repo
 
-- **15 Nov 2026:** CS07 + CS08 + mesin sudah di `main` (PR #50; mesin larian 2 berjalan 14 Nov). CS09 (`cs_keluar9.py`, `hasil/CS09/`, pindaan (r), ujian `TestCS09`) berada di branch `claude/determined-albattani-45uyxg`; ia sampai ke `main` hanya selepas pengguna meminta PR.
+- **15 Nov 2026:** CS07 + CS08 + mesin di `main` (PR #50); **CS09 di `main` (PR #51, keputusan pengguna "1 dan 2 ya")**. **CS10 di `main` (PR #52, keputusan pengguna "1.ya")** (`cs_keluar10.py`, `hasil/CS10/`, pindaan (s), ujian `TestCS10`).
 - Kerja 13–14 Nov hingga CS05 di `main` (PR #45–#48; #48 = CS05, pindaan (i), (j), (k) dan baris `lejar.yml`). Kerja CS06 (`cs_tala6.py`, `hasil/CS06/`, `F58`–`F87`, fail ini) berada di branch `claude/dreamy-lovelace-38z7wm`; ia sampai ke `main` hanya selepas pengguna meminta PR. Jika fail ini dibaca di `main`, gabungan itu sudah berlaku.
 - `jejak_f.yml` berjalan selepas workflow "Lejar penuh" berjaya (06:17 dan 10:17 UTC, Sel–Sab). Stor harga yang dibaca penjejak dikemas kini oleh Lejar, BUKAN `harga_harian.yml`. Disemak 14 Nov 03:10 UTC: `jejak_f.yml` TERBUKTI tercetus melalui `workflow_run` selepas Lejar berjadual 13 Nov 17:45 UTC (larian #2, berjaya); `jejak_f/lejar.csv` masih kosong hanya kerana Lejar bagi sesi 2026-11-13 belum berjalan pada waktu itu (harga hingga 20261112).
 - **Perkara untuk disemak oleh chat baharu:** adakah `jejak_f/RINGKASAN.md` menunjukkan harga ≥ 20261113 dan isyarat pertama? Sejak 14 Nov 2026 (PR #48, keputusan pengguna) langkah akhir `lejar.yml` mencetus `jejak_f.yml` terus selepas larian Lejar yang didispatch penjaga, jadi ia tidak lagi menunggu larian berjadual.
@@ -186,9 +190,12 @@ Diukur ad hoc daripada stor harga (930–947 saham Shariah, Sep 2024 – Okt 202
 
 **Diputuskan pengguna 15 Nov 2026 ("Cari keluar cara baharu") dan SUDAH dilaksanakan:** pusingan **CS09** (§9g). Registry F, kedudukan akhir dan kohort TIDAK diubah.
 
+**Diputuskan pengguna 15 Nov 2026 ("1 dan 2 ya") dan SUDAH dilaksanakan:** (1) CS09 digabung ke `main` (PR #51); (2) kelas keluar baharu diuji pada lorong trend = pusingan **CS10** (§9h). Soalan ketiga (tukar peraturan RSI CS07 kepada "terlalu panas selepas +10 %" dalam kedudukan akhir) TIDAK dijawab: tiada perubahan.
+
+**Diputuskan pengguna 15 Nov 2026 ("1.ya 2.x 3.ya") dan SUDAH dilaksanakan:** (1) CS10 digabung ke `main` (PR #52); (2) keluar `T01`–`T12` TIDAK ditukar kepada "terlalu panas selepas +20 %"; (3) "pegang hingga had masa + henti rugi longgar" diterima sebagai keluar kedua-dua lorong dan carian keluar manual dihentikan (mesin boleh terus mencuba jika diperluas). Direkod dalam spec selepas pindaan (s).
+
 **Menunggu keputusan pengguna:**
-1. Gabung CS09 ke `main` (PR). (CS07 + pegang minimum + mesin sudah digabung: PR #50.)
-1a. Selepas CS09: (a) uji kelas keluar baharu pada lorong trend `T01`–`T12` (cadangan Claude; perlu pindaan bertarikh); (b) sama ada peraturan sejagat "terlalu panas selepas +10 %" patut menggantikan peraturan RSI CS07 dalam kedudukan akhir (Claude TIDAK mencadangkannya: bacaan dikunci gagal dan nisbah simpan di sempadan).
+1. Langkah seterusnya selepas keluar ditutup: (a) ukur lorong trend `T01`–`T12` pada peringkat akaun (portfolio slot, MDD; backtest, perlu pindaan bertarikh) — cadangan Claude, kerana ini satu-satunya ukuran backtest yang lorong swing ada (pindaan (l)) tetapi lorong trend tiada; ATAU (b) terus ke keputusan jejak hadapan maya. Jejak hadapan/papertrade kekal memerlukan keputusan pengguna berasingan.
 2. Data saham delist (§9d): pengguna mempersoalkan keperluannya ("saya tak faham kenapa perlu fokus dekat saham delist ini"); Claude mencadangkan langkau dan catat sebagai kaveat. Ia BUKAN item matlamat. Pilihan lama selepas portfolio (§9b): (a) mula jejak hadapan maya bagi kohort kecil (`F40`, `F58`, `F49`) untuk menguji kadar tangkap pada data langsung, selepas kalendar earnings dibina dalam penjejak; atau (b) berhenti di sini dan tunggu kohort 13 Nov matang. Pengguna melarang jejak hadapan sehingga membenarkannya.
 
 **Tiada yang berkaitan wang sebenar berubah:** kad skor kekal satu-satunya keputusan.
@@ -390,6 +397,25 @@ python3 cs_keluar9.py cari $K                                              # kum
 python3 cs_keluar9.py pilih $K && python3 cs_keluar9.py kunci $K && python3 cs_keluar9.py lapor $K   # < 2 min
 ```
 Masa sebenar sesi 15 Nov: panel A + B ~3 min, benih A 38 min (4 pekerja), benih B 54 min (3 pekerja, bersaing), keseluruhan ~1 jam 40 min.
+
+## 9h. CS10: kelas keluar baharu pada lorong trend `T01`–`T12` (pindaan (s), 15 Nov 2026)
+
+Keputusan pengguna 15 Nov 2026 ("1 dan 2 ya"). Pradaftar dikomit sebelum dijalankan (komit `3d5b780`). Kod `cs_keluar10.py`: kernel sendiri dengan topeng bit 125 sesi (dua kata 63 bit) supaya pasangan ATAU/DAN boleh dinilai; pariti TEPAT dengan `cs_trend8.hasil_semua` pada kesemua 38 atom lama × 3 syarat aktif × 6 henti (ujian), dan pada data sebenar: "dijual ≥ +30 %" `X00` dan bilangan belian satu posisi sama dengan `hasil/CS08/papan.csv` bagi kesemua 12 setup. Setup dibaca semula daripada `papan.csv` (`papan8()`); 7 varian M dijana semula secara deterministik (`cs_keluar9.tugas_m`), parameternya sepadan tepat dengan teks papan. Sumber angka: `hasil/CS10/KELUAR.md`, `keluar.csv`, `sejagat.csv`.
+
+- **Ruang:** 38 atom CS08 + 90 atom baharu (P 22, S 2, E 10 termasuk "premis masuk hilang": hasil suku tumbuh < 20 % / < 10 % / < 0 % dan SUE < 0; R 6; K 24 termasuk regangan atas SMA50/SMA200; L 26 diskala 20–90 sesi). 16,385 peraturan (tunggal + SEMUA pasangan) × 3 syarat aktif × 6 henti = 294,930 cara setiap setup. Syarat "tidak jual awal" baharu: untung pada pelari besar ≥ 90 % daripada pegang sahaja.
+- **Bacaan 1 (dijual ≥ +30 %): MENOLONG, 8 daripada 12** (perlu ≥ 7); median nisbah simpan 1.00; rugi ≥ 15 % median −1.5 mata; 2025–26 digabung +0.75 mata. Median dijual ≥ +30 %: 24.0 % → 27.0 %.
+- **Tetapi baca bersama ini (dalam `keluar.csv`):** semua 10 keluar sejagat senarai T ialah kelas K, pada dasarnya SATU peraturan: **"tutup ≥ 30 % di atas SMA50 DAN (tutup − SMA50) ÷ ATR14 ≥ 6, aktif selepas untung ≥ 20 %"** (B: +2.8 mata, 100 % setup, simpan 0.90, rugi ≥ 15 % −2.4 mata, 2025–26 +1.9). 8 setup memilihnya, 4 kekal `X00` (`T01`, `T02`, `T03`, `T11`). Bagi 8 itu pada B: kadar menang naik 1.5–5 mata, median dagangan kurang negatif, sesi pegang median turun (cth. 126 → 95–122), **tetapi purata setiap dagangan tidak naik (6 daripada 8 turun sedikit; cth. `T12` +10.6 % → +8.3 %) dan 4 daripada 8 menyimpan hanya 81–89 % untung pelari besar**. Median simpan 1.00 lulus kerana 4 setup `X00` dikira 1.00. Iaitu: lebih kerap untung, untung besar lebih kecil — bukan "pegang sampai habis trend".
+- **Kes MXL (maklumat; satu kes, di luar statistik):** isyarat `T11` 21 Apr 2026, beli $34.0; peraturan itu menjual pada buka 27 Apr $60.94 (+79 %), selepas gap 24 Apr; puncak tutup $128.03 (+277 %) pada 30 Jun; tutup terakhir data $71.32 (+110 %). (`T11` sendiri memilih `X00`.)
+- **Bacaan 2 (sisi rugi): TIDAK, 4 daripada 12.** Senarai R hampir semuanya kelas P: "turun-naik SPY 21 hari ≥ 25 % DAN QQQ tutup < SMA50" (pasaran panik) menambah purata +0.25 hingga +0.42 mata dan memotong rugi ≥ 15 % hingga 3 mata pada B (67–83 % setup, simpan 1.00), 2025–26 bercampur (−0.4 hingga +0.15). Kecil dan tidak lulus bacaan; ini satu-satunya tempat keluar ikut pasaran menunjukkan tanda positif.
+- **Atom tunggal setiap kelas (A / B, tambahan dijual ≥ +30 %):** pasaran −4.3 / −2.0; sektor/industri tiada yang lulus; peristiwa syarikat −1.4 / +0.0; relatif −0.8 / −0.5; laluan +0.6 / +0.5 (Chandelier mengetat selepas +50 %, simpan 0.87); atom CS08 lama −0.8 / −0.5; **kemuncak +0.85 / +2.4 (92 % setup)**.
+- **Kesimpulan jujur merentas CS07, CS09, CS10:** dalam kedua-dua lorong, satu-satunya isyarat keluar yang menambah ukuran dikunci ialah "jual ketika terlalu panas selepas sudah untung"; ia menaikkan kekerapan untung dengan mengorbankan sebahagian untung pelari. Tiada isyarat "kenaikan sudah tamat" (kelemahan saham, pasaran, sektor, earnings, premis) yang menolong.
+- **Kaveat:** 12 setup, beberapa kembar (`T04`≈`T06`, `T01`≈`T02`, `T05`≈`T08`); B berkongsi hari dengan A; tiada saham delist (bias besar bagi 6 bulan); papan `T01`–`T12` TIDAK diubah.
+- **Jana semula CS10** (selepas panel/benih/lapis A dan B, `cs07_K_*` dan fail CS09 `cs09_XB*` ada):
+```bash
+python3 cs_keluar10.py benihm $K && python3 cs_keluar10.py atom $K      # ~5 min + ~1 min
+python3 cs_keluar10.py cari $K && python3 cs_keluar10.py pilih $K      # < 1 min
+python3 cs_keluar10.py kunci $K && python3 cs_keluar10.py lapor $K     # < 1 min
+```
 
 ## 10. Apa yang TIDAK disimpan dalam repo, dan cara menjana semula
 

@@ -430,15 +430,16 @@ def sedia_pan(pan, XA, XB, ev, pegang_min=None):
 
 
 # ---------- setup yang dinilai ----------
-def tugas_m():
-    """Tugas benih (nama, modul, P) bagi varian M CS07 yang dipakai setup kedudukan akhir (F88-F95) SAHAJA; parameter
-    dijana semula secara deterministik seperti cs_tala7 (varian rawak v3+; varian setempat 's')."""
-    import cs_cs07 as c7
-    import cs_lapor as lapor
+def tugas_m(mahu=None):
+    """Tugas benih (nama, modul, P) bagi varian M CS07 tertentu SAHAJA (lalai: yang dipakai setup kedudukan akhir F88-F95);
+    parameter dijana semula secara deterministik seperti cs_tala7 (varian rawak v3+; varian setempat 's')."""
     import cs_tala7 as t7
-    reg = pd.read_csv(lapor.REG_F, dtype=str).fillna('')
-    mahu = sorted({c7.dari_takrif7(r.takrif)['pencetus'] for r in reg[reg.pusingan == 'CS07'].itertuples()})
-    mahu = [n for n in mahu if n[0] == 'M' and n.split('.')[1] not in ('0', '1', '2')]
+    if mahu is None:
+        import cs_cs07 as c7
+        import cs_lapor as lapor
+        reg = pd.read_csv(lapor.REG_F, dtype=str).fillna('')
+        mahu = {c7.dari_takrif7(r.takrif)['pencetus'] for r in reg[reg.pusingan == 'CS07'].itertuples()}
+    mahu = [n for n in sorted(set(mahu)) if n[0] == 'M' and n.split('.')[1] not in ('0', '1', '2')]
     pj = pd.read_csv(os.path.join(cari.AKAR, 'AUTOTUNE', 'kaedah', 'param_julat.csv'))
     par = lambda n: cari.param_varian(pj, n.split('.')[0], int(n.split('.')[1]))
     tugas, terbaik, param = [], {}, {}
