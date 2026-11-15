@@ -706,6 +706,86 @@ keluaran `hasil/CS08/`. Tiada jejak hadapan, tiada order.
 - **Kaveat dikunci:** tiada saham delist — bagi pegang 6 bulan biasnya LEBIH besar daripada lorong swing; K3 pendek
   (tetingkap 126 sesi berakhir ~April 2026); kumpulan B sudah dilihat untuk label lain; satu kes (MXL) bukan bukti.
 
+### Pindaan 15 Nov 2026 (r) — pusingan CS09: KELUAR daripada maklumat yang BELUM dicuba (sebelum dijalankan)
+
+Sebab: item 4 matlamat ("keluar: indikator yang memberitahu kenaikan sudah tamat") ialah satu-satunya item yang belum capai
+selepas CS07 (`SERAHAN_CARIAN_SETUP.md` §1a). CS07 mencari 225,840 cara keluar setiap setup, tetapi SEMUA 97 atomnya dibina
+daripada harga/volum harian saham itu sendiri. Keputusan pengguna 15 Nov 2026: "Cari keluar cara baharu". Pusingan ini menguji
+kelas maklumat keluar yang belum dicuba. Tiada jejak hadapan, tiada order, tiada perubahan registry atau kohort.
+
+Kod `carian_setup/cs_keluar9.py` (topeng, henti dan statistik `cs_keluar7` dipakai semula; hanya peringkat `sedia` diperluas
+dengan jenis atom baharu, pariti dengan `cs_keluar7` diuji pada atom lama); keluaran `hasil/CS09/KELUAR.md`, `keluar.csv`.
+
+**Tidak berubah daripada (n)(b) dan (p):** mekanik (isyarat pada tutup → beli buka esok; atom dinilai pada tutup sesi d → jual
+buka sesi d + 1; henti intrahari; had 20 sesi; kos 0.5 %); pegang minimum 3 sesi (indikator keluar menjual paling awal pada
+buka sesi ke-4, henti kekal aktif); 8 henti; 3 syarat aktif {sentiasa, selepas tutup tertinggi ≥ +5 %, selepas ≥ +10 %};
+ukuran `tp` (naik ≥ 5 % minggu pertama DAN dijual dengan untung ≥ +10 %); syarat "tidak jual awal" (nisbah simpan ≥ 0.90);
+statistik atas SEMUA isyarat masuk setup (perbandingan berpasangan, penjelasan (n)-1); carian pada kumpulan A sahaja.
+
+**80 atom baharu dalam enam kelas** (tiada satu pun dalam 97 atom CS07):
+- **P — pasaran (22; sama bagi semua saham pada hari itu):** daripada lapisan (i): QQQ OFF (`QA02`); SPY < SMA200 (`QA04`);
+  QQQ ≥ 10 % di bawah puncak (`QA06`); rejim OFF baharu ≤ 10 sesi (`QA09`); QQQ RSI14 < 35 (`QA10`); turun-naik SPY 21 hari
+  ≥ 25 % (`QB01`); ≤ 30 % saham di atas MA50 (`QC02`); distribution day QQQ ≥ 5 dalam 25 sesi (`QH03`); nisbah 4 % < 0.5
+  (`QH06`); BUKAN `QH08` (QQQ SMA10 ≤ SMA20); BUKAN `QB03` (turun-naik SPY 21 hari ≥ 63 hari). Siri QQQ harian baharu: tutup <
+  SMA10 / SMA20 / SMA50; tutup < rendah 5 / 10 hari sebelumnya; pulangan sehari ≤ −1.5 % / ≤ −2.5 %; pulangan 5 sesi ≤ −3 % /
+  ≤ −5 %; 3 tutup menurun berturut; keluasan (% saham layak A + B di atas MA50) turun ≥ 10 mata dalam 10 sesi.
+- **S — sektor/industri (2):** sektor 3 terbawah pulangan 63 sesi (`QD02`); industri 20 % terbawah pulangan 63 sesi (`QE03`).
+- **E — peristiwa earnings (10; kalendar 8-K item 2.02 yang sama dengan prasyarat `QF`):** earnings pada sesi berikutnya
+  (jual sebelum laporan); reaksi earnings terakhir (0–5 sesi lalu; reaksi = tutup hari reaksi ÷ tutup sebelumnya − 1) ≤ −5 % /
+  ≤ −3 % / ≤ 0 % / < +3 %; hari reaksi itu (0–5 sesi lalu) tutup < buka; 0–10 sesi selepas reaksi DAN tutup < tutup sebelum
+  earnings; k hingga 10 sesi selepas reaksi, k ∈ {1, 3, 5}.
+- **R — relatif kepada pasaran (5):** pulangan k sesi saham − pulangan k sesi QQQ ≤ −x: (5, 5 %), (5, 10 %), (10, 10 %),
+  (10, 15 %); RS < 70.
+- **K — kemuncak / terlalu panas (17; saham sendiri tetapi tiada dalam CS07):** (tutup − SMA20) ÷ ATR14 ≥ 3 / 4 / 5 / 6;
+  tutup ≥ 10 % / 15 % / 20 % di atas SMA10; tutup > jalur atas Bollinger(20, 2.5) / (20, 3.0); 4 / 5 / 6 tutup naik berturut;
+  gap naik ≥ 2 % / ≥ 4 % DAN tutup < buka; julat hari ≥ 2.5 × ATR14 DAN tutup dalam separuh bawah julat; naik ≥ 2 × ATR14
+  sehari dengan volum ≥ 2 × purata 50; ekor atas ≥ 60 % julat dengan volum ≥ 1.5 ×.
+- **L — keadaan laluan sejak beli (24):** tiada tutup tertinggi baharu selama k sesi, k ∈ {3, 5, 7, 10}; pulang ≥ f daripada
+  untung puncak (tutup ≤ P + (1 − f) × (tutup tertinggi − P), tutup tertinggi > P), f ∈ {1/3, 1/2, 2/3}; gagal corak (selepas
+  d sesi, tutup < P × (1 + x)): (5, +3 %), (5, +5 %), (8, +5 %), (10, +5 %), (10, +10 %); lantai untung (selepas tutup tertinggi
+  ≥ +a, tutup < +b): (5 %, 0 %), (10 %, 3 %), (10 %, 5 %), (15 %, 8 %), (20 %, 10 %); tutup < rendah bar tutup tertinggi;
+  distribution day saham sejak beli ≥ k (tutup turun, volum > semalam DAN ≥ purata 50), k ∈ {2, 3, 4}; Chandelier yang
+  mengetat ikut masa (k0 × ATR14 hingga sesi 10, kemudian k1): (4 → 2), (5 → 2.5), (3 → 1.5).
+
+**Peraturan:** `X00`; 80 atom baharu tunggal; pasangan baharu × baharu (ATAU, DAN); pasangan baharu × lama (80 × 97; ATAU,
+DAN — termasuk "indikator saham hanya dikira bila pasaran lemah"); dan SATU peraturan lama sebagai penanda aras: keluar
+sejagat terbaik CS07 (`Y08.10 ATAU Y09.4`). ≈ 21,900 peraturan × 3 syarat aktif × 8 henti ≈ 526,000 cara keluar setiap
+setup. Pasangan lama × lama tidak diulang (sudah dicari dalam CS07). **Setup** = 69 setup kedudukan akhir semasa.
+
+**Pilihan pada kumpulan A (dua peringkat, seperti (n)(b)), dua senarai sejagat:**
+- Senarai T ("tangkap"): 30 teratas ikut purata merentas setup bagi [min dua era (tp − tp `X00` henti sama)], lulus nisbah
+  simpan ≥ 0.90 (jumlah merentas setup). Setiap setup memilih antara `X00` (8 henti) dan 30 itu (lulus simpan setup itu) ikut
+  min dua era tp, seri dipecah ikut rugi ≥ 8 % terendah. Penanda aras CS07 sentiasa calon.
+- Senarai R ("sisi rugi"): 30 teratas ikut purata merentas setup bagi [min dua era (purata dagangan − purata `X00` henti
+  sama)], lulus nisbah simpan ≥ 0.90 DAN purata merentas setup [min dua era (tp − tp `X00`)] ≥ 0. Setiap setup memilih antara
+  `X00` (8 henti) dan 30 itu (lulus simpan setup itu dan tp min dua era ≥ tp `X00` henti sama) ikut min dua era purata.
+
+**Bacaan dikunci (kumpulan B):**
+1. **Item 4, "keluar baharu MENOLONG"** jika (i) tp keluar terpilih-T > tp `X00` (henti sama) DAN > tp keluar terbaik CS07
+   setup itu (`hasil/CS07/keluar.csv`; bagi `F88`–`F95`, keluar dalam registry), bagi lebih separuh setup; (ii) median nisbah
+   simpan ≥ 0.90; (iii) median beza rugi ≥ 8 % lawan keluar terbaik CS07 ≤ +1 mata; (iv) dalam K3 (2025–26, tahun yang carian
+   tidak lihat), median merentas setup (isyarat K3 ≥ 30) bagi [tp terpilih-T − tp `X00` henti sama] > 0.
+2. **Sisi rugi (BUKAN item 4; untuk item 5 dan matlamat akaun "untung bersih melebihi rugi"), "potong rugi MENOLONG"** jika
+   bagi lebih separuh setup: purata terpilih-R > purata `X00` (henti sama) DAN rugi ≥ 8 % terpilih-R < `X00` DAN tp terpilih-R
+   ≥ tp `X00` − 0.5 mata; median nisbah simpan ≥ 0.90; dan dalam K3 median [purata terpilih-R − purata `X00`] > 0.
+   Kayu ukur keluarga F kekal kadar tangkap; bacaan 2 hanya menjawab "adakah keluar baharu mengurangkan rugi tanpa menjual
+   pelari".
+
+**Dilaporkan sebagai maklumat (bukan bacaan):** bagi setiap kelas (P, S, E, R, K, L) peraturan atom tunggal terbaik pada A
+dan nilainya pada B dan K3; komposisi kelas dalam kedua-dua senarai sejagat; **plasebo** bagi kelas P, S, E (siri yang sama
+dianjak 437 sesi/bar secara membulat, seperti (i)): atom tunggal sebenar lawan plasebo; menang, rugi ≥ 8 %, purata,
+kekurangan dari puncak, sesi pegang.
+
+**Kaveat dikunci:** kumpulan B berkongsi HARI yang sama dengan kumpulan A — bagi keluar ikut pasaran (kelas P) saham B bukan
+ujian bebas; hanya K3 yang tidak dilihat dari segi masa, dan K3 pendek. Kumpulan B sudah dilihat dalam pusingan terdahulu.
+Lebih banyak calon = skor A terbaik lebih melambung. Tarikh earnings = tarikh pemfailan 8-K sebenar; "earnings pada sesi
+berikutnya" mengandaikan tarikh diumumkan lebih awal (andaian sama seperti `QF01`). Tiada saham delist. Lima pusingan terdahulu
+(CS04, (j), CS06, CS07 masuk, CS07 keluar) tidak menemui keluar yang mengatasi "pegang 20 sesi": pusingan ini mengukur kelas
+maklumat baharu, bukan menjanjikan hasil.
+
+**Selepas bacaan:** registry F, kedudukan akhir dan kohort jejak TIDAK diubah oleh pusingan ini. Jika bacaan 1 atau 2
+"MENOLONG", penukaran keluar mana-mana setup memerlukan keputusan pengguna dan pindaan bertarikh berasingan.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

@@ -1110,5 +1110,159 @@ class TestCS08(unittest.TestCase):
         self.assertTrue(os.path.exists(os.path.join(d, 'LAPORAN.md')))
 
 
+class TestCS09(unittest.TestCase):
+    """SPEC pindaan 15 Nov 2026 (r): keluar daripada maklumat yang belum dicuba (pasaran, sektor, earnings, relatif,
+    kemuncak, laluan)."""
+
+    def test_ruang_dikunci(self):
+        import collections
+
+        import cs_keluar7 as k7
+        import cs_keluar9 as k9
+        self.assertEqual(dict(collections.Counter(a[1] for a in k9.ATOM9)), {'P': 22, 'S': 2, 'E': 10, 'R': 5, 'K': 17, 'L': 24})
+        self.assertEqual((k9.NB, k9.NL, k9.N_SIRI, k9.NR, k9.NH * k9.NKOL), (80, 97, 56, 21922, 526128))
+        self.assertEqual((k9.N_SEJAGAT, k9.SIMPAN_MIN, k9.TP_LONGGAR, k9.N_K3_MIN), (30, 0.90, 0.005, 30))
+        self.assertEqual(len({a[0] for a in k9.ATOM9}), 80)
+        self.assertFalse({a[5] for a in k9.ATOM9} & {a[3] for a in k7.ATOM})        # tiada atom baharu yang sudah ada dalam CS07
+        self.assertEqual(k9.kod_peraturan(0), 'X00')
+        self.assertEqual(k9.kod_peraturan(k9.KOL_ARAS), 'Y08.10 ATAU Y09.4@10')    # penanda aras = keluar sejagat terbaik CS07
+        self.assertEqual(k9.HENTI[k9.S_ARAS], '5xATR14')
+        op = collections.Counter(k9.OP.tolist())
+        self.assertEqual((op[0], op[1]), (1, 80))
+        lama = (k9.A1 < k9.NL) & (k9.A2 < k9.NL) & (k9.OP > 0)                      # lama x lama: hanya penanda aras
+        self.assertEqual(int(lama.sum()), 1)
+        self.assertEqual(k9.kelas_peraturan(k9.KOL_ARAS), 'lama')
+
+    def _data(self):
+        import cs_keluar9 as k9
+        g = _saham(420, 21)
+        rng = np.random.default_rng(4)
+        XB = (rng.random((k9.N_SIRI + 1, len(g))) < 0.15).astype(np.uint8)
+        return g, XB, np.arange(260, 380, 3).astype(np.int64)
+
+    def test_kernel_atom_baharu_menyamai_kiraan_naif(self):
+        import cs_keluar9 as k9
+        g, XB, ev = self._data()
+        o, l, c = (g[n].to_numpy(float) for n in ('open', 'low', 'close'))
+        atr = c * 0.03
+        for pm in (1, 3):
+            M = k9.sedia_baharu(ev, o, l, c, atr, XB, k9.JENIS9, k9.PAR9, k9.PAR29, k9.BARIS9, k9.N_SIRI, pm)
+            for k, i in enumerate(ev):
+                e = i + 1
+                P = o[e]
+                for a, (_, _, j, par, par2, _, _) in enumerate(k9.ATOM9):
+                    m = 0
+                    for d in range(k9.TMAX - 1):
+                        b = e + d
+                        seg = c[e:b + 1]
+                        hc, dh = seg.max(), int(np.argmax(seg))
+                        ya = (XB[k9.BARIS9[a], b] != 0 if j == 0 else d - dh >= par if j == 4
+                              else (hc > P and c[b] <= P + (1 - par) * (hc - P)) if j == 5
+                              else (d + 1 >= par and c[b] < P * (1 + par2)) if j == 6
+                              else (hc >= P * (1 + par) and c[b] < P * (1 + par2)) if j == 7
+                              else (d > dh and c[b] < l[e + dh]) if j == 8
+                              else XB[k9.N_SIRI, e:b + 1].sum() >= par if j == 9
+                              else c[b] < hc - (par if d + 1 <= 10 else par2) * atr[b])
+                        if ya and d >= pm - 1:
+                            m |= 1 << d
+                    self.assertEqual(m, int(M[k, a]), (pm, k, a))
+            if pm == 3:
+                self.assertTrue(((M & 3) == 0).all())                           # pegang minimum: tiada bit sesi 1 dan 2
+
+    def test_bahagian_lama_sama_dengan_cs07_dan_penanda_aras(self):
+        import cs_keluar7 as k7
+        import cs_keluar9 as k9
+        g, XB, ev = self._data()
+        pan = {k: g[n].to_numpy(float) for k, n in (('o', 'open'), ('h', 'high'), ('l', 'low'), ('c', 'close'))}
+        pan['atr'] = pan['c'] * 0.03
+        XA = k7.siri(g).astype(np.uint8)
+        S7, S9 = k7.sedia_pan(pan, XA, ev), k9.sedia_pan(pan, XA, XB, ev)
+        self.assertEqual(S9[0].shape, (len(ev), 177))
+        self.assertTrue((S9[0][:, :97] == S7[0]).all())
+        for a, b in zip(S7[1:], S9[1:]):
+            self.assertTrue(np.array_equal(a, b))
+        kod = [k7.kod_peraturan(r * k7.NG) for r in range(k7.NR)]
+        r7 = kod.index('Y08.10 ATAU Y09.4')
+        for s in (0, 5, 6):                                                     # penanda aras dalam ruang baharu = peraturan CS07
+            self.assertTrue(np.allclose(k7.hasil(*S7[:7], k7.A1, k7.A2, k7.OP, s, r7 * k7.NG + 2)[0],
+                                        k7.hasil(*S9[:7], k9.A1, k9.A2, k9.OP, s, k9.KOL_ARAS)[0]))
+            self.assertTrue(np.allclose(k7.hasil(*S7[:7], k7.A1, k7.A2, k7.OP, s, 0)[0],
+                                        k7.hasil(*S9[:7], k9.A1, k9.A2, k9.OP, s, 0)[0]))
+
+    def test_siri_tiada_pandang_hadapan(self):
+        import cs_keluar9 as k9
+        g = _saham(500, 13)
+        self.assertEqual(k9.siri_k(g).shape, (18, 500))
+        self.assertTrue((k9.siri_k(g)[:, :430] == k9.siri_k(g.iloc[:430])).all())
+        q = _saham(500, 14)
+        b50 = pd.Series(np.random.default_rng(3).uniform(0.2, 0.8, 500)).rolling(5).mean()
+        S = k9.siri_qqq(q.close.reset_index(drop=True), q.low.reset_index(drop=True), b50)
+        S2 = k9.siri_qqq(q.close.iloc[:430].reset_index(drop=True), q.low.iloc[:430].reset_index(drop=True), b50.iloc[:430])
+        self.assertEqual(len(S), 11)
+        for k in S:
+            self.assertTrue((S[k][:430] == S2[k]).all(), k)
+
+    def test_siri_earnings(self):
+        import cs_keluar9 as k9
+        n = 60
+        c = np.full(n, 100.0)
+        o = c.copy()
+        c[30], o[30] = 94.0, 97.0                                               # sesi reaksi: tutup -6 %, tutup < buka
+        c[31:] = 95.0
+        tarikh = (20240101 + np.arange(n)).astype(np.int32)                     # "tarikh" berturutan (ujian sahaja)
+        pan = {'o': o, 'c': c, 'tarikh': tarikh, 'mula': np.asarray([0, n]), 'ticker': np.asarray(['AAA'])}
+        # pemfailan pada hari indeks 29 selepas tutup (lewat) -> sesi reaksi = indeks 30
+        E = k9.earnings_siri(pan, {'AAA': (np.asarray([int(tarikh[29])]), np.asarray([True]))})
+        kod = {a[5]: a[0] for a in k9.ATOM9 if a[1] == 'E'}
+        esok = E[kod['earnings pada sesi berikutnya (jual sebelum laporan)']]
+        self.assertEqual(np.flatnonzero(esok).tolist(), [29])
+        r5 = E[kod['reaksi earnings terakhir (0-5 sesi lalu) <= -5%']]
+        self.assertEqual(np.flatnonzero(r5).tolist(), list(range(30, 36)))
+        self.assertEqual(np.flatnonzero(E[kod['hari reaksi earnings (0-5 sesi lalu) tutup < buka']]).tolist(), list(range(30, 36)))
+        self.assertEqual(np.flatnonzero(E[kod['0-10 sesi selepas earnings DAN tutup < tutup sebelum earnings']]).tolist(),
+                         list(range(30, 41)))
+        self.assertEqual(np.flatnonzero(E[kod['3 hingga 10 sesi selepas reaksi earnings']]).tolist(), list(range(33, 41)))
+        self.assertFalse(E[kod['reaksi earnings terakhir (0-5 sesi lalu) <= 0%']][:30].any())   # tiada apa sebelum reaksi
+
+    def test_bacaan_dikunci(self):
+        import cs_keluar9 as k9
+        n = 10
+        asas = dict(n_K3=np.full(n, 50), tp_x00T=0.10, tp_aras7=0.11, simpan_T=0.95, rugi8_T=0.20, rugi8_aras7=0.20,
+                    tp_K3_T=0.12, tp_K3_x00T=0.10, pur_R=0.03, pur_x00R=0.02, rugi8_R=0.18, rugi8_x00R=0.20, tp_R=0.10,
+                    tp_x00R=0.10, simpan_R=0.95, pur_K3_R=0.03, pur_K3_x00R=0.02)
+        T = pd.DataFrame({**asas, 'tp_T': [0.12] * 6 + [0.105] * 4})            # 6/10 mengatasi X00 DAN penanda aras
+        B = k9.bacaan(T)
+        self.assertEqual((B['n1'], B['atas_x00'], B['atas_aras7'], B['ya1'], B['n2'], B['ya2']), (6, 10, 6, True, 10, True))
+        self.assertFalse(k9.bacaan(T.assign(tp_T=[0.12] * 5 + [0.105] * 5))['ya1'])     # tepat separuh tidak cukup
+        self.assertFalse(k9.bacaan(T.assign(simpan_T=0.85))['ya1'])                     # jual awal
+        self.assertFalse(k9.bacaan(T.assign(tp_K3_T=0.10))['ya1'])                      # tiada tambahan pada 2025-26
+        self.assertFalse(k9.bacaan(T.assign(rugi8_T=0.22))['ya1'])                      # rugi naik lebih 1 mata
+        self.assertFalse(k9.bacaan(T.assign(rugi8_R=0.20))['ya2'])                      # rugi tidak turun
+        self.assertFalse(k9.bacaan(T.assign(tp_R=0.09))['ya2'])                         # tangkap penuh dikorbankan
+        self.assertFalse(k9.bacaan(T.assign(pur_K3_R=0.02))['ya2'])
+
+    def test_rekod_cs09(self):
+        import cs_keluar9 as k9
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS09')
+        T = pd.read_csv(os.path.join(d, 'keluar.csv'))
+        ids = pd.read_csv(os.path.join(d, '..', 'KEDUDUKAN_AKHIR.csv')).id.tolist()
+        self.assertEqual(sorted(T.id), sorted(ids))                             # semua setup kedudukan akhir dinilai
+        self.assertTrue(set(T.henti_T) | set(T.henti_R) <= set(k9.HENTI))
+        B = k9.bacaan(T)
+        self.assertFalse(B['ya1'])                                              # bacaan dikunci (r) 1: keluar baharu TIDAK menolong
+        self.assertFalse(B['ya2'])                                              # bacaan dikunci (r) 2: potong rugi TIDAK menolong
+        self.assertLessEqual(B['n1'], len(T) / 2)
+        md = open(os.path.join(d, 'KELUAR.md'), encoding='utf-8').read()
+        self.assertIn(f"**{B['n1']} daripada {B['n']}**", md)
+        self.assertIn('Keputusan bacaan 1: keluar baharu TIDAK menolong', md)
+        self.assertIn('Keputusan bacaan 2: potong rugi TIDAK menolong', md)
+        S = pd.read_csv(os.path.join(d, 'sejagat.csv'))
+        self.assertEqual((int((S.senarai == 'T').sum()), int((S.senarai == 'aras CS07').sum())), (k9.N_SEJAGAT, 1))
+        self.assertLessEqual(int((S.senarai == 'R').sum()), k9.N_SEJAGAT)
+        self.assertTrue(S[S.senarai == 'T'].kelas.str.contains('K').all())      # hanya kelas kemuncak masuk senarai sejagat
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('')
+        self.assertNotIn('CS09', set(reg.pusingan))                             # pusingan ini tidak mendaftar atau mengubah setup F
+
+
 if __name__ == '__main__':
     unittest.main()
