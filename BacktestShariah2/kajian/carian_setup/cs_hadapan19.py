@@ -1,13 +1,21 @@
 """Carian setup — PAPERTRADE kohort "gred A" (SPEC pindaan 16 Nov 2026 (ae) Bahagian D). Maya; tiada order; BUKAN Lejar.
 
   python3 cs_hadapan19.py kohort    bina jejak_f2/kohort.json (29 ahli dikunci, takrif daripada registry F)
-  python3 cs_hadapan19.py jejak     tambah isyarat hari harga TERAKHIR ke isyarat.csv; nilai semua -> lejar.csv, RINGKASAN.md
+  python3 cs_hadapan19.py harga --ke DIR                 harga 3 tahun SEMUA saham alam (Yahoo) -> DIR (format stor; tidak dikomit)
+  python3 cs_hadapan19.py kalendar --stor DIR --ke F     kalendar laporan Nasdaq semua saham alam, seperti diketahui hari D -> F
+  python3 cs_hadapan19.py jejak --stor DIR --kalendar F  tambah isyarat hari harga TERAKHIR ke isyarat.csv; nilai semua ->
+                                                         lejar.csv, RINGKASAN.md (alam = semua saham; pindaan (af))
+  python3 cs_hadapan19.py jejak     yang sama pada stor harga repo (senarai Shariah; cara lama, untuk ujian sahaja)
+
+Alam (pindaan 17 Nov 2026 (af), keputusan pengguna: tiada tapisan Shariah buat masa ini): `jejak_f2/alam.txt` = 3,260 saham
+alam backtest A02; layak = 2,000 paling cair setiap bulan mengikut peraturan universe A02 yang dikira ke hadapan.
 
 Beza daripada penjejak lama (`cs_hadapan.py`, 8 setup): setup di sini memakai prasyarat "laporan kewangan dalam 1-5 sesi",
 iaitu maklumat AKAN DATANG. Maka isyarat TIDAK dikira semula daripada awal setiap larian: ia ditulis sekali, pada hari itu,
 dengan kalendar laporan seperti yang diketahui hari itu (`isyarat.csv`, tambah-sahaja). Hasil (beli, jual, naik / jatuh)
 dikira semula daripada stor harga setiap larian. Isyarat benih M dikira dalam mod tanpa intai (`cs_cari.tanpa_intai`).
 """
+import argparse
 import csv
 import json
 import os
@@ -31,7 +39,15 @@ BS2 = lama.BS2
 STOR = lama.STOR
 KELUAR = os.path.join(BS2, 'jejak_f2')
 PEMANGKIN = os.path.join(BS2, 'data', 'pemangkin')
-SPEC = 'kajian/SPEC_CARIAN_SETUP.md pindaan 16 Nov 2026 (ae) Bahagian D'
+SPEC = 'kajian/SPEC_CARIAN_SETUP.md pindaan 16 Nov 2026 (ae) Bahagian D + pindaan 17 Nov 2026 (af)'
+ALAM = os.path.join(KELUAR, 'alam.txt')                      # 3,260 saham alam backtest A02 (pindaan (af))
+# peraturan universe bulanan A02 (AUTOTUNE/SPEC_A02.md §1), dikira ke hadapan
+N_ALAM, HARGA_MIN, NILAI_MIN, BAR_MIN, TET_NILAI, TET_SAH = 2000, 10.0, 1e6, 200, 60, 50
+LIPUTAN_MIN = 0.9                                            # bahagian saham alam yang mesti ada bar pada hari D
+TEMPOH_HARGA = '3y'
+KAL_BELAKANG, KAL_HADAPAN = 6, 24                            # tetingkap kalendar Nasdaq sekitar D - 1 (hari)
+TEKS_ALAM = {False: 'stor harga repo (senarai Shariah semasa)',
+             True: 'semua saham alam backtest (3,260 saham; 2,000 paling cair setiap bulan), BUKAN senarai Shariah sahaja'}
 KOS, T20, HAD_B, ATR_STOP = 0.005, 20, 126, 4.0
 MIN_BACAAN = 300                                             # belian unik tetingkap lengkap sebelum bacaan dikunci
 KW1 = 'KW1'                                                  # kawalan: laporan 1-5 sesi, tiada isyarat beli
@@ -111,12 +127,23 @@ def _i(d):
 
 
 # ---------- tarikh laporan seperti diketahui ----------
-def muat_kalendar(folder=PEMANGKIN):
+def muat_kalendar(folder=PEMANGKIN, tambahan=None):
+    """(modul kalendar, K = {saham: {tarikh: sumber}}, nas = {saham: {seterusnya, seterusnya_masa, ...}}). tambahan: fail
+    kalendar Nasdaq semua saham alam (`tarik_kalendar`); tarikhnya ditambah ke K dan entrinya mengatasi entri repo."""
     sys.path.insert(0, os.path.join(BS2, 'standard'))
     import kalendar_earnings as KE
     p = os.path.join(folder, 'earnings_nasdaq.json')
     nas = (json.load(open(p, encoding='utf-8')).get('saham') or {}) if os.path.exists(p) else {}
-    return KE, KE.muat(folder), nas
+    K = KE.muat(folder)
+    if tambahan:
+        for t, e in (json.load(open(tambahan, encoding='utf-8')).get('saham') or {}).items():
+            for k in ('lalu', 'seterusnya'):
+                try:
+                    K.setdefault(t, {}).setdefault(date.fromisoformat(str(e.get(k))[:10]), 'Nasdaq')
+                except ValueError:
+                    pass
+            nas[t] = e
+    return KE, K, nas
 
 
 def baca(fail, lajur):
@@ -158,6 +185,93 @@ def tindak_balas(KE, K, nas, arkib, t, D):
     return R, m, tb
 
 
+# ---------- alam semua saham (pindaan (af)) ----------
+def baca_alam(p=None):
+    return sorted({x.strip().upper() for x in open(p or ALAM, encoding='utf-8') if x.strip()})
+
+
+def topeng_bulanan(fr, kal):
+    """dict saham -> ndarray bool sejajar bar: True jika saham itu ahli universe bulan bar tersebut. Peraturan A02 dikira ke
+    hadapan: pada hari dagangan terakhir bulan m -- tutup > USD 10, median 60 hari (tutup x volum) >= USD 1 juta dengan >= 50
+    bar sah, >= 200 bar; 2,000 teratas ikut median; berkuat kuasa bulan m + 1. kal = kalendar sesi (DatetimeIndex)."""
+    tick = sorted(fr)
+    kal = pd.DatetimeIndex(kal).sort_values()
+    c = pd.DataFrame({t: fr[t].close for t in tick}).reindex(kal).to_numpy(float)
+    dv = c * pd.DataFrame({t: fr[t].volume for t in tick}).reindex(kal).to_numpy(float)
+    bar = np.cumsum(~np.isnan(c), axis=0)
+    per = kal.to_period('M')
+    ahli = {}
+    for p in np.flatnonzero(np.append(per[1:] != per[:-1], True)):
+        win = dv[max(0, p - TET_NILAI + 1):p + 1]
+        sah = (~np.isnan(win)).sum(axis=0)
+        with warnings.catch_warnings():
+            warnings.simplefilter('ignore')
+            med = np.nanmedian(win, axis=0)
+        with np.errstate(invalid='ignore'):
+            ok = (c[p] > HARGA_MIN) & (med >= NILAI_MIN) & (bar[p] >= BAR_MIN) & (sah >= TET_SAH)
+        ix = np.flatnonzero(ok)
+        b = per[p] + 1
+        ahli[b.year * 100 + b.month] = set(ix[np.argsort(-med[ix], kind='stable')][:N_ALAM].tolist())
+    out = {}
+    for j, t in enumerate(tick):
+        ym = np.asarray(fr[t].index.year * 100 + fr[t].index.month)
+        out[t] = np.isin(ym, [b for b, a in ahli.items() if j in a])
+    return out
+
+
+def _sesi_stor(stor):
+    return int(pd.read_csv(os.path.join(stor, 'harga_idx.csv'), usecols=['date']).date.max())
+
+
+def tarik_harga(ke, alam=None, rujukan=STOR, tarik=None):
+    """Harga 3 tahun semua saham alam + SPY / QQQ (Yahoo, konvensyen stor) -> folder `ke` dalam format stor. Bar selepas
+    sesi terakhir stor repo (`rujukan`) dibuang. Gagal (SystemExit) jika < LIPUTAN_MIN saham alam ada bar pada hari itu."""
+    sys.path.insert(0, os.path.join(BS2, 'standard'))
+    import harga_yf as H
+    tarik = tarik or H.muat_turun
+    tk = baca_alam(alam)
+    D = _sesi_stor(rujukan)
+    d, gagal = tarik(tk + list(H.IDX), period=TEMPOH_HARGA)
+    if gagal:                                                    # cubaan kedua bagi yang tiada data (had kadar Yahoo)
+        d2, gagal = tarik(sorted(gagal), period=TEMPOH_HARGA)
+        d = pd.concat([d, d2], ignore_index=True)
+    d = d[d.date <= D].drop_duplicates(['ticker', 'date']).sort_values(['ticker', 'date'])
+    ix = d[d.ticker.isin(H.IDX)]
+    s = d[d.ticker.isin(set(tk))]
+    ada = int(s[s.date == D].ticker.nunique())
+    os.makedirs(ke, exist_ok=True)
+    L = ['ticker', 'date', 'open', 'high', 'low', 'close', 'volume']
+    s[L].to_csv(os.path.join(ke, 'harga_A.csv'), index=False, float_format='%.6g')
+    s.iloc[:0][L].to_csv(os.path.join(ke, 'harga_B.csv'), index=False)
+    ix[L].to_csv(os.path.join(ke, 'harga_idx.csv'), index=False, float_format='%.6g')
+    st = dict(dijana=pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%M UTC'), sesi=D, alam=len(tk), ada_data=int(s.ticker.nunique()),
+              ada_sesi=ada, tiada_data=sorted(set(tk) - set(s.ticker))[:200])
+    json.dump(st, open(os.path.join(ke, 'status.json'), 'w'), indent=1)
+    print(f"harga semua saham: sesi {D}; {st['ada_data']} daripada {len(tk)} ada data; {ada} ada bar sesi itu")
+    if set(ix[ix.date == D].ticker) != set(H.IDX):
+        raise SystemExit(f'harga semua saham: SPY / QQQ tiada bar sesi {D}')
+    if ada < LIPUTAN_MIN * len(tk):
+        raise SystemExit(f'harga semua saham: liputan {ada} / {len(tk)} < {LIPUTAN_MIN:.0%}; tiada isyarat ditulis')
+    return st
+
+
+def tarik_kalendar(stor, ke, alam=None, tarik=None):
+    """Kalendar laporan Nasdaq bagi semua saham alam seperti diketahui sekarang, rujukan D - 1 hari (D = sesi terakhir
+    `stor`): `seterusnya` = laporan terawal pada / selepas D. Gagal (SystemExit) jika mana-mana hari tetingkap ralat."""
+    sys.path.insert(0, os.path.join(BS2, 'standard'))
+    if tarik is None:
+        import pemangkin_actions as PA
+        tarik = PA.tarik_nasdaq
+    D = _d(_sesi_stor(stor))
+    nas = tarik(D - timedelta(days=1), simpan=set(baca_alam(alam)), ke_belakang=KAL_BELAKANG, ke_hadapan=KAL_HADAPAN)
+    nas = dict(dijana=pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%M UTC'), sesi=_i(D), **nas)
+    json.dump(nas, open(ke, 'w', encoding='utf-8'), ensure_ascii=False)
+    print(f"kalendar semua saham: sesi {_i(D)}; {len(nas.get('saham') or {})} saham; hari ralat {nas.get('hari_ralat')}")
+    if nas.get('hari_ralat') or not nas.get('saham'):
+        raise SystemExit(f"kalendar semua saham: tidak lengkap ({nas.get('hari_ralat')} hari ralat); tiada isyarat ditulis")
+    return nas
+
+
 # ---------- kohort ----------
 def bina_kohort():
     import cs_audit19 as a19
@@ -184,14 +298,16 @@ def bina_kohort():
             a.update(jenis='P')
         ahli.append(a)
     os.makedirs(KELUAR, exist_ok=True)
-    json.dump({'spec': SPEC, 'kawalan': KW1, 'stop': '4xATR14', 'ahli': ahli}, open(os.path.join(KELUAR, 'kohort.json'), 'w'),
+    json.dump({'spec': SPEC, 'alam': TEKS_ALAM[True], 'kawalan': KW1, 'stop': '4xATR14', 'ahli': ahli}, open(os.path.join(KELUAR, 'kohort.json'), 'w'),
               indent=1, ensure_ascii=False)
     print(f'kohort: {len(ahli)} ahli ->', os.path.join(KELUAR, 'kohort.json'))
 
 
 # ---------- panel stor + prasyarat pasaran ----------
-def panel(fr, idx):
-    pan = atom.bina(fr, idx, 'hadapan')
+def panel(fr, idx, topeng=None):
+    """topeng (dict saham -> bool setiap bar, `topeng_bulanan`): alam semua saham -- layak = >= 252 bar DAN ahli universe
+    bulan itu (seperti backtest). Tanpa topeng: cara lama (stor Shariah; tutup >= USD 10 dan nilai dagangan >= USD 1 juta)."""
+    pan = atom.bina(fr, idx, 'hadapan' if topeng is None else 'alam', topeng)
     hu = np.unique(pan['tarikh'])
     pan['hari'], pan['hari_unik'] = np.searchsorted(hu, pan['tarikh']), hu
     pan['akhir'] = pan['mula'][pan['tid'] + 1]
@@ -390,7 +506,8 @@ def kemas_arkib(nas, D, direkod):
     return akhir
 
 
-def jejak(stor=STOR, keluar=None, pemangkin=PEMANGKIN, direkod=None):
+def jejak(stor=STOR, keluar=None, pemangkin=PEMANGKIN, direkod=None, kalendar=None, semua=False, alam=None):
+    """semua=True (pindaan (af)): `stor` = folder `tarik_harga` (semua saham alam), `kalendar` = fail `tarik_kalendar`."""
     global KELUAR
     if keluar:
         KELUAR = keluar
@@ -398,10 +515,15 @@ def jejak(stor=STOR, keluar=None, pemangkin=PEMANGKIN, direkod=None):
     Kh = json.load(open(os.path.join(KELUAR, 'kohort.json'), encoding='utf-8'))
     ahli = Kh['ahli']
     fr, idx = lama.muat_stor(stor)
-    pan = panel(fr, idx)
+    topeng = None
+    if semua:
+        dalam = set(baca_alam(alam))
+        fr = {t: g for t, g in fr.items() if t in dalam}
+        topeng = topeng_bulanan(fr, idx['SPY'].index)
+    pan = panel(fr, idx, topeng)
     hu = pan['hari_unik']
     PM, PC = pasaran_stor(pan, idx), pencetus_semua(pan, fr, idx, ahli)
-    KE, K, nas = muat_kalendar(pemangkin)
+    KE, K, nas = muat_kalendar(pemangkin, kalendar)
     direkod = direkod or pd.Timestamp.now('UTC').strftime('%Y-%m-%d %H:%M')
     H = baca('hari.csv', L_HARI)
     siap = set(H.tarikh.astype(int)) if len(H) else set()
@@ -421,8 +543,12 @@ def jejak(stor=STOR, keluar=None, pemangkin=PEMANGKIN, direkod=None):
                [dict(tarikh=int(hu[h]), lewat=lewat, isyarat=sum(1 for x in S if x[1] != KW1), kawalan=sum(1 for x in S if x[1] == KW1),
                      direkod=direkod)])
     L = nilai(pan)
-    lapor(pan, PM, Kh, L)
-    print(f"papertrade gred A: harga hingga {int(hu[-1])}; hari diproses {len(baca('hari.csv', L_HARI))}; "
+    p_st = os.path.join(stor, 'status.json')
+    st = json.load(open(p_st)) if semua and os.path.exists(p_st) else {}
+    layak = int((pan['calon'] & (pan['hari'] == akhir_h)).sum())
+    lapor(pan, PM, Kh, L, TEKS_ALAM[bool(semua)] + f'; saham layak hari ini: {layak}'
+          + (f"; harga diperoleh bagi {st['ada_sesi']} daripada {st['alam']} saham" if st else ''))
+    print(f"papertrade gred A ({'semua saham' if semua else 'stor Shariah'}; layak {layak}): harga hingga {int(hu[-1])}; hari diproses {len(baca('hari.csv', L_HARI))}; "
           f"isyarat {int((L.id != KW1).sum()) if len(L) else 0}; kawalan {int((L.id == KW1).sum()) if len(L) else 0}")
 
 
@@ -517,7 +643,7 @@ def unik(L):
     return L[(L.id != KW1) & (L.diambil.astype(str) == '1')].drop_duplicates(['saham', 'tarikh_isyarat'])
 
 
-def lapor(pan, PM, Kh, L):
+def lapor(pan, PM, Kh, L, alam_teks=TEKS_ALAM[False]):
     try:
         sys.path.insert(0, os.path.join(BS2, 'standard'))
         import status_kad
@@ -585,10 +711,31 @@ def lapor(pan, PM, Kh, L):
           '- Cara B = pegang sekurang-kurangnya 20 sesi, kemudian jual selepas tutup di bawah purata 20 hari (paling lama 126 sesi). '
           'Cara 50 = yang sama dengan purata 50 hari, tiada had masa. Stop loss 4×ATR14 pada kedua-duanya; kos 0.5 %.',
           '- Dagangan yang belum ditutup dinilai pada harga tutup terkini; cara yang sama bagi saham rawak.',
-          '- Tarikh laporan = seperti diketahui pada hari isyarat (`isyarat.csv`, tidak pernah dikira semula). Alam: stor harga (senarai Shariah semasa).',
+          f'- Tarikh laporan = seperti diketahui pada hari isyarat (`isyarat.csv`, tidak pernah dikira semula). Alam: {alam_teks}.',
           '- Kebanyakan setup hanya aktif dalam keadaan pasaran tertentu dan pada musim laporan kewangan; hari tanpa belian adalah biasa.', '']
     open(os.path.join(KELUAR, 'RINGKASAN.md'), 'w', encoding='utf-8').write('\n'.join(A))
 
 
+def main(argv=None):
+    ap = argparse.ArgumentParser()
+    ap.add_argument('arahan', choices=['kohort', 'harga', 'kalendar', 'jejak'])
+    ap.add_argument('--stor', help='folder harga semua saham (hasil `harga`)')
+    ap.add_argument('--kalendar', help='fail kalendar semua saham (hasil `kalendar`)')
+    ap.add_argument('--ke', help='destinasi `harga` (folder) atau `kalendar` (fail)')
+    a = ap.parse_args(argv)
+    if a.arahan == 'kohort':
+        bina_kohort()
+    elif a.arahan == 'harga':
+        tarik_harga(a.ke)
+    elif a.arahan == 'kalendar':
+        tarik_kalendar(a.stor, a.ke)
+    elif a.stor:
+        if not a.kalendar:
+            ap.error('jejak --stor memerlukan --kalendar')
+        jejak(stor=a.stor, kalendar=a.kalendar, semua=True)
+    else:
+        jejak()
+
+
 if __name__ == '__main__':
-    {'kohort': bina_kohort, 'jejak': jejak}[sys.argv[1]]()
+    main()

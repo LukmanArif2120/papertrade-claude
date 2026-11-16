@@ -2733,6 +2733,102 @@ class TestCS19(unittest.TestCase):
             h19.KELUAR = asal
             shutil.rmtree(d, ignore_errors=True)
 
+    def test_alam_semua_saham(self):
+        """Pindaan (af): senarai alam, topeng universe bulanan (peraturan A02 dikira ke hadapan, tanpa pandang hadapan), pintu
+        harga dan kalendar, gabungan kalendar, dan jejak(semua=True) hujung ke hujung."""
+        import shutil
+        import tempfile
+        from datetime import date, timedelta
+        import cs_hadapan19 as h19
+        A = h19.baca_alam()
+        self.assertEqual((len(A), len(set(A)), A == sorted(A)), (3260, 3260, True))
+        self.assertTrue({'AAPL', 'BRK.B', 'NVDA'} <= set(A) and not any('-' in t for t in A))
+        self.assertEqual((h19.N_ALAM, h19.HARGA_MIN, h19.NILAI_MIN, h19.BAR_MIN, h19.TET_NILAI, h19.TET_SAH, h19.LIPUTAN_MIN),
+                         (2000, 10.0, 1e6, 200, 60, 50, 0.9))
+        self.assertEqual((h19.KAL_BELAKANG, h19.KAL_HADAPAN, h19.TEMPOH_HARGA), (6, 24, '3y'))
+        self.assertEqual(atom.TEMPOH['alam'], (('H', 20261117, 20991231),))
+        self.assertIn('(af)', h19.SPEC)
+        tick = ['AAA', 'BBB', 'CCC', 'DDD']
+        fr = {t: _saham(420, 30 + k) for k, t in enumerate(tick)}
+        kal = fr['AAA'].index
+        luar = {'MUR': fr['AAA'] * [0.1, 0.1, 0.1, 0.1, 10.0],            # tutup ~USD 5 (nilai dagangan sama)
+                'SEP': fr['BBB'].assign(volume=100.0),                    # nilai dagangan kecil
+                'BARU': fr['CCC'].iloc[-150:]}                            # < 200 bar
+        tp = h19.topeng_bulanan({**fr, **luar}, kal)
+        self.assertFalse(tp['MUR'].any() or tp['SEP'].any() or tp['BARU'].any())
+        per = kal.to_period('M')
+        akhir = np.flatnonzero(np.append(per[1:] != per[:-1], True))
+        b = per[akhir[akhir >= 199][0]] + 1                               # hujung bulan pertama dengan >= 200 bar -> bulan berikutnya
+        for t in tick:
+            self.assertTrue((tp[t] == (np.asarray(kal.year * 100 + kal.month) >= b.year * 100 + b.month)).all(), t)
+        tp2 = h19.topeng_bulanan({t: g.iloc[:380] for t, g in fr.items()}, kal[:380])     # tiada pandang hadapan
+        for t in tick:
+            self.assertTrue((tp2[t] == tp[t][:380]).all(), t)
+        n_asal, asal = h19.N_ALAM, h19.KELUAR
+        d = tempfile.mkdtemp()
+        try:
+            h19.N_ALAM = 2
+            self.assertEqual(sum(int(v[-1]) for v in h19.topeng_bulanan(fr, kal).values()), 2)      # hanya 2 teratas
+            h19.N_ALAM = n_asal
+            ruj, ke, pem, kel = (os.path.join(d, x) for x in ('ruj', 'harga', 'pem', 'jejak'))
+            for x in (ruj, pem, kel):
+                os.makedirs(x)
+            alam = os.path.join(d, 'alam.txt')
+            open(alam, 'w').write('\n'.join(tick) + '\n')
+            L = ['ticker', 'date', 'open', 'high', 'low', 'close', 'volume']
+            pj = lambda dd, n: pd.concat([g.iloc[:n].assign(ticker=t, date=g.index[:n].strftime('%Y%m%d').astype(int))
+                                          for t, g in dd.items()])[L]
+            idx = {'QQQ': _saham(420, 91), 'SPY': _saham(420, 92)}
+            pj(idx, 418).to_csv(os.path.join(ruj, 'harga_idx.csv'), index=False)          # stor repo: D = bar ke-418
+            semua = pj({**fr, **idx, 'LUAR': _saham(420, 77)}, 420)
+            D = kal[417]
+
+            def tarik(tk, period):
+                x = semua[semua.ticker.isin(tk)]
+                return x, sorted(set(tk) - set(x.ticker))
+
+            def kurang(tk, period):
+                x = semua[semua.ticker.isin(tk) & ~semua.ticker.isin(['CCC', 'DDD'])]
+                return x, sorted(set(tk) - set(x.ticker))
+            st = h19.tarik_harga(ke, alam=alam, rujukan=ruj, tarik=tarik)
+            self.assertEqual((st['sesi'], st['ada_sesi'], st['alam']), (int(D.strftime('%Y%m%d')), 4, 4))
+            self.assertEqual(int(pd.read_csv(os.path.join(ke, 'harga_A.csv')).date.max()), st['sesi'])      # bar selepas D dibuang
+            with self.assertRaises(SystemExit):                                           # 2 daripada 4 < 90 %
+                h19.tarik_harga(os.path.join(d, 'h2'), alam=alam, rujukan=ruj, tarik=kurang)
+            R = (D + pd.offsets.BDay(3)).strftime('%Y-%m-%d')
+            pg = {}
+
+            def nasdaq(hari_ini, simpan=None, ke_belakang=0, ke_hadapan=0):
+                pg.update(hari_ini=hari_ini, kb=ke_belakang, kh=ke_hadapan)
+                return {'hari_ralat': pg.get('ralat', 0),
+                        'saham': {t: {'seterusnya': R, 'seterusnya_masa': 'time-pre-market'} for t in sorted(simpan)}}
+            kf = os.path.join(d, 'kal.json')
+            h19.tarik_kalendar(ke, kf, alam=alam, tarik=nasdaq)
+            self.assertEqual((pg['hari_ini'], pg['kb'], pg['kh']), (D.date() - timedelta(days=1), 6, 24))
+            pg['ralat'] = 1
+            with self.assertRaises(SystemExit):                                           # kalendar tidak lengkap
+                h19.tarik_kalendar(ke, os.path.join(d, 'k2.json'), alam=alam, tarik=nasdaq)
+            json.dump({'saham': {'AAA': {'seterusnya': '2099-01-05', 'seterusnya_masa': 'time-after-hours'}}},
+                      open(os.path.join(pem, 'earnings_nasdaq.json'), 'w'))
+            _, K, nas = h19.muat_kalendar(pem, kf)
+            self.assertEqual(nas['AAA']['seterusnya'], R)                                 # kalendar semua saham mengatasi repo
+            self.assertTrue(date.fromisoformat(R) in K['BBB'] and date(2099, 1, 5) in K['AAA'])
+            json.dump({'spec': 'ujian', 'kawalan': 'KW1', 'ahli': [dict(id='X1', pencetus='K01.003', jenis='K', fs=[], pasaran=[],
+                                                                       syarikat=['QF01'])]}, open(os.path.join(kel, 'kohort.json'), 'w'))
+            h19.jejak(stor=ke, keluar=kel, pemangkin=pem, direkod='ujian', kalendar=kf, semua=True, alam=alam)
+            I = pd.read_csv(os.path.join(kel, 'isyarat.csv'))
+            self.assertEqual(sorted(I[I.id == 'KW1'].saham), tick)                        # semua layak; laporan 3 sesi lagi
+            self.assertEqual(set(I.tarikh_isyarat), {st['sesi']})
+            self.assertIn('semua saham alam backtest', open(os.path.join(kel, 'RINGKASAN.md'), encoding='utf-8').read())
+            open(alam, 'w').write('AAA\nBBB\n')                                         # saham di luar alam.txt tidak masuk
+            for f in ('isyarat.csv', 'hari.csv', 'kalendar_dilihat.csv'):
+                os.remove(os.path.join(kel, f))
+            h19.jejak(stor=ke, keluar=kel, pemangkin=pem, direkod='ujian', kalendar=kf, semua=True, alam=alam)
+            self.assertEqual(sorted(pd.read_csv(os.path.join(kel, 'isyarat.csv')).saham.unique()), ['AAA', 'BBB'])
+        finally:
+            h19.N_ALAM, h19.KELUAR = n_asal, asal
+            shutil.rmtree(d, ignore_errors=True)
+
     def test_kohort_dikunci(self):
         import cs_audit19 as a19
         d = os.path.join(SINI, '..', 'jejak_f2')

@@ -23,7 +23,7 @@ jobs:
   jejak:
     if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 75
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,15 +32,24 @@ jobs:
         with:
           python-version: '3.11'
       - name: Pasang pakej
-        run: pip install -q -c kekangan.txt -r requirements.txt
+        run: pip install -q -c kekangan.txt -r requirements.txt yfinance
       - name: Jejak kohort F
         run: python3 BacktestShariah2/kajian/carian_setup/cs_hadapan.py jejak
       # Papertrade 29 setup gred A (pindaan 16 Nov 2026 (ae) Bahagian D): log isyarat tambah-sahaja + kalendar laporan
       # seperti diketahui hari itu. Kegagalannya tidak menyekat komit penjejak lama; langkah akhir menggagalkan larian.
+      # Alam = SEMUA saham alam backtest, bukan senarai Shariah (pindaan 17 Nov 2026 (af)): harga 3 tahun bagi 3,260 saham
+      # ditarik segar dari Yahoo ke folder sementara (TIDAK dikomit) dan kalendar laporan Nasdaq ditarik bagi semua saham.
+      # Liputan harga < 90 % atau kalendar tidak lengkap = langkah gagal, tiada isyarat ditulis (hari itu diisi kemudian
+      # sebagai lewat).
       - name: Papertrade gred A
         id: greda
         continue-on-error: true
-        run: python3 BacktestShariah2/kajian/carian_setup/cs_hadapan19.py jejak
+        timeout-minutes: 50
+        run: |
+          H="$RUNNER_TEMP/harga_semua"
+          python3 BacktestShariah2/kajian/carian_setup/cs_hadapan19.py harga --ke "$H"
+          python3 BacktestShariah2/kajian/carian_setup/cs_hadapan19.py kalendar --stor "$H" --ke "$H/kalendar.json"
+          python3 BacktestShariah2/kajian/carian_setup/cs_hadapan19.py jejak --stor "$H" --kalendar "$H/kalendar.json"
       - name: Commit dan push
         run: |
           git config user.name "jejak-f[bot]"
@@ -58,5 +67,5 @@ jobs:
       - name: Gagal jika papertrade gred A gagal
         if: steps.greda.outcome == 'failure'
         run: |
-          echo "cs_hadapan19.py jejak gagal (lihat langkah Papertrade gred A)." >&2
+          echo "Papertrade gred A gagal (harga semua saham, kalendar atau jejak; lihat langkah Papertrade gred A)." >&2
           exit 1

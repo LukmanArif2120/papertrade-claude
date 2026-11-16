@@ -1531,6 +1531,16 @@ Pindaan ini MENGGANTIKAN butir "Alam dan kelayakan" Bahagian D pindaan (ae) dan 
   Jun 27, September 36, Disember 24); 300 belian lengkap dijangka dicapai lebih awal daripada jangkaan pindaan (ae).
 - **Wang sebenar:** tiada. Apabila wang sebenar dipertimbangkan, tapisan Shariah dikenakan semula dengan keputusan pengguna
   berasingan; bacaan papertrade ini ialah bacaan pada semua saham, bukan pada senarai Shariah.
+- **Pembetulan angka jangkaan (17 Nov 2026, sebelum bermula):** "1,680 setahun" di atas terkurang kira-kira 5 %, kerana
+  enjin backtest hanya menjana isyarat separuh alam (kumpulan A) hingga 2024. Dikira pada 2010–2024 sahaja (kedua-dua
+  separuh lengkap): **kira-kira 1,760 belian unik setahun**, 93 % dalam bulan laporan (purata Oktober 405, Mac 40, Jun 27,
+  September 38, Disember 24). Kesimpulan tidak berubah.
+- **Semakan mekanik sebelum bermula (data backtest sebagai ganti muat turun; BUKAN papertrade):** topeng universe ke hadapan
+  lawan universe A02 — 2,000 daripada 2,000 sama pada September dan Oktober 2026 (bulan lebih lama berbeza ≤ 12 saham, iaitu
+  saham yang berpecah songsang selepas itu); syarat pasaran 12 kod ahli sama pada 20 daripada 20 hari (13 Jul – 7 Ogo 2026);
+  isyarat 29 ahli pada separuh alam yang enjin menjana untuk 2026 (kumpulan B): 303 daripada 307 sama, tiada isyarat
+  tambahan. Muat turun Yahoo dan kalendar Nasdaq sebenar hanya boleh berjalan di GitHub (kedua-duanya disekat dalam sesi
+  Claude), jadi larian pertama di `main` ialah ujian pertama bahagian itu; kegagalannya tidak menulis isyarat.
 
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
