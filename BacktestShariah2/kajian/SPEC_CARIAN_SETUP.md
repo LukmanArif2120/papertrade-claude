@@ -1493,6 +1493,45 @@ Maya; tiada order; bukan Lejar; tidak dinilai kad skor. Penjejak lama (`jejak_f/
   yang tiada dalam stor ketika dinilai = `TIADA_DATA`. Larian kering mekanik pada 31 Ogos – 13 Nov 2026 dengan kalendar hari
   ini (hasil dalam `SERAHAN_CARIAN_SETUP.md` §9t) dibuat untuk menguji kod; ia BUKAN papertrade dan tidak masuk bacaan.
 
+### Pindaan 17 Nov 2026 (af) — papertrade gred A pada SEMUA saham alam backtest (bukan senarai Shariah sahaja)
+
+**Keputusan pengguna 17 Nov 2026** (kata pengguna: "kita bukan beli betul betul lagi. yg penting sekarang kita nak backtest
+then papertrade utk melihat keberkesanan method method ni semua dahulu. so x perlu shariah lagi sekarang"). Terpakai pada
+backtest DAN papertrade setup F sehingga pengguna menyatakan sebaliknya (lanjutan arahan 16 Nov 2026 dalam pindaan (z)).
+Ditulis SEBELUM mana-mana isyarat papertrade wujud: `jejak_f2/` hanya mengandungi `kohort.json` dan penjejak belum berada di
+`main`, jadi tiada data papertrade yang dilihat ketika alam ditukar.
+
+Pindaan ini MENGGANTIKAN butir "Alam dan kelayakan" Bahagian D pindaan (ae) dan menambah sumber data; yang lain kekal.
+
+- **Alam:** `jejak_f2/alam.txt` = 3,260 saham alam backtest A02 (senarai tetap, ejaan ticker stor). Saham yang hanya menjadi
+  cair selepas November 2026 tidak masuk; saham yang tidak lagi didagangkan gugur dengan sendirinya (tiada data).
+- **Kelayakan = peraturan universe A02, dikira ke hadapan** (`cs_hadapan19.topeng_bulanan`): pada hari dagangan terakhir bulan
+  m — tutup > USD 10, median 60 hari (tutup × volum) ≥ USD 1 juta dengan ≥ 50 bar sah, ≥ 200 bar; 2,000 teratas ikut median
+  itu; berkuat kuasa sepanjang bulan m + 1. Ditambah ≥ 252 bar sejarah (seperti enjin backtest). TIADA syarat harga harian
+  tambahan (penjejak Shariah lama memakai tutup ≥ USD 10 dan purata 20 hari ≥ USD 1 juta setiap hari; backtest tidak).
+  Beza yang diketahui daripada A02: tutup di sini dilaras split sahaja (A02 memakai tutup mentah) — berbeza hanya bagi saham
+  yang berpecah selepas hari itu; calon terhad kepada 3,260 saham di atas.
+- **Harga:** Yahoo melalui `standard/harga_yf.muat_turun` (konvensyen stor: `auto_adjust=False`), 3 tahun, dimuat turun SEGAR
+  setiap larian ke folder sementara pelari. **Tidak dikomit** (saiz repo); `lejar.csv` tetap dijana semula sepenuhnya setiap
+  larian daripada muat turun itu. Bar selepas sesi terakhir stor repo dibuang, supaya hari D sama dengan penjejak lama dan
+  tiada bar separa. **Pintu liputan:** ≥ 90 % saham alam mesti ada bar pada hari D; jika tidak, larian gagal, tiada isyarat
+  ditulis, dan hari itu diisi kemudian dengan `lewat = 1` (dikecualikan daripada bacaan, seperti sedia ada).
+- **Tarikh laporan kewangan (seperti diketahui hari itu):** kalendar repo (senarai Shariah, seperti sebelum ini) DITAMBAH
+  kalendar Nasdaq bagi semua saham alam, ditarik semasa larian (`standard/pemangkin_actions.tarik_nasdaq`, rujukan D − 1 hari,
+  tetingkap −6 hingga +24 hari). Ralat tarikan pada mana-mana hari tetingkap = larian gagal (tiada isyarat ditulis daripada
+  kalendar yang tidak lengkap). Arkib `kalendar_dilihat.csv` kini meliputi semua saham alam.
+- **Prasyarat keluasan pasaran** dikira atas saham layak alam ini — kini takrif yang sama dengan backtest (butir "BUKAN alam
+  A02" dalam pindaan (ae) tidak lagi terpakai).
+- **Tidak berubah:** 29 ahli dan takrifnya, kawalan `KW1`, asas "saham rawak hari sama × tercile ATR %" (kini antara semua
+  saham layak alam), mekanik, dua cara pegang, ukuran, log tambah-sahaja, dan bacaan dikunci P1–P4 pada ≥ 300 belian unik
+  dengan tetingkap 20 sesi lengkap. Penjejak lama `jejak_f/` (8 setup) kekal pada stor Shariah. Lejar, Papertrade C, kad
+  skor dan dashboard tidak disentuh.
+- **Yang dijangka (ditulis sebelum bermula; kiraan backtest 2010–2026 pada semua 3,260 saham):** kira-kira 1,680 belian unik
+  setahun (senarai Shariah: 574), masih tertumpu pada bulan laporan kewangan (92 % belian; purata Oktober 370, Mac 40,
+  Jun 27, September 36, Disember 24); 300 belian lengkap dijangka dicapai lebih awal daripada jangkaan pindaan (ae).
+- **Wang sebenar:** tiada. Apabila wang sebenar dipertimbangkan, tapisan Shariah dikenakan semula dengan keputusan pengguna
+  berasingan; bacaan papertrade ini ialah bacaan pada semua saham, bukan pada senarai Shariah.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan
