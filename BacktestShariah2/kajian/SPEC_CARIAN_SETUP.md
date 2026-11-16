@@ -1386,6 +1386,100 @@ berubah, dan bilangan "menepati semua DAN A4b" dilaporkan di sebelahnya.
 keputusan pemilihan yang dibuat pada kumpulan B; kekonsistenan laporan lain dengan pindaan (p) (lajur `menang`
 `registry_F.csv`/`KADAR_MENANG.md` lawan `KEDUDUKAN_AKHIR.csv`); keadaan kohort jejak hadapan dan mesin.
 
+### Pindaan 16 Nov 2026 (ae) — pusingan CS19: AUDIT BEBAS senarai utama, lajur "jatuh" dan "lawan rawak", mod tanpa intai, dan PAPERTRADE gred A
+
+Permintaan pengguna 16 Nov 2026: "saya ada hak untuk merasa ragu-ragu dengan method ... anda menjadi juru audit ... check one by
+one ... top 300 ... check betul-betul". Selepas hasil audit dibentang, keputusan pengguna 16 Nov 2026 ("1. ya 2.ya 3.ya tapi utk
+berapa method F ya kalau papertrade?"): (1) simpan audit dalam repo dan tambah lajur "Jatuh", "Menang lawan rawak" dan "Gred"
+di dashboard; (2) baiki "intai buka esok" sebelum papertrade; (3) mula papertrade (maya) setup gred A. Jawapan Claude kepada
+"berapa": **29 setup** (kesemua gred A dalam 300 teratas).
+
+**Kejujuran urutan (WAJIB dibaca):** Bahagian A di bawah SUDAH dijalankan sebelum pindaan ini ditulis (kerja audit dalam chat,
+skrip sementara). Takrif gred ditulis dalam sesi itu SEBELUM angka setiap setup dilihat, tetapi tidak dikomit dahulu; maka
+Bahagian A ialah AUDIT dan gred ialah LABEL MAKLUMAT, bukan ujian dikunci dan bukan bukti. Bahagian B, C dan D ditulis di sini
+SEBELUM dilaksanakan; tiada data papertrade kohort baharu yang wujud ketika pindaan ini dikomit.
+
+**Bahagian A — audit bebas (kod `carian_setup/cs_audit19.py`, keluaran `hasil/CS19/`).** Bukan carian; tiada kod F baharu;
+`registry_F.csv`, `hasil/CS13/`, `hasil/CS16/` dan kohort lama tidak diubah. Tiada tapisan Shariah (arahan pengguna).
+
+- **A1 kiraan semula bebas.** Modul audit mengira sendiri, daripada harga mentah Release `autotune-data-a02` dan tanpa
+  mengimport kernel enjin (`cs_teras`, `cs_semak11`, `cs_tala7`): bar layak, harga beli (buka esok), label, asas saham rawak
+  hari sama × tercile ATR %, peraturan satu posisi, dan cara pegang B. Isyarat beli (pencetus, penapis, prasyarat) diambil
+  daripada penjana enjin; bagi 7 setup contoh isyarat juga ditulis semula secara bebas. **Pariti wajib:** bilangan belian,
+  `m5`, `terus`, bilangan dagangan B, kadar menang B dan purata B setiap setup senarai utama mesti menyamai
+  `hasil/CS13/senarai_utama.csv` (beza ≤ 0.0005; bilangan sama tepat); setup yang pencetusnya tidak dapat dijana semula
+  ditanda "tidak diaudit" dan dilaporkan.
+- **A2 ujian "tengok masa depan".** (i) pemotongan: isyarat atas data penuh lawan data yang dipotong pada dua tarikh (40 saham)
+  bagi 656 ahli keluarga K, atom `P`/`F`/`X` dan setiap modul benih M/N yang dipakai; (ii) "tanpa intai": modul benih
+  dijalankan dengan `open.shift(negatif)` dipaksa kosong (lihat Bahagian C) dan setup terkesan dikira semula.
+- **A3 ukuran baharu setiap setup (kumpulan B, satu posisi setiap saham):**
+  `j5` = tutup sesi ke-5 ≤ 0.95 × harga beli ("jatuh ≥ 5 % minggu pertama"), cermin kepada `m5`; `arah` = (`m5` − asas) −
+  (`j5` − asas); `r5x` / `r20x` = purata pulangan 5 / 20 sesi tolak asas; kadar menang, purata dan bahagian rugi ≥ 15 % cara
+  pegang B **lawan saham rawak hari sama × tercile ATR yang dibeli dan dipegang dengan cara yang sama** (`menangx`, `puratax`,
+  `rugix`); semuanya juga setiap tempoh (K1, K2, K3). Stop loss: bahagian dagangan yang harganya melompat melepasi paras
+  ("stop lompat") dan purata ruginya. `esok` = bahagian belian yang dibuat selepas laporan keluar (`hingga` = 1).
+- **A4 gred (label maklumat).** `rapuh` = gagal S1, S3 atau S5 takrif SOLID CS16 (pindaan (z)); `arah3` = `arah` > 0 dalam
+  K1, K2 DAN K3; `atas_rawak` = `menangx` > 0 DAN `puratax` > 0 keseluruhan; `atas_rawak_K3` = yang sama pada K3 (≥ 20
+  dagangan). **D** jika `rapuh`; **A** jika SOLID (CS16) DAN `arah3` DAN `atas_rawak` DAN `atas_rawak_K3`; **B** jika `arah3`
+  ATAU (`atas_rawak` DAN `atas_rawak_K3`); selainnya **C**. Nota: `x` bukan prasyarat laporan kewangan, `k` prasyarat
+  kalendar (bulan / hari), `i` modul pencetus memakai buka esok, `h` gagal S5, `y` gagal S3, `t` gagal S1.
+- **A5 gabungan.** Belian unik (satu posisi setiap saham) bagi kumpulan setup (300 teratas, setiap gred, 30 teratas) dan
+  tiga kawalan tanpa isyarat beli: semua bar layak dengan laporan dalam 1–5 sesi; laporan esok; laporan 2–5 sesi lagi.
+- **A6 semakan kestabilan** (dilaporkan): korelasi pangkat kelebihan antara tempoh; adakah setup yang "baik dahulu"
+  (`arah`, `menangx`, `puratax` > 0 dalam K1 dan K2) lebih baik pada K3.
+- **Had yang dinyatakan:** gred memakai K3, jadi angka K3 gred A bukan bukti; alam A02 tiada saham delist; 2025–26 sudah
+  menjadi syarat lulus CS13 (bukan lagi tempoh tidak dilihat bagi setup berdaftar).
+
+**Bahagian B — paparan.** `standard/f_utama_db.py` menambah lajur audit (jatuh ≥ 5 %, asasnya, kadar menang dan purata saham
+rawak yang dipegang sama, gred + nota) daripada `hasil/CS19/audit.csv.gz`; halaman Setup F memaparkannya. Susunan senarai utama,
+tapisan "pilihan" dan tanda Solid TIDAK diubah.
+
+**Bahagian C — mod "tanpa intai".** 60 daripada 134 modul `AUTOTUNE/kaedah/M*.py` (dan salinan `kod/kaedah/`) memakai
+`open.shift(-1)` untuk membatalkan isyarat apabila harga buka esok ≤ paras stop kaedah (atau ≥ sasaran): maklumat itu belum
+wujud pada tutup hari isyarat. Modul kaedah TIDAK diubah (ia sumber kebenaran kaedah M dan dipakai Lejar, Papertrade C dan
+AUTOTUNE). Pembaikan di laluan F sahaja: `cs_cari.tanpa_intai()` (pengurus konteks yang memaksa `Series 'open'.shift(negatif)`
+menjadi kosong) dan parameter `kausal` pada penjana benih. **Lalai kekal `kausal=False`** supaya pusingan CS01–CS18 dapat
+dijana semula sama seperti dahulu; **setiap pusingan baharu dan penjejak kohort baharu WAJIB memakai `kausal=True`.** Angka
+berdaftar setup terkesan tidak ditulis ganti; kesannya dilaporkan dalam `hasil/CS19/AUDIT.md`.
+
+**Bahagian D — papertrade kohort "gred A" (penjejak baharu `carian_setup/cs_hadapan19.py` → `BacktestShariah2/jejak_f2/`).**
+Maya; tiada order; bukan Lejar; tidak dinilai kad skor. Penjejak lama (`jejak_f/`, 8 setup, pindaan (f)) tidak disentuh.
+
+- **Ahli (29, dikunci):** `F421`, `F1057`, `F1033`, `F200`, `F1247`, `F1448`, `F1285`, `F668`, `F833`, `F1030`, `F571`,
+  `F1288`, `F203`, `F479`, `F694`, `F1589`, `F363`, `F1207`, `F1539`, `F1347`, `F733`, `F263`, `F1564`, `F1583`, `F1354`,
+  `F706`, `F742`, `F557`, `F707`. Takrif = `registry_F.csv` (pencetus | penapis | stop loss 4×ATR14 | prasyarat).
+- **Kawalan (bukan setup; untuk bandingan sahaja):** `KW1` = setiap saham layak yang laporannya dalam 1–5 sesi, tanpa isyarat
+  beli (satu posisi setiap saham); asas rawak = purata semua saham layak hari itu dalam tercile ATR % yang sama.
+- **Alam dan kelayakan:** stor harga repo (senarai Shariah semasa), ≥ 252 bar, tutup ≥ USD 10, purata nilai dagangan 20 hari
+  ≥ USD 1 juta (sama seperti penjejak lama). Prasyarat keluasan dikira atas saham layak stor (BUKAN alam A02): perbezaan ini
+  diukur sekali atas data backtest dan dilaporkan.
+- **Tarikh laporan kewangan = seperti DIKETAHUI pada hari isyarat:** kalendar repo (`standard/kalendar_earnings.py`,
+  `data/pemangkin/earnings_nasdaq.json`; tarikh "seterusnya" yang dipercayai). Sesi tindak balas = hari laporan, atau sesi
+  berikutnya jika masa laporan "selepas tutup". `hingga` = bilangan sesi NYSE (hari bekerja tolak cuti pasaran) dari hari
+  isyarat ke sesi tindak balas; prasyarat benar jika 1 ≤ `hingga` ≤ 5.
+- **Log isyarat tambah-sahaja (`jejak_f2/isyarat.csv`):** setiap larian hanya menambah isyarat bagi hari harga TERAKHIR dalam
+  stor (belian belum berlaku), bersama tarikh laporan yang dipakai. Baris yang sudah ditulis tidak dikira semula. Hari yang
+  terlepas diisi kemudian dengan tanda `lewat = 1` dan DIKECUALIKAN daripada bacaan utama. Mula: hari harga pertama selepas
+  penjejak ini berada di `main` (tiada isian ke belakang yang dikira).
+- **Mekanik (sama seperti senarai utama):** beli pada buka sesi berikutnya; stop loss = harga beli − 4 × ATR14 hari isyarat
+  (harga melompat: jual pada buka); tiada jualan pada hari beli. Dua cara pegang direkod sebelah-menyebelah bagi setiap
+  belian: **B** (mulai tutup sesi ke-20, jual pada buka esok selepas tutup < purata 20 hari; had 126 sesi) dan **50** (yang
+  sama dengan purata 50 hari, tiada had masa). Cara pegang RASMI diputuskan pengguna (keputusan 16 Nov 2026: "diputuskan
+  apabila papertrade dimulakan"); sehingga itu kedua-duanya dilaporkan. Kos 0.5 % pergi balik. Isyarat benih M dikira
+  dengan `kausal=True`.
+- **Ukuran (setiap setup, gabungan belian unik kohort, dan `KW1`; hanya isyarat tidak lewat):** tangkap (`terus`), naik ≥ 5 %
+  dan jatuh ≥ 5 % minggu pertama, masing-masing lawan asas rawak (tetingkap 20 sesi lengkap); kadar menang dan purata setiap
+  cara pegang bagi dagangan yang sudah ditutup, lawan saham rawak hari sama yang dipegang sama.
+- **Bacaan dikunci (dibuat SEKALI, apabila gabungan kohort mencapai ≥ 300 belian unik dengan tetingkap 20 sesi lengkap):**
+  (P1) kelebihan tangkap > 0; (P2) `arah` > 0; (P3) kadar menang cara B − saham rawak dipegang sama > 0; (P4) `arah` kohort >
+  `arah` `KW1` ("isyarat beli menambah di atas laporan sahaja"). Keempat-empat dilaporkan walau apa pun hasilnya. Sebelum 300
+  belian, RINGKASAN memaparkan angka dengan label "belum cukup". Tiada wang sebenar walau apa pun bacaan: setup F yang lulus
+  masih perlu keputusan pengguna + integrasi Lejar + kad skor.
+- **Yang dijangka (ditulis sebelum bermula):** 14 ahli memerlukan "rejim OFF baharu (≤ 10 sesi)" dan 5 memerlukan "Mei–Okt",
+  jadi kebanyakan ahli tidak aktif pada November 2026; belian tertumpu pada musim laporan (akhir Januari, April, Julai,
+  Oktober). Bacaan dikunci dijangka paling awal selepas 1–2 musim laporan.
+- **Jangan ubah `jejak_f2/kohort.json` atau buang baris `isyarat.csv` tanpa pindaan bertarikh.**
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan
