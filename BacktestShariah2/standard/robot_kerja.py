@@ -240,7 +240,9 @@ def bina(masa=None, larian=None, robot_claude=None, mingguan=None, ulang_jam=24)
     # pengejut penjaga: penjaga_jadual dicetus tangan tepat pada minit :20 jam jadualnya
     cetus = [r for r in ikut.get('penjaga_jadual.yml', [])
              if r[3] == 'workflow_dispatch' and r[0][14:16] in ('20', '21') and int(r[0][11:13]) in (5, 6, 12, 14, 22, 23)]
-    sejak = min((r[0] for v in ikut.values() for r in v), default=None)
+    # kiraan larian hanya dalam tetingkap petikan (larian lama yang disimpan sebagai 'terakhir' tidak dikira)
+    tingkap = iso((snap or masa) - timedelta(days=int((larian or {}).get('hari') or 4)))
+    sejak = min((r[0] for v in ikut.values() for r in v if r[0] >= tingkap), default=None)
 
     # tetingkap ulang tayang: 24 jam (03:00-03:00 MYT) paling sibuk
     ulang = None
@@ -278,7 +280,7 @@ def bina(masa=None, larian=None, robot_claude=None, mingguan=None, ulang_jam=24)
                           for r in semua if dalam(r) and r[2] not in ('skipped', 'in_progress')]
             k = {}
             for r in semua:
-                if r[2] != 'in_progress':
+                if r[2] != 'in_progress' and r[0] >= tingkap:
                     k[r[2]] = k.get(r[2], 0) + 1
             d['kiraan'] = k
         else:

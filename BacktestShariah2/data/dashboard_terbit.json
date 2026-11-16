@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794804187-90d8",
-  "nombor": 214,
-  "sha256": "6408acd4ccb080f9e860556aa542943cf12ea8874f6d405dde14d3d7975f9f63",
-  "bait": 875463,
-  "dikemas": "2026-11-16 04:43 UTC",
-  "nota": "v183 (16 Nov 2026, keputusan pengguna \"v3 dan C ... tab kiri, satu khas utk robot\"): tab Robot (pejabat 3D, 27 kerja automatik, robot gaya C)"
+  "versi_artifact": "1794806882-0778",
+  "nombor": 216,
+  "sha256": "df5cb1cd47256eb774c00987e25107fe28ceaae757fcc607eaa0a2e8a5d70b6c",
+  "bait": 878160,
+  "dikemas": "2026-11-16 05:28 UTC",
+  "nota": "v183 (16 Nov 2026): tab Robot; tanda siapa buat; pejabat 3D memenuhi lebar penuh (bilik disebar ikut lebar skrin)"
 }
