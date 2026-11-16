@@ -2185,6 +2185,176 @@ class TestCS17(unittest.TestCase):
         self.assertFalse(reg.iloc[:, 0].astype(str).str.match(r'^T\d+$').any())
 
 
+class TestCS18(unittest.TestCase):
+    """SPEC pindaan 16 Nov 2026 (ab): "ujian solid" bagi lorong "pegang berbulan-bulan" (T)."""
+
+    def _pan(self, n_saham=6, n=700, benih=18):
+        rng = np.random.default_rng(benih)
+        N = n_saham * n
+        c = np.concatenate([40 * np.exp(np.cumsum(rng.normal(0.001, 0.035, n))) for _ in range(n_saham)])
+        o = c * (1 + rng.normal(0, 0.008, N))
+        lo = np.minimum(o, c) * (1 - np.abs(rng.normal(0, 0.01, N)))
+        hari = pd.bdate_range('2015-01-02', periods=n)
+        return dict(o=o, l=lo, c=c, atr=c * rng.uniform(0.02, 0.06, N), mula=np.arange(0, N + 1, n), tid=np.repeat(np.arange(n_saham), n),
+                    hari=np.tile(np.arange(n), n_saham), sah=np.ones(N, bool),
+                    tarikh=np.tile((hari.year * 10000 + hari.month * 100 + hari.day).to_numpy().astype(np.int32), n_saham),
+                    tempoh=np.tile(np.where(np.arange(n) < 300, 0, np.where(np.arange(n) < 450, 1, 2)).astype(np.int8), n_saham))
+
+    def test_dikunci(self):
+        import cs_solid16 as s16
+        import cs_solid18 as s18
+        self.assertEqual((s18.MIN_N, s18.MIN_TAHUN, s18.MIN_K3, s18.KL_MIN), (300, 10, 20, 0.03))
+        self.assertEqual((s18.THN_MIN_N, s18.THN_MIN_BIL, s18.THN_BAHAGIAN, s18.BUANG_HARI, s18.KL_BAKI), (15, 8, 0.70, 10, 0.01))
+        self.assertEqual((s18.ADIK_MAKS, s18.ADIK_MIN_N, s18.ADIK_MIN_BIL, s18.ADIK_BAHAGIAN), (30, 100, 3, 0.60))
+        self.assertEqual((s18.TAMBAH_MIN, s18.S8_BAHAGIAN, s18.JACCARD, s18.B1_MAKS, s18.B2_BEZA, s18.RUGI), (0.01, 0.5, 0.50, 0.05, 0.10, 0.15))
+        self.assertEqual((s18.LABEL, s18.MAKLUMAT, s18.Q_HASIL, s18.Q_TARIKH), (('besar', 'besar100', 'tb'), ('menang', 'rugi15', 'purata'), 13, s16.Q_TARIKH))
+        # takrif sama bentuk dengan ujian solid setup F
+        for k in ('MIN_N', 'MIN_TAHUN', 'MIN_K3', 'KL_MIN', 'THN_MIN_N', 'THN_MIN_BIL', 'THN_BAHAGIAN', 'BUANG_HARI', 'KL_BAKI', 'ADIK_MAKS',
+                  'ADIK_MIN_N', 'ADIK_MIN_BIL', 'ADIK_BAHAGIAN', 'TAMBAH_MIN', 'S8_BAHAGIAN', 'JACCARD', 'B1_MAKS', 'B2_BEZA'):
+            self.assertEqual(getattr(s18, k), getattr(s16, k), k)
+
+    def test_asas_menyamai_kiraan_naif(self):
+        import cs_solid18 as s18
+        import cs_trend17 as t17
+        import cs_trend8 as t8
+        pan = self._pan()
+        S8, Lab, As, Mk, Am, SK = s18.asas18(pan)
+        S8b, V, L8, G = t8.label_v(pan)
+        sah = np.flatnonzero(S8)
+        self.assertTrue((S8 == S8b).all() and 0 < len(sah) < len(pan['c']))
+        self.assertTrue(np.allclose(Lab[:, 0], L8[:, 0]) and np.allclose(As[:, 0], V[:, 1]) and np.allclose(Lab[:, 1], L8[:, 1]))
+        self.assertTrue((Lab[~S8] == 0).all() and (Mk[~S8] == 0).all())
+        R, sk = t17.pegang(pan, sah)
+        self.assertTrue(np.allclose(Mk[sah, 2], R) and (SK[sah] == sk).all())
+        self.assertTrue(((Mk[sah, 0] == 1) == (R > 0)).all() and ((Mk[sah, 1] == 1) == (R <= -0.15)).all() and ((Lab[sah, 2] == 1) == (R >= 0.30)).all())
+        for i in sah[::97]:                                                      # asas = purata kumpulan hari x tercile ATR yang sama
+            q = sah[G[sah] == G[i]]
+            self.assertAlmostEqual(As[i, 2], float((R[np.searchsorted(sah, q)] >= 0.30).mean()), 12)
+            self.assertAlmostEqual(Am[i, 0], float((R[np.searchsorted(sah, q)] > 0).mean()), 12)
+            self.assertAlmostEqual(Am[i, 2], float(R[np.searchsorted(sah, q)].mean()), 12)
+            self.assertAlmostEqual(Am[i, 1], float((R[np.searchsorted(sah, q)] <= -0.15).mean()), 12)
+
+    def test_ukur_menyamai_cs17_dan_kiraan_naif(self):
+        import cs_solid18 as s18
+        import cs_trend17 as t17
+        import cs_trend8 as t8
+        pan = self._pan()
+        A = s18.asas18(pan)
+        S8, V, L8, _ = t8.label_v(pan)
+        ev = np.flatnonzero(S8)[::3]
+        d, e = s18.ukur18(pan, A, ev)
+        d17, e17 = t17.ukur(pan, V, L8, ev)
+        self.assertTrue((e == e17).all() and d['n'] == d17['n'] and d['n'] < len(ev))
+        for a, b in (('besar', 'besar'), ('a_besar', 'a_besar'), ('kl_besar', 'kl'), ('besar100', 'besar100'), ('a_besar100', 'a_besar100'),
+                     ('tb', 'tb'), ('menang', 'menang'), ('rugi15', 'rugi15'), ('purata', 'purata'), ('median', 'median'), ('pegang', 'pegang'),
+                     ('kl_K1', 'kl_K1'), ('kl_K2', 'kl_K2'), ('kl_K3', 'kl_K3')):
+            self.assertAlmostEqual(d[a], d17[b], 6, a)
+        x = A[1][e, 0] - A[2][e, 0]
+        thn = pan['tarikh'][e] // 10000
+        cukup = [t for t in np.unique(thn) if (thn == t).sum() >= s18.THN_MIN_N]
+        self.assertEqual((d['thn_bil'], d['thn_pos']), (len(cukup), sum(x[thn == t].sum() > 0 for t in cukup)))
+        hari = pan['hari'][e]
+        jh = {h: x[hari == h].sum() for h in np.unique(hari)}
+        buang = sorted(jh, key=lambda h: -jh[h])[:s18.BUANG_HARI]
+        kekal = ~np.isin(hari, buang)
+        self.assertAlmostEqual(d['kl_baki'], float(x[kekal].mean()), 9)
+        self.assertLess(d['kl_baki'], d['kl_besar'])
+        self.assertAlmostEqual(d['a_menang'], float(A[4][e, 0].mean()), 12)
+        self.assertEqual(s18.ukur18(pan, A, np.zeros(0, np.int64))[0]['n'], 0)
+
+    def test_syarat(self):
+        import cs_solid18 as s18
+        baik = dict(n=300, tahun=10, n_K3=20, kl_besar=0.03, kl_K1=0.01, kl_K2=0.02, kl_K3=0.001, thn_bil=10, thn_pos=7, kl_besar100=0.001,
+                    kl_tb=0.002, kl_baki=0.01)
+        self.assertEqual(s18.syarat(baik), dict(s1=True, s2=True, s3=True, s4=True, s5=True))
+        for ubah, gagal in ((dict(n=299), 's1'), (dict(n_K3=19), 's1'), (dict(kl_besar=0.0299), 's2'), (dict(kl_K2=-0.001), 's2'),
+                            (dict(kl_K3=float('nan')), 's2'), (dict(thn_pos=6), 's3'), (dict(thn_bil=7, thn_pos=7), 's3'),
+                            (dict(kl_besar100=0.0), 's4'), (dict(kl_tb=-0.01), 's4'), (dict(kl_baki=0.0099), 's5'),
+                            (dict(kl_baki=float('nan')), 's5')):
+            s = s18.syarat(dict(baik, **ubah))
+            self.assertFalse(s[gagal], ubah)
+            self.assertTrue(all(v for k, v in s.items() if k != gagal), ubah)
+
+    def test_senarai_pendek_dan_bacaan(self):
+        import cs_solid18 as s18
+        U = pd.DataFrame({'id_T': ['T13', 'T14', 'T15', 'T16'], 'solid': [True, True, True, False], 'boleh_dibuat': [True, True, False, True],
+                          'besar': [0.30, 0.25, 0.40, 0.50], 'kl_besar': [0.1, 0.1, 0.1, 0.1]})
+        beli = {'T13': np.arange(0, 100), 'T14': np.arange(40, 140), 'T15': np.arange(200, 300), 'T16': np.arange(0, 100)}
+        w = s18.wakil(U, beli)                                                   # T14 bertindih 60/140 = 0.43 < 0.5: kekal wakil
+        self.assertEqual(w, {'T13': '', 'T14': '', 'T15': ''})
+        beli['T14'] = np.arange(20, 120)                                         # 80/120 = 0.67: serupa dengan T13
+        self.assertEqual(s18.wakil(U, beli), {'T13': '', 'T14': 'T13', 'T15': ''})
+        asas = dict(s1=True, s2=True, s3=True, s4=True, s5=True, s7=True)
+        T = pd.DataFrame([dict(asas, jenis='calon', q2=13, solid=True)] * 3 + [dict(asas, jenis='calon', q2=13, solid=False)] * 7
+                         + [dict(asas, jenis='calon', q2=-1, solid=False)] * 10
+                         + [dict(asas, jenis='K1', q2=3, solid=True)] + [dict(asas, jenis='K1', q2=3, solid=False)] * 19
+                         + [dict(asas, jenis='K2', q2=13, solid=True)] * 3 + [dict(asas, jenis='K2', q2=13, solid=False)] * 17)
+        B = s18.bacaan(T)
+        self.assertEqual((B['n_calon'], B['solid_calon'], B['n_K1'], B['solid_K1'], B['n_K2'], B['solid_K2']), (20, 3, 20, 1, 20, 3))
+        self.assertTrue(B['b1'])                                                 # 5 % <= 5 %
+        self.assertAlmostEqual(B['nasib'], 0.05 / 0.15)
+        self.assertAlmostEqual(B['kadar_calon_hasil'], 0.3)
+        self.assertTrue(B['b2'])                                                 # 30 % >= 15 % + 10 mata
+        T.loc[T.jenis == 'K2', 'solid'] = [True] * 5 + [False] * 15
+        self.assertFalse(s18.bacaan(T)['b2'])                                    # 30 % < 25 % + 10 mata
+
+    def test_fail_hasil(self):
+        """Fail hasil CS18 konsisten sesama sendiri dan dengan senarai lorong T (CS17) + papan CS08; tiada yang lain diubah."""
+        import cs_solid18 as s18
+        asas = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil')
+        d = os.path.join(asas, 'CS18')
+        with open(os.path.join(d, 'bacaan.json'), encoding='utf-8') as f:
+            B = json.load(f)
+        U = pd.read_csv(os.path.join(d, 'solid_t.csv.gz'))
+        Kw = pd.read_csv(os.path.join(d, 'kawalan.csv'))
+        Pr = pd.read_csv(os.path.join(d, 'prasyarat.csv'))
+        S17 = pd.read_csv(os.path.join(asas, 'CS17', 'senarai_t.csv')).set_index('id')
+        P8 = pd.read_csv(os.path.join(asas, 'CS08', 'papan.csv')).set_index('id')
+        self.assertEqual((len(U), B['n_t'], B['n_baharu'], B['n_lama'], B['lama_gagal']), (2576, 2576, len(S17), len(P8), []))
+        self.assertEqual(set(U.id), set(S17.index) | set(P8.index))
+        self.assertEqual(set(U.id[U.asal == 'lama']), set(P8.index))
+        g = U.set_index('id')
+        # pariti: angka sama dengan senarai CS17 (fail ini 4 titik perpuluhan)
+        for a, b in (('besar', 'besar'), ('a_besar', 'a_besar'), ('kl_besar', 'kl'), ('besar100', 'besar100'), ('tb', 'tb'), ('menang', 'menang'),
+                     ('purata', 'purata'), ('rugi15', 'rugi15'), ('kl_K3', 'kl_K3'), ('tambah', 'tambah')):
+            self.assertTrue(np.allclose(g.loc[S17.index, a], S17[b], atol=6e-5, equal_nan=True), a)
+        self.assertTrue((g.loc[S17.index, 'n'] == S17.n).all())
+        self.assertTrue(np.allclose(g.loc[P8.index, 'a_besar'], P8.a_besar, atol=6e-4))      # papan lama: asas hampir sama (T11 stop loss lain)
+        # takrif SOLID dikira semula daripada lajur syarat
+        semula = U.s1 & U.s2 & U.s3 & U.s4 & U.s5 & U.s7 & (U.s6 != 'gagal')
+        self.assertTrue((semula == U.solid).all())
+        self.assertEqual((int(U.solid.sum()), int(U.wakil.sum()), int((U.solid & (U.asal == 'lama')).sum())), (B['solid_t'], B['wakil'], B['solid_lama']))
+        self.assertTrue((U.wakil <= U.solid).all() and (U[U.solid & ~U.wakil].serupa_dengan.fillna('') != '').all())
+        self.assertTrue(set(U[U.solid & ~U.wakil].serupa_dengan) <= set(U[U.wakil].id))
+        self.assertTrue((U.boleh_dibuat == (~U.tarikh | U.s8)).all())
+        hampir = (U.rugi15 - U.a_rugi15).abs() < 6e-5
+        self.assertTrue(((U.rugi_ok == (U.rugi15 <= U.a_rugi15)) | hampir).all())
+        self.assertEqual(int((U.solid & U.rugi_ok).sum()), B['solid_rugi_ok'])
+        s = U[U.solid]
+        self.assertTrue((s.n >= s18.MIN_N).all() and (s.tahun >= s18.MIN_TAHUN).all() and (s.n_K3 >= s18.MIN_K3).all())
+        self.assertTrue((s.kl_besar >= s18.KL_MIN - 6e-5).all() and (s[['kl_K1', 'kl_K2', 'kl_K3']] >= 0).all().all())
+        self.assertTrue((s.thn_bil >= s18.THN_MIN_BIL).all() and (s.thn_pos >= s18.THN_BAHAGIAN * s.thn_bil - 1e-9).all())
+        self.assertTrue((s.kl_besar100 >= 0).all() and (s.kl_tb >= 0).all() and (s.kl_baki >= s18.KL_BAKI - 6e-5).all())
+        self.assertTrue((s.tambah.isna() | (s.tambah >= s18.TAMBAH_MIN - 6e-5)).all())
+        self.assertTrue((U.besar100 <= U.besar + 1e-9).all() and np.allclose(U.kl_besar, U.besar - U.a_besar, atol=2e-4))
+        # senarai disusun: solid yang berbeza dahulu, ikut kadar naik besar
+        w = U[U.wakil]
+        self.assertTrue(U.wakil.iloc[:len(w)].all() and (w[w.boleh_dibuat].besar.diff().dropna() <= 1e-9).all())
+        # kawalan dan bacaan dikunci
+        self.assertEqual((len(Kw[Kw.jenis == 'K1']), len(Kw[Kw.jenis == 'K2']), B['n_K1'], B['n_K2']), (300, 300, 300, 300))
+        self.assertTrue((Kw[Kw.jenis == 'K2'].q2 == s18.Q_HASIL).all())
+        self.assertEqual((int(Kw[Kw.jenis == 'K1'].solid.sum()), int(Kw[Kw.jenis == 'K2'].solid.sum())), (B['solid_K1'], B['solid_K2']))
+        self.assertEqual(B['b1'], B['kadar_K1'] <= s18.B1_MAKS)
+        self.assertEqual(B['b2'], B['kadar_calon_hasil'] >= B['kadar_K2'] + s18.B2_BEZA)
+        self.assertTrue(B['b1'] and B['b2'])                                     # dapatan yang dilaporkan
+        self.assertAlmostEqual(B['nasib'], B['kadar_K1'] / B['kadar_calon'], 5)
+        self.assertEqual(int(Pr.solid_s1_s5.sum()), B['prasyarat_solid'])
+        # tiada yang lain diubah: kod T kekal 2,564 + 12; registry F tiada kod T
+        self.assertEqual((len(S17), len(P8)), (2564, 12))
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'))
+        self.assertFalse(reg.iloc[:, 0].astype(str).str.match(r'^T\d+$').any())
+
+
 class TestJenisTrend(unittest.TestCase):
     """SPEC pindaan 16 Nov 2026 (w): tinjauan jenis dan tempoh trend menaik (zigzag ATR; deskriptif)."""
 

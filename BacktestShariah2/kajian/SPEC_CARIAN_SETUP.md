@@ -1225,6 +1225,62 @@ besar (rawak hari sama 14.1 %), menang 42 %, rugi ≥ 15 % 45 %, purata +5.8 %; 
   lorong ini rugi ≥ 15 % (CS08); beribu calon disemak pada kumpulan B, jadi sebahagian lulus kerana nasib (anggaran dilaporkan);
   kelebihan lawan rawak hari sama mengukur PILIHAN saham; pangkat backtest, BUKAN bukti.
 
+### Pindaan 16 Nov 2026 (ab) — pusingan CS18: "UJIAN SOLID" bagi lorong "pegang berbulan-bulan" (T) (sebelum dijalankan)
+
+Keputusan pengguna 16 Nov 2026 ("ya untuk 1 dan 2"; soalan 2: "Buat 'ujian solid' bagi 2,564 setup ini, seperti setup F?").
+Sebab: dalam CS17 peraturan rawak lulus 34 % dan anggaran bahagian nasib 40 %, jadi "lulus" sahaja tidak cukup untuk memilih.
+Bukan carian baharu: peraturan masuk tidak diubah, tiada kod T baharu, tiada tapisan Shariah (arahan pengguna). Kod
+`carian_setup/cs_solid18.py`; keluaran `hasil/CS18/`. Takrif sengaja SAMA bentuk dengan CS16 (pindaan (z)) supaya "solid"
+bermakna perkara yang sama dalam kedua-dua lorong; hanya sasaran dan mekanik ditukar kepada lorong T.
+
+**Had yang diketahui sebelum menulis:** 2,564 setup `T13`–`T2576` sudah dipilih dengan kumpulan B (lulus K1, K2, K3), jadi
+tapisan lanjut pada kumpulan B ialah pemilihan DALAM sampel; sebab itu kadar lulus kawalan rawak dilaporkan bagi takrif yang
+sama. Yang sudah dilihat sebelum menulis ambang: ringkasan CS17 (nilai tengah kelebihan +6.0 mata, `tambah` +5.1 mata, saiz
+sampel: 86 % ≥ 300 belian, 98 % ≥ 20 belian pada 2025–26). Ambang di bawah disalin daripada CS16, bukan ditala kepada CS17.
+
+- **Yang dinilai (kumpulan B, semua saham; mekanik lorong T: satu posisi setiap saham, pegang 126 sesi + stop loss
+  6 × ATR14, tiada jualan lain; asas = saham rawak hari sama × tercile ATR):** 5,105 calon CS17 (2,564 daripadanya berkod
+  `T13`–`T2576`), 12 setup papan lama `T01`–`T12` (peraturan dipadankan semula daripada teks `hasil/CS08/papan.csv`; mesti
+  menyamai bilangan belian dan kadar `besar` papan itu, jika tidak ia ditinggalkan dan dilaporkan), 300 kawalan rawak CS17
+  (K1), 300 "kawalan hasil tumbuh" (K2 = kawalan yang sama dengan prasyarat syarikat diganti `QF06` hasil suku terkini
+  tumbuh ≥ 20 %), dan setiap gabungan prasyarat yang dipakai calon TANPA isyarat beli atau syarat saham.
+- **Tiga angka lorong ini (daripada 100 belian, lawan saham rawak hari sama):** `besar` (tutup mencapai ≥ +50 % dalam 126
+  sesi sebelum mana-mana tutup ≤ −15 %; kayu ukur utama); `besar100` (yang sama dengan +100 %); `tb` (dagangan DIJUAL dengan
+  untung ≥ +30 %). Asas `tb` = saham rawak hari sama × tercile ATR yang dibeli dan dipegang dengan mekanik yang sama.
+- **Lajur maklumat baharu (BUKAN syarat SOLID):** kadar menang, purata setiap dagangan dan bahagian rugi ≥ 15 %, masing-masing
+  lawan saham rawak hari sama yang dipegang dengan cara sama; tanda `rugi_ok` = bahagian rugi ≥ 15 % tidak melebihi saham
+  rawak hari sama.
+- **Takrif SOLID-T (semua mesti benar):**
+  - S1 cukup belian: ≥ 300 belian, ≥ 10 tahun aktif, ≥ 20 belian pada 2025–26.
+  - S2 kelebihan jelas: kelebihan `besar` atas rawak ≥ +3 mata keseluruhan DAN > 0 dalam K1, K2, K3.
+  - S3 tahun demi tahun: kelebihan `besar` > 0 dalam ≥ 70 % tahun kalendar yang ada ≥ 15 belian; sekurang-kurangnya 8 tahun
+    sedemikian.
+  - S4 tiga angka lorong: kelebihan atas rawak > 0 bagi `besar`, `besar100` DAN `tb`.
+  - S5 tidak bergantung pada beberapa hari: selepas membuang 10 hari beli yang paling banyak menyumbang kepada kelebihan
+    `besar`, kelebihan yang tinggal ≥ +1 mata.
+  - S6 tahan ubah parameter: daripada "adik-beradik" (varian parameter LAIN bagi keluarga isyarat beli yang sama, dengan
+    prasyarat dan syarat saham yang sama; hingga 30, dipilih sekata ikut susunan nama; hanya yang ≥ 100 belian), ≥ 60 %
+    mempunyai kelebihan `besar` > 0. Kurang daripada 3 adik-beradik = "tidak diuji" (ditanda, tidak menggagalkan). Dikira
+    hanya bagi yang lulus syarat lain.
+  - S7 menambah di atas prasyarat: kelebihan `besar` setup − kelebihan `besar` "prasyarat sahaja" yang sama ≥ +1 mata
+    (setup tanpa prasyarat: tidak berkenaan, lulus).
+- **Boleh dibuat (S8; dilaporkan, menentukan tanda "boleh dibuat"):** setup yang memakai tarikh laporan kewangan AKAN DATANG
+  (`QF01`, `QF04`) dinilai semula dengan tarikh DITEKA (`cs_solid16.ramal_earnings`: suku sama tahun lepas + 364 hari); lulus
+  jika kelebihan `besar` > 0 DAN ≥ separuh kelebihan asal. Prasyarat lain (termasuk `QF06`) hanya memakai maklumat lampau.
+- **Senarai pendek (S9):** antara setup SOLID-T yang berkod T, disusun ("boleh dibuat" dahulu, kemudian kadar `besar`), buang
+  yang beliannya bertindih ≥ 50 % (Jaccard) dengan setup yang sudah dipilih → "wakil".
+- **Bacaan dikunci:** (B1, takrif boleh dipercayai) kawalan rawak K1 yang lulus SOLID-T ≤ 5 %; (B2, isyarat beli menambah di
+  atas prasyarat utama lorong ini) calon ber-`QF06` yang lulus SOLID-T ≥ kadar K2 + 10 mata. Kedua-duanya dilaporkan walau
+  apa pun hasilnya; anggaran bahagian nasib = kadar K1 ÷ kadar calon.
+- **Pariti wajib:** bilangan belian, `besar` dan kelebihan setiap calon mesti menyamai `hasil/CS17/calon.csv.gz`.
+- **Tiada yang diubah:** `registry_F.csv`, `hasil/CS17/` (senarai dan kod T), `hasil/CS08/papan.csv`, kohort, dashboard.
+  Tanda `solid`, `wakil`, `boleh_dibuat` ditulis dalam `hasil/CS18/solid_t.csv.gz` sahaja. "Solid" = paling tahan uji dalam
+  backtest, BUKAN bukti; tiada papertrade tanpa keputusan pengguna.
+- **Tambahan sebelum dijalankan (16 Nov 2026, semasa menulis kod; belum ada hasil dilihat):** `T11` dalam papan CS08 memakai
+  stop loss −20 %, bukan 6 × ATR14. Semakan padanan semula (bilangan belian dan kadar `besar` sama dengan papan) dibuat dengan
+  stop loss papan itu sendiri; penilaian SOLID-T bagi kesemua 12 setup lama memakai mekanik lorong (6 × ATR14) seperti setup
+  lain, dan ini dinyatakan dalam laporan.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan
