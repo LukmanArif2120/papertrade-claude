@@ -1281,6 +1281,111 @@ sampel: 86 % ≥ 300 belian, 98 % ≥ 20 belian pada 2025–26). Ambang di bawah
   stop loss papan itu sendiri; penilaian SOLID-T bagi kesemua 12 setup lama memakai mekanik lorong (6 × ATR14) seperti setup
   lain, dan ini dinyatakan dalam laporan.
 
+### Pindaan 14 Nov 2026 (ac) — analisis PENGESAHAN "higher high baru entry" (diminta pengguna; sebelum dijalankan) [dibawa ke `main` 16 Nov 2026]
+
+**Nota nama (16 Nov 2026):** pindaan ini ditulis dan dikomit SEBELUM dijalankan pada 14 Nov 2026 sebagai "pindaan (r)" di cawangan
+`claude/dreamy-lovelace-38z7wm` (komit `9d76ab7e`; hasil komit `706e383d`). Cawangan itu tidak pernah digabung, dan `main`
+kemudian memakai huruf (r) untuk pusingan CS09. Atas keputusan pengguna 16 Nov 2026 ("ya ya tidak": selamatkan dua laporan
+lama dengan nama baharu) ia dibawa ke `main` sebagai **(ac)**. Kandungan peraturan di bawah TIDAK berubah; hasil
+(`hasil/PENGESAHAN.md|csv`, 14 Nov 2026) TIDAK dijana semula. Yang dibawa bersama: parameter `px` (harga beli khas) pada
+kernel `cs_keluar7.sedia` / `sedia_pan` (lalai = buka bar beli; tingkah laku sedia ada tidak berubah, diuji).
+
+Pengguna 14 Nov 2026: seorang pakar berkata "tunggu confirmation signals baru beli, contohnya higher high baru entry"; "cuba kaji
+dan analisa ... memang standard practice pakar-pakar saham ke? possible untuk integrate dalam F". Ini analisis, bukan carian:
+tiada setup dipilih daripadanya. Kod `carian_setup/cs_sahkan.py`; keluaran `hasil/PENGESAHAN.md|csv`; amalan pakar dan sumber
+dalam `kajian/KAJIAN_PENGESAHAN.md`.
+
+- **(1) Amalan pakar:** ringkasan sumber awam (aliran pecah tinggi/ikut trend lawan aliran beli semasa lemah), dengan pautan.
+- **(2) Gaya masuk dalam ruang carian sedia ada** (656 varian keluarga K, kumpulan B, pencetus SAHAJA tanpa prasyarat atau
+  penapis): kelebihan kadar tangkap atas rawak hari sama bagi `terus` (swing) dan `besar` (trend), dikumpul ikut gaya — beli
+  semasa lemah (`K01`, `K03`, `K06`, `K18`); pengesahan pembalikan (`K02`, `K04`, `K13`, `K24`); undur dalam uptrend (`K17`,
+  `K22`); pengesahan kekuatan / higher high (`K05`, `K07`–`K12`, `K14`–`K16`, `K19`, `K20`, `K23`, `K25`); lain (`K21`).
+- **(3) Lapisan pengesahan atas setup F** (69 setup kedudukan akhir; kumpulan B; isyarat dijarakkan ≥ 24 bar setiap saham
+  supaya ketiga-tiga cara menilai isyarat yang SAMA): **V0** beli pada buka esok; **S1** "tutup sahkan" = tutup pertama di atas
+  tinggi hari isyarat dalam 3 sesi → beli pada buka berikutnya; **S2** "pecah tinggi" = buy-stop pada tinggi hari isyarat,
+  terisi pada max(buka, tinggi hari isyarat) dalam 3 sesi; tiada pengesahan = tiada belian. Semua ukuran dari harga beli
+  SEBENAR (`m5`, `terus`, tangkap penuh, menang, rugi ≥ 8 %, purata), henti dan keluar setup sendiri, pegang minimum (p).
+- **Bacaan dikunci:** satu cara "menolong" jika kadar `terus` DAN tangkap penuh lebih tinggi daripada V0 bagi lebih separuh
+  setup dipercayai. Turut dilaporkan: % isyarat yang dibeli, premium harga beli, bilangan tangkapan mutlak (kadar × belian),
+  dan hasil V0 bagi isyarat yang kemudian disahkan lawan yang tidak.
+- Jika menolong: dicadangkan sebagai lapisan pilihan keluarga F melalui pindaan berasingan; jika tidak: direkod sebagai dapatan.
+- Kaveat: S2 mengandaikan tiada gelinciran; prasyarat dinilai pada hari isyarat; kumpulan B sudah dilihat; tiada saham delist.
+
+### Pindaan 14 Nov 2026 (ad) — AUDIT proses menjana F lawan standard dan matlamat (diminta pengguna; sebelum dijalankan) [dibawa ke `main` 16 Nov 2026]
+
+**Nota nama (16 Nov 2026):** ditulis dan dikomit SEBELUM dijalankan pada 14 Nov 2026 sebagai "pindaan (u)" di cawangan
+`claude/dreamy-lovelace-38z7wm` (komit `0b03bfa0`; hasil komit `7df7082c`); `main` kemudian memakai huruf (u) untuk CS12.
+Dibawa ke `main` sebagai **(ad)** atas keputusan pengguna yang sama. Kandungan peraturan TIDAK berubah. `hasil/AUDIT_F.md|csv`,
+`AUDIT_earnings.csv` dan `AUDIT_meta.json` ialah REKOD 14 Nov 2026: **95 setup berdaftar ketika itu**; `F96`–`F2054` (CS13)
+didaftarkan kemudian dan tidak diaudit (tarikh laporan diteka bagi senarai utama diukur semula dalam CS16, S8). Yang TIDAK
+dibawa dari cawangan itu: semakan peringkat akaun (pindaan (s) lama; kayu ukur yang pengguna tolak), mesin lorong trend
+(pindaan (t) lama; kod sahaja), dan "keluar ikut kata pengguna" (pindaan (v), (w) lama; diganti CS14 di `main`).
+
+Pengguna 14 Nov 2026, selepas menolak ("belum lagi") gabung ke `main` dan papertrade: "cuba recheck sekali lagi proses
+generate F method kita, menepati semua standard ke? dan matlamat saya?" **Apa yang sudah dilihat:** semua hasil hingga
+pindaan (t) cawangan lama [di `main`: (a)–(q), analisis pengesahan (ac), dan dua pindaan cawangan lama yang TIDAK dibawa ke
+`main`: (s) semakan peringkat akaun dan (t) mesin lorong trend]. Audit ini BUKAN pusingan carian: tiada setup baharu, tiada kod F baharu, tiada perubahan pada pangkat,
+`registry_F.csv` atau `jejak_f/kohort.json`. Kod `carian_setup/cs_audit.py` → `hasil/AUDIT_F.md`, `AUDIT_F.csv`,
+`AUDIT_earnings.csv`.
+
+**Bahagian A — matriks pematuhan setiap baris `registry_F.csv`** (senarai semak dikunci di sini):
+
+| Kod | Semakan | Sumber |
+|---|---|---|
+| A1 | ada prasyarat (≥ 1 kod `Q`; pasaran dan kumpulan/syarikat dilaporkan berasingan) | takrif |
+| A2 | ada syarat saham (pencetus; bilangan penapis dilaporkan) | takrif |
+| A3 | ada henti rugi; jenisnya dilaporkan | takrif |
+| A4 | keluar ialah INDIKATOR (bukan `X00` "henti + 20 sesi sahaja") | takrif |
+| A5 | tiada sasaran untung tetap (keluar "aktif selepas +x %" ditanda, bukan dikira langgar) | takrif |
+| A6 | dinilai di bawah kayu ukur akhir (m) + pegang minimum (p) | `KEDUDUKAN_AKHIR.csv` |
+| A7 | "dipercayai" (takrif (m)) | sama |
+| A8 | purata setiap dagangan > 0 | sama |
+| A9 | dijual sebelum sesi ke-4 (oleh henti) ≤ 10 % dagangan | sama (`jual_awal`) |
+| A10 | indikator keluar tidak memotong pelari: `R_pelari` ≥ 90 % `R_pelari_x00` (hanya bagi yang lulus A4) | sama |
+| A11 | tidak bergantung pada tarikh earnings masa hadapan (`QF01`, `QF04`) | takrif |
+
+"Struktur lengkap ikut matlamat" = A1 DAN A2 DAN A3 DAN A4. "Menepati semua" = struktur lengkap DAN A5–A10.
+A11 dilaporkan berasingan dan dinilai oleh Bahagian B. Maklumat tambahan: % dagangan rugi ≥ 15 % (kedalaman henti).
+
+**Bahagian B — ukuran pandang ke hadapan tarikh earnings (BAHARU).** `QF01`/`QF04` memakai tarikh 8-K item 2.02 SEBENAR
+selepas bar isyarat (kaveat (i) butiran 7: "ringan", tidak pernah diukur). Bagi setiap saham, peristiwa disusun seperti
+`cs_prasyarat.earnings`. **Ramalan (masa lalu sahaja)** bagi peristiwa ke-*j* = peristiwa ke-(*j*−1) + median hingga 4 jarak
+terakhir sebelum *j* (perlu ≥ 3 peristiwa terdahulu). Peristiwa **berjadual** = |sebenar − ramalan| ≤ 10 sesi; selainnya
+**luar jadual** (pra-umum, keputusan awal, 8-K tambahan: tiada kalendar boleh tahu lebih awal); < 3 peristiwa terdahulu =
+**tiada sejarah**. Varian prasyarat:
+
+- `A` asal (tarikh sebenar, semua peristiwa) — mesti mengulang angka `KEDUDUKAN_AKHIR.csv` dengan tepat (semakan pariti);
+- `J` tarikh sebenar, peristiwa berjadual sahaja (setara kalendar earnings yang betul);
+- `L` tarikh sebenar, peristiwa luar jadual atau tiada sejarah sahaja (tidak boleh didagang);
+- `P` tarikh RAMALAN daripada peristiwa ≤ bar isyarat sahaja (tiada maklumat masa hadapan langsung): `QF01` = ramalan
+  dalam 1–5 sesi akan datang; `QF04` = ramalan > 20 sesi akan datang.
+
+Setiap setup kedudukan akhir yang memakai `QF01` atau `QF04` dinilai semula pada kumpulan B di bawah setiap varian (masuk,
+henti, keluar, pegang minimum dan satu posisi setiap saham tidak berubah): belian, `terus`, kelebihan `terus` atas rawak
+hari sama (keseluruhan dan K1, K2, K3), tangkap penuh, purata, rugi ≥ 8 %. **Bacaan dikunci:** setup "bertahan" di bawah
+satu varian jika belian ≥ 100 dan kelebihan `terus` > 0 dalam K1, K2 dan K3. Kebenaran dagangan sebenar terletak antara
+`P` (pesimis) dan `J`; jika kelebihan hanya wujud pada `L`, setup itu artifak.
+
+**Bahagian C — kebolehpercayaan pangkat (BAHARU).** Pangkat `KEDUDUKAN_AKHIR` disusun ikut angka kumpulan B sendiri.
+(i) Saham kumpulan B dibahagi dua ikut md5(ticker) genap/ganjil; (ii) tahun kalendar dibahagi genap/ganjil. Bagi setiap
+setup: kelebihan `terus` pada setiap separuh (min 30 belian). Dilaporkan: Spearman antara dua separuh; median kelebihan
+pada separuh kedua bagi 10 teratas separuh pertama lawan median semua setup. **Bacaan dikunci:** jika Spearman belahan
+tahun ≤ 0.2, SUSUNAN dalam jadual tidak bermakna (hanya "dipercayai" lawan "tidak" yang boleh dibaca).
+
+**Penjelasan (ad)-1 (14 Nov 2026, sebelum mana-mana hasil belahan saham wujud):** kumpulan A/B sendiri ialah belahan
+md5(ticker), jadi semua saham kumpulan B jatuh pada separuh yang sama dan belahan (i) kosong. Belahan saham memakai
+md5("audit:" + ticker) genap/ganjil. Tiada perubahan lain.
+
+**Penjelasan (ad)-2 (14 Nov 2026, POST-HOC dan dilabel begitu):** selepas matriks pertama dilihat, nisbah A10 = 1.00 bagi
+beberapa setup menunjukkan indikator keluarnya hampir tidak pernah menyala (setara `X00` walaupun lulus A4). Semakan
+tambahan **A4b**: indikator keluar benar-benar menjual, iaitu ≥ 10 % dagangan dijual LEBIH AWAL daripada "pegang sahaja"
+dengan henti yang sama (sesi jual < sesi jual `X00`). A4b dilaporkan berasingan; takrif "menepati semua" (A1–A10) tidak
+berubah, dan bilangan "menepati semua DAN A4b" dilaporkan di sebelahnya.
+
+**Bahagian D — semakan proses** (tanpa data baharu): urutan pradaftar → hasil setiap pindaan daripada sejarah komit;
+keputusan pemilihan yang dibuat pada kumpulan B; kekonsistenan laporan lain dengan pindaan (p) (lajur `menang`
+`registry_F.csv`/`KADAR_MENANG.md` lawan `KEDUDUKAN_AKHIR.csv`); keadaan kohort jejak hadapan dan mesin.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

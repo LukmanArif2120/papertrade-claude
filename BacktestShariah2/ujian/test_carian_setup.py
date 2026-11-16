@@ -1011,6 +1011,43 @@ class TestCS07(unittest.TestCase):
             self.assertEqual(c7.takrif7(x['pencetus'], x['q1'], x['q2'], x['f1'], x['f2'], x['s'], x['kol']), tk)
         self.assertEqual(reg.id.tolist()[:87], [f'F{n:02d}' for n in range(1, 88)])   # F lama kekal
 
+    def test_pengesahan_dan_harga_beli_khas(self):
+        """Pindaan (ac) [asalnya (r) cawangan lama]: pengesan pengesahan dan kernel dengan harga beli khas (buy-stop)."""
+        import cs_keluar7 as k7
+        import cs_sahkan as sh
+        self.assertEqual((sh.N_SAH, sh.JARAK), (3, 24))
+        self.assertEqual(sorted(f for fs in sh.GAYA.values() for f in fs), [f'K{i:02d}' for i in range(1, 26)])
+        h = np.array([10.0, 10.5, 9.9, 10.2, 10.8, 10.1, 10.0, 10.0])
+        c = np.array([9.8, 10.2, 9.7, 10.1, 10.7, 10.0, 9.9, 9.9])
+        o = np.array([9.9, 10.1, 9.8, 9.9, 10.3, 10.6, 9.9, 9.9])
+        d1, b2, p2 = sh.sahkan({'h': h, 'c': c, 'o': o}, np.array([0, 1, 4]))
+        self.assertEqual(d1.tolist(), [1, 4, -1])                               # tutup pertama di atas tinggi hari isyarat
+        self.assertEqual(b2.tolist(), [1, 4, -1])                               # hari pertama harga melepasi tinggi itu
+        self.assertEqual(p2.tolist(), [10.1, 10.5, 0.0])                        # max(buka, tinggi isyarat): gap atas -> buka
+        pan, XA, ev = self._pan7()
+        S0, S1 = k7.sedia_pan(pan, XA, ev), k7.sedia_pan(pan, XA, ev, px=pan['o'][ev + 1])
+        for a_, b_ in zip(S0, S1):
+            self.assertTrue(np.array_equal(a_, b_))                             # harga khas = buka -> sama tepat
+        S2 = k7.sedia_pan(pan, XA, ev, px=pan['o'][ev + 1] * 1.02)             # beli 2 % lebih mahal
+        R0 = k7.hasil(*S0[:7], k7.A1, k7.A2, k7.OP, 3, 0)[0]
+        R2 = k7.hasil(*S2[:7], k7.A1, k7.A2, k7.OP, 3, 0)[0]
+        tiada_henti = (S0[2][:, 3] == 99) & (S2[2][:, 3] == 99) & ~S0[4][:, 3] & ~S2[4][:, 3]
+        self.assertTrue(np.allclose((1 + R2[tiada_henti] + k7.KOS) * 1.02, 1 + R0[tiada_henti] + k7.KOS))
+        self.assertTrue((S2[7][:, 0] <= S0[7][:, 0]).all())                     # naik >= 5 % lebih sukar dari harga lebih tinggi
+
+    def test_rekod_pengesahan(self):
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil')
+        T = pd.read_csv(os.path.join(d, 'PENGESAHAN.csv'))
+        Y = T[T.dipercayai]
+        self.assertGreaterEqual(len(Y), 40)
+        self.assertTrue((T.sah1 <= T.sah2 + 1e-9).all())                        # tutup di atas tinggi => harga melepasi tinggi
+        self.assertTrue((T.premium2.dropna() >= -1e-9).all())                   # buy-stop tidak pernah lebih murah daripada buka esok
+        for v in ('s1', 's2'):                                                  # bacaan dikunci (ac): pengesahan TIDAK menolong
+            lulus = int(((Y[f'terus_{v}'] > Y.terus_v0) & (Y[f'tp_{v}'] > Y.tp_v0)).sum())
+            self.assertLessEqual(lulus, len(Y) / 2)
+        G = pd.read_csv(os.path.join(d, 'PENGESAHAN_keluarga.csv'))
+        self.assertEqual(len(G), 656)
+
     def test_mesin_kelompok_tetap(self):
         import cs_mesin as ms
         import cs_tala7 as t7
@@ -1023,6 +1060,84 @@ class TestCS07(unittest.TestCase):
         self.assertEqual((t7.induk('K07.012'), t7.induk('M73.5s3'), t7.induk('N16')), ('K07', 'M73', 'N16'))
         self.assertEqual((len(t7.varian_m1()), t7.V_RAWAK, t7.N_M_SETEMPAT, t7.N_SETEMPAT), (1072, tuple(range(3, 11)), 50, 8))
 
+
+class TestAudit(unittest.TestCase):
+    """Audit proses menjana F (pindaan (ad), asalnya (u) cawangan lama; rekod 14 Nov 2026, 95 setup): ramalan earnings tanpa masa
+    hadapan, matriks pematuhan, kekonsistenan keluaran."""
+
+    @classmethod
+    def setUpClass(cls):
+        import cs_audit
+        cls.au = cs_audit
+        cls.d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil')
+
+    def test_ramalan_hanya_masa_lalu(self):
+        au = self.au
+        ev = np.array([10, 73, 136, 199, 262, 330])
+        r = au.ramalan(ev)
+        self.assertEqual(len(r), len(ev) + 1)
+        self.assertTrue(np.isnan(r[:au.MIN_SEJARAH]).all())
+        self.assertEqual(r[3], 136 + 63)
+        ev2 = ev.copy()
+        ev2[4:] += 17                                                   # mengubah peristiwa ke-4 dan seterusnya
+        np.testing.assert_array_equal(r[:5], au.ramalan(ev2)[:5])       # ... tidak mengubah ramalan peristiwa <= 4
+
+    def test_kelas_berjadual_luar_jadual(self):
+        k = self.au.kelas(np.array([10, 73, 136, 199, 262, 290, 353]))
+        self.assertEqual(list(k), [2, 2, 2, 0, 0, 1, 0])                # 290 = pra-umum 28 sesi selepas laporan
+
+    def test_topeng_varian(self):
+        au = self.au
+        ev, T = np.array([10, 73, 136, 199, 262, 290, 353]), 420
+        m = au.topeng_satu(ev, T)
+        a = np.zeros(T, bool)
+        for e in ev:
+            a[max(e - 5, 0):e] = True
+        np.testing.assert_array_equal(m['QF01_A'], a)                   # takrif asal: 1-5 sesi sebelum peristiwa sebenar
+        np.testing.assert_array_equal(m['QF01_J'] | m['QF01_L'], m['QF01_A'])
+        self.assertFalse((m['QF01_J'] & m['QF01_L']).any())
+        self.assertTrue(m['QF01_L'][285:290].all() and m['QF01_J'][194:199].all())
+        for potong in (3, 4, 5):                                        # varian P pada bar i hanya memakai peristiwa <= i
+            m2 = au.topeng_satu(ev[:potong], T)
+            for kod in ('QF01_P', 'QF04_P'):
+                np.testing.assert_array_equal(m[kod][:ev[potong]], m2[kod][:ev[potong]])
+        self.assertFalse(m['QF01_P'][:ev[2]].any())                     # kurang 3 peristiwa terdahulu: tiada ramalan
+
+    def test_matriks(self):
+        au = self.au
+        M = au.matriks()
+        reg = pd.read_csv(au.REG_F, dtype=str).fillna('')
+        self.assertEqual(list(M.id), list(reg.id))
+        x00 = reg.takrif.str.split('|').str[3] == 'X00'
+        self.assertTrue((M.A4 == ~x00.to_numpy()).all())
+        self.assertFalse(M[M.menepati_semua].struktur_lengkap.eq(False).any())
+        self.assertTrue(M[M.menepati_semua].A7.eq(True).all())
+        self.assertTrue(M[M.A6 == False].menepati_semua.eq(False).all())   # noqa: E712
+        qf = reg.takrif.str.contains('QF01|QF04')
+        self.assertTrue((M.earnings_hadapan == qf.to_numpy()).all())
+        self.assertEqual(int(M.kohort.sum()), 8)
+
+    def test_keluaran_konsisten(self):
+        au = self.au
+        M = pd.read_csv(os.path.join(self.d, 'AUDIT_F.csv'))
+        E = pd.read_csv(os.path.join(self.d, 'AUDIT_earnings.csv'))
+        K = pd.read_csv(os.path.join(self.d, 'KEDUDUKAN_AKHIR.csv')).set_index('id')
+        M0 = au.matriks()
+        M0 = M0[M0.id.isin(M.id)]                                       # rekod 14 Nov 2026: 95 setup; F96+ (CS13) didaftarkan kemudian
+        self.assertEqual(len(M), 95)
+        self.assertEqual(list(M.id), list(M0.id))
+        self.assertEqual(list(M.menepati_semua), list(M0.menepati_semua))
+        A = E[(E.varian == 'A') & (E.id != 'SEMUA')].set_index('id')
+        self.assertTrue((A.belian == K.loc[A.index, 'belian']).all())    # varian A mengulang kedudukan akhir
+        self.assertTrue(np.allclose(A.terus, K.loc[A.index, 'terus'], atol=1e-4))
+        for v in ('J', 'L'):
+            x = E[(E.varian == v) & (E.id != 'SEMUA')].set_index('id')
+            self.assertTrue((x.belian <= A.loc[x.index, 'belian']).all())
+        d = M[M.A6 == True]                                             # noqa: E712
+        self.assertTrue(((d.jual_indikator >= 0) & (d.jual_indikator <= 1)).all())
+        self.assertTrue((d[~d.A4.astype(bool)].jual_indikator == 0).all())   # X00: indikator tidak pernah menjual
+        self.assertTrue((d.pegang <= 20).all() and (d.pegang >= 1).all())
+        self.assertTrue(os.path.exists(os.path.join(self.d, 'AUDIT_F.md')))
 
 class TestCS08(unittest.TestCase):
     """SPEC pindaan 14 Nov 2026 (q): lorong kedua (beli selepas pengesahan uptrend, pegang sampai trend tamat)."""

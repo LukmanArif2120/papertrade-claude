@@ -218,10 +218,11 @@ def _aras_henti(P, a, L):
 
 
 @njit(parallel=True, cache=True)
-def sedia(ev, o, h, l, c, atr, XA, jenis, par, baris, pegang_min):
+def sedia(ev, o, h, l, c, atr, XA, jenis, par, baris, pegang_min, px):
     """Bagi setiap isyarat: topeng atom M (bit d = benar pada tutup sesi d), topeng aktif ARM, keadaan henti (DS, PS, H0),
     buka setiap sesi / P (OPN), tutup sesi 20 / P (CF) dan label [m5, terus, puncak]. pegang_min: bit atom hanya dipasang
-    bagi d >= pegang_min - 1, iaitu indikator menjual paling awal pada buka indeks sesi pegang_min (1 = tiada had)."""
+    bagi d >= pegang_min - 1, iaitu indikator menjual paling awal pada buka indeks sesi pegang_min (1 = tiada had).
+    px[k] > 0: harga beli khas pada bar beli (cth. pecah tinggi intrahari, pindaan (ac)); 0 = buka bar beli."""
     n, nA = ev.shape[0], jenis.shape[0]
     M = np.zeros((n, nA), np.int32)
     ARM = np.zeros((n, 2), np.int32)
@@ -234,7 +235,7 @@ def sedia(ev, o, h, l, c, atr, XA, jenis, par, baris, pegang_min):
     for k in prange(n):
         i = ev[k]
         e = i + 1
-        P = o[e]
+        P = px[k] if px[k] > 0 else o[e]
         L = np.zeros(NH)
         _aras_henti(P, atr[i], L)
         hc = c[e]
@@ -362,9 +363,10 @@ def hasil(M, ARM, DS, PS, H0, OPN, CF, a1, a2, op, s, kol):
     return R, sk
 
 
-def sedia_pan(pan, XA, ev, pegang_min=None):
+def sedia_pan(pan, XA, ev, pegang_min=None, px=None):
     return sedia(np.ascontiguousarray(ev, dtype=np.int64), pan['o'], pan['h'], pan['l'], pan['c'], pan['atr'],
-                 XA, JENIS, PAR, BARIS, PEGANG_MIN if pegang_min is None else pegang_min)
+                 XA, JENIS, PAR, BARIS, PEGANG_MIN if pegang_min is None else pegang_min,
+                 np.zeros(len(ev)) if px is None else np.ascontiguousarray(px, dtype=np.float64))
 
 
 # ---------- setup yang dinilai ----------
