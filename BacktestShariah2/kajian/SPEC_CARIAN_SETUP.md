@@ -1046,6 +1046,89 @@ utama atau kohort. Kod `carian_setup/cs_jenis_trend.py`; keluaran `hasil/TREND/`
   dasar → puncak melebihi apa yang dagangan sebenar boleh tangkap; tiada saham delist; angka bergantung pada takrif (sebab
   itu tiga saiz ditunjuk).
 
+### Pindaan 16 Nov 2026 (x) — pusingan CS14: cara pegang "jual yang rugi, pegang yang untung", TANPA had masa (sebelum dijalankan)
+
+Permintaan pengguna 16 Nov 2026, selepas melihat senarai utama dalam dashboard: "kita tak boleh limitkan kalau pegang saham
+itu selagi untung, kenapa nak jual ... tak boleh limit 20 hari je, kalau still untung, kalau rugi of couse la kena jual ...
+contoh macam MXL bulan 4 hari tu, boleh pegang berbulan bulan ... Mungkin kena refine sikit kot exit strategy". Keputusan
+pengguna: **"ya dan C"** (uji cara baharu; uji KEDUA-DUA tafsiran "selagi untung": A = selagi harga di atas harga beli,
+B = selagi trend masih naik). Ini **membuka semula carian cara jual** yang dihentikan 15 Nov 2026, dengan sebab baharu:
+kelas "layan saham untung dan saham rugi secara BERBEZA selepas hari ke-20, tanpa had 6 bulan" belum pernah diuji (CS07 dan
+CS09 mencari dalam 20 sesi; CS11 menguji 7 cara yang melayan semua dagangan sama rata, had 126 sesi). Kod
+`carian_setup/cs_pegang14.py`; keluaran `hasil/CS14/`.
+
+**Yang sudah dilihat sebelum pindaan ini ditulis:** CS11 §3 (69 setup: pegang lebih lama menaikkan purata, menurunkan kadar
+menang dan menaikkan rugi ≥ 15 %); median hari pegang cara B pada senarai utama = 21–24 sesi; satu kes MXL (beli 22 Apr 2026:
+cara B +170 %, tutup < SMA50 +149 %, jatuh 4 × ATR dari puncak +109 %, pegang hingga 16 Okt +110 %).
+
+- **Populasi:** 2,001 setup senarai utama (42 lama yang dipercayai + 1,959 kod CS13). Peraturan MASUK tidak diubah; kadar
+  tangkap tidak terkesan (ia sifat masuk). Stop loss 4 × ATR14 (seperti senarai utama), aktif sepanjang pegangan.
+- **20 sesi pertama tidak diubah** (stop loss sahaja): enam pusingan tidak menemui cara jual yang menolong di situ, dan
+  syarat wajib (tiada jual hari beli, pegang ≥ 3 sesi) dipatuhi dengan sendirinya.
+- **Mulai tutup sesi ke-20:** jual pada buka sesi berikutnya selepas tutup PERTAMA yang memenuhi mana-mana komponen cara itu.
+  - Komponen RUGI (tafsiran A): `r0` tiada; `r1` tutup < harga beli; `r2` tutup < harga beli − 1 × ATR14 (ATR hari isyarat;
+    "rugi sikit masih ok"); `r3` semakan SEKALI pada tutup sesi ke-20 sahaja: jual jika tutup < harga beli.
+  - Komponen TREND TAMAT (tafsiran B): `t0` tiada; `t1` tutup < SMA20; `t2` tutup < SMA50; `t3` tutup < SMA100; `t4` tutup <
+    SMA200; `t5`, `t6`, `t7` tutup < tutup tertinggi sejak beli − 4, 6, 8 × ATR14 (ATR hari itu; sepadan dengan trend
+    sederhana hingga besar tinjauan (w)); `t8` tutup < 75 % tutup tertinggi sejak beli. SMA yang belum cukup bar = tidak
+    tercetus.
+  - Had masa: 126 sesi; 252 sesi; TIADA (pegang hingga peraturan tercetus, stop loss, atau hujung data; posisi yang masih
+    terbuka pada hujung data dinilai pada tutup terakhir dan bahagiannya dilaporkan).
+  - 4 × 9 × 3 = 108 cara + rujukan "jual hari ke-20". `r0·t1·126` = cara B sekarang dan MESTI menghasilkan semula angka
+    senarai utama (pariti, disemak sebelum laporan); `r0·t0·126` = "pegang 6 bulan" CS11; `r0·t0·tiada` = beli dan simpan
+    (rujukan sahaja, bukan calon).
+- **Sampel dan mekanik:** sama seperti senarai utama — semua isyarat dengan tetingkap 126 sesi lengkap; beli pada buka sesi
+  selepas isyarat; satu posisi setiap saham mengikut sesi jual cara itu sendiri; kos 0.5 %; kumpulan A dan B berasingan.
+- **Ukuran setiap setup × cara:** bilangan dagangan, purata setiap dagangan, kadar menang, rugi ≥ 15 %, untung ≥ 10 %,
+  untung ≥ 50 %, median dan purata hari pegang, bahagian masih terbuka, "untung setiap 20 sesi pegang" (jumlah untung ÷
+  jumlah sesi pegang × 20; maklumat, kerana pegang lebih lama menaikkan purata setiap dagangan secara mekanikal), dan
+  purata serta menang ikut tempoh beli (K1 2010–19, K2 2020–24, K3 2025–26).
+- **Calon:** 35 cara tanpa had masa selain beli-dan-simpan. Kelas A = komponen rugi sahaja (`r1·t0`, `r2·t0`, `r3·t0`);
+  kelas B = ada komponen trend (`t1`–`t8`, dengan atau tanpa komponen rugi).
+- **Pemilihan (kumpulan A SAHAJA; setup dengan ≥ 30 dagangan cara B dalam kedua-dua kumpulan):** bagi setiap calon, nilai
+  tengah merentas setup bagi beza lawan cara B: Δpurata, Δmenang, Δrugi15. Cara terpilih = Δpurata tertinggi antara calon
+  dengan Δmenang ≥ −2 mata DAN Δrugi15 ≤ +2 mata; jika tiada calon menepati, Δpurata tertinggi antara semua calon. Kriteria
+  yang sama dipakai untuk "terbaik kelas A" dan "terbaik kelas B", yang dilaporkan di sebelahnya.
+- **Bacaan dikunci (kumpulan B, saham yang carian tidak lihat; ambang sama seperti CS11):** cara terpilih **MENOLONG** jika
+  (1) purata setiap dagangan lebih tinggi daripada cara B bagi lebih separuh setup; (2) nilai tengah Δmenang ≥ −2 mata;
+  (3) nilai tengah Δrugi15 ≤ +2 mata; (4) semakan ikut tahun: pada dagangan yang dibeli 2025–26, nilai tengah Δpurata > 0
+  (setup dengan ≥ 20 dagangan K3 pada kedua-dua cara). Bacaan yang sama dilaporkan bagi terbaik kelas A dan kelas B.
+- **Juga dilaporkan:** jadual semua cara (nilai tengah merentas setup, kumpulan B); cara terpilih dengan had 126 dan 252
+  (kesan had masa); kes MXL bagi cara-cara utama (satu contoh, bukan bukti).
+- **Selepas pusingan:** laporan dan cadangan sahaja. TIADA perubahan automatik pada senarai utama, `registry_F.csv`,
+  kohort atau dashboard: menukar cara pegang ialah keputusan pengguna (seperti pilihan B pada CS12), walau apa pun bacaan.
+- **Kaveat dikunci:** tiada saham delist — bias ini membesar dengan tempoh pegang; pegang lebih lama menaikkan purata
+  setiap dagangan walaupun tanpa kemahiran (saham yang kekal dalam data cenderung naik), sebab itu kadar menang, rugi besar
+  dan untung setiap 20 sesi ditunjuk bersama; posisi masih terbuka dinilai pada harga terakhir, bukan harga jual; 108 cara
+  dicuba, jadi yang terbaik condong ke atas — sebab pemilihan dibuat pada kumpulan A dan bacaan pada kumpulan B; kumpulan B
+  sudah dilihat berkali-kali; 2025–26 pendek. Pangkat backtest, BUKAN bukti.
+
+**Tambahan 16 Nov 2026 SELEPAS hasil (x) dilihat (post hoc; maklumat sahaja, BUKAN sebahagian bacaan dikunci; ditulis sebelum
+kawalan dikira).** Hasil: tiada cara menaikkan purata tanpa menurunkan kadar menang; cara "terpilih" lulus bacaan hanya
+kerana ia hampir sama dengan cara sekarang (beza < 0.1 mata). Dua tambahan pada laporan supaya angka pegang lama tidak
+disalah tafsir:
+- **Kawalan rawak:** 300,000 bar layak kumpulan B dengan tetingkap 126 sesi lengkap, dicabut rawak (benih 20261116), dinilai
+  dengan enjin, stop loss dan peraturan satu-posisi yang sama bagi setiap cara. Ia menjawab: berapa banyak untung pegang
+  lama datang daripada sekadar memegang mana-mana saham dalam data ini (pasaran naik, tiada saham delist), bukan daripada
+  setup. Dilaporkan di sebelah angka setup; tiada ambang.
+- **Tangga tukar ganti:** bagi cara sekarang dan lima cara wakil (`r0·t2`, `r0·t5`, `r0·t4`, `r0·t7`, `r1·t0`, tanpa had
+  masa), nilai tengah bagi tiga kumpulan setup (semua 2,001; 42 lama; 210 "pilihan") dan beza purata 2025–26. Cara yang
+  bezanya lawan cara sekarang < 0.1 mata ditanda "secara praktikal sama".
+
+### Keputusan pengguna 16 Nov 2026 selepas CS14 ("B") — cara pegang kedua dipapar di sebelah cara sekarang
+
+Hasil (x) dibentang dengan tiga pilihan (A kekal cara sekarang sahaja; B tambah "pegang selagi tutup di atas purata 50 hari,
+tiada had masa" di sebelah cara sekarang; C tambah "jual bila jatuh 4 × ATR dari tutup tertinggi"). Pengguna memilih **B**.
+
+- Dashboard (Rujukan → Setup F) memaparkan kedua-dua cara sebelah-menyebelah bagi setiap setup: cara sekarang (pegang B,
+  `r0·t1·126`) dan "pegang lebih lama" (`r0·t2·tiada`), daripada `hasil/CS14/setup.csv.gz`.
+- **Yang TIDAK berubah:** susunan dan tapisan "pilihan" senarai utama (kekal ikut cara sekarang), `hasil/CS13/` (rekod),
+  `registry_F.csv` (keluar berdaftar `F96`–`F2054` kekal `PB`), kohort jejak F. Cara pegang untuk papertrade diputuskan
+  apabila pengguna memulakan papertrade (masih ditangguh oleh pengguna).
+- **Kaveat dikunci:** cara kedua GAGAL ujian (x) kerana kadar menang turun (nilai tengah −5.6 mata; purata +0.5 mata; rugi
+  ≥ 15 % tidak berubah); ia dipapar kerana pilihan pengguna, bukan kerana ia lulus. Saham rawak yang dipegang dengan cara
+  sama mendapat tambahan purata yang serupa. Carian cara jual kekal DITUTUP: tiada pusingan keluar baharu tanpa sebab baharu.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

@@ -1,0 +1,19 @@
+kumpulan,n_setup,cara,teks,n,purata,menang,rugi15,k50,sesi_med,per20,d_purata_K3,d_menang_K3
+semua setup,2001,r0.t1.126,cara sekarang: jual bila tutup di bawah purata 20 hari (had 6 bulan),890.00000,0.00472,0.46765,0.05812,0.00667,21.00000,0.00413,0.00000,0.00000
+semua setup,2001,r0.t2.0,jual bila tutup di bawah purata 50 hari · tanpa had masa,884.00000,0.01014,0.41006,0.05970,0.01646,25.00000,0.00595,0.00934,-0.04188
+semua setup,2001,r0.t5.0,jual bila jatuh 4×ATR dari tutup tertinggi · tanpa had masa,874.00000,0.02009,0.38700,0.07603,0.03209,40.00000,0.00743,0.03293,-0.06313
+semua setup,2001,r0.t4.0,jual bila tutup di bawah purata 200 hari · tanpa had masa,858.00000,0.03190,0.34906,0.08248,0.05085,46.00000,0.00771,0.03137,-0.06990
+semua setup,2001,r0.t7.0,jual bila jatuh 8×ATR dari tutup tertinggi · tanpa had masa,838.00000,0.06122,0.32045,0.12733,0.08662,78.00000,0.00889,0.06074,-0.09490
+semua setup,2001,r1.t0.0,jual bila tutup di bawah harga beli · tanpa had masa,823.00000,0.25969,0.12284,0.06557,0.06522,22.00000,0.02239,0.03078,-0.24027
+setup lama yang dipercayai,42,r0.t1.126,cara sekarang: jual bila tutup di bawah purata 20 hari (had 6 bulan),954.00000,0.02092,0.49162,0.16424,0.02489,22.00000,0.01712,0.00000,0.00000
+setup lama yang dipercayai,42,r0.t2.0,jual bila tutup di bawah purata 50 hari · tanpa had masa,900.00000,0.02658,0.41316,0.16639,0.04551,26.50000,0.01496,0.02142,-0.04704
+setup lama yang dipercayai,42,r0.t5.0,jual bila jatuh 4×ATR dari tutup tertinggi · tanpa had masa,859.00000,0.04196,0.39829,0.26428,0.07327,42.00000,0.01461,0.05946,-0.06030
+setup lama yang dipercayai,42,r0.t4.0,jual bila tutup di bawah purata 200 hari · tanpa had masa,818.00000,0.05272,0.42251,0.23607,0.06971,21.00000,0.01624,0.04657,-0.05617
+setup lama yang dipercayai,42,r0.t7.0,jual bila jatuh 8×ATR dari tutup tertinggi · tanpa had masa,780.50000,0.09939,0.35772,0.42625,0.12942,88.50000,0.01538,0.10779,-0.09672
+setup lama yang dipercayai,42,r1.t0.0,jual bila tutup di bawah harga beli · tanpa had masa,833.50000,0.24332,0.13902,0.17421,0.07221,23.00000,0.02265,0.01417,-0.26595
+"setup ""pilihan""",210,r0.t1.126,cara sekarang: jual bila tutup di bawah purata 20 hari (had 6 bulan),763.00000,0.02606,0.53229,0.08330,0.01478,22.00000,0.02096,0.00000,0.00000
+"setup ""pilihan""",210,r0.t2.0,jual bila tutup di bawah purata 50 hari · tanpa had masa,762.50000,0.03488,0.53488,0.08177,0.02718,21.00000,0.02142,0.01446,0.00706
+"setup ""pilihan""",210,r0.t5.0,jual bila jatuh 4×ATR dari tutup tertinggi · tanpa had masa,755.00000,0.05159,0.46858,0.10753,0.05009,45.00000,0.01765,0.05197,-0.04520
+"setup ""pilihan""",210,r0.t4.0,jual bila tutup di bawah purata 200 hari · tanpa had masa,736.00000,0.05596,0.47517,0.09336,0.05549,21.00000,0.01713,0.01919,-0.03704
+"setup ""pilihan""",210,r0.t7.0,jual bila jatuh 8×ATR dari tutup tertinggi · tanpa had masa,724.00000,0.11078,0.40176,0.16625,0.11792,105.00000,0.01388,0.08936,-0.08333
+"setup ""pilihan""",210,r1.t0.0,jual bila tutup di bawah harga beli · tanpa had masa,699.50000,0.41531,0.17129,0.09134,0.10385,26.00000,0.02711,0.02666,-0.25560

@@ -45,6 +45,29 @@ class TestFUtamaDb(unittest.TestCase):
             pra = d['kamus']['pra'][r[ix['pra']]]
             self.assertEqual(pra, '' if pd.isna(u.prasyarat) else u.prasyarat)
 
+    def test_cara_pegang_kedua(self):
+        """Keputusan pengguna 16 Nov 2026 ("B" selepas CS14): lajur "pegang lebih lama" (r0.t2.0) di sebelah cara sekarang."""
+        d = self.d
+        X = pd.read_csv(os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS14', 'setup.csv.gz')).set_index('id')
+        ix = {k: i for i, k in enumerate(d['kol'])}
+        self.assertEqual(d['kol'][:17], ['id', 'asal', 'pil', 'pra', 'nama', 'pen', 'beli', 'shar', 'tangkap', 'rawak', 'm5', 'menang', 'purata',
+                                         'rugi15', 'hari', 'k3', 'n'])                      # lajur lama tidak berganjak (halaman lama masih membaca)
+        self.assertEqual(d['kol'][17:], ['menang2', 'purata2', 'rugi2', 'hari2'])
+        self.assertEqual((F.CARA1, F.CARA2), ('r0.t1.126', 'r0.t2.0'))
+        for r in d['rows'][:40] + d['rows'][-40:]:
+            x = X.loc[r[ix['id']]]
+            self.assertAlmostEqual(r[ix['menang2']] / 1000, x['r0.t2.0:menang'], delta=6e-4)
+            self.assertAlmostEqual(r[ix['purata2']] / 10000, x['r0.t2.0:purata'], delta=6e-5)
+            self.assertAlmostEqual(r[ix['rugi2']] / 1000, x['r0.t2.0:rugi15'], delta=6e-4)
+            self.assertEqual(r[ix['hari2']], int(round(x['r0.t2.0:sesi_med'])))
+            self.assertAlmostEqual(r[ix['menang']] / 1000, x['r0.t1.126:menang'], delta=6e-4)   # cara sekarang = angka CS14 yang sama
+        b = d['banding']
+        self.assertEqual(set(b), {'kini', 'lama', 'rawak_kini', 'rawak_lama'})
+        self.assertGreater(b['lama']['purata'], b['kini']['purata'])                       # pegang lebih lama: purata naik ...
+        self.assertLess(b['lama']['menang'], b['kini']['menang'])                           # ... dan kadar menang turun
+        self.assertIn('minimum, bukan had', d['pegang'])
+        self.assertIn('purata 50 hari', d['pegang2'])
+
     def test_saiz_di_bawah_had_db(self):
         with tempfile.TemporaryDirectory() as t:
             out = F.main(['--keluar', t])

@@ -5104,15 +5104,19 @@ const KN_PAKSI=[['MASUK','Masuk'],['KELUAR','Keluar'],['CARA','Cara'],['URUTAN',
 /* ================= Rujukan -> Setup F (v181, 16 Nov 2026; permintaan pengguna: "satu table dalam dashboard") =================
    Senarai utama setup F (carian setup CS13) daripada db `carian/f_utama` (standard/f_utama_db.py; dokumen statik yang
    ditolak manual selepas pusingan carian, bukan oleh jana_db.py). Pangkat backtest, BUKAN keputusan: kad skor kekal
-   satu-satunya keputusan wang sebenar. */
+   satu-satunya keputusan wang sebenar.
+   v182 (16 Nov 2026, keputusan pengguna "B" selepas CS14): cara pegang kedua "pegang lebih lama" (jual hanya bila tutup di bawah
+   purata 50 hari, tiada had masa) dipapar DI SEBELAH cara sekarang (lajur menang2/purata2/rugi2/hari2 di hujung `kol`); ayat kotak
+   Menang dibetulkan (20 hari = minimum, bukan had). */
 function sfBaris(d){if(d._r)return d._r;const ix={};(d.kol||[]).forEach((k,i)=>ix[k]=i);const km=d.kamus||{},g=(a,k,b)=>{const v=a[ix[k]];return v==null?null:v/b;};
   d._r=(d.rows||[]).map(a=>({id:a[ix.id],asal:a[ix.asal]?'baharu':'lama',pil:!!a[ix.pil],pra:(km.pra||[])[a[ix.pra]]||'',nama:(km.nama||[])[a[ix.nama]]||'',pen:(km.pen||[])[a[ix.pen]]||'',
-    shar:a[ix.shar],tangkap:g(a,'tangkap',10),rawak:g(a,'rawak',10),m5:g(a,'m5',10),menang:g(a,'menang',10),purata:g(a,'purata',100),rugi15:g(a,'rugi15',10),hari:a[ix.hari],k3:g(a,'k3',100),n:a[ix.n]}));
+    shar:a[ix.shar],tangkap:g(a,'tangkap',10),rawak:g(a,'rawak',10),m5:g(a,'m5',10),menang:g(a,'menang',10),purata:g(a,'purata',100),rugi15:g(a,'rugi15',10),hari:a[ix.hari],k3:g(a,'k3',100),n:a[ix.n],
+    menang2:g(a,'menang2',10),purata2:g(a,'purata2',100),rugi2:g(a,'rugi2',10),hari2:a[ix.hari2]}));
   return d._r;}
 function renderSetupF(){
   const el=$('#v-setupf'),d=S.sf;
   if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.sfSiap?'Senarai setup F belum ditolak ke pangkalan data (carian/f_utama).':'Memuatkan senarai setup F…'}${diagDok('sf')}</div>`;return;}
-  const f=S.sff,all=sfBaris(d),u=d.ujian||{},sm=d.semak_masa||{},sp=sm.pilih||{},sl=sm.lain||{};
+  const f=S.sff,all=sfBaris(d),u=d.ujian||{},sm=d.semak_masa||{},sp=sm.pilih||{},sl=sm.lain||{},bd=d.banding||null,ada2=(d.kol||[]).includes('menang2');
   const pc=x=>x==null||isNaN(x)?'–':Math.round(x*100)+'%',sfp=v=>v==null||isNaN(v)?'–':v.toFixed(0)+'%',sfs=v=>v==null||isNaN(v)?'–':(v>0?'+':'')+v.toFixed(1)+'%';
   let rows=f.lihat==='pilihan'?all.filter(r=>r.pil):all;
   if(f.asal!=='semua')rows=rows.filter(r=>r.asal===f.asal);
@@ -5126,10 +5130,12 @@ function renderSetupF(){
     {k:'tangkap',t:'Tangkap',tip:'sf_tangkap',hc:'kp-hi',f:r=>`<b>${sfp(r.tangkap)}</b><span class="vv">rawak ${sfp(r.rawak)}</span>`},
     {k:'menang',t:'Menang',tip:'sf_menang',hc:'kp-hi',f:r=>`<b class="${r.menang>=50?'pos':''}">${sfp(r.menang)}</b>`},
     {k:'purata',t:'Purata',tip:'sf_purata',hc:'kp-hi',f:r=>`<b class="${cls(r.purata)}">${sfs(r.purata)}</b>`},
+    ...(ada2?[{k:'menang2',t:'Menang 50 hari',tip:'sf_menang2',hc:'kp-hi',f:r=>r.menang2==null?'<span class="mut">–</span>':`<span class="${r.menang2>=50?'pos':''}">${sfp(r.menang2)}</span>`},
+    {k:'purata2',t:'Purata 50 hari',tip:'sf_purata2',hc:'kp-hi',f:r=>r.purata2==null?'<span class="mut">–</span>':`<span class="${cls(r.purata2)}">${sfs(r.purata2)}</span><span class="vv">rugi ≥ 15%: ${sfp(r.rugi2)} · ${fx(r.hari2,0)} hari</span>`}]:[]),
     {k:'rugi15',t:'Rugi ≥ 15%',tip:'sf_rugi',f:r=>sfp(r.rugi15)},
-    {k:'hari',t:'Hari pegang',tip:'sf_hari',f:r=>fx(r.hari,0)},
-    {k:'shar',t:'Beli setahun',tip:'sf_beli',f:r=>fx(r.shar,0)},
-    {k:'k3',t:'2025–26',tip:'sf_k3',f:r=>`<span class="${cls(r.k3)}">${sfs(r.k3)}</span>`}];
+    {k:'hari',t:'Hari pegang',tip:'sf_hari',hc:'kp-lo',f:r=>fx(r.hari,0)},
+    {k:'shar',t:'Beli setahun',tip:'sf_beli',hc:'kp-lo',f:r=>fx(r.shar,0)},
+    {k:'k3',t:'2025–26',tip:'sf_k3',hc:'kp-hi',f:r=>`<span class="${cls(r.k3)}">${sfs(r.k3)}</span>`}];
   el.innerHTML=`
   <div class="panel"><div class="panel-h"><h2>Setup F: senarai utama</h2><span class="sub">pangkat backtest · BUKAN keputusan wang sebenar · belum papertrade · dijana ${esc(d.dibina||'')}</span></div>
     <div class="kpis">
@@ -5143,7 +5149,9 @@ function renderSetupF(){
     ${sortTable({id:'setupf',rows,cols,def:{k:'tangkap',dir:-1},limit:f.shown,empty:'Tiada setup sepadan.',foot:kakiLagi('sfMore'),attr:r=>`title="${esc(r.id+': '+[r.pra,r.nama,r.pen].filter(Boolean).join(' · '))}"`,
       lp:{key:r=>r.id,line:r=>`<b>${esc(r.id)}</b>${pil(r)}<span class="mlx">${esc(r.pra||r.nama)}</span><b class="mlr">${sfp(r.tangkap)}</b>${mlC}`}})}
     <p class="note"><b>Tentang "Pilihan".</b> "Pilihan" ditapis SELEPAS melihat hasil, jadi angkanya condong ke atas. Setup yang menepati tapisan itu pada 2010–2024, pada 2025–26: menang ${pc(sp.menang)}, purata ${sp.purata==null?'–':sfs(sp.purata*100)}; setup lain: menang ${pc(sl.menang)}, purata ${sl.purata==null?'–':sfs(sl.purata*100)}. Yang bertahan pada tahun yang tidak dilihat ialah kadar tangkap (lajur 2025–26). Kebanyakan setup baharu membeli beberapa hari sebelum laporan kewangan: lebih kerap menangkap saham naik laju, dan juga lebih kerap jatuh.</p>
-    <p class="note"><b>Cara semua setup berdagang:</b> ${esc(d.pegang||'')}. <b>Tangkap</b> = daripada 100 belian, berapa yang naik ≥ 5% pada minggu pertama dan naik lagi hingga minggu ke-4 ("rawak" = saham rawak pada hari yang sama). <b>Menang</b> dan <b>Purata</b> = semua dagangan dengan cara di atas, selepas kos 0.5%. ${esc(d.nota||'')} Kad skor (tab Pilih kaedah) kekal satu-satunya keputusan wang sebenar.</p>
+    <p class="note"><b>Cara sekarang</b> (lajur Menang, Purata, Rugi ≥ 15%, Hari pegang): ${esc(d.pegang||'')}. <b>Tangkap</b> = daripada 100 belian, berapa yang naik ≥ 5% pada minggu pertama dan naik lagi hingga minggu ke-4 ("rawak" = saham rawak pada hari yang sama); ia tidak bergantung pada cara pegang. Semua angka selepas kos 0.5%.</p>
+    ${ada2?`<p class="note"><b>Pegang lebih lama</b> (lajur Menang 50 hari, Purata 50 hari; pilihan anda 16 Nov 2026): ${esc(d.pegang2||'')}.${bd?` Nilai tengah semua setup: cara sekarang purata ${sfs(bd.kini.purata*100)}, menang ${pc(bd.kini.menang)}, rugi ≥ 15% ${pc(bd.kini.rugi15)}; pegang lebih lama purata ${sfs(bd.lama.purata*100)}, menang ${pc(bd.lama.menang)}, rugi ≥ 15% ${pc(bd.lama.rugi15)}. <b>Pegang lebih lama menaikkan purata tetapi mengurangkan dagangan yang menang.</b> Saham rawak yang dipegang dengan cara yang sama mendapat tambahan serupa (purata ${sfs(bd.rawak_kini.purata*100)} → ${sfs(bd.rawak_lama.purata*100)}), jadi tambahan itu datang daripada pasaran yang naik, bukan daripada setup.`:''} Daripada 108 cara pegang yang diuji, tiada yang menaikkan purata tanpa menurunkan kadar menang.</p>`:''}
+    <p class="note">${esc(d.nota||'')} Kad skor (tab Pilih kaedah) kekal satu-satunya keputusan wang sebenar.</p>
   </div>`;
   bindSegH('sfLihat',v=>{f.lihat=v;f.shown=AWAL;});
   bindSegH('sfAsal',v=>{f.asal=v;f.shown=AWAL;});
@@ -5440,10 +5448,12 @@ let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(wi
 /* ================= tooltip istilah (ganti tab Panduan istilah) ================= */
 const TIPS={
   sf_tangkap:{t:'Tangkap',d:'Daripada 100 belian setup ini, berapa yang naik sekurang-kurangnya 5% pada minggu pertama DAN naik lagi hingga minggu ke-4 tanpa menyentuh −8%. "Rawak" = saham rawak yang dibeli pada hari yang sama. Diukur pada saham yang carian tidak pernah lihat, 2010–2026.'},
-  sf_menang:{t:'Menang',d:'Peratus dagangan yang dijual dengan untung selepas kos 0.5%, dengan stop loss 4×ATR14 dan pegang sekurang-kurangnya 20 hari.'},
-  sf_purata:{t:'Purata setiap dagangan',d:'Purata untung atau rugi setiap dagangan selepas kos 0.5%. Ini bukan hasil akaun.'},
-  sf_rugi:{t:'Rugi ≥ 15%',d:'Peratus dagangan yang berakhir dengan rugi 15% atau lebih.'},
-  sf_hari:{t:'Hari pegang',d:'Nilai tengah bilangan hari dagangan satu posisi dipegang.'},
+  sf_menang:{t:'Menang (cara sekarang)',d:'Peratus dagangan yang dijual dengan untung selepas kos 0.5%. Cara sekarang: stop loss 4×ATR14; pegang sekurang-kurangnya 20 hari (20 hari ialah minimum, BUKAN had); selepas itu jual bila harga tutup di bawah purata 20 hari; paling lama 6 bulan.',e:'Saham yang terus naik dipegang melebihi 20 hari; separuh dagangan dijual sekitar hari ke-21 kerana harga cepat jatuh di bawah purata 20 hari.'},
+  sf_purata:{t:'Purata setiap dagangan (cara sekarang)',d:'Purata untung atau rugi setiap dagangan selepas kos 0.5%, dengan cara sekarang (lihat Menang). Ini bukan hasil akaun.'},
+  sf_menang2:{t:'Menang · pegang lebih lama',d:'Peratus dagangan yang dijual dengan untung jika dipegang lebih lama: sama hingga hari ke-20, selepas itu jual hanya bila harga tutup di bawah purata 50 hari; tiada had masa. Biasanya lebih rendah daripada cara sekarang.'},
+  sf_purata2:{t:'Purata · pegang lebih lama',d:'Purata setiap dagangan dengan cara pegang lebih lama (jual hanya bila tutup di bawah purata 50 hari, tiada had masa). Biasanya lebih tinggi daripada cara sekarang, tetapi saham rawak yang dipegang dengan cara sama mendapat tambahan yang serupa. Baris kecil: rugi ≥ 15% dan hari pegang biasa bagi cara ini.'},
+  sf_rugi:{t:'Rugi ≥ 15% (cara sekarang)',d:'Peratus dagangan yang berakhir dengan rugi 15% atau lebih, dengan cara sekarang.'},
+  sf_hari:{t:'Hari pegang (cara sekarang)',d:'Nilai tengah bilangan hari dagangan satu posisi dipegang, dengan cara sekarang. 20 hari ialah minimum, bukan had.'},
   sf_beli:{t:'Beli setahun',d:'Anggaran bilangan belian setahun pada senarai saham Shariah dalam data backtest.'},
   sf_k3:{t:'2025–26',d:'Kelebihan kadar tangkap atas saham rawak pada 2025–26 (tahun yang carian tidak lihat), dalam mata peratus. Positif = masih lebih baik daripada rawak.'},
   trend_jp:{t:'Trend (susunan SMA 50/150/200)',d:'Bullish = tutup > SMA50 > SMA150 > SMA200; Bearish = tutup < SMA50 < SMA150 < SMA200; lain-lain Neutral. Status bertukar hanya selepas 2 tutup berturut. "Sejak" = tutup kedua itu (umur dikira dari situ, tarikh sah = 1); baharu = ≤ 20 sesi, lama = > 60 sesi; Neutral menunjukkan status sebelumnya. Titik mula = harga terendah (Bullish) atau tertinggi (Bearish) dalam 63 sesi hingga tarikh sah, dibekukan; berapa jauh harga sudah bergerak sebelum label bertukar. Kajian 23 Okt 2026 (lebih 500 varian, 2020–2026): status ini tidak meramal pulangan 3–30 hari dan tiada peraturan jual berasaskannya yang lebih baik daripada lorong 1/lorong 2. Bullish tidak bermaksud lebih selamat; risiko diukur oleh ATR (lajur Risiko), jarak lorong 2 dan earnings. Bearish lama (diisi merah) satu-satunya amaran: lebih kerap jatuh > 8% dalam 10 sesi (bukti sederhana).',e:'Bullish lama · 142 sesi · sejak 1 Apr (+38.5%) · titik mula 2 Jan @ 121.61 (+87%)'},
