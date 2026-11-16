@@ -1129,6 +1129,63 @@ tiada had masa" di sebelah cara sekarang; C tambah "jual bila jatuh 4 × ATR dar
   ≥ 15 % tidak berubah); ia dipapar kerana pilihan pengguna, bukan kerana ia lulus. Saham rawak yang dipegang dengan cara
   sama mendapat tambahan purata yang serupa. Carian cara jual kekal DITUTUP: tiada pusingan keluar baharu tanpa sebab baharu.
 
+### Pindaan 16 Nov 2026 (z) — pusingan CS16: "UJIAN SOLID" bagi setup F (sebelum dijalankan)
+
+**Nota nama (16 Nov 2026, selepas hasil):** pusingan ini ditulis dan dikomit sebagai "CS15 / pindaan (y)" (komit `0adc8ad`, sebelum
+dijalankan). Chat lain pada hari yang sama memakai CS15 / (y) untuk pusingan K26 (cawangan `claude/funny-hopper-p6z9a7`), jadi
+nama di sini ditukar kepada **CS16 / (z)** untuk mengelak pertembungan fail. Kandungan peraturan TIDAK berubah.
+
+Permintaan pengguna 16 Nov 2026: "in the end saya dapat beberapa methods F yang betul betul solid selepas backtest ... 5 %
+seminggu ke, 10% seminggu ke, 10% dua minggu ke ... apa lagi yang perlu"; lima perkara yang kurang dibentang dan pengguna
+bersetuju ("ya"), dengan satu arahan tambahan: **"utk setup sekarang, abaikan dahulu saham shariah"** — tiada tapisan atau
+syarat Shariah dalam pusingan ini. Bukan carian baharu: peraturan masuk tidak diubah dan tiada kod F baharu. Kod
+`carian_setup/cs_solid16.py`; keluaran `hasil/CS16/`.
+
+**Had yang diketahui sebelum menulis:** senarai utama sudah dipilih dengan kumpulan B (lulus K1, K2, K3), jadi apa-apa
+tapisan lanjut pada kumpulan B ialah pemilihan DALAM sampel; sebab itu kadar lulus kawalan rawak dilaporkan bagi takrif yang
+sama. 4,446 daripada 4,923 calon CS13 memakai `QF01` (laporan kewangan dalam 1–5 sesi) tetapi hanya 15 daripada 300 kawalan.
+
+- **Yang dinilai (kumpulan B, semua saham; mekanik senarai utama: satu posisi setiap saham, jual hari ke-20, stop loss
+  4 × ATR14, asas = saham rawak hari sama × tercile ATR):** 4,923 calon CS13, 42 setup lama yang dipercayai, 300 kawalan
+  rawak CS13 (K1), 300 "kawalan laporan kewangan" (K2 = kawalan yang sama dengan prasyarat syarikat diganti `QF01`), dan
+  setiap gabungan prasyarat yang dipakai calon TANPA isyarat beli atau syarat saham ("prasyarat sahaja").
+- **Tiga angka pengguna (lajur baharu):** daripada 100 belian, berapa yang tutup hari ke-5 ≥ +5 % (`m5`, sedia ada); tutup
+  hari ke-5 ≥ +10 % (`m10`); tutup hari ke-10 ≥ +10 % (`m10d`). Versi "pernah capai" (mana-mana tutup dalam tempoh itu)
+  dikira sebagai maklumat. Kayu ukur utama kekal `terus`.
+- **Takrif SOLID (semua mesti benar):**
+  - S1 cukup belian: ≥ 300 belian, ≥ 10 tahun aktif, ≥ 20 belian pada 2025–26.
+  - S2 kelebihan jelas: kelebihan `terus` atas rawak ≥ +3 mata keseluruhan DAN > 0 dalam K1, K2, K3.
+  - S3 tahun demi tahun: kelebihan `terus` > 0 dalam ≥ 70 % tahun kalendar yang ada ≥ 15 belian; sekurang-kurangnya 8
+    tahun sedemikian.
+  - S4 tiga angka pengguna: kelebihan atas rawak > 0 bagi `m5`, `m10` DAN `m10d`.
+  - S5 tidak bergantung pada beberapa hari: selepas membuang 10 hari beli yang paling banyak menyumbang kepada kelebihan
+    `terus`, kelebihan yang tinggal ≥ +1 mata.
+  - S6 tahan ubah parameter: daripada "adik-beradik" (varian parameter LAIN bagi keluarga isyarat beli yang sama, dengan
+    prasyarat dan syarat saham yang sama; hingga 30, dipilih sekata ikut susunan nama; hanya yang ≥ 100 belian), ≥ 60 %
+    mempunyai kelebihan `terus` > 0. Kurang daripada 3 adik-beradik = "tidak dapat diuji" (ditanda, tidak menggagalkan).
+  - S7 menambah di atas prasyarat: kelebihan `terus` setup − kelebihan `terus` "prasyarat sahaja" yang sama ≥ +1 mata
+    (setup tanpa prasyarat: tidak berkenaan, lulus).
+- **Boleh dibuat dalam dunia sebenar (S8; dilaporkan, menentukan tanda "boleh dibuat"):** `QF01` dan `QF04` memakai tarikh
+  laporan kewangan SEBENAR. Tarikh DITEKA daripada maklumat lampau sahaja: tarikh laporan suku yang sama tahun lepas + 364
+  hari (jika tiada: laporan terakhir + 91 hari); tekaan yang sudah berlalu tanpa laporan = tiada isyarat. Setup yang memakai
+  `QF01`/`QF04` dinilai semula dengan prasyarat tekaan; S8 lulus jika kelebihan `terus` > 0 DAN ≥ separuh kelebihan asal.
+  Ini ujian paling keras (tanpa kalendar langsung): dalam dunia sebenar kebanyakan syarikat mengumumkan tarikh lebih awal,
+  jadi keadaan sebenar di antara dua angka itu. Ketepatan tekaan (dalam ±2 dan ±5 sesi) dilaporkan. "Boleh dibuat" = tidak
+  memakai `QF01`/`QF04`, atau lulus S8.
+- **Senarai pendek yang berbeza (S9):** antara setup SOLID dalam senarai utama, disusun ("boleh dibuat" dahulu, kemudian
+  kadar `terus`), satu setup dibuang sebagai "serupa" jika beliannya bertindih (Jaccard, kumpulan B) ≥ 0.50 dengan setup
+  yang sudah dipilih. Yang tinggal = "wakil".
+- **Bacaan dikunci:** (B1) takrif SOLID boleh dipercayai jika kawalan rawak K1 lulus ≤ 5 %; bahagian nasib = kadar lulus K1
+  ÷ kadar lulus calon. (B2) isyarat beli menambah di atas prasyarat laporan kewangan jika kadar lulus SOLID calon ber-`QF01`
+  ≥ kadar lulus K2 + 10 mata; jika tidak, dilaporkan terus terang bahawa yang solid ialah PRASYARAT itu, bukan setiap setup.
+- **Pariti:** `terus`, asasnya, `m5`, bilangan belian dan kelebihan K1–K3 setiap setup mesti sama dengan `senarai_utama.csv`.
+- **Selepas pusingan:** laporan `hasil/CS16/SOLID.md` + `solid.csv.gz` (tiga angka dan setiap syarat bagi setiap setup senarai
+  utama), `kawalan.csv`, `prasyarat.csv`. Registry, kohort dan susunan senarai utama tidak diubah; tanda "Solid" dan tiga
+  angka boleh dipapar dalam dashboard. Tiada papertrade tanpa keputusan pengguna.
+- **Kaveat dikunci:** semua ambang ialah pilihan Claude (keputusan teknikal), ditulis sebelum hasil dilihat; kumpulan B sudah
+  dipakai untuk memilih, jadi "solid" bermaksud "paling tahan uji dalam backtest", BUKAN bukti; tiada saham delist; bukti
+  hanya datang daripada papertrade.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

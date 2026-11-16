@@ -1,0 +1,77 @@
+{
+ "n_calon": 4923,
+ "solid_calon": 524,
+ "kadar_calon": 0.106439,
+ "n_K1": 300,
+ "solid_K1": 2,
+ "kadar_K1": 0.006667,
+ "n_K2": 300,
+ "solid_K2": 7,
+ "kadar_K2": 0.023333,
+ "n_calon_earnings": 4446,
+ "solid_calon_earnings": 515,
+ "kadar_calon_earnings": 0.115834,
+ "b1": true,
+ "nasib": 0.062634,
+ "b2": false,
+ "lulus_s1": {
+  "calon": 0.897217,
+  "K1": 0.923333,
+  "K2": 0.626667
+ },
+ "lulus_s2": {
+  "calon": 0.770059,
+  "K1": 0.05,
+  "K2": 0.656667
+ },
+ "lulus_s3": {
+  "calon": 0.841966,
+  "K1": 0.12,
+  "K2": 0.583333
+ },
+ "lulus_s4": {
+  "calon": 0.980093,
+  "K1": 0.346667,
+  "K2": 0.943333
+ },
+ "lulus_s5": {
+  "calon": 0.801138,
+  "K1": 0.05,
+  "K2": 0.593333
+ },
+ "lulus_s7": {
+  "calon": 0.19094,
+  "K1": 0.13,
+  "K2": 0.1
+ },
+ "pariti": {
+  "n": 0.0,
+  "terus": 5e-06,
+  "a_terus": 5e-06,
+  "m5": 5e-06,
+  "kl_K1": 5e-06,
+  "kl_K3": 5e-06
+ },
+ "tepat": {
+  "n": 71664,
+  "dalam2": 0.49746,
+  "dalam5": 0.653787,
+  "ingat": 0.510348,
+  "tepat": 0.752995
+ },
+ "n_utama": 2001,
+ "solid_utama": 290,
+ "wakil": 224,
+ "solid_boleh": 277,
+ "wakil_boleh": 213,
+ "solid_lama": 4,
+ "solid_tarikh": 284,
+ "ramal": {
+  "n": 1887,
+  "kl_sebenar": 0.054271,
+  "kl_ramal": 0.042444,
+  "positif": 0.99788,
+  "s8": 0.944356
+ },
+ "prasyarat_solid": 32
+}
