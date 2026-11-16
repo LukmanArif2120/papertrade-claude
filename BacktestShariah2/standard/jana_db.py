@@ -7,7 +7,7 @@
 #      supaya setiap tulisan membawa if_version; dokumen tanpa versi = dokumen baharu.
 # Dokumen: papertrade/moomoo, papertrade/claude… (1:1 dengan claude*.csv), papertrade/senarai_beli (dipulihkan 6 Nov 2026),
 # papertrade/watchlist(+_2…), prestasi/mae, prestasi/mae_atr (dibahagi), prestasi/harian_kaedah, prestasi/portfolio_slot, analisis/papan, analisis/lift (lift_kaedah.py), analisis/kad_skor (kad_skor.py), analisis/skor_kaedah (skor_kaedah.py), analisis/kaedah_siri (kaedah_siri.py; dibahagi), harian/status,
-# harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py), institusi/kumpulan (institusi_13f.py), kumpulan/peta (peta_kumpulan.py). sektor/snapshot dijana oleh tugasan
+# harian/trend (trend_status.py), harian/stage (stage.py), posisi/lorong2(+_2…; lorong2_siri.py), institusi/kumpulan (institusi_13f.py), kumpulan/peta (peta_kumpulan.py), robot/kerja (robot_kerja.py; tab Robot). sektor/snapshot dijana oleh tugasan
 # mingguan (data/db/sektor_snapshot.json, jika ada; medan posisi dikemas kini di sini).
 import argparse, csv, glob, hashlib, json, os, re, statistics as stt, sys
 
@@ -1624,6 +1624,18 @@ def main(argv=None):
     os.makedirs(a.keluar, exist_ok=True)
     # --versi menerima peta rata {"koleksi/doc": versi} ATAU daftar db `meta/versi_db` ({"versi": {...}}).
     versi = json.load(open(a.versi)) if a.versi else {}
+    # robot/kerja (tab Robot, 16 Nov 2026; standard/robot_kerja.py; paparan sahaja). Larian tugasan Claude tiada
+    # API dalam sesi berjadual, jadi masa larian sesi INI direkod dalam medan `robot_claude` daftar versi: medan itu
+    # dibaca di sini daripada --versi dan ditulis semula ke versi_selepas.json (tolak_db.md langkah 3 -> 5c
+    # menyalin keseluruhan `data`, jadi ia terbawa tanpa perubahan prosedur). Gagal = amaran, bukan henti.
+    robot_claude = versi.get('robot_claude') if isinstance(versi.get('robot_claude'), dict) else {}
+    try:
+        import robot_kerja
+        mu = masa.tz_convert('UTC').to_pydatetime()
+        robot_claude = robot_kerja.kemas_robot_claude(robot_claude, mu, awal=a.awal)
+        docs['robot/kerja'] = robot_kerja.bina(masa=mu, robot_claude=robot_claude)
+    except Exception as e:
+        print(f'  AMARAN robot/kerja tidak dibina: {e}', file=sys.stderr)
     if isinstance(versi.get('versi'), dict):
         versi = versi['versi']
     tulis = []
@@ -1675,9 +1687,10 @@ def main(argv=None):
     baru = dict(versi)
     for w, _, _ in tulis:
         baru[f"{w['collection']}/{w['doc_id']}"] = int(w['if_version']) + 1 if 'if_version' in w else 1
-    json.dump(dict(versi=dict(sorted(baru.items())), dibina=dibina, sesi=S,
+    json.dump(dict(versi=dict(sorted(baru.items())), dibina=dibina, sesi=S, robot_claude=robot_claude,
                    nota='Daftar versi dokumen db yang ditulis jana_db.py (tolak_db.md langkah 3/5c). '
-                        'Sah HANYA jika setiap batch larian itu berjaya.'),
+                        'Sah HANYA jika setiap batch larian itu berjaya. robot_claude = larian terakhir tugasan '
+                        'berjadual Claude untuk tab Robot (robot_kerja.py).'),
               open(os.path.join(a.keluar, 'versi_selepas.json'), 'w'), ensure_ascii=False, indent=1)
     print(json.dumps(ring, ensure_ascii=False, indent=1))
 

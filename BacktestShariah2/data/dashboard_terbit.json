@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794795050-308f",
-  "nombor": 213,
-  "sha256": "6b4b6010f91efd374e62064d5371c5c2ec8296b5bad3dd274e395d8c47a3e67f",
-  "bait": 812636,
-  "dikemas": "2026-11-16 02:11 UTC",
-  "nota": "v182 (16 Nov 2026, keputusan pengguna B selepas CS14): Setup F memaparkan cara pegang kedua (purata 50 hari, tiada had masa) di sebelah cara sekarang; ayat kotak Menang dibetulkan"
+  "versi_artifact": "1794807279-1e90",
+  "nombor": 217,
+  "sha256": "bccf5aedf22064078608241de6aff10370ec3076c649c3c60023e3a83410bb99",
+  "bait": 951208,
+  "dikemas": "2026-11-16 05:34 UTC",
+  "nota": "v184 (16 Nov 2026): Setup F dan Hari ini reka bentuk baharu (kad juara, cincin tangkap, peta pasaran, jalur untung harian) di atas v183 Robot"
 }

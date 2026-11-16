@@ -27,7 +27,24 @@ CS13 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS13')
 CS14 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS14')
 CARA1, CARA2 = 'r0.t1.126', 'r0.t2.0'                    # cara sekarang (pegang B) dan "pegang lebih lama" (pilihan pengguna B, 16 Nov 2026)
 KOL = ['id', 'asal', 'pil', 'pra', 'nama', 'pen', 'beli', 'shar', 'tangkap', 'rawak', 'm5', 'menang', 'purata', 'rugi15', 'hari', 'k3', 'n',
-       'menang2', 'purata2', 'rugi2', 'hari2']
+       'menang2', 'purata2', 'rugi2', 'hari2', 'jenis', 'am5', 'k10', 'k1', 'k2']
+# v182 reka bentuk (16 Nov 2026; selepas lajur CS14): jenis isyarat beli (indeks kamus `jenis`), naik >= 5 % minggu 1 bagi saham rawak hari sama (am5), dagangan dijual
+# >= +10 % (k10), kelebihan tangkap 2010-19 (k1) dan 2020-24 (k2); semuanya terus daripada senarai_utama.csv, tiada kiraan baharu.
+JENIS = ['Terlebih jual', 'Kaedah M asal', 'Undur dalam trend', 'Momentum', 'Pecah paras', 'Silang purata', 'Kaedah N / P asal',
+         'Volum, gap & corak bar']
+_K = {1: 0, 2: 0, 3: 0, 4: 0, 13: 0, 17: 2, 18: 2, 22: 2, 9: 3, 11: 3, 12: 3, 23: 3, 10: 4, 19: 4, 20: 4, 21: 4, 25: 4, 5: 5, 7: 5, 8: 5,
+      14: 7, 15: 7, 16: 7, 6: 7, 24: 7}
+
+
+def jenis(nama):
+    """Kumpulan jenis isyarat beli (indeks JENIS) daripada kod pencetus: Kxx.yyy = keluarga indikator cs_param, M = benih M, N/P = benih N/P."""
+    import re
+    m = re.match(r'^K(\d+)\.', str(nama))
+    if m:
+        return _K.get(int(m.group(1)), 7)
+    return 1 if str(nama).startswith('M') else 6
+
+
 HAD_BAHAGI = 200000
 PEGANG = ('Beli pada buka esok · stop loss 4×ATR14 · pegang sekurang-kurangnya 20 hari (20 hari ialah minimum, bukan had), kemudian jual '
           'bila harga tutup di bawah purata 20 hari · paling lama 6 bulan · tiada jualan pada hari beli')
@@ -66,8 +83,13 @@ def bina(folder=CS13, folder14=CS14):
         rows.append([r.id, int(r.asal == 'baharu'), int(bool(r.pilihan)), ix['pra'][r.prasyarat], ix['nama'][r.nama_p], ix['pen'][r.penapis],
                      b(r.setahun, 1), b(r.shariah_setahun, 1), b(r.terus, 1000), b(r.a_terus, 1000), b(r.m5, 1000), b(r.menang_B, 1000),
                      b(r.purata_B, 10000), b(r.rugi15_B, 1000), b(r.hari_B, 1), b(r.kl_terus_K3, 10000), int(r.n),
-                     b(r.menang2, 1000), b(r.purata2, 10000), b(r.rugi2, 1000), b(r.hari2, 1)])
+                     b(r.menang2, 1000), b(r.purata2, 10000), b(r.rugi2, 1000), b(r.hari2, 1),
+                     jenis(r.nama), b(r.a_m5, 1000), b(r.k10_B, 1000), b(r.kl_terus_K1, 10000), b(r.kl_terus_K2, 10000)])
     sm = J.get('semak_masa') or {}
+    kamus['jenis'] = JENIS
+    K = pd.read_csv(os.path.join(folder, 'kawalan.csv'))
+    K = K[K.layak.astype(bool)] if 'layak' in K else K
+    kawalan = dict(n=int(len(K)), menang=round(float(K.menang_B.median()), 4), purata=round(float(K.purata_B.median()), 5))
     return dict(
         tajuk='Senarai utama setup F (saham naik laju) dengan cara pegang B', sumber='kajian/carian_setup/hasil/CS13/senarai_utama.csv',
         dibina=pd.Timestamp.now(tz='UTC').strftime('%Y-%m-%d %H:%M UTC'), n=len(U), n_pilihan=int(U.pilihan.sum()),
@@ -76,7 +98,7 @@ def bina(folder=CS13, folder14=CS14):
         ujian=dict(calon=J.get('n_calon'), lulus=J.get('n_lulus'), kembar=J.get('n_kembar'), lulus_calon=J.get('lulus_calon'),
                    lulus_kawalan=J.get('lulus_kawalan'), k3_calon=J.get('k3_calon'), k3_kawalan=J.get('k3_kawalan')),
         semak_masa={k: {a: (round(x, 4) if isinstance(x, float) else x) for a, x in v.items()} for k, v in sm.items()},
-        pegang=PEGANG, pegang2=PEGANG2, banding=banding(folder14), kol=KOL, kamus=kamus, rows=rows,
+        kawalan=kawalan, pegang=PEGANG, pegang2=PEGANG2, banding=banding(folder14), kol=KOL, kamus=kamus, rows=rows,
         nota='Pangkat backtest pada saham yang carian tidak lihat (2010–2026); BUKAN bukti dan BUKAN keputusan wang sebenar. '
              'Tiada saham delist dalam data. Tiada papertrade tanpa keputusan pengguna.')
 

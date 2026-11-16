@@ -45,6 +45,26 @@ class TestFUtamaDb(unittest.TestCase):
             pra = d['kamus']['pra'][r[ix['pra']]]
             self.assertEqual(pra, '' if pd.isna(u.prasyarat) else u.prasyarat)
 
+    def test_lajur_v182_sepadan_dengan_sumber(self):
+        """Lajur v182 (jenis, am5, k10, k1, k2) dan median kawalan dibaca terus daripada CSV CS13, tanpa kiraan baharu."""
+        d, U = self.d, self.U.set_index('id')
+        ix = {k: i for i, k in enumerate(d['kol'])}
+        self.assertEqual(d['kamus']['jenis'], F.JENIS)
+        for r in d['rows'][:50] + d['rows'][-50:]:
+            u = U.loc[r[ix['id']]]
+            self.assertAlmostEqual(r[ix['am5']] / 1000, u.a_m5, delta=6e-4)
+            self.assertAlmostEqual(r[ix['k10']] / 1000, u.k10_B, delta=6e-4)
+            self.assertAlmostEqual(r[ix['k1']] / 10000, u.kl_terus_K1, delta=6e-5)
+            self.assertAlmostEqual(r[ix['k2']] / 10000, u.kl_terus_K2, delta=6e-5)
+            self.assertEqual(r[ix['jenis']], F.jenis(u.nama))
+        self.assertEqual(F.jenis('K13.009 Stochastic(14) silang naik'), 0)
+        self.assertEqual(F.jenis('M105 Supertrend tulen'), 1)
+        self.assertEqual(F.jenis('N16 RSI2<10 tanpa penapis'), 6)
+        K = pd.read_csv(os.path.join(CS13, 'kawalan.csv'))
+        K = K[K.layak.astype(bool)]
+        self.assertEqual(d['kawalan']['n'], len(K))
+        self.assertAlmostEqual(d['kawalan']['menang'], K.menang_B.median(), places=3)
+
     def test_cara_pegang_kedua(self):
         """Keputusan pengguna 16 Nov 2026 ("B" selepas CS14): lajur "pegang lebih lama" (r0.t2.0) di sebelah cara sekarang."""
         d = self.d
@@ -52,7 +72,8 @@ class TestFUtamaDb(unittest.TestCase):
         ix = {k: i for i, k in enumerate(d['kol'])}
         self.assertEqual(d['kol'][:17], ['id', 'asal', 'pil', 'pra', 'nama', 'pen', 'beli', 'shar', 'tangkap', 'rawak', 'm5', 'menang', 'purata',
                                          'rugi15', 'hari', 'k3', 'n'])                      # lajur lama tidak berganjak (halaman lama masih membaca)
-        self.assertEqual(d['kol'][17:], ['menang2', 'purata2', 'rugi2', 'hari2'])
+        self.assertEqual(d['kol'][17:21], ['menang2', 'purata2', 'rugi2', 'hari2'])
+        self.assertEqual(d['kol'][21:], ['jenis', 'am5', 'k10', 'k1', 'k2'])  # v182 reka bentuk, selepas CS14
         self.assertEqual((F.CARA1, F.CARA2), ('r0.t1.126', 'r0.t2.0'))
         for r in d['rows'][:40] + d['rows'][-40:]:
             x = X.loc[r[ix['id']]]
