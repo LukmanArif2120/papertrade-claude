@@ -12,7 +12,7 @@ Peraturan: `kajian/SPEC_CARIAN_SETUP.md` pindaan 16 Nov 2026 (ae). Dijana `cs_au
 
 - **Pariti:** 2,001 daripada 2,001 setup yang diaudit menyamai `hasil/CS13/senarai_utama.csv` (bilangan belian sama tepat; kadar tangkap, kadar menang dan purata dalam 0.05 mata). 300 teratas: 300 daripada 300. Tidak dapat diaudit (pencetus tidak dijana semula): 0. Bar layak: beza 0 antara enjin dan audit.
 - **Isyarat ditulis semula secara bebas:** 6 daripada 6 setup contoh sama tepat (`bebas.csv`).
-- **Tengok masa depan:** keluarga K (656 ahli) beza –; atom P / penapis / keluar beza –; prasyarat dan label disemak dalam kod (tiada anjakan negatif). Tarikh laporan (8-K butiran 2.02) memakai masa terima: waktu UTC ≥ 20 atau waktu New York ≥ 16:00 memberi hasil yang sama.
+- **Tengok masa depan:** keluarga K (656 ahli) beza 0; atom P / penapis / keluar beza 0; prasyarat dan label disemak dalam kod (tiada anjakan negatif). Tarikh laporan (8-K butiran 2.02) memakai masa terima: waktu UTC ≥ 20 atau waktu New York ≥ 16:00 memberi hasil yang sama.
 - **Data:** 1,587 saham kumpulan B, 1,326 ada data laporan (11.1 % bar layak tanpa data; kadar asas naik ≥ 5 % sama: 12.4 lawan 13.1). Pulangan 5 hari > +100 %: 93 bar daripada 3,324,189 (GME, AMC, RGC dan seumpamanya: benar); bar OHLC tidak konsisten: 1.
 
 ## 2. Yang terlepas
@@ -23,7 +23,7 @@ Peraturan: `kajian/SPEC_CARIAN_SETUP.md` pindaan 16 Nov 2026 (ae). Dijana `cs_au
 4. **Kedudukan tidak stabil.** Korelasi pangkat kelebihan tangkap antara tempoh (semua setup): 2010–19 lawan 2020–24 0.24; 2010–19 lawan 2025–26 0.15; 2020–24 lawan 2025–26 0.03. Setup yang "baik dahulu" (98 daripada 300) pada 2025–26: arah +1.1, menang lawan rawak +2.8; yang lain: +1.3, +1.0.
 5. **2025–26 bukan lagi tempoh tidak dilihat** bagi setup berdaftar: ia syarat lulus CS13 (kelebihan > 0 dalam ketiga-tiga tempoh). Bukti bersih hanya daripada papertrade.
 6. **Tiada saham mati.** 0 daripada 1,587 saham berakhir sebelum Ogos 2026. Angka condong ke atas, terutama setup "≥ 30 % di bawah puncak 52 minggu".
-7. **Intai buka esok.** 322 setup (28 dalam 300 teratas) memakai pencetus kaedah M yang membaca bar esok. Diukur semula tanpa intai: 264 setup berubah; kadar tangkap nilai tengah -0.02 mata, paling besar 0.8 mata; kadar menang paling besar 2.2 mata. Ujian bar terakhir: – daripada – pencetus benih berbeza; selepas mod tanpa intai – (modul `INTAI_LAIN` tidak dibetulkan mod itu).
+7. **Intai buka esok.** 450 setup (30 dalam 300 teratas) memakai pencetus kaedah M yang membaca bar esok. Diukur semula tanpa intai: 380 setup berubah; kadar tangkap nilai tengah -0.01 mata, paling besar 1.1 mata; kadar menang paling besar 2.2 mata. Ujian bar terakhir: 39 daripada 302 pencetus benih berbeza; selepas mod tanpa intai 3 (modul `INTAI_LAIN` tidak dibetulkan mod itu).
 8. **Stop loss dan hari laporan.** Nilai tengah 300 teratas: 80 % belian dipegang melalui hari laporan; 21 % dagangan kena stop, 4.4 % harganya melompat melepasi paras (rugi purata -17.8 % lawan -13.7 % bagi stop biasa).
 9. **Nama:** "k tutup menurun berturut" (keluarga K06) bermaksud k − 1 hari turun berturut-turut.
 
@@ -94,7 +94,7 @@ Tangkap = naik ≥ 5 % minggu pertama dan naik lagi hingga minggu ke-4. Naik:Jat
 | 3 | `F421` | hari 90% turun kemudian naik (20 sesi) + earnings dalam 1-5 sesi akan datang | M14 Walking with the Whales (benih M, parameter asal) | 23 (13) | 38:24 | 64 (59) | +6.1 (+4.6) | A i |
 | 4 | `F63` | QQQ OFF + earnings dalam 1-5 sesi akan datang | N16 RSI2<10 tanpa penapis | 22 (16) | 38:26 | 56 (55) | +4.1 (+3.3) | C |
 | 5 | `F65` | SPY bawah SMA200 + earnings dalam 1-5 sesi akan datang | P14 RSI14 silang atas 30 | 22 (16) | 38:20 | 61 (57) | +4.6 (+3.9) | C |
-| 6 | `F151` | breadth thrust Zweig aktif (20 sesi) + earnings dalam 1-5 sesi akan datang | M125 2-Bar Breakout (benih M, parameter asal) | 21 (14) | 38:24 | 62 (59) | +6.5 (+5.8) | C |
+| 6 | `F151` | breadth thrust Zweig aktif (20 sesi) + earnings dalam 1-5 sesi akan datang | M125 2-Bar Breakout (benih M, parameter asal) | 21 (14) | 38:24 | 62 (59) | +6.5 (+5.8) | C i |
 | 7 | `F51` | SPY bawah SMA200 + earnings dalam 1-5 sesi akan datang | N16 RSI2<10 tanpa penapis | 21 (16) | 36:19 | 60 (59) | +4.3 (+4.2) | C |
 | 8 | `F1255` | distribution day QQQ >= 5 dalam 25 sesi + earnings dalam 1-5 sesi akan datang | K13.006 Stochastic(9) silang naik dari bawah 20 | 21 (11) | 32:23 | 50 (51) | +2.3 (+1.8) | C |
 | 9 | `F1885` | QQQ RSI14 < 35 + tiada earnings dalam 20 sesi akan datang | K18.031 jatuh >= 10% dalam 20 hari | 21 (16) | 39:19 | 53 (49) | +2.3 (+1.0) | D xh |
@@ -298,7 +298,7 @@ Tangkap = naik ≥ 5 % minggu pertama dan naik lagi hingga minggu ke-4. Naik:Jat
 | 207 | `F2017` | >= 60% saham di atas MA50 + hasil suku terkini tumbuh >= 20% | K16.017 gap-and-go (buka > tinggi semalam + 5.0%) | 12 (9) | 24:24 | 51 (44) | +2.1 (+0.4) | D xhy |
 | 208 | `F401` | follow-through day aktif (QQQ, 20 sesi) + earnings dalam 1-5 sesi akan datang | K08.008 ema8 silang atas ema21 | 11 (8) | 20:18 | 53 (53) | +2.0 (+1.7) | D h |
 | 209 | `F1009` | rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang | M28 VWAP Separator + Kiss Pivot (benih M, varian 2: ambang=1 | 11 (7) | 18:13 | 57 (56) | +2.3 (+2.1) | D iht |
-| 210 | `F1797` | keluasan naik >= 10 mata dalam 10 sesi + earnings dalam 1-5 sesi akan datang | M147 Improved Three-Bar Pullback (benih M, varian 1: ema_3=3 | 8 (7) | 22:18 | 53 (51) | +2.2 (+1.8) | D hy |
+| 210 | `F1797` | keluasan naik >= 10 mata dalam 10 sesi + earnings dalam 1-5 sesi akan datang | M147 Improved Three-Bar Pullback (benih M, varian 1: ema_3=3 | 8 (7) | 22:18 | 53 (51) | +2.2 (+1.8) | D ihy |
 | 211 | `F1697` | <= 30% saham di atas MA50 + earnings dalam 1-5 sesi akan datang | K18.030 jatuh >= 8% dalam 20 hari | 19 (11) | 30:22 | 50 (52) | +1.2 (+1.5) | B |
 | 212 | `F1038` | rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang | K01.081 RSI(10) < 30 | 18 (9) | 30:20 | 53 (51) | +1.8 (+1.1) | B |
 | 213 | `F1459` | regangan turun-naik SPY (proksi VIX) + SPY > SMA200 + earnings dalam 1-5 sesi akan datang | K18.030 jatuh >= 8% dalam 20 hari | 18 (9) | 29:20 | 54 (52) | +2.0 (+1.7) | C |

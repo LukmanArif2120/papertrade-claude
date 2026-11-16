@@ -371,11 +371,13 @@ def tugas_benih(nama):
 
 
 def modul_intai():
-    """Modul kaedah M yang membaca bar ESOK (imbasan sumber): (anjak 'open', indeks tatasusunan, siri kalendar)."""
+    """Modul kaedah M yang membaca bar ESOK (imbasan sumber): (anjak 'open', indeks tatasusunan, siri kalendar).
+    "anjak" = `open.shift(-1)` ditulis terus ATAU melalui fungsi kongsi `_k145.langkau(g, stop)` ("langkau jika buka esok <=
+    henti"); kedua-duanya dibetulkan oleh `cs_cari.tanpa_intai()`."""
     anjak, indeks, kal = set(), set(), set()
     for f in glob.glob(os.path.join(AKAR, 'AUTOTUNE', 'kaedah', 'M*.py')):
         s, m = open(f, encoding='utf-8').read(), os.path.basename(f)[:-3]
-        if re.search(r'(open|\bo)\.shift\(-', s):
+        if re.search(r'(open|\bo)\.shift\(-', s) or re.search(r'\blangkau\(g', s):
             anjak.add(m)
         if re.search(r'\bo\[i \+ 1\]|open\.values\[i \+ 1\]', s):
             indeks.add(m)

@@ -1479,6 +1479,10 @@ Maya; tiada order; bukan Lejar; tidak dinilai kad skor. Penjejak lama (`jejak_f/
   jadi kebanyakan ahli tidak aktif pada November 2026; belian tertumpu pada musim laporan (akhir Januari, April, Julai,
   Oktober). Bacaan dikunci dijangka paling awal selepas 1–2 musim laporan.
 - **Jangan ubah `jejak_f2/kohort.json` atau buang baris `isyarat.csv` tanpa pindaan bertarikh.**
+- **Pembetulan bilangan Bahagian C (17 Nov 2026):** imbasan pertama hanya mengira `open.shift(-1)` yang ditulis terus (59 modul,
+  dibundarkan "60"). 40 modul lagi melakukannya melalui fungsi kongsi `_k145.langkau(g, stop)`, jadi bilangan sebenar ialah
+  **98 daripada 134** (ditemui oleh ujian bar terakhir `cs_audit19.py intai`: modul berbeza yang tiada dalam imbasan).
+  `tanpa_intai()` membetulkan kedua-dua bentuk; `cs_audit19.modul_intai()` kini mengira kedua-duanya dan kesan diukur semula.
 - **Penjelasan sebelum bermula (17 Nov 2026; ditulis semasa membina penjejak, sebelum mana-mana isyarat papertrade wujud):**
   (i) kawalan `KW1` direkod SATU baris setiap saham setiap laporan (hari pertama ia masuk tetingkap 1–5 sesi), setara dengan
   peraturan satu posisi; (ii) satu posisi setiap (setup, saham) ditentukan oleh jualan cara B; cara 50 dinilai atas belian yang

@@ -2607,7 +2607,7 @@ class TestCS19(unittest.TestCase):
         tiada = [d.date() for d in pd.bdate_range(min(ada), max(ada)) if d.date() not in ada]
         cuti = set().union(*(h19.cuti_nyse(y) for y in range(min(ada).year, max(ada).year + 1)))
         self.assertFalse([d for d in cuti if min(ada) <= d <= max(ada) and d in ada])
-        self.assertLessEqual(len([d for d in tiada if d not in cuti]), 2, [d for d in tiada if d not in cuti])
+        self.assertLessEqual(len([d for d in tiada if d not in cuti]), 3, [d for d in tiada if d not in cuti])   # penutupan khas
 
     def test_tindak_balas_laporan(self):
         from datetime import date
@@ -2779,6 +2779,15 @@ class TestCS19(unittest.TestCase):
         md = open(os.path.join(d, 'AUDIT.md'), encoding='utf-8').read()
         for frasa in ('BUKAN bukti', 'Gred A bukan bukti', 'Tiada saham mati', 'Jatuh hampir sama banyak'):
             self.assertIn(frasa, md)
+        anjak, indeks, kal = a19.modul_intai()                                  # imbasan termasuk fungsi kongsi _k145.langkau
+        self.assertTrue({'M14', 'M20', 'M125'} <= anjak and 'M155' not in anjak and 'M79' not in anjak)
+        I = pd.read_csv(os.path.join(d, 'intai.csv'))
+        self.assertEqual(int(I[I.pencetus.str.match(r'^K')].shape[0]), 0)
+        beza = set(I[I.beza.fillna(0) > 0].modul)
+        self.assertTrue(beza <= anjak | indeks | kal, beza - (anjak | indeks | kal))   # tiada modul mengintai yang tidak dikenal
+        self.assertTrue(set(I[I.beza_kausal.fillna(0) > 0].modul) <= set(a19.INTAI_LAIN))
+        self.assertEqual(int(I[I.pencetus.isin(['M14.0', 'M20.0s4', 'M155.2', 'M79.0', 'N43'])].beza_kausal.sum()), 0)   # pencetus kohort
+        self.assertEqual(B['intai_ujian']['K']['beza'] + B['intai_ujian']['PFX']['beza'], 0)
 
 
 CAP_F_LAMA = 'e4b8fd20bb8f78a123e32c2eef75c55c42c8f27e1a50ee81ea2b4a7b7001edd5'

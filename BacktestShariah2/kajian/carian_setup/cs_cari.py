@@ -102,7 +102,8 @@ _KAUSAL = False               # pindaan 16 Nov 2026 (ae) Bahagian C; lalai False
 
 @contextlib.contextmanager
 def tanpa_intai():
-    """Mod "tanpa intai" (pindaan 16 Nov 2026 (ae) Bahagian C). 60 daripada 134 modul kaedah M memakai `open.shift(-1)`
+    """Mod "tanpa intai" (pindaan 16 Nov 2026 (ae) Bahagian C). 98 daripada 134 modul kaedah M memakai `open.shift(-1)` (59 terus,
+    40 melalui fungsi kongsi `_k145.langkau`)
     untuk membatalkan isyarat apabila harga buka ESOK <= paras stop (atau >= sasaran) -- maklumat yang belum wujud pada
     tutup hari isyarat. Dalam konteks ini `Series` bernama 'open' yang dianjak NEGATIF dipulangkan kosong (NaN), jadi
     pembatalan itu tidak berlaku dan isyarat hanya bergantung pada bar hari itu dan sebelumnya. Modul kaedah tidak diubah.

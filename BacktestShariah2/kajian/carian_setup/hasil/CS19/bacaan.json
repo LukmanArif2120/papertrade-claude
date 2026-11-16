@@ -98,11 +98,11 @@
   "menangx_K3": 0.009789886284436666,
   "puratax_K3": 0.0020358839881977134
  },
- "intai_setup": 322,
- "intai_300": 28,
- "intai_diukur": 264,
- "intai_beza_terus_median": -0.00017426308373547778,
- "intai_beza_terus_maks": 0.008284435146924438,
+ "intai_setup": 450,
+ "intai_300": 30,
+ "intai_diukur": 380,
+ "intai_beza_terus_median": -8.35282560781303e-05,
+ "intai_beza_terus_maks": 0.010991023997069055,
  "intai_beza_menang_maks": 0.021554825149176837,
  "data": {
   "saham": 1587,
@@ -118,5 +118,18 @@
   "saham_bar_terakhir_sebelum_2026_08": 0
  },
  "bebas_sama": 6,
- "bebas_bil": 6
+ "bebas_bil": 6,
+ "intai_ujian": {
+  "pencetus": 302,
+  "berbeza": 39,
+  "berbeza_selepas_tanpa_intai": 3,
+  "K": {
+   "ahli": 656,
+   "beza": 0,
+   "saham": 12
+  },
+  "PFX": {
+   "beza": 0
+  }
+ }
 }
