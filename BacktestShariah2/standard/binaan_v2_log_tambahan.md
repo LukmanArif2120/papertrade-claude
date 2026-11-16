@@ -628,3 +628,8 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Watchlist 547 (baharu 243, dibuang 177, ke senarai beli 67). Isyarat direkod: 13152 (data/isyarat/2026-11-13_malam.csv.gz).
 - Ralat kaedah: tiada. Nota: C KVUE M93: tiada bar 2026-11-13 (harga terkini 2026-10-30); C KVUE M74: tiada bar 2026-11-13 (harga terkini 2026-10-30); C KVUE M99: tiada bar 2026-11-13 (harga terkini 2026-10-30); C KVUE M124: tiada bar 2026-11-13 (harga terkini 2026-10-30); C KVUE M80: tiada bar 2026-11-13 (harga terkini 2026-10-30); C KVUE M141: tiada bar 2026-11-13 (harga terkini 2026-10-30); C KVUE M148: tiada bar 2026-11-13 (harga terkini 2026-10-30); C WFRD M33: tiada bar 2026-11-13 (harga terkini 2026-11-12).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-11-17 05:14 MYT — GitHub Actions: beli maya 2026-11-16 (isyarat 2026-11-13)
+- Direkod 1063 (321 saham; belian semula 142; fail claude_227.csv); dilangkau 13. Harga: buka sementara yfinance 16:14 NY.
+- Dilangkau: SBH M08: buka 19.17 > buka_maks 19.04; PHIN M13: buka 73.65 <= henti 76.63; SRAD M14: buka 12.67 <= henti 12.76; AMRZ M14: buka 40.21 <= henti 40.69; HSIC M14: buka 85.70 <= henti 85.73; NXT M18: buka 91.21 <= henti 91.47; IBEX M41: isyarat batal pada buka (peraturan kaedah); UI M57: buka 645.64 <= henti 656.93; CNX M70: buka 36.16 <= henti 36.19; AVGO M139: isyarat batal pada buka (peraturan kaedah); CECO M139: isyarat batal pada buka (peraturan kaedah); TPC M143: isyarat batal pada buka (peraturan kaedah); JD M153: isyarat batal pada buka (peraturan kaedah).
+- Tiada order. Tiada wang sebenar.
