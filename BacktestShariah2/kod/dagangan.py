@@ -58,11 +58,12 @@ def betul_c(folder, frames, idx, tulis=True):
     """Nilai semula lorong 1 posisi Papertrade C bagi kaedah REPLIKA dengan lajur dagangan sendiri (sama dengan harian_c.kerja
     dan Lejar sejak 22 Okt 2026). Hanya keputusan yang diliputi stor (keluar <= bar akhir saham) diubah: keluar salah tarikh/
     harga dibetulkan; keluar yang tidak berlaku dibuka semula (harga terkini = tutup bar akhir); posisi yang patut sudah keluar
-    ditutup. Pulang senarai perubahan (fail, saham, kaedah, tarikh_beli, lama, baharu)."""
+    ditutup. Posisi yang ditutup kerana delist (tidak_layak.tutup_delist) tidak disentuh. Pulang senarai perubahan (fail, saham, kaedah, tarikh_beli, lama, baharu)."""
     import importlib
     import os
     import harian_c as H
     import sahkan as SH
+    import tidak_layak as TL
     SES = list(idx['SPY'].index)
     mod, out = {}, []
     for p in sorted(os.path.join(folder, f) for f in os.listdir(folder) if f.startswith('claude') and f.endswith('.csv')):
@@ -87,6 +88,8 @@ def betul_c(folder, frames, idx, tulis=True):
             x = H.nilai_keluar(gd, gd.index.get_loc(pd.Timestamp(ti)), getattr(m, 'TMAX', None) or 0)
             akhir = str(g.index[-1].date())
             keluar = SH.benar(r.get('keluar'))
+            if keluar and (r.get('isyarat_keluar') or '').startswith(TL.NOTA_DELIST):
+                continue                        # 16 Nov 2026: tutup delist muktamad (tiada bar lagi; dahulu dibuka semula setiap hari)
             lama = r.get('tarikh_keluar') if keluar else ''
             if keluar and lama > akhir:
                 continue                        # keluar selepas bar akhir stor: tidak boleh disahkan

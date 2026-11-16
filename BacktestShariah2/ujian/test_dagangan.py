@@ -123,6 +123,14 @@ class TestDagangan(unittest.TestCase):
             self.assertEqual((r['keluar'], r['tarikh_keluar'], r['tutup_semua']), ('True', betul, 'True'))
             self.assertIn('dagangan sendiri', r['nota'])
             self.assertEqual(D.betul_c(d, {'X': g}, self.idx), [])
+            # 16 Nov 2026: posisi yang ditutup kerana delist (tidak_layak.tutup_delist) TIDAK dibuka semula / diubah
+            r0d = dict(r0, isyarat_keluar='Keluar: delist / tiada data 10 sesi — tutup akhir 2026-10-30 @ 19.31')
+            with open(p, 'w', newline='') as fh:
+                w = csv.DictWriter(fh, lajur); w.writeheader(); w.writerow({k: r0d.get(k, '') for k in lajur})
+            self.assertEqual(D.betul_c(d, {'X': g}, self.idx), [])
+            with open(p) as fh:
+                r = list(csv.DictReader(fh))[0]
+            self.assertEqual((r['keluar'], r['tarikh_keluar'], r['nota']), ('True', salah, 'buka rasmi'))
 
 
 if __name__ == '__main__':

@@ -43,6 +43,7 @@ BAR_CAIR = 20
 JULAT0_MAKS = 3        # bar tanpa julat dalam 20 bar -> tidak cair
 VOL0_MAKS = 2          # bar tanpa volum dalam 20 bar -> tidak cair
 NILAI_MIN = 100_000.0  # median tutup x volum (USD)
+NOTA_DELIST = 'Keluar: delist / tiada data'   # awalan isyarat_keluar tutup delist (muktamad; dagangan.betul_c tidak membukanya semula)
 DELIST_SESI = 10       # 22 Okt 2026: 5 -> 10 (penggantungan SEC H10 sehingga 10 hari dagangan; tarikan gagal sementara)
 
 
@@ -183,6 +184,7 @@ def tutup_delist(folder, frames, sesi, tulis=True, bursa=None, ditahan=None):
     """Posisi Papertrade C yang masih terbuka (lorong 1 atau 2) bagi saham tanpa bar >= DELIST_SESI sesi DAN delist
     (sah_delist dengan `bursa`; None = peraturan lama): tutup lorong yang terbuka pada tutup bar terakhir. Posisi saham yang
     masih tersenarai kekal terbuka; (fail, saham, kaedah, sesi tanpa bar, sebab) ditambah ke senarai `ditahan` jika diberi.
+    Belian bertarikh selepas bar terakhir saham yang delist ditanda tidak_dibeli (harga None, untung 'tidak dibeli').
     Pulang senarai perubahan."""
     import sahkan as SH
     S = pd.DatetimeIndex(sesi)[-1]
@@ -198,7 +200,10 @@ def tutup_delist(folder, frames, sesi, tulis=True, bursa=None, ditahan=None):
             if not (l1 or l2):
                 continue
             g = frames.get(r['saham'])
-            if g is None or not len(g) or str(g.index[-1].date()) < r['tarikh_beli']:
+            if g is None or not len(g):
+                continue
+            selepas = str(g.index[-1].date()) < r['tarikh_beli']
+            if selepas and not l1:
                 continue
             n = sesi_tanpa_bar(g, sesi, S)
             if n < DELIST_SESI:
@@ -209,8 +214,26 @@ def tutup_delist(folder, frames, sesi, tulis=True, bursa=None, ditahan=None):
                     ditahan.append((os.path.basename(p), r['saham'], r.get('kaedah'), n, sebab))
                 continue
             tk = str(g.index[-1].date()); hk = float(g.close.iloc[-1]); hb = float(r['harga_beli'])
+            if selepas:
+                # 16 Nov 2026 (KVUE M14 2 Nov): belian bertarikh SELEPAS bar terakhir saham yang delist = saham tidak didagangkan
+                # pada hari beli; harga sementara tidak akan disahkan oleh bar harian (harian_c §5.4). Ditanda tidak_dibeli dengan
+                # medan yang sama seperti pengesahan harian_c "tiada bar dagangan".
+                import keluar_lorong as KL
+                r.update(tidak_dibeli='True', tidak_sah='True',
+                         sebab_tidak_sah=f"tiada bar dagangan pada {r['tarikh_beli']} (saham delist; bar akhir {tk})",
+                         harga_beli='', harga_terkini='', untung_pct='', hari='', isyarat_keluar='TIDAK DIBELI', keluar='False',
+                         tarikh_keluar='', harga_keluar='', untung_akhir_pct='')
+                for c, v in (('harga_buka_rujukan', AA.nombor_teks(hb)), ('tarikh_beli_dirancang', r['tarikh_beli'])):
+                    if c in lajur:
+                        r[c] = v
+                for c in KL.LAJUR_LORONG:
+                    if c in r:
+                        r[c] = ''
+                ubah = True
+                out.append((os.path.basename(p), r['saham'], r.get('kaedah'), r['tarikh_beli'], tk, None, 'tidak dibeli'))
+                continue
             u = f'{(hk / hb - 1) * 100:.2f}'; ht = AA.nombor_teks(hk)
-            nota = f'Keluar: delist / tiada data {n} sesi — tutup akhir {tk} @ {hk:.2f}'
+            nota = f'{NOTA_DELIST} {n} sesi — tutup akhir {tk} @ {hk:.2f}'
             if l1:
                 r.update(keluar='True', tarikh_keluar=tk, harga_keluar=ht, untung_akhir_pct=u, harga_terkini=ht, untung_pct=u,
                          isyarat_keluar=nota)

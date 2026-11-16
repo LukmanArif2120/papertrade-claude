@@ -56,6 +56,34 @@ class TestDelist(unittest.TestCase):
                              (str(IX[165].date()), '51', akhir))
             self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi), [])
 
+    def test_belian_selepas_bar_akhir_tidak_dibeli(self):
+        # 16 Nov 2026 (KVUE M14): belian bertarikh selepas bar terakhir saham delist -> tidak_dibeli, bukan "pegang" selamanya
+        g = saham(umum=None, n=180)
+        sesi = list(IX[:190])
+        lajur = TestPosisi.LAJUR + ['harga_buka_rujukan', 'tarikh_beli_dirancang']
+        rows = [dict(tarikh_beli=str(IX[181].date()), saham='Y', kaedah='M14', harga_beli='19.31', harga_terkini='19.31', untung_pct='0',
+                     hari='9', isyarat_keluar='Pegang (henti 19.20)', keluar='False'),
+                dict(tarikh_beli=str(IX[181].date()), saham='Y', kaedah='M15', harga_beli='19.31', keluar='True',
+                     tarikh_keluar=str(IX[183].date()), harga_keluar='19', keluar_henti='True')]
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'claude_4.csv')
+            with open(p, 'w', newline='') as f:
+                w = csv.DictWriter(f, lajur); w.writeheader()
+                for r in rows:
+                    w.writerow({k: r.get(k, '') for k in lajur})
+            self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi[:189]), [])     # 9 sesi tanpa bar: belum
+            self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi, bursa=dict(semasa={'Y'}, tamat={}, peristiwa={})), [])   # masih tersenarai: kekal
+            x = TL.tutup_delist(d, {'Y': g}, sesi)
+            self.assertEqual([(y[2], y[6]) for y in x], [('M14', 'tidak dibeli')])
+            with open(p) as f:
+                out = list(csv.DictReader(f))
+            self.assertEqual((out[0]['tidak_dibeli'], out[0]['tidak_sah'], out[0]['isyarat_keluar'], out[0]['harga_beli'],
+                              out[0]['harga_buka_rujukan'], out[0]['tarikh_beli_dirancang'], out[0]['keluar']),
+                             ('True', 'True', 'TIDAK DIBELI', '', '19.31', str(IX[181].date()), 'False'))
+            self.assertIn('tiada bar dagangan', out[0]['sebab_tidak_sah'])
+            self.assertEqual((out[1]['tidak_dibeli'], out[1]['keluar']), ('', 'True'))                   # lorong tertutup: tidak disentuh
+            self.assertEqual(TL.tutup_delist(d, {'Y': g}, sesi), [])
+
 
 class TestTapisFail(unittest.TestCase):
     def test_senarai_beli_dan_watchlist(self):
