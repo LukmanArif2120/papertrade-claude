@@ -1417,6 +1417,10 @@ b.nk.nk-c{color:var(--neg-tx)}b.nk.nk-t{color:var(--pos)}b.nk.nk-v{color:#C9B8FF
 .rk-cip.sl{color:#AFC0DA;background:rgba(107,122,153,.2);border:1px solid rgba(107,122,153,.4)}
 .rk-cip.bl{color:var(--fg-2);background:#262C34;border:1px solid var(--line-2,#3A414C);text-transform:none;letter-spacing:0;font-weight:600}
 .rk-cip .b{width:7px;height:7px;border-radius:50%;background:currentColor}
+.rk-cip.cl{color:#F3E7D3;background:rgba(243,231,211,.1);border:1px solid rgba(243,231,211,.4);text-transform:none;letter-spacing:0}
+.rk-cip.gh{color:#C9D3E0;background:#232A33;border:1px solid #4A5563;text-transform:none;letter-spacing:0}
+.rk-sm{display:inline-block;width:9px;height:9px;border-radius:2px;flex:0 0 auto;margin-right:6px;vertical-align:0}
+.rk-sm.cl{background:#EFE6D8}.rk-sm.gh{background:#1A222D;box-shadow:inset 0 0 0 1.5px #8A93A0}
 .rk-tt{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:5px;font-size:12.5px;line-height:1;color:#0d1117;font-weight:800;flex:0 0 auto}
 .rk-titik{display:inline-block;width:10px;height:10px;border-radius:50%;flex:0 0 auto}
 .rk-t-siap{background:#1EE3B4}.rk-t-gagal,.rk-t-lewat{background:#FF5D73}.rk-t-senyap,.rk-t-belum{background:#6B7A99}.rk-t-kerja{background:#5FD3E6;box-shadow:0 0 6px #5FD3E6}
@@ -1495,6 +1499,8 @@ b.nk.nk-c{color:var(--neg-tx)}b.nk.nk-t{color:var(--pos)}b.nk.nk-v{color:#C9B8FF
 .rk-tw table{width:100%;border-collapse:collapse;font-size:15px}
 .rk-tw th{font:600 12.5px var(--f-semi);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:9px 12px;border-bottom:1px solid var(--line,#2E353E);background:#1C2026;white-space:nowrap}
 .rk-tw td{padding:9px 12px;border-top:1px solid #262C34;vertical-align:top;color:var(--fg)}
+.rk-tw th,.rk-tw td{text-align:left;overflow-wrap:normal}
+.rk-tw td.w{white-space:nowrap}
 .rk-tw tbody tr{cursor:pointer}
 .rk-tw tbody tr:hover td,.rk-tw tbody tr.pilih td{background:rgba(255,255,255,.04)}
 .rk-tw td .nm{font-weight:700}
@@ -1635,7 +1641,7 @@ root.innerHTML=`<div class="rk-akar">
     <button class="rk-btn" data-rk="semua" hidden>‹ Semua bilik</button>
     ${ADA_ULANG?`<div class="rk-seg" role="group" aria-label="Paparan"><button data-rk="mKini" aria-pressed="true">Sekarang</button><button data-rk="mUlang" aria-pressed="false">Ulang tayang ${esc(tarikh(D.ulang.mula))}</button></div>`:''}</div></div>
   <div class="rk-pentasbalut"><div class="rk-pentas" data-rk="pentas"><div data-rk="kanvas"></div><div class="rk-lapis" data-rk="lapis"></div><div class="rk-muat" data-rk="muat">Memuatkan pejabat 3D…</div><div class="rk-butir" data-rk="kad" hidden></div></div></div>
-  <div class="rk-petua"><span><i class="rk-titik rk-t-siap"></i>Siap</span><span><i class="rk-titik rk-t-kerja"></i>Sedang bekerja</span><span><i class="rk-titik rk-t-gagal"></i>Gagal / lewat</span><span><i class="rk-titik rk-t-senyap"></i>Senyap / belum mula</span><span>Muka robot = status · zZ rehat · seret untuk pusing · ketik bilik untuk zum · ketik robot untuk butiran</span></div>
+  <div class="rk-petua"><span><i class="rk-titik rk-t-siap"></i>Siap</span><span><i class="rk-titik rk-t-kerja"></i>Sedang bekerja</span><span><i class="rk-titik rk-t-gagal"></i>Gagal / lewat</span><span><i class="rk-titik rk-t-senyap"></i>Senyap / belum mula</span><span><i class="rk-sm cl"></i>Dada terang = Claude</span><span><i class="rk-sm gh"></i>Dada gelap = GitHub Actions</span><span>Muka robot = status · zZ rehat · seret untuk pusing · ketik bilik untuk zum · ketik robot untuk butiran</span></div>
  </section>
  <p class="rk-intro"><b>${D.robot.length} robot</b>: setiap satu ialah kerja automatik projek (<b>${nGh}</b> kerja GitHub dan <b>${nCl}</b> tugasan berjadual Claude), dalam 6 bilik ikut aliran kerja: Data → Papertrade → Analisis / Carian setup → Dashboard; Pusat kawalan menjaga semuanya. Keadaan dikemas kini setiap kali data dihantar ke dashboard, bukan setiap saat. Paparan sahaja.</p>
  <div class="rk-kpis" data-rk="kpis"></div>
@@ -1645,7 +1651,7 @@ root.innerHTML=`<div class="rk-akar">
    ${ADA_ULANG?`<div class="rk-gm-alat"><button class="rk-btn" data-rk="main">▶ Main ulang tayang</button><span class="rk-gm-jam" data-rk="jamU">–</span><span class="rk-gm-n" data-rk="kiraU"></span></div><div class="rk-gm" data-rk="gm"></div>`:'<p class="rk-nota">Belum ada data larian untuk garis masa.</p>'}</section>
  </div>
  <section class="rk-kad"><div class="rk-ph"><h2>Semua robot</h2><div class="rk-seg" data-rk="tapis" role="group" aria-label="Tapis bilik"></div></div>
-  <div class="rk-tw"><table><thead><tr><th>Robot</th><th>Bilik</th><th>Keadaan</th><th>Terakhir</th><th>Tempoh</th><th>Seterusnya</th><th>Jadual</th></tr></thead><tbody data-rk="tb"></tbody></table></div>
+  <div class="rk-tw"><table><thead><tr><th>Robot</th><th>Siapa buat</th><th>Bilik</th><th>Keadaan</th><th>Terakhir</th><th>Tempoh</th><th>Seterusnya</th><th>Jadual</th></tr></thead><tbody data-rk="tb"></tbody></table></div>
   <div class="rk-kadtel" data-rk="kt"></div></section>
  <p class="rk-nota" data-rk="nota"></p>
 </div>`;
@@ -1666,6 +1672,9 @@ function kiraKeadaan(){let n=0;for(const r of D.robot){const k=MOD==='kini'?kead
 /* ---------- UI bukan 3D ---------- */
 const LABEL={siap:'Siap — berjaya',gagal:'Gagal',lewat:'Lewat — tidak berjalan ikut jadual',senyap:'Senyap — tiada yang perlu dilapor',belum:'Belum ada rekod larian'};
 const CIP={siap:['ok','Siap'],gagal:['neg','Gagal'],lewat:['neg','Lewat'],senyap:['sl','Senyap'],belum:['sl','Belum ada rekod']};
+const siapa=r=>String(r.jenis||'').startsWith('Claude')?'cl':'gh';
+const SIAPA={cl:'Claude',gh:'GitHub Actions'};
+const cipSiapa=r=>`<span class="rk-cip ${siapa(r)}"><i class="rk-sm ${siapa(r)}" style="margin-right:0"></i>${SIAPA[siapa(r)]}</span>`;
 const cipStatus=st=>`<span class="rk-cip ${CIP[st][0]}"><i class="b"></i>${CIP[st][1]}</span>`;
 const ttB=b=>`<span class="rk-tt" style="background:${WARNA[b]}">${IKON[b]}</span>`;
 const cipBilik=b=>`<span class="rk-cip bl">${ttB(b)}${esc(BIL[b].nama)}</span>`;
@@ -1685,7 +1694,7 @@ function binaAktiviti(){let item=[];
       if(a<=TU&&TU<b)item.push({r,t:a+1e13,st:'kerja',w:jam(a),m:'sedang bekerja'});
       else if(b<=TU)item.push({r,t:b,st:u[2]==='failure'?'gagal':'siap',w:jam(b),m:(u[2]==='failure'?'gagal':'siap')+' · '+tempoh(a,b)+(u[3]==='penjaga'?' · dikejut penjaga':u[3]==='aliran'?' · disambung kerja lain':'')});}}}
   item.sort((a,b)=>b.t-a.t);item=item.slice(0,12);
-  const html=item.length?item.map(o=>`<li data-id="${o.r.id}"><i class="rk-titik rk-t-${o.st}"></i><div><b>${esc(o.r.nama)}</b><span class="m">${esc(o.m)} · ${esc(BIL[o.r.bilik].nama)}</span></div><span class="w">${esc(o.w)}</span></li>`).join(''):'<li class="kosong">Belum ada larian pada waktu ini.</li>';
+  const html=item.length?item.map(o=>`<li data-id="${o.r.id}"><i class="rk-titik rk-t-${o.st}"></i><div><b>${esc(o.r.nama)}</b><span class="m">${esc(o.m)} · ${esc(BIL[o.r.bilik].nama)} · ${SIAPA[siapa(o.r)]}</span></div><span class="w">${esc(o.w)}</span></li>`).join(''):'<li class="kosong">Belum ada larian pada waktu ini.</li>';
   if(html!==aktLepas){q('akt').innerHTML=html;aktLepas=html;}}
 let gph=null;
 function binaGantt(){if(!ADA_ULANG)return;const gm=q('gm');const x=t=>((ms(t)-U0)/(U1-U0)*100);
@@ -1695,7 +1704,7 @@ function binaGantt(){if(!ADA_ULANG)return;const gm=q('gm');const x=t=>((ms(t)-U0
     for(const r of ikutBilik[b]){const u=r.ulang||[];
       const bars=u.map(v=>{const a=x(v[0]),w=Math.max(.35,x(v[1])-a);return `<i class="bt${v[2]==='failure'?' g':''}" style="left:${a.toFixed(2)}%;width:${w.toFixed(2)}%" title="${esc(r.nama)}: ${jam(v[0])}–${jam(v[1])}"></i>`;}).join('');
       const kosong=u.length?'':`<span class="kosongtx">${r.id==='loceng'?'senyap sepanjang hari (tiada kerja gagal)':'tiada larian pada hari ini'}</span>`;
-      h+=`<div class="rk-gm-row" data-id="${r.id}"><div class="nm" title="${esc(r.nama)}">${esc(r.nama)}</div><div class="trek">${bars}${kosong}</div></div>`;}}
+      h+=`<div class="rk-gm-row" data-id="${r.id}"><div class="nm" title="${esc(r.nama)} · ${SIAPA[siapa(r)]}"><i class="rk-sm ${siapa(r)}"></i>${esc(r.nama)}</div><div class="trek">${bars}${kosong}</div></div>`;}}
   h+=`<div class="rk-gm-ph" data-rk="gph" hidden></div><div class="rk-gm-paksi"><div></div><div>${jamPaksi.map((t,i)=>`<span style="left:${i*25}%">${t}</span>`).join('')}</div></div>`;
   gm.innerHTML=h;gph=q('gph');
   const cari=e=>{const t=gm.querySelector('.rk-gm-row:not(.kumpulan) .trek').getBoundingClientRect();const k=Math.min(1,Math.max(0,(e.clientX-t.left)/t.width));if(MOD!=='ulang')setMod('ulang');TU=U0+k*(U1-U0);G.buangPembawa();lepasUI=0;kemasUlangUI();};
@@ -1714,22 +1723,22 @@ function bukaKad(id){const r=ROB[id];
   root.querySelectorAll('tr.pilih').forEach(e=>e.classList.remove('pilih'));const row=root.querySelector(`tr[data-id="${id}"]`);row&&row.classList.add('pilih');
   const a=r.akhir;const k=r.kiraan?Object.entries(r.kiraan).map(([h,n])=>`${n} ${({success:'berjaya',failure:'gagal',cancelled:'dibatalkan',skipped:'senyap'})[h]||h}`).join(', '):'';
   kad.innerHTML=`<button class="tutup" aria-label="Tutup">×</button><h3><i class="rk-titik rk-t-${r.status}"></i>${esc(r.nama)}</h3><p>${esc(r.kerja)}</p>
-   <dl><dt>Bilik</dt><dd>${esc(BIL[r.bilik].nama)}</dd><dt>Keadaan</dt><dd>${LABEL[r.status]}</dd>
+   <dl><dt>Siapa buat</dt><dd>${cipSiapa(r)}</dd><dt>Bilik</dt><dd>${esc(BIL[r.bilik].nama)}</dd><dt>Keadaan</dt><dd>${LABEL[r.status]}</dd>
    <dt>Terakhir</dt><dd>${a?penuh(a.mula)+' · '+tempoh(a.mula,a.akhir):'–'}</dd>
    <dt>Seterusnya</dt><dd>${r.seterusnya?penuh(r.seterusnya):(r.id==='penjaga'?'Setiap 30 minit':'Bila kerja sebelumnya siap')}</dd>
    <dt>Jadual</dt><dd>${esc(r.jadual)}</dd>${k?`<dt>Larian 4 hari</dt><dd>${k}</dd>`:''}
-   <dt>Jenis</dt><dd>${esc(r.jenis)} · <code>${esc(r.rujukan)}</code></dd></dl>`;
+   <dt>Rujukan</dt><dd><code>${esc(r.rujukan)}</code></dd></dl>`;
   kad.hidden=false;kad.querySelector('.tutup').onclick=e=>{e.stopPropagation();tutupKad();};}
 function tutupKad(){kad.hidden=true;root.querySelectorAll('tr.pilih').forEach(e=>e.classList.remove('pilih'));}
 function pilihRobot(id,gulung){const r=ROB[id];if(gulung!==false)pentasEl.scrollIntoView({behavior:REDUP?'auto':'smooth',block:'center'});G.zum(r.bilik);bukaKad(id);}
 let TAPIS='semua';
 function binaJadual(){const t=q('tapis');
-  t.innerHTML=[['semua','Semua',D.robot.length],...URUT.map(b=>[b,BIL[b].nama,ikutBilik[b].length])].map(([k,n,c])=>`<button data-k="${k}" aria-pressed="${k===TAPIS}">${esc(n)} (${c})</button>`).join('');
-  const rs=TAPIS==='semua'?URUT.flatMap(b=>ikutBilik[b]):ikutBilik[TAPIS];
-  q('tb').innerHTML=rs.map(r=>`<tr data-id="${r.id}"><td><div class="nm">${esc(r.nama)}</div><div class="kj">${esc(r.kerja)}</div></td><td>${cipBilik(r.bilik)}</td><td>${cipStatus(r.status)}</td>
+  t.innerHTML=[['semua','Semua',D.robot.length],['cl','Claude',D.robot.filter(r=>siapa(r)==='cl').length],['gh','GitHub Actions',D.robot.filter(r=>siapa(r)==='gh').length],...URUT.map(b=>[b,BIL[b].nama,ikutBilik[b].length])].map(([k,n,c])=>`<button data-k="${k}" aria-pressed="${k===TAPIS}">${esc(n)} (${c})</button>`).join('');
+  const rs=TAPIS==='semua'?URUT.flatMap(b=>ikutBilik[b]):(TAPIS==='cl'||TAPIS==='gh')?URUT.flatMap(b=>ikutBilik[b]).filter(r=>siapa(r)===TAPIS):ikutBilik[TAPIS];
+  q('tb').innerHTML=rs.map(r=>`<tr data-id="${r.id}"><td><div class="nm">${esc(r.nama)}</div><div class="kj">${esc(r.kerja)}</div></td><td>${cipSiapa(r)}</td><td>${cipBilik(r.bilik)}</td><td>${cipStatus(r.status)}</td>
     <td class="w">${r.akhir?penuh(r.akhir.mula):'belum ada rekod'}</td><td class="w">${r.akhir?tempoh(r.akhir.mula,r.akhir.akhir):'–'}</td>
     <td class="w">${r.seterusnya?penuh(r.seterusnya):(r.id==='penjaga'?'setiap 30 min':'selepas kerja lain')}</td><td class="j">${esc(r.jadual)}</td></tr>`).join('');
-  q('kt').innerHTML=rs.map(r=>`<div class="k" data-id="${r.id}"><i class="rk-titik rk-t-${r.status}"></i><div><b>${esc(r.nama)}</b> <span class="m">· ${esc(BIL[r.bilik].nama)}</span><div class="kj">${esc(r.kerja)}</div>
+  q('kt').innerHTML=rs.map(r=>`<div class="k" data-id="${r.id}"><i class="rk-titik rk-t-${r.status}"></i><div><b>${esc(r.nama)}</b> <span class="m">· ${esc(BIL[r.bilik].nama)} · ${SIAPA[siapa(r)]}</span><div class="kj">${esc(r.kerja)}</div>
     <div class="m">Terakhir ${r.akhir?penuh(r.akhir.mula)+' ('+tempoh(r.akhir.mula,r.akhir.akhir)+')':'belum ada rekod'}${r.seterusnya?' · lagi '+penuh(r.seterusnya):''}</div></div></div>`).join('');}
 q('tapis').addEventListener('click',e=>{const b=e.target.closest('button[data-k]');if(!b)return;TAPIS=b.dataset.k;binaJadual();});
 q('tb').addEventListener('click',e=>{const tr=e.target.closest('tr[data-id]');if(tr)pilihRobot(tr.dataset.id);});
@@ -1807,7 +1816,9 @@ function lukisMuka(st,k){return (g,w,h)=>{rr(g,0,0,w,h,26);g.fillStyle=st==='gag
 function muka(st,k=0){if(st!=='kerja')return MUKA[st]||(MUKA[st]=kanvas(256,176,lukisMuka(st,0)));
   if(!MUKA.kerja)MUKA.kerja=kanvas(256,176,lukisMuka('kerja',k));else{const c=MUKA.kerja.image,g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);lukisMuka('kerja',k)(g,c.width,c.height);MUKA.kerja.needsUpdate=true;}return MUKA.kerja;}
 const GEO={};const geo=(k,f)=>GEO[k]||(GEO[k]=f());
-function binaRobot(warna){
+const DADA={};
+function dada(k){return DADA[k]||(DADA[k]=kanvas(256,96,(g,w,h)=>{rr(g,0,0,w,h,22);g.fillStyle=k==='cl'?'#EFE6D8':'#1A222D';g.fill();if(k==='gh'){g.strokeStyle='#8A93A0';g.lineWidth=5;g.stroke();}g.fillStyle=k==='cl'?'#2A2118':'#DDE6F0';g.font='800 50px "Barlow Condensed","Arial Narrow",sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(k==='cl'?'CLAUDE':'GITHUB',w/2,h/2+2);}));}
+function binaRobot(warna,sp='gh'){
   const g=new THREE.Group(),badan=new THREE.Group(),kepala=new THREE.Group();g.add(badan);
   const gelap=campur(warna,'#0b0f14',.45),terang=campur(warna,'#ffffff',.3);
   const mB=bahan(warna,{roughness:.45}),mG=bahan(gelap,{roughness:.55}),mT=bahan(terang,{roughness:.4});
@@ -1817,7 +1828,8 @@ function binaRobot(warna){
   const kakiG=(x,m)=>{const p=new THREE.Group();p.position.set(x,.24,0);const a=new THREE.Mesh(geo('kaki',()=>new THREE.CapsuleGeometry(.08,.16,6,12)),m);a.position.y=-.14;p.add(a);badan.add(p);kaki.push(p);return p;};
   kakiG(-.13,mG);kakiG(.13,mG);
   const b=new THREE.Mesh(geo('badan',()=>kotakBulat(.58,.46,.42,.12)),mB);b.position.y=.55;badan.add(b);
-  const panel=new THREE.Mesh(geo('panel',()=>kotakBulat(.3,.12,.04,.03)),mG);panel.position.set(-.04,.6,.21);badan.add(panel);
+  const panel=new THREE.Mesh(geo('panel',()=>kotakBulat(.34,.14,.04,.03)),mG);panel.position.set(-.04,.6,.21);badan.add(panel);
+  const label=new THREE.Mesh(geo('label',()=>new THREE.PlaneGeometry(.32,.12)),new THREE.MeshBasicMaterial({map:dada(sp),toneMapped:false}));label.position.set(-.04,.6,.2315);badan.add(label);
   const pl=new THREE.Mesh(geo('pl',()=>new THREE.SphereGeometry(.03,10,8)),led.material);pl.position.set(.16,.6,.225);badan.add(pl);
   lenganG(-.36,.7,mG);lenganG(.36,.7,mG);
   const leher=new THREE.Mesh(geo('leher',()=>new THREE.CylinderGeometry(.07,.07,.12,12)),mG);leher.position.y=.84;badan.add(leher);
@@ -1889,9 +1901,9 @@ function bina(){
     const sel=grid(id,id==='pusat'?rs.length:Math.max(rs.length,rs.length>4?9:4));
     sel.forEach((p,i)=>{const r=rs[i];if(!r){dunia.add(pokok(p[0],p[1]));return;}
       const mj=meja(p[0],p[1]);dunia.add(mj);MEJA[r.id]=mj;
-      const R=binaRobot(WARNA[r.bilik]);R.g.position.set(p[0]-.55,0,p[1]-.55);R.g.rotation.y=Math.PI/4;R.g.traverse(o=>o.userData.id=r.id);dunia.add(R.g);ROBOT[r.id]=R;});
+      const R=binaRobot(WARNA[r.bilik],siapa(r));R.g.position.set(p[0]-.55,0,p[1]-.55);R.g.rotation.y=Math.PI/4;R.g.traverse(o=>o.userData.id=r.id);dunia.add(R.g);ROBOT[r.id]=R;});
     if(id==='pusat')dunia.add(hab());}
-  if(ROB.penjaga){const P=binaRobot(WARNA.pusat);P.g.traverse(o=>o.userData.id='penjaga');dunia.add(P.g);ROBOT.penjaga=P;PENJAGA.R=P;PENJAGA.pts=ronda();PENJAGA.i=0;PENJAGA.s=0;P.g.position.set(PENJAGA.pts[0][0],0,PENJAGA.pts[0][1]);}
+  if(ROB.penjaga){const P=binaRobot(WARNA.pusat,'gh');P.g.traverse(o=>o.userData.id='penjaga');dunia.add(P.g);ROBOT.penjaga=P;PENJAGA.R=P;PENJAGA.pts=ronda();PENJAGA.i=0;PENJAGA.s=0;P.g.position.set(PENJAGA.pts[0][0],0,PENJAGA.pts[0][1]);}
   const sz=new THREE.Box3().setFromObject(dunia).getSize(new THREE.Vector3()).length()/1.6;
   Object.assign(mentari.shadow.camera,{left:-sz,right:sz,top:sz,bottom:-sz});mentari.shadow.camera.updateProjectionMatrix();}
 /* kamera */
@@ -1934,7 +1946,7 @@ function letakBelon(id){const bl=BELON[id];if(!bl||!bl._r)return;const R=ROBOT[b
 function putarBelon(){const ids=URUT;let papar=ids;if(ZUM)papar=[ZUM];else if(sempit()){papar=[ids[putaranGlobal%ids.length]];putaranGlobal++;}
   for(const id of ids){const bl=BELON[id];if(!papar.includes(id)){bl.classList.remove('nampak');continue;}const c=calonBelon(id);if(!c.length){bl.classList.remove('nampak');continue;}
     giliran[id]=((giliran[id]||0)+1)%c.length;const o=c[giliran[id]];bl.classList.remove('nampak');
-    setTimeout(()=>{if(!hidup)return;bl._r=o.r;bl.innerHTML=`<small>${esc(o.r.nama)}</small><b>${esc(o.t)}</b>`;letakBelon(id);bl.classList.add('nampak');},sempit()&&!ZUM?0:180);}}
+    setTimeout(()=>{if(!hidup)return;bl._r=o.r;bl.innerHTML=`<small>${esc(o.r.nama)} · ${o.r.id==='penjaga'||siapa(o.r)==='gh'?'GitHub':'Claude'}</small><b>${esc(o.t)}</b>`;letakBelon(id);bl.classList.add('nampak');},sempit()&&!ZUM?0:180);}}
 /* pejalan */
 const PINTU={};
 function pintu(id){if(PINTU[id])return PINTU[id];const L=LETAK[id];const d=Math.hypot(L.x,L.y);const u=[L.x/d,L.y/d];const h=L.h*1.18;return PINTU[id]=[L.x-u[0]*h,L.y-u[1]*h];}
@@ -1950,15 +1962,15 @@ function gerak(o,dt,laju){let j=laju*dt;
   return [a[0]+(b[0]-a[0])*t,a[1]+(b[1]-a[1])*t,o.i>=o.pts.length-1,Math.atan2(b[0]-a[0],b[1]-a[1])];}
 const PENJAGA={R:null,pts:null,i:0,s:0};const PEMBAWA=[];
 const bahanKotak=bahan('#F2D98E',{roughness:.5,emissive:'#5a4a10',emissiveIntensity:.25});
-function hantar(dari,ke,warna){if(dari===ke||REDUP||!LETAK[dari]||!LETAK[ke])return;const R=binaRobot(warna);setRupa(R,'kerja');
+function hantar(dari,ke,warna,sp='gh'){if(dari===ke||REDUP||!LETAK[dari]||!LETAK[ke])return;const R=binaRobot(warna,sp);setRupa(R,'kerja');
   const k=new THREE.Mesh(geo('kotakB',()=>kotakBulat(.34,.34,.34,.05)),bahanKotak);k.position.y=1.9;k.castShadow=true;R.g.add(k);R.lengan.forEach(l=>l.rotation.x=-2.6);
   dunia.add(R.g);PEMBAWA.push({R,pts:laluanJalan(dari,ke),i:0,s:0,laju:3.2});}
 function buangPembawa(){PEMBAWA.splice(0).forEach(o=>dunia&&dunia.remove(o.R.g));}
 const PEMBERI={};(D.aliran||[]).forEach(([a,b])=>(PEMBERI[b]=PEMBERI[b]||[]).push(a));
 function picuPembawa(t0,t1){for(const r of D.robot)for(const u of r.ulang||[]){const a=ms(u[0]);if(!(a>t0&&a<=t1))continue;
-  if(u[3]==='penjaga'||r.id==='cetus'){hantar('pusat',r.bilik,WARNA.pusat);continue;}
+  if(u[3]==='penjaga'||r.id==='cetus'){hantar('pusat',r.bilik,WARNA.pusat,r.id==='cetus'?'cl':'gh');continue;}
   const pb=(PEMBERI[r.id]||[]).map(id=>ROB[id]).filter(x=>x&&x.bilik!==r.bilik);
-  if(u[3]==='aliran'||String(r.jenis).startsWith('Claude')){let tb=-1,tr=null;for(const x of pb)for(const v of x.ulang||[]){const b=ms(v[1]);if(b<=a&&b>tb){tb=b;tr=x;}}if(tr)hantar(tr.bilik,r.bilik,WARNA[tr.bilik]);}}}
+  if(u[3]==='aliran'||String(r.jenis).startsWith('Claude')){let tb=-1,tr=null;for(const x of pb)for(const v of x.ulang||[]){const b=ms(v[1]);if(b<=a&&b>tb){tb=b;tr=x;}}if(tr)hantar(tr.bilik,r.bilik,WARNA[tr.bilik],siapa(r));}}}
 function kemas(){for(const r of D.robot){const R=ROBOT[r.id];if(!R||!r._k)continue;const k=r._k;const v=r.id==='penjaga'?(k.st==='gagal'?'gagal':'siap'):visual(k);if(R.st!==v)setRupa(R,v);
   const mj=MEJA[r.id];if(mj){const on=v==='kerja';mj.userData.skrin.material.color.set(on?'#7FE3F2':v==='gagal'?'#4A1C26':'#16202A');mj.userData.sinar.material.opacity=on?.55:0;}}}
 /* interaksi */
