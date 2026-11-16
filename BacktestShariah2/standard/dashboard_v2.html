@@ -1508,8 +1508,8 @@ b.nk.nk-c{color:var(--neg-tx)}b.nk.nk-t{color:var(--pos)}b.nk.nk-v{color:#C9B8FF
 .rk-tw td.w{font:600 14px var(--f-semi);white-space:nowrap}
 .rk-tw td.j{color:var(--fg-2);font-size:14px;min-width:150px}
 .rk-kadtel{display:none}
-.rk-nota{color:var(--muted);font-size:13px;line-height:1.55;margin:0;max-width:1100px}
-.rk-intro{margin:0;color:var(--fg-2);max-width:1100px}
+.rk-nota{color:var(--muted);font-size:13px;line-height:1.55;margin:0}
+.rk-intro{margin:0;color:var(--fg-2)}
 .rk-intro b{color:var(--fg)}
 @media (max-width:1180px){.rk-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.rk-dua{grid-template-columns:1fr}.rk-akt ol{max-height:360px}}
 @media (max-width:760px){
@@ -1621,7 +1621,7 @@ const U0=ADA_ULANG?ms(D.ulang.mula):0,U1=ADA_ULANG?ms(D.ulang.akhir):1;
 const WARNA={pusat:'#C9D0DA',data:'#5C83E4',pt:'#22A3BA',analisis:'#7C93C9',carian:'#2E74E0',dash:'#4A6FB0'};
 const IKON={pusat:'◎',data:'▤',pt:'⇄',analisis:'▥',carian:'⌕',dash:'▣'};
 const SUSUN={lebar:{data:[-170,-142],analisis:[135,-121],pt:[-208,43],carian:[199,67],dash:[0,144]},sempit:{data:[-80,-330],analisis:[125,-175],pt:[-128,175],carian:[128,175],dash:[0,335]}};
-const LABEL_BILIK={lebar:{data:['belakang','atas'],pt:['depan','bawah'],analisis:['kanan','kanan'],carian:['depan','bawah'],dash:['depan','bawah'],pusat:['lantai','tengah']},
+const LABEL_BILIK={lebar:{data:['belakang','atas'],pt:['depan','bawah'],analisis:['belakang','atas'],carian:['depan','bawah'],dash:['depan','bawah'],pusat:['lantai','tengah']},
   sempit:{data:['belakang','atas'],analisis:['belakang','atas'],pt:['depan','bawah'],carian:['depan','bawah'],dash:['depan','bawah'],pusat:['lantai','tengah']}};
 const BIL=Object.fromEntries((D.bilik||[]).map(b=>[b.id,b]));
 const ROB=Object.fromEntries(D.robot.map(r=>[r.id,r]));
@@ -1766,7 +1766,16 @@ const sempit=()=>(root.querySelector('.rk-pentasbalut').clientWidth||innerWidth)
 let LETAK,BENTUK;
 const S0=24,K0=Math.cos(Math.PI/6);
 const W=(X,Y)=>({x:(X/(K0*S0)+Y/(.5*S0))/2,y:(Y/(.5*S0)-X/(K0*S0))/2});
-function pilihLetak(){BENTUK=sempit()?'sempit':'lebar';LETAK={pusat:{x:0,y:0,R:3.4,okt:true}};for(const [id,[X,Y]] of Object.entries(SUSUN[BENTUK]))if(ikutBilik[id])LETAK[id]={...W(X,Y),h:id==='data'?3.5:2.45};}
+let SX=1,SASAR=0;
+/* bilik disebar mendatar (SX) supaya pejabat memenuhi lebar kad tanpa ruang kosong kiri/kanan (permintaan pengguna 16 Nov 2026 "jangan bazirkan space") */
+function pilihLetak(){BENTUK=sempit()?'sempit':'lebar';LETAK={pusat:{x:0,y:0,R:3.4,okt:true}};for(const [id,[X,Y]] of Object.entries(SUSUN[BENTUK]))if(ikutBilik[id])LETAK[id]={...W(X*(BENTUK==='lebar'?SX:1),Y),h:id==='data'?3.5:2.45};}
+const sasaranNisbah=()=>{const w=root.querySelector('.rk-pentasbalut').clientWidth||900;return w/Math.max(420,innerHeight*.72);};
+function ukurLuas(){AZ=AZ0;T.set(0,0,0);ZOOM=1;FW=20;FH=14;letakKamera();
+  const pts=[];for(const id in LETAK){const L=LETAK[id],h=(L.R||L.h)+.2;for(const [sx,sz] of [[-1,-1],[1,-1],[1,1],[-1,1]])for(const y of [-.8,2.1])pts.push(new THREE.Vector3(L.x+sx*h,y,L.y+sz*h));}
+  const inv=camera.matrixWorldInverse;let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
+  for(const p of pts){const v=p.clone().applyMatrix4(inv);x0=Math.min(x0,v.x);x1=Math.max(x1,v.x);y0=Math.min(y0,v.y);y1=Math.max(y1,v.y);}return [x0,x1,y0,y1];}
+function pilihSX(){SASAR=sasaranNisbah();SX=1;if(sempit())return;
+  for(SX=1;SX<2.2;SX+=.05){pilihLetak();const [x0,x1,y0,y1]=ukurLuas();if(((x1-x0)+1.6)/((y1-y0)+2.0)>=SASAR)break;}}
 function grid(id,n){const L=LETAK[id];
   if(id==='pusat'){const sud=[180,270,135,315,90];return sud.slice(0,n).map(a=>{const t=a*Math.PI/180;return [L.x+2.2*Math.cos(t),L.y+2.2*Math.sin(t)];});}
   const k=n>4?3:2,g=n>4?2.25:2.15,o=(k-1)/2,sel=[];for(let j=0;j<k;j++)for(let i=0;i<k;i++)sel.push([L.x+(i-o)*g,L.y+(j-o)*g]);return sel;}
@@ -1909,14 +1918,12 @@ function bina(){
 /* kamera */
 function arah(){return new THREE.Vector3(Math.sin(AZ)*Math.cos(EL),Math.sin(EL),Math.cos(AZ)*Math.cos(EL));}
 function letakKamera(){camera.position.copy(T).addScaledVector(arah(),60);camera.lookAt(T);camera.zoom=ZOOM;camera.left=-FW/2;camera.right=FW/2;camera.top=FH/2;camera.bottom=-FH/2;camera.updateProjectionMatrix();camera.updateMatrixWorld();}
-function muatKamera(){AZ=AZ0;T.set(0,0,0);ZOOM=1;FW=20;FH=14;letakKamera();
-  const pts=[];for(const id in LETAK){const L=LETAK[id],h=(L.R||L.h)+.2;for(const [sx,sz] of [[-1,-1],[1,-1],[1,1],[-1,1]])for(const y of [-.8,2.1])pts.push(new THREE.Vector3(L.x+sx*h,y,L.y+sz*h));}
-  const inv=camera.matrixWorldInverse;let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;
-  for(const p of pts){const v=p.clone().applyMatrix4(inv);x0=Math.min(x0,v.x);x1=Math.max(x1,v.x);y0=Math.min(y0,v.y);y1=Math.max(y1,v.y);}
+function muatKamera(){const [x0,x1,y0,y1]=ukurLuas();
   const kanan=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,0),atas=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,1);
   T.addScaledVector(kanan,(x0+x1)/2).addScaledVector(atas,(y0+y1)/2+(BENTUK==='lebar'?.6:.9));T.y=0;
   FW=(x1-x0)+(BENTUK==='lebar'?1.6:.6);FH=(y1-y0)+(BENTUK==='lebar'?2.0:3.0);T0.copy(T);letakKamera();
-  const nis=FW/FH;pentasEl.style.aspectRatio=nis.toFixed(4);pentasEl.style.maxWidth=BENTUK==='lebar'?`calc(74vh * ${nis.toFixed(4)})`:'';saiz();}
+  if(BENTUK==='lebar'&&FW/FH<SASAR){const fw=FH*SASAR;FW=Math.min(fw,FW*1.15);}letakKamera();
+  const nis=FW/FH;pentasEl.style.aspectRatio=nis.toFixed(4);pentasEl.style.maxWidth='';saiz();}
 function saiz(){const w=pentasEl.clientWidth||kanvasEl.clientWidth;if(!w)return;const h=Math.round(w*FH/FW);renderer.setSize(w,h,false);}
 /* label + belon */
 const TAG={},BELON={};
@@ -2009,12 +2016,12 @@ function gelung(t){if(!hidup)return;raf=requestAnimationFrame(gelung);const dt=M
   for(const m of TIANG)m.material.uniforms.t.value=s;for(const r of GELANG){const f=(s*.42+r.userData.f)%1;r.scale.setScalar(1+f*1.8);r.material.opacity=(1-f)*.75;}
   renderer.render(scene,camera);}
 henti.push(()=>cancelAnimationFrame(raf));
-function mulaPentas(){pilihLetak();for(const k in PINTU)delete PINTU[k];buangPembawa();ZUM=null;q('semua').hidden=true;bina();muatKamera();for(const id in ROBOT)ROBOT[id].st=null;kemas();susunLapis();}
+function mulaPentas(){pilihSX();pilihLetak();for(const k in PINTU)delete PINTU[k];buangPembawa();ZUM=null;q('semua').hidden=true;bina();muatKamera();for(const id in ROBOT)ROBOT[id].st=null;kemas();susunLapis();}
 Object.assign(G,{kemas,segarBelon,putarBelon,zum,buangPembawa});
 mulaPentas();setMod(MOD);
 const iv=setInterval(()=>{if(hidup&&nampak&&!document.hidden)putarBelon();},3600);henti.push(()=>clearInterval(iv));
 let lebarLepas=root.querySelector('.rk-pentasbalut').clientWidth;
-const ro=new ResizeObserver(()=>{const w=root.querySelector('.rk-pentasbalut').clientWidth;if(!w||w===lebarLepas)return;lebarLepas=w;if((sempit()?'sempit':'lebar')!==BENTUK){tutupKad();mulaPentas();setMod(MOD);}else{saiz();susunLapis();}if(MOD==='ulang'){lepasUI=0;kemasUlangUI();}});
+const ro=new ResizeObserver(()=>{const w=root.querySelector('.rk-pentasbalut').clientWidth;if(!w||w===lebarLepas)return;lebarLepas=w;if((sempit()?'sempit':'lebar')!==BENTUK||(BENTUK==='lebar'&&Math.abs(sasaranNisbah()/SASAR-1)>.08)){tutupKad();mulaPentas();setMod(MOD);}else{saiz();susunLapis();}if(MOD==='ulang'){lepasUI=0;kemasUlangUI();}});
 ro.observe(root.querySelector('.rk-pentasbalut'));henti.push(()=>ro.disconnect());
 raf=requestAnimationFrame(gelung);
 }

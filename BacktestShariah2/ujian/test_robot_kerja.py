@@ -83,6 +83,15 @@ class TestBina(unittest.TestCase):
         self.assertEqual(d['semak']['akhir']['mula'], '2026-11-14T02:53:00Z')
         self.assertEqual(d['semak']['kiraan'], {'success': 1, 'cancelled': 1})
 
+    def test_kiraan_hanya_dalam_tetingkap(self):
+        doc = RK.bina(masa=self.MASA, larian=dict(dibina='2026-11-16T02:05:00Z', hari=4, runs=[
+            ['institusi.yml', '2026-11-09T11:59:50Z', '2026-11-09T12:02:05Z', 'completed', 'success', 'schedule'],
+            ['harian.yml', '2026-11-14T17:00:02Z', '2026-11-14T17:03:55Z', 'completed', 'success', 'schedule']]), mingguan=[])
+        d = {r['id']: r for r in doc['robot']}
+        self.assertEqual(doc['kiraan_sejak'], '2026-11-14T17:00:02Z')
+        self.assertEqual(d['institusi']['kiraan'], {})
+        self.assertEqual(d['institusi']['akhir']['mula'], '2026-11-09T11:59:50Z')   # terakhir tetap dipapar
+
     def test_sedang_berjalan_hanya_bila_petikan_segar(self):
         runs = [['harian.yml', '2026-11-16T01:00:00Z', None, 'in_progress', None, 'schedule']]
         segar = RK.bina(masa=datetime(2026, 11, 16, 2, 30, tzinfo=UTC), larian=larian(runs), mingguan=[])
