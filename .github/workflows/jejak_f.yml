@@ -35,11 +35,17 @@ jobs:
         run: pip install -q -c kekangan.txt -r requirements.txt
       - name: Jejak kohort F
         run: python3 BacktestShariah2/kajian/carian_setup/cs_hadapan.py jejak
+      # Papertrade 29 setup gred A (pindaan 16 Nov 2026 (ae) Bahagian D): log isyarat tambah-sahaja + kalendar laporan
+      # seperti diketahui hari itu. Kegagalannya tidak menyekat komit penjejak lama; langkah akhir menggagalkan larian.
+      - name: Papertrade gred A
+        id: greda
+        continue-on-error: true
+        run: python3 BacktestShariah2/kajian/carian_setup/cs_hadapan19.py jejak
       - name: Commit dan push
         run: |
           git config user.name "jejak-f[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add BacktestShariah2/jejak_f/lejar.csv BacktestShariah2/jejak_f/RINGKASAN.md
+          git add BacktestShariah2/jejak_f/lejar.csv BacktestShariah2/jejak_f/RINGKASAN.md BacktestShariah2/jejak_f2
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "Jejak hadapan F: harga $(tail -n +2 BacktestShariah2/data/harga/stor/harga_idx.csv | cut -d, -f2 | sort | tail -1)"
           for n in 1 2 3; do
@@ -48,4 +54,9 @@ jobs:
             sleep $((n * 15))
           done
           echo "Push gagal; larian seterusnya menjana semula." >&2
+          exit 1
+      - name: Gagal jika papertrade gred A gagal
+        if: steps.greda.outcome == 'failure'
+        run: |
+          echo "cs_hadapan19.py jejak gagal (lihat langkah Papertrade gred A)." >&2
           exit 1

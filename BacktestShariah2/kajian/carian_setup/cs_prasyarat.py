@@ -50,13 +50,16 @@ def _rsi(s, n=14):
     return 100 - 100 / (1 + u / v.replace(0, np.nan))
 
 
-def pasaran(hu, keluasan):
-    """dict nama -> Series bool berindeks tarikh (int). hu: tarikh tersusun; keluasan: DataFrame b50, b200, b5."""
-    from AUTOTUNE.teras import data as D
-    ix = pd.read_parquet(D.ambil(tag='autotune-data-a02') / 'idx.parquet')
-    ix['d'] = ix.date.dt.year * 10000 + ix.date.dt.month * 100 + ix.date.dt.day
-    q = ix[ix.ticker == 'QQQ'].set_index('d').close.reindex(hu).ffill()
-    s = ix[ix.ticker == 'SPY'].set_index('d').close.reindex(hu).ffill()
+def pasaran(hu, keluasan, q=None, s=None):
+    """dict nama -> Series bool berindeks tarikh (int). hu: tarikh tersusun; keluasan: DataFrame b50, b200, b5.
+    q, s: tutup QQQ / SPY berindeks tarikh (int) -- pilihan (pindaan (ae): penjejak papertrade memberi harga stor); lalai =
+    indeks Release A02 seperti semua pusingan backtest."""
+    if q is None or s is None:
+        from AUTOTUNE.teras import data as D
+        ix = pd.read_parquet(D.ambil(tag='autotune-data-a02') / 'idx.parquet')
+        ix['d'] = ix.date.dt.year * 10000 + ix.date.dt.month * 100 + ix.date.dt.day
+        q, s = ix[ix.ticker == 'QQQ'].set_index('d').close, ix[ix.ticker == 'SPY'].set_index('d').close
+    q, s = q.reindex(hu).ffill(), s.reindex(hu).ffill()
     m50 = q.rolling(50).mean()
     on = (q > m50) & (q.rolling(10).mean() > q.rolling(20).mean())
     off = (~on) & m50.notna()

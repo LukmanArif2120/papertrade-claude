@@ -1479,6 +1479,15 @@ Maya; tiada order; bukan Lejar; tidak dinilai kad skor. Penjejak lama (`jejak_f/
   jadi kebanyakan ahli tidak aktif pada November 2026; belian tertumpu pada musim laporan (akhir Januari, April, Julai,
   Oktober). Bacaan dikunci dijangka paling awal selepas 1–2 musim laporan.
 - **Jangan ubah `jejak_f2/kohort.json` atau buang baris `isyarat.csv` tanpa pindaan bertarikh.**
+- **Penjelasan sebelum bermula (17 Nov 2026; ditulis semasa membina penjejak, sebelum mana-mana isyarat papertrade wujud):**
+  (i) kawalan `KW1` direkod SATU baris setiap saham setiap laporan (hari pertama ia masuk tetingkap 1–5 sesi), setara dengan
+  peraturan satu posisi; (ii) satu posisi setiap (setup, saham) ditentukan oleh jualan cara B; cara 50 dinilai atas belian yang
+  sama; (iii) kadar menang dan purata dilaporkan bagi belian yang tetingkap 20 sesinya lengkap, dan dagangan yang belum ditutup
+  dinilai pada harga tutup terkini — cara yang sama bagi saham rawak (menggantikan frasa "dagangan yang sudah ditutup" di atas,
+  kerana menapis kepada dagangan tertutup sahaja memihak kepada yang kena stop awal); (iv) laporan pada hari isyarat sendiri
+  hanya dikira jika masanya "selepas tutup" (diketahui daripada kalendar hari itu atau arkib `kalendar_dilihat.csv`); (v) saham
+  yang tiada dalam stor ketika dinilai = `TIADA_DATA`. Larian kering mekanik pada 31 Ogos – 13 Nov 2026 dengan kalendar hari
+  ini (hasil dalam `SERAHAN_CARIAN_SETUP.md` §9t) dibuat untuk menguji kod; ia BUKAN papertrade dan tidak masuk bacaan.
 
 ## 8. Apa yang TIDAK dibuat dalam CS01
 

@@ -2531,6 +2531,256 @@ class TestJenisTrend(unittest.TestCase):
         self.assertIn('Bahagian yang boleh dikenal semasa berlaku', md)
 
 
+class TestCS19(unittest.TestCase):
+    """SPEC pindaan 16 Nov 2026 (ae): audit bebas, mod tanpa intai dan penjejak papertrade kohort gred A."""
+
+    def _pan(self, n=900, benih=19):
+        rng = np.random.default_rng(benih)
+        c = 40 * np.exp(np.cumsum(rng.normal(0.0004, 0.03, n)))
+        o = c * (1 + rng.normal(0, 0.012, n))
+        lo = np.minimum(o, c) * (1 - np.abs(rng.normal(0, 0.012, n)))
+        pan = dict(o=o, l=lo, h=np.maximum(o, c) * 1.01, c=c, atr=c * 0.03, mula=np.asarray([0, n]), tid=np.zeros(n, np.int64))
+        S = np.concatenate([[0.0], np.cumsum(c)])
+        i = np.arange(n)
+        for k in (20, 50):
+            pan[f'sma{k}'] = np.where(i >= k - 1, (S[i + 1] - S[np.maximum(i + 1 - k, 0)]) / k, np.nan)
+        return pan
+
+    def test_dikunci(self):
+        import cs_audit19 as a19
+        import cs_hadapan19 as h19
+        self.assertEqual((a19.N_ATAS, a19.TOL, a19.KOS, len(a19.KOHORT), len(set(a19.KOHORT))), (300, 0.0005, 0.005, 29, 29))
+        self.assertEqual((h19.KOS, h19.T20, h19.HAD_B, h19.ATR_STOP, h19.MIN_BACAAN, h19.KW1), (0.005, 20, 126, 4.0, 300, 'KW1'))
+        self.assertEqual(a19.TEMPOH_B, tuple((a, z) for _, a, z in atom.TEMPOH['B']))
+
+    def test_tanpa_intai(self):
+        import cs_cari as cari
+        o, c = pd.Series([1.0, 2.0, 3.0], name='open'), pd.Series([1.0, 2.0, 3.0], name='close')
+        asal = pd.Series.shift
+        with cari.tanpa_intai():
+            self.assertTrue(o.shift(-1).isna().all())                           # buka esok tidak kelihatan
+            self.assertEqual(o.shift(1).tolist()[1:], [1.0, 2.0])               # anjakan ke belakang tidak disentuh
+            self.assertEqual(c.shift(-1).tolist()[:2], [2.0, 3.0])              # siri lain tidak disentuh
+        self.assertIs(pd.Series.shift, asal)
+        with self.assertRaises(ValueError):
+            with cari.tanpa_intai():
+                raise ValueError
+        self.assertIs(pd.Series.shift, asal)
+        self.assertFalse(cari._KAUSAL)
+
+    def test_modul_m14_tanpa_intai_sama_dengan_bar_terakhir(self):
+        """Isyarat mod tanpa intai pada bar t = isyarat modul asal apabila data berakhir pada bar t (tiada bar esok)."""
+        import importlib
+        import cs_cari as cari
+        m = importlib.import_module('M14')
+        g = _saham(500, 3)
+        penuh = {'A': g.copy()}
+        m.sedia(penuh, {})
+        with cari.tanpa_intai():
+            kausal = {'A': g.copy()}
+            m.sedia(kausal, {})
+        sp, sk = penuh['A']['sig'].to_numpy(bool), kausal['A']['sig'].to_numpy(bool)
+        self.assertTrue((sk | ~sp).all())                                       # tanpa intai hanya MENAMBAH isyarat
+        self.assertGreater(int((sk & ~sp).sum()), 0)                            # ada isyarat yang dahulu dibatalkan oleh buka esok
+        for t in range(260, 500, 7):
+            ptg = {'A': g.iloc[:t + 1].copy()}
+            m.sedia(ptg, {})
+            self.assertEqual(bool(ptg['A']['sig'].iloc[-1]), bool(sk[t]), t)
+
+    def test_kalendar_nyse(self):
+        from datetime import date
+        import cs_hadapan19 as h19
+        self.assertEqual(sorted(h19.cuti_nyse(2026)), [date(2026, 1, 1), date(2026, 1, 19), date(2026, 2, 16), date(2026, 4, 3),
+                                                       date(2026, 5, 25), date(2026, 6, 19), date(2026, 7, 3), date(2026, 9, 7),
+                                                       date(2026, 11, 26), date(2026, 12, 25)])
+        self.assertEqual(sorted(h19.cuti_nyse(2027)), [date(2027, 1, 1), date(2027, 1, 18), date(2027, 2, 15), date(2027, 3, 26),
+                                                       date(2027, 5, 31), date(2027, 6, 18), date(2027, 7, 5), date(2027, 9, 6),
+                                                       date(2027, 11, 25), date(2027, 12, 24)])
+        self.assertNotIn(date(2021, 12, 31), h19.cuti_nyse(2021) | h19.cuti_nyse(2022))   # 1 Jan Sabtu: tiada cuti ganti
+        self.assertEqual(h19.bil_sesi(date(2026, 11, 25), date(2026, 11, 27)), 1)           # Hari Kesyukuran dilangkau
+        self.assertEqual(h19.bil_sesi(date(2026, 11, 13), date(2026, 11, 16)), 1)           # Jumaat -> Isnin
+        self.assertEqual(h19.bil_sesi(date(2026, 11, 13), date(2026, 11, 13)), 0)
+        self.assertEqual(h19.sesi_pada_atau_selepas(date(2026, 11, 26)), date(2026, 11, 27))
+        # lawan stor harga sebenar: setiap cuti kiraan tiada dalam stor; hari bekerja yang tiada = cuti (+ penutupan khas)
+        ix = pd.read_csv(os.path.join(SINI, '..', 'data', 'harga', 'stor', 'harga_idx.csv'))
+        ada = {h19._d(x) for x in ix[ix.ticker == 'SPY'].date}
+        tiada = [d.date() for d in pd.bdate_range(min(ada), max(ada)) if d.date() not in ada]
+        cuti = set().union(*(h19.cuti_nyse(y) for y in range(min(ada).year, max(ada).year + 1)))
+        self.assertFalse([d for d in cuti if min(ada) <= d <= max(ada) and d in ada])
+        self.assertLessEqual(len([d for d in tiada if d not in cuti]), 2, [d for d in tiada if d not in cuti])
+
+    def test_tindak_balas_laporan(self):
+        from datetime import date
+        import cs_hadapan19 as h19
+        KE = h19.muat_kalendar(os.path.join(SINI, 'tiada_folder'))[0]
+        D = date(2026, 11, 13)                                                  # Jumaat
+        K = {'PAGI': {date(2026, 11, 16): 'Nasdaq'}, 'PETANG': {date(2026, 11, 16): 'Nasdaq'},
+             'HARI_INI_PETANG': {date(2026, 11, 13): 'Nasdaq', date(2027, 2, 12): 'Nasdaq'},
+             'HARI_INI_PAGI': {date(2026, 11, 13): 'Nasdaq', date(2027, 2, 12): 'Nasdaq'},
+             'JAUH': {date(2026, 12, 1): 'Nasdaq'}, 'SABTU': {date(2026, 11, 14): 'tambahan'}}
+        nas = {'PAGI': {'seterusnya': '2026-11-16', 'seterusnya_masa': 'time-pre-market'},
+               'PETANG': {'seterusnya': '2026-11-16', 'seterusnya_masa': 'time-after-hours'},
+               'HARI_INI_PETANG': {'seterusnya': '2026-11-13', 'seterusnya_masa': 'time-after-hours'},
+               'HARI_INI_PAGI': {'seterusnya': '2026-11-13', 'seterusnya_masa': 'time-pre-market'}}
+        hg = lambda t, arkib={}, n=nas: (lambda x: None if x is None else h19.bil_sesi(D, x[2]))(h19.tindak_balas(KE, K, n, arkib, t, D))
+        self.assertEqual(hg('PAGI'), 1)                                         # laporan Isnin pagi: beli Isnin selepas laporan keluar
+        self.assertEqual(hg('PETANG'), 2)                                       # Isnin selepas tutup: pasaran bertindak balas Selasa
+        self.assertEqual(hg('HARI_INI_PETANG'), 1)                              # hari ini selepas tutup: tindak balas esok
+        self.assertGreater(hg('HARI_INI_PAGI'), 5)                              # sudah berlalu: laporan seterusnya suku depan
+        self.assertEqual(hg('JAUH'), 11)                                        # 26 Nov cuti
+        self.assertEqual(hg('SABTU'), 1)                                        # bukan hari dagangan -> sesi berikutnya
+        self.assertIsNone(hg('TIADA'))
+        # selepas kalendar dimuat semula (tarikh itu sudah "lalu"), masa laporan diambil daripada arkib yang dilihat sebelumnya
+        self.assertGreater(hg('HARI_INI_PETANG', n={}), 5)
+        self.assertEqual(hg('HARI_INI_PETANG', arkib={('HARI_INI_PETANG', '2026-11-13'): 'time-after-hours'}, n={}), 1)
+
+    def test_mekanik_penjejak_dan_audit_menyamai_enjin(self):
+        """Tetingkap lengkap: penjejak (cs_hadapan19.simulasi) dan kod audit bebas (cs_audit19.pegang_b) = cs_semak11.pegang."""
+        import cs_audit19 as a19
+        import cs_hadapan19 as h19
+        import cs_semak11 as s11
+        pan = self._pan()
+        n = len(pan['c'])
+        ev = np.arange(60, n - 130).astype(np.int64)
+        s = s11.HENTI.index('4xATR14')
+        R, SK = s11.pegang(ev, pan['o'], pan['l'], pan['c'], pan['atr'], s11.siri_trend(pan), s)
+        z = np.full(len(ev), n, np.int64)
+        for cara, sma in (('P-MA20', 'sma20'), ('P-MA50', 'sma50')):
+            st, sb, bk, hk, ss, Rh = h19.simulasi(ev, z, pan['o'], pan['l'], pan['c'], pan['atr'], pan[sma], h19.HAD_B)
+            j = s11.CARA.index(cara)
+            self.assertTrue((st == 3).all())
+            np.testing.assert_allclose(Rh, R[:, j], atol=1e-12)
+            np.testing.assert_array_equal(ss, SK[:, j])
+            np.testing.assert_array_equal(bk, ev + 1 + SK[:, j])
+        Ra, SKa, Ja = a19.pegang_b(ev, pan['o'], pan['l'], pan['c'], pan['atr'], pan['sma20'])
+        np.testing.assert_allclose(Ra, R[:, s11.CARA.index('P-MA20')], atol=1e-12)
+        np.testing.assert_array_equal(SKa, SK[:, s11.CARA.index('P-MA20')])
+        self.assertGreater(len(set(Ja.tolist())), 2)                            # had masa / trend / stop semuanya berlaku
+        np.testing.assert_array_equal(a19.sesi20(ev, pan['o'], pan['l'], pan['c'], pan['atr']),
+                                      s11.jual20(ev, pan['o'], pan['l'], pan['c'], pan['atr'], s)[1])
+        Lh = h19.label(ev, z, pan['o'], pan['l'], pan['c'])
+        Le = s11.label11(ev, pan['o'], pan['l'], pan['c'])
+        np.testing.assert_array_equal(Lh[:, 0], Le[:, 0])                       # naik >= 5 % minggu pertama
+        np.testing.assert_array_equal(Lh[:, 2], Le[:, 1])                       # terus
+        np.testing.assert_array_equal(Lh[:, 1], (pan['c'][ev + 5] <= 0.95 * pan['o'][ev + 1]).astype(float))
+        self.assertGreater(Lh[:, 1].sum(), 0)
+
+    def test_tetingkap_belum_lengkap(self):
+        import cs_hadapan19 as h19
+        pan = self._pan(300)
+        n = 300
+        a = (pan['o'], pan['l'], pan['c'], pan['atr'], pan['sma20'], h19.HAD_B)
+        st = h19.simulasi(np.asarray([n - 1]), np.asarray([n]), *a)[0]
+        self.assertEqual(h19.STATUS[st[0]], 'TUNGGU_BELI')                      # isyarat pada bar terakhir: belum dibeli
+        st, sb, bk, hk, ss, R = h19.simulasi(np.asarray([n - 6]), np.asarray([n]), *a)
+        if st[0] != 3:
+            self.assertEqual((h19.STATUS[st[0]], ss[0]), ('TERBUKA', 5))
+            self.assertAlmostEqual(R[0], pan['c'][-1] / pan['o'][n - 5] - 1 - h19.KOS, places=12)   # dinilai pada tutup terkini
+        c2 = pan['c'].copy()
+        c2[n - 1] = pan['o'][n - 1] * 0.5                                       # tutup hari beli di bawah stop: jual esok
+        st, sb = h19.simulasi(np.asarray([n - 2]), np.asarray([n]), pan['o'], pan['l'], c2, pan['atr'], pan['sma20'], h19.HAD_B)[:2]
+        self.assertEqual((h19.STATUS[st[0]], h19.SEBAB[sb[0]]), ('JUAL_ESOK', 'stop loss (tutup hari beli)'))
+        L = h19.label(np.asarray([n - 3, n - 10, n - 30]), np.asarray([n, n, n]), pan['o'], pan['l'], pan['c'])
+        self.assertTrue(np.isnan(L[0]).all() and not np.isnan(L[1, 0]) and np.isnan(L[1, 2]) and not np.isnan(L[2]).any())
+
+    def test_log_isyarat_tambah_sahaja(self):
+        """Larian kedua pada data yang sama tidak menambah apa-apa; hari baharu hanya MENAMBAH baris (baris lama sama bait)."""
+        import shutil
+        import tempfile
+        import cs_hadapan19 as h19
+        asal = h19.KELUAR
+        d = tempfile.mkdtemp()
+        try:
+            stor, pem, kel = (os.path.join(d, x) for x in ('stor', 'pemangkin', 'jejak'))
+            for x in (stor, pem, kel):
+                os.makedirs(x)
+            tick = ['AAA', 'BBB', 'CCC', 'DDD']
+            fr = {t: _saham(420, 30 + k) for k, t in enumerate(tick)}
+
+            def tulis(n):
+                f = lambda dd: pd.concat([g.iloc[:n].assign(ticker=t, date=g.index[:n].strftime('%Y%m%d')) for t, g in dd.items()])
+                L = ['ticker', 'date', 'open', 'high', 'low', 'close', 'volume']
+                f({t: fr[t] for t in tick[:2]})[L].to_csv(os.path.join(stor, 'harga_A.csv'), index=False)
+                f({t: fr[t] for t in tick[2:]})[L].to_csv(os.path.join(stor, 'harga_B.csv'), index=False)
+                f({'QQQ': _saham(420, 91), 'SPY': _saham(420, 92)})[L].to_csv(os.path.join(stor, 'harga_idx.csv'), index=False)
+                return fr['AAA'].index[n - 1]
+
+            def kalendar(akhir):
+                R = (akhir + pd.offsets.BDay(3)).strftime('%Y-%m-%d')
+                json.dump({'saham': {t: {'seterusnya': R, 'seterusnya_masa': 'time-pre-market'} for t in tick}},
+                          open(os.path.join(pem, 'earnings_nasdaq.json'), 'w'))
+            json.dump({'spec': 'ujian', 'kawalan': 'KW1', 'ahli': [dict(id='X1', pencetus='K01.003', jenis='K', fs=[], pasaran=[],
+                                                                       syarikat=['QF01'])]}, open(os.path.join(kel, 'kohort.json'), 'w'))
+            baca = lambda f: open(os.path.join(kel, f), encoding='utf-8').read()
+            kalendar(tulis(418))
+            h19.jejak(stor=stor, keluar=kel, pemangkin=pem, direkod='ujian-1')
+            i1, h1 = baca('isyarat.csv'), baca('hari.csv')
+            self.assertEqual(len(h1.splitlines()), 2)                           # larian pertama: hari terakhir sahaja
+            self.assertIn(',KW1,', i1)                                          # kawalan direkod (laporan 3 sesi lagi)
+            self.assertIn('TUNGGU_BELI', baca('lejar.csv'))
+            h19.jejak(stor=stor, keluar=kel, pemangkin=pem, direkod='ujian-2')
+            self.assertEqual((baca('isyarat.csv'), baca('hari.csv')), (i1, h1))  # larian ulang: tiada perubahan
+            kalendar(tulis(420))                                                # dua hari baharu; kalendar berubah
+            h19.jejak(stor=stor, keluar=kel, pemangkin=pem, direkod='ujian-3')
+            i3, h3 = baca('isyarat.csv'), baca('hari.csv')
+            self.assertTrue(i3.startswith(i1) and h3.startswith(h1))            # baris lama tidak disentuh
+            H = pd.read_csv(os.path.join(kel, 'hari.csv'))
+            self.assertEqual(H.lewat.tolist(), [0, 1, 0])                       # hari yang terlepas ditanda lewat
+            L = pd.read_csv(os.path.join(kel, 'lejar.csv'))
+            self.assertTrue((L[L.tarikh_isyarat == H.tarikh.iloc[0]].status_B != 'TUNGGU_BELI').all())   # sudah dibeli
+            self.assertIn('Belum cukup', baca('RINGKASAN.md'))
+        finally:
+            h19.KELUAR = asal
+            shutil.rmtree(d, ignore_errors=True)
+
+    def test_kohort_dikunci(self):
+        import cs_audit19 as a19
+        d = os.path.join(SINI, '..', 'jejak_f2')
+        K = json.load(open(os.path.join(d, 'kohort.json'), encoding='utf-8'))
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('').set_index('id')
+        self.assertEqual([a['id'] for a in K['ahli']], a19.KOHORT)
+        for a in K['ahli']:
+            self.assertEqual(a['takrif'], reg.loc[a['id'], 'takrif'])
+            b = a['takrif'].split('|')
+            self.assertEqual((b[2], b[3], a['syarikat']), ('G6', 'PB', ['QF01']), a['id'])
+            self.assertEqual(a['pencetus'], b[0])
+        self.assertEqual(sum(1 for a in K['ahli'] if a['jenis'] == 'benih'), 5)
+        if os.path.exists(os.path.join(d, 'isyarat.csv')):                      # log hanya bertambah: tersusun ikut hari
+            S = pd.read_csv(os.path.join(d, 'isyarat.csv'))
+            self.assertTrue(S.tarikh_isyarat.is_monotonic_increasing)
+            self.assertTrue(set(S.id) <= set(a19.KOHORT) | {'KW1'})
+
+    def test_rekod_audit(self):
+        import cs_audit19 as a19
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS19')
+        B = json.load(open(os.path.join(d, 'bacaan.json'), encoding='utf-8'))
+        T = pd.read_csv(os.path.join(d, 'audit.csv.gz'))
+        U = pd.read_csv(os.path.join(d, '..', 'CS13', 'senarai_utama.csv'))
+        self.assertEqual((len(T), T.id.tolist()), (len(U), U.id.tolist()))
+        self.assertEqual((B['n_utama'], B['beza_bar_layak']), (len(U), 0))
+        self.assertEqual(B['pariti'], B['diaudit'])                             # setiap setup yang diaudit menyamai senarai utama
+        self.assertEqual(B['pariti_300'], 300)
+        self.assertGreaterEqual(B['diaudit'], 1990)
+        self.assertEqual((B['bebas_sama'], B['bebas_bil']), (6, 6))             # isyarat ditulis semula secara bebas: sama tepat
+        self.assertTrue(B['kohort_sama_gred_A_300'])
+        self.assertEqual(sum(B['gred_300'].values()), 300)
+        a3 = T[T.kedudukan <= 300]
+        self.assertEqual(sorted(a3[a3.gred == 'A'].id), sorted(a19.KOHORT))
+        d_ = T[T.diaudit]
+        self.assertTrue(((d_.n == U.set_index('id').loc[d_.id, 'n'].to_numpy())).all())
+        self.assertTrue((d_.gred.isin(list('ABCD'))).all())
+        g = d_[d_.gred == 'A']                                                  # takrif gred A (pindaan (ae) A4)
+        self.assertTrue((g.solid & g.arah3 & g.atas_rawak & g.atas_rawak_K3 & ~g.rapuh).all())
+        self.assertTrue((d_[d_.rapuh].gred == 'D').all())
+        G = pd.read_csv(os.path.join(d, 'gabungan.csv'))
+        k = G[G.kumpulan.str.startswith('KAWALAN: semua saham') & (G.tempoh == 'semua')].iloc[0]
+        self.assertGreater(k.naik5 - k.r_naik5, 0.08)                           # laporan sahaja: naik >= 5 % jauh melebihi rawak ...
+        self.assertGreater(k.jatuh5 - k.r_jatuh5, 0.07)                         # ... dan jatuh >= 5 % pun begitu
+        md = open(os.path.join(d, 'AUDIT.md'), encoding='utf-8').read()
+        for frasa in ('BUKAN bukti', 'Gred A bukan bukti', 'Tiada saham mati', 'Jatuh hampir sama banyak'):
+            self.assertIn(frasa, md)
+
+
 CAP_F_LAMA = 'e4b8fd20bb8f78a123e32c2eef75c55c42c8f27e1a50ee81ea2b4a7b7001edd5'
 
 
