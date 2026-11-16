@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794795050-308f",
-  "nombor": 213,
-  "sha256": "6b4b6010f91efd374e62064d5371c5c2ec8296b5bad3dd274e395d8c47a3e67f",
-  "bait": 812636,
-  "dikemas": "2026-11-16 02:11 UTC",
-  "nota": "v182 (16 Nov 2026, keputusan pengguna B selepas CS14): Setup F memaparkan cara pegang kedua (purata 50 hari, tiada had masa) di sebelah cara sekarang; ayat kotak Menang dibetulkan"
+  "versi_artifact": "1794804187-90d8",
+  "nombor": 214,
+  "sha256": "6408acd4ccb080f9e860556aa542943cf12ea8874f6d405dde14d3d7975f9f63",
+  "bait": 875463,
+  "dikemas": "2026-11-16 04:43 UTC",
+  "nota": "v183 (16 Nov 2026, keputusan pengguna \"v3 dan C ... tab kiri, satu khas utk robot\"): tab Robot (pejabat 3D, 27 kerja automatik, robot gaya C)"
 }
