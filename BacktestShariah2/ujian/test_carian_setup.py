@@ -1708,6 +1708,177 @@ class TestCS13(unittest.TestCase):
         self.assertIn('Keputusan: carian naik laju BERHASIL', md)
 
 
+class TestCS14(unittest.TestCase):
+    """SPEC pindaan 16 Nov 2026 (x): cara pegang "jual yang rugi, pegang yang untung", tanpa had masa."""
+
+    def _data(self):
+        rng = np.random.default_rng(11)
+        n = 1500
+        c = 50 * np.exp(np.cumsum(rng.normal(0.0008, 0.03, n)))
+        o = c * (1 + rng.normal(0, 0.008, n))
+        h = np.maximum(o, c) * (1 + np.abs(rng.normal(0, 0.008, n)))
+        lo = np.minimum(o, c) * (1 - np.abs(rng.normal(0, 0.01, n)))
+        pan = dict(o=o, h=h, l=lo, c=c, atr=c * 0.035, mula=np.asarray([0, n]), tid=np.zeros(n, np.int64))
+        return pan, np.arange(260, 1300, 7).astype(np.int64)
+
+    def test_dikunci(self):
+        import cs_pegang14 as p14
+        self.assertEqual((p14.W, len(p14.CALON), len(p14.KELAS_A), len(p14.KELAS_B)), (109, 35, 3, 32))
+        self.assertEqual((p14.MIN_DAG, p14.MIN_K3, p14.D_MENANG, p14.D_RUGI), (30, 20, -0.02, 0.02))
+        self.assertEqual((p14.T20, p14.SMA_N, list(p14.CH_K), p14.JATUH, p14.HAD), (20, (20, 50, 100, 200), [4.0, 6.0, 8.0], 0.75, (126, 252, 0)))
+        self.assertEqual((p14.CARA[p14.SEKARANG], p14.CARA[p14.P126], p14.CARA[p14.SIMPAN], p14.CARA[0]), ('r0.t1.126', 'r0.t0.126', 'r0.t0.0', 'J20'))
+        self.assertEqual(p14.k7.HENTI[p14.S_HENTI], '4xATR14')
+        self.assertEqual(sorted(p14.CARA[w] for w in p14.KELAS_A), ['r1.t0.0', 'r2.t0.0', 'r3.t0.0'])
+        self.assertTrue(all(p14.HW[w] == 0 and p14.TW[w] > 0 for w in p14.KELAS_B) and p14.SIMPAN not in p14.CALON)
+
+    def test_menyamai_enjin_cs11(self):
+        """Cara dengan had 126 sesi mesti sama dengan cs_semak11.pegang (enjin senarai utama)."""
+        import cs_pegang14 as p14
+        import cs_semak11 as s11
+        pan, ev = self._data()
+        R0, SK0 = s11.pegang(ev, pan['o'], pan['l'], pan['c'], pan['atr'], s11.siri_trend(pan), p14.S_HENTI)
+        R, SK, TB = p14.hasil14(*p14.atom_panel(pan, ev), p14.RW, p14.TW, p14.HW)
+        for lama, baru in (('J20', 'J20'), ('P-MA20', 'r0.t1.126'), ('P-MA50', 'r0.t2.126'), ('P-CH4', 'r0.t5.126'), ('P-126', 'r0.t0.126')):
+            a, b = s11.CARA.index(lama), p14.CARA.index(baru)
+            self.assertTrue(np.allclose(R[:, b], R0[:, a], atol=1e-12) and (SK[:, b] == SK0[:, a]).all(), lama)
+            self.assertFalse(TB[:, b].any())
+        self.assertGreater(len(set(SK0[:, 1])), 10)
+
+    def _naif(self, pan, i, r, t, had):
+        o, lo, c, atr = pan['o'], pan['l'], pan['c'], pan['atr']
+        e, akhir = i + 1, len(c) - 1
+        P, a0 = o[e], atr[i]
+        Ls, kos = P - 4 * a0, 0.005
+        if c[e] <= Ls:
+            return o[e + 1] / P - 1 - kos, 1, False
+        sma = lambda b, n: c[b - n + 1:b + 1].mean() if b - n + 1 >= 0 else np.nan
+        hc = c[e]
+        for d in range(0, akhir - e + 1):
+            b = e + d
+            if d >= 1 and (o[b] <= Ls or lo[b] <= Ls):
+                return (o[b] if o[b] <= Ls else Ls) / P - 1 - kos, d, False
+            hc = max(hc, c[b])
+            if had and d == had - 1:
+                return c[b] / P - 1 - kos, d, False
+            if d < 19 or b == akhir:
+                continue
+            rugi = {0: False, 1: c[b] < P, 2: c[b] < P - a0, 3: d == 19 and c[b] < P}[r]
+            trend = {0: False, 1: c[b] < sma(b, 20), 2: c[b] < sma(b, 50), 3: c[b] < sma(b, 100), 4: c[b] < sma(b, 200),
+                     5: c[b] < hc - 4 * atr[b], 6: c[b] < hc - 6 * atr[b], 7: c[b] < hc - 8 * atr[b], 8: c[b] < 0.75 * hc}[t]
+            if (rugi or trend) and not (had and d + 1 > had - 1):
+                return o[b + 1] / P - 1 - kos, d + 1, False
+        return c[akhir] / P - 1 - kos, akhir - e, True
+
+    def test_menyamai_kiraan_naif(self):
+        import cs_pegang14 as p14
+        pan, ev = self._data()
+        R, SK, TB = p14.hasil14(*p14.atom_panel(pan, ev), p14.RW, p14.TW, p14.HW)
+        terbuka = 0
+        for nama in ('r1.t0.0', 'r2.t0.0', 'r3.t0.0', 'r3.t2.0', 'r1.t3.0', 'r2.t7.0', 'r0.t8.0', 'r0.t4.0', 'r0.t6.252', 'r1.t2.252', 'r0.t0.0', 'r3.t5.126'):
+            w = p14.CARA.index(nama)
+            r, t, had = int(nama[1]), int(nama[4]), int(nama.split('.')[2])
+            for k, i in enumerate(ev):
+                mahu = self._naif(pan, int(i), r, t, had)
+                self.assertAlmostEqual(R[k, w], mahu[0], 10, (nama, k))
+                self.assertEqual((int(SK[k, w]), bool(TB[k, w])), mahu[1:], (nama, k))
+                terbuka += mahu[2]
+        self.assertGreater(terbuka, 0)                                   # ada posisi yang masih terbuka pada hujung data
+        w1, w0 = p14.CARA.index('r1.t0.0'), p14.CARA.index('r0.t0.0')
+        self.assertTrue((SK[:, w1] <= SK[:, w0]).all())                  # menambah peraturan tidak boleh melambatkan jualan
+
+    def test_statistik_satu_posisi(self):
+        import cs_pegang14 as p14
+        ev = np.array([10, 12, 40, 5, 6], np.int64)
+        tid = np.array([0, 0, 0, 1, 1], np.int64)
+        tp = np.array([0, 0, 2, 1, 1], np.int64)
+        R = np.array([[0.10, 0.60], [0.50, 0.50], [-0.20, -0.20], [0.02, 0.02], [0.30, 0.30]])
+        SK = np.array([[5, 1], [3, 3], [9, 9], [0, 2], [4, 4]], np.int64)
+        TB = np.zeros((5, 2), bool)
+        TB[2, 0] = True
+        S = p14.stat14(ev, tid, tp, R, SK, TB)
+        g = lambda w, k: S[w, p14.IX[k]]
+        # cara 0: isyarat 12 diabaikan (saham 0 dipegang hingga bar 16); saham 1: isyarat 6 selepas bar jual 6? 5+1+0 = 6 -> diabaikan
+        self.assertEqual(g(0, 'n'), 3)
+        self.assertAlmostEqual(g(0, 'purata'), (0.10 - 0.20 + 0.02) / 3)
+        self.assertAlmostEqual(g(0, 'menang'), 2 / 3)
+        self.assertAlmostEqual(g(0, 'rugi15'), 1 / 3)
+        self.assertAlmostEqual(g(0, 'terbuka'), 1 / 3)
+        self.assertEqual((g(0, 'sesi_med'), g(0, 'n_K1'), g(0, 'n_K2'), g(0, 'n_K3')), (6, 1, 1, 1))
+        self.assertAlmostEqual(g(0, 'per20'), (0.10 - 0.20 + 0.02) / (6 + 10 + 1) * 20)
+        # cara 1: saham 0 jual pada bar 12 -> isyarat 12 diabaikan (bar jual), isyarat 40 diambil; saham 1 jual bar 8 -> isyarat 6 diabaikan
+        self.assertEqual(g(1, 'n'), 3)
+        self.assertAlmostEqual(g(1, 'k50'), 1 / 3)
+        self.assertAlmostEqual(g(1, 'purata_K1'), 0.60)
+
+    def test_pemilihan_dan_bacaan(self):
+        import cs_pegang14 as p14
+        n = 40
+        S = np.zeros((n, p14.W, p14.NS))
+        S[:, :, p14.IX['n']] = 100
+        S[:, :, p14.IX['n_K3']] = 25
+        S[:, :, p14.IX['menang']] = 0.50
+        S[:, :, p14.IX['rugi15']] = 0.10
+        S[:, :, p14.IX['purata']] = 0.02
+        S[:, :, p14.IX['purata_K3']] = 0.02
+        a, b = p14.CARA.index('r1.t2.0'), p14.CARA.index('r0.t7.0')
+        S[:, a, p14.IX['purata']] = 0.04                                 # lebih baik, menang dan rugi besar hampir sama
+        S[:, a, p14.IX['menang']] = 0.49
+        S[:, a, p14.IX['purata_K3']] = 0.03
+        S[:, b, p14.IX['purata']] = 0.09                                 # purata tertinggi tetapi menang jatuh 8 mata
+        S[:, b, p14.IX['menang']] = 0.42
+        D = dict(ids=[f'F{i}' for i in range(n)], A=S, B=S.copy())
+        B, ok = p14.bacaan(D)
+        self.assertEqual((B['n_layak'], B['semua']['cara'], B['semua']['menepati_A'], B['semua']['ya']), (n, 'r1.t2.0', True, True))
+        self.assertEqual(B['kelas_B']['cara'], 'r1.t2.0')
+        self.assertFalse(B['kelas_A']['ya'])                             # tiada cara kelas A yang lebih baik daripada cara sekarang
+        D['B'][:, a, p14.IX['rugi15']] = 0.13                            # syarat (3) gagal pada saham tidak dilihat
+        self.assertFalse(p14.bacaan(D)[0]['semua']['ya'])
+        D['B'][:, a, p14.IX['rugi15']] = 0.10
+        D['B'][:, a, p14.IX['purata_K3']] = 0.01                         # syarat (4): 2025-26 lebih rendah
+        self.assertFalse(p14.bacaan(D)[0]['semua']['ya'])
+        S2 = S.copy()
+        S2[:, p14.CALON, p14.IX['menang']] = 0.40                        # tiada calon menepati syarat -> purata tertinggi antara semua
+        B2, _ = p14.bacaan(dict(ids=D['ids'], A=S2, B=S2.copy()))
+        self.assertEqual((B2['semua']['cara'], B2['semua']['menepati_A'], B2['semua']['ya']), ('r0.t7.0', False, False))
+        D['A'][:5, p14.SEKARANG, 0] = 10                                 # < 30 dagangan cara sekarang -> tidak layak
+        self.assertEqual(p14.bacaan(D)[0]['n_layak'], n - 5)
+
+
+    def test_fail_hasil(self):
+        """Fail hasil CS14 konsisten sesama sendiri; cara sekarang = angka senarai utama; senarai utama tidak diubah."""
+        import cs_pegang14 as p14
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS14')
+        B = json.load(open(os.path.join(d, 'bacaan.json'), encoding='utf-8'))
+        T = pd.read_csv(os.path.join(d, 'cara.csv'))
+        G = pd.read_csv(os.path.join(d, 'tangga.csv'))
+        X = pd.read_csv(os.path.join(d, 'setup.csv.gz'))
+        U = pd.read_csv(os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS13', 'senarai_utama.csv'))
+        self.assertEqual((B['n_setup'], len(X), len(U), len(T), len(G)), (2001, 2001, 2001, 2 * p14.W, 3 * len(p14.TANGGA)))
+        self.assertEqual(B['cara'], p14.CARA)
+        self.assertTrue(B['pariti']['n'] == 0 and B['pariti']['hari'] == 0 and max(B['pariti'][k] for k in ('menang', 'purata', 'rugi15')) < 2e-5)
+        X, U = X.set_index('id'), U.set_index('id')
+        self.assertTrue(np.allclose(X.loc[U.index, 'r0.t1.126:menang'], U.menang_B, atol=1e-4))
+        self.assertTrue(np.allclose(X.loc[U.index, 'r0.t1.126:purata'], U.purata_B, atol=1e-4))
+        tb = T[T.set == 'B'].set_index('cara')
+        for k in ('semua', 'kelas_A', 'kelas_B'):
+            x = B[k]
+            self.assertEqual(x['cara'], p14.CARA[x['w']])
+            self.assertEqual(x['ya'], x['s1'] and x['s2'] and x['s3'] and x['s4'])
+            self.assertAlmostEqual(x['d_purata'], tb.loc[x['cara'], 'd_purata'], 4)
+            self.assertEqual(x['sama'], abs(x['d_purata']) < p14.SAMA)
+        self.assertIn(B['semua']['w'], p14.CALON)
+        self.assertIn(B['kelas_A']['w'], p14.KELAS_A)
+        # dapatan yang dilaporkan: tiada calon yang menaikkan purata >= 0.1 mata tanpa kadar menang jatuh > 2 mata (kumpulan B)
+        c = tb.loc[[p14.CARA[w] for w in p14.CALON]]
+        self.assertFalse(((c.d_purata >= p14.SAMA) & (c.d_menang >= p14.D_MENANG)).any())
+        self.assertTrue(B['semua']['sama'] and not B['kelas_A']['ya'])
+        # kawalan rawak: pegang lebih longgar menaikkan purata saham rawak juga
+        self.assertEqual(B['n_kawalan'], p14.N_KAWALAN)
+        self.assertGreater(tb.loc['r0.t7.0', 'rawak_purata'], tb.loc['r0.t1.126', 'rawak_purata'])
+        self.assertEqual(sorted(G.cara.unique()), sorted(p14.TANGGA))
+        self.assertEqual(sorted(G.n_setup.unique()), [42, 210, 2001])
+
+
 class TestJenisTrend(unittest.TestCase):
     """SPEC pindaan 16 Nov 2026 (w): tinjauan jenis dan tempoh trend menaik (zigzag ATR; deskriptif)."""
 
