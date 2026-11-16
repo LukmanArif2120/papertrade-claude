@@ -109,7 +109,7 @@ def main(kerja):
     calon, langkau = [], []
     for r in reg.itertuples():
         cs07 = r.pusingan == 'CS07'
-        if not cs07 and ('@' in r.takrif or r.pusingan == 'CS04'):
+        if not cs07 and ('@' in r.takrif or r.pusingan in ('CS04', 'CS13')):     # CS13: senarai sendiri (hasil/CS13/SENARAI_UTAMA.md)
             langkau.append(r.id)
             continue
         try:

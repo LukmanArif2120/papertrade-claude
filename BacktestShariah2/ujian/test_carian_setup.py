@@ -361,7 +361,7 @@ class TestRingkas(unittest.TestCase):
         import cs_ringkas
         t = cs_ringkas.pembahagian()
         self.assertEqual(t.id.tolist()[:3], ['F01', 'F02', 'F03'])
-        lama = t[~t.pusingan.isin(['CS05', 'CS06', 'CS07'])]
+        lama = t[~t.pusingan.isin(['CS05', 'CS06', 'CS07', 'CS13'])]
         self.assertEqual(len(lama), 38)
         self.assertTrue(set(lama.prasyarat_pasaran) <= {'–', 'QQQ ON', 'QQQ OFF', 'SPY > SMA200'})
         self.assertEqual(int((t.jejak_hadapan == 'ya').sum()), 8)
@@ -548,7 +548,7 @@ class TestCS05(unittest.TestCase):
         self.assertEqual(list(reg.columns)[-6:], ['prasyarat', 'syarat', 'menang_K1', 'menang_K2', 'menang_K3', 'menang'])
         self.assertTrue((reg.prasyarat != '').all() and (reg.syarat != '').all())
         self.assertEqual(reg.id.tolist(), [f'F{i:02d}' for i in range(1, len(reg) + 1)])
-        lama = reg[~reg.pusingan.isin(['CS05', 'CS06', 'CS07'])]
+        lama = reg[~reg.pusingan.isin(['CS05', 'CS06', 'CS07', 'CS13'])]
         self.assertEqual(len(lama), 38)
         self.assertTrue(set(lama.prasyarat) <= {'tiada', 'QQQ ON', 'QQQ OFF', 'SPY > SMA200'})
         for t in reg[reg.pusingan == 'CS05'].itertuples():
@@ -1425,6 +1425,351 @@ class TestCS10(unittest.TestCase):
         self.assertLessEqual(float((bukan_x00.pur_T - bukan_x00.pur_x00T).median()), 0.0)
         p8 = pd.read_csv(os.path.join(d, '..', 'CS08', 'papan.csv'))
         self.assertTrue(p8.keluar.str.startswith('X00').all())                  # papan T01-T12 tidak diubah oleh CS10
+
+
+class TestCS11(unittest.TestCase):
+    """SPEC pindaan 15 Nov 2026 (t): ukuran longgar `naik`, pegang selepas 4 minggu, kekerapan, banding M / N / F."""
+
+    def _data(self):
+        rng = np.random.default_rng(7)
+        n = 900
+        c = 50 * np.exp(np.cumsum(rng.normal(0.001, 0.03, n)))
+        o = c * (1 + rng.normal(0, 0.008, n))
+        h = np.maximum(o, c) * (1 + np.abs(rng.normal(0, 0.008, n)))
+        lo = np.minimum(o, c) * (1 - np.abs(rng.normal(0, 0.01, n)))
+        pan = dict(o=o, h=h, l=lo, c=c, atr=c * 0.035, mula=np.asarray([0, n]), tid=np.zeros(n, np.int64))
+        return pan, np.arange(260, 700, 5).astype(np.int64)
+
+    def test_dikunci(self):
+        import cs_semak11 as s11
+        self.assertEqual((s11.T20, s11.H, s11.NAIK_MIN, s11.NAIK_LANTAI), (20, 126, 0.02, 0.10))
+        self.assertEqual((s11.MIN_BELIAN, s11.MIN_TAHUN, s11.MIN_SETAHUN), (300, 10, 24))
+        self.assertEqual(s11.CARA, ['J20', 'P-MA20', 'P-MA20x2', 'P-MA50', 'P-R10', 'P-CH4', 'P-126'])
+        self.assertEqual(s11.HENTI[s11.S_ASAL], '4xATR14')
+
+    def test_label_menyamai_kiraan_naif(self):
+        import cs_semak11 as s11
+        pan, ev = self._data()
+        o, lo, c = pan['o'], pan['l'], pan['c']
+        Lb = s11.label11(ev, o, lo, c)
+        for k, i in enumerate(ev):
+            e = i + 1
+            P, seg = o[e], c[e:e + 20]
+            h8 = c[e] <= .92 * P or any(o[e + d] <= .92 * P or lo[e + d] <= .92 * P for d in range(1, 20))
+            m5 = c[e + 4] >= 1.05 * P
+            naik = c[e + 19] >= 1.02 * P and c[e + 19] > seg.mean() and seg.min() > .90 * P
+            mahu = [m5, m5 and c[e + 19] > c[e + 4] and not h8, naik, naik and c[e + 19] >= 1.10 * P, naik and c[e + 19] >= 1.20 * P]
+            self.assertEqual([bool(x) for x in Lb[k]], [bool(x) for x in mahu], k)
+        self.assertTrue((Lb[:, 3] <= Lb[:, 2]).all() and (Lb[:, 4] <= Lb[:, 3]).all())
+
+    def test_jual20_sama_dengan_cs_keluar7(self):
+        import cs_keluar7 as k7
+        import cs_semak11 as s11
+        pan, ev = self._data()
+        g = pd.DataFrame({'open': pan['o'], 'high': pan['h'], 'low': pan['l'], 'close': pan['c'], 'volume': 1e6},
+                         index=pd.bdate_range('2019-01-02', periods=len(pan['c'])))
+        st = k7.sedia_pan(pan, k7.siri(g).astype(np.uint8), ev)
+        for s in range(8):
+            R7, sk7 = k7.hasil(*st[:7], k7.A1, k7.A2, k7.OP, s, 0)
+            R, sk, kena = s11.jual20(ev, pan['o'], pan['l'], pan['c'], pan['atr'], s)
+            self.assertTrue(np.allclose(R, R7, atol=1e-9) and (sk == sk7).all(), s)
+            self.assertTrue((sk >= 1).all())                                    # tiada jualan pada hari beli
+            self.assertTrue(((sk < 19) <= kena).all())                          # jualan sebelum hari ke-20 hanya kerana stop loss
+
+    def test_pegang_menyamai_simulasi_hari_demi_hari(self):
+        import cs_semak11 as s11
+        pan, ev = self._data()
+        o, lo, c, atr = pan['o'], pan['l'], pan['c'], pan['atr']
+        ev = ev[ev + 127 < len(c)]
+        B = s11.siri_trend(pan)
+        s20 = pd.Series(c).rolling(20).mean().to_numpy()
+        self.assertTrue((B[0] == (c < s20)).all())
+
+        def sim(i, s, m):
+            e = i + 1
+            P = o[e]
+            Ls = [P * .92, P * .90, P * .88, P * .85, P - 3 * atr[i], P - 4 * atr[i], P - 5 * atr[i], min(P * .90, P - 4 * atr[i])][s]
+            jual_esok, hc, akhir = c[e] <= Ls, c[e], 19 if m == 0 else 125
+            for d in range(1, akhir + 1):
+                b = e + d
+                if jual_esok or o[b] <= Ls:
+                    return o[b] / P - 1 - s11.KOS, d
+                if lo[b] <= Ls:
+                    return Ls / P - 1 - s11.KOS, d
+                hc = max(hc, c[b])
+                if d == akhir:
+                    return c[b] / P - 1 - s11.KOS, d
+                if 1 <= m <= 5 and d >= 19 and ((B[m - 1, b] != 0) if m <= 4 else (c[b] < hc - 4 * atr[b])):
+                    jual_esok = True
+        for s in (1, 5, 6):
+            R, SK = s11.pegang(ev, o, lo, c, atr, B, s)
+            for k, i in enumerate(ev):
+                for m in range(s11.NC):
+                    r, sk = sim(int(i), s, m)
+                    self.assertAlmostEqual(r, float(R[k, m]), places=9, msg=(s, k, m))
+                    self.assertEqual(sk, int(SK[k, m]), (s, k, m))
+            self.assertTrue((SK >= 1).all())                                    # tiada jualan pada hari beli
+            self.assertTrue((SK[:, 1:] >= np.minimum(SK[:, :1], 19)).all())     # cara pegang tidak pernah menjual lebih awal daripada J20
+
+    def test_rekod_cs11(self):
+        import cs_semak11 as s11
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS11')
+        T = pd.read_csv(os.path.join(d, 'semak_f.csv'))
+        F, M, N = (T[T.kump == k] for k in ('F', 'M asal', 'N asal'))
+        self.assertEqual((len(F), len(M), len(N)), (69, 134, 49))
+        self.assertTrue(F.swing.all())                                          # tiada jualan hari beli; jualan awal hanya stop loss
+        self.assertGreater(F.terus.median(), 2 * M.terus.median())              # ukuran ketat: F jauh mengatasi M dan N asal
+        self.assertGreater(F.terus.median(), 2 * N.terus.median())
+        self.assertGreater(F.m5.median(), 2 * M.m5.median())
+        self.assertLess(abs(float((F.naik - F.a_naik).median())), 0.01)         # ukuran longgar: F hampir sama dengan rawak hari sama
+        self.assertLessEqual(int(F.lulus_naik.sum()), 5)
+        self.assertEqual(int(F.menepati.sum()), int((F.lulus_naik & (F.prasyarat.fillna('') != '')).sum()))
+        for r in F.itertuples():                                                # takrif "lulus ukuran longgar" dikunci pindaan (t)
+            mahu = bool(r.n >= s11.MIN_BELIAN and r.tahun >= s11.MIN_TAHUN and min(r.kl_naik_K1, r.kl_naik_K2, r.kl_naik_K3) > 0)
+            self.assertEqual(bool(r.lulus_naik), mahu, r.id)
+        P = pd.read_csv(os.path.join(d, 'pegang.csv'))
+        b = P[P.set == 'B'].pivot(index='id', columns='cara')
+        self.assertEqual(sorted(P.cara.unique()), sorted(s11.CARA))
+        for cr in s11.CARA[1:]:                                                 # pegang lebih lama: purata naik, kadar menang turun
+            self.assertGreater(int((b['purata'][cr] > b['purata']['J20']).sum()), len(b) / 2, cr)
+            self.assertLess(float((b['menang'][cr] - b['menang']['J20']).median()), -0.02, cr)
+        md = open(os.path.join(d, 'SEMAK_F.md'), encoding='utf-8').read()
+        self.assertIn('Keputusan: pegang selepas 4 minggu TIDAK menolong', md)
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('')
+        self.assertNotIn('CS11', set(reg.pusingan))                             # pusingan ini tidak mendaftar atau mengubah setup F
+
+
+class TestCS12(unittest.TestCase):
+    """SPEC pindaan 15 Nov 2026 (u): carian baharu dipangkatkan ikut ukuran longgar `naik`, cara pegang B."""
+
+    def test_dikunci(self):
+        import cs_cari12 as c12
+        import cs_semak11 as s11
+        self.assertEqual((c12.N_ATAS, c12.N_KAWALAN, c12.BENIH_KAWALAN, c12.N_BACA), (5, 300, 20261115, 100))
+        self.assertEqual((c12.k7.HENTI[c12.S_HENTI], s11.CARA[c12.CARA_B]), ('4xATR14', 'P-MA20'))
+
+    def test_bacaan_dikunci(self):
+        import cs_cari12 as c12
+        asas = dict(peranan=['calon'] * 120 + ['kawalan'] * 50, skor_A=list(np.linspace(0.2, 0.01, 120)) + [np.nan] * 50)
+        T = pd.DataFrame({**asas, 'lulus': [True] * 70 + [False] * 50 + [True] * 5 + [False] * 45, 'kl_naik': [0.05] * 120 + [0.0] * 50})
+        B = c12.bacaan(T)
+        self.assertEqual((B['n_calon'], B['atas'], B['kawalan']), (120, 100, 50))
+        self.assertAlmostEqual(B['atas_lulus'], 0.70)
+        self.assertTrue(B['ya'])
+        self.assertFalse(c12.bacaan(T.assign(kl_naik=0.01))['ya'])                      # kelebihan terlalu kecil
+        self.assertFalse(c12.bacaan(T.assign(lulus=[True] * 40 + [False] * 80 + [True] * 5 + [False] * 45))['ya'])   # kurang separuh
+        self.assertFalse(c12.bacaan(T.assign(lulus=[True] * 70 + [False] * 50 + [True] * 30 + [False] * 20))['ya'])  # kawalan terlalu hampir
+
+    def test_rekod_cs12(self):
+        import cs_cari12 as c12
+        import cs_semak11 as s11
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS12')
+        c = pd.read_csv(os.path.join(d, 'calon.csv.gz'))
+        k = pd.read_csv(os.path.join(d, 'kawalan.csv'))
+        self.assertEqual(len(k), c12.N_KAWALAN)
+        self.assertGreater(len(c), 1000)                                        # tiada had bilangan calon
+        self.assertTrue((c.skor_A > 0).all() and c.skor_A.is_monotonic_decreasing)
+        for r in c.head(300).itertuples():                                      # takrif "lulus" dikunci
+            mahu = bool(r.n >= s11.MIN_BELIAN and r.tahun >= s11.MIN_TAHUN and min(r.kl_naik_K1, r.kl_naik_K2, r.kl_naik_K3) > 0)
+            self.assertEqual(bool(r.lulus), mahu, r.id)
+        B = c12.bacaan(pd.concat([c.assign(peranan='calon'), k.assign(peranan='kawalan')], ignore_index=True))
+        self.assertFalse(B['ya'])                                               # bacaan dikunci (u): carian TIDAK berhasil
+        e = c[(c.n >= s11.MIN_BELIAN) & (c.tahun >= s11.MIN_TAHUN)]
+        ek = k[(k.n >= s11.MIN_BELIAN) & (k.tahun >= s11.MIN_TAHUN)]
+        self.assertGreater(float((e.kl_naik_K1 > 0).mean()), 0.7)               # pada tahun carian calon mengatasi rawak ...
+        self.assertLess(float((e.kl_naik_K3 > 0).mean()), 0.5)                  # ... tetapi tidak pada 2025-26
+        self.assertLess(abs(float((e.kl_naik_K3 > 0).mean()) - float((ek.kl_naik_K3 > 0).mean())), 0.10)
+        md = open(os.path.join(d, 'CARIAN.md'), encoding='utf-8').read()
+        self.assertIn('Keputusan: carian ikut ukuran longgar TIDAK berhasil', md)
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('')
+        self.assertNotIn('CS12', set(reg.pusingan))                             # tiada calon ukuran longgar didaftarkan sebagai kod F
+
+
+class TestCS13(unittest.TestCase):
+    """SPEC pindaan 15 Nov 2026 (v): daftar SEMUA setup naik laju yang lulus (tanpa had bilangan) + senarai utama F + cara pegang B."""
+
+    def test_dikunci(self):
+        import cs_daftar13 as d13
+        import cs_semak11 as s11
+        self.assertEqual((d13.N_ATAS, d13.N_KAWALAN, d13.BENIH_KAWALAN), (5, 300, 20261116))
+        self.assertEqual((d13.JACCARD, d13.B1_BEZA, d13.B2_MIN, d13.B2_BEZA), (0.80, 0.20, 0.60, 0.10))
+        self.assertEqual((d13.MENANG_PILIH, d13.PURATA_PILIH, d13.MIN_K3), (0.50, 0.02, 20))
+        self.assertEqual((d13.k7.HENTI[d13.S_HENTI], s11.CARA[d13.CARA_B], d13.KOD_HENTI, d13.KOD_PEGANG, d13.ID_MULA),
+                         ('4xATR14', 'P-MA20', 'G6', 'PB', 96))
+        self.assertEqual(d13.takrif13('K19.011', 2, 0, 8, 16).split('|')[2:4], ['G6', 'PB'])
+
+    def _T(self, lulus_c, k3_c, lulus_k, k3_k, n=100):
+        f = lambda bil, m: [True] * int(round(bil * m)) + [False] * (m - int(round(bil * m)))
+        return pd.DataFrame({'peranan': ['calon'] * n + ['kawalan'] * n + ['calon'] * 10, 'layak': [True] * (2 * n) + [False] * 10,
+                             'lulus': f(lulus_c, n) + f(lulus_k, n) + [False] * 10,
+                             'kl_terus_K3': [0.02 if x else -0.02 for x in f(k3_c, n) + f(k3_k, n)] + [0.05] * 10})
+
+    def test_bacaan_dikunci(self):
+        import cs_daftar13 as d13
+        B = d13.bacaan(self._T(0.45, 0.70, 0.12, 0.50))
+        self.assertEqual((B['n_calon'], B['calon_layak'], B['kawalan_layak'], B['n_lulus']), (110, 100, 100, 45))
+        self.assertTrue(B['b1'] and B['b2'] and B['ya'])
+        self.assertAlmostEqual(B['nasib'], 0.12 / 0.45)
+        self.assertFalse(d13.bacaan(self._T(0.30, 0.70, 0.12, 0.50))['ya'])              # B1: beza lulus < 20 mata
+        self.assertFalse(d13.bacaan(self._T(0.45, 0.58, 0.12, 0.40))['ya'])              # B2: 2025-26 < 60 %
+        self.assertFalse(d13.bacaan(self._T(0.45, 0.65, 0.12, 0.58))['ya'])              # B2: beza dengan kawalan < 10 mata
+
+    def test_kembar(self):
+        import cs_daftar13 as d13
+        r = lambda *x: np.concatenate([np.arange(a, b) for a, b in x]).astype(np.int32)
+        kos = np.zeros(0, np.int32)
+        K = {'_n': {'A': 10000, 'B': 10000},
+             'F01': dict(e_B=r((0, 100)), e_A=kos),
+             'C0001': dict(e_B=r((0, 95), (200, 205)), e_A=kos),                 # 95 / 105 dengan F01 -> kembar F01
+             'C0002': dict(e_B=r((1000, 1050)), e_A=r((1000, 1050))),            # baharu
+             'C0003': dict(e_B=r((1000, 1050)), e_A=r((1000, 1040), (2000, 2010))),   # 90 / 110 dengan C0002 -> kembar
+             'C0004': dict(e_B=r((1000, 1050)), e_A=r((3000, 3050))),            # 50 / 150 -> bukan kembar
+             'C0005': dict(e_B=r((1000, 1050)), e_A=r((1000, 1050)))}            # tidak lulus -> tidak disemak
+        T = pd.DataFrame({'peranan': ['F'] + ['calon'] * 5, 'id': ['F01', 'C0001', 'C0002', 'C0003', 'C0004', 'C0005'],
+                          'lulus': [True, True, True, True, True, False], 'skor_A': [np.nan, 0.5, 0.4, 0.3, 0.2, 0.1]})
+        self.assertEqual(d13.kembar(T, K), {'C0001': 'F01', 'C0002': '', 'C0003': 'C0002', 'C0004': ''})
+
+    def test_lengkap_satu_posisi_tiada_jual_hari_beli(self):
+        import cs_daftar13 as d13
+        import cs_semak11 as s11
+        g = _saham(700, 13)
+        n = len(g)
+        pan = {k: g[m].to_numpy(float) for k, m in (('o', 'open'), ('h', 'high'), ('l', 'low'), ('c', 'close'))}
+        pan.update(atr=pan['c'] * 0.03, mula=np.asarray([0, n]), tid=np.zeros(n, np.int64), sah=np.ones(n, bool),
+                   tempoh=(np.arange(n) >= 300).astype(np.int8))
+        Bt = np.zeros((4, n), np.uint8)
+        Bt[0] = pan['c'] < pd.Series(pan['c']).rolling(20).mean().to_numpy()
+        ev = np.arange(60, 650, 7)
+        L = d13.lengkap(pan, Bt, ev)
+        sah = ev[ev + s11.H < n]
+        R, SK = s11.pegang(np.ascontiguousarray(sah, dtype=np.int64), pan['o'], pan['l'], pan['c'], pan['atr'], Bt, d13.S_HENTI)
+        ambil, akhir = [], -1
+        for k, e in enumerate(sah):                                             # satu posisi: isyarat semasa dipegang diabaikan
+            if e > akhir:
+                ambil.append(k)
+                akhir = e + 1 + SK[k, d13.CARA_B]
+        self.assertEqual(L['n_semua'], len(sah))
+        self.assertEqual(L['n'], len(ambil))
+        self.assertAlmostEqual(L['purata'], float(R[ambil, d13.CARA_B].mean()))
+        self.assertAlmostEqual(L['menang'], float((R[ambil, d13.CARA_B] > 0).mean()))
+        self.assertEqual(L['jual_hari_beli'], 0)
+        self.assertEqual(sum(v['n'] for v in L['K']), L['n'])
+        self.assertTrue((SK[:, d13.CARA_B] >= 1).all())
+
+    def test_rekod_cs13(self):
+        import hashlib
+        import cs_daftar13 as d13
+        import cs_semak11 as s11
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS13')
+        c = pd.read_csv(os.path.join(d, 'calon.csv.gz')).fillna({'kembar_kepada': '', 'id_F': ''})
+        k = pd.read_csv(os.path.join(d, 'kawalan.csv'))
+        U = pd.read_csv(os.path.join(d, 'senarai_utama.csv'))
+        J = json.load(open(os.path.join(d, 'bacaan.json')))
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('')
+        self.assertEqual(len(k), d13.N_KAWALAN)
+        self.assertGreater(len(c), 1000)                                        # tiada had bilangan calon
+        self.assertTrue((c.skor_A > 0).all() and c.skor_A.is_monotonic_decreasing)
+        for r in pd.concat([c.head(300), c[c.id_F != '']]).itertuples():        # takrif "lulus" dikunci
+            layak = bool(r.n >= s11.MIN_BELIAN and r.tahun >= s11.MIN_TAHUN)
+            self.assertEqual((bool(r.layak), bool(r.lulus)), (layak, bool(layak and min(r.kl_terus_K1, r.kl_terus_K2, r.kl_terus_K3) > 0)), r.id)
+        B = d13.bacaan(pd.concat([c.assign(peranan='calon'), k.assign(peranan='kawalan')], ignore_index=True))
+        self.assertEqual((B['ya'], B['b1'], B['b2'], B['n_lulus']), (J['ya'], J['b1'], J['b2'], J['n_lulus']))
+        self.assertTrue((c.kembar_kepada[~c.lulus] == '').all())
+        self.assertTrue(c.untuk_daftar.equals(c.lulus & (c.kembar_kepada == '')))
+        r13 = reg[reg.pusingan == 'CS13']
+        lama = reg.iloc[:95]
+        self.assertEqual(lama.id.tolist(), [f'F{i:02d}' for i in range(1, 96)])  # F01-F95 kekal: ID, takrif, henti, keluar
+        cap = hashlib.sha256(lama[['id', 'pusingan', 'takrif', 'henti', 'keluar', 'status']].to_csv(index=False).encode()).hexdigest()
+        self.assertEqual(cap, CAP_F_LAMA)
+        if not J['ya']:                                                         # bacaan gagal -> tiada kod baharu
+            self.assertEqual(len(r13), 0)
+            return
+        D = c[c.untuk_daftar]
+        self.assertEqual(len(r13), len(D))                                      # SEMUA yang lulus dan bukan kembar didaftarkan
+        self.assertEqual(r13.id.tolist(), [f'F{i}' for i in range(d13.ID_MULA, d13.ID_MULA + len(r13))])
+        self.assertEqual(r13.takrif.tolist(), D.takrif.tolist())                # ikut susunan skor A
+        self.assertEqual(dict(zip(D.takrif, D.id_F)), dict(zip(r13.takrif, r13.id)))
+        self.assertTrue((c.id_F[~c.untuk_daftar] == '').all())
+        self.assertTrue((r13.status == 'BACKTEST').all() and (r13.henti == 'G6 4xATR14').all() and r13.keluar.str.startswith('PB ').all())
+        self.assertTrue(r13.takrif.map(lambda x: x.split('|')[2:4] == ['G6', 'PB'] and len(x.split('|')) == 5).all())
+        self.assertEqual(reg.takrif.nunique(), len(reg))
+        self.assertEqual(U.kedudukan.tolist(), list(range(1, len(U) + 1)))     # senarai utama
+        self.assertTrue(U.pilihan.equals((U.menang_B >= d13.MENANG_PILIH) & (U.purata_B >= d13.PURATA_PILIH)))   # keputusan 16 Nov 2026
+        self.assertTrue(U.pilihan.iloc[:int(U.pilihan.sum())].all())            # setup pilihan dipaparkan dahulu
+        self.assertEqual(J['n_pilihan'], int(U.pilihan.sum()))
+        for _, g in U.groupby('pilihan'):                                       # dalam setiap kumpulan: ikut kadar tangkap
+            self.assertTrue(g.terus.is_monotonic_decreasing)
+        self.assertEqual(set(J['semak_masa']), {'pilih', 'lain'})
+        self.assertEqual((int((U.asal == 'lama').sum()), int((U.asal == 'baharu').sum())), (42, len(r13)))
+        self.assertEqual(set(U.id[U.asal == 'baharu']), set(r13.id))
+        self.assertEqual(int(U.jual_hari_beli.sum()), 0)                        # tiada jualan pada hari beli
+        self.assertTrue((U.hari_B[U.asal == 'baharu'] >= 20).all())             # median pegang sekurang-kurangnya 20 hari
+        md = open(os.path.join(d, 'DAFTAR.md'), encoding='utf-8').read()
+        self.assertIn('Keputusan: carian naik laju BERHASIL', md)
+
+
+class TestJenisTrend(unittest.TestCase):
+    """SPEC pindaan 16 Nov 2026 (w): tinjauan jenis dan tempoh trend menaik (zigzag ATR; deskriptif)."""
+
+    def test_dikunci(self):
+        import cs_jenis_trend as jt
+        self.assertEqual(jt.SAIZ, ((2.0, 'kecil'), (4.0, 'sederhana'), (8.0, 'besar')))
+        self.assertEqual([x[0] for x in jt.LAJU], [0.0025, 0.005, 0.01, np.inf])
+        self.assertEqual((jt.MIN_SESI, jt.BULAN, [x[0] for x in jt.BAKUL][:3]), (5, 21, [21, 63, 126]))
+
+    def test_zigzag_sintetik(self):
+        import cs_jenis_trend as jt
+        lin = lambda a, b, n: list(np.linspace(a, b, n + 1)[1:])
+        c = np.asarray([100.0] + lin(100, 80, 10) + lin(80, 120, 20) + lin(120, 115, 2) + lin(115, 130, 6) + lin(130, 110, 5)
+                       + lin(110, 150, 16) + lin(150, 100, 10))
+        atr = np.full(len(c), 2.0)                                              # had = 4 x 2 = 8 mata
+        T, P, U, D, G, n_awal, n_gantung = jt.zigzag(c, atr, np.asarray([0, len(c)]), 4.0)
+        self.assertEqual((n_awal, n_gantung), (0, 0))
+        self.assertEqual(c[T].tolist(), [80.0, 110.0])                          # dua trend: 80 -> 130 dan 110 -> 150
+        self.assertEqual(c[P].tolist(), [130.0, 150.0])
+        self.assertEqual((P - T).tolist(), [28, 16])
+        self.assertAlmostEqual(G[0], 1 - 115 / 120)                             # turun di tengah jalan (tidak termasuk kejatuhan penamat)
+        self.assertAlmostEqual(G[1], 0.0)
+        self.assertTrue((c[U] >= c[T] + 8).all() and (c[U - 1] < c[T] + 8).all())    # dikenal pada bar pertama yang naik >= had
+        self.assertTrue((c[D] <= c[P] - 8).all() and (c[D - 1] > c[P] - 8).all())    # disahkan tamat pada bar pertama yang jatuh >= had
+        T2 = jt.zigzag(c[11:], atr[11:], np.asarray([0, len(c) - 11]), 4.0)     # bermula di dasar: ayunan pertama terpotong -> dibuang
+        self.assertEqual((len(T2[0]), T2[5]), (1, 1))
+        T3 = jt.zigzag(c[:-10], atr[:-10], np.asarray([0, len(c) - 10]), 4.0)   # trend terakhir belum tamat -> dibuang
+        self.assertEqual((len(T3[0]), T3[6]), (1, 1))
+
+    def test_zigzag_sifat_pada_data_rawak(self):
+        import cs_jenis_trend as jt
+        rng = np.random.default_rng(5)
+        c = 50 * np.exp(np.cumsum(rng.normal(0.0003, 0.02, 3000)))
+        mula = np.asarray([0, 1500, 3000])                                      # dua saham
+        for k in (2.0, 4.0, 8.0):
+            atr = np.full(len(c), 1.0)
+            T, P, U, D, G, _, _ = jt.zigzag(c, atr, mula, k)
+            self.assertGreater(len(T), 3)
+            self.assertTrue((T < U).all() and (U <= P).all() and (P < D).all())
+            self.assertTrue(((T < 1500) == (D < 1500)).all())                   # tiada trend merentas dua saham
+            for t, p, d in zip(T, P, D):
+                self.assertEqual(c[p], c[t:d + 1].max())
+                self.assertEqual(c[t], c[t:p + 1].min())
+            self.assertTrue((G >= 0).all() and (G * c[T] < k * 1.0).all())      # turun di tengah jalan (mata) sentiasa di bawah had
+
+    def test_rekod(self):
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'TREND')
+        J = pd.read_csv(os.path.join(d, 'jenis_trend.csv'))
+        s = J[J.jadual == 'saiz'].set_index('saiz')
+        self.assertEqual(s.index.tolist(), ['kecil', 'sederhana', 'besar'])
+        self.assertTrue(s.sesi_50.is_monotonic_increasing and s.naik_50.is_monotonic_increasing)
+        self.assertTrue(s.setahun.is_monotonic_decreasing)
+        for jd in ('tempoh', 'jenis'):
+            for _, g in J[J.jadual == jd].groupby('saiz'):
+                self.assertAlmostEqual(float(g.bahagian.sum()), 1.0, places=3)
+                self.assertEqual(int(g.n.sum()), int(s.n[g.saiz.iloc[0]]))
+        md = open(os.path.join(d, 'JENIS_TREND.md'), encoding='utf-8').read()
+        self.assertIn('BUKAN isyarat beli atau jual', md)
+        self.assertIn('Bahagian yang boleh dikenal semasa berlaku', md)
+
+
+CAP_F_LAMA = 'e4b8fd20bb8f78a123e32c2eef75c55c42c8f27e1a50ee81ea2b4a7b7001edd5'
 
 
 if __name__ == '__main__':

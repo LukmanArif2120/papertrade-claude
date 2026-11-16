@@ -1,0 +1,36 @@
+{
+ "b1": true,
+ "b2": true,
+ "calon_layak": 4711,
+ "k3_calon": 0.8951390362980259,
+ "k3_kawalan": 0.5243055555555556,
+ "kawalan_layak": 288,
+ "lulus_calon": 0.8439821693907875,
+ "lulus_kawalan": 0.18055555555555555,
+ "n_berdaftar": 1959,
+ "n_calon": 4923,
+ "n_kembar": 2017,
+ "n_lulus": 3976,
+ "n_pilihan": 210,
+ "n_untuk_daftar": 1959,
+ "n_utama": 2001,
+ "n_utama_lama": 42,
+ "nasib": 0.21393290297339593,
+ "semak_masa": {
+  "lain": {
+   "menang": 0.43212530712530717,
+   "menang50": 0.23113207547169812,
+   "n": 1696,
+   "positif": 0.5017688679245284,
+   "purata": 0.00011674578341913015
+  },
+  "pilih": {
+   "menang": 0.4431818181818182,
+   "menang50": 0.3425414364640884,
+   "n": 181,
+   "positif": 0.5027624309392266,
+   "purata": 0.0014140259448987508
+  }
+ },
+ "ya": true
+}
