@@ -1452,6 +1452,7 @@ b.nk.nk-c{color:var(--neg-tx)}b.nk.nk-t{color:var(--pos)}b.nk.nk-v{color:#C9B8FF
   <section class="view" id="v-pr-gab" hidden></section>
   <section class="view" id="v-kaedah" hidden></section>
   <section class="view" id="v-kaedahn" hidden></section>
+  <section class="view" id="v-setupf" hidden></section>
   <section class="view" id="v-sektor" hidden></section>
   <section class="view" id="v-autotune" hidden></section>
 </div>
@@ -1468,14 +1469,14 @@ const KCLS={'GUNA':'k-GUNA','UJI KERTAS':'k-UJI','SIMPAN':'k-SIMPAN','DITOLAK':'
 const KVAR={'GUNA':'--guna','UJI KERTAS':'--uji','SIMPAN':'--simpan','DITOLAK':'--tolak'};
 const CMPCOL=['--accent','--uji','--violet'];
 const HARI=['5','10','15','20','30','40','60'];
-const MAIN=['utama','analisis','prestasi','posisi','watch','backtest','kaedah','kaedahn','sektor'];
+const MAIN=['utama','analisis','prestasi','posisi','watch','backtest','kaedah','kaedahn','setupf','sektor'];
 /* v155 (audit v154, keputusan pengguna 6 Nov 2026 Pilihan B): 9 tab -> 5 di navigasi atas. Kunci dalaman KEKAL
    (langganan db, pautan #hash, data-pergi dan localStorage merujuknya), jadi tab lama menjadi BAHAGIAN dalam
    kumpulan: Posisi = Posisi + Watchlist; Rujukan = Kaedah + Kombinasi N + Backtest.
    v156: tab Sektor DIARKIB (audit v154 pepijat #3/#4): sektor/snapshot tiada fail sumber di main dan kumpulan/siri
    tiada penulis, jadi datanya beku pada tarikh yang tidak diketahui; rejim pasaran kekal sebagai satu baris di Posisi.
    v157: bahagian Sektor KEMBALI dengan aliran institusi 13F sahaja (ada penulis mingguan: institusi.yml). */
-const KUMP={posisi:[['posisi','Posisi'],['watch','Watchlist']],rujukan:[['kaedah','Kaedah'],['kaedahn','Kombinasi N'],['backtest','Backtest'],['sektor','Sektor']]};
+const KUMP={posisi:[['posisi','Posisi'],['watch','Watchlist']],rujukan:[['kaedah','Kaedah'],['kaedahn','Kombinasi N'],['setupf','Setup F'],['backtest','Backtest'],['sektor','Sektor']]};
 const atasOf=t=>Object.keys(KUMP).find(g=>KUMP[g].some(x=>x[0]===t))||t;
 /* tab yang memerlukan registry backtest (~2 MB) + autotune; Hari ini dan Pilih kaedah tidak, jadi semakan pagi di
    telefon tidak memuat turunnya (audit v154 pepijat #18) */
@@ -1503,13 +1504,13 @@ const TELEFON=(()=>{try{return matchMedia('(max-width:760px)').matches;}catch(e)
 const S={akhir:{posisi:'posisi',rujukan:'kaedah'},set:'431',tab:'utama',akaun:'cm',sub:{backtest:'keputusan'},docs:{},meta:null,live:false,
   f:{jenis:'semua',kep:new Set(),q:'',best:true,gaya:false,shown:TELEFON?10:40},cmp:[],cmpTouched:false,
   ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:TELEFON?10:25},kat:null,kf:{kel:'semua',q:'',shown:TELEFON?10:25},at:{},af:{lbl:'',q:'',eq:'oos',v:'sar',lane:''},kp:{lihat:'pingat',gaya:false,q:'',langkah:null,shown:TELEFON?10:1e9},b4:'papan',
-  pos:{st:'pegang'},lajur:{},anl:null,af2:{lihat:'swing',q:'',shown:TELEFON?10:25},kn:null,knf:{paksi:'semua',q:'',shown:TELEFON?10:25},knu:{pra:'semua',q:'',shown:TELEFON?10:25},knp:{keluar:'semua',q:'',shown:TELEFON?10:25}};
+  pos:{st:'pegang'},lajur:{},anl:null,af2:{lihat:'swing',q:'',shown:TELEFON?10:25},sff:{lihat:'pilihan',asal:'semua',q:'',shown:TELEFON?10:25},kn:null,knf:{paksi:'semua',q:'',shown:TELEFON?10:25},knu:{pra:'semua',q:'',shown:TELEFON?10:25},knp:{keluar:'semua',q:'',shown:TELEFON?10:25}};
 try{const t=localStorage.getItem('pbs3_tab');if(MAIN.includes(t))S.tab=t;
   const ak=JSON.parse(localStorage.getItem('pbs4_akhir')||'null');if(ak&&typeof ak==='object')Object.keys(KUMP).forEach(g=>{if(KUMP[g].some(x=>x[0]===ak[g]))S.akhir[g]=ak[g];});const a=localStorage.getItem('pbs3_akaun');if(AKAUN.some(x=>x[0]===a))S.akaun=a;else if(a==='c')S.akaun='cm';
   const s=localStorage.getItem('pbs_set');if(SETSEG.includes(s))S.set=s;const b4=localStorage.getItem('pbs2_b4');if(['papan','ringkasan','banding'].includes(b4))S.b4=b4;
   const sb=JSON.parse(localStorage.getItem('pbs2_sub')||'null');if(sb&&SUBS.backtest.some(x=>x[0]===sb.backtest))S.sub.backtest=sb.backtest;
   const lj=JSON.parse(localStorage.getItem('pbs3_lajur')||'null');if(lj&&typeof lj==='object')S.lajur=lj;}catch(e){}
-{const h=(location.hash||'').slice(1);const map={utama:['utama'],harini:['utama'],pilih:['analisis'],akaun:['prestasi'],rujukan:['kaedah'],ringkasan:['utama'],analisis:['analisis'],penganalisis:['analisis'],keputusan:['backtest','keputusan'],kedudukan:['backtest','keputusan'],butiran:['backtest','butiran'],papan:['backtest','butiran'],banding:['backtest','butiran'],sektor:['sektor'],watchlist:['watch'],posisi:['posisi'],ptm:['posisi'],ptc:['posisi'],prestasi:['prestasi'],kaedah:['kaedah'],kaedahn:['kaedahn'],autotune:['backtest','butiran']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];if(h==='ptm')S.akaun='m';if(h==='ptc')S.akaun='cm';if(h==='autotune')S.set='2000';if((h==='papan'||h==='banding')&&S.set==='2000')S.set='431';if(h==='banding')S.b4='banding';if(h==='papan')S.b4='papan';}}
+{const h=(location.hash||'').slice(1);const map={utama:['utama'],harini:['utama'],pilih:['analisis'],akaun:['prestasi'],rujukan:['kaedah'],ringkasan:['utama'],analisis:['analisis'],penganalisis:['analisis'],keputusan:['backtest','keputusan'],kedudukan:['backtest','keputusan'],butiran:['backtest','butiran'],papan:['backtest','butiran'],banding:['backtest','butiran'],sektor:['sektor'],watchlist:['watch'],posisi:['posisi'],ptm:['posisi'],ptc:['posisi'],prestasi:['prestasi'],kaedah:['kaedah'],kaedahn:['kaedahn'],setupf:['setupf'],autotune:['backtest','butiran']};if(map[h]){S.tab=map[h][0];if(map[h][1])S.sub.backtest=map[h][1];if(h==='ptm')S.akaun='m';if(h==='ptc')S.akaun='cm';if(h==='autotune')S.set='2000';if((h==='papan'||h==='banding')&&S.set==='2000')S.set='431';if(h==='banding')S.b4='banding';if(h==='papan')S.b4='papan';}}
 
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -1575,7 +1576,7 @@ document.addEventListener('click',e=>{const th=e.target.closest&&e.target.closes
 /* ================= navigasi ================= */
 function viewId(){if(S.tab==='backtest'){const b=S.sub.backtest;return b==='butiran'?(S.set==='2000'?'v-autotune':'v-'+S.b4):'v-keputusan';}if(S.tab==='prestasi')return 'v-pr-'+S.akaun;if(S.tab==='posisi')return 'v-pos';return 'v-'+S.tab;}
 function renderNav(){
-  const atas=atasOf(S.tab);if(KUMP[atas])S.akhir[atas]=S.tab;if(PERLU_RUJ.has(S.tab)&&S.muatRujukan)S.muatRujukan();
+  const atas=atasOf(S.tab);if(KUMP[atas])S.akhir[atas]=S.tab;if(PERLU_RUJ.has(S.tab)&&S.muatRujukan)S.muatRujukan();if(S.tab==='setupf'&&S.muatF)S.muatF();
   document.querySelectorAll('#mainTabs button[data-tab]').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===atas));
   const kg=$('#kumpSeg'),kl=KUMP[atas];kg.hidden=!kl;kg.innerHTML=kl?kl.map(([v,t])=>`<button type="button" role="tab" data-k="${v}" aria-selected="${S.tab===v}">${t}</button>`).join(''):'';
   const subs=SUBS[S.tab];const seg=$('#subSeg');
@@ -5100,6 +5101,55 @@ const KN_GLC={'1':'CARA1 · beza jangkaan > 0 dua tingkap','2':'CARA2 · BH-FDR 
 const KN_PAKSI=[['MASUK','Masuk'],['KELUAR','Keluar'],['CARA','Cara'],['URUTAN','Urutan'],
   ['GABUNGAN','Gabungan'],['SAIZ','Saiz'],['ALAM','Alam'],['PEGANG','Pegang'],
   ['IMBANG','Imbang'],['KORELASI','Korelasi'],['INSTRUMEN','Instrumen']];
+/* ================= Rujukan -> Setup F (v181, 16 Nov 2026; permintaan pengguna: "satu table dalam dashboard") =================
+   Senarai utama setup F (carian setup CS13) daripada db `carian/f_utama` (standard/f_utama_db.py; dokumen statik yang
+   ditolak manual selepas pusingan carian, bukan oleh jana_db.py). Pangkat backtest, BUKAN keputusan: kad skor kekal
+   satu-satunya keputusan wang sebenar. */
+function sfBaris(d){if(d._r)return d._r;const ix={};(d.kol||[]).forEach((k,i)=>ix[k]=i);const km=d.kamus||{},g=(a,k,b)=>{const v=a[ix[k]];return v==null?null:v/b;};
+  d._r=(d.rows||[]).map(a=>({id:a[ix.id],asal:a[ix.asal]?'baharu':'lama',pil:!!a[ix.pil],pra:(km.pra||[])[a[ix.pra]]||'',nama:(km.nama||[])[a[ix.nama]]||'',pen:(km.pen||[])[a[ix.pen]]||'',
+    shar:a[ix.shar],tangkap:g(a,'tangkap',10),rawak:g(a,'rawak',10),m5:g(a,'m5',10),menang:g(a,'menang',10),purata:g(a,'purata',100),rugi15:g(a,'rugi15',10),hari:a[ix.hari],k3:g(a,'k3',100),n:a[ix.n]}));
+  return d._r;}
+function renderSetupF(){
+  const el=$('#v-setupf'),d=S.sf;
+  if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.sfSiap?'Senarai setup F belum ditolak ke pangkalan data (carian/f_utama).':'Memuatkan senarai setup F…'}${diagDok('sf')}</div>`;return;}
+  const f=S.sff,all=sfBaris(d),u=d.ujian||{},sm=d.semak_masa||{},sp=sm.pilih||{},sl=sm.lain||{};
+  const pc=x=>x==null||isNaN(x)?'–':Math.round(x*100)+'%',sfp=v=>v==null||isNaN(v)?'–':v.toFixed(0)+'%',sfs=v=>v==null||isNaN(v)?'–':(v>0?'+':'')+v.toFixed(1)+'%';
+  let rows=f.lihat==='pilihan'?all.filter(r=>r.pil):all;
+  if(f.asal!=='semua')rows=rows.filter(r=>r.asal===f.asal);
+  if(f.q){const q=f.q.toLowerCase();rows=rows.filter(r=>[r.id,r.pra,r.nama,r.pen].join(' ').toLowerCase().includes(q));}
+  const pil=r=>r.pil?' <span class="pill p-buy">Pilihan</span>':'';
+  const cols=[
+    {k:'id',t:'ID',l:1,frz:1,c:()=>'nw',f:r=>`<b>${esc(r.id)}</b>${pil(r)}<span class="vv">${r.asal}</span>`},
+    {k:'pra',t:'Prasyarat',l:1,c:()=>'wrap lrg',f:r=>esc(r.pra||'–')},
+    {k:'nama',t:'Isyarat beli',l:1,c:()=>'wrap lrg',f:r=>esc(r.nama)},
+    {k:'pen',t:'Syarat saham',l:1,hc:'kp-lo',c:()=>'wrap lrg',f:r=>esc(r.pen||'–')},
+    {k:'tangkap',t:'Tangkap',tip:'sf_tangkap',hc:'kp-hi',f:r=>`<b>${sfp(r.tangkap)}</b><span class="vv">rawak ${sfp(r.rawak)}</span>`},
+    {k:'menang',t:'Menang',tip:'sf_menang',hc:'kp-hi',f:r=>`<b class="${r.menang>=50?'pos':''}">${sfp(r.menang)}</b>`},
+    {k:'purata',t:'Purata',tip:'sf_purata',hc:'kp-hi',f:r=>`<b class="${cls(r.purata)}">${sfs(r.purata)}</b>`},
+    {k:'rugi15',t:'Rugi ≥ 15%',tip:'sf_rugi',f:r=>sfp(r.rugi15)},
+    {k:'hari',t:'Hari pegang',tip:'sf_hari',f:r=>fx(r.hari,0)},
+    {k:'shar',t:'Beli setahun',tip:'sf_beli',f:r=>fx(r.shar,0)},
+    {k:'k3',t:'2025–26',tip:'sf_k3',f:r=>`<span class="${cls(r.k3)}">${sfs(r.k3)}</span>`}];
+  el.innerHTML=`
+  <div class="panel"><div class="panel-h"><h2>Setup F: senarai utama</h2><span class="sub">pangkat backtest · BUKAN keputusan wang sebenar · belum papertrade · dijana ${esc(d.dibina||'')}</span></div>
+    <div class="kpis">
+      <div class="kpi"><div class="lbl">Setup dalam senarai</div><div class="v">${Number(d.n||all.length).toLocaleString('en-US')}</div><div class="s">${d.n_lama} lama (F01–F95) · ${Number(d.n_baharu||0).toLocaleString('en-US')} baharu (F96 ke atas)</div></div>
+      <div class="kpi"><div class="lbl">Pilihan</div><div class="v pos">${d.n_pilihan}</div><div class="s">menang ≥ 50% dan purata ≥ +2% setiap dagangan</div></div>
+      <div class="kpi"><div class="lbl">Ujian carian</div><div class="v">${pc(u.lulus_calon)}</div><div class="s">calon lulus pada saham yang tidak dilihat · peraturan rawak ${pc(u.lulus_kawalan)}</div></div>
+      <div class="kpi"><div class="lbl">Beli sebelum laporan kewangan</div><div class="v">${Number(d.n_earnings||0).toLocaleString('en-US')}</div><div class="s">setup dengan prasyarat "earnings dalam 1–5 hari"</div></div>
+    </div>
+    <p class="note"><b>Pangkat backtest, bukan bukti.</b> "Pilihan" ditapis selepas melihat hasil dan hampir tidak bertahan pada 2025–26; baca nota di bawah jadual.</p>
+    <div class="filters" style="margin:12px 0 10px">${segH('sfLihat',f.lihat,[['pilihan',`Pilihan (${d.n_pilihan})`],['semua',`Semua (${all.length.toLocaleString('en-US')})`]],'Paparan')}${segH('sfAsal',f.asal,[['semua','Lama + baharu'],['lama','Lama'],['baharu','Baharu']],'Asal')}<input type="search" id="sfQ" placeholder="Cari ID, prasyarat atau isyarat, cth. F43, earnings, RSI" value="${esc(f.q)}" aria-label="Cari setup F"><span class="mut" id="sfBil">${rows.length.toLocaleString('en-US')} daripada ${all.length.toLocaleString('en-US')} · ketik tajuk untuk susun</span></div>
+    ${sortTable({id:'setupf',rows,cols,def:{k:'tangkap',dir:-1},limit:f.shown,empty:'Tiada setup sepadan.',foot:kakiLagi('sfMore'),attr:r=>`title="${esc(r.id+': '+[r.pra,r.nama,r.pen].filter(Boolean).join(' · '))}"`,
+      lp:{key:r=>r.id,line:r=>`<b>${esc(r.id)}</b>${pil(r)}<span class="mlx">${esc(r.pra||r.nama)}</span><b class="mlr">${sfp(r.tangkap)}</b>${mlC}`}})}
+    <p class="note"><b>Tentang "Pilihan".</b> "Pilihan" ditapis SELEPAS melihat hasil, jadi angkanya condong ke atas. Setup yang menepati tapisan itu pada 2010–2024, pada 2025–26: menang ${pc(sp.menang)}, purata ${sp.purata==null?'–':sfs(sp.purata*100)}; setup lain: menang ${pc(sl.menang)}, purata ${sl.purata==null?'–':sfs(sl.purata*100)}. Yang bertahan pada tahun yang tidak dilihat ialah kadar tangkap (lajur 2025–26). Kebanyakan setup baharu membeli beberapa hari sebelum laporan kewangan: lebih kerap menangkap saham naik laju, dan juga lebih kerap jatuh.</p>
+    <p class="note"><b>Cara semua setup berdagang:</b> ${esc(d.pegang||'')}. <b>Tangkap</b> = daripada 100 belian, berapa yang naik ≥ 5% pada minggu pertama dan naik lagi hingga minggu ke-4 ("rawak" = saham rawak pada hari yang sama). <b>Menang</b> dan <b>Purata</b> = semua dagangan dengan cara di atas, selepas kos 0.5%. ${esc(d.nota||'')} Kad skor (tab Pilih kaedah) kekal satu-satunya keputusan wang sebenar.</p>
+  </div>`;
+  bindSegH('sfLihat',v=>{f.lihat=v;f.shown=AWAL;});
+  bindSegH('sfAsal',v=>{f.asal=v;f.shown=AWAL;});
+  {const q=$('#sfQ');if(q){let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.shown=AWAL;renderAll();const n=$('#sfQ');if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);};}}
+  bindLagi('sfMore',f);
+}
 function renderKaedahN(){
   const el=$('#v-kaedahn'),d=S.kn;
   if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.live?'Registry Nxx belum ditolak ke pangkalan data (kaedah_n/papan).':'Memuatkan registry Nxx…'}${diagDok('kn')}</div>`;return;}
@@ -5321,7 +5371,7 @@ function renderKaedahN(){
   const q=$('#knQ');if(q){let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.shown=AWAL;renderAll();const n=$('#knQ');if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);};}
   bindLagi('knMore',f);
 }
-const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-cm':()=>renderPrestasi('cm'),'pr-cn':()=>renderPrestasi('cn'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis,kaedahn:renderKaedahN,sektor:renderSektor};
+const R={utama:renderUtama,keputusan:renderKeputusan,ringkasan:butiran431(renderRingkasan),papan:butiran431(renderPapan),banding:butiran431(renderBanding),watch:renderWatch,pos:renderPos,'pr-m':()=>renderPrestasi('m'),'pr-cm':()=>renderPrestasi('cm'),'pr-cn':()=>renderPrestasi('cn'),'pr-gab':()=>renderPrestasi('gab'),kaedah:renderKaedah,autotune:renderAutotune,analisis:renderAnalisis,kaedahn:renderKaedahN,setupf:renderSetupF,sektor:renderSektor};
 function renderAll(){try{sorotLepasLukis();}catch(e){}try{kdSegar();}catch(e){}try{v5RenderRel();}catch(e){}const vid=viewId();const el=document.getElementById(vid);el.classList.toggle('pnav',pnavBoleh(vid));
   const sx={},sy={};el.querySelectorAll('table[data-st]').forEach(t=>{sx[t.dataset.st]=t.parentElement.scrollLeft;sy[t.dataset.st]=t.parentElement.scrollTop;});
   try{R[vid.slice(2)]();}catch(err){el.innerHTML=`<div class="panel empty" style="text-align:left"><b class="neg">Ralat memapar tab ini.</b><br>${esc(err&&err.message||err)}<br><span class="mut">${esc(String(err&&err.stack||'').split('\n').slice(0,3).join(' | '))}</span></div>`;return;}
@@ -5389,6 +5439,13 @@ let rz,lw=window.innerWidth;window.addEventListener('resize',()=>{if(Math.abs(wi
 
 /* ================= tooltip istilah (ganti tab Panduan istilah) ================= */
 const TIPS={
+  sf_tangkap:{t:'Tangkap',d:'Daripada 100 belian setup ini, berapa yang naik sekurang-kurangnya 5% pada minggu pertama DAN naik lagi hingga minggu ke-4 tanpa menyentuh −8%. "Rawak" = saham rawak yang dibeli pada hari yang sama. Diukur pada saham yang carian tidak pernah lihat, 2010–2026.'},
+  sf_menang:{t:'Menang',d:'Peratus dagangan yang dijual dengan untung selepas kos 0.5%, dengan stop loss 4×ATR14 dan pegang sekurang-kurangnya 20 hari.'},
+  sf_purata:{t:'Purata setiap dagangan',d:'Purata untung atau rugi setiap dagangan selepas kos 0.5%. Ini bukan hasil akaun.'},
+  sf_rugi:{t:'Rugi ≥ 15%',d:'Peratus dagangan yang berakhir dengan rugi 15% atau lebih.'},
+  sf_hari:{t:'Hari pegang',d:'Nilai tengah bilangan hari dagangan satu posisi dipegang.'},
+  sf_beli:{t:'Beli setahun',d:'Anggaran bilangan belian setahun pada senarai saham Shariah dalam data backtest.'},
+  sf_k3:{t:'2025–26',d:'Kelebihan kadar tangkap atas saham rawak pada 2025–26 (tahun yang carian tidak lihat), dalam mata peratus. Positif = masih lebih baik daripada rawak.'},
   trend_jp:{t:'Trend (susunan SMA 50/150/200)',d:'Bullish = tutup > SMA50 > SMA150 > SMA200; Bearish = tutup < SMA50 < SMA150 < SMA200; lain-lain Neutral. Status bertukar hanya selepas 2 tutup berturut. "Sejak" = tutup kedua itu (umur dikira dari situ, tarikh sah = 1); baharu = ≤ 20 sesi, lama = > 60 sesi; Neutral menunjukkan status sebelumnya. Titik mula = harga terendah (Bullish) atau tertinggi (Bearish) dalam 63 sesi hingga tarikh sah, dibekukan; berapa jauh harga sudah bergerak sebelum label bertukar. Kajian 23 Okt 2026 (lebih 500 varian, 2020–2026): status ini tidak meramal pulangan 3–30 hari dan tiada peraturan jual berasaskannya yang lebih baik daripada lorong 1/lorong 2. Bullish tidak bermaksud lebih selamat; risiko diukur oleh ATR (lajur Risiko), jarak lorong 2 dan earnings. Bearish lama (diisi merah) satu-satunya amaran: lebih kerap jatuh > 8% dalam 10 sesi (bukti sederhana).',e:'Bullish lama · 142 sesi · sejak 1 Apr (+38.5%) · titik mula 2 Jan @ 121.61 (+87%)'},
   stage_w:{t:'Stage (Stage Analysis Weinstein)',d:'Peringkat kitaran saham pada bar MINGGUAN dengan purata bergerak 30 minggu (MA30), kaedah Stan Weinstein. Stage 2 = tutup di atas MA30 yang menaik (fasa naik); Stage 4 = tutup di bawah MA30 yang menurun (fasa turun); 1/3 = selain itu — asas (selepas Stage 4) atau kawasan puncak (selepas Stage 2); kedua-duanya kelihatan sama pada carta, jadi screener stageanalysis.net menggabungkannya dan baris kecil di bawah label menyatakan yang mana. Sebelas label sama seperti screener itu: 2A (minggu breakout pertama kitaran ini) · 2 · 2− · 2B · 2B− · 1/3 · 4A (minggu breakdown pertama) · 4 · 4− · 4B · 4B−. B = sudah 39 minggu atau lebih dalam kitaran yang sama (surut sementara ke 1/3 tidak menetapkan semula kiraan). “−” dalam label = harga menentang arah peringkat berbanding MA 10 minggu (Stage 2 bawah MA10 = hambar; Stage 4 atas MA10 = mula perk up). Cip kecil (+)/(−) di sebelah label ialah penggred kualiti Weinstein dan BERBEZA daripada “−” dalam label: (+) = garis Mansfield RP positif dan volum minggu mula ≥ 2× purata 4 minggu sebelumnya; (−) = Mansfield negatif. Dikira daripada stor harga repo mengikut takrif yang diterbitkan stageanalysis.net; tiada sambungan ke laman itu (tiada API awam). Stor 520 sesi ≈ 104 minggu, jadi kitaran yang bermula lebih awal ditanda “≥ n minggu” dan tidak diberi label A. PAPARAN SAHAJA (keputusan pengguna 27 Okt 2026): belum diuji sama ada ia meramal pulangan 3–30 hari, jadi ia bukan penapis belian dan bukan isyarat jual — keluar kekal ikut lorong kaedah dan lorong 2.',e:'2B+ · 64 minggu · sejak 15 Ogo 2025'},
   j52_jarak:{t:'Jarak ke tinggi 52 minggu',d:'Tutup ÷ tinggi intrahari tertinggi 252 sesi (termasuk hari ini) − 1. 0.0% = harga pada tinggi 52 minggu; −12.0% = 12% di bawahnya. Nombor kecil = sesi sejak tinggi itu ditetapkan. Kajian REVERSE/JARAK_52W.md (4 Nov 2026), 10,468,053 bar 2012–2025 dengan tingkap latih/tahan berasingan: sebagai PENAPIS belian ia GAGAL — band 0%…−2% memberi lift −1.34 mata (21 sesi) dan −5.76 mata (126 sesi) pada tingkap tahan, sama seperti N35 (pecah 52w), N66 dan N120 (Minervini) yang sudah diuji dan gagal. Sebagai URUTAN antara calon pada HARI YANG SAMA ia berfungsi sedikit: IC Spearman +0.032 hingga +0.116, bertanda sama dalam kedua-dua tingkap, positif dalam 10 daripada 14 tahun. Tetapi kelebihan itu HABIS kira-kira −10%: median pulangan 126 sesi desil 6–10 ialah +4.43%, +4.53%, +4.70%, +4.53%, +3.87% (tahan) — desil paling hampir tinggi BUKAN yang terbaik. Jadual band mutlak mengukur pemasaan pasaran, bukan pemilihan saham (Mac 2020 hampir setiap nama > 40% di bawah tingginya). Alam kajian tiada saham delist. PAPARAN SAHAJA: bukan penapis belian, bukan isyarat jual.',e:'−12.4% 49s'},
@@ -5953,6 +6010,9 @@ renderNav();renderAll();
   db.collection('autotune').limit(1000).onSnapshot(snap=>{const d={};snap.docs.forEach(x=>{if(x.exists)d[x.id]=x.data();});S.at=d;S.live=true;re('autotune','backtest');},()=>{});
   };
   if(PERLU_RUJ.has(S.tab))S.muatRujukan();
+  /* v181: senarai utama setup F (carian/f_utama, ~176 KB) dimuat hanya apabila Rujukan -> Setup F dibuka */
+  S.muatF=()=>{if(S.fMuat)return;S.fMuat=true;subBhg('carian/f_utama','sf',['setupf']);};
+  if(S.tab==='setupf')S.muatF();
   /* AUTOTUNE: semua dokumen koleksi autotune (status, ringkasan, gabungan, kaedah_<ID>) */
 })();
 })();

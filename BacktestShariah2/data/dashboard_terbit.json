@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794553577-edb7",
-  "nombor": 211,
-  "sha256": "7c833a45d444991ef573c87f4c772f28eb2778047d07d8510965fcb0c5e24d94",
-  "bait": 801745,
-  "dikemas": "2026-11-13 07:06 UTC",
-  "nota": "v180 (13 Nov 2026, laporan pengguna \"asyik loading dari pagi\"): ringkas_c tumbuh ke 39 bahagian; anak memegang slot langganan sehingga semua tiba (38 + ~24 kekal > had ~60), jadi 3 kamus terakhir tidak pernah dibuka dan Posisi/Akaun/Kombinasi N tersekat. Anak yang induknya sepadan kini dilepaskan serta-merta (subRingkas, subBhg). semak_kolam_langganan.js LULUS pada had 40/52/58 (lama GAGAL pada 58)."
+  "versi_artifact": "1794789933-7364",
+  "nombor": 212,
+  "sha256": "bc8d38ed21ed6544728b099184d141d9099171076080df8e7107c73b3e96361f",
+  "bait": 809731,
+  "dikemas": "2026-11-16 00:45 UTC",
+  "nota": "v181 (16 Nov 2026, permintaan pengguna): Rujukan -> Setup F (senarai utama setup F, db carian/f_utama)"
 }
