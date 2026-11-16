@@ -35,6 +35,7 @@ except ImportError:  # pragma: no cover
 BS2 = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 AKAR = os.path.dirname(BS2)
 LARIAN = os.path.join(BS2, 'data', 'robot', 'larian.json')
+PETIKAN_BASI_JAM = 72   # harian.yml Sel-Sab: jurang terpanjang Sab -> Sel 66 jam + 6
 UTC = timezone.utc
 MYT = 'Asia/Kuala_Lumpur'
 NY = 'America/New_York'
@@ -222,6 +223,11 @@ def bina(masa=None, larian=None, robot_claude=None, mingguan=None, ulang_jam=24)
     runs = (larian or {}).get('runs') or []
     snap = dt(larian['dibina']) if larian and larian.get('dibina') else None
     segar = snap is not None and (masa - snap) < timedelta(minutes=90)
+    # Robot yang dibaca daripada petikan larian (Actions + pengejut) dinilai 'lewat' pada masa petikan, bukan
+    # sekarang: petikan ditulis harian.yml sahaja, jadi robot kerap (penjaga setiap 30 minit) kelihatan lewat
+    # palsu sepanjang hari (dibetulkan 16 Nov 2026). Petikan yang sendiri basi (> PETIKAN_BASI_JAM, melebihi
+    # jurang terpanjang harian.yml) kembali dinilai pada masa sekarang supaya kerosakan tidak tersembunyi.
+    rujuk_larian = snap if snap is not None and (masa - snap) <= timedelta(hours=PETIKAN_BASI_JAM) else masa
     ikut = {}
     for r in runs:
         if len(r) < 6:
@@ -316,7 +322,8 @@ def bina(masa=None, larian=None, robot_claude=None, mingguan=None, ulang_jam=24)
             st = 'senyap'
         else:
             st = 'siap'
-            if had and (masa - dt(a['mula'])).total_seconds() / 3600 > had:
+            rujuk = rujuk_larian if (jenis == 'wf' or kunci == 'cetus') else masa
+            if had and (rujuk - dt(a['mula'])).total_seconds() / 3600 > had:
                 st = 'lewat'
         if rid == 'semak_db' and st == 'belum':
             st = 'senyap'

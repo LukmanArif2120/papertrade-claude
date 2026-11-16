@@ -75,6 +75,20 @@ class TestBina(unittest.TestCase):
         d = self.doc([['harian.yml', '2026-11-12T11:00:00Z', '2026-11-12T11:05:00Z', 'completed', 'success', 'schedule']])
         self.assertEqual(d['harian']['status'], 'lewat')
 
+    def test_lewat_diukur_pada_masa_petikan(self):
+        # petikan 02:05; penjaga 00:51 (sebelum petikan). Dibina 15:24 -> bukan lewat (larian selepas petikan
+        # tidak kelihatan, bukan hilang)
+        doc = RK.bina(masa=datetime(2026, 11, 16, 15, 24, tzinfo=UTC), mingguan=[], larian=larian([
+            ['penjaga_jadual.yml', '2026-11-16T00:51:36Z', '2026-11-16T00:51:44Z', 'completed', 'success', 'push']]))
+        d = {r['id']: r for r in doc['robot']}
+        self.assertEqual(d['penjaga']['status'], 'siap')
+
+    def test_petikan_basi_dinilai_pada_masa_sekarang(self):
+        doc = RK.bina(masa=datetime(2026, 11, 20, 3, 0, tzinfo=UTC), mingguan=[], larian=larian([
+            ['penjaga_jadual.yml', '2026-11-16T00:51:36Z', '2026-11-16T00:51:44Z', 'completed', 'success', 'push']]))
+        d = {r['id']: r for r in doc['robot']}
+        self.assertEqual(d['penjaga']['status'], 'lewat')
+
     def test_dibatalkan_tidak_dikira_terakhir(self):
         d = self.doc([
             ['semak_data.yml', '2026-11-14T02:53:00Z', '2026-11-14T02:56:00Z', 'completed', 'success', 'push'],
