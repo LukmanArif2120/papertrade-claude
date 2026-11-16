@@ -1186,6 +1186,45 @@ sama. 4,446 daripada 4,923 calon CS13 memakai `QF01` (laporan kewangan dalam 1�
   dipakai untuk memilih, jadi "solid" bermaksud "paling tahan uji dalam backtest", BUKAN bukti; tiada saham delist; bukti
   hanya datang daripada papertrade.
 
+### Pindaan 16 Nov 2026 (aa) — pusingan CS17: LORONG "pegang berbulan-bulan" (T) TANPA HAD bilangan (sebelum dijalankan)
+
+Keputusan pengguna 16 Nov 2026 ("ya utk semua"): mulakan lorong "pegang berbulan-bulan" tanpa had. Latar: CS08 (pindaan (q))
+mencari lorong ini (kes MXL) tetapi papan dihadkan kepada 12 setup (`T01`–`T12`; had Claude) walaupun ~2,300 pencetus berskor
+positif; pengguna tidak mahu had ("cuma dpt 95 je? serius lah") dan pada 16 Nov mahu memegang saham yang naik berbulan-bulan.
+Pusingan ini mengulang untuk lorong T apa yang CS13 buat untuk F: semua setup yang lulus didaftarkan. Kod
+`carian_setup/cs_trend17.py`; keluaran `hasil/CS17/`. Nama CS15 dan (y) dipakai chat lain (K26); CS16 / (z) = ujian solid.
+
+**Yang sudah diketahui sebelum menulis:** CS08 — 11 daripada 12 dipercayai; nilai tengah papan: 20.8 % belian jadi pelari
+besar (rawak hari sama 14.1 %), menang 42 %, rugi ≥ 15 % 45 %, purata +5.8 %; semua 12 memakai prasyarat hasil suku tumbuh
+≥ 20 %; indikator keluar tidak menolong (CS08, CS10). CS16 — bagi F, yang solid pada asasnya ialah prasyarat, bukan setiap setup.
+
+- **Sasaran dan mekanik (tidak berubah daripada CS08):** label `besar` = tutup mencapai ≥ +50 % dalam 126 sesi SEBELUM
+  mana-mana tutup ≤ −15 %; asas = saham rawak hari sama × tercile ATR; hanya isyarat dengan tetingkap 126 sesi lengkap; beli
+  pada buka sesi berikutnya; pegang 126 sesi dengan stop loss 6 × ATR14 dan TIADA indikator keluar (keluar yang diterima
+  pengguna 15 Nov 2026); satu posisi setiap saham; kos 0.5 %; tiada tapisan Shariah (arahan pengguna 16 Nov).
+- **Carian (kumpulan A):** semua pencetus yang ada isyarat pada kedua-dua kumpulan dalam folder kerja (alam yang sama dengan
+  CS13) × prasyarat × syarat saham, diskor dengan enjin yang sama (`cs_tala7.skor_ev`, sasaran `besar`). **Calon = sehingga
+  5 peraturan berskor > 0 bagi setiap pencetus, tanpa had bilangan.** Kawalan = 300 peraturan rawak (benih 20261117) dengan
+  isyarat yang cukup pada A.
+- **Lulus (kumpulan B; sama dengan "Dipercayai-T" CS08):** ≥ 200 belian, ≥ 8 tahun aktif, kelebihan `besar` atas rawak > 0
+  dalam K1, K2 DAN K3. "Layak" = dua syarat pertama.
+- **Bacaan dikunci (sama dengan CS13):** (B1) kadar lulus calon layak ≥ kadar lulus kawalan layak + 20 mata; (B2) bahagian
+  calon layak dengan kelebihan K3 > 0 ≥ 60 % DAN ≥ kawalan + 10 mata. **Kod T baharu diberi HANYA jika bacaan lulus**, kepada
+  setiap calon lulus yang bukan kembar (Jaccard belian A + B ≥ 0.80 dengan calon lulus yang berskor A lebih tinggi), ikut
+  susunan skor A, bermula `T13`. Kod T BUKAN kod F: `registry_F.csv` tidak disentuh; senarai dalam `hasil/CS17/senarai_t.csv`.
+- **Dilaporkan bersama (maklumat, bukan syarat; pelajaran CS16):** "prasyarat sahaja" (tanpa isyarat beli) bagi setiap gabungan
+  prasyarat calon, dan `tambah` = kelebihan setup − kelebihan prasyaratnya; bahagian setup yang memakai hasil suku tumbuh
+  ≥ 20 %; kadar menang, purata, rugi ≥ 15 %, dijual ≥ +30 %, capai +100 %; kes MXL (setup mana yang akan membeli MXL antara
+  Mac dan Jun 2026).
+- **Had yang diketahui:** `T01`–`T12` kekal seperti dalam `hasil/CS08/papan.csv` (isyarat varian lama tiada dalam folder
+  kerja, jadi semakan kembar lawan 12 itu tidak dapat dibuat dan dinyatakan); K3 pendek (isyarat hingga ~Feb 2026 kerana
+  tetingkap 126 sesi).
+- **Selepas pusingan:** laporan dan senarai. Tiada papertrade tanpa keputusan pengguna; dashboard tidak disentuh oleh chat
+  ini (paparan lorong T, jika dimahukan, dibuat oleh chat reka bentuk di atas halaman hidup).
+- **Kaveat dikunci:** tiada saham delist — bagi pegang 6 bulan bias ini LEBIH besar daripada lorong swing; 33–50 % dagangan
+  lorong ini rugi ≥ 15 % (CS08); beribu calon disemak pada kumpulan B, jadi sebahagian lulus kerana nasib (anggaran dilaporkan);
+  kelebihan lawan rawak hari sama mengukur PILIHAN saham; pangkat backtest, BUKAN bukti.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

@@ -1,0 +1,57 @@
+{
+ "n_calon": 5105,
+ "calon_layak": 4988,
+ "kawalan_layak": 299,
+ "n_lulus": 4167,
+ "lulus_calon": 0.835405,
+ "lulus_kawalan": 0.337793,
+ "k3_calon": 0.900762,
+ "k3_kawalan": 0.635452,
+ "b1": true,
+ "b2": true,
+ "ya": true,
+ "nasib": 0.404346,
+ "n_kawalan": 300,
+ "n_kembar": 1603,
+ "n_daftar": 2564,
+ "asas": {
+  "besar": 0.079019,
+  "besar100": 0.014228,
+  "n": 3234917
+ },
+ "hasil_tumbuh_calon": 0.521645,
+ "hasil_tumbuh_daftar": 0.549142,
+ "tambah_daftar": 0.966459,
+ "n_kes": 1005,
+ "median_daftar": {
+  "besar": 0.199592,
+  "a_besar": 0.138937,
+  "kl": 0.059616,
+  "besar100": 0.06112,
+  "menang": 0.459065,
+  "purata": 0.064331,
+  "median": -0.047683,
+  "rugi15": 0.406114,
+  "tb": 0.220246,
+  "n": 513.0,
+  "setahun": 30.817969,
+  "tambah": 0.050522
+ },
+ "median_lulus": {
+  "besar": 0.193833,
+  "a_besar": 0.134027,
+  "kl": 0.059571,
+  "menang": 0.459854,
+  "purata": 0.063917,
+  "rugi15": 0.40413
+ },
+ "median_kawalan": {
+  "besar": 0.075255,
+  "a_besar": 0.072924,
+  "kl": 0.004049,
+  "menang": 0.498798,
+  "purata": 0.039849,
+  "rugi15": 0.232633
+ },
+ "id_akhir": 2576
+}
