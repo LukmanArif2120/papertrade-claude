@@ -26,6 +26,7 @@ on:
 
 permissions:
   contents: write
+  actions: read   # robot_larian.py: senarai larian Actions untuk tab Robot dashboard (16 Nov 2026)
 
 concurrency:
   group: papertrade
@@ -185,6 +186,13 @@ jobs:
         run: pip install -q -c kekangan.txt -r requirements.txt && python3 -m unittest discover -s BacktestShariah2/ujian || { echo "::warning::ujian unit gagal (lihat semak_data.yml)"; exit 1; }
       - name: Papan koordinator (KOORDINATOR.md; ringkasan keputusan terbuka + kesegaran data)
         run: python3 BacktestShariah2/standard/koordinator.py || echo "::warning::koordinator gagal"
+      - name: Larian robot (data/robot/larian.json; tab Robot dashboard, paparan sahaja)
+        # Hanya Actions ada token untuk membaca senarai larian; sesi Claude tolak db membacanya melalui fail ini.
+        # Tidak pernah menghalang commit: skrip sentiasa keluar 0 dan fail lama dikekalkan jika API gagal.
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 BacktestShariah2/standard/robot_larian.py || echo "::warning::robot_larian gagal"
       - name: Commit dan push
         run: |
           git config user.name "harian[bot]"
@@ -194,6 +202,8 @@ jobs:
           git add BacktestShariah2/uji_kertas/jejak_M166.csv 2>/dev/null || true
           git add KOORDINATOR.md 2>/dev/null || true
           git add "${{ steps.mod.outputs.folder }}" "${{ steps.mod.outputs.isyarat }}" "${{ steps.mod.outputs.pemangkin }}" "${{ steps.mod.outputs.log }}" 2>/dev/null || true
+          # larian robot hanya menumpang commit yang memang berlaku (tiada commit tambahan semata-mata untuknya)
+          if ! git diff --cached --quiet; then git add BacktestShariah2/data/robot 2>/dev/null || true; fi
           if git diff --cached --quiet; then echo "tiada perubahan"; exit 0; fi
           git commit -q -m "Harian Actions (${{ steps.mod.outputs.mod }}): sesi ${{ steps.malam.outputs.sesi }}"
           for n in 1 2 3 4; do
