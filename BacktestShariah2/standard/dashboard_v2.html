@@ -1582,6 +1582,30 @@ table.sf-tb{width:100%;border-collapse:collapse;font-family:var(--f-semi)}
   .sf-sls{grid-template-columns:1fr;gap:12px}
   .sf-chain{flex-direction:column}.sf-arr{transform:rotate(90deg);align-self:flex-start;margin-left:14px}
 }
+/* v187 (16 Nov 2026, keputusan pengguna): ujian Solid CS16 dalam Setup F (tapisan, tiga angka lawan rawak, kad Ujian solid) */
+.sf-sb{display:inline-block;font:700 .74rem/1.4 var(--f-semi);letter-spacing:.06em;color:#04261d;background:#1EE3B4;border-radius:6px;padding:0 6px;white-space:nowrap}
+.sf-sb.sr{background:transparent;color:#1EE3B4;border:1px solid rgba(30,227,180,.5)}
+.sf-3{display:grid;gap:3px;min-width:188px}
+.sf-3r{display:grid;grid-template-columns:76px 22px 48px 32px;gap:5px;align-items:center;font:600 .74rem var(--f-semi);color:var(--sfm);white-space:nowrap}
+.sf-3r b{color:#EEF1F4;text-align:right;font-size:.86rem}
+.sf-3r .sf-trk{width:48px}
+.sf-3t{font:600 .72rem var(--f-semi);color:var(--sfm);margin-top:2px;max-width:200px}
+.sf-tb .sf-pb .sf-trk{width:60px}
+.sf-sol{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:26px;padding:16px 18px}
+.sf-sol .big{font:700 2.3rem/1 var(--f-cond);color:#EEF1F4;margin-top:10px}.sf-sol .big small{font:600 .9rem var(--f-semi);color:var(--sfm);margin-left:8px}
+.sf-solk{display:flex;gap:24px;flex-wrap:wrap;margin:12px 0 4px}
+.sf-solk div{font:600 .74rem var(--f-semi);color:var(--sfm)}.sf-solk b{display:block;font:700 1.25rem var(--f-semi);color:#EEF1F4}
+.sf-gb{display:grid;gap:12px;align-content:start}
+.sf-gbr .t{font:600 .8rem var(--f-semi);color:#B4BBC6;margin-bottom:2px}
+.sf-gbl{display:grid;grid-template-columns:168px minmax(0,1fr) 40px;gap:8px;align-items:center;font:600 .74rem var(--f-semi);color:var(--sfm);margin-top:4px}
+.sf-gbl .tr{height:8px;border-radius:4px;background:#2A3039;overflow:hidden}.sf-gbl .tr b{display:block;height:8px;border-radius:4px}
+.sf-gbl .v{text-align:right;color:#EEF1F4;font-weight:700;font-size:.86rem}
+.sf-sd{display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) minmax(0,1.1fr);gap:16px;background:#191D23;border:1px solid #2E353E;border-radius:12px;padding:14px 16px;margin-top:12px}
+.sf-sd .h{font:600 .74rem var(--f-semi);letter-spacing:.06em;text-transform:uppercase;color:var(--sfm);margin-bottom:4px}
+.sf-sd .sf-gbl{grid-template-columns:96px minmax(0,1fr) 30px}
+@media (max-width:1100px){.sf-sol{grid-template-columns:1fr}.sf-sd{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.sf-sol{padding:14px}.sf-gbl{grid-template-columns:118px minmax(0,1fr) 34px}.sf-sd{grid-template-columns:1fr}
+  .sf-mc .sf-3{min-width:0;margin-top:10px}.sf-mc .sf-3r{grid-template-columns:96px 24px minmax(0,1fr) 34px}.sf-mc .sf-3r .sf-trk{width:100%}}
 /* v182: Hari ini gaya v2 (hi-; memakai komponen sf- yang sama: kad, jalur KPI, pil, tooltip) */
 .hi-kst{grid-template-columns:repeat(6,minmax(0,1fr));margin-bottom:14px}
 .hi-kst .sf-k{padding:4px 12px}
@@ -2317,7 +2341,7 @@ const TELEFON=(()=>{try{return matchMedia('(max-width:760px)').matches;}catch(e)
 const S={akhir:{posisi:'posisi',rujukan:'kaedah'},set:'431',tab:'utama',akaun:'cm',sub:{backtest:'keputusan'},docs:{},meta:null,live:false,
   f:{jenis:'semua',kep:new Set(),q:'',best:true,gaya:false,shown:TELEFON?10:40},cmp:[],cmpTouched:false,
   ptm:null,ptmPeta:null,ptc:null,ptcN:{},mae:null,prf:null,watch:null,sektor:null,hst:null,sf:null,wf:{k:'',sk:'',ind:'',q:'',shown:TELEFON?10:25},kat:null,kf:{kel:'semua',q:'',shown:TELEFON?10:25},at:{},af:{lbl:'',q:'',eq:'oos',v:'sar',lane:''},kp:{lihat:'pingat',gaya:false,q:'',langkah:null,shown:TELEFON?10:1e9},b4:'papan',
-  pos:{st:'pegang'},lajur:{},anl:null,af2:{lihat:'swing',q:'',shown:TELEFON?10:25},sff:{lihat:'pilihan',asal:'semua',q:'',shown:TELEFON?10:25},kn:null,knf:{paksi:'semua',q:'',shown:TELEFON?10:25},knu:{pra:'semua',q:'',shown:TELEFON?10:25},knp:{keluar:'semua',q:'',shown:TELEFON?10:25}};
+  pos:{st:'pegang'},lajur:{},anl:null,af2:{lihat:'swing',q:'',shown:TELEFON?10:25},sff:{lihat:'solid',asal:'semua',q:'',shown:TELEFON?10:25},kn:null,knf:{paksi:'semua',q:'',shown:TELEFON?10:25},knu:{pra:'semua',q:'',shown:TELEFON?10:25},knp:{keluar:'semua',q:'',shown:TELEFON?10:25}};
 try{const t=localStorage.getItem('pbs3_tab');if(MAIN.includes(t))S.tab=t;
   const ak=JSON.parse(localStorage.getItem('pbs4_akhir')||'null');if(ak&&typeof ak==='object')Object.keys(KUMP).forEach(g=>{if(KUMP[g].some(x=>x[0]===ak[g]))S.akhir[g]=ak[g];});const a=localStorage.getItem('pbs3_akaun');if(AKAUN.some(x=>x[0]===a))S.akaun=a;else if(a==='c')S.akaun='cm';
   const s=localStorage.getItem('pbs_set');if(SETSEG.includes(s))S.set=s;const b4=localStorage.getItem('pbs2_b4');if(['papan','ringkasan','banding'].includes(b4))S.b4=b4;
@@ -6065,7 +6089,12 @@ function sfBaris(d){if(d._r)return d._r;const ix={};(d.kol||[]).forEach((k,i)=>i
     /* v182: lajur tambahan (dokumen lama tiada -> null; paparan yang bergantung padanya disembunyi) */
     jenis:ix.jenis==null?null:(km.jenis||[])[a[ix.jenis]]||null,am5:g(a,'am5',10),k10:g(a,'k10',10),k1:g(a,'k1',100),k2:g(a,'k2',100),
     /* v182 CS14 (keputusan pengguna "B"): cara pegang kedua "pegang lebih lama" (jual bila tutup < purata 50 hari, tiada had masa) */
-    menang2:g(a,'menang2',10),purata2:g(a,'purata2',100),rugi2:g(a,'rugi2',10),hari2:ix.hari2==null?null:a[ix.hari2]}));
+    menang2:g(a,'menang2',10),purata2:g(a,'purata2',100),rugi2:g(a,'rugi2',10),hari2:ix.hari2==null?null:a[ix.hari2],
+    /* v187 CS16 "ujian solid": solid/wakil/boleh dibuat, tiga angka pengguna (m5 sedia ada; m10 = >= 10 % seminggu; m10d = >= 10 % dua minggu)
+       dengan saham rawak hari sama, tahun lebih baik daripada rawak (tpos/tbil), jatuh >= 8 % (rugi8), serupa = wakil bagi solid bukan wakil */
+    solid:ix.solid==null?null:!!a[ix.solid],wakil:ix.wakil==null?null:!!a[ix.wakil],boleh:ix.boleh==null?null:!!a[ix.boleh],
+    m10:g(a,'m10',10),am10:g(a,'am10',10),m10d:g(a,'m10d',10),am10d:g(a,'am10d',10),tpos:ix.tpos==null?null:a[ix.tpos],tbil:ix.tbil==null?null:a[ix.tbil],
+    rugi8:g(a,'rugi8',10),serupa:ix.serupa==null?null:a[ix.serupa]||null}));
   return d._r;}
 /* v182 (16 Nov 2026): gaya v5 (keputusan pengguna selepas contoh v1–v5). Gred = berapa kali setup menangkap pelari
    berbanding saham rawak hari sama (tangkap ÷ rawak): A ≥ 2.5× · B 2–2.5× · C 1.6–2× · D 1.3–1.6× · E < 1.3×.
@@ -6091,6 +6120,12 @@ function sfChips(pra){const R=[['rejim OFF baharu (<= 10 sesi)','QQQ baru lemah'
     else{const m=R.find(x=>x[0]===p);t='↗ '+(m?m[1]:p);}
     return `<span class="sf-chip ${c}" title="${esc(p)}">${esc(t)}</span>`;}).join('');}
 const sfTrk=(v,mx,col,mk)=>`<span class="sf-trk"><b style="width:${Math.max(0,Math.min(100,100*(v||0)/mx))}%;background:${col}"></b>${mk!=null?`<u style="left:${Math.min(100,100*mk/mx)}%"></u>`:''}</span>`;
+/* v187: tiga angka pengguna daripada 100 belian, lawan saham rawak hari sama (○); skala sama 0–45 supaya bar boleh dibanding */
+const SF_TIGA=[['m5','am5','≥ 5% seminggu','a_m5','≥ 5% · 1 mgg'],['m10','am10','≥ 10% seminggu','a_m10','≥ 10% · 1 mgg'],['m10d','am10d','≥ 10% 2 minggu','a_m10d','≥ 10% · 2 mgg']];
+/* jadual komputer: baris ke-4 = tahun lebih baik daripada rawak · jatuh >= 8 % · boleh dibuat (kad telefon ada baris sendiri) */
+const sfTiga=(r,thn)=>r.m10==null?'<span class="mut">–</span>':`<div class="sf-3">${SF_TIGA.map(([k,a,,,l])=>`<div class="sf-3r"><span>${l}</span><b>${Math.round(r[k])}</b>${sfTrk(r[k],45,'linear-gradient(90deg,#12A886,#1EE3B4)',r[a])}<span>○ ${Math.round(r[a])}</span></div>`).join('')}${thn&&r.tbil?`<div class="sf-3t" data-tip="sf_tahun">${r.tpos}/${r.tbil} tahun · jatuh ≥ 8%: ${sfPc(r.rugi8)} · <span style="white-space:nowrap;color:${r.boleh?'#1EE3B4':'#FF8C9C'}">${r.boleh?'✓ boleh dibuat':'✗ tarikh tepat'}</span></div>`:''}</div>`;
+const sfSolidB=r=>!r.solid?'':`<span class="sf-sb${r.wakil?'':' sr'}" title="${r.wakil?'Lulus ujian solid S1–S7 (CS16): paling tahan uji dalam backtest, bukan bukti':'Lulus ujian solid, tetapi beliannya bertindih ≥ 50% dengan '+esc(r.serupa||'setup lain')+' (wakilnya)'}">SOLID${r.wakil?'':' · serupa '+esc(r.serupa||'')}</span>`;
+const sfBoleh=r=>r.boleh==null?'':`<div class="sf-rw" style="color:${r.boleh?'#1EE3B4':'#FF8C9C'}" title="${r.boleh?'Kelebihan kekal walaupun tarikh laporan kewangan diteka (suku sama tahun lepas + 364 hari)':'Kelebihan bergantung pada tarikh laporan yang tepat'}">${r.boleh?'✓ boleh dibuat':'✗ perlu tarikh tepat'}</div>`;
 const SF_GL=id=>`<filter id="${id}" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
 /* cincin kecil (kad juara, 92px) dan sederhana (kad teratas, 200px): lengkok = tangkap (skala 0–30), titik putih = saham rawak */
 function sfCincinKecil(v,mk,sz,w,id){const c=sz/2,R=c-w-2,f=x=>{const a=-Math.PI/2+2*Math.PI*Math.min(.999,Math.max(0,x)/30);return [c+R*Math.cos(a),c+R*Math.sin(a)];};const [x1,y1]=f(v),[mx,my]=f(mk);
@@ -6123,12 +6158,31 @@ function sfButiran(r,d){const g=sfGred(r),k=sfGred3(r.k3),kw=d.kawalan||{};
      <span data-tip="sf_menang">Cara sekarang</span><b>${sfPc(r.menang)}</b><b class="${cls(r.purata)}">${sfSg(r.purata)}</b><b>${sfPc(r.rugi15)}</b><b>${fx(r.hari,0)}</b>
      <span data-tip="sf_menang2">Pegang lebih lama</span><b>${sfPc(r.menang2)}</b><b class="${cls(r.purata2)}">${sfSg(r.purata2)}</b><b>${sfPc(r.rugi2)}</b><b>${fx(r.hari2,0)}</b></div>`:''}</div>
    <div><div class="sf-dh">Ikut tempoh <span>mata atas rawak</span></div>${tempoh}</div></div>
+  ${sfSolidD(r,d)}
   <div class="sf-sls">${sfSl('Tangkap lawan saham rawak',g,fx(sfNis(r),1)+'×')}${sfSl('Bertahan pada 2025–26 (tahun carian tidak lihat)',k,(r.k3>0?'+':'')+fx(r.k3,1)+' mata')}</div>
   <div class="sf-chain"><div class="sf-st"><span class="n">① PRASYARAT</span>${sfChips(r.pra)||'–'}</div><span class="sf-arr">→</span>
    <div class="sf-st"><span class="n">② SYARAT SAHAM</span>${esc(r.pen||'–')}</div><span class="sf-arr">→</span>
    <div class="sf-st"><span class="n">③ ISYARAT BELI</span>${esc(sfNm(r.nama))}</div><span class="sf-arr">→</span>
    <div class="sf-st" style="flex:1.4"><span class="n">④ PEGANG &amp; JUAL</span>${esc(d.pegang||'')}</div></div>
   <p class="mut" style="font-size:.72rem;margin:10px 0 0">${fx(r.n,0)} belian diuji · beli ${fx(r.beli,0)} kali setahun (${fx(r.shar,0)} pada senarai Shariah) · ${r.asal==='lama'?'setup lama (F01–F95)':'kod baharu CS13'} · backtest, belum papertrade</p>`;}
+/* v187: butiran ujian solid satu setup — tiga angka (setup · saham rawak · laporan kewangan 1–5 hari sahaja bagi setup ber-earnings) */
+function sfSolidD(r,d){if(r.m10==null)return '';const a=(d.solid||{}).asas,ea=a&&/earnings dalam 1-5/.test(r.pra||'');
+  const br=(l,v,c)=>`<div class="sf-gbl"><span>${l}</span><span class="tr"><b style="width:${Math.min(100,(v||0)/45*100)}%;background:${c}"></b></span><span class="v">${v==null?'–':Math.round(v)}</span></div>`;
+  return `<div class="sf-sd">${SF_TIGA.map(([k,ak,l,asK])=>`<div><div class="h">Naik ${l}</div>${br('setup',r[k],'linear-gradient(90deg,#12A886,#1EE3B4)')}${br('saham rawak',r[ak],'#6B7A99')}${ea?br('laporan sahaja',a[asK.replace('a_','')]*100,'#5FC7DA'):''}</div>`).join('')}
+   <div><div class="h">Ujian solid</div><div style="font:700 1rem var(--f-semi);color:${r.solid?'#1EE3B4':'#B4BBC6'}">${r.solid?(r.wakil?'Solid':'Solid · serupa '+esc(r.serupa||'')):'Tidak solid'}</div>
+    <div class="sf-rw" style="text-align:left;margin-top:4px">lebih baik daripada rawak ${r.tpos}/${r.tbil} tahun · jatuh ≥ 8%: ${sfPc(r.rugi8)}</div>${sfBoleh(r).replace('class="sf-rw"','class="sf-rw" style="text-align:left"').replace('style="color','style="text-align:left;color')}
+    <div class="sf-rw" style="text-align:left;margin-top:4px">daripada 100 belian · ○/bar kelabu = saham rawak hari sama${ea?' · biru = beli 1–5 hari sebelum laporan, tanpa isyarat lain':''}</div></div></div>`;}
+/* v187: kad Ujian solid — nilai tengah 224 setup Solid lawan "laporan kewangan 1–5 hari sahaja" dan saham rawak */
+function sfSolidKad(all,d){const Z=d.solid,W=all.filter(r=>r.wakil);if(!Z||!W.length)return '';const a=Z.asas||{},med=k=>sfMed(W.map(r=>r[k]));
+  const tp=sfMed(W.filter(r=>r.tbil).map(r=>100*r.tpos/r.tbil)),bol=W.filter(r=>r.boleh).length;
+  const br=(l,v,c)=>`<div class="sf-gbl"><span>${l}</span><span class="tr"><b style="width:${Math.min(100,(v||0)/30*100)}%;background:${c}"></b></span><span class="v">${v==null?'–':fx(v,v<10&&v%1?1:0)}</span></div>`;
+  return `<div class="sf-card sf-sol"><div><h3 class="sf-h2">Ujian solid <span class="mut">CS16 · ditulis dahulu sebelum diuji</span></h3>
+    <div class="big">${nf(W.length)}<small>setup Solid berbeza · ${nf(Z.n_solid)} lulus daripada ${nf(all.length)}</small></div>
+    <div class="sf-solk"><div><b>${nf(bol)}</b>boleh dibuat</div><div><b>${Math.round(tp)}%</b>tahun lebih baik (nilai tengah)</div><div><b>${fx(Z.kawalan_lulus*100,1)}%</b>peraturan rawak lulus</div></div>
+    <div class="sf-verd"><i style="background:#5FC7DA"></i><div>Membeli 1–5 hari sebelum laporan kewangan <b style="color:#EEF1F4">sahaja</b>, tanpa isyarat lain, sudah memberi <b style="color:#EEF1F4">${Math.round(a.m5*100)} daripada 100</b> naik ≥ 5% seminggu (rawak ${fx(a.a_m5*100,1)}). Setup Solid ialah yang menambah di atas itu. <b style="color:#EEF1F4">Solid = paling tahan uji dalam backtest, bukan bukti.</b></div></div>
+    ${Z.b2===false?'<div class="sf-verd"><i style="background:#6B7A99"></i><div>Ujian "isyarat beli menambah di atas laporan kewangan" gagal tipis: sebahagian besar kekuatan Solid datang daripada BILA membeli (sebelum laporan), bukan isyarat beli.</div></div>':''}</div>
+   <div class="sf-gb">${SF_TIGA.map(([k,ak,l,asK])=>`<div class="sf-gbr"><div class="t">Naik ${l} <span class="mut">· daripada 100 belian</span></div>${br('Solid (nilai tengah)',med(k),'linear-gradient(90deg,#12A886,#1EE3B4)')}${br('Laporan 1–5 hari sahaja',a[asK.replace('a_','')]*100,'#5FC7DA')}${br('Saham rawak',a[asK]*100,'#6B7A99')}</div>`).join('')}
+    <div class="sf-rw" style="text-align:left">Saham rawak = dibeli pada hari sama (asas baris "laporan sahaja"). Tiga angka setiap setup ada dalam ranking di bawah.</div></div></div>`;}
 function sfCincinBesar(all,d){const W=360,H=330,cx=180,cy=165,R=104,mx=26,srt=all.map(r=>r.tangkap).filter(v=>v!=null).sort((a,b)=>a-b),nb=180;
   const tMed=sfMed(all.map(r=>r.tangkap)),rMed=sfMed(all.map(r=>r.rawak)),mn=sfMed(all.map(r=>r.menang)),pu=sfMed(all.map(r=>r.purata)),kw=d.kawalan||{};
   let s=`<defs><linearGradient id="sfRg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22A3BA"/><stop offset="1" stop-color="#1EE3B4"/></linearGradient>${SF_GL('sfRf')}</defs>`;
@@ -6171,11 +6225,11 @@ function sfLukisPeta(all,f){const w=$('#sfPeta');if(!w)return;const svg=w.queryS
     const bx=w.getBoundingClientRect(),px=e.clientX-bx.left,py=e.clientY-bx.top;tip.style.left=Math.min(px+16,W-256)+'px';tip.style.top=Math.min(py+12,Math.max(0,svg.getBoundingClientRect().height-150))+'px';};
   svg.onmouseleave=()=>{tip.hidden=true;};
   svg.onclick=e=>{const p=e.target.dataset&&e.target.dataset.i!=null?P[+e.target.dataset.i]:null;if(!p)return;sfBuka(p.r,f);};}
-function sfBuka(r,f){f.buka=r.id;f.jenis='semua';f.q='';f.asal='semua';if(!r.pil)f.lihat='semua';
+function sfBuka(r,f){f.buka=r.id;f.jenis='semua';f.q='';f.asal='semua';if(!(f.lihat==='solid'?r.wakil:f.lihat==='pilihan'?r.pil:true))f.lihat='semua';
   const L=sfSenarai(S.sf,f),i=L.findIndex(x=>x.id===r.id);if(i>=f.shown)f.shown=i+5;renderAll();
   setTimeout(()=>{const t=document.querySelector(`[data-sfid="${CSS.escape(r.id)}"]`);if(t)t.scrollIntoView({block:'center',behavior:'smooth'});},60);}
-const SF_SUSUN={tangkap:r=>r.tangkap,menang:r=>r.menang,purata:r=>r.purata,beli:r=>r.shar,k3:r=>r.k3,gred:r=>sfNis(r)};
-function sfSenarai(d,f){const all=sfBaris(d);let rows=f.lihat==='pilihan'?all.filter(r=>r.pil):all.slice();
+const SF_SUSUN={tangkap:r=>r.tangkap,menang:r=>r.menang,purata:r=>r.purata,beli:r=>r.shar,k3:r=>r.k3,gred:r=>sfNis(r),m5:r=>r.m5,tahun:r=>r.tbil?r.tpos/r.tbil:null};
+function sfSenarai(d,f){const all=sfBaris(d);let rows=f.lihat==='solid'?all.filter(r=>r.wakil):f.lihat==='pilihan'?all.filter(r=>r.pil):all.slice();
   if(f.asal!=='semua')rows=rows.filter(r=>r.asal===f.asal);
   if(f.jenis&&f.jenis!=='semua')rows=rows.filter(r=>r.jenis===f.jenis);
   if(f.q){const q=f.q.toLowerCase();rows=rows.filter(r=>[r.id,r.pra,r.nama,r.pen,r.jenis].join(' ').toLowerCase().includes(q));}
@@ -6184,7 +6238,8 @@ function renderSetupF(){
   const el=$('#v-setupf'),d=S.sf;
   if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.sfSiap?'Senarai setup F belum ditolak ke pangkalan data (carian/f_utama).':'Memuatkan senarai setup F…'}${diagDok('sf')}</div>`;return;}
   const f=S.sff;['jenis','sk','dir','buka','banding','peta'].forEach((k,i)=>{if(f[k]===undefined)f[k]=['semua','tangkap',-1,null,null,'tangkap'][i];});
-  const all=sfBaris(d),u=d.ujian||{},sm=d.semak_masa||{},sp=sm.pilih||{},sl=sm.lain||{},kw=d.kawalan||{},adaJ=all.some(r=>r.jenis);
+  const all=sfBaris(d),u=d.ujian||{},sm=d.semak_masa||{},sp=sm.pilih||{},sl=sm.lain||{},kw=d.kawalan||{},adaJ=all.some(r=>r.jenis),adaS=all.some(r=>r.wakil),nW=all.filter(r=>r.wakil).length;
+  if(f.lihat==='solid'&&!adaS)f.lihat='pilihan';
   const pc=x=>x==null||isNaN(x)?'–':Math.round(x*100)+'%';
   const rows=sfSenarai(d,f),tMed=sfMed(all.map(r=>r.tangkap)),rMed=sfMed(all.map(r=>r.rawak)),nE=Number(d.n_earnings||0);
   if(!Array.isArray(f.banding))f.banding=rows.slice(0,2).map(r=>r.id);
@@ -6198,13 +6253,14 @@ function renderSetupF(){
    <div class="sf-k">${ik('target')}<div><div class="sf-kl" data-tip="sf_tangkap">Tangkap (nilai tengah)</div><div class="sf-kv">${Math.round(tMed)}<small>/100 · rawak ${Math.round(rMed)}</small></div><div class="sf-dual"><span>setup</span><div class="tr"><b style="width:${Math.min(100,tMed/15*100)}%;background:#1EE3B4"></b></div><span>rawak</span><div class="tr"><b style="width:${Math.min(100,rMed/15*100)}%;background:#6B7A99"></b></div></div></div></div>
    <div class="sf-k">${ik('check')}<div><div class="sf-kl">Ujian carian lulus</div><div class="sf-kv">${pc(u.lulus_calon)}<small>peraturan rawak ${pc(u.lulus_kawalan)}</small></div><div class="sf-dual"><span>carian</span><div class="tr"><b style="width:${100*(u.lulus_calon||0)}%;background:#1EE3B4"></b></div><span>rawak</span><div class="tr"><b style="width:${100*(u.lulus_kawalan||0)}%;background:#6B7A99"></b></div></div></div></div>
    <div class="sf-k">${ik('cal')}<div><div class="sf-kl">Beli sebelum laporan kewangan</div><div class="sf-kv">${nf(nE)}<small>${Math.round(100*nE/N)}% setup</small></div><div class="sf-mb"><i style="width:${130*nE/N}px;background:#22A3BA"></i><i style="flex:1;background:#2E353E"></i></div></div></div></div>`;
-  /* kad juara: setup tangkap tertinggi dalam setiap jenis isyarat (seluruh senarai) */
-  const topT=Math.max(...all.map(r=>r.tangkap||0));
-  const juara=!adaJ?'':`<div class="sf-hd" style="margin-bottom:-4px"><h3 class="sf-h2">Juara setiap jenis isyarat <span class="mut">tangkap tertinggi dalam setiap kumpulan · ○ = saham rawak hari sama · ketik kad → tapis ranking</span></h3></div>
-   <div class="sf-chs" id="sfChs">${Object.keys(SF_JENIS_P).map((k,i)=>{const L=all.filter(r=>r.jenis===k).sort((a,b)=>b.tangkap-a.tangkap),r=L[0];if(!r)return '';const g=sfGred(r);
-    return `<div class="sf-card sf-ch${f.jenis===k?' on':''}" data-j="${esc(k)}" role="button" tabindex="0">${r.tangkap===topT?'<span class="sf-crown">♛</span>':''}<div class="f">${esc(SF_JENIS_P[k])}</div><div class="id">${esc(r.id)}${sfGrH(g,'width:18px;height:18px;min-width:18px;font-size:.69rem')}</div>
+  /* kad juara: setup tangkap tertinggi dalam setiap jenis isyarat; v187: setup Solid (wakil) diutamakan, selainnya terbaik keseluruhan */
+  const JR=Object.keys(SF_JENIS_P).map(k=>{const L=all.filter(r=>r.jenis===k).sort((a,b)=>b.tangkap-a.tangkap),Ls=L.filter(r=>r.wakil);return [k,L,Ls[0]||L[0],Ls.length];});
+  const topT=Math.max(...JR.filter(x=>x[2]&&(!adaS||x[2].wakil)).map(x=>x[2].tangkap||0));
+  const juara=!adaJ?'':`<div class="sf-hd" style="margin-bottom:-4px"><h3 class="sf-h2">Juara setiap jenis isyarat <span class="mut">${adaS?'setup Solid didahulukan · ':''}tangkap tertinggi dalam setiap kumpulan · ○ = saham rawak hari sama · ketik kad → tapis ranking</span></h3></div>
+   <div class="sf-chs" id="sfChs">${JR.map(([k,L,r,nS],i)=>{if(!r)return '';const g=sfGred(r);
+    return `<div class="sf-card sf-ch${f.jenis===k?' on':''}" data-j="${esc(k)}" role="button" tabindex="0">${r.tangkap===topT&&(!adaS||r.wakil)?'<span class="sf-crown">♛</span>':''}<div class="f">${esc(SF_JENIS_P[k])}</div><div class="id">${esc(r.id)}${sfGrH(g,'width:18px;height:18px;min-width:18px;font-size:.69rem')}</div>${adaS?`<div style="margin-top:3px">${r.wakil?sfSolidB(r):'<span class="sf-rw" style="text-align:center">tiada Solid</span>'}</div>`:''}
      <div class="rw">${sfCincinKecil(r.tangkap,r.rawak,92,7,'sfJ'+i)}<div class="c"><div><div style="font:700 1.5rem/1 var(--f-semi);color:#EEF1F4">${Math.round(r.tangkap)}</div><div style="font:600 .6rem var(--f-semi);color:var(--sfm)">○ ${Math.round(r.rawak)}</div></div></div></div>
-     <div class="s">menang ${sfPc(r.menang)} · <span class="${cls(r.purata)}">${sfSg(r.purata)}</span></div><div class="s mut" style="font-size:.66rem">${L.length} setup dalam kumpulan</div></div>`;}).join('')}</div>`;
+     <div class="s">menang ${sfPc(r.menang)} · <span class="${cls(r.purata)}">${sfSg(r.purata)}</span></div><div class="s mut" style="font-size:.74rem">${L.length} setup${adaS?` · ${nS} Solid`:' dalam kumpulan'}</div></div>`;}).join('')}</div>`;
   const mid=`<div class="sf-mid"><div class="sf-card sf-ringc"><h3 class="sf-h2">Kadar tangkap <span class="mut">semua ${nf(N)} setup</span></h3>${sfCincinBesar(all,d)}
     <div class="sf-verd"><i style="background:#1EE3B4"></i><div><b style="color:#EEF1F4">Kelebihan ada pada tangkap</b> (~${fx(tMed/rMed,1)}× saham rawak). Menang dan purata setiap dagangan hampir sama dengan peraturan rawak. ${nf(nE)} daripada ${nf(N)} setup memakai prasyarat "laporan kewangan dalam 1–5 hari".</div></div></div>
    <div class="sf-card sf-mapc"><div class="sf-hd"><h3 class="sf-h2">Peta ${nf(N)} setup <span class="mut">satu heks = satu setup · ikut jenis isyarat beli</span></h3>
@@ -6240,30 +6296,34 @@ function renderSetupF(){
   const th=(k,t,r,tip)=>`<th class="s${r?' r':''}" data-sk="${k}"${tip?` data-tip="${tip}"`:''}>${t}${f.sk===k?(f.dir<0?' ↓':' ↑'):''}</th>`,ada2=all.some(r=>r.menang2!=null),bd=d.banding||null;
   const vis=rows.slice(0,f.shown);
   const tr=vis.map(r=>{const g=sfGred(r),op=f.buka===r.id,ib=f.banding.includes(r.id);
-    let h=`<tr class="sf-r${op?' buka':''}" data-sfid="${esc(r.id)}"><td><span class="sf-chev">${op?'▼':'▶'}</span></td><td><div class="sf-idc"><b>${esc(r.id)}</b>${sfGrH(g)}</div><span class="sf-asal">${r.asal}${r.pil?' · pilihan':''}</span></td>
-     <td style="max-width:300px">${sfChips(r.pra)||'<span class="mut">–</span>'}</td><td class="sf-is" title="${esc(r.nama)}">${esc(sfNm(r.nama))}<small>${esc(r.pen||'–')}</small></td>
+    let h=`<tr class="sf-r${op?' buka':''}" data-sfid="${esc(r.id)}"><td><span class="sf-chev">${op?'▼':'▶'}</span></td><td><div class="sf-idc"><b>${esc(r.id)}</b>${sfGrH(g)}</div>${r.solid?`<div style="margin-top:3px">${sfSolidB(r)}</div>`:''}<span class="sf-asal">${r.asal}${r.pil?' · pilihan':''}</span></td>
+     ${adaS?`<td style="max-width:300px"><div>${sfChips(r.pra)||'<span class="mut">tiada prasyarat</span>'}</div><div class="sf-is" style="margin-top:4px" title="${esc(r.nama)}">${esc(sfNm(r.nama))}<small>${esc(r.pen||'–')}</small></div></td>`
+       :`<td style="max-width:300px">${sfChips(r.pra)||'<span class="mut">–</span>'}</td><td class="sf-is" title="${esc(r.nama)}">${esc(sfNm(r.nama))}<small>${esc(r.pen||'–')}</small></td>`}
      <td class="r"><div class="sf-pb"><span class="v">${sfPc(r.tangkap)}</span>${sfTrk(r.tangkap,30,'linear-gradient(90deg,#12A886,#1EE3B4)',r.rawak)}</div><div class="sf-rw">rawak ${sfPc(r.rawak)} · ${fx(sfNis(r),1)}×</div></td>
+     ${adaS?`<td>${sfTiga(r,1)}</td>`:''}
      <td class="r"><div class="sf-pb"><span class="v ${r.menang>=50?'pos':''}">${sfPc(r.menang)}</span>${sfTrk(r.menang,100,r.menang>=50?'#1EE3B4':'#5C6878',50)}</div>${ada2&&r.menang2!=null?`<div class="sf-rw" data-tip="sf_menang2" style="white-space:nowrap">lebih lama ${sfPc(r.menang2)}</div>`:''}</td>
      <td class="r"><span class="sf-num ${cls(r.purata)}">${sfSg(r.purata)}</span>${ada2&&r.purata2!=null?`<div class="sf-rw" data-tip="sf_purata2" style="white-space:nowrap">lebih lama <span class="${cls(r.purata2)}">${sfSg(r.purata2)}</span></div>`:''}</td><td class="r sf-num">${fx(r.shar,0)}<span class="mut" style="font-size:.69rem"> /${fx(r.beli,0)}</span></td>
      <td class="r"><span class="sf-num ${cls(r.k3)}">${(r.k3>0?'+':'')+fx(r.k3,1)}</span><div class="sf-rw">mata atas rawak</div></td>
      <td class="r"><button type="button" class="sf-add" data-ban="${esc(r.id)}" aria-pressed="${ib}" title="Masukkan ke banding">${ib?'✓':'+'}</button></td></tr>`;
     if(op)h+=`<tr class="det"><td colspan="10">${sfButiran(r,d)}</td></tr>`;return h;}).join('');
-  const kad=vis.map(r=>{const g=sfGred(r),op=f.buka===r.id;return `<div class="sf-mc" data-sfid="${esc(r.id)}"><div class="top"><b class="sf-num">${esc(r.id)}</b>${sfGrH(g)}<span class="sf-asal" style="display:inline">${r.asal}</span><span class="sf-num k3 ${cls(r.k3)}" style="font-size:.8rem">2025–26 ${(r.k3>0?'+':'')+fx(r.k3,1)}</span></div>
+  const kad=vis.map(r=>{const g=sfGred(r),op=f.buka===r.id;return `<div class="sf-mc" data-sfid="${esc(r.id)}"><div class="top"><b class="sf-num">${esc(r.id)}</b>${sfGrH(g)}${sfSolidB(r)}<span class="sf-asal" style="display:inline">${r.asal}</span><span class="sf-num k3 ${cls(r.k3)}" style="font-size:.8rem">2025–26 ${(r.k3>0?'+':'')+fx(r.k3,1)}</span></div>
     <div style="margin-top:6px">${sfChips(r.pra)}</div><div class="sf-is" style="margin-top:4px;font-size:.8rem">${esc(sfNm(r.nama))}<small>${esc(r.pen||'–')}</small></div>
     <div class="bb"><div><div class="sf-kl">Tangkap ${sfPc(r.tangkap)} <span class="mut">· rawak ${Math.round(r.rawak)}</span></div>${sfTrk(r.tangkap,30,'linear-gradient(90deg,#12A886,#1EE3B4)',r.rawak)}</div><div><div class="sf-kl">Menang ${sfPc(r.menang)} <span class="mut">· ${sfSg(r.purata)}</span></div>${sfTrk(r.menang,100,'#1EE3B4',50)}${ada2&&r.menang2!=null?`<div class="sf-rw" style="text-align:left">lebih lama ${sfPc(r.menang2)} · ${sfSg(r.purata2)}</div>`:''}</div></div>
+    ${adaS?`${sfTiga(r)}<div class="sf-rw" style="text-align:left;margin-top:6px">lebih baik daripada rawak ${r.tpos}/${r.tbil} tahun · jatuh ≥ 8%: ${sfPc(r.rugi8)} · <span style="white-space:nowrap;color:${r.boleh?'#1EE3B4':'#FF8C9C'}">${r.boleh?'✓ boleh dibuat':'✗ perlu tarikh tepat'}</span></div>`:''}
     ${op?sfButiran(r,d):''}</div>`;}).join('');
   const jopt=[['semua','Semua jenis isyarat']].concat(Object.entries(SF_JENIS_P).filter(([k])=>all.some(r=>r.jenis===k)).map(([k,v])=>[k,v]));
   el.innerHTML=`<div class="sf5">
    <div class="sf-hd"><h2>Setup F</h2><span class="sf-tag">● SENARAI UTAMA · BACKTEST</span><p class="sub">pangkat backtest · BUKAN keputusan wang sebenar · belum papertrade · dijana ${esc(d.dibina||'')}</p></div>
-   ${kst}${juara}${mid}${row1}</div>
+   ${kst}${sfSolidKad(all,d)}${juara}${mid}${row1}</div>
   <div class="panel"><div class="panel-h"><h2>Ranking setup</h2><span class="sub">${nf(rows.length)} daripada ${nf(all.length)} · ketik baris untuk butiran · + = banding</span></div>
-    <div class="sf-flt">${segH('sfLihat',f.lihat,[['pilihan',`Pilihan (${d.n_pilihan})`],['semua',`Semua (${nf(all.length)})`]],'Paparan')}${segH('sfAsal',f.asal,[['semua','Lama + baharu'],['lama','Lama'],['baharu','Baharu']],'Asal')}
+    <div class="sf-flt">${segH('sfLihat',f.lihat,(adaS?[['solid',`Solid (${nf(nW)})`]]:[]).concat([['pilihan',`Pilihan (${d.n_pilihan})`],['semua',`Semua (${nf(all.length)})`]]),'Paparan')}${segH('sfAsal',f.asal,[['semua','Lama + baharu'],['lama','Lama'],['baharu','Baharu']],'Asal')}
      ${adaJ?`<select id="sfJenis" aria-label="Jenis isyarat">${jopt.map(([v,t])=>`<option value="${esc(v)}"${f.jenis===v?' selected':''}>${esc(t)}</option>`).join('')}</select>`:''}
      <input type="search" id="sfQ" placeholder="Cari ID, prasyarat atau isyarat, cth. F43, earnings, RSI" value="${esc(f.q)}"></div>
-    <div class="sf-tbw"><table class="sf-tb"><thead><tr><th style="width:26px"></th>${th('gred','Setup')}<th>Prasyarat</th><th>Isyarat beli · syarat saham</th>${th('tangkap','Tangkap',1)}${th('menang','Menang',1,'sf_menang')}${th('purata','Purata',1,'sf_purata')}${th('beli','Beli/tahun',1)}${th('k3','2025–26',1)}<th></th></tr></thead>
-     <tbody>${tr||'<tr><td colspan="10" class="mut">Tiada setup sepadan.</td></tr>'}</tbody></table></div>
+    <div class="sf-tbw"><table class="sf-tb"><thead><tr><th style="width:26px"></th>${th('gred','Setup')}${adaS?'<th style="white-space:normal">Prasyarat · isyarat beli</th>':'<th>Prasyarat</th><th>Isyarat beli · syarat saham</th>'}${th('tangkap','Tangkap',1)}${adaS?th('m5','Naik · 100 belian',0,'sf_tiga'):''}${th('menang','Menang',1,'sf_menang')}${th('purata','Purata',1,'sf_purata')}${th('beli','Beli/tahun',1)}${th('k3','2025–26',1)}<th></th></tr></thead>
+     <tbody>${tr||`<tr><td colspan="10" class="mut">Tiada setup sepadan.</td></tr>`}</tbody></table></div>
     <div class="sf-cards">${kad||'<p class="mut">Tiada setup sepadan.</p>'}</div>
     ${kakiLagi('sfMore')(Math.min(f.shown,rows.length),rows.length)}
+    ${adaS?`<p class="note"><b>Solid</b> (lalai) = ${nf(nW)} setup berbeza yang lulus semua syarat ujian solid CS16 (${nf((d.solid||{}).n_solid)} lulus; yang beliannya bertindih ≥ 50% dengan setup lain ditanda "serupa" dan hanya muncul dalam Semua). <b>Naik · 100 belian</b> = daripada 100 belian, berapa yang naik ≥ 5% seminggu, ≥ 10% seminggu dan ≥ 10% dalam 2 minggu; ○ = saham rawak hari sama. Baris bawahnya = tahun lebih baik daripada rawak, peratus belian yang jatuh ≥ 8%, dan sama ada setup masih untung bila tarikh laporan kewangan diteka ("boleh dibuat"). Solid = paling tahan uji dalam backtest, bukan bukti.</p>`:''}
     <p class="note"><b>Gred</b> = berapa kali setup menangkap pelari berbanding saham rawak pada hari yang sama: A ≥ 2.5× · B 2–2.5× · C 1.6–2× · D 1.3–1.6× · E &lt; 1.3×. Setup yang tangkapnya tinggi tetapi gred rendah (cth. F43) kebanyakannya untung daripada BILA membeli, bukan saham yang dipilih.</p>
     <p class="note"><b>Tentang "Pilihan".</b> "Pilihan" ditapis SELEPAS melihat hasil, jadi angkanya condong ke atas. Setup yang menepati tapisan itu pada 2010–2024, pada 2025–26: menang ${pc(sp.menang)}, purata ${sp.purata==null?'–':sfSg(sp.purata*100)}; setup lain: menang ${pc(sl.menang)}, purata ${sl.purata==null?'–':sfSg(sl.purata*100)}. Yang bertahan pada tahun yang tidak dilihat ialah kadar tangkap, bukan menang atau purata.</p>
     <p class="note"><b>Cara sekarang</b> (Menang, Purata, Rugi ≥ 15%, Hari pegang): ${esc(d.pegang||'')}. <b>Tangkap</b> = daripada 100 belian, berapa yang naik ≥ 5% pada minggu pertama dan naik lagi hingga minggu ke-4 ("rawak" = saham rawak pada hari yang sama); ia tidak bergantung pada cara pegang. Semua angka selepas kos 0.5%.</p>
@@ -6589,6 +6649,8 @@ const TIPS={
   sf_rugi:{t:'Rugi ≥ 15% (cara sekarang)',d:'Peratus dagangan yang berakhir dengan rugi 15% atau lebih, dengan cara sekarang.'},
   sf_hari:{t:'Hari pegang (cara sekarang)',d:'Nilai tengah bilangan hari dagangan satu posisi dipegang, dengan cara sekarang. 20 hari ialah minimum, bukan had.'},
   sf_beli:{t:'Beli setahun',d:'Anggaran bilangan belian setahun pada senarai saham Shariah dalam data backtest.'},
+  sf_tiga:{t:'Naik · 100 belian (ujian solid)',d:'Daripada 100 belian setup ini, berapa yang tutup hari ke-5 sekurang-kurangnya +5% (seminggu), +10% (seminggu), dan tutup hari ke-10 sekurang-kurangnya +10% (2 minggu). ○ = saham rawak yang dibeli pada hari sama dengan turun naik setara. Saham yang carian tidak pernah lihat, 2010–2026 (CS16).',e:'25 ○14 = 25 daripada 100 belian naik ≥ 5% dalam seminggu; saham rawak 14.'},
+  sf_tahun:{t:'Tahun · jatuh · boleh dibuat',d:'Tahun lebih baik daripada rawak = bilangan tahun kalendar setup menangkap lebih kerap daripada saham rawak hari sama, daripada tahun yang ada belian. Jatuh ≥ 8% = peratus belian yang jatuh 8% atau lebih. Boleh dibuat = kelebihan kekal positif walaupun tarikh laporan kewangan diteka (suku sama tahun lepas + 364 hari), jadi setup boleh diikut tanpa kalendar tepat.',e:'15/17 · jatuh ≥ 8%: 23% · ✓ boleh dibuat.'},
   sf_k3:{t:'2025–26',d:'Kelebihan kadar tangkap atas saham rawak pada 2025–26 (tahun yang carian tidak lihat), dalam mata peratus. Positif = masih lebih baik daripada rawak.'},
   trend_jp:{t:'Trend (susunan SMA 50/150/200)',d:'Bullish = tutup > SMA50 > SMA150 > SMA200; Bearish = tutup < SMA50 < SMA150 < SMA200; lain-lain Neutral. Status bertukar hanya selepas 2 tutup berturut. "Sejak" = tutup kedua itu (umur dikira dari situ, tarikh sah = 1); baharu = ≤ 20 sesi, lama = > 60 sesi; Neutral menunjukkan status sebelumnya. Titik mula = harga terendah (Bullish) atau tertinggi (Bearish) dalam 63 sesi hingga tarikh sah, dibekukan; berapa jauh harga sudah bergerak sebelum label bertukar. Kajian 23 Okt 2026 (lebih 500 varian, 2020–2026): status ini tidak meramal pulangan 3–30 hari dan tiada peraturan jual berasaskannya yang lebih baik daripada lorong 1/lorong 2. Bullish tidak bermaksud lebih selamat; risiko diukur oleh ATR (lajur Risiko), jarak lorong 2 dan earnings. Bearish lama (diisi merah) satu-satunya amaran: lebih kerap jatuh > 8% dalam 10 sesi (bukti sederhana).',e:'Bullish lama · 142 sesi · sejak 1 Apr (+38.5%) · titik mula 2 Jan @ 121.61 (+87%)'},
   stage_w:{t:'Stage (Stage Analysis Weinstein)',d:'Peringkat kitaran saham pada bar MINGGUAN dengan purata bergerak 30 minggu (MA30), kaedah Stan Weinstein. Stage 2 = tutup di atas MA30 yang menaik (fasa naik); Stage 4 = tutup di bawah MA30 yang menurun (fasa turun); 1/3 = selain itu — asas (selepas Stage 4) atau kawasan puncak (selepas Stage 2); kedua-duanya kelihatan sama pada carta, jadi screener stageanalysis.net menggabungkannya dan baris kecil di bawah label menyatakan yang mana. Sebelas label sama seperti screener itu: 2A (minggu breakout pertama kitaran ini) · 2 · 2− · 2B · 2B− · 1/3 · 4A (minggu breakdown pertama) · 4 · 4− · 4B · 4B−. B = sudah 39 minggu atau lebih dalam kitaran yang sama (surut sementara ke 1/3 tidak menetapkan semula kiraan). “−” dalam label = harga menentang arah peringkat berbanding MA 10 minggu (Stage 2 bawah MA10 = hambar; Stage 4 atas MA10 = mula perk up). Cip kecil (+)/(−) di sebelah label ialah penggred kualiti Weinstein dan BERBEZA daripada “−” dalam label: (+) = garis Mansfield RP positif dan volum minggu mula ≥ 2× purata 4 minggu sebelumnya; (−) = Mansfield negatif. Dikira daripada stor harga repo mengikut takrif yang diterbitkan stageanalysis.net; tiada sambungan ke laman itu (tiada API awam). Stor 520 sesi ≈ 104 minggu, jadi kitaran yang bermula lebih awal ditanda “≥ n minggu” dan tidak diberi label A. PAPARAN SAHAJA (keputusan pengguna 27 Okt 2026): belum diuji sama ada ia meramal pulangan 3–30 hari, jadi ia bukan penapis belian dan bukan isyarat jual — keluar kekal ikut lorong kaedah dan lorong 2.',e:'2B+ · 64 minggu · sejak 15 Ogo 2025'},

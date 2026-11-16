@@ -73,7 +73,7 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertEqual(d['kol'][:17], ['id', 'asal', 'pil', 'pra', 'nama', 'pen', 'beli', 'shar', 'tangkap', 'rawak', 'm5', 'menang', 'purata',
                                          'rugi15', 'hari', 'k3', 'n'])                      # lajur lama tidak berganjak (halaman lama masih membaca)
         self.assertEqual(d['kol'][17:21], ['menang2', 'purata2', 'rugi2', 'hari2'])
-        self.assertEqual(d['kol'][21:], ['jenis', 'am5', 'k10', 'k1', 'k2'])  # v182 reka bentuk, selepas CS14
+        self.assertEqual(d['kol'][21:26], ['jenis', 'am5', 'k10', 'k1', 'k2'])  # v182 reka bentuk, selepas CS14
         self.assertEqual((F.CARA1, F.CARA2), ('r0.t1.126', 'r0.t2.0'))
         for r in d['rows'][:40] + d['rows'][-40:]:
             x = X.loc[r[ix['id']]]
@@ -88,6 +88,32 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertLess(b['lama']['menang'], b['kini']['menang'])                           # ... dan kadar menang turun
         self.assertIn('minimum, bukan had', d['pegang'])
         self.assertIn('purata 50 hari', d['pegang2'])
+
+    def test_lajur_solid_cs16(self):
+        """CS16 "ujian solid" (pindaan (z), 16 Nov 2026): lajur di HUJUNG `kol`, dibaca terus daripada hasil/CS16/solid.csv.gz."""
+        d = self.d
+        ix = {k: i for i, k in enumerate(d['kol'])}
+        self.assertEqual(d['kol'][:26], F.KOL[:26])                                       # lajur sedia ada tidak berganjak
+        self.assertEqual(d['kol'][26:], ['solid', 'wakil', 'boleh', 'm10', 'am10', 'm10d', 'am10d', 'tpos', 'tbil', 'rugi8', 'serupa'])
+        Z = pd.read_csv(os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS16', 'solid.csv.gz')).set_index('id')
+        self.assertEqual(sum(r[ix['wakil']] for r in d['rows']), int(Z.wakil.sum()))
+        self.assertEqual(sum(r[ix['solid']] for r in d['rows']), int(Z.solid.sum()))
+        self.assertEqual((d['solid']['n_wakil'], d['solid']['n_solid']), (224, 290))
+        for r in d['rows'][:60] + d['rows'][-60:] + [x for x in d['rows'] if x[0] in ('F43', 'F58', 'F89')]:
+            z = Z.loc[r[ix['id']]]
+            self.assertEqual(bool(r[ix['solid']]), bool(z.solid))
+            self.assertEqual(bool(r[ix['wakil']]), bool(z.wakil))
+            self.assertEqual(bool(r[ix['boleh']]), bool(z.boleh_dibuat))
+            for k, a in (('m10', 'm10'), ('am10', 'a_m10'), ('m10d', 'm10d'), ('am10d', 'a_m10d'), ('rugi8', 'rugi8')):
+                self.assertAlmostEqual(r[ix[k]] / 1000, z[a], delta=6e-4, msg=k)
+            self.assertEqual((r[ix['tpos']], r[ix['tbil']]), (int(z.thn_pos), int(z.thn_bil)))
+            self.assertEqual(r[ix['serupa']], None if pd.isna(z.serupa_dengan) else z.serupa_dengan)
+        f43 = [x for x in d['rows'] if x[0] == 'F43'][0]
+        self.assertEqual(f43[ix['solid']], 0)                                             # F43 TIDAK solid (gagal S5)
+        a = d['solid']['asas']                                                            # "laporan kewangan 1-5 sesi" sahaja
+        self.assertEqual(a['prasyarat'], F.ASAS_EARN)
+        self.assertAlmostEqual(a['m5'], 0.2404, places=3)
+        self.assertAlmostEqual(a['a_m5'], 0.135, places=3)
 
     def test_saiz_di_bawah_had_db(self):
         with tempfile.TemporaryDirectory() as t:

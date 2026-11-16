@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794817205-b50d",
-  "nombor": 221,
-  "sha256": "0d4265402663a62353ff8678cd87967d5c7f3f90855dad8a5bd519f4ccf97762",
-  "bait": 953257,
-  "dikemas": "2026-11-16 08:20 UTC",
-  "nota": "v186 (16 Nov 2026): baiki 3 cacat telefon (label paksi Akaun, label carta posisi); audit_tindih 0 cacat, audit_fon LULUS"
+  "versi_artifact": "1794817511-a90b",
+  "nombor": 222,
+  "sha256": "9ed323aeadcdb092d65c7983ddae2284bb75238ea6a634e0e57e6460db5a8da5",
+  "bait": 964925,
+  "dikemas": "2026-11-16 08:25 UTC",
+  "nota": "v187 (16 Nov 2026): Setup F paparan Solid CS16 (224 setup, tiga angka lawan rawak, kad Ujian solid, juara utamakan Solid), atas v186 #221"
 }
