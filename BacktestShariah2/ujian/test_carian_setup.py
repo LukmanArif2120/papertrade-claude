@@ -2986,5 +2986,59 @@ class TestCS20(unittest.TestCase):
         self.assertEqual(m20.kekerapan(M, np.flatnonzero(hu < 20100104))[:2], (0.0, 0.0))
 
 
+class TestCS21(unittest.TestCase):
+    """Pusingan CS21 (pindaan 17 Nov 2026 (ah)): ukuran kedua "mencapai +10 % sebelum jatuh 8 %" dalam 63 sesi."""
+
+    def _kes(self, o=None, l=None, c=None):
+        import cs_capai21 as c21
+        O, L, C = np.full(70, 100.0), np.full(70, 99.0), np.full(70, 100.0)
+        for a, d in ((O, o), (L, l), (C, c)):
+            for k, v in (d or {}).items():
+                a[k] = v
+        out, sk = c21.label21(np.array([0], np.int64), O, L, C, c21.NAIK, c21.JATUH, c21.HAD)      # isyarat bar 0, beli bar 1
+        return out[0].tolist(), int(sk[0])
+
+    def test_dikunci(self):
+        import cs_capai21 as c21
+        self.assertEqual((c21.NAIK, c21.JATUH, c21.HAD, c21.MIN_BELIAN, c21.MIN_TAHUN_N, c21.LABEL), (0.10, 0.08, 63, 300, 20, ('c10', 'j8', 'k10')))
+        spec = open(os.path.join(SINI, '..', 'kajian', 'SPEC_CARIAN_SETUP.md'), encoding='utf-8').read()
+        self.assertIn('### Pindaan 17 Nov 2026 (ah)', spec)
+
+    def test_label(self):
+        self.assertEqual(self._kes(), ([0.0, 0.0, 0.0], 62))                                   # tiada apa-apa dalam 63 sesi
+        self.assertEqual(self._kes(c={5: 110.5}), ([1.0, 0.0, 0.0], 4))                        # kena pada sesi ke-5
+        self.assertEqual(self._kes(l={3: 91.9}, c={5: 110.5}), ([0.0, 1.0, 0.0], 2))           # jatuh dahulu
+        self.assertEqual(self._kes(l={7: 91.0}, c={5: 110.5}), ([1.0, 0.0, 0.0], 4))           # kena dahulu; jatuh kemudian tidak dikira
+        self.assertEqual(self._kes(l={5: 91.9}, c={5: 111.0}), ([0.0, 1.0, 0.0], 4))           # hari yang sama: sentuhan -8 % dahulu
+        self.assertEqual(self._kes(o={4: 91.0}, c={6: 115.0}), ([0.0, 1.0, 0.0], 3))           # buka melompat ke bawah
+        self.assertEqual(self._kes(l={1: 90.0}, c={5: 110.5}), ([1.0, 0.0, 0.0], 4))           # rendah HARI BELI tidak dikira
+        self.assertEqual(self._kes(c={1: 91.5}), ([0.0, 1.0, 0.0], 0))                         # tutup hari beli <= -8 %
+        self.assertEqual(self._kes(c={63: 110.5}), ([1.0, 0.0, 1.0], 62))                      # sesi ke-63 = sesi terakhir tetingkap
+        self.assertEqual(self._kes(c={64: 110.5}), ([0.0, 0.0, 0.0], 62))                      # sesi ke-64 di luar tetingkap
+        self.assertEqual(self._kes(c={5: 110.5, 63: 104.0}), ([1.0, 0.0, 0.0], 4))             # kena, tetapi tidak "terus naik"
+
+    def test_ukur_satu_posisi_dan_asas(self):
+        import cs_capai21 as c21
+        fr = {t: _saham(420, 30 + k) for k, t in enumerate(['AAA', 'BBB', 'CCC'])}
+        pan = atom.bina(fr, {'QQQ': _saham(420, 91), 'SPY': _saham(420, 92)}, 'kunci')
+        hu = np.unique(pan['tarikh'])
+        pan['hari'], pan['hari_unik'] = np.searchsorted(hu, pan['tarikh']), hu
+        pan['sah'] = pan['layak'] & (pan['atr'] > 0)
+        Lab, As, SK, S63 = c21.asas21(pan)
+        akhir = pan['mula'][pan['tid'] + 1]
+        self.assertTrue((np.flatnonzero(S63) + c21.HAD < akhir[S63]).all())                    # tetingkap 63 sesi lengkap
+        sah = np.flatnonzero(S63)
+        self.assertTrue(((Lab[sah, 0] + Lab[sah, 1]) <= 1).all())                              # kena dan jatuh dahulu saling eksklusif
+        self.assertAlmostEqual(float(As[sah, 0].mean()), float(Lab[sah, 0].mean()), places=5)  # asas = purata label hari x tercile
+        d = c21.ukur21(pan, Lab, As, SK, S63, sah)                                             # "beli setiap bar": satu posisi mengehadkan
+        self.assertTrue(0 < d['n'] < len(sah))
+        e = np.ascontiguousarray(sah, dtype=np.int64)
+        amb = e[teras.satu_posisi(e, SK[e], pan['tid'])]
+        self.assertEqual(d['n'], len(amb))
+        for a, b in zip(amb[:-1], amb[1:]):
+            if pan['tid'][a] == pan['tid'][b]:
+                self.assertGreater(b, a + 1 + SK[a])                                           # belian baharu hanya selepas keputusan
+
+
 if __name__ == '__main__':
     unittest.main()
