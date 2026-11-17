@@ -21,21 +21,24 @@ class TestFUtamaDb(unittest.TestCase):
     def setUpClass(cls):
         cls.d = F.bina()
         cls.U = pd.read_csv(os.path.join(CS13, 'senarai_utama.csv'))
+        cls.utama = cls.d['rows'][:cls.d['n_utama']]          # v189: baris senarai utama dahulu; baris sepanjang tahun selepasnya
 
     def test_bentuk_dan_bilangan(self):
         d, U = self.d, self.U
         self.assertEqual(d['kol'], F.KOL)
-        self.assertEqual((d['n'], len(d['rows'])), (len(U), len(U)))
-        self.assertEqual(d['n_pilihan'], int(U.pilihan.sum()))
+        ix = {k: i for i, k in enumerate(d['kol'])}
+        self.assertEqual((d['n_utama'], d['n']), (len(U), len(d['rows'])))
+        self.assertEqual(sum(1 for r in self.utama if r[ix['pil']]), int(U.pilihan.sum()))
+        self.assertEqual(d['n_pilihan'], sum(1 for r in d['rows'] if r[ix['pil']]))
         self.assertEqual((d['n_lama'], d['n_baharu']), (int((U.asal == 'lama').sum()), int((U.asal == 'baharu').sum())))
         self.assertTrue(all(len(r) == len(F.KOL) for r in d['rows']))
-        self.assertEqual([r[0] for r in d['rows']], U.id.tolist())               # susunan senarai utama dikekalkan
+        self.assertEqual([r[0] for r in self.utama], U.id.tolist())              # susunan senarai utama dikekalkan
         self.assertEqual(set(d['semak_masa']), {'pilih', 'lain'})
 
     def test_nyahkod_sepadan_dengan_sumber(self):
         d, U = self.d, self.U.set_index('id')
         ix = {k: i for i, k in enumerate(d['kol'])}
-        for r in d['rows'][:50] + d['rows'][-50:]:
+        for r in self.utama[:50] + self.utama[-50:]:
             u = U.loc[r[ix['id']]]
             self.assertEqual(bool(r[ix['pil']]), bool(u.pilihan))
             self.assertEqual('baharu' if r[ix['asal']] else 'lama', u.asal)
@@ -50,7 +53,7 @@ class TestFUtamaDb(unittest.TestCase):
         d, U = self.d, self.U.set_index('id')
         ix = {k: i for i, k in enumerate(d['kol'])}
         self.assertEqual(d['kamus']['jenis'], F.JENIS)
-        for r in d['rows'][:50] + d['rows'][-50:]:
+        for r in self.utama[:50] + self.utama[-50:]:
             u = U.loc[r[ix['id']]]
             self.assertAlmostEqual(r[ix['am5']] / 1000, u.a_m5, delta=6e-4)
             self.assertAlmostEqual(r[ix['k10']] / 1000, u.k10_B, delta=6e-4)
@@ -75,7 +78,7 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertEqual(d['kol'][17:21], ['menang2', 'purata2', 'rugi2', 'hari2'])
         self.assertEqual(d['kol'][21:26], ['jenis', 'am5', 'k10', 'k1', 'k2'])  # v182 reka bentuk, selepas CS14
         self.assertEqual((F.CARA1, F.CARA2), ('r0.t1.126', 'r0.t2.0'))
-        for r in d['rows'][:40] + d['rows'][-40:]:
+        for r in self.utama[:40] + self.utama[-40:]:
             x = X.loc[r[ix['id']]]
             self.assertAlmostEqual(r[ix['menang2']] / 1000, x['r0.t2.0:menang'], delta=6e-4)
             self.assertAlmostEqual(r[ix['purata2']] / 10000, x['r0.t2.0:purata'], delta=6e-5)
@@ -99,7 +102,7 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertEqual(sum(r[ix['wakil']] for r in d['rows']), int(Z.wakil.sum()))
         self.assertEqual(sum(r[ix['solid']] for r in d['rows']), int(Z.solid.sum()))
         self.assertEqual((d['solid']['n_wakil'], d['solid']['n_solid']), (224, 290))
-        for r in d['rows'][:60] + d['rows'][-60:] + [x for x in d['rows'] if x[0] in ('F43', 'F58', 'F89')]:
+        for r in self.utama[:60] + self.utama[-60:] + [x for x in d['rows'] if x[0] in ('F43', 'F58', 'F89')]:
             z = Z.loc[r[ix['id']]]
             self.assertEqual(bool(r[ix['solid']]), bool(z.solid))
             self.assertEqual(bool(r[ix['wakil']]), bool(z.wakil))
@@ -116,16 +119,16 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertAlmostEqual(a['a_m5'], 0.135, places=3)
 
     def test_lajur_audit_cs19(self):
-        """CS19 audit bebas (pindaan (ae), 16 Nov 2026): 7 lajur di HUJUNG `kol`, terus daripada hasil/CS19/audit.csv.gz."""
+        """CS19 audit bebas (pindaan (ae), 16 Nov 2026): 7 lajur selepas lajur CS16, terus daripada hasil/CS19/audit.csv.gz."""
         import json
         d = self.d
         ix = {k: i for i, k in enumerate(d['kol'])}
         self.assertEqual(d['kol'][:37], F.KOL[:37])                                       # lajur sedia ada tidak berganjak
-        self.assertEqual(d['kol'][37:], ['j5', 'aj5', 'am', 'ap', 'aud', 'aun', 'pt'])
+        self.assertEqual(d['kol'][37:44], ['j5', 'aj5', 'am', 'ap', 'aud', 'aun', 'pt'])
         d19 = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS19')
         A = pd.read_csv(os.path.join(d19, 'audit.csv.gz')).set_index('id')
         B = json.load(open(os.path.join(d19, 'bacaan.json'), encoding='utf-8'))
-        for r in d['rows'][:80] + d['rows'][-60:]:
+        for r in self.utama[:80] + self.utama[-60:]:
             a = A.loc[r[ix['id']]]
             self.assertAlmostEqual(r[ix['j5']] / 1000, a.j5, delta=6e-4)
             self.assertAlmostEqual(r[ix['aj5']] / 1000, a.a_j5, delta=6e-4)
@@ -137,11 +140,60 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertEqual(sorted(pt), sorted(B['kohort']))                                 # 29 setup papertrade
         self.assertTrue(all(F.GRED_AUDIT[r[ix['aud']]] == 'A' for r in d['rows'] if r[ix['pt']]))
         u = d['audit']
-        self.assertEqual((u['n'], u['diaudit'], u['pariti']), (len(d['rows']), B['diaudit'], B['pariti']))
+        self.assertEqual((u['n'], u['diaudit'], u['pariti']), (d['n_utama'], B['diaudit'], B['pariti']))
         self.assertEqual(sum(u['gred_300'].values()), 300)
         self.assertGreater(u['atas']['semua']['jatuh5'], u['atas']['semua']['r_jatuh5'])   # jatuh >= 5 % pun melebihi saham rawak
         h = open(HTML, encoding='utf-8').read()                                           # halaman membaca lajur ikut nama
         for frasa in ("j5:g(a,'j5',10)", "aud:ix.aud==null", 'sfAuditD(r,d)', "f.lihat==='pt'", 'sf_audit:', 'sf_jatuh:', 'sf_mrawak:'):
+            self.assertIn(frasa, h)
+
+    def test_mingguan_dan_ukuran_kedua(self):
+        """v189 (17 Nov 2026): setup sepanjang tahun CS20 (+ CS22) sebagai baris tambahan, dan ukuran kedua CS21 bagi semua baris;
+        7 lajur di HUJUNG `kol`. Papertrade dijeda."""
+        import json
+        d = self.d
+        ix = {k: i for i, k in enumerate(d['kol'])}
+        self.assertEqual(d['kol'][:44], F.KOL[:44])                                        # lajur sedia ada tidak berganjak
+        self.assertEqual(d['kol'][44:], ['mg', 'mgg', 'bs', 'c10', 'ac10', 'j8', 'aj8'])
+        hs = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil')
+        B20 = json.load(open(os.path.join(hs, 'CS20', 'bacaan.json'), encoding='utf-8'))
+        M = pd.read_csv(os.path.join(hs, 'CS20', 'mingguan.csv')).set_index('id')
+        T21 = pd.read_csv(os.path.join(hs, 'CS21', 'unit.csv.gz'))
+        T21 = T21[T21.kumpulan.str.startswith('F ')].drop_duplicates('id').set_index('id')
+        self.assertTrue(all(r[ix['mg']] == 0 and r[ix['mgg']] is None for r in self.utama))
+        mg = d['rows'][d['n_utama']:]
+        self.assertTrue(all(r[ix['mg']] in (1, 2) for r in mg))
+        mg1 = [r for r in mg if r[ix['mg']] == 1]
+        self.assertEqual((len(mg1), d['mingguan']['n'], d['n_mingguan']), (B20['n_berdaftar'], B20['n_berdaftar'], len(mg)))
+        self.assertEqual([r[0] for r in mg1], [f'F{i}' for i in range(2055, 2055 + len(mg1))])
+        larang = ('earnings dalam', 'selepas earnings', 'tiada earnings', 'hari earnings', 'Nov-Apr', 'Mei-Okt', 'hari pertama bulan', 'Januari')
+        for r in mg1[:60] + mg1[-60:]:
+            m = M.loc[r[0]]
+            self.assertAlmostEqual(r[ix['tangkap']] / 1000, m.terus, delta=6e-4)
+            self.assertAlmostEqual(r[ix['rawak']] / 1000, m.a_terus, delta=6e-4)
+            self.assertAlmostEqual(r[ix['menang']] / 1000, m.menang_B, delta=6e-4)
+            self.assertAlmostEqual(r[ix['am']] / 1000, m.a_menang_B, delta=6e-4)
+            self.assertAlmostEqual(r[ix['purata']] / 10000, m.purata_B, delta=6e-5)
+            self.assertAlmostEqual(r[ix['j5']] / 1000, m.j5, delta=6e-4)
+            self.assertAlmostEqual(r[ix['mgg']] / 1000, m.mgg_semua, delta=6e-4)
+            self.assertEqual(r[ix['bs']], int(round(m.setahun_semua)))
+            self.assertGreaterEqual(r[ix['mgg']], 800)                                    # membeli hampir setiap minggu
+            self.assertEqual((r[ix['solid']], r[ix['pt']], r[ix['aud']], r[ix['menang2']], r[ix['shar']]), (0, 0, 0, None, None))
+            self.assertFalse(any(x in d['kamus']['pra'][r[ix['pra']]] for x in larang))
+        for r in self.utama[:60] + mg1[:60]:                                              # ukuran kedua terus daripada CS21
+            if r[0] in T21.index:
+                t = T21.loc[r[0]]
+                for k, a in (('c10', 'c10'), ('ac10', 'a_c10'), ('j8', 'j8'), ('aj8', 'a_j8')):
+                    self.assertAlmostEqual(r[ix[k]] / 1000, t[a], delta=6e-4, msg=k)
+            else:
+                self.assertIsNone(r[ix['c10']])
+        self.assertGreater(sum(1 for r in d['rows'] if r[ix['c10']] is not None), 0.98 * len(d['rows']))
+        uk = d['ukuran_kedua']
+        self.assertTrue(0.35 < uk['dasar']['c10'] < 0.45 and uk['had'] == 63 and {'M', 'N', 'mingguan', 'laporan'} <= set(uk['kumpulan']))
+        self.assertEqual(d['jeda']['papertrade'], os.path.exists(os.path.join(SINI, '..', 'jejak_f2', 'JEDA')))
+        h = open(HTML, encoding='utf-8').read()
+        for frasa in ("mg:ix.mg==null?0:a[ix.mg]||0", "c10:g(a,'c10',10)", "f.lihat==='mg'?all.filter(r=>r.mg)", "['mg',`Mingguan (", 'sfMgB(r)',
+                      'PAPERTRADE · DIJEDA', 'sf_c10:', 'sf_mingguan:', '+10% dahulu ${Math.round(r.c10)}', "if(nMg&&!f._mg){f._mg=1;f.lihat='mg';}"):
             self.assertIn(frasa, h)
 
     def test_saiz_di_bawah_had_db(self):
@@ -153,7 +205,7 @@ class TestFUtamaDb(unittest.TestCase):
                 self.assertEqual(o['collection'], 'carian')
                 self.assertLess(o['bait'], HAD_DB)
                 self.assertTrue(os.path.exists(o['file_path']))
-        self.assertLess(bait(self.d), 2 * HAD_DB)
+        self.assertLess(bait(self.d), 4 * HAD_DB)
 
     def test_halaman_membaca_dengan_subbhg(self):
         """Dokumen ini dibahagi dengan bahagi(); halaman MESTI membacanya dengan subBhg() (pelajaran jana_db.PECAH)."""
