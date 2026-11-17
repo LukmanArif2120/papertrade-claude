@@ -8,7 +8,7 @@ Dijana `kajian/carian_setup/cs_ringkas.py` daripada `data/registry_F.csv` dan fa
 
 **Baca bersama purata setiap dagangan.** Kadar menang sahaja tidak menunjukkan saiz untung dan rugi: setup yang menang 4 daripada 10 masih boleh untung jika untungnya besar, dan setup yang menang 6 daripada 10 boleh rugi jika ruginya besar (`CLAUDE.md`: kadar menang sahaja bukan ukuran).
 
-Ringkasan: 2054 setup; median kadar menang 47 %; 509 setup menang ≥ 50 %; 509 setup menang ≥ 50 % DAN purata positif; 963 setup menang < 50 % tetapi purata positif.
+Ringkasan: 2802 setup; median kadar menang 47 %; 512 setup menang ≥ 50 %; 512 setup menang ≥ 50 % DAN purata positif; 1702 setup menang < 50 % tetapi purata positif.
 
 Kadar menang tertinggi (≥ 300 belian): `F55` 74 % (purata +7.7 %, 484 belian); `F62` 73 % (purata +9.9 %, 1,387 belian); `F79` 73 % (purata +10.1 %, 1,205 belian); `F43` 70 % (purata +5.8 %, 515 belian); `F57` 70 % (purata +6.7 %, 542 belian).
 
@@ -2068,6 +2068,754 @@ Kadar menang tertinggi (≥ 300 belian): `F55` 74 % (purata +7.7 %, 484 belian);
 | `F2052` | CS13 | tiada earnings dalam 20 sesi akan datang | K18.020 jatuh >= 25% dalam 5 hari | RSI14 < 40 + volum hari isyarat >= 1.5x purata 50 | 1,268 | **48** | 5 / 5 | +2.85 | 30 | 47 / 52 / 36 |  |
 | `F2053` | CS13 | >= 60% saham di atas MA200 + >= 60% saham industri di atas MA50 | K01.038 RSI(4) < 8 + atas MA200 | MA20 > MA50 + RS >= 70 | 310 | **50** | 5 / 5 | +1.55 | 19 | 53 / 44 / 50 |  |
 | `F2054` | CS13 | follow-through day aktif (QQQ, 20 sesi) | K18.004 jatuh >= 15% dalam 2 hari | RSI14 < 40 + ATR% >= 4 | 686 | **51** | 5 / 5 | +2.55 | 26 | 49 / 52 / 57 |  |
+| `F2055` | CS20 | – | M08 SMA20 + SMA200 | RS >= 90 + ATR% >= 4 | 2,439 | **45** | 4 / 6 | +1.29 | 24 | 45 / 45 / 44 |  |
+| `F2056` | CS20 | – | K01.003 RSI(2) < 5 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 7,813 | **48** | 5 / 5 | +1.75 | 24 | 49 / 46 / 49 |  |
+| `F2057` | CS20 | industri 20% teratas (pulangan 63 sesi) | K01.031 RSI(3) < 30 | tutup > MA200 + ATR% >= 4 | 3,519 | **46** | 5 / 5 | +1.77 | 24 | 46 / 47 / 47 |  |
+| `F2058` | CS20 | – | K18.015 jatuh >= 5% dalam 5 hari | RSI14 > 50 + RS >= 90 | 3,022 | **45** | 4 / 6 | +1.39 | 23 | 46 / 44 / 43 |  |
+| `F2059` | CS20 | – | K18.016 jatuh >= 8% dalam 5 hari | RS >= 70 + ATR% >= 4 | 7,000 | **49** | 5 / 5 | +2.79 | 27 | 49 / 48 / 50 |  |
+| `F2060` | CS20 | – | M08 SMA20 + SMA200 (ditala 2) | templat trend Minervini + RS >= 90 | 3,644 | **46** | 5 / 5 | +0.82 | 19 | 47 / 44 / 48 |  |
+| `F2061` | CS20 | – | M18 EMA9/21 Pullback (ditala 2) | RS >= 90 + ATR% >= 4 | 2,582 | **44** | 4 / 6 | +0.94 | 23 | 46 / 44 / 44 |  |
+| `F2062` | CS20 | – | K18.017 jatuh >= 10% dalam 5 hari | RS >= 70 + ATR% >= 4 | 5,651 | **48** | 5 / 5 | +2.63 | 27 | 50 / 47 / 50 |  |
+| `F2063` | CS20 | – | K18.017 jatuh >= 10% dalam 5 hari | MA50 > MA200 + RS >= 70 | 6,756 | **48** | 5 / 5 | +2.28 | 25 | 50 / 46 / 50 |  |
+| `F2064` | CS20 | – | M55 Guppy GMMA (ditala 2) | RS >= 90 + ATR% >= 4 | 2,735 | **45** | 5 / 5 | +1.04 | 24 | 46 / 43 / 49 |  |
+| `F2065` | CS20 | – | K01.072 RSI(7) < 30 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 5,402 | **46** | 5 / 5 | +1.59 | 23 | 45 / 46 / 46 |  |
+| `F2066` | CS20 | – | K03.028 tutup < jalur bawah BB(20, 2.0) | tutup > MA200 + ATR% >= 4 | 5,270 | **47** | 5 / 5 | +1.84 | 24 | 46 / 47 / 46 |  |
+| `F2067` | CS20 | >= 60% saham sektor di atas MA50 | K01.031 RSI(3) < 30 | RS >= 90 | 4,734 | **45** | 5 / 5 | +0.92 | 19 | 46 / 44 / 49 |  |
+| `F2068` | CS20 | – | K18.015 jatuh >= 5% dalam 5 hari | Supertrend naik + RS >= 90 | 4,373 | **46** | 5 / 5 | +1.46 | 23 | 48 / 45 / 47 |  |
+| `F2069` | CS20 | – | K18.017 jatuh >= 10% dalam 5 hari | MA50 > MA200 + ATR% >= 4 | 10,086 | **47** | 5 / 5 | +1.86 | 25 | 49 / 46 / 48 |  |
+| `F2070` | CS20 | – | K01.005 RSI(2) < 8 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 9,620 | **48** | 5 / 5 | +1.68 | 24 | 50 / 46 / 48 |  |
+| `F2071` | CS20 | – | K18.001 jatuh >= 5% dalam 2 hari | tutup > MA50 + RS >= 70 | 8,244 | **47** | 5 / 5 | +1.32 | 21 | 48 / 47 / 46 |  |
+| `F2072` | CS20 | – | K03.001 tutup < jalur bawah BB(10, 1.5) | dalam 15% dari puncak 52 minggu + ATR% >= 4 | 3,494 | **47** | 5 / 5 | +1.26 | 22 | 44 / 50 / 43 |  |
+| `F2073` | CS20 | – | K03.030 tutup < jalur bawah BB(20, 2.0) + RSI14 < 40 | tutup > MA200 + ATR% >= 4 | 4,437 | **47** | 5 / 5 | +1.61 | 23 | 47 / 48 / 45 |  |
+| `F2074` | CS20 | – | K01.044 RSI(4) < 20 + atas MA200 | MA50 > MA200 + ATR% >= 4 | 6,589 | **47** | 5 / 5 | +2.00 | 24 | 46 / 47 / 47 |  |
+| `F2075` | CS20 | – | K09.007 MACD(5,35,5) silang naik | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,340 | **46** | 5 / 5 | +1.07 | 23 | 45 / 47 / 45 |  |
+| `F2076` | CS20 | – | K17.014 undur ke sma20 yang naik (tol 0.0%) + atas MA200 | RS >= 70 + ATR% >= 4 | 4,602 | **46** | 5 / 5 | +1.37 | 23 | 47 / 45 / 48 |  |
+| `F2077` | CS20 | industri 20% teratas (pulangan 63 sesi) | K01.031 RSI(3) < 30 | MA50 > MA200 + ATR% >= 4 | 3,879 | **47** | 5 / 5 | +1.90 | 25 | 46 / 49 / 46 |  |
+| `F2078` | CS20 | – | K03.028 tutup < jalur bawah BB(20, 2.0) | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 8,266 | **47** | 5 / 5 | +1.18 | 23 | 47 / 46 / 48 |  |
+| `F2079` | CS20 | – | K18.010 jatuh >= 10% dalam 3 hari | MA50 > MA200 + ATR% >= 4 | 8,465 | **47** | 5 / 5 | +1.96 | 25 | 47 / 46 / 48 |  |
+| `F2080` | CS20 | – | K01.027 RSI(3) < 20 | templat trend Minervini + RS >= 90 | 3,933 | **47** | 5 / 5 | +0.97 | 19 | 49 / 45 / 48 |  |
+| `F2081` | CS20 | – | K17.013 undur ke sma20 yang naik (tol 0.0%) | MA50 > MA200 + ATR% >= 4 | 5,215 | **46** | 5 / 5 | +1.17 | 23 | 46 / 47 / 46 |  |
+| `F2082` | CS20 | hasil suku terkini tumbuh >= 20% | N36 Pocket pivot | ADX < 20 + hari naik (tutup > buka) | 6,851 | **46** | 5 / 5 | +0.82 | 19 | 48 / 45 / 46 |  |
+| `F2083` | CS20 | – | K18.015 jatuh >= 5% dalam 5 hari | MACD > 0 + RS >= 90 | 5,276 | **46** | 5 / 5 | +1.49 | 23 | 48 / 45 / 49 |  |
+| `F2084` | CS20 | – | K01.023 RSI(3) < 10 | MA50 > MA200 + ATR% >= 4 | 8,192 | **47** | 5 / 5 | +1.54 | 23 | 48 / 46 / 47 |  |
+| `F2085` | CS20 | – | K17.002 undur ke sma10 yang naik (tol 0.0%) + atas MA200 | RS >= 90 + ATR% >= 4 | 3,445 | **44** | 4 / 6 | +1.32 | 24 | 44 / 43 / 48 |  |
+| `F2086` | CS20 | – | K01.028 RSI(3) < 20 + atas MA200 | dalam 15% dari puncak 52 minggu + ATR% >= 4 | 3,235 | **47** | 5 / 5 | +1.50 | 23 | 46 / 49 / 45 |  |
+| `F2087` | CS20 | – | K18.016 jatuh >= 8% dalam 5 hari | ADX > 25 + RS >= 70 | 5,422 | **48** | 5 / 5 | +1.81 | 23 | 50 / 47 / 47 |  |
+| `F2088` | CS20 | >= 60% saham sektor di atas MA50 | K17.015 undur ke ema20 yang naik (tol 0.0%) | tutup > MA20 + RS >= 90 | 3,099 | **45** | 5 / 5 | +0.70 | 18 | 45 / 45 / 49 |  |
+| `F2089` | CS20 | – | K03.001 tutup < jalur bawah BB(10, 1.5) | templat trend Minervini + RS >= 90 | 4,161 | **47** | 5 / 5 | +0.83 | 19 | 49 / 43 / 45 |  |
+| `F2090` | CS20 | – | K01.062 RSI(5) < 25 + atas MA200 | ATR% >= 4 | 6,893 | **47** | 5 / 5 | +1.87 | 24 | 47 / 47 / 47 |  |
+| `F2091` | CS20 | >= 60% saham sektor di atas MA50 | K17.015 undur ke ema20 yang naik (tol 0.0%) | MACD > 0 + RS >= 90 | 3,785 | **45** | 5 / 5 | +0.73 | 19 | 45 / 45 / 49 |  |
+| `F2092` | CS20 | – | K01.024 RSI(3) < 10 + atas MA200 | MA50 > MA200 + ATR% >= 4 | 4,708 | **47** | 5 / 5 | +1.75 | 23 | 47 / 48 / 43 |  |
+| `F2093` | CS20 | – | M08 SMA20 + SMA200 | MA50 > MA200 + ATR% >= 4 | 4,437 | **46** | 5 / 5 | +1.49 | 23 | 44 / 47 / 46 |  |
+| `F2094` | CS20 | – | K17.016 undur ke ema20 yang naik (tol 0.0%) + atas MA200 | RS >= 90 + ATR% >= 4 | 3,031 | **45** | 4 / 6 | +1.11 | 23 | 46 / 44 / 44 |  |
+| `F2095` | CS20 | – | K03.028 tutup < jalur bawah BB(20, 2.0) | MA50 > MA200 + ATR% >= 4 | 9,017 | **47** | 5 / 5 | +1.75 | 24 | 48 / 46 / 49 |  |
+| `F2096` | CS20 | – | K01.029 RSI(3) < 25 | templat trend Minervini + RS >= 90 | 5,016 | **46** | 5 / 5 | +0.82 | 19 | 48 / 44 / 46 |  |
+| `F2097` | CS20 | – | K01.074 RSI(7) < 35 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,070 | **46** | 5 / 5 | +1.34 | 23 | 45 / 46 / 46 |  |
+| `F2098` | CS20 | – | K01.072 RSI(7) < 30 + atas MA200 | RS >= 70 + ATR% >= 4 | 4,370 | **46** | 5 / 5 | +1.94 | 24 | 46 / 45 / 48 |  |
+| `F2099` | CS20 | – | K01.044 RSI(4) < 20 + atas MA200 | MA20 > MA50 + ATR% >= 4 | 5,440 | **47** | 5 / 5 | +1.87 | 24 | 46 / 47 / 47 |  |
+| `F2100` | CS20 | industri 20% teratas (pulangan 63 sesi) | K01.029 RSI(3) < 25 | MA50 > MA200 + ATR% >= 4 | 3,530 | **47** | 5 / 5 | +1.65 | 25 | 47 / 48 / 46 |  |
+| `F2101` | CS20 | – | K07.003 tutup silang atas sma8 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,800 | **46** | 5 / 5 | +0.96 | 23 | 46 / 46 / 45 |  |
+| `F2102` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K01.030 RSI(3) < 25 + atas MA200 | ATR% >= 4 | 3,698 | **47** | 5 / 5 | +1.23 | 23 | 46 / 48 / 43 |  |
+| `F2103` | CS20 | – | K18.009 jatuh >= 8% dalam 3 hari | MA50 > MA200 + ATR% >= 4 | 11,089 | **47** | 5 / 5 | +1.90 | 24 | 48 / 46 / 47 |  |
+| `F2104` | CS20 | – | M08 SMA20 + SMA200 | RS >= 70 + ATR% >= 4 | 4,162 | **47** | 5 / 5 | +1.88 | 24 | 45 / 47 / 47 |  |
+| `F2105` | CS20 | – | K18.017 jatuh >= 10% dalam 5 hari | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 5,797 | **47** | 5 / 5 | +1.56 | 23 | 49 / 45 / 49 |  |
+| `F2106` | CS20 | – | K01.028 RSI(3) < 20 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,783 | **46** | 5 / 5 | +1.35 | 23 | 46 / 46 / 46 |  |
+| `F2107` | CS20 | – | K01.025 RSI(3) < 15 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 9,456 | **48** | 5 / 5 | +1.56 | 24 | 50 / 46 / 47 |  |
+| `F2108` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K01.029 RSI(3) < 25 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 4,765 | **46** | 5 / 5 | +1.19 | 23 | 45 / 47 / 46 |  |
+| `F2109` | CS20 | – | K17.015 undur ke ema20 yang naik (tol 0.0%) | Supertrend naik + RS >= 90 | 5,669 | **45** | 5 / 5 | +0.61 | 18 | 47 / 43 / 48 |  |
+| `F2110` | CS20 | – | K17.004 undur ke ema10 yang naik (tol 0.0%) + atas MA200 | RS >= 90 + ATR% >= 4 | 3,706 | **45** | 4 / 6 | +1.20 | 24 | 46 / 44 / 47 |  |
+| `F2111` | CS20 | – | K07.009 tutup silang atas sma20 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,100 | **46** | 5 / 5 | +0.91 | 23 | 45 / 47 / 47 |  |
+| `F2112` | CS20 | – | K03.004 tutup < jalur bawah BB(10, 2.0) | tutup > MA200 + ATR% >= 4 | 6,138 | **47** | 5 / 5 | +1.56 | 24 | 46 / 47 / 46 |  |
+| `F2113` | CS20 | industri 20% teratas (pulangan 21 sesi) | M35 Pocket Pivot Morales & Kacher | templat trend Minervini + RS >= 90 | 2,274 | **44** | 4 / 6 | +0.39 | 16 | 43 / 43 / 52 |  |
+| `F2114` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K06.004 3 tutup menurun berturut + atas MA200 | Supertrend naik + ATR% >= 4 | 3,375 | **48** | 5 / 5 | +1.61 | 23 | 44 / 51 / 48 |  |
+| `F2115` | CS20 | – | K07.005 tutup silang atas sma10 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,303 | **46** | 5 / 5 | +0.94 | 23 | 46 / 47 / 44 |  |
+| `F2116` | CS20 | – | N08 tutup>EMA20 tidak terlalu jauh | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,090 | **46** | 5 / 5 | +0.79 | 23 | 45 / 46 / 46 |  |
+| `F2117` | CS20 | – | K01.027 RSI(3) < 20 | RS >= 70 + ATR% >= 4 | 7,589 | **48** | 5 / 5 | +1.98 | 25 | 48 / 47 / 49 |  |
+| `F2118` | CS20 | – | K03.039 tutup < jalur bawah BB(30, 1.5) + RSI14 < 40 | tutup > MA200 + ATR% >= 4 | 5,088 | **47** | 5 / 5 | +1.83 | 23 | 48 / 47 / 47 |  |
+| `F2119` | CS20 | – | K01.046 RSI(4) < 25 + atas MA200 | RSI14 < 40 + ATR% >= 4 | 4,288 | **46** | 5 / 5 | +1.57 | 23 | 46 / 47 / 45 |  |
+| `F2120` | CS20 | – | M18 EMA9/21 Pullback (ditala 1) | MA50 > MA200 + ATR% >= 4 | 3,757 | **45** | 5 / 5 | +1.28 | 23 | 47 / 45 / 46 |  |
+| `F2121` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K01.029 RSI(3) < 25 | ATR% >= 4 | 7,111 | **46** | 5 / 5 | +1.38 | 24 | 45 / 48 / 43 |  |
+| `F2122` | CS20 | – | K01.043 RSI(4) < 20 | volum 10 hari > volum 50 hari + ATR% >= 4 | 12,347 | **48** | 5 / 5 | +1.67 | 24 | 50 / 48 / 45 |  |
+| `F2123` | CS20 | – | K11.006 Supertrend(10, 1.5) bertukar naik | ADX < 20 + ATR% >= 4 | 7,901 | **47** | 5 / 5 | +1.53 | 24 | 48 / 46 / 48 |  |
+| `F2124` | CS20 | – | K01.046 RSI(4) < 25 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,362 | **46** | 5 / 5 | +1.35 | 23 | 46 / 46 / 45 |  |
+| `F2125` | CS20 | – | K18.016 jatuh >= 8% dalam 5 hari | RS >= 90 + ATR% >= 4 | 3,444 | **47** | 5 / 5 | +2.67 | 27 | 49 / 46 / 47 |  |
+| `F2126` | CS20 | – | K13.016 Stochastic(21) silang naik dari bawah 40 | tutup > MA20 + >= 30% di bawah puncak 52 minggu | 5,672 | **48** | 5 / 5 | +1.33 | 23 | 48 / 48 / 46 |  |
+| `F2127` | CS20 | – | K01.046 RSI(4) < 25 + atas MA200 | MA50 > MA200 + ATR% >= 4 | 8,169 | **46** | 5 / 5 | +1.60 | 24 | 46 / 47 / 45 |  |
+| `F2128` | CS20 | – | N43 Undur EMA8 + penapis MA50 | RS >= 90 + ATR% >= 4 | 3,803 | **45** | 4 / 6 | +1.30 | 24 | 45 / 44 / 48 |  |
+| `F2129` | CS20 | – | K09.019 MACD(3,10,16) silang naik | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,697 | **47** | 5 / 5 | +1.14 | 23 | 46 / 48 / 44 |  |
+| `F2130` | CS20 | – | K18.016 jatuh >= 8% dalam 5 hari | MA50 > MA200 + ATR% >= 4 | 11,961 | **47** | 5 / 5 | +1.85 | 24 | 48 / 47 / 48 |  |
+| `F2131` | CS20 | – | N08 tutup>EMA20 tidak terlalu jauh | RS >= 90 + ATR% >= 4 | 5,123 | **45** | 5 / 5 | +1.42 | 24 | 45 / 45 / 46 |  |
+| `F2132` | CS20 | industri 20% teratas (pulangan 63 sesi) | K13.003 Stochastic(5) silang naik dari bawah 30 | ATR% >= 4 | 5,482 | **48** | 5 / 5 | +2.25 | 24 | 47 / 48 / 50 |  |
+| `F2133` | CS20 | – | K21.006 NR7 + hari dalam | RS >= 90 + ATR% >= 4 | 3,528 | **45** | 5 / 5 | +1.92 | 25 | 45 / 45 / 47 |  |
+| `F2134` | CS20 | – | K18.008 jatuh >= 5% dalam 3 hari | MACD > 0 + RS >= 90 | 5,215 | **46** | 5 / 5 | +1.58 | 23 | 47 / 44 / 48 |  |
+| `F2135` | CS20 | – | K01.043 RSI(4) < 20 | RS >= 70 + ATR% >= 4 | 5,682 | **48** | 5 / 5 | +2.39 | 26 | 48 / 47 / 51 |  |
+| `F2136` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K01.011 RSI(2) < 20 | RS >= 70 + ATR% >= 4 | 3,588 | **48** | 5 / 5 | +1.81 | 25 | 45 / 50 / 44 |  |
+| `F2137` | CS20 | – | K02.007 RSI(5) silang atas 60 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,784 | **46** | 5 / 5 | +0.92 | 23 | 46 / 47 / 45 |  |
+| `F2138` | CS20 | hasil suku terkini tumbuh >= 20% | N09 Undur EMA10 + penapis EMA50 | MA50 > MA200 + MACD > isyarat | 3,728 | **45** | 4 / 6 | +0.43 | 17 | 47 / 43 / 40 |  |
+| `F2139` | CS20 | – | K02.006 RSI(5) silang atas 50 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,776 | **46** | 5 / 5 | +0.97 | 23 | 46 / 46 / 45 |  |
+| `F2140` | CS20 | – | K01.025 RSI(3) < 15 | RSI14 < 40 + ATR% >= 4 | 16,112 | **49** | 5 / 5 | +2.21 | 26 | 51 / 47 / 48 |  |
+| `F2141` | CS20 | – | K01.062 RSI(5) < 25 + atas MA200 | MACD > 0 + ATR% >= 4 | 4,175 | **46** | 5 / 5 | +1.65 | 24 | 45 / 47 / 47 |  |
+| `F2142` | CS20 | – | K18.009 jatuh >= 8% dalam 3 hari | MA50 > MA200 + RS >= 70 | 8,155 | **48** | 5 / 5 | +2.03 | 24 | 49 / 46 / 49 |  |
+| `F2143` | CS20 | industri 20% teratas (pulangan 63 sesi) | K06.004 3 tutup menurun berturut + atas MA200 | Supertrend naik + ATR% >= 4 | 3,015 | **49** | 5 / 5 | +2.38 | 24 | 45 / 51 / 50 |  |
+| `F2144` | CS20 | – | K01.028 RSI(3) < 20 + atas MA200 | MACD > 0 + ATR% >= 4 | 6,426 | **46** | 5 / 5 | +1.44 | 24 | 46 / 47 / 46 |  |
+| `F2145` | CS20 | – | K18.015 jatuh >= 5% dalam 5 hari | RS >= 90 + dalam 15% dari puncak 52 minggu | 4,264 | **48** | 5 / 5 | +1.44 | 21 | 49 / 46 / 51 |  |
+| `F2146` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K06.004 3 tutup menurun berturut + atas MA200 | MACD > 0 + ATR% >= 4 | 3,836 | **48** | 5 / 5 | +1.48 | 24 | 44 / 50 / 48 |  |
+| `F2147` | CS20 | industri 20% teratas (pulangan 63 sesi) | K06.004 3 tutup menurun berturut + atas MA200 | MACD > 0 + ATR% >= 4 | 3,438 | **48** | 5 / 5 | +2.22 | 24 | 46 / 49 / 49 |  |
+| `F2148` | CS20 | >= 60% saham industri di atas MA50 | K17.001 undur ke sma10 yang naik (tol 0.0%) | MA50 > MA200 + ATR% >= 4 | 4,075 | **46** | 5 / 5 | +1.87 | 24 | 43 / 47 / 47 |  |
+| `F2149` | CS20 | hasil suku terkini tumbuh >= 20% | M12 Parabolic SAR (ditala 2) | MA50 > MA200 + hari naik (tutup > buka) | 6,080 | **46** | 5 / 5 | +0.72 | 17 | 49 / 43 / 47 |  |
+| `F2150` | CS20 | – | K07.006 tutup silang atas ema10 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,613 | **46** | 5 / 5 | +0.92 | 23 | 46 / 46 / 45 |  |
+| `F2151` | CS20 | – | K18.009 jatuh >= 8% dalam 3 hari | RS >= 70 + ATR% >= 4 | 6,451 | **47** | 5 / 5 | +2.37 | 26 | 48 / 47 / 47 |  |
+| `F2152` | CS20 | >= 60% saham industri di atas MA50 | P48 EMA crossback | tutup > MA50 + RS >= 90 | 3,437 | **44** | 4 / 6 | +0.57 | 17 | 46 / 42 / 48 |  |
+| `F2153` | CS20 | – | K01.042 RSI(4) < 15 + atas MA200 | ATR% >= 4 | 4,517 | **47** | 5 / 5 | +1.61 | 23 | 49 / 47 / 44 |  |
+| `F2154` | CS20 | industri 20% teratas (pulangan 63 sesi) | K17.024 undur ke ema20 yang naik (tol 2.0%) + atas MA200 | MA20 > MA50 + ATR% >= 4 | 2,901 | **47** | 5 / 5 | +2.03 | 24 | 46 / 47 / 50 |  |
+| `F2155` | CS20 | – | M08 SMA20 + SMA200 (ditala 1) | MACD > 0 + RS >= 90 | 3,236 | **45** | 4 / 6 | +0.56 | 20 | 48 / 41 / 45 |  |
+| `F2156` | CS20 | – | K18.009 jatuh >= 8% dalam 3 hari | MACD > 0 + RS >= 70 | 5,524 | **47** | 5 / 5 | +1.51 | 23 | 47 / 46 / 49 |  |
+| `F2157` | CS20 | >= 60% saham industri di atas MA50 | K06.001 2 tutup menurun berturut | ADX < 20 + >= 30% di bawah puncak 52 minggu | 7,052 | **46** | 5 / 5 | +0.78 | 22 | 45 / 46 / 49 |  |
+| `F2158` | CS20 | – | K03.014 tutup < jalur bawah BB(15, 1.5) + RSI14 < 30 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,927 | **49** | 5 / 5 | +1.44 | 24 | 53 / 46 / 49 |  |
+| `F2159` | CS20 | hasil suku terkini tumbuh >= 20% | K09.010 MACD(6,19,6) silang naik | tutup > MA20 + MACD > isyarat | 6,656 | **46** | 5 / 5 | +0.59 | 17 | 48 / 44 / 45 |  |
+| `F2160` | CS20 | – | K03.030 tutup < jalur bawah BB(20, 2.0) + RSI14 < 40 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,340 | **46** | 5 / 5 | +0.88 | 22 | 47 / 46 / 47 |  |
+| `F2161` | CS20 | – | K07.013 tutup silang atas sma50 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 6,804 | **47** | 5 / 5 | +1.09 | 23 | 46 / 47 / 45 |  |
+| `F2162` | CS20 | industri 20% teratas (pulangan 63 sesi) | K02.020 RSI(10) silang atas 50 | MACD > 0 + RS >= 90 | 2,519 | **45** | 5 / 5 | +0.64 | 19 | 46 / 43 / 49 |  |
+| `F2163` | CS20 | – | K02.020 RSI(10) silang atas 50 | MACD > 0 + RS >= 90 | 6,156 | **46** | 5 / 5 | +0.68 | 19 | 47 / 44 / 48 |  |
+| `F2164` | CS20 | >= 60% saham sektor di atas MA50 | K01.011 RSI(2) < 20 | MA50 naik (lawan 20 bar lalu) + RS >= 90 | 5,033 | **46** | 5 / 5 | +1.13 | 18 | 46 / 43 / 51 |  |
+| `F2165` | CS20 | hasil suku terkini tumbuh >= 20% | K19.011 pecah atas Keltner(30, 1.0) | MA50 naik (lawan 20 bar lalu) + MACD > isyarat | 4,646 | **46** | 5 / 5 | +0.49 | 17 | 48 / 43 / 44 |  |
+| `F2166` | CS20 | – | N41 CMF20>0 + tutup>EMA20 | MACD > 0 + RS >= 90 | 7,281 | **45** | 5 / 5 | +0.62 | 18 | 46 / 44 / 45 |  |
+| `F2167` | CS20 | – | K01.003 RSI(2) < 5 | >= 30% di bawah puncak 52 minggu + volum hari isyarat >= 1.5x purata 50 | 6,539 | **47** | 5 / 5 | +1.63 | 24 | 49 / 46 / 48 |  |
+| `F2168` | CS20 | hasil suku terkini tumbuh >= 20% | M35 Pocket Pivot Morales & Kacher | MA50 > MA200 + RS >= 70 | 4,148 | **45** | 5 / 5 | +0.33 | 16 | 48 / 42 / 44 |  |
+| `F2169` | CS20 | – | K01.071 RSI(7) < 30 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 9,400 | **46** | 5 / 5 | +1.20 | 23 | 47 / 45 / 46 |  |
+| `F2170` | CS20 | – | K02.013 RSI(7) silang atas 50 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,267 | **46** | 5 / 5 | +0.92 | 23 | 46 / 46 / 46 |  |
+| `F2171` | CS20 | hasil suku terkini tumbuh >= 20% | K09.010 MACD(6,19,6) silang naik | tutup > MA50 + MACD > isyarat | 5,574 | **45** | 4 / 6 | +0.28 | 16 | 48 / 42 / 44 |  |
+| `F2172` | CS20 | – | K07.011 tutup silang atas sma30 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 7,653 | **46** | 5 / 5 | +0.83 | 23 | 46 / 47 / 45 |  |
+| `F2173` | CS20 | >= 60% saham industri di atas MA50 | K07.002 tutup silang atas ema5 | RS >= 90 + squeeze hidup | 2,902 | **45** | 5 / 5 | +0.63 | 18 | 46 / 43 / 47 |  |
+| `F2174` | CS20 | – | K01.063 RSI(5) < 30 | RS >= 70 + ATR% >= 4 | 7,156 | **47** | 5 / 5 | +1.81 | 25 | 48 / 46 / 49 |  |
+| `F2175` | CS20 | hasil suku terkini tumbuh >= 20% | K09.019 MACD(3,10,16) silang naik | tutup > MA20 + MACD > isyarat | 7,137 | **46** | 5 / 5 | +0.68 | 17 | 48 / 45 / 45 |  |
+| `F2176` | CS20 | – | K01.047 RSI(4) < 30 | templat trend Minervini + RS >= 90 | 4,420 | **47** | 5 / 5 | +0.98 | 19 | 49 / 44 / 47 |  |
+| `F2177` | CS20 | – | K07.007 tutup silang atas sma15 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,503 | **46** | 5 / 5 | +0.96 | 23 | 46 / 46 / 47 |  |
+| `F2178` | CS20 | – | K18.008 jatuh >= 5% dalam 3 hari | RS >= 90 + dalam 15% dari puncak 52 minggu | 4,165 | **47** | 5 / 5 | +1.29 | 22 | 48 / 45 / 48 |  |
+| `F2179` | CS20 | – | K18.009 jatuh >= 8% dalam 3 hari | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 7,103 | **46** | 5 / 5 | +1.37 | 22 | 48 / 45 / 49 |  |
+| `F2180` | CS20 | – | K18.016 jatuh >= 8% dalam 5 hari | tutup > MA200 + ATR% >= 4 | 8,235 | **46** | 5 / 5 | +1.79 | 24 | 46 / 47 / 45 |  |
+| `F2181` | CS20 | hasil suku terkini tumbuh >= 20% | K24.005 bar pembalikan (buka <= 20%, tutup >= 80% julat) | tutup > MA50 + ADX < 20 | 6,649 | **46** | 5 / 5 | +0.70 | 18 | 49 / 44 / 49 |  |
+| `F2182` | CS20 | – | M08 SMA20 + SMA200 (ditala 1) | templat trend Minervini + RS >= 90 | 2,805 | **45** | 4 / 6 | +0.67 | 20 | 47 / 41 / 46 |  |
+| `F2183` | CS20 | – | K08.002 ema3 silang atas ema10 | RS >= 90 + ATR% >= 4 | 4,092 | **44** | 4 / 6 | +1.38 | 24 | 44 / 44 / 46 |  |
+| `F2184` | CS20 | hasil suku terkini tumbuh >= 20% | K07.005 tutup silang atas sma10 | MA50 naik (lawan 20 bar lalu) + MACD > isyarat | 3,858 | **46** | 5 / 5 | +0.52 | 17 | 49 / 42 / 47 |  |
+| `F2185` | CS20 | – | K01.026 RSI(3) < 15 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 6,382 | **47** | 5 / 5 | +1.82 | 24 | 46 / 48 / 46 |  |
+| `F2186` | CS20 | hasil suku terkini tumbuh >= 20% | M106 DMI Wilder (ditala 2) | tutup > MA20 + MA50 naik (lawan 20 bar lalu) | 5,429 | **47** | 5 / 5 | +0.55 | 17 | 49 / 45 / 46 |  |
+| `F2187` | CS20 | – | M35 Pocket Pivot Morales & Kacher | MACD > 0 + ATR% >= 4 | 4,490 | **45** | 4 / 6 | +1.02 | 23 | 42 / 46 / 47 |  |
+| `F2188` | CS20 | – | K08.002 ema3 silang atas ema10 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,021 | **47** | 5 / 5 | +1.03 | 23 | 46 / 47 / 46 |  |
+| `F2189` | CS20 | hasil suku terkini tumbuh >= 20% | P40 pocket pivot | hari naik (tutup > buka) | 7,638 | **46** | 5 / 5 | +0.43 | 16 | 49 / 43 / 46 |  |
+| `F2190` | CS20 | – | K02.027 RSI(14) silang atas 50 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,475 | **46** | 5 / 5 | +0.82 | 23 | 46 / 46 / 45 |  |
+| `F2191` | CS20 | – | K17.008 undur ke ema10 yang naik (tol 1.0%) + atas MA200 | RS >= 90 + ATR% >= 4 | 3,988 | **45** | 4 / 6 | +1.11 | 24 | 45 / 44 / 48 |  |
+| `F2192` | CS20 | – | K01.041 RSI(4) < 15 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 7,576 | **48** | 5 / 5 | +1.71 | 24 | 50 / 45 / 49 |  |
+| `F2193` | CS20 | – | K03.001 tutup < jalur bawah BB(10, 1.5) | RS >= 90 + ATR% >= 4 | 3,693 | **46** | 5 / 5 | +1.84 | 25 | 47 / 45 / 45 |  |
+| `F2194` | CS20 | – | K18.008 jatuh >= 5% dalam 3 hari | RS >= 70 + ATR% >= 4 | 9,044 | **47** | 5 / 5 | +2.15 | 25 | 47 / 48 / 48 |  |
+| `F2195` | CS20 | – | K07.008 tutup silang atas ema15 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,080 | **46** | 5 / 5 | +0.82 | 23 | 46 / 45 / 45 |  |
+| `F2196` | CS20 | – | K06.006 4 tutup menurun berturut + atas MA200 | MACD > 0 + ATR% >= 4 | 6,762 | **47** | 5 / 5 | +1.64 | 23 | 45 / 48 / 45 |  |
+| `F2197` | CS20 | – | K07.002 tutup silang atas ema5 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 10,731 | **46** | 5 / 5 | +0.94 | 23 | 46 / 46 / 44 |  |
+| `F2198` | CS20 | – | K01.015 RSI(2) < 30 | templat trend Minervini + ATR% >= 4 | 5,159 | **46** | 5 / 5 | +1.56 | 24 | 44 / 48 / 44 |  |
+| `F2199` | CS20 | – | K07.012 tutup silang atas ema30 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,316 | **46** | 5 / 5 | +0.85 | 23 | 46 / 47 / 46 |  |
+| `F2200` | CS20 | – | K01.009 RSI(2) < 15 | templat trend Minervini + RS >= 90 | 5,533 | **47** | 5 / 5 | +1.05 | 19 | 49 / 44 / 48 |  |
+| `F2201` | CS20 | hasil suku terkini tumbuh >= 20% | M106 DMI Wilder (ditala 2) | MACD > isyarat + ADX < 20 | 5,775 | **47** | 5 / 5 | +0.93 | 18 | 49 / 45 / 48 |  |
+| `F2202` | CS20 | hasil suku terkini tumbuh >= 20% | P40 pocket pivot | MA50 naik (lawan 20 bar lalu) + hari naik (tutup > buka) | 5,779 | **46** | 5 / 5 | +0.30 | 15 | 49 / 42 / 44 |  |
+| `F2203` | CS20 | – | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) (ditala 2) | RS >= 70 + ATR% >= 4 | 4,040 | **47** | 5 / 5 | +1.75 | 24 | 47 / 46 / 49 |  |
+| `F2204` | CS20 | – | K07.010 tutup silang atas ema20 | MACD > 0 + RS >= 90 | 5,989 | **46** | 5 / 5 | +0.70 | 19 | 47 / 44 / 47 |  |
+| `F2205` | CS20 | industri 20% teratas (pulangan 21 sesi) | N43 Undur EMA8 + penapis MA50 | tutup > MA20 + RS >= 90 | 3,129 | **45** | 5 / 5 | +0.87 | 18 | 46 / 43 / 50 |  |
+| `F2206` | CS20 | – | K01.074 RSI(7) < 35 + atas MA200 | MACD > 0 + ATR% >= 4 | 5,300 | **46** | 5 / 5 | +1.68 | 24 | 45 / 47 / 46 |  |
+| `F2207` | CS20 | – | M161 EMA 10/21 + Supertrend (10,3) (ditala 1) | RS >= 90 + ATR% >= 4 | 3,273 | **45** | 5 / 5 | +1.22 | 24 | 45 / 45 / 48 |  |
+| `F2208` | CS20 | >= 60% saham industri di atas MA50 | N08 tutup>EMA20 tidak terlalu jauh | RS >= 90 + ATR% >= 4 | 3,031 | **45** | 4 / 6 | +1.78 | 24 | 44 / 44 / 49 |  |
+| `F2209` | CS20 | – | K24.007 bar pembalikan (buka <= 30%, tutup >= 70% julat) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 10,601 | **46** | 5 / 5 | +0.91 | 23 | 47 / 46 / 45 |  |
+| `F2210` | CS20 | – | K16.001 gap-and-go (buka > tinggi semalam + 0.0%) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 6,725 | **48** | 5 / 5 | +1.29 | 23 | 47 / 49 / 43 |  |
+| `F2211` | CS20 | – | K01.027 RSI(3) < 20 | MACD > 0 + RS >= 90 | 5,584 | **47** | 5 / 5 | +1.15 | 21 | 50 / 43 / 49 |  |
+| `F2212` | CS20 | industri 20% teratas (pulangan 63 sesi) | K01.010 RSI(2) < 15 + atas MA200 | ATR% >= 4 | 3,297 | **47** | 5 / 5 | +1.96 | 24 | 46 / 48 / 48 |  |
+| `F2213` | CS20 | – | K03.057 tutup < jalur bawah BB(50, 2.5) + RSI14 < 40 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 5,184 | **47** | 5 / 5 | +0.82 | 23 | 48 / 45 / 49 |  |
+| `F2214` | CS20 | >= 60% saham sektor di atas MA50 | K01.015 RSI(2) < 30 | tutup > MA200 + RS >= 90 | 6,440 | **45** | 5 / 5 | +0.91 | 18 | 45 / 44 / 53 |  |
+| `F2215` | CS20 | – | K03.039 tutup < jalur bawah BB(30, 1.5) + RSI14 < 40 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,979 | **46** | 5 / 5 | +1.22 | 22 | 47 / 46 / 47 |  |
+| `F2216` | CS20 | – | K17.034 undur ke sma50 yang naik (tol 2.0%) + atas MA200 | MACD > 0 + ATR% >= 4 | 4,545 | **45** | 5 / 5 | +0.82 | 23 | 45 / 46 / 45 |  |
+| `F2217` | CS20 | – | K03.037 tutup < jalur bawah BB(30, 1.5) | tutup > MA200 + ATR% >= 4 | 5,827 | **47** | 5 / 5 | +1.76 | 24 | 47 / 47 / 48 |  |
+| `F2218` | CS20 | – | M39 Radge Pecahan Bollinger 100 hari (ditala 1) | RS >= 90 + ATR% >= 4 | 2,812 | **45** | 5 / 5 | +1.13 | 24 | 46 / 43 / 49 |  |
+| `F2219` | CS20 | – | M153 Range Leader | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,699 | **47** | 5 / 5 | +1.10 | 23 | 46 / 47 / 45 |  |
+| `F2220` | CS20 | >= 60% saham sektor di atas MA50 | K07.002 tutup silang atas ema5 | RS >= 90 + tutup dalam 25% teratas julat hari | 5,610 | **44** | 4 / 6 | +0.78 | 18 | 44 / 43 / 50 |  |
+| `F2221` | CS20 | – | K17.023 undur ke ema20 yang naik (tol 2.0%) | RS >= 90 + ATR% >= 4 | 3,577 | **45** | 4 / 6 | +1.14 | 23 | 46 / 44 / 46 |  |
+| `F2222` | CS20 | hasil suku terkini tumbuh >= 20% | K07.004 tutup silang atas ema8 | MA50 naik (lawan 20 bar lalu) + MACD > isyarat | 4,555 | **46** | 5 / 5 | +0.56 | 16 | 49 / 42 / 46 |  |
+| `F2223` | CS20 | – | K02.020 RSI(10) silang atas 50 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,875 | **46** | 5 / 5 | +0.87 | 23 | 45 / 46 / 46 |  |
+| `F2224` | CS20 | – | K03.016 tutup < jalur bawah BB(15, 2.0) | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 8,783 | **46** | 5 / 5 | +1.22 | 23 | 47 / 46 / 46 |  |
+| `F2225` | CS20 | – | K01.043 RSI(4) < 20 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 9,373 | **47** | 5 / 5 | +1.48 | 24 | 50 / 46 / 47 |  |
+| `F2226` | CS20 | industri 20% teratas (pulangan 21 sesi) | N09 Undur EMA10 + penapis EMA50 | tutup > MA20 + RS >= 90 | 3,110 | **45** | 4 / 6 | +0.70 | 18 | 46 / 43 / 51 |  |
+| `F2227` | CS20 | – | K01.005 RSI(2) < 8 | RSI14 < 40 + ATR% >= 4 | 16,034 | **50** | 5 / 5 | +2.27 | 26 | 52 / 48 / 50 |  |
+| `F2228` | CS20 | – | K01.023 RSI(3) < 10 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 7,370 | **48** | 5 / 5 | +1.81 | 24 | 50 / 46 / 50 |  |
+| `F2229` | CS20 | – | K01.045 RSI(4) < 25 | RS >= 70 + ATR% >= 4 | 7,099 | **47** | 5 / 5 | +1.88 | 25 | 48 / 47 / 48 |  |
+| `F2230` | CS20 | hasil suku terkini tumbuh >= 20% | K09.019 MACD(3,10,16) silang naik | MACD > isyarat + MACD > 0 | 5,676 | **45** | 5 / 5 | +0.30 | 16 | 47 / 43 / 45 |  |
+| `F2231` | CS20 | – | K03.018 tutup < jalur bawah BB(15, 2.0) + RSI14 < 40 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,126 | **46** | 5 / 5 | +0.97 | 22 | 47 / 46 / 45 |  |
+| `F2232` | CS20 | – | K03.017 tutup < jalur bawah BB(15, 2.0) + RSI14 < 30 | volum 10 hari > volum 50 hari + ATR% >= 4 | 5,567 | **48** | 5 / 5 | +1.06 | 24 | 52 / 45 / 50 |  |
+| `F2233` | CS20 | – | K11.001 Supertrend(7, 1.5) bertukar naik | ADX < 20 + ATR% >= 4 | 7,940 | **47** | 5 / 5 | +1.53 | 24 | 48 / 47 / 49 |  |
+| `F2234` | CS20 | – | K01.007 RSI(2) < 10 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 10,327 | **47** | 5 / 5 | +1.43 | 24 | 49 / 46 / 47 |  |
+| `F2235` | CS20 | – | K01.073 RSI(7) < 35 | RS >= 70 + ATR% >= 4 | 6,785 | **48** | 5 / 5 | +2.06 | 26 | 48 / 47 / 51 |  |
+| `F2236` | CS20 | – | K01.064 RSI(5) < 30 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,428 | **46** | 5 / 5 | +1.41 | 23 | 46 / 46 / 46 |  |
+| `F2237` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K01.073 RSI(7) < 35 | ATR% >= 4 | 5,563 | **46** | 5 / 5 | +1.01 | 24 | 43 / 49 / 42 |  |
+| `F2238` | CS20 | – | M18 EMA9/21 Pullback (ditala 2) | MA50 > MA200 + ATR% >= 4 | 4,781 | **45** | 5 / 5 | +1.35 | 23 | 46 / 45 / 46 |  |
+| `F2239` | CS20 | >= 60% saham sektor di atas MA50 | K07.007 tutup silang atas sma15 | RS >= 90 + dalam 15% dari puncak 52 minggu | 4,160 | **44** | 4 / 6 | +0.50 | 17 | 44 / 44 / 50 |  |
+| `F2240` | CS20 | hasil suku terkini tumbuh >= 20% | K24.004 bar pembalikan (buka <= 20%, tutup >= 70% julat) | tutup > MA50 + ADX < 20 | 7,416 | **46** | 5 / 5 | +0.66 | 18 | 49 / 43 / 50 |  |
+| `F2241` | CS20 | – | K01.005 RSI(2) < 8 | MA50 > MA200 + ATR% >= 4 | 11,864 | **47** | 5 / 5 | +1.79 | 24 | 49 / 46 / 48 |  |
+| `F2242` | CS20 | – | K24.004 bar pembalikan (buka <= 20%, tutup >= 70% julat) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,452 | **46** | 5 / 5 | +0.85 | 23 | 47 / 46 / 44 |  |
+| `F2243` | CS20 | – | K01.047 RSI(4) < 30 | RS >= 70 + ATR% >= 4 | 8,157 | **47** | 5 / 5 | +1.89 | 25 | 48 / 47 / 49 |  |
+| `F2244` | CS20 | – | K03.030 tutup < jalur bawah BB(20, 2.0) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 8,306 | **48** | 5 / 5 | +1.60 | 24 | 48 / 47 / 48 |  |
+| `F2245` | CS20 | – | K01.005 RSI(2) < 8 | volum 10 hari > volum 50 hari + ATR% >= 4 | 14,214 | **48** | 5 / 5 | +1.81 | 24 | 51 / 47 / 47 |  |
+| `F2246` | CS20 | >= 60% saham sektor di atas MA50 | K07.006 tutup silang atas ema10 | RS >= 90 + dalam 15% dari puncak 52 minggu | 4,846 | **45** | 4 / 6 | +0.62 | 17 | 45 / 43 / 49 |  |
+| `F2247` | CS20 | >= 60% saham industri di atas MA50 | K17.008 undur ke ema10 yang naik (tol 1.0%) + atas MA200 | RS >= 90 + ATR% >= 4 | 2,655 | **45** | 4 / 6 | +1.53 | 24 | 44 / 44 / 49 |  |
+| `F2248` | CS20 | – | K01.003 RSI(2) < 5 | MA50 > MA200 + ATR% >= 4 | 9,623 | **47** | 5 / 5 | +1.73 | 24 | 48 / 47 / 47 |  |
+| `F2249` | CS20 | hasil suku terkini tumbuh >= 20% | M12 Parabolic SAR (ditala 2) | templat trend Minervini + hari naik (tutup > buka) | 4,240 | **46** | 5 / 5 | +0.66 | 17 | 49 / 43 / 44 |  |
+| `F2250` | CS20 | hasil suku terkini tumbuh >= 20% | P40 pocket pivot | MACD > 0 + hari naik (tutup > buka) | 6,838 | **47** | 5 / 5 | +0.49 | 16 | 50 / 44 / 46 |  |
+| `F2251` | CS20 | hasil suku terkini tumbuh >= 20% | K24.007 bar pembalikan (buka <= 30%, tutup >= 70% julat) | tutup > MA50 + ADX < 20 | 8,114 | **46** | 5 / 5 | +0.67 | 18 | 48 / 44 / 50 |  |
+| `F2252` | CS20 | – | K03.043 tutup < jalur bawah BB(30, 2.5) | RSI14 < 40 + ATR% >= 4 | 9,003 | **48** | 5 / 5 | +1.48 | 25 | 51 / 45 / 51 |  |
+| `F2253` | CS20 | – | K01.025 RSI(3) < 15 | RS >= 70 + ATR% >= 4 | 6,133 | **48** | 5 / 5 | +2.40 | 26 | 49 / 47 / 49 |  |
+| `F2254` | CS20 | – | K05.001 tutup silang atas jalur atas BB(10, 1.5) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 7,335 | **45** | 5 / 5 | +0.67 | 22 | 45 / 46 / 45 |  |
+| `F2255` | CS20 | – | K07.004 tutup silang atas ema8 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,963 | **46** | 5 / 5 | +0.93 | 23 | 47 / 46 / 45 |  |
+| `F2256` | CS20 | – | N09 Undur EMA10 + penapis EMA50 | RS >= 90 + ATR% >= 4 | 4,081 | **45** | 4 / 6 | +1.21 | 24 | 45 / 44 / 47 |  |
+| `F2257` | CS20 | >= 60% saham sektor di atas MA50 | K07.006 tutup silang atas ema10 | RS >= 90 + tutup dalam 25% teratas julat hari | 4,465 | **44** | 4 / 6 | +0.59 | 18 | 44 / 42 / 48 |  |
+| `F2258` | CS20 | – | K03.004 tutup < jalur bawah BB(10, 2.0) | RS >= 70 + ATR% >= 4 | 5,160 | **48** | 5 / 5 | +1.76 | 25 | 48 / 47 / 50 |  |
+| `F2259` | CS20 | hasil suku terkini tumbuh >= 20% | K09.021 MACD(3,10,16) silang naik atas sifar | MA50 > MA200 + MACD > isyarat | 4,375 | **45** | 5 / 5 | +0.41 | 16 | 47 / 45 / 43 |  |
+| `F2260` | CS20 | >= 60% saham industri di atas MA50 | M20 EMA10/15 Crossover + Sudut | RS >= 90 + squeeze hidup | 2,364 | **46** | 5 / 5 | +0.81 | 19 | 46 / 44 / 53 |  |
+| `F2261` | CS20 | industri 20% teratas (pulangan 63 sesi) | M14 Walking with the Whales | MA50 > MA200 + ATR% >= 4 | 3,840 | **47** | 5 / 5 | +2.25 | 24 | 44 / 48 / 50 |  |
+| `F2262` | CS20 | hasil suku terkini tumbuh >= 20% | K06.005 4 tutup menurun berturut | MA50 naik (lawan 20 bar lalu) + MACD > 0 | 6,663 | **46** | 5 / 5 | +0.66 | 17 | 48 / 43 / 50 |  |
+| `F2263` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 1) | tutup > MA50 + hari naik (tutup > buka) | 9,499 | **46** | 5 / 5 | +0.54 | 18 | 48 / 44 / 48 |  |
+| `F2264` | CS20 | hasil suku terkini tumbuh >= 20% | K09.021 MACD(3,10,16) silang naik atas sifar | MACD > 0 | 8,291 | **46** | 5 / 5 | +0.49 | 17 | 49 / 43 / 47 |  |
+| `F2265` | CS20 | hasil suku terkini tumbuh >= 20% | K09.010 MACD(6,19,6) silang naik | MACD > isyarat + hari naik (tutup > buka) | 6,959 | **46** | 5 / 5 | +0.57 | 18 | 49 / 44 / 45 |  |
+| `F2266` | CS20 | hasil suku terkini tumbuh >= 20% | K16.001 gap-and-go (buka > tinggi semalam + 0.0%) | tutup > MA20 + ADX < 20 | 6,494 | **47** | 5 / 5 | +0.79 | 18 | 49 / 44 / 46 |  |
+| `F2267` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K01.047 RSI(4) < 30 | ATR% >= 4 | 6,741 | **46** | 5 / 5 | +1.24 | 24 | 45 / 48 / 43 |  |
+| `F2268` | CS20 | hasil suku terkini tumbuh >= 20% | K24.005 bar pembalikan (buka <= 20%, tutup >= 80% julat) | RSI14 > 50 + ADX < 20 | 7,212 | **46** | 5 / 5 | +0.66 | 18 | 48 / 44 / 48 |  |
+| `F2269` | CS20 | >= 60% saham industri di atas MA50 | K07.008 tutup silang atas ema15 | RS >= 90 + squeeze hidup | 2,368 | **45** | 5 / 5 | +0.74 | 19 | 46 / 43 / 51 |  |
+| `F2270` | CS20 | >= 60% saham sektor di atas MA50 | K17.019 undur ke ema20 yang naik (tol 1.0%) | MACD > 0 + RS >= 90 | 4,879 | **45** | 5 / 5 | +0.67 | 18 | 45 / 44 / 50 |  |
+| `F2271` | CS20 | >= 60% saham industri di atas MA50 | K13.004 Stochastic(5) silang naik dari bawah 40 | RS >= 90 + hari naik (tutup > buka) | 4,882 | **44** | 4 / 6 | +0.71 | 18 | 45 / 42 / 48 |  |
+| `F2272` | CS20 | – | M159 Heikin-Ashi Trend | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,502 | **46** | 5 / 5 | +0.99 | 23 | 46 / 46 / 47 |  |
+| `F2273` | CS20 | – | K01.026 RSI(3) < 15 + atas MA200 | MACD > 0 + ATR% >= 4 | 4,872 | **46** | 5 / 5 | +1.68 | 24 | 45 / 47 / 45 |  |
+| `F2274` | CS20 | – | K17.003 undur ke ema10 yang naik (tol 0.0%) | MA50 > MA200 + ATR% >= 4 | 6,792 | **45** | 5 / 5 | +1.35 | 23 | 44 / 46 / 46 |  |
+| `F2275` | CS20 | – | K03.001 tutup < jalur bawah BB(10, 1.5) | MACD > 0 + RS >= 90 | 5,879 | **47** | 5 / 5 | +1.09 | 20 | 49 / 44 / 47 |  |
+| `F2276` | CS20 | hasil suku terkini tumbuh >= 20% | K01.063 RSI(5) < 30 | tutup > MA200 | 7,283 | **47** | 5 / 5 | +1.05 | 18 | 50 / 44 / 45 |  |
+| `F2277` | CS20 | >= 60% saham sektor di atas MA50 | M161 EMA 10/21 + Supertrend (10,3) (ditala 1) | RS >= 90 + tutup dalam 25% teratas julat hari | 4,702 | **45** | 4 / 6 | +0.68 | 17 | 46 / 42 / 50 |  |
+| `F2278` | CS20 | – | M149 3-Step Pullback (ditala 2) | RS >= 70 + ATR% >= 4 | 3,820 | **46** | 5 / 5 | +1.74 | 23 | 43 / 47 / 47 |  |
+| `F2279` | CS20 | hasil suku terkini tumbuh >= 20% | K05.001 tutup silang atas jalur atas BB(10, 1.5) | MACD > isyarat + ADX < 20 | 7,479 | **46** | 5 / 5 | +0.75 | 18 | 48 / 44 / 47 |  |
+| `F2280` | CS20 | – | K13.003 Stochastic(5) silang naik dari bawah 30 | RS >= 70 + ATR% >= 4 | 9,161 | **47** | 5 / 5 | +2.24 | 25 | 46 / 48 / 48 |  |
+| `F2281` | CS20 | – | K01.048 RSI(4) < 30 + atas MA200 | tutup > MA50 + ATR% >= 4 | 5,060 | **46** | 5 / 5 | +1.56 | 24 | 46 / 47 / 44 |  |
+| `F2282` | CS20 | – | K18.024 jatuh >= 10% dalam 10 hari | MA50 > MA200 + MACD > 0 | 5,750 | **45** | 4 / 6 | +0.86 | 21 | 44 / 46 / 43 |  |
+| `F2283` | CS20 | hasil suku terkini tumbuh >= 20% | K07.012 tutup silang atas ema30 | tutup > MA20 + MA50 naik (lawan 20 bar lalu) | 4,758 | **47** | 5 / 5 | +0.75 | 18 | 49 / 45 / 47 |  |
+| `F2284` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line | tutup > MA50 + hari naik (tutup > buka) | 8,081 | **46** | 5 / 5 | +0.60 | 18 | 48 / 44 / 49 |  |
+| `F2285` | CS20 | – | K01.005 RSI(2) < 8 | >= 30% di bawah puncak 52 minggu + volum hari isyarat >= 1.5x purata 50 | 7,845 | **48** | 5 / 5 | +1.76 | 24 | 49 / 47 / 47 |  |
+| `F2286` | CS20 | – | K01.007 RSI(2) < 10 | MA50 > MA200 + ATR% >= 4 | 12,771 | **47** | 5 / 5 | +1.56 | 23 | 48 / 46 / 46 |  |
+| `F2287` | CS20 | >= 60% saham sektor di atas MA50 | K17.019 undur ke ema20 yang naik (tol 1.0%) | tutup > MA20 + RS >= 90 | 4,346 | **45** | 4 / 6 | +0.59 | 17 | 45 / 44 / 49 |  |
+| `F2288` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 1) | MA50 > MA200 + MACD > 0 | 5,762 | **46** | 5 / 5 | +0.75 | 17 | 48 / 44 / 47 |  |
+| `F2289` | CS20 | hasil suku terkini tumbuh >= 20% | K05.001 tutup silang atas jalur atas BB(10, 1.5) | ADX < 20 + hari naik (tutup > buka) | 8,262 | **46** | 5 / 5 | +0.74 | 18 | 49 / 43 / 49 |  |
+| `F2290` | CS20 | – | K01.006 RSI(2) < 8 + atas MA200 | tutup > MA50 + RS >= 90 | 4,244 | **48** | 5 / 5 | +1.11 | 20 | 50 / 44 / 47 |  |
+| `F2291` | CS20 | hasil suku terkini tumbuh >= 20% | K07.012 tutup silang atas ema30 | MA50 naik (lawan 20 bar lalu) + RSI14 > 50 | 6,914 | **46** | 5 / 5 | +0.53 | 17 | 49 / 43 / 46 |  |
+| `F2292` | CS20 | – | K03.004 tutup < jalur bawah BB(10, 2.0) | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 9,015 | **47** | 5 / 5 | +1.08 | 23 | 47 / 46 / 47 |  |
+| `F2293` | CS20 | – | K01.059 RSI(5) < 20 | volum 10 hari > volum 50 hari + ATR% >= 4 | 10,083 | **48** | 5 / 5 | +1.45 | 24 | 50 / 47 / 45 |  |
+| `F2294` | CS20 | >= 60% saham sektor di atas MA50 | K07.002 tutup silang atas ema5 | MA50 > MA200 + RS >= 90 | 7,032 | **44** | 4 / 6 | +0.76 | 18 | 44 / 43 / 50 |  |
+| `F2295` | CS20 | hasil suku terkini tumbuh >= 20% | K07.012 tutup silang atas ema30 | templat trend Minervini + RSI14 > 50 | 4,279 | **47** | 5 / 5 | +0.81 | 18 | 49 / 45 / 49 |  |
+| `F2296` | CS20 | – | K21.009 NR14 | RS >= 90 + ATR% >= 4 | 4,167 | **44** | 4 / 6 | +1.41 | 24 | 45 / 43 / 47 |  |
+| `F2297` | CS20 | hasil suku terkini tumbuh >= 20% | N45 Undur EMA21 cerun positif | tutup > MA50 + MA50 > MA200 | 7,277 | **46** | 5 / 5 | +0.81 | 17 | 48 / 45 / 48 |  |
+| `F2298` | CS20 | – | K02.004 RSI(5) silang atas 35 | templat trend Minervini + RS >= 90 | 4,863 | **45** | 4 / 6 | +0.60 | 19 | 46 / 43 / 49 |  |
+| `F2299` | CS20 | – | K01.025 RSI(3) < 15 | ATR% >= 4 | 20,757 | **48** | 5 / 5 | +2.08 | 25 | 50 / 47 / 48 |  |
+| `F2300` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 1) | tutup > MA20 + ADX < 20 | 7,285 | **47** | 5 / 5 | +0.85 | 19 | 48 / 44 / 51 |  |
+| `F2301` | CS20 | – | K07.001 tutup silang atas sma5 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 10,957 | **46** | 5 / 5 | +0.93 | 22 | 46 / 46 / 45 |  |
+| `F2302` | CS20 | hasil suku terkini tumbuh >= 20% | N45 Undur EMA21 cerun positif | RS >= 70 | 5,712 | **46** | 5 / 5 | +0.85 | 19 | 47 / 44 / 51 |  |
+| `F2303` | CS20 | – | K03.016 tutup < jalur bawah BB(15, 2.0) | MA50 > MA200 + ATR% >= 4 | 9,504 | **47** | 5 / 5 | +1.47 | 24 | 48 / 45 / 47 |  |
+| `F2304` | CS20 | hasil suku terkini tumbuh >= 20% | N29 PSAR naik + tutup>MA50 | MA50 > MA200 + MACD > isyarat | 5,458 | **46** | 5 / 5 | +0.74 | 17 | 46 / 45 / 46 |  |
+| `F2305` | CS20 | – | K18.008 jatuh >= 5% dalam 3 hari | MA50 naik (lawan 20 bar lalu) + RS >= 90 | 5,829 | **45** | 5 / 5 | +1.30 | 22 | 47 / 43 / 48 |  |
+| `F2306` | CS20 | hasil suku terkini tumbuh >= 20% | K15.001 gap >= 2.0% | tutup > MA20 + hari naik (tutup > buka) | 4,945 | **45** | 5 / 5 | +0.62 | 20 | 48 / 43 / 47 |  |
+| `F2307` | CS20 | hasil suku terkini tumbuh >= 20% | M12 Parabolic SAR (ditala 2) | MA50 > MA200 + dalam 15% dari puncak 52 minggu | 6,078 | **46** | 5 / 5 | +0.63 | 16 | 49 / 43 / 45 |  |
+| `F2308` | CS20 | – | K01.025 RSI(3) < 15 | volum 10 hari > volum 50 hari + ATR% >= 4 | 12,867 | **48** | 5 / 5 | +1.55 | 24 | 50 / 47 / 45 |  |
+| `F2309` | CS20 | – | K01.043 RSI(4) < 20 | ATR% >= 4 | 19,990 | **49** | 5 / 5 | +2.14 | 26 | 51 / 47 / 49 |  |
+| `F2310` | CS20 | – | K01.007 RSI(2) < 10 | RSI14 < 40 + ATR% >= 4 | 16,544 | **49** | 5 / 5 | +2.20 | 26 | 51 / 48 / 49 |  |
+| `F2311` | CS20 | – | M13 Garis Trend Action/Safety Line | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,449 | **46** | 5 / 5 | +0.84 | 23 | 46 / 46 / 45 |  |
+| `F2312` | CS20 | – | K03.040 tutup < jalur bawah BB(30, 2.0) | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 6,715 | **46** | 5 / 5 | +0.92 | 22 | 47 / 45 / 47 |  |
+| `F2313` | CS20 | hasil suku terkini tumbuh >= 20% | N29 PSAR naik + tutup>MA50 | templat trend Minervini + hari naik (tutup > buka) | 5,608 | **46** | 5 / 5 | +0.60 | 17 | 49 / 44 / 44 |  |
+| `F2314` | CS20 | hasil suku terkini tumbuh >= 20% | K17.026 undur ke sma50 yang naik (tol 0.0%) + atas MA200 | hari naik (tutup > buka) | 4,501 | **47** | 5 / 5 | +0.95 | 19 | 50 / 45 / 45 |  |
+| `F2315` | CS20 | >= 60% saham sektor di atas MA50 | K13.004 Stochastic(5) silang naik dari bawah 40 | RS >= 90 + hari naik (tutup > buka) | 4,574 | **44** | 4 / 6 | +0.71 | 18 | 44 / 42 / 51 |  |
+| `F2316` | CS20 | hasil suku terkini tumbuh >= 20% | M14 Walking with the Whales | MA50 > MA200 + ADX < 20 | 5,478 | **46** | 5 / 5 | +0.94 | 17 | 47 / 46 / 47 |  |
+| `F2317` | CS20 | – | K03.031 tutup < jalur bawah BB(20, 2.5) | RSI14 < 40 + ATR% >= 4 | 9,007 | **49** | 5 / 5 | +1.84 | 25 | 49 / 47 / 52 |  |
+| `F2318` | CS20 | hasil suku terkini tumbuh >= 20% | K24.008 bar pembalikan (buka <= 30%, tutup >= 80% julat) | ADX < 20 + RS >= 70 | 3,994 | **45** | 5 / 5 | +1.12 | 19 | 47 / 43 / 50 |  |
+| `F2319` | CS20 | – | K17.012 undur ke ema10 yang naik (tol 2.0%) + atas MA200 | RS >= 90 + ATR% >= 4 | 4,191 | **45** | 4 / 6 | +1.09 | 23 | 45 / 44 / 47 |  |
+| `F2320` | CS20 | hasil suku terkini tumbuh >= 20% | N29 PSAR naik + tutup>MA50 | tutup > MA200 + hari naik (tutup > buka) | 8,665 | **46** | 5 / 5 | +0.62 | 17 | 49 / 44 / 46 |  |
+| `F2321` | CS20 | – | K02.005 RSI(5) silang atas 40 | tutup > MA20 + >= 30% di bawah puncak 52 minggu | 7,415 | **47** | 5 / 5 | +0.89 | 22 | 46 / 47 / 49 |  |
+| `F2322` | CS20 | hasil suku terkini tumbuh >= 20% | K10.001 pecah tinggi 5 hari | MACD > isyarat + ADX < 20 | 7,532 | **46** | 5 / 5 | +0.79 | 18 | 49 / 44 / 48 |  |
+| `F2323` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 1) | tutup > MA200 + MACD > 0 | 7,136 | **46** | 5 / 5 | +0.66 | 17 | 48 / 43 / 48 |  |
+| `F2324` | CS20 | – | K18.008 jatuh >= 5% dalam 3 hari | ADX > 25 + RS >= 90 | 3,918 | **45** | 5 / 5 | +1.28 | 22 | 47 / 44 / 46 |  |
+| `F2325` | CS20 | – | K03.018 tutup < jalur bawah BB(15, 2.0) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 8,239 | **47** | 5 / 5 | +1.38 | 23 | 48 / 45 / 48 |  |
+| `F2326` | CS20 | – | K13.007 Stochastic(9) silang naik dari bawah 30 | MA50 > MA200 + ATR% >= 4 | 13,979 | **47** | 5 / 5 | +1.73 | 23 | 46 / 47 / 47 |  |
+| `F2327` | CS20 | hasil suku terkini tumbuh >= 20% | K24.001 bar pembalikan (buka <= 10%, tutup >= 70% julat) | tutup > MA50 + ADX < 20 | 6,005 | **46** | 5 / 5 | +0.70 | 18 | 50 / 43 / 49 |  |
+| `F2328` | CS20 | – | M161 EMA 10/21 + Supertrend (10,3) | RS >= 90 + ATR% >= 4 | 3,507 | **46** | 5 / 5 | +1.33 | 24 | 44 / 45 / 50 |  |
+| `F2329` | CS20 | – | K19.001 pecah atas Keltner(10, 1.0) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 5,826 | **46** | 5 / 5 | +0.78 | 22 | 45 / 47 / 43 |  |
+| `F2330` | CS20 | – | K01.061 RSI(5) < 25 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 10,185 | **46** | 5 / 5 | +1.28 | 23 | 47 / 45 / 48 |  |
+| `F2331` | CS20 | – | M20 EMA10/15 Crossover + Sudut (ditala 1) | RS >= 90 + ATR% >= 4 | 3,368 | **45** | 5 / 5 | +1.45 | 25 | 45 / 44 / 49 |  |
+| `F2332` | CS20 | hasil suku terkini tumbuh >= 20% | N45 Undur EMA21 cerun positif | MA50 > MA200 + Supertrend naik | 6,141 | **47** | 5 / 5 | +0.75 | 17 | 48 / 45 / 48 |  |
+| `F2333` | CS20 | hasil suku terkini tumbuh >= 20% | K06.005 4 tutup menurun berturut | MA50 naik (lawan 20 bar lalu) + Supertrend naik | 5,849 | **46** | 5 / 5 | +0.67 | 17 | 48 / 43 / 51 |  |
+| `F2334` | CS20 | – | K01.007 RSI(2) < 10 | RSI14 < 40 + >= 30% di bawah puncak 52 minggu | 16,605 | **48** | 5 / 5 | +1.80 | 24 | 50 / 48 / 45 |  |
+| `F2335` | CS20 | >= 60% saham industri di atas MA50 | K07.001 tutup silang atas sma5 | RS >= 90 + ATR% >= 4 | 3,165 | **45** | 4 / 6 | +1.41 | 24 | 44 / 44 / 50 |  |
+| `F2336` | CS20 | hasil suku terkini tumbuh >= 20% | K05.013 tutup silang atas jalur atas BB(50, 1.5) | MACD > isyarat + hari naik (tutup > buka) | 7,434 | **47** | 5 / 5 | +0.42 | 16 | 49 / 44 / 50 |  |
+| `F2337` | CS20 | – | K21.006 NR7 + hari dalam | RS >= 70 + ATR% >= 4 | 6,731 | **46** | 5 / 5 | +1.87 | 24 | 43 / 47 / 50 |  |
+| `F2338` | CS20 | – | K06.006 4 tutup menurun berturut + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,864 | **46** | 5 / 5 | +1.59 | 23 | 44 / 47 / 45 |  |
+| `F2339` | CS20 | – | K01.061 RSI(5) < 25 | RS >= 70 + ATR% >= 4 | 5,771 | **47** | 5 / 5 | +2.17 | 26 | 48 / 46 / 50 |  |
+| `F2340` | CS20 | – | K01.007 RSI(2) < 10 | RS >= 70 + ATR% >= 4 | 7,678 | **48** | 5 / 5 | +2.20 | 25 | 49 / 47 / 48 |  |
+| `F2341` | CS20 | hasil suku terkini tumbuh >= 20% | K10.001 pecah tinggi 5 hari | RSI14 > 60 + ADX < 20 | 5,167 | **46** | 5 / 5 | +0.58 | 17 | 49 / 43 / 49 |  |
+| `F2342` | CS20 | – | M14 Walking with the Whales | ADX < 20 + >= 30% di bawah puncak 52 minggu | 6,770 | **47** | 5 / 5 | +1.00 | 23 | 47 / 48 / 50 |  |
+| `F2343` | CS20 | hasil suku terkini tumbuh >= 20% | K08.001 sma3 silang atas sma10 | MA50 naik (lawan 20 bar lalu) + hari naik (tutup > buka) | 7,887 | **46** | 5 / 5 | +0.68 | 18 | 50 / 43 / 48 |  |
+| `F2344` | CS20 | – | K01.009 RSI(2) < 15 | RSI14 > 50 + RS >= 90 | 5,303 | **47** | 5 / 5 | +1.02 | 18 | 49 / 43 / 47 |  |
+| `F2345` | CS20 | hasil suku terkini tumbuh >= 20% | M12 Parabolic SAR (ditala 2) | MA50 naik (lawan 20 bar lalu) + dalam 15% dari puncak 52 minggu | 5,607 | **47** | 5 / 5 | +0.66 | 16 | 51 / 42 / 46 |  |
+| `F2346` | CS20 | – | K13.007 Stochastic(9) silang naik dari bawah 30 | MACD > 0 + RS >= 90 | 5,574 | **44** | 4 / 6 | +0.69 | 19 | 47 / 41 / 47 |  |
+| `F2347` | CS20 | hasil suku terkini tumbuh >= 20% | K24.005 bar pembalikan (buka <= 20%, tutup >= 80% julat) | ADX < 20 | 8,300 | **46** | 5 / 5 | +0.80 | 19 | 49 / 44 / 49 |  |
+| `F2348` | CS20 | – | K03.004 tutup < jalur bawah BB(10, 2.0) | ADX < 20 + ATR% >= 4 | 8,031 | **49** | 5 / 5 | +2.14 | 26 | 49 / 49 / 46 |  |
+| `F2349` | CS20 | – | K22.002 Holy Grail (ADX > 20, undur EMA20) | MACD > 0 + RS >= 90 | 4,051 | **44** | 4 / 6 | +0.25 | 19 | 46 / 41 / 41 |  |
+| `F2350` | CS20 | – | K13.012 Stochastic(14) silang naik dari bawah 40 | MA20 > MA50 + RS >= 90 | 6,644 | **45** | 4 / 6 | +0.83 | 20 | 47 / 41 / 48 |  |
+| `F2351` | CS20 | – | K01.059 RSI(5) < 20 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 8,127 | **47** | 5 / 5 | +1.36 | 24 | 50 / 44 / 48 |  |
+| `F2352` | CS20 | >= 60% saham sektor di atas MA50 | K07.001 tutup silang atas sma5 | RS >= 90 + tutup dalam 25% teratas julat hari | 5,883 | **45** | 4 / 6 | +0.78 | 18 | 45 / 43 / 51 |  |
+| `F2353` | CS20 | hasil suku terkini tumbuh >= 20% | K09.001 MACD(12,26,9) silang naik | RSI14 > 50 + ADX < 20 | 5,712 | **46** | 5 / 5 | +0.62 | 18 | 49 / 43 / 48 |  |
+| `F2354` | CS20 | – | K11.011 Supertrend(14, 1.5) bertukar naik | tutup > MA20 + >= 30% di bawah puncak 52 minggu | 10,177 | **45** | 5 / 5 | +0.57 | 22 | 45 / 46 / 42 |  |
+| `F2355` | CS20 | hasil suku terkini tumbuh >= 20% | K24.004 bar pembalikan (buka <= 20%, tutup >= 70% julat) | tutup > MA20 + ADX < 20 | 7,888 | **46** | 5 / 5 | +0.73 | 18 | 49 / 43 / 50 |  |
+| `F2356` | CS20 | – | K13.003 Stochastic(5) silang naik dari bawah 30 | MA50 > MA200 + RS >= 90 | 8,758 | **46** | 5 / 5 | +1.23 | 20 | 48 / 43 / 48 |  |
+| `F2357` | CS20 | hasil suku terkini tumbuh >= 20% | M12 Parabolic SAR (ditala 1) | MA50 > MA200 + MACD > isyarat | 3,921 | **45** | 5 / 5 | +0.72 | 16 | 48 / 43 / 47 |  |
+| `F2358` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K13.008 Stochastic(9) silang naik dari bawah 40 | tutup > MA50 + RS >= 90 | 2,729 | **44** | 4 / 6 | +0.25 | 19 | 45 / 43 / 43 |  |
+| `F2359` | CS20 | – | K01.003 RSI(2) < 5 | volum 10 hari > volum 50 hari + ATR% >= 4 | 11,106 | **48** | 5 / 5 | +1.71 | 24 | 50 / 48 / 46 |  |
+| `F2360` | CS20 | >= 60% saham industri di atas MA50 | K14.002 lonjakan >= 0.0% + volum 1.5x + tutup 25 % teratas | RS >= 90 + dalam 15% dari puncak 52 minggu | 3,734 | **44** | 4 / 6 | +0.43 | 16 | 45 / 44 / 43 |  |
+| `F2361` | CS20 | – | N38 VCP pecah | ATR% >= 4 + hari naik (tutup > buka) | 5,641 | **50** | 5 / 5 | +2.46 | 26 | 50 / 50 / 47 |  |
+| `F2362` | CS20 | hasil suku terkini tumbuh >= 20% | K01.006 RSI(2) < 8 + atas MA200 | MA20 > MA50 + MACD > 0 | 5,411 | **46** | 5 / 5 | +0.95 | 17 | 49 / 42 / 45 |  |
+| `F2363` | CS20 | hasil suku terkini tumbuh >= 20% | K24.007 bar pembalikan (buka <= 30%, tutup >= 70% julat) | RSI14 > 50 + ADX < 20 | 8,723 | **46** | 5 / 5 | +0.77 | 19 | 49 / 43 / 51 |  |
+| `F2364` | CS20 | hasil suku terkini tumbuh >= 20% | K06.005 4 tutup menurun berturut | MA20 > MA50 + MACD > 0 | 7,395 | **46** | 5 / 5 | +0.73 | 18 | 49 / 43 / 51 |  |
+| `F2365` | CS20 | hasil suku terkini tumbuh >= 20% | N29 PSAR naik + tutup>MA50 | MA50 naik (lawan 20 bar lalu) + hari naik (tutup > buka) | 7,166 | **46** | 5 / 5 | +0.46 | 17 | 50 / 43 / 46 |  |
+| `F2366` | CS20 | hasil suku terkini tumbuh >= 20% | K16.001 gap-and-go (buka > tinggi semalam + 0.0%) | MACD > isyarat + ADX < 20 | 5,628 | **47** | 5 / 5 | +0.82 | 18 | 49 / 45 / 46 |  |
+| `F2367` | CS20 | industri 20% teratas (pulangan 63 sesi) | K13.004 Stochastic(5) silang naik dari bawah 40 | tutup > MA200 + ATR% >= 4 | 3,830 | **47** | 5 / 5 | +2.06 | 23 | 47 / 47 / 48 |  |
+| `F2368` | CS20 | – | K08.001 sma3 silang atas sma10 | templat trend Minervini + ATR% >= 4 | 4,415 | **46** | 5 / 5 | +1.43 | 23 | 45 / 46 / 47 |  |
+| `F2369` | CS20 | – | K01.045 RSI(4) < 25 | MA50 > MA200 + ATR% >= 4 | 12,293 | **47** | 5 / 5 | +1.51 | 24 | 48 / 46 / 46 |  |
+| `F2370` | CS20 | hasil suku terkini tumbuh >= 20% | K07.011 tutup silang atas sma30 | MA50 naik (lawan 20 bar lalu) + hari naik (tutup > buka) | 6,545 | **47** | 5 / 5 | +0.61 | 18 | 50 / 43 / 48 |  |
+| `F2371` | CS20 | – | K03.045 tutup < jalur bawah BB(30, 2.5) + RSI14 < 40 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 6,121 | **48** | 5 / 5 | +1.31 | 24 | 50 / 45 / 51 |  |
+| `F2372` | CS20 | >= 60% saham industri di atas MA50 | K13.003 Stochastic(5) silang naik dari bawah 30 | tutup > MA20 + RS >= 90 | 3,003 | **45** | 4 / 6 | +0.98 | 18 | 45 / 44 / 50 |  |
+| `F2373` | CS20 | – | M161 EMA 10/21 + Supertrend (10,3) (ditala 2) | RS >= 90 + ATR% >= 4 | 4,095 | **46** | 5 / 5 | +1.54 | 24 | 46 / 45 / 49 |  |
+| `F2374` | CS20 | – | K17.005 undur ke sma10 yang naik (tol 1.0%) | RS >= 90 + ATR% >= 4 | 3,748 | **44** | 4 / 6 | +1.23 | 24 | 44 / 43 / 48 |  |
+| `F2375` | CS20 | hasil suku terkini tumbuh >= 20% | K24.004 bar pembalikan (buka <= 20%, tutup >= 70% julat) | RSI14 > 50 + ADX < 20 | 8,013 | **46** | 5 / 5 | +0.69 | 18 | 48 / 43 / 50 |  |
+| `F2376` | CS20 | hasil suku terkini tumbuh >= 20% | M12 Parabolic SAR | hari naik (tutup > buka) | 8,180 | **46** | 5 / 5 | +0.33 | 17 | 49 / 42 / 46 |  |
+| `F2377` | CS20 | – | K01.006 RSI(2) < 8 + atas MA200 | MACD > 0 + RS >= 90 | 5,136 | **47** | 5 / 5 | +1.18 | 20 | 50 / 44 / 48 |  |
+| `F2378` | CS20 | – | K17.007 undur ke ema10 yang naik (tol 1.0%) | MA50 > MA200 + ATR% >= 4 | 7,235 | **45** | 5 / 5 | +1.38 | 23 | 44 / 46 / 46 |  |
+| `F2379` | CS20 | – | K11.011 Supertrend(14, 1.5) bertukar naik | ADX < 20 + ATR% >= 4 | 7,878 | **47** | 5 / 5 | +1.47 | 24 | 48 / 46 / 48 |  |
+| `F2380` | CS20 | hasil suku terkini tumbuh >= 20% | M153 Range Leader | ADX < 20 + tutup dalam 25% teratas julat hari | 7,140 | **46** | 5 / 5 | +0.61 | 18 | 49 / 43 / 49 |  |
+| `F2381` | CS20 | – | K13.004 Stochastic(5) silang naik dari bawah 40 | RS >= 90 + ATR% >= 4 | 5,025 | **46** | 5 / 5 | +1.84 | 25 | 47 / 45 / 46 |  |
+| `F2382` | CS20 | – | K01.045 RSI(4) < 25 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 10,314 | **47** | 5 / 5 | +1.07 | 23 | 48 / 46 / 47 |  |
+| `F2383` | CS20 | – | K13.004 Stochastic(5) silang naik dari bawah 40 | tutup > MA200 + RS >= 90 | 10,132 | **45** | 5 / 5 | +1.02 | 20 | 47 / 43 / 46 |  |
+| `F2384` | CS20 | – | K06.006 4 tutup menurun berturut + atas MA200 | MA20 > MA50 + ATR% >= 4 | 7,430 | **47** | 5 / 5 | +1.64 | 23 | 45 / 48 / 44 |  |
+| `F2385` | CS20 | hasil suku terkini tumbuh >= 20% | K25.007 pecah julat sempit 10 hari (<= 35%) | RSI14 > 60 + ADX < 20 | 5,293 | **46** | 5 / 5 | +0.56 | 17 | 49 / 43 / 48 |  |
+| `F2386` | CS20 | – | K24.008 bar pembalikan (buka <= 30%, tutup >= 80% julat) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,341 | **46** | 5 / 5 | +0.83 | 23 | 47 / 45 / 45 |  |
+| `F2387` | CS20 | – | K03.053 tutup < jalur bawah BB(50, 2.0) + RSI14 < 30 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,273 | **49** | 5 / 5 | +1.44 | 24 | 52 / 46 / 50 |  |
+| `F2388` | CS20 | – | K03.037 tutup < jalur bawah BB(30, 1.5) | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 8,661 | **46** | 5 / 5 | +1.15 | 23 | 47 / 46 / 48 |  |
+| `F2389` | CS20 | hasil suku terkini tumbuh >= 20% | K02.027 RSI(14) silang atas 50 | MA50 > MA200 + MACD > 0 | 5,063 | **46** | 5 / 5 | +0.66 | 17 | 48 / 44 / 47 |  |
+| `F2390` | CS20 | – | K03.051 tutup < jalur bawah BB(50, 1.5) + RSI14 < 40 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 6,317 | **46** | 5 / 5 | +0.80 | 21 | 47 / 45 / 47 |  |
+| `F2391` | CS20 | – | K13.008 Stochastic(9) silang naik dari bawah 40 | tutup > MA20 + RS >= 90 | 5,052 | **46** | 5 / 5 | +0.72 | 19 | 46 / 44 / 50 |  |
+| `F2392` | CS20 | hasil suku terkini tumbuh >= 20% | K24.007 bar pembalikan (buka <= 30%, tutup >= 70% julat) | tutup > MA20 + ADX < 20 | 8,590 | **46** | 5 / 5 | +0.76 | 19 | 49 / 44 / 50 |  |
+| `F2393` | CS20 | hasil suku terkini tumbuh >= 20% | K01.010 RSI(2) < 15 + atas MA200 | MA50 naik (lawan 20 bar lalu) + Supertrend naik | 6,164 | **46** | 5 / 5 | +0.77 | 17 | 49 / 43 / 49 |  |
+| `F2394` | CS20 | hasil suku terkini tumbuh >= 20% | K02.027 RSI(14) silang atas 50 | MA50 naik (lawan 20 bar lalu) | 7,539 | **46** | 5 / 5 | +0.51 | 17 | 49 / 42 / 47 |  |
+| `F2395` | CS20 | hasil suku terkini tumbuh >= 20% | K05.005 tutup silang atas jalur atas BB(20, 1.5) | MA50 naik (lawan 20 bar lalu) + ADX < 20 | 4,041 | **47** | 5 / 5 | +0.80 | 17 | 49 / 44 / 47 |  |
+| `F2396` | CS20 | >= 60% saham industri di atas MA50 | M161 EMA 10/21 + Supertrend (10,3) (ditala 2) | RS >= 90 + ATR% >= 4 | 2,909 | **46** | 5 / 5 | +1.92 | 24 | 45 / 45 / 50 |  |
+| `F2397` | CS20 | – | K01.008 RSI(2) < 10 + atas MA200 | templat trend Minervini + RS >= 90 | 4,294 | **47** | 5 / 5 | +0.89 | 19 | 49 / 44 / 46 |  |
+| `F2398` | CS20 | – | M105 Supertrend tulen (ditala 2) | ADX < 20 + ATR% >= 4 | 7,297 | **47** | 5 / 5 | +1.46 | 24 | 48 / 46 / 47 |  |
+| `F2399` | CS20 | – | K01.009 RSI(2) < 15 | MACD > 0 + RS >= 90 | 7,359 | **47** | 5 / 5 | +1.32 | 20 | 49 / 43 / 50 |  |
+| `F2400` | CS20 | hasil suku terkini tumbuh >= 20% | K24.007 bar pembalikan (buka <= 30%, tutup >= 70% julat) | ADX < 20 + tutup dalam 25% teratas julat hari | 9,675 | **46** | 5 / 5 | +0.88 | 19 | 49 / 44 / 49 |  |
+| `F2401` | CS20 | – | K13.012 Stochastic(14) silang naik dari bawah 40 | templat trend Minervini + RS >= 90 | 4,737 | **45** | 4 / 6 | +0.69 | 19 | 47 / 41 / 49 |  |
+| `F2402` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line | tutup > MA20 + tutup > MA50 | 7,893 | **46** | 5 / 5 | +0.67 | 18 | 48 / 44 / 49 |  |
+| `F2403` | CS20 | hasil suku terkini tumbuh >= 20% | K09.007 MACD(5,35,5) silang naik | ADX < 20 + hari naik (tutup > buka) | 7,822 | **47** | 5 / 5 | +1.07 | 19 | 50 / 45 / 51 |  |
+| `F2404` | CS20 | – | K13.016 Stochastic(21) silang naik dari bawah 40 | tutup > MA20 + RS >= 90 | 2,701 | **46** | 5 / 5 | +1.20 | 22 | 47 / 43 / 50 |  |
+| `F2405` | CS20 | – | K22.002 Holy Grail (ADX > 20, undur EMA20) | templat trend Minervini + RS >= 90 | 3,790 | **45** | 4 / 6 | +0.42 | 19 | 46 / 42 / 44 |  |
+| `F2406` | CS20 | – | K13.016 Stochastic(21) silang naik dari bawah 40 | tutup > MA20 + ATR% >= 4 | 7,047 | **46** | 5 / 5 | +1.16 | 23 | 46 / 46 / 50 |  |
+| `F2407` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line | tutup > MA200 + MACD > 0 | 5,875 | **46** | 5 / 5 | +0.71 | 17 | 47 / 43 / 47 |  |
+| `F2408` | CS20 | – | K21.004 NR5 + hari dalam | RS >= 70 + ATR% >= 4 | 7,780 | **47** | 5 / 5 | +1.91 | 24 | 44 / 47 / 52 |  |
+| `F2409` | CS20 | hasil suku terkini tumbuh >= 20% | K25.007 pecah julat sempit 10 hari (<= 35%) | ADX < 20 + hari naik (tutup > buka) | 7,338 | **46** | 5 / 5 | +0.56 | 18 | 48 / 44 / 46 |  |
+| `F2410` | CS20 | – | M55 Guppy GMMA (ditala 2) | RS >= 70 + ATR% >= 4 | 4,599 | **46** | 5 / 5 | +1.20 | 23 | 45 / 45 / 49 |  |
+| `F2411` | CS20 | – | K02.005 RSI(5) silang atas 40 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,495 | **46** | 5 / 5 | +1.14 | 23 | 46 / 47 / 45 |  |
+| `F2412` | CS20 | – | K03.053 tutup < jalur bawah BB(50, 2.0) + RSI14 < 30 | ATR% >= 4 | 7,781 | **49** | 5 / 5 | +1.90 | 25 | 51 / 46 / 52 |  |
+| `F2413` | CS20 | – | K01.004 RSI(2) < 5 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 5,451 | **47** | 5 / 5 | +1.63 | 23 | 46 / 48 / 44 |  |
+| `F2414` | CS20 | – | K21.002 NR4 + hari dalam | RS >= 70 + ATR% >= 4 | 8,454 | **47** | 5 / 5 | +1.99 | 25 | 44 / 47 / 52 |  |
+| `F2415` | CS20 | hasil suku terkini tumbuh >= 20% | K24.009 bar pembalikan (buka <= 30%, tutup >= 90% julat) | ADX < 20 + Supertrend naik | 4,575 | **46** | 5 / 5 | +0.35 | 17 | 48 / 44 / 48 |  |
+| `F2416` | CS20 | hasil suku terkini tumbuh >= 20% | K05.013 tutup silang atas jalur atas BB(50, 1.5) | ADX < 20 + hari naik (tutup > buka) | 4,832 | **47** | 5 / 5 | +0.46 | 16 | 50 / 43 / 52 |  |
+| `F2417` | CS20 | – | K21.004 NR5 + hari dalam | RS >= 90 + ATR% >= 4 | 4,078 | **45** | 5 / 5 | +1.89 | 25 | 45 / 45 / 49 |  |
+| `F2418` | CS20 | – | K10.001 pecah tinggi 5 hari | ADX < 20 + >= 30% di bawah puncak 52 minggu | 7,882 | **46** | 5 / 5 | +0.76 | 23 | 45 / 47 / 44 |  |
+| `F2419` | CS20 | hasil suku terkini tumbuh >= 20% | K01.009 RSI(2) < 15 | MA50 > MA200 + Supertrend naik | 6,535 | **46** | 5 / 5 | +0.86 | 17 | 48 / 44 / 45 |  |
+| `F2420` | CS20 | – | N202 | Supertrend naik + RS >= 90 | 4,583 | **47** | 5 / 5 | +1.24 | 20 | 49 / 44 / 48 |  |
+| `F2421` | CS20 | sektor 3 teratas (pulangan 63 sesi) | M73 ADX(5) > 40 + Julat Terkecil 6 Hari (ditala 2) | RS >= 70 + ATR% >= 4 | 4,841 | **47** | 5 / 5 | +1.98 | 24 | 44 / 50 / 46 |  |
+| `F2422` | CS20 | – | K09.007 MACD(5,35,5) silang naik | ADX < 20 + ATR% >= 4 | 10,447 | **47** | 5 / 5 | +1.55 | 25 | 47 / 47 / 49 |  |
+| `F2423` | CS20 | – | K08.011 sma10 silang atas sma30 | ADX < 20 + RS >= 90 | 2,470 | **48** | 5 / 5 | +1.58 | 21 | 48 / 45 / 57 |  |
+| `F2424` | CS20 | – | N38 VCP pecah | >= 30% di bawah puncak 52 minggu | 5,726 | **47** | 5 / 5 | +1.10 | 22 | 46 / 47 / 49 |  |
+| `F2425` | CS20 | hasil suku terkini tumbuh >= 20% | M161 EMA 10/21 + Supertrend (10,3) (ditala 2) | MA20 > MA50 + ADX < 20 | 5,035 | **46** | 5 / 5 | +0.67 | 17 | 49 / 43 / 51 |  |
+| `F2426` | CS20 | – | K13.016 Stochastic(21) silang naik dari bawah 40 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,715 | **47** | 5 / 5 | +1.14 | 23 | 47 / 47 / 43 |  |
+| `F2427` | CS20 | – | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) | MA50 > MA200 + ATR% >= 4 | 4,346 | **47** | 5 / 5 | +2.04 | 23 | 47 / 47 / 48 |  |
+| `F2428` | CS20 | – | K13.007 Stochastic(9) silang naik dari bawah 30 | RS >= 70 + ATR% >= 4 | 8,582 | **47** | 5 / 5 | +2.19 | 25 | 46 / 47 / 47 |  |
+| `F2429` | CS20 | hasil suku terkini tumbuh >= 20% | K24.008 bar pembalikan (buka <= 30%, tutup >= 80% julat) | tutup > MA50 + ADX < 20 | 7,429 | **46** | 5 / 5 | +0.71 | 18 | 49 / 44 / 48 |  |
+| `F2430` | CS20 | hasil suku terkini tumbuh >= 20% | K24.004 bar pembalikan (buka <= 20%, tutup >= 70% julat) | ADX < 20 + tutup dalam 25% teratas julat hari | 8,760 | **46** | 5 / 5 | +0.89 | 19 | 49 / 44 / 50 |  |
+| `F2431` | CS20 | hasil suku terkini tumbuh >= 20% | K09.007 MACD(5,35,5) silang naik | MA50 naik (lawan 20 bar lalu) + MACD > isyarat | 4,320 | **46** | 5 / 5 | +0.33 | 16 | 49 / 42 / 47 |  |
+| `F2432` | CS20 | hasil suku terkini tumbuh >= 20% | K16.001 gap-and-go (buka > tinggi semalam + 0.0%) | ADX < 20 | 7,276 | **47** | 5 / 5 | +0.92 | 19 | 49 / 45 / 47 |  |
+| `F2433` | CS20 | hasil suku terkini tumbuh >= 20% | K09.004 MACD(8,17,9) silang naik | ADX < 20 + hari naik (tutup > buka) | 6,698 | **47** | 5 / 5 | +0.89 | 18 | 50 / 43 / 50 |  |
+| `F2434` | CS20 | sektor 3 teratas (pulangan 63 sesi) | M153 Range Leader | ATR% >= 4 + tutup dalam 25% teratas julat hari | 5,317 | **46** | 5 / 5 | +1.07 | 24 | 42 / 49 / 44 |  |
+| `F2435` | CS20 | – | K13.008 Stochastic(9) silang naik dari bawah 40 | templat trend Minervini + RS >= 90 | 5,795 | **45** | 5 / 5 | +0.59 | 18 | 47 / 42 / 47 |  |
+| `F2436` | CS20 | – | K21.010 NR14 + hari dalam | RS >= 90 + ATR% >= 4 | 2,387 | **45** | 4 / 6 | +1.18 | 24 | 44 / 44 / 48 |  |
+| `F2437` | CS20 | – | K03.038 tutup < jalur bawah BB(30, 1.5) + RSI14 < 30 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,929 | **49** | 5 / 5 | +1.46 | 24 | 52 / 46 / 49 |  |
+| `F2438` | CS20 | hasil suku terkini tumbuh >= 20% | K06.005 4 tutup menurun berturut | MACD > 0 | 8,480 | **46** | 5 / 5 | +0.66 | 18 | 48 / 44 / 48 |  |
+| `F2439` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 2) | tutup > MA20 + MACD > 0 | 5,889 | **47** | 5 / 5 | +0.49 | 18 | 49 / 44 / 51 |  |
+| `F2440` | CS20 | – | K03.040 tutup < jalur bawah BB(30, 2.0) | MA50 > MA200 + ATR% >= 4 | 7,756 | **47** | 5 / 5 | +1.54 | 24 | 48 / 46 / 50 |  |
+| `F2441` | CS20 | hasil suku terkini tumbuh >= 20% | K02.012 RSI(7) silang atas 40 | MA50 > MA200 + MACD > 0 | 4,770 | **46** | 5 / 5 | +0.68 | 17 | 49 / 44 / 46 |  |
+| `F2442` | CS20 | – | K02.012 RSI(7) silang atas 40 | MA20 > MA50 + RS >= 90 | 5,966 | **45** | 5 / 5 | +0.78 | 20 | 47 / 41 / 47 |  |
+| `F2443` | CS20 | hasil suku terkini tumbuh >= 20% | K10.005 pecah tinggi 10 hari | MACD > isyarat + ADX < 20 | 7,196 | **46** | 5 / 5 | +0.62 | 18 | 48 / 44 / 47 |  |
+| `F2444` | CS20 | hasil suku terkini tumbuh >= 20% | K06.006 4 tutup menurun berturut + atas MA200 | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 4,623 | **48** | 5 / 5 | +1.43 | 19 | 49 / 45 / 51 |  |
+| `F2445` | CS20 | – | K07.011 tutup silang atas sma30 | tutup > MA50 + >= 30% di bawah puncak 52 minggu | 6,124 | **46** | 5 / 5 | +0.33 | 22 | 46 / 46 / 47 |  |
+| `F2446` | CS20 | hasil suku terkini tumbuh >= 20% | K01.045 RSI(4) < 25 | tutup > MA200 + MACD > 0 | 5,641 | **46** | 5 / 5 | +0.83 | 18 | 49 / 43 / 46 |  |
+| `F2447` | CS20 | hasil suku terkini tumbuh >= 20% | M153 Range Leader | ADX < 20 + hari naik (tutup > buka) | 9,008 | **46** | 5 / 5 | +0.90 | 19 | 48 / 44 / 48 |  |
+| `F2448` | CS20 | – | K13.007 Stochastic(9) silang naik dari bawah 30 | RSI14 > 50 + RS >= 90 | 4,768 | **46** | 5 / 5 | +1.01 | 20 | 47 / 43 / 48 |  |
+| `F2449` | CS20 | hasil suku terkini tumbuh >= 20% | K05.005 tutup silang atas jalur atas BB(20, 1.5) | MA50 > MA200 + ADX < 20 | 4,637 | **47** | 5 / 5 | +1.08 | 17 | 48 / 45 / 47 |  |
+| `F2450` | CS20 | hasil suku terkini tumbuh >= 20% | K14.001 lonjakan >= 0.0% + volum 1.5x | MA50 > MA200 + Supertrend naik | 5,089 | **46** | 5 / 5 | +0.59 | 17 | 48 / 44 / 45 |  |
+| `F2451` | CS20 | – | K02.012 RSI(7) silang atas 40 | templat trend Minervini + RS >= 90 | 4,464 | **45** | 5 / 5 | +0.90 | 20 | 46 / 43 / 49 |  |
+| `F2452` | CS20 | – | K13.016 Stochastic(21) silang naik dari bawah 40 | RSI14 > 50 + RS >= 90 | 3,723 | **45** | 5 / 5 | +0.91 | 21 | 47 / 42 / 50 |  |
+| `F2453` | CS20 | – | K02.012 RSI(7) silang atas 40 | RSI14 > 50 + RS >= 90 | 4,404 | **46** | 5 / 5 | +1.12 | 20 | 47 / 44 / 49 |  |
+| `F2454` | CS20 | hasil suku terkini tumbuh >= 20% | K19.001 pecah atas Keltner(10, 1.0) | MA50 naik (lawan 20 bar lalu) + ADX < 20 | 4,051 | **47** | 5 / 5 | +0.80 | 17 | 49 / 45 / 47 |  |
+| `F2455` | CS20 | hasil suku terkini tumbuh >= 20% | M12 Parabolic SAR | MA50 > MA200 + MACD > isyarat | 3,633 | **45** | 5 / 5 | +0.67 | 17 | 47 / 44 / 43 |  |
+| `F2456` | CS20 | – | K03.045 tutup < jalur bawah BB(30, 2.5) + RSI14 < 40 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,374 | **47** | 5 / 5 | +0.89 | 23 | 49 / 45 / 48 |  |
+| `F2457` | CS20 | – | K01.071 RSI(7) < 30 | MA50 > MA200 + ATR% >= 4 | 10,260 | **47** | 5 / 5 | +1.68 | 24 | 49 / 46 / 48 |  |
+| `F2458` | CS20 | – | K01.008 RSI(2) < 10 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 7,884 | **46** | 5 / 5 | +1.57 | 23 | 47 / 46 / 45 |  |
+| `F2459` | CS20 | hasil suku terkini tumbuh >= 20% | K09.009 MACD(5,35,5) silang naik atas sifar | MACD > isyarat + tutup dalam 25% teratas julat hari | 4,224 | **45** | 4 / 6 | +0.12 | 16 | 47 / 43 / 46 |  |
+| `F2460` | CS20 | hasil suku terkini tumbuh >= 20% | K09.001 MACD(12,26,9) silang naik | ADX < 20 | 6,756 | **46** | 5 / 5 | +0.82 | 18 | 50 / 43 / 50 |  |
+| `F2461` | CS20 | hasil suku terkini tumbuh >= 20% | M50 Elder Triple Screen (ditala 1) | MACD > isyarat + hari naik (tutup > buka) | 4,669 | **44** | 4 / 6 | -0.01 | 15 | 46 / 41 / 45 |  |
+| `F2462` | CS20 | hasil suku terkini tumbuh >= 20% | K24.009 bar pembalikan (buka <= 30%, tutup >= 90% julat) | MA50 naik (lawan 20 bar lalu) + ADX < 20 | 4,166 | **46** | 5 / 5 | +0.77 | 18 | 48 / 44 / 46 |  |
+| `F2463` | CS20 | – | K03.053 tutup < jalur bawah BB(50, 2.0) + RSI14 < 30 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 5,201 | **49** | 5 / 5 | +1.66 | 25 | 51 / 46 / 52 |  |
+| `F2464` | CS20 | – | K01.071 RSI(7) < 30 | MACD > 0 + ATR% >= 4 | 5,145 | **45** | 5 / 5 | +0.99 | 23 | 45 / 45 / 45 |  |
+| `F2465` | CS20 | – | K01.021 RSI(3) < 8 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 6,166 | **47** | 5 / 5 | +0.81 | 22 | 49 / 46 / 46 |  |
+| `F2466` | CS20 | hasil suku terkini tumbuh >= 20% | K14.001 lonjakan >= 0.0% + volum 1.5x | tutup > MA50 + MA50 > MA200 | 5,724 | **47** | 5 / 5 | +0.71 | 17 | 49 / 45 / 47 |  |
+| `F2467` | CS20 | – | K01.008 RSI(2) < 10 + atas MA200 | MACD > 0 + RS >= 90 | 5,925 | **47** | 5 / 5 | +1.21 | 20 | 49 / 43 / 48 |  |
+| `F2468` | CS20 | hasil suku terkini tumbuh >= 20% | K09.007 MACD(5,35,5) silang naik | tutup > MA50 | 9,652 | **46** | 5 / 5 | +0.55 | 17 | 50 / 43 / 47 |  |
+| `F2469` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 2) | ADX < 20 + hari naik (tutup > buka) | 6,518 | **47** | 5 / 5 | +0.99 | 19 | 49 / 44 / 53 |  |
+| `F2470` | CS20 | – | K01.023 RSI(3) < 10 | volum 10 hari > volum 50 hari + ATR% >= 4 | 9,401 | **48** | 5 / 5 | +1.49 | 24 | 50 / 47 / 46 |  |
+| `F2471` | CS20 | hasil suku terkini tumbuh >= 20% | N54 Supertrend + RSI>50 | tutup > MA50 + ADX < 20 | 6,387 | **47** | 5 / 5 | +0.61 | 18 | 49 / 44 / 50 |  |
+| `F2472` | CS20 | – | M55 Guppy GMMA (ditala 2) | MA50 > MA200 + ATR% >= 4 | 5,202 | **45** | 5 / 5 | +1.14 | 23 | 43 / 46 / 47 |  |
+| `F2473` | CS20 | hasil suku terkini tumbuh >= 20% | K24.001 bar pembalikan (buka <= 10%, tutup >= 70% julat) | RSI14 > 50 + ADX < 20 | 6,519 | **46** | 5 / 5 | +0.70 | 18 | 49 / 42 / 49 |  |
+| `F2474` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 2) | tutup > MA20 + tutup > MA50 | 7,035 | **46** | 5 / 5 | +0.49 | 18 | 48 / 44 / 50 |  |
+| `F2475` | CS20 | – | K01.059 RSI(5) < 20 | MA50 > MA200 + ATR% >= 4 | 8,640 | **48** | 5 / 5 | +1.71 | 24 | 49 / 46 / 48 |  |
+| `F2476` | CS20 | hasil suku terkini tumbuh >= 20% | K08.003 sma5 silang atas sma10 | tutup > MA20 + RSI14 > 60 | 4,746 | **45** | 5 / 5 | +0.19 | 16 | 50 / 41 / 48 |  |
+| `F2477` | CS20 | – | K01.003 RSI(2) < 5 | RSI14 < 40 + ATR% >= 4 | 14,009 | **49** | 5 / 5 | +2.11 | 25 | 51 / 47 / 50 |  |
+| `F2478` | CS20 | >= 60% saham industri di atas MA50 | K02.004 RSI(5) silang atas 35 | MA50 > MA200 + RS >= 90 | 3,705 | **45** | 4 / 6 | +0.88 | 19 | 45 / 43 / 49 |  |
+| `F2479` | CS20 | >= 60% saham industri di atas MA50 | K14.002 lonjakan >= 0.0% + volum 1.5x + tutup 25 % teratas | tutup > MA20 + ADX < 20 | 11,566 | **46** | 5 / 5 | +0.42 | 13 | 47 / 44 / 45 |  |
+| `F2480` | CS20 | – | K01.021 RSI(3) < 8 | MA50 > MA200 + ATR% >= 4 | 6,687 | **48** | 5 / 5 | +1.27 | 23 | 50 / 46 / 48 |  |
+| `F2481` | CS20 | hasil suku terkini tumbuh >= 20% | K09.006 MACD(8,17,9) silang naik atas sifar | Supertrend naik + hari naik (tutup > buka) | 5,472 | **46** | 5 / 5 | +0.23 | 16 | 48 / 43 / 47 |  |
+| `F2482` | CS20 | – | K03.016 tutup < jalur bawah BB(15, 2.0) | RS >= 70 + ATR% >= 4 | 4,948 | **48** | 5 / 5 | +1.89 | 25 | 49 / 46 / 50 |  |
+| `F2483` | CS20 | – | K11.006 Supertrend(10, 1.5) bertukar naik | RSI14 > 50 + ATR% >= 4 | 12,412 | **45** | 5 / 5 | +0.75 | 23 | 44 / 45 / 47 |  |
+| `F2484` | CS20 | hasil suku terkini tumbuh >= 20% | K03.013 tutup < jalur bawah BB(15, 1.5) | tutup > MA200 + MACD > 0 | 5,447 | **46** | 5 / 5 | +0.80 | 18 | 50 / 43 / 46 |  |
+| `F2485` | CS20 | – | K03.003 tutup < jalur bawah BB(10, 1.5) + RSI14 < 40 | tutup > MA200 + ATR% >= 4 | 5,508 | **47** | 5 / 5 | +1.69 | 23 | 47 / 47 / 44 |  |
+| `F2486` | CS20 | hasil suku terkini tumbuh >= 20% | K01.008 RSI(2) < 10 + atas MA200 | MA50 > MA200 | 7,705 | **47** | 5 / 5 | +1.09 | 18 | 49 / 45 / 45 |  |
+| `F2487` | CS20 | – | K02.012 RSI(7) silang atas 40 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,446 | **47** | 5 / 5 | +1.17 | 23 | 46 / 47 / 45 |  |
+| `F2488` | CS20 | – | K04.001 masuk semula atas jalur bawah BB(10, 1.5) | templat trend Minervini + RS >= 90 | 4,527 | **44** | 4 / 6 | +0.40 | 18 | 45 / 43 / 46 |  |
+| `F2489` | CS20 | – | K13.012 Stochastic(14) silang naik dari bawah 40 | MACD > 0 + RS >= 90 | 5,289 | **45** | 4 / 6 | +0.86 | 20 | 47 / 41 / 47 |  |
+| `F2490` | CS20 | hasil suku terkini tumbuh >= 20% | M13 Garis Trend Action/Safety Line (ditala 2) | tutup > MA50 + Supertrend naik | 5,464 | **47** | 5 / 5 | +0.50 | 17 | 49 / 44 / 53 |  |
+| `F2491` | CS20 | – | K01.081 RSI(10) < 30 | ADX > 25 + ATR% >= 4 | 7,479 | **49** | 5 / 5 | +1.75 | 25 | 53 / 46 / 50 |  |
+| `F2492` | CS20 | hasil suku terkini tumbuh >= 20% | K09.009 MACD(5,35,5) silang naik atas sifar | tutup > MA50 + MACD > isyarat | 5,366 | **46** | 5 / 5 | +0.28 | 16 | 48 / 43 / 46 |  |
+| `F2493` | CS20 | hasil suku terkini tumbuh >= 20% | K04.001 masuk semula atas jalur bawah BB(10, 1.5) | tutup > MA50 + tutup > MA200 | 5,512 | **45** | 5 / 5 | +0.47 | 17 | 48 / 43 / 45 |  |
+| `F2494` | CS20 | – | K02.004 RSI(5) silang atas 35 | MA20 > MA50 + RS >= 90 | 6,642 | **45** | 4 / 6 | +0.61 | 19 | 47 / 41 / 48 |  |
+| `F2495` | CS20 | – | K18.029 jatuh >= 5% dalam 20 hari | MA50 > MA200 + ATR% >= 4 | 10,303 | **46** | 5 / 5 | +1.26 | 23 | 45 / 45 / 50 |  |
+| `F2496` | CS20 | – | K21.002 NR4 + hari dalam | RS >= 90 + ATR% >= 4 | 4,428 | **45** | 5 / 5 | +1.72 | 25 | 45 / 44 / 50 |  |
+| `F2497` | CS20 | hasil suku terkini tumbuh >= 20% | K14.003 lonjakan >= 0.0% + volum 2.0x | tutup > MA200 + MA50 > MA200 | 4,589 | **46** | 5 / 5 | +0.48 | 17 | 49 / 44 / 44 |  |
+| `F2498` | CS20 | – | K07.015 tutup silang atas sma100 | >= 30% di bawah puncak 52 minggu + hari naik (tutup > buka) | 5,749 | **43** | 4 / 6 | -0.04 | 20 | 44 / 42 / 45 |  |
+| `F2499` | CS20 | – | K03.030 tutup < jalur bawah BB(20, 2.0) + RSI14 < 40 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 8,699 | **47** | 5 / 5 | +1.43 | 24 | 50 / 45 / 48 |  |
+| `F2500` | CS20 | hasil suku terkini tumbuh >= 20% | K04.001 masuk semula atas jalur bawah BB(10, 1.5) | MA20 > MA50 + tutup dalam 25% teratas julat hari | 6,162 | **46** | 5 / 5 | +0.68 | 18 | 49 / 43 / 47 |  |
+| `F2501` | CS20 | – | K03.016 tutup < jalur bawah BB(15, 2.0) | ADX > 25 + ATR% >= 4 | 7,473 | **49** | 5 / 5 | +1.33 | 25 | 52 / 45 / 52 |  |
+| `F2502` | CS20 | – | K09.009 MACD(5,35,5) silang naik atas sifar | RS >= 70 + ATR% >= 4 | 5,022 | **46** | 5 / 5 | +1.47 | 23 | 45 / 46 / 46 |  |
+| `F2503` | CS20 | hasil suku terkini tumbuh >= 20% | K03.013 tutup < jalur bawah BB(15, 1.5) | MA20 > MA50 + MACD > 0 | 6,861 | **46** | 5 / 5 | +0.50 | 18 | 49 / 42 / 46 |  |
+| `F2504` | CS20 | hasil suku terkini tumbuh >= 20% | K25.005 pecah julat sempit 10 hari (<= 20%) | MA50 > MA200 + ADX < 20 | 4,645 | **46** | 5 / 5 | +0.75 | 16 | 47 / 44 / 47 |  |
+| `F2505` | CS20 | – | K09.008 MACD(5,35,5) silang naik bawah sifar | ADX < 20 + ATR% >= 4 | 7,152 | **47** | 5 / 5 | +1.51 | 25 | 47 / 47 / 50 |  |
+| `F2506` | CS20 | – | M18 EMA9/21 Pullback | RS >= 90 + ATR% >= 4 | 2,519 | **45** | 4 / 6 | +1.20 | 24 | 46 / 45 / 44 |  |
+| `F2507` | CS20 | – | M89 Chande 65sma-3cc | ATR% >= 4 | 3,902 | **46** | 5 / 5 | +0.98 | 24 | 43 / 47 / 48 |  |
+| `F2508` | CS20 | hasil suku terkini tumbuh >= 20% | M155 Market Cycle Strategy | tutup > MA20 + ADX < 20 | 5,312 | **46** | 5 / 5 | +0.76 | 18 | 49 / 44 / 45 |  |
+| `F2509` | CS20 | – | K01.059 RSI(5) < 20 | ADX > 25 + ATR% >= 4 | 8,056 | **49** | 5 / 5 | +1.69 | 25 | 53 / 45 / 51 |  |
+| `F2510` | CS20 | hasil suku terkini tumbuh >= 20% | K19.001 pecah atas Keltner(10, 1.0) | MACD > isyarat + ADX < 20 | 6,879 | **46** | 5 / 5 | +0.79 | 18 | 48 / 44 / 48 |  |
+| `F2511` | CS20 | hasil suku terkini tumbuh >= 20% | K07.015 tutup silang atas sma100 | ADX < 20 + hari naik (tutup > buka) | 4,440 | **46** | 5 / 5 | +0.78 | 18 | 48 / 44 / 48 |  |
+| `F2512` | CS20 | – | K18.029 jatuh >= 5% dalam 20 hari | tutup > MA200 + ATR% >= 4 | 8,080 | **45** | 4 / 6 | +1.16 | 23 | 45 / 44 / 48 |  |
+| `F2513` | CS20 | – | K21.007 NR10 | RS >= 90 + ATR% >= 4 | 4,891 | **45** | 5 / 5 | +1.62 | 24 | 46 / 44 / 46 |  |
+| `F2514` | CS20 | – | K03.042 tutup < jalur bawah BB(30, 2.0) + RSI14 < 40 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 8,009 | **48** | 5 / 5 | +1.60 | 24 | 49 / 46 / 50 |  |
+| `F2515` | CS20 | – | K01.092 RSI(14) < 40 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 4,955 | **46** | 5 / 5 | +1.24 | 23 | 46 / 46 / 46 |  |
+| `F2516` | CS20 | – | K01.093 RSI(14) < 45 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 9,913 | **46** | 5 / 5 | +1.33 | 24 | 46 / 47 / 42 |  |
+| `F2517` | CS20 | >= 60% saham industri di atas MA50 | K21.004 NR5 + hari dalam | RS >= 70 + ATR% >= 4 | 3,869 | **46** | 5 / 5 | +1.89 | 23 | 43 / 47 / 51 |  |
+| `F2518` | CS20 | – | M92 CCI-50 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 6,417 | **47** | 5 / 5 | +1.11 | 23 | 46 / 48 / 45 |  |
+| `F2519` | CS20 | hasil suku terkini tumbuh >= 20% | K09.004 MACD(8,17,9) silang naik | RSI14 > 50 + ADX < 20 | 5,973 | **47** | 5 / 5 | +0.78 | 18 | 50 / 43 / 51 |  |
+| `F2520` | CS20 | industri 20% teratas (pulangan 63 sesi) | K21.005 NR7 | ATR% >= 4 | 6,805 | **46** | 5 / 5 | +1.82 | 24 | 44 / 47 / 50 |  |
+| `F2521` | CS20 | hasil suku terkini tumbuh >= 20% | K09.004 MACD(8,17,9) silang naik | tutup > MA50 + ADX < 20 | 5,346 | **47** | 5 / 5 | +0.69 | 18 | 50 / 43 / 51 |  |
+| `F2522` | CS20 | – | K03.033 tutup < jalur bawah BB(20, 2.5) + RSI14 < 40 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,004 | **47** | 5 / 5 | +0.86 | 23 | 47 / 46 / 49 |  |
+| `F2523` | CS20 | – | K01.091 RSI(14) < 40 | tutup > MA200 + ATR% >= 4 | 5,804 | **46** | 5 / 5 | +1.45 | 23 | 47 / 46 / 45 |  |
+| `F2524` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K21.005 NR7 | RS >= 70 + ATR% >= 4 | 4,106 | **48** | 5 / 5 | +1.92 | 25 | 45 / 50 / 47 |  |
+| `F2525` | CS20 | – | K03.006 tutup < jalur bawah BB(10, 2.0) + RSI14 < 40 | ATR% >= 4 | 14,272 | **48** | 5 / 5 | +1.38 | 25 | 51 / 45 / 49 |  |
+| `F2526` | CS20 | – | K03.018 tutup < jalur bawah BB(15, 2.0) + RSI14 < 40 | ADX > 25 + ATR% >= 4 | 6,399 | **49** | 5 / 5 | +1.28 | 25 | 52 / 45 / 52 |  |
+| `F2527` | CS20 | – | K01.069 RSI(7) < 25 | ADX > 25 + ATR% >= 4 | 7,677 | **49** | 5 / 5 | +1.52 | 25 | 52 / 46 / 49 |  |
+| `F2528` | CS20 | – | K01.081 RSI(10) < 30 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 7,595 | **48** | 5 / 5 | +1.48 | 24 | 52 / 45 / 48 |  |
+| `F2529` | CS20 | hasil suku terkini tumbuh >= 20% | M116 2/20 EMA Breakout (Landry) | tutup > MA50 + ADX < 20 | 5,037 | **47** | 5 / 5 | +0.80 | 17 | 49 / 45 / 50 |  |
+| `F2530` | CS20 | – | K13.012 Stochastic(14) silang naik dari bawah 40 | RS >= 90 + dalam 15% dari puncak 52 minggu | 5,526 | **46** | 5 / 5 | +0.79 | 19 | 47 / 43 / 51 |  |
+| `F2531` | CS20 | hasil suku terkini tumbuh >= 20% | K09.004 MACD(8,17,9) silang naik | tutup > MA20 + hari naik (tutup > buka) | 8,858 | **46** | 5 / 5 | +0.46 | 17 | 49 / 43 / 47 |  |
+| `F2532` | CS20 | >= 60% saham industri di atas MA50 | M11 NR7 Breakout + Volume | MACD > isyarat + tutup dalam 25% teratas julat hari | 3,929 | **44** | 4 / 6 | +0.28 | 13 | 45 / 43 / 48 |  |
+| `F2533` | CS20 | hasil suku terkini tumbuh >= 20% | N40 OBV tinggi baharu + MA50 | tutup > MA200 + MACD > 0 | 4,196 | **46** | 5 / 5 | +0.62 | 16 | 47 / 44 / 49 |  |
+| `F2534` | CS20 | >= 60% saham industri di atas MA50 | K21.009 NR14 | RS >= 70 + ATR% >= 4 | 4,016 | **46** | 5 / 5 | +1.85 | 23 | 45 / 45 / 49 |  |
+| `F2535` | CS20 | hasil suku terkini tumbuh >= 20% | K09.022 MACD(24,52,18) silang naik | – | 9,313 | **46** | 5 / 5 | +0.61 | 18 | 48 / 44 / 46 |  |
+| `F2536` | CS20 | – | K03.028 tutup < jalur bawah BB(20, 2.0) | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 11,480 | **48** | 5 / 5 | +1.18 | 18 | 51 / 44 / 52 |  |
+| `F2537` | CS20 | – | K03.006 tutup < jalur bawah BB(10, 2.0) + RSI14 < 40 | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 7,412 | **49** | 5 / 5 | +1.18 | 19 | 51 / 44 / 53 |  |
+| `F2538` | CS20 | – | K18.029 jatuh >= 5% dalam 20 hari | RS >= 90 + ATR% >= 4 | 3,140 | **45** | 5 / 5 | +1.68 | 25 | 48 / 43 / 46 |  |
+| `F2539` | CS20 | hasil suku terkini tumbuh >= 20% | K03.013 tutup < jalur bawah BB(15, 1.5) | ADX > 25 | 5,501 | **48** | 5 / 5 | +0.85 | 19 | 51 / 44 / 48 |  |
+| `F2540` | CS20 | – | K03.038 tutup < jalur bawah BB(30, 1.5) + RSI14 < 30 | ATR% >= 4 | 9,062 | **49** | 5 / 5 | +1.99 | 25 | 53 / 46 / 52 |  |
+| `F2541` | CS20 | – | K03.015 tutup < jalur bawah BB(15, 1.5) + RSI14 < 40 | volum 10 hari > volum 50 hari + ATR% >= 4 | 11,766 | **48** | 5 / 5 | +1.28 | 24 | 50 / 46 / 47 |  |
+| `F2542` | CS20 | – | K01.069 RSI(7) < 25 | volum 10 hari > volum 50 hari + ATR% >= 4 | 9,718 | **48** | 5 / 5 | +1.31 | 24 | 51 / 47 / 45 |  |
+| `F2543` | CS20 | hasil suku terkini tumbuh >= 20% | K01.001 RSI(2) < 3 | – | 7,807 | **47** | 5 / 5 | +0.92 | 19 | 50 / 44 / 46 |  |
+| `F2544` | CS20 | – | K08.004 ema5 silang atas ema10 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 7,322 | **47** | 5 / 5 | +0.96 | 23 | 46 / 47 / 46 |  |
+| `F2545` | CS20 | – | K03.052 tutup < jalur bawah BB(50, 2.0) | MA50 > MA200 + ATR% >= 4 | 5,755 | **48** | 5 / 5 | +1.36 | 23 | 48 / 46 / 50 |  |
+| `F2546` | CS20 | – | M149 3-Step Pullback (ditala 2) | MA50 > MA200 + ATR% >= 4 | 4,090 | **45** | 5 / 5 | +1.28 | 22 | 42 / 47 / 45 |  |
+| `F2547` | CS20 | – | K03.003 tutup < jalur bawah BB(10, 1.5) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 10,049 | **47** | 5 / 5 | +1.53 | 23 | 48 / 46 / 48 |  |
+| `F2548` | CS20 | – | K01.059 RSI(5) < 20 | >= 30% di bawah puncak 52 minggu + volum 10 hari > volum 50 hari | 9,050 | **48** | 5 / 5 | +1.63 | 24 | 49 / 48 / 43 |  |
+| `F2549` | CS20 | hasil suku terkini tumbuh >= 20% | K24.006 bar pembalikan (buka <= 20%, tutup >= 90% julat) | RSI14 > 50 + ADX < 20 | 5,256 | **45** | 5 / 5 | +0.46 | 17 | 48 / 43 / 50 |  |
+| `F2550` | CS20 | hasil suku terkini tumbuh >= 20% | K11.011 Supertrend(14, 1.5) bertukar naik | tutup > MA20 + hari naik (tutup > buka) | 10,518 | **46** | 5 / 5 | +0.57 | 18 | 49 / 44 / 46 |  |
+| `F2551` | CS20 | – | K03.006 tutup < jalur bawah BB(10, 2.0) + RSI14 < 40 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 8,369 | **47** | 5 / 5 | +0.82 | 23 | 50 / 43 / 48 |  |
+| `F2552` | CS20 | hasil suku terkini tumbuh >= 20% | K24.001 bar pembalikan (buka <= 10%, tutup >= 70% julat) | ADX < 20 | 7,594 | **46** | 5 / 5 | +0.82 | 19 | 49 / 43 / 51 |  |
+| `F2553` | CS20 | >= 60% saham sektor di atas MA50 | M11 NR7 Breakout + Volume | MACD > isyarat | 6,136 | **45** | 5 / 5 | +0.55 | 14 | 45 / 44 / 48 |  |
+| `F2554` | CS20 | hasil suku terkini tumbuh >= 20% | K09.016 MACD(19,39,9) silang naik | RSI14 > 50 + ADX < 20 | 5,449 | **46** | 5 / 5 | +0.72 | 17 | 49 / 44 / 46 |  |
+| `F2555` | CS20 | hasil suku terkini tumbuh >= 20% | M50 Elder Triple Screen (ditala 1) | tutup > MA200 + MACD > isyarat | 4,493 | **44** | 4 / 6 | +0.22 | 14 | 47 / 41 / 47 |  |
+| `F2556` | CS20 | >= 60% saham sektor di atas MA50 | K17.037 undur ke sma100 yang naik (tol 0.0%) | RSI14 > 50 + ADX < 20 | 5,059 | **47** | 5 / 5 | +0.76 | 14 | 47 / 46 / 47 |  |
+| `F2557` | CS20 | >= 60% saham industri di atas MA50 | K14.007 lonjakan >= 2.0% + volum 1.5x | ATR% >= 4 + tutup dalam 25% teratas julat hari | 4,823 | **44** | 4 / 6 | +0.88 | 22 | 42 / 45 / 46 |  |
+| `F2558` | CS20 | hasil suku terkini tumbuh >= 20% | M89 Chande 65sma-3cc (ditala 1) | – | 3,220 | **46** | 5 / 5 | +0.77 | 18 | 49 / 44 / 45 |  |
+| `F2559` | CS20 | hasil suku terkini tumbuh >= 20% | K25.015 pecah julat sempit 20 hari (<= 35%) | MACD > isyarat + ADX < 20 | 5,617 | **47** | 5 / 5 | +0.65 | 17 | 49 / 44 / 50 |  |
+| `F2560` | CS20 | – | K01.021 RSI(3) < 8 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 6,085 | **48** | 5 / 5 | +1.69 | 24 | 50 / 45 / 49 |  |
+| `F2561` | CS20 | – | K01.002 RSI(2) < 3 + atas MA200 | MA50 > MA200 + ATR% >= 4 | 4,181 | **47** | 5 / 5 | +1.45 | 23 | 47 / 48 / 43 |  |
+| `F2562` | CS20 | – | K03.029 tutup < jalur bawah BB(20, 2.0) + RSI14 < 30 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,057 | **48** | 5 / 5 | +1.46 | 24 | 51 / 45 / 50 |  |
+| `F2563` | CS20 | hasil suku terkini tumbuh >= 20% | N40 OBV tinggi baharu + MA50 | MACD > 0 + hari naik (tutup > buka) | 4,410 | **45** | 5 / 5 | +0.34 | 16 | 46 / 44 / 48 |  |
+| `F2564` | CS20 | hasil suku terkini tumbuh >= 20% | M50 Elder Triple Screen (ditala 1) | RSI14 > 50 + ADX < 20 | 3,286 | **45** | 5 / 5 | +0.63 | 17 | 48 / 43 / 51 |  |
+| `F2565` | CS20 | – | K18.011 jatuh >= 15% dalam 3 hari | RSI14 < 40 + ATR% >= 4 | 6,145 | **48** | 5 / 5 | +2.62 | 28 | 48 / 47 / 52 |  |
+| `F2566` | CS20 | – | K01.069 RSI(7) < 25 | MA50 > MA200 + ATR% >= 4 | 7,961 | **47** | 5 / 5 | +1.44 | 23 | 49 / 46 / 47 |  |
+| `F2567` | CS20 | hasil suku terkini tumbuh >= 20% | K25.015 pecah julat sempit 20 hari (<= 35%) | RSI14 > 60 + ADX < 20 | 5,023 | **46** | 5 / 5 | +0.56 | 16 | 49 / 43 / 49 |  |
+| `F2568` | CS20 | hasil suku terkini tumbuh >= 20% | K05.002 tutup silang atas jalur atas BB(10, 2.0) | MACD > isyarat + ADX < 20 | 5,451 | **46** | 5 / 5 | +0.72 | 18 | 48 / 45 / 45 |  |
+| `F2569` | CS20 | – | K03.016 tutup < jalur bawah BB(15, 2.0) | RSI14 < 40 + ATR% >= 4 | 14,385 | **48** | 5 / 5 | +1.56 | 25 | 50 / 46 / 49 |  |
+| `F2570` | CS20 | – | M125 2-Bar Breakout (ditala 1) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 8,625 | **46** | 5 / 5 | +0.98 | 23 | 46 / 46 / 43 |  |
+| `F2571` | CS20 | – | K02.019 RSI(10) silang atas 40 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 7,161 | **46** | 5 / 5 | +0.98 | 23 | 46 / 48 / 41 |  |
+| `F2572` | CS20 | hasil suku terkini tumbuh >= 20% | K09.013 MACD(10,20,7) silang naik | ADX < 20 + hari naik (tutup > buka) | 6,630 | **46** | 5 / 5 | +0.87 | 19 | 49 / 43 / 49 |  |
+| `F2573` | CS20 | – | K03.003 tutup < jalur bawah BB(10, 1.5) + RSI14 < 40 | RS >= 70 + ATR% >= 4 | 4,811 | **48** | 5 / 5 | +1.93 | 26 | 50 / 46 / 50 |  |
+| `F2574` | CS20 | hasil suku terkini tumbuh >= 20% | K09.013 MACD(10,20,7) silang naik | MA50 naik (lawan 20 bar lalu) + ADX < 20 | 4,558 | **47** | 5 / 5 | +1.05 | 18 | 50 / 44 / 51 |  |
+| `F2575` | CS20 | – | K18.018 jatuh >= 15% dalam 5 hari | MA50 > MA200 + ATR% >= 4 | 5,194 | **46** | 5 / 5 | +1.26 | 25 | 48 / 44 / 50 |  |
+| `F2576` | CS20 | – | K01.060 RSI(5) < 20 + atas MA200 | ATR% >= 4 | 4,785 | **47** | 5 / 5 | +1.77 | 23 | 49 / 47 / 44 |  |
+| `F2577` | CS20 | hasil suku terkini tumbuh >= 20% | N40 OBV tinggi baharu + MA50 | RSI14 > 50 + hari naik (tutup > buka) | 4,894 | **45** | 5 / 5 | +0.37 | 16 | 46 / 44 / 47 |  |
+| `F2578` | CS20 | – | K03.033 tutup < jalur bawah BB(20, 2.5) + RSI14 < 40 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 6,233 | **47** | 5 / 5 | +1.29 | 24 | 48 / 45 / 52 |  |
+| `F2579` | CS20 | hasil suku terkini tumbuh >= 20% | K19.007 pecah atas Keltner(20, 1.5) | ADX < 20 + hari naik (tutup > buka) | 5,537 | **46** | 5 / 5 | +0.39 | 17 | 48 / 44 / 46 |  |
+| `F2580` | CS20 | hasil suku terkini tumbuh >= 20% | K09.022 MACD(24,52,18) silang naik | MA50 > MA200 + dalam 15% dari puncak 52 minggu | 4,729 | **46** | 5 / 5 | +0.62 | 15 | 48 / 44 / 45 |  |
+| `F2581` | CS20 | – | K03.018 tutup < jalur bawah BB(15, 2.0) + RSI14 < 40 | volum 10 hari > volum 50 hari + ATR% >= 4 | 9,420 | **47** | 5 / 5 | +0.81 | 23 | 49 / 46 / 45 |  |
+| `F2582` | CS20 | hasil suku terkini tumbuh >= 20% | M50 Elder Triple Screen | ADX < 20 + Supertrend naik | 4,122 | **47** | 5 / 5 | +0.76 | 18 | 48 / 46 / 51 |  |
+| `F2583` | CS20 | hasil suku terkini tumbuh >= 20% | K02.035 RSI(21) silang atas 60 | RSI14 > 60 + Supertrend naik | 7,530 | **46** | 5 / 5 | +0.32 | 16 | 48 / 43 / 47 |  |
+| `F2584` | CS20 | – | K01.069 RSI(7) < 25 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 7,851 | **47** | 5 / 5 | +1.24 | 24 | 50 / 45 / 47 |  |
+| `F2585` | CS20 | – | K03.017 tutup < jalur bawah BB(15, 2.0) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + ATR% >= 4 | 5,820 | **50** | 5 / 5 | +2.28 | 28 | 51 / 48 / 55 |  |
+| `F2586` | CS20 | hasil suku terkini tumbuh >= 20% | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) (ditala 1) | tutup > MA200 + Supertrend naik | 5,404 | **46** | 5 / 5 | +0.78 | 17 | 49 / 44 / 45 |  |
+| `F2587` | CS20 | – | K01.087 RSI(14) < 30 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 5,587 | **49** | 5 / 5 | +1.49 | 24 | 51 / 46 / 51 |  |
+| `F2588` | CS20 | hasil suku terkini tumbuh >= 20% | K09.024 MACD(24,52,18) silang naik atas sifar | tutup > MA50 + dalam 15% dari puncak 52 minggu | 3,753 | **47** | 5 / 5 | +0.56 | 16 | 50 / 44 / 45 |  |
+| `F2589` | CS20 | – | K03.005 tutup < jalur bawah BB(10, 2.0) + RSI14 < 30 | ATR% >= 4 | 6,424 | **48** | 5 / 5 | +1.11 | 24 | 52 / 42 / 53 |  |
+| `F2590` | CS20 | hasil suku terkini tumbuh >= 20% | K09.015 MACD(10,20,7) silang naik atas sifar | Supertrend naik + hari naik (tutup > buka) | 5,338 | **46** | 5 / 5 | +0.37 | 16 | 47 / 43 / 47 |  |
+| `F2591` | CS20 | >= 60% saham sektor di atas MA50 | M156 Single Penetration (DiNapoli) (ditala 1) | Supertrend naik + RS >= 90 | 4,635 | **45** | 4 / 6 | +0.87 | 17 | 45 / 44 / 48 |  |
+| `F2592` | CS20 | – | K01.081 RSI(10) < 30 | ADX > 25 + >= 30% di bawah puncak 52 minggu | 7,648 | **50** | 5 / 5 | +1.98 | 25 | 51 / 49 / 48 |  |
+| `F2593` | CS20 | hasil suku terkini tumbuh >= 20% | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) (ditala 1) | tutup > MA200 + hari naik (tutup > buka) | 5,420 | **47** | 5 / 5 | +0.91 | 17 | 50 / 44 / 45 |  |
+| `F2594` | CS20 | – | K03.013 tutup < jalur bawah BB(15, 1.5) | RS >= 70 + ATR% >= 4 | 6,883 | **47** | 5 / 5 | +1.80 | 25 | 48 / 46 / 49 |  |
+| `F2595` | CS20 | – | K21.005 NR7 | RS >= 90 + ATR% >= 4 | 5,555 | **46** | 5 / 5 | +1.62 | 24 | 47 / 45 / 47 |  |
+| `F2596` | CS20 | – | K01.091 RSI(14) < 40 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 8,540 | **46** | 5 / 5 | +0.92 | 22 | 47 / 45 / 46 |  |
+| `F2597` | CS20 | – | K01.001 RSI(2) < 3 | >= 30% di bawah puncak 52 minggu + volum hari isyarat >= 1.5x purata 50 | 5,041 | **48** | 5 / 5 | +1.74 | 24 | 50 / 46 / 47 |  |
+| `F2598` | CS20 | – | K03.040 tutup < jalur bawah BB(30, 2.0) | RSI14 < 40 + ATR% >= 4 | 14,012 | **49** | 5 / 5 | +1.98 | 25 | 51 / 46 / 51 |  |
+| `F2599` | CS20 | – | M11 NR7 Breakout + Volume | MACD > isyarat + tutup dalam 25% teratas julat hari | 6,147 | **45** | 5 / 5 | +0.35 | 14 | 46 / 43 / 48 |  |
+| `F2600` | CS20 | hasil suku terkini tumbuh >= 20% | K14.013 lonjakan >= 3.0% + volum 1.5x | MA50 > MA200 + hari naik (tutup > buka) | 4,842 | **47** | 5 / 5 | +0.95 | 19 | 48 / 45 / 48 |  |
+| `F2601` | CS20 | hasil suku terkini tumbuh >= 20% | K09.015 MACD(10,20,7) silang naik atas sifar | MA50 > MA200 + MACD > isyarat | 3,401 | **46** | 5 / 5 | +0.52 | 16 | 47 / 45 / 45 |  |
+| `F2602` | CS20 | industri 20% teratas (pulangan 63 sesi) | M70 Pecahan Hari Dalam (ditala 2) | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 2,716 | **47** | 5 / 5 | +2.01 | 24 | 45 / 47 / 54 |  |
+| `F2603` | CS20 | – | K03.014 tutup < jalur bawah BB(15, 1.5) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + volum 10 hari > volum 50 hari | 7,052 | **49** | 5 / 5 | +1.74 | 25 | 50 / 49 / 47 |  |
+| `F2604` | CS20 | – | K03.002 tutup < jalur bawah BB(10, 1.5) + RSI14 < 30 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,950 | **48** | 5 / 5 | +1.61 | 24 | 52 / 46 / 49 |  |
+| `F2605` | CS20 | hasil suku terkini tumbuh >= 20% | K25.015 pecah julat sempit 20 hari (<= 35%) | ADX < 20 + Supertrend naik | 5,099 | **46** | 5 / 5 | +0.42 | 16 | 49 / 43 / 48 |  |
+| `F2606` | CS20 | hasil suku terkini tumbuh >= 20% | M116 2/20 EMA Breakout (Landry) (ditala 1) | tutup > MA20 + ADX < 20 | 5,256 | **47** | 5 / 5 | +0.71 | 17 | 49 / 45 / 49 |  |
+| `F2607` | CS20 | – | K03.040 tutup < jalur bawah BB(30, 2.0) | ADX < 20 + ATR% >= 4 | 6,505 | **48** | 5 / 5 | +2.13 | 26 | 49 / 49 / 46 |  |
+| `F2608` | CS20 | – | M57 Landry Trend Knockout (TKO) (ditala 1) | MA50 > MA200 + ATR% >= 4 | 4,327 | **46** | 5 / 5 | +1.44 | 23 | 42 / 46 / 48 |  |
+| `F2609` | CS20 | – | K03.042 tutup < jalur bawah BB(30, 2.0) + RSI14 < 40 | volum 10 hari > volum 50 hari + ATR% >= 4 | 9,432 | **48** | 5 / 5 | +1.30 | 24 | 49 / 46 / 49 |  |
+| `F2610` | CS20 | – | K18.030 jatuh >= 8% dalam 20 hari | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 9,716 | **45** | 5 / 5 | +0.87 | 22 | 47 / 44 / 48 |  |
+| `F2611` | CS20 | – | K01.004 RSI(2) < 5 + atas MA200 | MACD > 0 + ATR% >= 4 | 4,175 | **47** | 5 / 5 | +1.49 | 24 | 46 / 48 / 44 |  |
+| `F2612` | CS20 | – | K22.005 Holy Grail (ADX > 25, undur EMA20) | tutup > MA50 + RS >= 90 | 3,018 | **43** | 4 / 6 | -0.06 | 18 | 46 / 40 / 41 |  |
+| `F2613` | CS20 | – | K01.057 RSI(5) < 15 | RSI14 < 40 + ATR% >= 4 | 10,595 | **49** | 5 / 5 | +1.80 | 25 | 52 / 46 / 49 |  |
+| `F2614` | CS20 | – | K03.050 tutup < jalur bawah BB(50, 1.5) + RSI14 < 30 | ADX > 25 + ATR% >= 4 | 5,876 | **50** | 5 / 5 | +1.75 | 26 | 54 / 46 / 52 |  |
+| `F2615` | CS20 | – | K21.003 NR5 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 12,486 | **47** | 5 / 5 | +1.15 | 23 | 47 / 47 / 45 |  |
+| `F2616` | CS20 | – | K01.067 RSI(7) < 20 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,949 | **49** | 5 / 5 | +1.81 | 24 | 52 / 47 / 49 |  |
+| `F2617` | CS20 | hasil suku terkini tumbuh >= 20% | K14.013 lonjakan >= 3.0% + volum 1.5x | hari naik (tutup > buka) | 7,538 | **47** | 5 / 5 | +0.90 | 20 | 49 / 45 / 50 |  |
+| `F2618` | CS20 | – | K03.015 tutup < jalur bawah BB(15, 1.5) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 9,809 | **47** | 5 / 5 | +1.47 | 23 | 48 / 45 / 48 |  |
+| `F2619` | CS20 | hasil suku terkini tumbuh >= 20% | M156 Single Penetration (DiNapoli) | MA50 > MA200 + RSI14 > 50 | 4,464 | **46** | 5 / 5 | +0.63 | 17 | 48 / 44 / 46 |  |
+| `F2620` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K02.011 RSI(7) silang atas 35 | ATR% >= 4 | 5,613 | **46** | 5 / 5 | +1.16 | 24 | 41 / 50 / 46 |  |
+| `F2621` | CS20 | hasil suku terkini tumbuh >= 20% | K14.003 lonjakan >= 0.0% + volum 2.0x | – | 7,799 | **46** | 5 / 5 | +0.65 | 18 | 49 / 44 / 43 |  |
+| `F2622` | CS20 | industri 20% teratas (pulangan 63 sesi) | K21.005 NR7 | RS >= 70 + ATR% >= 4 | 3,717 | **48** | 5 / 5 | +2.57 | 25 | 43 / 49 / 51 |  |
+| `F2623` | CS20 | – | K18.031 jatuh >= 10% dalam 20 hari | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 9,003 | **46** | 5 / 5 | +0.79 | 22 | 47 / 44 / 47 |  |
+| `F2624` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K02.003 RSI(5) silang atas 30 | >= 30% di bawah puncak 52 minggu + hari naik (tutup > buka) | 4,563 | **45** | 5 / 5 | +1.40 | 23 | 43 / 48 / 44 |  |
+| `F2625` | CS20 | hasil suku terkini tumbuh >= 20% | M92 CCI-50 (ditala 2) | tutup > MA20 + hari naik (tutup > buka) | 4,951 | **45** | 5 / 5 | +0.48 | 17 | 47 / 44 / 48 |  |
+| `F2626` | CS20 | – | K03.031 tutup < jalur bawah BB(20, 2.5) | >= 30% di bawah puncak 52 minggu | 8,482 | **48** | 5 / 5 | +1.74 | 25 | 49 / 47 / 52 |  |
+| `F2627` | CS20 | – | K02.026 RSI(14) silang atas 40 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 5,561 | **46** | 5 / 5 | +1.14 | 23 | 46 / 47 / 42 |  |
+| `F2628` | CS20 | hasil suku terkini tumbuh >= 20% | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) (ditala 1) | tutup > MA200 | 6,419 | **47** | 5 / 5 | +0.87 | 17 | 49 / 45 / 46 |  |
+| `F2629` | CS20 | – | K03.026 tutup < jalur bawah BB(20, 1.5) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + volum 10 hari > volum 50 hari | 6,999 | **49** | 5 / 5 | +1.62 | 25 | 50 / 49 / 48 |  |
+| `F2630` | CS20 | hasil suku terkini tumbuh >= 20% | K09.015 MACD(10,20,7) silang naik atas sifar | MACD > isyarat | 4,829 | **45** | 5 / 5 | +0.31 | 16 | 46 / 43 / 48 |  |
+| `F2631` | CS20 | hasil suku terkini tumbuh >= 20% | M137 Livermore System (ditala 2) | ADX < 20 + hari naik (tutup > buka) | 3,686 | **47** | 5 / 5 | +0.49 | 16 | 50 / 43 / 49 |  |
+| `F2632` | CS20 | – | K03.033 tutup < jalur bawah BB(20, 2.5) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 4,914 | **47** | 5 / 5 | +1.44 | 24 | 46 / 46 / 51 |  |
+| `F2633` | CS20 | – | M136 Short/Intermediate-term Low (Larry Williams) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 7,714 | **46** | 5 / 5 | +1.00 | 23 | 47 / 46 / 45 |  |
+| `F2634` | CS20 | – | K03.017 tutup < jalur bawah BB(15, 2.0) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + volum 10 hari > volum 50 hari | 5,576 | **48** | 5 / 5 | +1.28 | 24 | 50 / 48 / 48 |  |
+| `F2635` | CS20 | – | K03.039 tutup < jalur bawah BB(30, 1.5) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 8,967 | **48** | 5 / 5 | +1.73 | 24 | 49 / 46 / 51 |  |
+| `F2636` | CS20 | – | P23 Ichimoku pecah atas awan | tutup > MA20 + ATR% >= 4 | 5,181 | **45** | 5 / 5 | +0.79 | 22 | 44 / 44 / 53 |  |
+| `F2637` | CS20 | – | K01.091 RSI(14) < 40 | MA50 > MA200 + ATR% >= 4 | 9,456 | **47** | 5 / 5 | +1.62 | 23 | 47 / 46 / 49 |  |
+| `F2638` | CS20 | – | K03.055 tutup < jalur bawah BB(50, 2.5) | RSI14 < 40 + >= 30% di bawah puncak 52 minggu | 6,726 | **48** | 5 / 5 | +1.40 | 25 | 49 / 48 / 48 |  |
+| `F2639` | CS20 | – | N07 Tiga MA tersusun | tutup > MA50 + >= 30% di bawah puncak 52 minggu | 5,332 | **45** | 5 / 5 | +0.37 | 22 | 46 / 45 / 47 |  |
+| `F2640` | CS20 | – | M55 Guppy GMMA | tutup > MA20 + RS >= 90 | 4,848 | **46** | 5 / 5 | +0.48 | 19 | 47 / 42 / 49 |  |
+| `F2641` | CS20 | hasil suku terkini tumbuh >= 20% | K12.003 ADX(7) silang atas 25 & +DI > -DI | RSI14 > 50 + ADX < 20 | 5,577 | **46** | 5 / 5 | +0.65 | 17 | 48 / 43 / 50 |  |
+| `F2642` | CS20 | hasil suku terkini tumbuh >= 20% | K14.009 lonjakan >= 2.0% + volum 2.0x | hari naik (tutup > buka) | 5,411 | **47** | 5 / 5 | +0.87 | 19 | 49 / 45 / 47 |  |
+| `F2643` | CS20 | – | M156 Single Penetration (DiNapoli) | templat trend Minervini + RS >= 90 | 5,059 | **45** | 4 / 6 | +0.52 | 18 | 47 / 42 / 45 |  |
+| `F2644` | CS20 | >= 60% saham industri di atas MA50 | K21.003 NR5 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 6,209 | **46** | 5 / 5 | +0.74 | 21 | 46 / 47 / 46 |  |
+| `F2645` | CS20 | – | K03.015 tutup < jalur bawah BB(15, 1.5) + RSI14 < 40 | ATR% >= 4 | 18,827 | **48** | 5 / 5 | +1.66 | 25 | 51 / 46 / 48 |  |
+| `F2646` | CS20 | industri 20% teratas (pulangan 63 sesi) | K21.003 NR5 | ATR% >= 4 | 7,567 | **46** | 5 / 5 | +1.73 | 24 | 44 / 47 / 49 |  |
+| `F2647` | CS20 | – | M149 3-Step Pullback (ditala 2) | dalam 15% dari puncak 52 minggu + ATR% >= 4 | 3,239 | **45** | 5 / 5 | +1.14 | 21 | 41 / 48 / 44 |  |
+| `F2648` | CS20 | – | M57 Landry Trend Knockout (TKO) (ditala 2) | MA50 > MA200 + ATR% >= 4 | 5,651 | **46** | 5 / 5 | +1.45 | 23 | 43 / 47 / 49 |  |
+| `F2649` | CS20 | >= 60% saham industri di atas MA50 | K14.008 lonjakan >= 2.0% + volum 1.5x + tutup 25 % teratas | RSI14 > 50 + ADX < 20 | 8,513 | **46** | 5 / 5 | +0.54 | 14 | 47 / 45 / 44 |  |
+| `F2650` | CS20 | – | K01.089 RSI(14) < 35 | MA50 > MA200 + ATR% >= 4 | 7,221 | **48** | 5 / 5 | +1.64 | 23 | 49 / 46 / 48 |  |
+| `F2651` | CS20 | – | K01.091 RSI(14) < 40 | RS >= 70 + ATR% >= 4 | 5,002 | **48** | 5 / 5 | +2.16 | 26 | 49 / 46 / 52 |  |
+| `F2652` | CS20 | hasil suku terkini tumbuh >= 20% | M124 'Last' Stochastic Technique (ChartSchool) (ditala 1) | tutup > MA20 + hari naik (tutup > buka) | 8,379 | **46** | 5 / 5 | +0.60 | 19 | 49 / 43 / 48 |  |
+| `F2653` | CS20 | – | K01.067 RSI(7) < 20 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 5,805 | **49** | 5 / 5 | +2.09 | 25 | 51 / 47 / 52 |  |
+| `F2654` | CS20 | – | K03.039 tutup < jalur bawah BB(30, 1.5) + RSI14 < 40 | RS >= 70 + ATR% >= 4 | 4,494 | **49** | 5 / 5 | +2.46 | 26 | 51 / 46 / 53 |  |
+| `F2655` | CS20 | hasil suku terkini tumbuh >= 20% | K14.007 lonjakan >= 2.0% + volum 1.5x | – | 9,466 | **47** | 5 / 5 | +0.86 | 20 | 48 / 45 / 48 |  |
+| `F2656` | CS20 | – | K13.011 Stochastic(14) silang naik dari bawah 30 | MA50 > MA200 + ATR% >= 4 | 13,244 | **47** | 5 / 5 | +1.80 | 23 | 46 / 47 / 47 |  |
+| `F2657` | CS20 | industri 20% teratas (pulangan 63 sesi) | M70 Pecahan Hari Dalam (ditala 2) | tutup > MA200 + ATR% >= 4 | 2,909 | **48** | 5 / 5 | +2.45 | 25 | 44 / 48 / 55 |  |
+| `F2658` | CS20 | – | K03.037 tutup < jalur bawah BB(30, 1.5) | RS >= 70 + ATR% >= 4 | 5,036 | **49** | 5 / 5 | +2.53 | 26 | 50 / 46 / 53 |  |
+| `F2659` | CS20 | – | K01.060 RSI(5) < 20 + atas MA200 | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 9,388 | **47** | 5 / 5 | +0.94 | 17 | 50 / 43 / 49 |  |
+| `F2660` | CS20 | – | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) | tutup > MA200 + ATR% >= 4 | 5,597 | **47** | 5 / 5 | +1.87 | 23 | 47 / 48 / 48 |  |
+| `F2661` | CS20 | >= 60% saham industri di atas MA50 | K21.005 NR7 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 5,568 | **46** | 5 / 5 | +0.79 | 21 | 45 / 46 / 47 |  |
+| `F2662` | CS20 | – | K03.014 tutup < jalur bawah BB(15, 1.5) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + ATR% >= 4 | 7,189 | **50** | 5 / 5 | +2.58 | 28 | 52 / 48 / 52 |  |
+| `F2663` | CS20 | – | K03.044 tutup < jalur bawah BB(30, 2.5) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu | 5,881 | **48** | 5 / 5 | +1.51 | 25 | 48 / 47 / 54 |  |
+| `F2664` | CS20 | >= 60% saham sektor di atas MA50 | K17.037 undur ke sma100 yang naik (tol 0.0%) | tutup > MA20 + ADX < 20 | 4,855 | **47** | 5 / 5 | +0.80 | 14 | 47 / 46 / 48 |  |
+| `F2665` | CS20 | – | K03.043 tutup < jalur bawah BB(30, 2.5) | >= 30% di bawah puncak 52 minggu | 8,192 | **48** | 5 / 5 | +1.62 | 25 | 48 / 47 / 50 |  |
+| `F2666` | CS20 | hasil suku terkini tumbuh >= 20% | K12.002 ADX(7) silang atas 20 & +DI > -DI | – | 5,401 | **47** | 5 / 5 | +1.25 | 19 | 48 / 44 / 52 |  |
+| `F2667` | CS20 | – | K03.030 tutup < jalur bawah BB(20, 2.0) + RSI14 < 40 | volum 10 hari > volum 50 hari + ATR% >= 4 | 9,793 | **48** | 5 / 5 | +1.40 | 24 | 50 / 47 / 47 |  |
+| `F2668` | CS20 | hasil suku terkini tumbuh >= 20% | K05.006 tutup silang atas jalur atas BB(20, 2.0) | MACD > 0 + ADX < 20 | 4,832 | **46** | 5 / 5 | +0.63 | 17 | 48 / 44 / 48 |  |
+| `F2669` | CS20 | – | M55 Guppy GMMA (ditala 1) | MACD > 0 + RS >= 90 | 5,130 | **45** | 5 / 5 | +0.60 | 19 | 47 / 41 / 50 |  |
+| `F2670` | CS20 | – | K01.083 RSI(10) < 35 | RS >= 70 + ATR% >= 4 | 4,968 | **48** | 5 / 5 | +2.26 | 26 | 50 / 45 / 53 |  |
+| `F2671` | CS20 | saham lain dalam industri sama naik >= 20% dalam 20 sesi | K08.013 sma10 silang atas sma50 | MACD > isyarat | 15,431 | **46** | 5 / 5 | +0.61 | 16 | 46 / 47 / 45 |  |
+| `F2672` | CS20 | – | M77 Undercut & Rally pada Purata Bergerak (MAU&R) | templat trend Minervini + ADX < 20 | 4,102 | **49** | 5 / 5 | +0.80 | 15 | 50 / 47 / 48 |  |
+| `F2673` | CS20 | – | K07.016 tutup silang atas ema100 | RSI14 > 50 + >= 30% di bawah puncak 52 minggu | 5,555 | **43** | 4 / 6 | -0.25 | 20 | 45 / 42 / 45 |  |
+| `F2674` | CS20 | – | K21.007 NR10 | MACD > 0 + RS >= 90 | 8,988 | **45** | 4 / 6 | +0.48 | 17 | 46 / 43 / 48 |  |
+| `F2675` | CS20 | – | K03.051 tutup < jalur bawah BB(50, 1.5) + RSI14 < 40 | >= 30% di bawah puncak 52 minggu | 13,731 | **48** | 5 / 5 | +1.80 | 24 | 49 / 48 / 48 |  |
+| `F2676` | CS20 | – | K13.011 Stochastic(14) silang naik dari bawah 30 | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 21,350 | **47** | 5 / 5 | +0.91 | 17 | 50 / 44 / 47 |  |
+| `F2677` | CS20 | – | K08.015 sma20 silang atas sma50 | >= 30% di bawah puncak 52 minggu | 5,172 | **47** | 5 / 5 | +0.86 | 23 | 47 / 46 / 48 |  |
+| `F2678` | CS20 | – | K06.009 6 tutup menurun berturut | MA20 > MA50 + RS >= 70 | 6,686 | **46** | 5 / 5 | +0.58 | 16 | 48 / 43 / 42 |  |
+| `F2679` | CS20 | – | K01.081 RSI(10) < 30 | ATR% >= 4 | 14,198 | **49** | 5 / 5 | +2.01 | 25 | 52 / 47 / 49 |  |
+| `F2680` | CS20 | – | K03.055 tutup < jalur bawah BB(50, 2.5) | RSI14 < 40 + ATR% >= 4 | 7,242 | **47** | 5 / 5 | +0.99 | 24 | 48 / 45 / 50 |  |
+| `F2681` | CS20 | hasil suku terkini tumbuh >= 20% | K10.013 pecah tinggi 30 hari | ADX < 20 + hari naik (tutup > buka) | 4,470 | **46** | 5 / 5 | +0.42 | 16 | 49 / 43 / 48 |  |
+| `F2682` | CS20 | – | K21.010 NR14 + hari dalam | RS >= 70 + ATR% >= 4 | 4,542 | **47** | 5 / 5 | +1.76 | 24 | 45 / 47 / 51 |  |
+| `F2683` | CS20 | – | P23 Ichimoku pecah atas awan | ATR% >= 4 + hari naik (tutup > buka) | 5,275 | **45** | 4 / 6 | +0.72 | 23 | 43 / 44 / 53 |  |
+| `F2684` | CS20 | – | K13.011 Stochastic(14) silang naik dari bawah 30 | RS >= 70 + ATR% >= 4 | 7,859 | **47** | 5 / 5 | +2.30 | 25 | 47 / 47 / 47 |  |
+| `F2685` | CS20 | – | K01.079 RSI(10) < 25 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 5,554 | **49** | 5 / 5 | +1.70 | 25 | 52 / 46 / 52 |  |
+| `F2686` | CS20 | industri 20% terbawah (pulangan 63 sesi) | K13.015 Stochastic(21) silang naik dari bawah 30 | MA20 > MA50 | 7,224 | **47** | 5 / 5 | +0.35 | 16 | 49 / 45 / 40 |  |
+| `F2687` | CS20 | – | K01.094 RSI(14) < 45 + atas MA200 | MACD > 0 + ATR% >= 4 | 5,423 | **46** | 5 / 5 | +1.85 | 24 | 46 / 47 / 46 |  |
+| `F2688` | CS20 | hasil suku terkini tumbuh >= 20% | K01.094 RSI(14) < 45 + atas MA200 | MA20 > MA50 | 5,370 | **47** | 5 / 5 | +1.17 | 19 | 51 / 45 / 42 |  |
+| `F2689` | CS20 | hasil suku terkini tumbuh >= 20% | N33 Donchian20 + penapis MA200 | ADX < 20 + Supertrend naik | 4,384 | **46** | 5 / 5 | +0.83 | 16 | 49 / 43 / 49 |  |
+| `F2690` | CS20 | hasil suku terkini tumbuh >= 20% | M50 Elder Triple Screen | tutup > MA200 + ADX < 20 | 3,540 | **47** | 5 / 5 | +1.03 | 17 | 48 / 46 / 49 |  |
+| `F2691` | CS20 | – | K01.091 RSI(14) < 40 | ADX < 20 + ATR% >= 4 | 9,274 | **48** | 5 / 5 | +2.01 | 25 | 49 / 47 / 45 |  |
+| `F2692` | CS20 | – | K03.019 tutup < jalur bawah BB(15, 2.5) | MA20 > MA50 + RS >= 70 | 5,672 | **50** | 5 / 5 | +1.15 | 18 | 51 / 46 / 56 |  |
+| `F2693` | CS20 | – | K08.013 sma10 silang atas sma50 | ATR% >= 4 | 7,190 | **49** | 5 / 5 | +1.73 | 25 | 48 / 49 / 50 |  |
+| `F2694` | CS20 | – | K03.052 tutup < jalur bawah BB(50, 2.0) | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 6,641 | **48** | 5 / 5 | +1.34 | 23 | 50 / 45 / 51 |  |
+| `F2695` | CS20 | – | K01.079 RSI(10) < 25 | volum 10 hari > volum 50 hari + ATR% >= 4 | 6,792 | **49** | 5 / 5 | +1.52 | 24 | 53 / 46 / 49 |  |
+| `F2696` | CS20 | >= 60% saham sektor di atas MA50 | K14.004 lonjakan >= 0.0% + volum 2.0x + tutup 25 % teratas | Supertrend naik + hari naik (tutup > buka) | 10,985 | **44** | 4 / 6 | +0.06 | 12 | 45 / 43 / 45 |  |
+| `F2697` | CS20 | – | K01.093 RSI(14) < 45 | ADX < 20 + ATR% >= 4 | 11,541 | **47** | 5 / 5 | +1.80 | 25 | 49 / 47 / 46 |  |
+| `F2698` | CS20 | – | K01.089 RSI(14) < 35 | >= 30% di bawah puncak 52 minggu | 14,140 | **48** | 5 / 5 | +1.95 | 24 | 50 / 48 / 48 |  |
+| `F2699` | CS20 | – | M149 3-Step Pullback (ditala 2) | tutup > MA200 + ATR% >= 4 | 4,994 | **45** | 5 / 5 | +1.18 | 22 | 43 / 46 / 46 |  |
+| `F2700` | CS20 | – | K03.039 tutup < jalur bawah BB(30, 1.5) + RSI14 < 40 | ATR% >= 4 | 17,295 | **49** | 5 / 5 | +2.02 | 25 | 51 / 47 / 51 |  |
+| `F2701` | CS20 | – | K01.089 RSI(14) < 35 | ATR% >= 4 | 14,316 | **49** | 5 / 5 | +2.02 | 25 | 51 / 47 / 50 |  |
+| `F2702` | CS20 | – | K03.051 tutup < jalur bawah BB(50, 1.5) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 7,396 | **48** | 5 / 5 | +1.74 | 23 | 48 / 47 / 50 |  |
+| `F2703` | CS20 | hasil suku terkini tumbuh >= 20% | M66 IBD Undur Pertama ke Purata 50 Hari | MACD > isyarat | 3,559 | **47** | 5 / 5 | +0.50 | 16 | 48 / 45 / 44 |  |
+| `F2704` | CS20 | hasil suku terkini tumbuh >= 20% | K25.004 pecah julat sempit 10 hari (<= 12%) + volum 1.5x | tutup > MA200 + MA50 > MA200 | 2,961 | **46** | 5 / 5 | +0.40 | 15 | 48 / 44 / 44 |  |
+| `F2705` | CS20 | – | K21.008 NR10 + hari dalam | RS >= 70 + ATR% >= 4 | 5,595 | **47** | 5 / 5 | +1.92 | 24 | 44 / 48 / 50 |  |
+| `F2706` | CS20 | – | K13.006 Stochastic(9) silang naik dari bawah 20 | RS >= 70 + ATR% >= 4 | 6,952 | **47** | 5 / 5 | +2.25 | 25 | 47 / 47 / 47 |  |
+| `F2707` | CS20 | hasil suku terkini tumbuh >= 20% | M50 Elder Triple Screen | MA50 > MA200 + ADX < 20 | 2,909 | **47** | 5 / 5 | +0.99 | 17 | 47 / 47 / 46 |  |
+| `F2708` | CS20 | – | K13.010 Stochastic(14) silang naik dari bawah 20 | RS >= 70 + ATR% >= 4 | 6,350 | **47** | 5 / 5 | +2.48 | 25 | 48 / 47 / 47 |  |
+| `F2709` | CS20 | – | K18.018 jatuh >= 15% dalam 5 hari | RSI14 < 40 + volum 10 hari > volum 50 hari | 7,198 | **48** | 5 / 5 | +1.51 | 25 | 50 / 47 / 51 |  |
+| `F2710` | CS20 | – | K02.010 RSI(7) silang atas 30 | ADX < 20 + >= 30% di bawah puncak 52 minggu | 5,457 | **47** | 5 / 5 | +1.42 | 24 | 49 / 47 / 41 |  |
+| `F2711` | CS20 | – | N47 NR7 + EMA9>EMA21 | RS >= 90 + ATR% >= 4 | 3,761 | **46** | 5 / 5 | +1.25 | 24 | 45 / 46 / 49 |  |
+| `F2712` | CS20 | – | K18.018 jatuh >= 15% dalam 5 hari | RSI14 < 40 + volum hari isyarat >= 1.5x purata 50 | 6,234 | **48** | 5 / 5 | +1.30 | 25 | 50 / 45 / 53 |  |
+| `F2713` | CS20 | hasil suku terkini tumbuh >= 20% | K10.002 pecah tinggi 5 hari + volum 1.5x | tutup > MA50 + MA50 > MA200 | 4,500 | **47** | 5 / 5 | +0.70 | 17 | 49 / 44 / 47 |  |
+| `F2714` | CS20 | – | K03.002 tutup < jalur bawah BB(10, 1.5) + RSI14 < 30 | ATR% >= 4 | 9,124 | **49** | 5 / 5 | +1.99 | 26 | 52 / 45 / 52 |  |
+| `F2715` | CS20 | – | K03.026 tutup < jalur bawah BB(20, 1.5) + RSI14 < 30 | ADX > 25 + volum hari isyarat >= 1.5x purata 50 | 6,967 | **49** | 5 / 5 | +0.87 | 20 | 52 / 45 / 49 |  |
+| `F2716` | CS20 | hasil suku terkini tumbuh >= 20% | K10.002 pecah tinggi 5 hari + volum 1.5x | hari naik (tutup > buka) | 7,083 | **46** | 5 / 5 | +0.32 | 17 | 48 / 43 / 45 |  |
+| `F2717` | CS20 | – | K03.021 tutup < jalur bawah BB(15, 2.5) + RSI14 < 40 | ADX > 25 | 8,153 | **48** | 5 / 5 | +0.76 | 18 | 50 / 44 / 57 |  |
+| `F2718` | CS20 | – | K01.083 RSI(10) < 35 | RSI14 < 40 + >= 30% di bawah puncak 52 minggu | 16,755 | **48** | 5 / 5 | +1.60 | 24 | 49 / 47 / 47 |  |
+| `F2719` | CS20 | hasil suku terkini tumbuh >= 20% | M50 Elder Triple Screen | ADX < 20 | 5,096 | **47** | 5 / 5 | +0.75 | 18 | 47 / 45 / 52 |  |
+| `F2720` | CS20 | – | K01.022 RSI(3) < 8 + atas MA200 | MA50 naik (lawan 20 bar lalu) + RS >= 70 | 7,591 | **47** | 5 / 5 | +0.69 | 17 | 50 / 42 / 47 |  |
+| `F2721` | CS20 | >= 60% saham sektor di atas MA50 | M156 Single Penetration (DiNapoli) (ditala 2) | MACD > isyarat + RS >= 90 | 4,785 | **44** | 4 / 6 | +0.61 | 17 | 45 / 43 / 45 |  |
+| `F2722` | CS20 | – | M124 'Last' Stochastic Technique (ChartSchool) (ditala 2) | ADX < 20 + ATR% >= 4 | 5,901 | **47** | 5 / 5 | +1.62 | 25 | 48 / 46 / 50 |  |
+| `F2723` | CS20 | – | K01.057 RSI(5) < 15 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 5,848 | **49** | 5 / 5 | +1.84 | 25 | 51 / 45 / 51 |  |
+| `F2724` | CS20 | – | N55 BB + RSI + ADX>20 | MA20 > MA50 + RS >= 70 | 11,231 | **47** | 5 / 5 | +0.84 | 16 | 50 / 43 / 50 |  |
+| `F2725` | CS20 | >= 60% saham industri di atas MA50 | K10.002 pecah tinggi 5 hari + volum 1.5x | ADX < 20 + tutup dalam 25% teratas julat hari | 8,768 | **46** | 5 / 5 | +0.47 | 13 | 47 / 45 / 47 |  |
+| `F2726` | CS20 | >= 60% saham industri di atas MA50 | M77 Undercut & Rally pada Purata Bergerak (MAU&R) | MA50 naik (lawan 20 bar lalu) + templat trend Minervini | 3,184 | **47** | 5 / 5 | +0.38 | 14 | 46 / 46 / 48 |  |
+| `F2727` | CS20 | hasil suku terkini tumbuh >= 20% | K19.002 pecah atas Keltner(10, 1.5) | MA50 > MA200 + RSI14 > 60 | 5,066 | **47** | 5 / 5 | +0.73 | 16 | 49 / 43 / 49 |  |
+| `F2728` | CS20 | >= 60% saham industri di atas MA50 | M80 Radge Saluran Purata Bergerak (MAC) (ditala 1) | MACD > isyarat + ATR% >= 4 | 6,438 | **46** | 5 / 5 | +1.46 | 23 | 44 / 48 / 47 |  |
+| `F2729` | CS20 | – | K03.041 tutup < jalur bawah BB(30, 2.0) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + ATR% >= 4 | 6,318 | **50** | 5 / 5 | +2.54 | 28 | 52 / 48 / 52 |  |
+| `F2730` | CS20 | – | K21.010 NR14 + hari dalam | ATR% >= 4 | 13,386 | **47** | 5 / 5 | +1.36 | 23 | 47 / 46 / 50 |  |
+| `F2731` | CS20 | – | N55 BB + RSI + ADX>20 | templat trend Minervini + RS >= 70 | 6,536 | **48** | 5 / 5 | +0.94 | 16 | 50 / 45 / 48 |  |
+| `F2732` | CS20 | hasil suku terkini tumbuh >= 20% | K10.002 pecah tinggi 5 hari + volum 1.5x | RSI14 > 60 + hari naik (tutup > buka) | 5,098 | **46** | 5 / 5 | +0.40 | 17 | 48 / 43 / 47 |  |
+| `F2733` | CS20 | – | K03.029 tutup < jalur bawah BB(20, 2.0) + RSI14 < 30 | volum hari isyarat >= 1.5x purata 50 + ATR% >= 4 | 5,431 | **48** | 5 / 5 | +1.66 | 25 | 51 / 45 / 52 |  |
+| `F2734` | CS20 | – | K03.027 tutup < jalur bawah BB(20, 1.5) + RSI14 < 40 | MA50 > MA200 + ATR% >= 4 | 9,566 | **47** | 5 / 5 | +1.50 | 23 | 48 / 45 / 49 |  |
+| `F2735` | CS20 | hasil suku terkini tumbuh >= 20% | N48 Inside day pecah | tutup > MA20 + ADX < 20 | 4,244 | **47** | 5 / 5 | +0.98 | 18 | 48 / 44 / 55 |  |
+| `F2736` | CS20 | – | K13.011 Stochastic(14) silang naik dari bawah 30 | MA20 > MA50 + RS >= 90 | 5,579 | **45** | 5 / 5 | +0.85 | 20 | 47 / 41 / 48 |  |
+| `F2737` | CS20 | – | K03.021 tutup < jalur bawah BB(15, 2.5) + RSI14 < 40 | ATR% >= 4 | 8,071 | **48** | 5 / 5 | +1.76 | 25 | 49 / 46 / 55 |  |
+| `F2738` | CS20 | – | K07.016 tutup silang atas ema100 | >= 30% di bawah puncak 52 minggu + hari naik (tutup > buka) | 6,061 | **43** | 4 / 6 | -0.31 | 20 | 44 / 42 / 45 |  |
+| `F2739` | CS20 | hasil suku terkini tumbuh >= 20% | M80 Radge Saluran Purata Bergerak (MAC) (ditala 1) | RSI14 > 50 + ADX < 20 | 4,987 | **46** | 5 / 5 | +0.68 | 17 | 47 / 44 / 48 |  |
+| `F2740` | CS20 | hasil suku terkini tumbuh >= 20% | K02.002 RSI(5) silang atas 25 | MA20 > MA50 + MA50 naik (lawan 20 bar lalu) | 5,592 | **45** | 5 / 5 | +0.48 | 18 | 49 / 42 / 46 |  |
+| `F2741` | CS20 | saham lain dalam industri sama naik >= 20% dalam 20 sesi | N48 Inside day pecah | tutup > MA20 + ADX < 20 | 10,573 | **45** | 5 / 5 | +0.41 | 15 | 46 / 45 / 45 |  |
+| `F2742` | CS20 | >= 60% saham sektor di atas MA50 | M156 Single Penetration (DiNapoli) (ditala 2) | tutup > MA200 + RS >= 90 | 5,368 | **44** | 4 / 6 | +0.58 | 17 | 45 / 42 / 48 |  |
+| `F2743` | CS20 | – | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) | ATR% >= 4 + hari naik (tutup > buka) | 6,703 | **45** | 4 / 6 | +0.80 | 21 | 45 / 44 / 48 |  |
+| `F2744` | CS20 | – | K18.003 jatuh >= 10% dalam 2 hari | RSI14 < 40 + ADX > 25 | 5,517 | **49** | 5 / 5 | +1.94 | 27 | 52 / 45 / 57 |  |
+| `F2745` | CS20 | – | K01.067 RSI(7) < 20 | RSI14 < 40 + ATR% >= 4 | 9,930 | **49** | 5 / 5 | +2.07 | 25 | 52 / 46 / 51 |  |
+| `F2746` | CS20 | hasil suku terkini tumbuh >= 20% | K06.007 5 tutup menurun berturut | MA20 > MA50 | 5,949 | **46** | 5 / 5 | +0.78 | 18 | 51 / 42 / 46 |  |
+| `F2747` | CS20 | – | K13.010 Stochastic(14) silang naik dari bawah 20 | MA50 > MA200 + ATR% >= 4 | 11,439 | **47** | 5 / 5 | +1.90 | 23 | 47 / 47 / 47 |  |
+| `F2748` | CS20 | – | M49 Ichimoku (Tutup Atas Awan + Tenkan Silang Kijun) | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 5,398 | **46** | 5 / 5 | +1.17 | 22 | 46 / 45 / 47 |  |
+| `F2749` | CS20 | – | N55 BB + RSI + ADX>20 | tutup > MA200 + ATR% >= 4 | 4,472 | **46** | 5 / 5 | +1.46 | 22 | 45 / 45 / 49 |  |
+| `F2750` | CS20 | – | K18.031 jatuh >= 10% dalam 20 hari | tutup > MA200 + ATR% >= 4 | 6,121 | **45** | 4 / 6 | +1.24 | 23 | 46 / 44 / 45 |  |
+| `F2751` | CS20 | hasil suku terkini tumbuh >= 20% | K08.007 sma8 silang atas sma21 | – | 11,506 | **46** | 5 / 5 | +0.64 | 18 | 49 / 44 / 46 |  |
+| `F2752` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K08.015 sma20 silang atas sma50 | ADX < 20 + Supertrend naik | 3,563 | **47** | 5 / 5 | +0.46 | 14 | 46 / 49 / 43 |  |
+| `F2753` | CS20 | – | M160 Measured Move Up (ditala 1) | ATR% >= 4 + hari naik (tutup > buka) | 3,857 | **46** | 5 / 5 | +1.29 | 24 | 43 / 47 / 49 |  |
+| `F2754` | CS20 | – | N55 BB + RSI + ADX>20 | MA20 > MA50 + RS >= 90 | 3,498 | **46** | 5 / 5 | +1.06 | 20 | 49 / 42 / 50 |  |
+| `F2755` | CS20 | – | K21.010 NR14 + hari dalam | tutup > MA200 + ATR% >= 4 | 5,669 | **45** | 4 / 6 | +0.85 | 22 | 44 / 44 / 49 |  |
+| `F2756` | CS20 | >= 60% saham industri di atas MA50 | M149 3-Step Pullback (ditala 1) | RS >= 90 + dalam 15% dari puncak 52 minggu | 3,504 | **43** | 4 / 6 | +0.45 | 16 | 44 / 41 / 47 |  |
+| `F2757` | CS20 | – | M124 'Last' Stochastic Technique (ChartSchool) (ditala 2) | tutup > MA50 + ADX < 20 | 26,400 | **47** | 5 / 5 | +0.63 | 15 | 49 / 47 / 44 |  |
+| `F2758` | CS20 | hasil suku terkini tumbuh >= 20% | K25.013 pecah julat sempit 20 hari (<= 20%) | Supertrend naik + hari naik (tutup > buka) | 7,006 | **46** | 5 / 5 | +0.28 | 15 | 49 / 43 / 45 |  |
+| `F2759` | CS20 | – | K03.007 tutup < jalur bawah BB(10, 2.5) | ATR% >= 4 | 5,661 | **46** | 5 / 5 | +0.70 | 23 | 47 / 43 / 51 |  |
+| `F2760` | CS20 | – | N55 BB + RSI + ADX>20 | tutup > MA50 + RS >= 70 | 8,451 | **48** | 5 / 5 | +0.94 | 16 | 50 / 43 / 50 |  |
+| `F2761` | CS20 | hasil suku terkini tumbuh >= 20% | K13.006 Stochastic(9) silang naik dari bawah 20 | MA50 > MA200 + MA50 naik (lawan 20 bar lalu) | 6,512 | **46** | 5 / 5 | +1.00 | 18 | 48 / 44 / 44 |  |
+| `F2762` | CS20 | – | K18.003 jatuh >= 10% dalam 2 hari | ADX > 25 + volum 10 hari > volum 50 hari | 5,860 | **47** | 5 / 5 | +1.34 | 25 | 50 / 44 / 50 |  |
+| `F2763` | CS20 | – | K01.079 RSI(10) < 25 | ADX > 25 + ATR% >= 4 | 5,815 | **49** | 5 / 5 | +1.54 | 26 | 54 / 45 / 51 |  |
+| `F2764` | CS20 | hasil suku terkini tumbuh >= 20% | K14.019 lonjakan >= 4.0% + volum 1.5x | – | 6,603 | **46** | 5 / 5 | +0.73 | 20 | 48 / 44 / 49 |  |
+| `F2765` | CS20 | industri 20% terbawah (pulangan 63 sesi) | M28 VWAP Separator + Kiss Pivot (ditala 2) | ADX < 20 | 5,246 | **47** | 5 / 5 | +1.05 | 18 | 49 / 49 / 35 |  |
+| `F2766` | CS20 | hasil suku terkini tumbuh >= 20% | N33 Donchian20 + penapis MA200 | MA50 > MA200 + Supertrend naik | 6,252 | **46** | 5 / 5 | +0.60 | 16 | 49 / 43 / 47 |  |
+| `F2767` | CS20 | hasil suku terkini tumbuh >= 20% | K25.013 pecah julat sempit 20 hari (<= 20%) | hari naik (tutup > buka) | 7,662 | **46** | 5 / 5 | +0.36 | 15 | 49 / 44 / 46 |  |
+| `F2768` | CS20 | – | K01.079 RSI(10) < 25 | ATR% >= 4 | 9,140 | **49** | 5 / 5 | +1.98 | 25 | 53 / 46 / 52 |  |
+| `F2769` | CS20 | – | M47 Holy Grail Raschke (ditala 1) | templat trend Minervini + RS >= 90 | 3,827 | **42** | 4 / 6 | -0.27 | 15 | 42 / 41 / 41 |  |
+| `F2770` | CS20 | hasil suku terkini tumbuh >= 20% | N56 RSI>50 + ADX>20 | MA50 > MA200 + MACD > 0 | 4,812 | **46** | 5 / 5 | +0.72 | 16 | 48 / 43 / 48 |  |
+| `F2771` | CS20 | hasil suku terkini tumbuh >= 20% | K11.005 Supertrend(7, 4.0) bertukar naik | tutup > MA50 + RSI14 > 60 | 4,301 | **46** | 5 / 5 | +0.37 | 17 | 47 / 45 / 49 |  |
+| `F2772` | CS20 | hasil suku terkini tumbuh >= 20% | N33 Donchian20 + penapis MA200 | MA50 > MA200 + MACD > isyarat | 6,372 | **46** | 5 / 5 | +0.63 | 16 | 48 / 44 / 47 |  |
+| `F2773` | CS20 | – | K18.011 jatuh >= 15% dalam 3 hari | RSI14 < 40 + volum hari isyarat >= 1.5x purata 50 | 5,025 | **48** | 5 / 5 | +2.51 | 26 | 48 / 47 / 52 |  |
+| `F2774` | CS20 | – | N50 Mampat + pecah volum 1.5x | tutup > MA200 + MA50 > MA200 | 4,612 | **46** | 5 / 5 | +0.42 | 12 | 47 / 44 / 43 |  |
+| `F2775` | CS20 | – | K03.049 tutup < jalur bawah BB(50, 1.5) | RSI14 < 40 + ATR% >= 4 | 13,697 | **49** | 5 / 5 | +2.09 | 25 | 51 / 47 / 50 |  |
+| `F2776` | CS20 | hasil suku terkini tumbuh >= 20% | M160 Measured Move Up (ditala 2) | tutup > MA20 + hari naik (tutup > buka) | 5,760 | **45** | 5 / 5 | +0.44 | 17 | 46 / 44 / 46 |  |
+| `F2777` | CS20 | hasil suku terkini tumbuh >= 20% | K18.031 jatuh >= 10% dalam 20 hari | – | 7,458 | **47** | 5 / 5 | +1.10 | 22 | 50 / 45 / 48 |  |
+| `F2778` | CS20 | – | K18.032 jatuh >= 15% dalam 20 hari | RSI14 < 40 + ATR% >= 4 | 12,617 | **48** | 5 / 5 | +1.27 | 24 | 51 / 44 / 50 |  |
+| `F2779` | CS20 | – | K06.007 5 tutup menurun berturut | MA50 > MA200 + RS >= 90 | 4,439 | **47** | 5 / 5 | +1.85 | 22 | 48 / 45 / 50 |  |
+| `F2780` | CS20 | – | K03.002 tutup < jalur bawah BB(10, 1.5) + RSI14 < 30 | ADX > 25 + ATR% >= 4 | 6,099 | **49** | 5 / 5 | +1.76 | 26 | 54 / 45 / 50 |  |
+| `F2781` | CS20 | – | K03.029 tutup < jalur bawah BB(20, 2.0) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + ATR% >= 4 | 6,189 | **50** | 5 / 5 | +2.59 | 28 | 51 / 48 / 53 |  |
+| `F2782` | CS20 | – | K18.030 jatuh >= 8% dalam 20 hari | RSI14 < 40 + ATR% >= 4 | 12,910 | **47** | 5 / 5 | +1.37 | 24 | 50 / 45 / 50 |  |
+| `F2783` | CS20 | – | K06.009 6 tutup menurun berturut | volum 10 hari > volum 50 hari + ATR% >= 4 | 5,559 | **48** | 5 / 5 | +1.74 | 24 | 50 / 47 / 43 |  |
+| `F2784` | CS20 | industri 20% terbawah (pulangan 63 sesi) | K09.020 MACD(3,10,16) silang naik bawah sifar | ADX < 20 + tutup dalam 25% teratas julat hari | 3,284 | **47** | 5 / 5 | +0.65 | 17 | 50 / 47 / 37 |  |
+| `F2785` | CS20 | hasil suku terkini tumbuh >= 20% | M01 Bollinger Band + RSI (ditala 2) | RSI14 < 40 | 7,040 | **49** | 5 / 5 | +1.70 | 21 | 52 / 47 / 46 |  |
+| `F2786` | CS20 | – | K18.025 jatuh >= 15% dalam 10 hari | MA50 > MA200 + ATR% >= 4 | 6,970 | **46** | 5 / 5 | +1.14 | 23 | 46 / 45 / 48 |  |
+| `F2787` | CS20 | – | K01.084 RSI(10) < 35 + atas MA200 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 4,972 | **46** | 5 / 5 | +1.43 | 23 | 46 / 46 / 46 |  |
+| `F2788` | CS20 | – | K03.002 tutup < jalur bawah BB(10, 1.5) + RSI14 < 30 | >= 30% di bawah puncak 52 minggu + volum 10 hari > volum 50 hari | 7,263 | **49** | 5 / 5 | +1.87 | 25 | 51 / 49 / 47 |  |
+| `F2789` | CS20 | – | M28 VWAP Separator + Kiss Pivot (ditala 2) | ADX < 20 | 21,578 | **48** | 5 / 5 | +1.17 | 18 | 50 / 47 / 44 |  |
+| `F2790` | CS20 | – | K18.032 jatuh >= 15% dalam 20 hari | ATR% >= 4 | 14,578 | **48** | 5 / 5 | +1.36 | 25 | 51 / 45 / 50 |  |
+| `F2791` | CS20 | sektor 3 teratas (pulangan 63 sesi) | K17.043 undur ke ema100 yang naik (tol 1.0%) | tutup > MA20 + tutup dalam 25% teratas julat hari | 3,463 | **47** | 5 / 5 | +0.62 | 15 | 48 / 49 / 41 |  |
+| `F2792` | CS20 | – | K06.007 5 tutup menurun berturut | MA50 > MA200 + ATR% >= 4 | 8,266 | **48** | 5 / 5 | +2.56 | 25 | 48 / 48 / 50 |  |
+| `F2793` | CS20 | – | K09.005 MACD(8,17,9) silang naik bawah sifar | ADX < 20 + hari naik (tutup > buka) | 23,197 | **48** | 5 / 5 | +0.95 | 16 | 50 / 46 / 45 |  |
+| `F2794` | CS20 | – | K09.011 MACD(6,19,6) silang naik bawah sifar | ADX < 20 | 30,995 | **47** | 5 / 5 | +0.86 | 16 | 49 / 46 / 45 |  |
+| `F2795` | CS20 | – | K18.003 jatuh >= 10% dalam 2 hari | ADX > 25 + volum hari isyarat >= 1.5x purata 50 | 5,150 | **47** | 5 / 5 | +1.18 | 25 | 51 / 42 / 54 |  |
+| `F2796` | CS20 | hasil suku terkini tumbuh >= 20% | N56 RSI>50 + ADX>20 | MA50 naik (lawan 20 bar lalu) | 6,079 | **46** | 5 / 5 | +0.53 | 17 | 50 / 42 / 49 |  |
+| `F2797` | CS20 | – | K01.083 RSI(10) < 35 | MA50 naik (lawan 20 bar lalu) + ATR% >= 4 | 8,705 | **46** | 5 / 5 | +0.98 | 22 | 47 / 45 / 46 |  |
+| `F2798` | CS20 | – | K18.031 jatuh >= 10% dalam 20 hari | ATR% >= 4 | 18,244 | **47** | 5 / 5 | +1.32 | 24 | 50 / 45 / 50 |  |
+| `F2799` | CS20 | – | K18.032 jatuh >= 15% dalam 20 hari | RSI14 < 40 + >= 30% di bawah puncak 52 minggu | 10,686 | **48** | 5 / 5 | +1.50 | 25 | 51 / 46 / 50 |  |
+| `F2800` | CS20 | hasil suku terkini tumbuh >= 20% | N56 RSI>50 + ADX>20 | tutup > MA20 + MA50 naik (lawan 20 bar lalu) | 4,665 | **46** | 5 / 5 | +0.52 | 16 | 49 / 42 / 49 |  |
+| `F2801` | CS20 | – | K03.052 tutup < jalur bawah BB(50, 2.0) | RSI14 < 40 + ATR% >= 4 | 11,020 | **49** | 5 / 5 | +1.66 | 24 | 51 / 46 / 52 |  |
+| `F2802` | CS20 | – | M28 VWAP Separator + Kiss Pivot (ditala 2) | ADX < 20 + >= 30% di bawah puncak 52 minggu | 5,143 | **46** | 5 / 5 | +1.33 | 24 | 45 / 48 / 42 |  |
 
 - K1 = 2010–2019, K2 = 2020–2024 (CS01: 2020 – Ogo 2026), K3 = 2025 – Ogo 2026 (tiada bagi CS01).
 - Cara pegang dan keluar setiap setup: lajur `henti` dan `keluar` dalam `KADAR_MENANG.csv` dan `data/registry_F.csv`.
