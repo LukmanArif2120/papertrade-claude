@@ -3152,5 +3152,120 @@ class TestCS22(unittest.TestCase):
             self.assertEqual(len(pd.read_csv(os.path.join(d, 'senarai_c10.csv'))), 0)
 
 
+class TestCS23(unittest.TestCase):
+    """Pusingan CS23 (pindaan 17 Nov 2026 (aj)): markah 0-100 setiap setup F ikut matlamat pengguna, Top 100, "Kegunaan bila?"."""
+
+    PENUH = dict(kl_terus=0.06, kl_m5=0.09, kl_m10=0.05, kl_c10=0.04, arah=0.05, kl_rugi15=-0.01, minggu=0.9, kl_K1=0.01, kl_K2=0.01, kl_K3=0.01,
+                 thn_pos=16, thn_bil=17, kl_baki=0.02, adik_bil=4, adik_pos=3, kl_menang=0.04, kl_purata=0.02)
+
+    def test_dikunci(self):
+        import cs_skor23 as s
+        self.assertEqual(s.BERAT, {'A': 35, 'B': 15, 'C': 20, 'D': 20, 'E': 10})
+        self.assertEqual((s.A1, s.A2A, s.A2B, s.A3), ((20, 0.0, 0.05), (5, 0.0, 0.08), (5, 0.0, 0.04), (5, 0.0, 0.03)))
+        self.assertEqual((s.B1, s.B2, s.C1), ((10, 0.0, 0.04), (5, 0.0, 0.05), (20, 0.25, 0.80)))
+        self.assertEqual((s.D1, s.D2, s.D2_MIN_TAHUN, s.D3A, s.D3B, s.BAKI_MIN, s.ADIK_MIN_BIL, s.ADIK_BAHAGIAN),
+                         ((2, 2, 4), (6, 0.50, 0.85), 8, 3, 3, 0.01, 3, 0.60))
+        self.assertEqual((s.E1, s.E2), ((5, 0.0, 0.03), (5, 0.0, 0.015)))
+        self.assertEqual((s.MIN_BELIAN, s.MIN_TAHUN, s.JACCARD, s.N_TOP, s.MINGGU_KERAP), (300, 10, 0.50, 100, 0.80))
+        self.assertEqual(s.GUNA, ('Setiap minggu', 'Musim laporan kewangan', 'Keadaan tertentu', 'Lain-lain'))
+        # berat setiap bahagian = jumlah markah penuh kriterianya
+        self.assertEqual(s.A1[0] + s.A2A[0] + s.A2B[0] + s.A3[0], s.BERAT['A'])
+        self.assertEqual(s.B1[0] + s.B2[0], s.BERAT['B'])
+        self.assertEqual(s.C1[0], s.BERAT['C'])
+        self.assertEqual(sum(s.D1) + s.D2[0] + s.D3A + s.D3B, s.BERAT['D'])
+        self.assertEqual(s.E1[0] + s.E2[0], s.BERAT['E'])
+        self.assertEqual(sum(s.BERAT.values()), 100)
+        spec = open(os.path.join(SINI, '..', 'kajian', 'SPEC_CARIAN_SETUP.md'), encoding='utf-8').read()
+        self.assertIn('### Pindaan 17 Nov 2026 (aj)', spec)
+        self.assertIn('DITULIS SELEPAS hasil dilihat', spec)                             # tambahan paparan ikut kegunaan ditanda selepas hasil
+
+    def test_markah(self):
+        import cs_skor23 as s
+        self.assertEqual(s.lin(0.025, 0.0, 0.05), 0.5)
+        self.assertEqual((s.lin(-1, 0, 1), s.lin(2, 0, 1), s.lin(float('nan'), 0, 1)), (0.0, 1.0, 0.0))
+        m = s.markah(self.PENUH)
+        self.assertEqual((m['markah'], m['mA'], m['mB'], m['mC'], m['mD'], m['mE']), (100.0, 35, 15, 20, 20, 10))
+        kosong = dict(kl_terus=0.0, kl_m5=-0.01, kl_m10=0.0, kl_c10=-0.02, arah=-0.01, kl_rugi15=0.06, minggu=0.2, kl_K1=-0.01, kl_K2=0.0,
+                      kl_K3=-0.02, thn_pos=8, thn_bil=17, kl_baki=0.0, adik_bil=4, adik_pos=2, kl_menang=-0.01, kl_purata=0.0)
+        self.assertEqual(s.markah(kosong)['markah'], 0.0)                                 # sama dengan / lebih buruk daripada rawak = 0
+        self.assertEqual(s.markah({})['markah'], 0.0)                                     # ukuran tiada = 0, bukan ralat
+        u = dict(self.PENUH, kl_terus=0.025, minggu=0.525, kl_K3=-0.01, thn_pos=7, thn_bil=7)
+        m = s.markah(u)                                                                   # A1 separuh, C separuh, tiada K3, tahun < 8
+        self.assertAlmostEqual(m['A1'], 10.0)
+        self.assertAlmostEqual(m['C1'], 10.0)
+        self.assertEqual((m['D1'], m['D2']), (4, 0.0))
+        self.assertAlmostEqual(m['markah'], 100 - 10 - 10 - 4 - 6, places=1)
+        self.assertEqual(s.markah(dict(self.PENUH, adik_bil=2, adik_pos=2))['D3'], 3)     # < 3 adik-beradik: tiada markah S6
+        self.assertEqual(s.markah(dict(self.PENUH, kl_rugi15=0.025))['B2'], 2.5)
+
+    def test_kegunaan(self):
+        import cs_skor23 as s
+        k = lambda p, m: s.GUNA[s.kegunaan(p, m)]
+        self.assertEqual(k('QQQ ON + earnings dalam 1-5 sesi akan datang', 0.95), 'Musim laporan kewangan')
+        self.assertEqual(k('', 0.80), 'Setiap minggu')
+        self.assertEqual(k('industri 20% teratas (pulangan 63 sesi)', 0.84), 'Setiap minggu')
+        self.assertEqual(k('', 0.79), 'Keadaan tertentu')
+        self.assertEqual(k(float('nan'), float('nan')), 'Keadaan tertentu')
+        for p in ('Nov-Apr', 'Mei-Okt', 'Januari', 'hari pertama bulan', '1-10 sesi selepas earnings', 'tiada earnings dalam 10 sesi'):
+            self.assertEqual(k(p, 0.95), 'Lain-lain', p)
+
+    def test_buang_serupa(self):
+        import cs_skor23 as s
+        T = pd.DataFrame(dict(id=['a', 'b', 'c', 'd'], dinilai=[True, True, True, False], markah=[70.0, 80.0, 60.0, 99.0], kl_terus=[0.01] * 4))
+        beli = {'a': np.arange(0, 10), 'b': np.arange(0, 12), 'c': np.arange(50, 60), 'd': np.arange(0, 10)}
+        ids, sr = s.buang_serupa(T, beli, 100)
+        self.assertEqual(ids, ['b', 'a', 'c'])                                            # ikut markah; yang tidak dinilai tiada
+        self.assertEqual(sr, {'b': '', 'a': 'b', 'c': ''})                                # a bertindih 10/12 dengan b -> serupa
+
+    def test_rekod(self):
+        """Hasil dalam repo: markah boleh dikira semula daripada lajur ukuran; Top 100 dan kedudukan ikut kegunaan konsisten."""
+        import cs_skor23 as s
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS23')
+        B = json.load(open(os.path.join(d, 'bacaan.json'), encoding='utf-8'))
+        T = pd.read_csv(os.path.join(d, 'skor.csv.gz'))
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('')
+        self.assertEqual((len(T), int(T.dinilai.sum())), (B['n'], B['dinilai']))
+        self.assertTrue(T.id.is_unique and set(T.id) <= set(reg.id))
+        D = T[T.dinilai]
+        self.assertTrue(((D.n >= s.MIN_BELIAN) & (D.tahun >= s.MIN_TAHUN)).all())
+        for r in pd.concat([D.head(150), D.sample(150, random_state=1)]).to_dict('records'):   # markah = fungsi ukuran yang direkod
+            u = dict(r, minggu=r['minggu'], kl_K1=r['kl_K1'], kl_K2=r['kl_K2'], kl_K3=r['kl_K3'])
+            m = s.markah(u)
+            self.assertAlmostEqual(m['markah'], r['markah'], delta=0.11, msg=r['id'])
+            self.assertAlmostEqual(sum(r[k] for k in s.KRIT), r['markah'], delta=0.06, msg=r['id'])
+            self.assertEqual(s.GUNA[s.kegunaan(r['prasyarat'], r['minggu'])], r['kegunaan'])
+        self.assertTrue((D.markah.between(0, 100)).all())
+        S = D[D.kedudukan > 0].sort_values('kedudukan')
+        self.assertEqual((len(S), int(D.serupa_dengan.notna().sum())), (B['disimpan'], B['serupa']))
+        self.assertEqual(S.kedudukan.tolist(), list(range(1, len(S) + 1)))
+        self.assertTrue((S.markah.diff().dropna() <= 1e-9).all())                         # kedudukan ikut markah menurun
+        self.assertTrue(S.serupa_dengan.isna().all())
+        Sr = D[D.serupa_dengan.notna()]
+        mk = T.set_index('id').markah
+        self.assertTrue((mk.loc[Sr.serupa_dengan].to_numpy() >= Sr.markah.to_numpy()).all())  # wakil bermarkah >= setup serupa
+        self.assertTrue(set(Sr.serupa_dengan) <= set(S.id))
+        P = T[T.top > 0]
+        self.assertEqual((len(P), sorted(P.top)), (s.N_TOP, list(range(1, s.N_TOP + 1))))
+        self.assertEqual(P.kegunaan.value_counts().to_dict(), {k: v for k, v in B['top_kegunaan'].items() if v})
+        for g in s.GUNA:                                                                  # kedudukan dalam kumpulan kegunaan (paparan)
+            G = S[S.kegunaan == g]
+            self.assertEqual(G.kedudukan_guna.tolist(), list(range(1, len(G) + 1)), g)
+            self.assertEqual(int((T[T.kegunaan == g].top_guna > 0).sum()), min(len(G), s.N_TOP))
+            self.assertEqual(B['disimpan_kegunaan'][g], len(G))
+        self.assertTrue((T[~T.dinilai][['kedudukan', 'top', 'kedudukan_guna', 'top_guna']] == 0).all().all())
+        # setup "Setiap minggu" tiada prasyarat tarikh laporan / kalendar dan membeli >= 80 % minggu
+        W = D[D.kegunaan == 'Setiap minggu']
+        self.assertTrue((W.minggu >= s.MINGGU_KERAP).all())
+        self.assertFalse(W.prasyarat.fillna('').str.contains('earnings|Nov-Apr|Mei-Okt|Januari|hari pertama bulan').any())
+        z = B['top_guna']['Setiap minggu']
+        self.assertEqual(z['n'], 100)
+        self.assertAlmostEqual(z['markah_maks'], float(W[W.top_guna == 1].markah.iloc[0]), places=3)
+        lap = open(os.path.join(d, 'TOP100.md'), encoding='utf-8').read()
+        for frasa in ('BUKAN bukti', '## 4. Top 100', '## 5. Top 100 "Setiap minggu"', '## 6. Top 100 "Musim laporan kewangan"', 'Jangkaan yang ditulis dahulu salah',
+                      'Senarai kerja rasmi (keputusan pengguna 17 Nov 2026): Top 100 "Setiap minggu"', '— SENARAI KERJA RASMI'):
+            self.assertIn(frasa, lap)
+        self.assertEqual((B['senarai_rasmi'], B['senarai_tambahan'], s.RASMI, s.TAMBAHAN), ('Setiap minggu', 'Musim laporan kewangan') * 2)
+
+
 if __name__ == '__main__':
     unittest.main()

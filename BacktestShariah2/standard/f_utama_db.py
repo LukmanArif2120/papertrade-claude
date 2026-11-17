@@ -9,6 +9,7 @@
 #   (collection `carian`; if_version bagi dokumen yang sudah wujud). Halaman membacanya dengan subBhg().
 # v189 (17 Nov 2026): baris setup sepanjang tahun CS20 (dan CS22 jika ada kod) ditambah SELEPAS baris senarai utama; meta n_utama,
 #   n_mingguan, mingguan{…}, ukuran_kedua{…}, jeda{…}; sumber tambahan hasil/CS20/calon.csv.gz, hasil/CS21/unit.csv.gz, hasil/CS22/.
+# v190 (17 Nov 2026): lajur markah CS23 (mk, mka..mke, gn, tk, tg, sr23, mgb) dan meta skor{…}; sumber tambahan hasil/CS23/.
 # Bentuk: {tajuk, sumber, dibina, n, n_pilihan, n_lama, n_baharu, ujian{…}, semak_masa{…}, pegang, pegang2, banding{…}, kol[],
 #          kamus{pra, nama, pen, jenis}, kawalan{…}, solid{…}, rows[[…]]}; baris padat sejajar `kol`: peratus x10 (tangkap, rawak, m5, am5,
 #          menang, rugi15, menang2, rugi2, k10, m10, am10, m10d, am10d, rugi8), x100 (purata, k3, purata2, k1, k2). Lajur baharu hanya DITAMBAH di hujung `kol` (halaman membaca ikut nama).
@@ -33,13 +34,21 @@ CS19 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS19')
 CS20 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS20')
 CS21 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS21')
 CS22 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS22')
+CS23 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS23')
 ASAS_EARN = 'earnings dalam 1-5 sesi akan datang'
 CARA1, CARA2 = 'r0.t1.126', 'r0.t2.0'                    # cara sekarang (pegang B) dan "pegang lebih lama" (pilihan pengguna B, 16 Nov 2026)
 KOL = ['id', 'asal', 'pil', 'pra', 'nama', 'pen', 'beli', 'shar', 'tangkap', 'rawak', 'm5', 'menang', 'purata', 'rugi15', 'hari', 'k3', 'n',
        'menang2', 'purata2', 'rugi2', 'hari2', 'jenis', 'am5', 'k10', 'k1', 'k2',
        'solid', 'wakil', 'boleh', 'm10', 'am10', 'm10d', 'am10d', 'tpos', 'tbil', 'rugi8', 'serupa',
        'j5', 'aj5', 'am', 'ap', 'aud', 'aun', 'pt',
-       'mg', 'mgg', 'bs', 'c10', 'ac10', 'j8', 'aj8']
+       'mg', 'mgg', 'bs', 'c10', 'ac10', 'j8', 'aj8',
+       'mk', 'mka', 'mkb', 'mkc', 'mkd', 'mke', 'gn', 'tk', 'tg', 'sr23', 'mgb']
+# v190 (17 Nov 2026; keputusan pengguna "ya dua dua"): MARKAH 0-100 dan "Kegunaan bila?" (CS23, pindaan (aj); hasil/CS23/skor.csv.gz).
+# mk = markah x10 (None = tidak dinilai); mka..mke = markah bahagian A (35), B (15), C (20), D (20), E (10) x10; gn = indeks GUNA
+# ("Kegunaan bila?"); tk = kedudukan keseluruhan antara setup berbeza (0 = serupa dengan setup bermarkah lebih tinggi, atau tidak
+# dinilai); tg = kedudukan dalam kumpulan "Kegunaan bila?" sendiri (0 = tiada); sr23 = setup bermarkah lebih tinggi yang beliannya
+# bertindih >= 50 %; mgb = bahagian minggu yang ada belian x1000, diukur seragam pada separuh saham (asas label "Setiap minggu").
+GUNA = ['Setiap minggu', 'Musim laporan kewangan', 'Keadaan tertentu', 'Lain-lain']
 # v189 (17 Nov 2026; keputusan pengguna "ya utk 1, 2, 3"): setup SEPANJANG TAHUN dan ukuran kedua. mg = 0 senarai utama CS13, 1 = setup
 # sepanjang tahun CS20 (membeli hampir setiap minggu; pindaan (ag)), 2 = CS22 (dicari ikut ukuran kedua; pindaan (ai)); mgg = bahagian
 # minggu yang ada belian pada semua saham; bs = belian setahun pada semua saham; c10 / ac10 = daripada 100 belian, berapa yang TUTUP
@@ -166,7 +175,30 @@ def ukuran_kedua(folder21=CS21, folder22=CS22):
     return peta, ring
 
 
-def bina(folder=CS13, folder14=CS14, folder16=CS16, folder19=CS19, folder20=CS20, folder21=CS21, folder22=CS22):
+def markah(folder23=CS23):
+    """id -> [mk, mka..mke, gn, tk, tg, sr23, mgb] daripada CS23 skor.csv.gz, + ringkasan; ({}, None) jika pusingan belum dijana."""
+    f = os.path.join(folder23, 'skor.csv.gz')
+    if not os.path.exists(f):
+        return {}, None
+    T = pd.read_csv(f)
+    B = json.load(open(os.path.join(folder23, 'bacaan.json'), encoding='utf-8'))
+    b10 = lambda x: None if x != x else int(round(float(x) * 10))
+    peta = {}
+    for r in T.itertuples():
+        ya = bool(r.dinilai)
+        peta[r.id] = ([b10(r.markah), b10(r.mA), b10(r.mB), b10(r.mC), b10(r.mD), b10(r.mE)] if ya else [None] * 6) + [
+            GUNA.index(r.kegunaan), int(r.kedudukan) if ya else 0, int(r.kedudukan_guna) if ya else 0,
+            r.serupa_dengan if isinstance(r.serupa_dengan, str) and r.serupa_dengan else None,
+            None if r.minggu != r.minggu else int(round(float(r.minggu) * 1000))]
+    ring = dict(n=int(B['n']), dinilai=int(B['dinilai']), tidak_dinilai=int(B['n'] - B['dinilai']), serupa=int(B['serupa']),
+                disimpan=int(B['disimpan']), n_top=int(B['n_top']), berat=B['berat'], guna=GUNA, markah_maks=B['markah_maks'],
+                markah_tengah=B['markah_tengah'], top_min=B['top_min'], top_kegunaan=B['top_kegunaan'],
+                disimpan_kegunaan=B['disimpan_kegunaan'], semua_kegunaan=B['semua_kegunaan'], top_guna=B['top_guna'],
+                sumber='kajian/carian_setup/hasil/CS23/skor.csv.gz, bacaan.json, TOP100.md (cs_skor23.py, pindaan (aj))')
+    return peta, ring
+
+
+def bina(folder=CS13, folder14=CS14, folder16=CS16, folder19=CS19, folder20=CS20, folder21=CS21, folder22=CS22, folder23=CS23):
     """Dokumen penuh (belum dibahagi) daripada senarai_utama.csv + cara pegang kedua (CS14); None jika fail tiada."""
     import cs_ringkas
     f = os.path.join(folder, 'senarai_utama.csv')
@@ -203,6 +235,8 @@ def bina(folder=CS13, folder14=CS14, folder16=CS16, folder19=CS19, folder20=CS20
     if M is not None:
         M['nama_p'] = M.nama.map(cs_ringkas.nama_pendek)
     C10, ring10 = ukuran_kedua(folder21, folder22)
+    MK, ring23 = markah(folder23)
+    mk = lambda idn: MK.get(idn, [None] * 6 + [None, 0, 0, None, None])
     kamus, ix = {}, {}
     for k, kol in (('pra', 'prasyarat'), ('nama', 'nama_p'), ('pen', 'penapis')):
         kamus[k] = sorted(set(U[kol]) | (set(M[kol]) if M is not None else set()))
@@ -219,7 +253,7 @@ def bina(folder=CS13, folder14=CS14, folder16=CS16, folder19=CS19, folder20=CS20
                      int(bool(r.z_solid)), int(bool(r.z_wakil)), int(bool(r.z_boleh)), b(r.z_m10, 1000), b(r.z_am10, 1000), b(r.z_m10d, 1000),
                      b(r.z_am10d, 1000), int(r.z_tpos), int(r.z_tbil), b(r.z_rugi8, 1000), None if r.z_serupa != r.z_serupa else str(r.z_serupa),
                      b(r.u_j5, 1000), b(r.u_aj5, 1000), b(r.u_am, 1000), b(r.u_ap, 10000), int(r.u_aud),
-                     r.u_aun if isinstance(r.u_aun, str) else None, int(r.u_pt), 0, None, None] + c10(r.id))
+                     r.u_aun if isinstance(r.u_aun, str) else None, int(r.u_pt), 0, None, None] + c10(r.id) + mk(r.id))
     n_utama = len(rows)
     for r in (M.itertuples() if M is not None else ()):
         tbil = int(r.tahun_n) if r.tahun_n == r.tahun_n else 0
@@ -230,7 +264,7 @@ def bina(folder=CS13, folder14=CS14, folder16=CS16, folder19=CS19, folder20=CS20
                      jenis(r.nama), b(r.a_m5, 1000), b(r.k10_B, 1000), b(r.kl_terus_K1, 10000), b(r.kl_terus_K2, 10000),
                      0, 0, 0, None, None, None, None, int(round(r.tahun_pos * tbil)) if tbil else 0, tbil, b(r.rugi8_J20, 1000), None,
                      b(r.j5, 1000), b(r.a_j5, 1000), b(r.a_menang_B, 1000), b(r.a_purata_B, 10000), 0, None, 0,
-                     int(r.mg), b(r.mgg_semua, 1000), b(r.setahun_semua, 1)] + c10(r.id_F))
+                     int(r.mg), b(r.mgg_semua, 1000), b(r.setahun_semua, 1)] + c10(r.id_F) + mk(r.id_F))
     ixk = {k: i for i, k in enumerate(KOL)}
     mgr = None
     if M is not None:
@@ -255,7 +289,7 @@ def bina(folder=CS13, folder14=CS14, folder16=CS16, folder19=CS19, folder20=CS20
         dibina=pd.Timestamp.now(tz='UTC').strftime('%Y-%m-%d %H:%M UTC'), n=len(rows), n_utama=n_utama,
         n_pilihan=int(sum(1 for x in rows if x[ixk['pil']])),
         n_lama=int((U.asal == 'lama').sum()), n_baharu=int((U.asal == 'baharu').sum()),
-        n_mingguan=int(sum(1 for x in rows if x[ixk['mg']])), mingguan=mgr, ukuran_kedua=ring10,
+        n_mingguan=int(sum(1 for x in rows if x[ixk['mg']])), mingguan=mgr, ukuran_kedua=ring10, skor=ring23,
         jeda=dict(papertrade=os.path.exists(os.path.join(BS2, 'jejak_f2', 'JEDA')), tarikh='2026-11-17'),
         n_earnings=int(U.prasyarat.str.contains('earnings dalam 1-').sum()),
         ujian=dict(calon=J.get('n_calon'), lulus=J.get('n_lulus'), kembar=J.get('n_kembar'), lulus_calon=J.get('lulus_calon'),

@@ -1695,6 +1695,78 @@ dikomit. Peraturan di bawah menyalin CS20 dengan sasaran ditukar; tiada ambang y
   dengan kod CS20; bacaan boleh gagal pada 2025–26 (pelajaran CS12: ukuran longgar lulus pada saham tidak dilihat tetapi
   gagal pada tahun tidak dilihat).
 
+### Pindaan 17 Nov 2026 (aj) — pusingan CS23: MARKAH 0–100 setiap setup F ikut matlamat pengguna, dan senarai "Top 100"
+
+**Permintaan pengguna 17 Nov 2026** ("boleh tak bagi saya evaluation criteria base on method method ni semua? bukan evaluate
+terus tau. mcmana kita nak evaluate method method ni semua base on matlamat saya sendiri. in the end totalnya adalah 100%
+utk setiap method then kita boleh sort the best"; sebelumnya "mungkin kita boleh guna top 100 ke total? kalau sampai 748 tu
+macam terlalu banyak sangat"), kemudian keputusan "ya dua dua" kepada (1) lima bahagian dan berat 35 / 15 / 20 / 20 / 10 dan
+(2) tulis peraturan dahulu, kira markah semua setup F, buang yang serupa, ambil Top 100, papar di dashboard dengan lajur
+Markah dan "Kegunaan bila?".
+
+**Kejujuran urutan (WAJIB dibaca):** berat dan sasaran markah penuh di bawah dipilih oleh Claude SELEPAS melihat taburan
+hasil kedua-dua kumpulan (setup laporan kewangan: kelebihan tangkap nilai tengah kira-kira +5 mata, membeli dalam kira-kira
+30 % minggu; setup sepanjang tahun CS20: kira-kira +1.3 mata, 96 % minggu). Berat "boleh dipakai setiap minggu" (20 %)
+dipilih supaya setup terbaik daripada kedua-dua kumpulan mendapat markah hampir sama. Markah ini ialah PENYUSUNAN mengikut
+kehendak pengguna atas data yang sudah dilihat — bukan ujian, bukan bukti. Tiada markah yang dikira ketika pindaan dikomit.
+
+- **Setup yang dinilai:** setiap baris senarai dashboard — 2,001 setup senarai utama (CS13) + 748 kod sepanjang tahun (CS20).
+- **Semua ukuran dikira SEMULA dengan satu cara yang sama** pada saham yang carian tidak lihat (kumpulan B, 2010 – 28 Ogos
+  2026), dengan isyarat beli dalam mod TANPA INTAI (`kausal=True`; ini menggantikan syarat wajib "tidak mengintai": tiada
+  setup dikecualikan kerana modulnya mengintai, ia dinilai dengan isyarat yang boleh dilaksanakan), stop loss 4×ATR14 dan
+  cara pegang B. Angka boleh berbeza sedikit daripada angka berdaftar bagi setup yang modulnya mengintai.
+- **Syarat wajib (tiada markah):** (i) swing, tiada jualan pada hari beli, pegang ≥ 3 hari, ada stop loss — benar bagi semua
+  kerana cara pegang B; (ii) cukup belian: ≥ 300 belian dan ≥ 10 tahun aktif; (iii) isyaratnya boleh dijana dalam folder
+  kerja (varian parameter M peringkat CS07 tidak boleh: "tidak dinilai"). Setup yang gagal (ii) atau (iii) tidak diberi
+  markah dan tidak masuk senarai.
+- **Markah.** `lin(x, a, b)` = 0 jika x ≤ a, 1 jika x ≥ b, berkadar di antaranya. "lawan rawak" = tolak saham rawak hari
+  sama × tercile ATR % (bagi menang, purata dan rugi besar: saham rawak yang DIPEGANG DENGAN CARA SAMA).
+  - **A. Menangkap saham yang naik — 35:** A1 (20) = 20 × lin(kelebihan tangkap `terus`, 0, +5 mata); A2 (10) = 5 ×
+    lin(kelebihan naik ≥ 5 % minggu pertama, 0, +8 mata) + 5 × lin(kelebihan naik ≥ 10 % minggu pertama, 0, +4 mata);
+    A3 (5) = 5 × lin(kelebihan `c10`, 0, +3 mata).
+  - **B. Naik melebihi jatuh — 15:** B1 (10) = 10 × lin(`arah`, 0, +4 mata), `arah` = kelebihan naik ≥ 5 % − kelebihan
+    jatuh ≥ 5 % minggu pertama; B2 (5) = 5 × (1 − lin(kelebihan rugi ≥ 15 %, 0, +5 mata)).
+  - **C. Boleh dipakai setiap minggu — 20:** 20 × lin(bahagian minggu kalendar yang ada belian, 25 %, 80 %), diukur pada
+    kumpulan B (separuh saham), satu posisi setiap saham.
+  - **D. Tahan uji — 20:** D1 (8) = 2 jika kelebihan tangkap K1 > 0, + 2 jika K2 > 0, + 4 jika K3 (2025–26) > 0; D2 (6) =
+    6 × lin(bahagian tahun kalendar (≥ 15 belian) yang kelebihannya > 0, 50 %, 85 %), 0 jika kurang daripada 8 tahun
+    sedemikian; D3 (6) = 3 jika kelebihan tangkap selepas 10 hari terbaik dibuang ≥ +1 mata, + 3 jika sekurang-kurangnya 3
+    isyarat "adik-beradik" (parameter lain dalam keluarga yang sama, prasyarat dan penapis yang sama, ≥ 100 belian) dapat
+    dinilai dan ≥ 60 % daripadanya berkelebihan > 0 (takrif S5 dan S6 pindaan (z)).
+  - **E. Hasil dagangan — 10:** E1 (5) = 5 × lin(kelebihan kadar menang cara B, 0, +3 mata); E2 (5) = 5 × lin(kelebihan
+    purata setiap dagangan cara B, 0, +1.5 %).
+  - **Markah = A + B + C + D + E** (0–100, satu titik perpuluhan).
+- **Buang yang serupa:** setup disusun ikut markah (seri: kelebihan tangkap, kemudian kod); satu setup "serupa" jika belian
+  satu posisinya pada kumpulan B bertindih (Jaccard) ≥ 50 % dengan mana-mana setup bermarkah lebih tinggi yang sudah
+  disimpan; setup serupa tidak masuk senarai dan direkod dengan wakilnya.
+- **Top 100:** 100 setup pertama yang disimpan. Tiada kuota bagi mana-mana kumpulan.
+- **"Kegunaan bila?" (label, satu bagi setiap setup):** "Musim laporan kewangan" jika prasyarat mengandungi laporan kewangan
+  dalam 1–5 sesi; jika tidak, "Lain-lain" jika prasyarat memakai tarikh laporan kewangan yang lain atau kalendar (bulan);
+  jika tidak, "Setiap minggu" jika minggu yang ada belian ≥ 80 % (kumpulan B); selainnya "Keadaan tertentu".
+- **Keluaran:** `carian_setup/cs_skor23.py` → `hasil/CS23/TOP100.md`, `skor.csv.gz` (setiap setup: ukuran, markah setiap
+  bahagian, jumlah, serupa dengan, kedudukan), `bacaan.json`. Dashboard: lajur Markah dan "Kegunaan bila?" dengan tapisan,
+  paparan lalai "Top 100".
+- **Tidak berubah:** registry, kod F, laporan pusingan lain. Papertrade kekal dijeda; Top 100 BUKAN keputusan papertrade
+  atau wang sebenar.
+- **Yang dijangka (ditulis dahulu):** markah tertinggi dijangka sekitar 55–70 (tiada setup cemerlang pada semua bahagian);
+  Top 100 dijangka bercampur setup laporan kewangan dan setup sepanjang tahun; kedudukan dalam Top 100 tidak stabil
+  (pelajaran audit CS19), jadi beza beberapa markah tidak bermakna.
+- **Tambahan 17 Nov 2026, DITULIS SELEPAS hasil dilihat (paparan sahaja; formula markah, sasaran, berat dan cara membuang
+  yang serupa TIDAK diubah):** jangkaan di atas salah pada dua perkara — markah tertinggi 88.2 (bukan 55–70), dan Top 100
+  keseluruhan mengandungi 97 setup "Musim laporan kewangan" dan hanya 3 "Setiap minggu" (bahagian C bernilai 20 markah,
+  sedangkan setup laporan kewangan mendapat hampir penuh pada A dan D). Top 100 keseluruhan itu kekal direkod seperti
+  dikunci. Kerana pengguna sudah menyatakan (17 Nov 2026) bahawa setup yang hanya bergantung pada musim laporan kewangan
+  tidak mencukupi dan setup yang boleh dipakai setiap minggu mesti ditunjuk dahulu, laporan dan dashboard turut memaparkan
+  **kedudukan dalam kumpulan "Kegunaan bila?" masing-masing** (markah yang sama, setup serupa sudah dibuang): "Top 100
+  setiap minggu" = 100 setup "Setiap minggu" bermarkah tertinggi; "Top 100 musim laporan" = 100 setup "Musim laporan
+  kewangan" bermarkah tertinggi. Paparan lalai dashboard = Top 100 setiap minggu. Ini susunan paparan mengikut kehendak
+  pengguna, bukan ujian dan bukan markah baharu; sama ada senarai kerja rasmi ialah Top 100 setiap minggu atau Top 100
+  keseluruhan = keputusan pengguna.
+- **Keputusan pengguna 17 Nov 2026 ("2 dan 3 ya"):** (2) **senarai kerja rasmi = Top 100 "Setiap minggu"**; Top 100 "Musim
+  laporan kewangan" ialah tambahan bermusim; Top 100 keseluruhan kekal rekod sahaja. (3) Di dashboard, tapisan "Kegunaan
+  bila?" kekal menggantikan tapisan Lama / Baharu. Markah, sasaran, berat dan fail hasil tidak diubah; laporan hanya
+  menyatakan senarai mana yang rasmi. Ini BUKAN keputusan papertrade (papertrade kekal dijeda).
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

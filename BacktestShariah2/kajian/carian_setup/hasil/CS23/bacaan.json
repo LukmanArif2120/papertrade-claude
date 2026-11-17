@@ -1,0 +1,180 @@
+{
+ "belian_tidak_cukup": 0,
+ "berat": {
+  "A": 35,
+  "B": 15,
+  "C": 20,
+  "D": 20,
+  "E": 10
+ },
+ "dinilai": 2718,
+ "disimpan": 1821,
+ "disimpan_kegunaan": {
+  "Keadaan tertentu": 64,
+  "Lain-lain": 25,
+  "Musim laporan kewangan": 1232,
+  "Setiap minggu": 500
+ },
+ "markah_maks": 88.2,
+ "markah_tengah": 59.8,
+ "n": 2749,
+ "n_top": 100,
+ "semua_kegunaan": {
+  "Keadaan tertentu": 86,
+  "Lain-lain": 28,
+  "Musim laporan kewangan": 1847,
+  "Setiap minggu": 757
+ },
+ "senarai_rasmi": "Setiap minggu",
+ "senarai_tambahan": "Musim laporan kewangan",
+ "serupa": 897,
+ "tengah_bahagian": {
+  "dinilai": {
+   "mA": 30.0,
+   "mB": 5.7709,
+   "mC": 4.0904,
+   "mD": 17.0,
+   "mE": 2.8726
+  },
+  "top": {
+   "mA": 34.6798,
+   "mB": 13.6171,
+   "mC": 5.4713,
+   "mD": 20.0,
+   "mE": 6.7892
+  }
+ },
+ "tengah_kegunaan": {
+  "Keadaan tertentu": 42.9,
+  "Lain-lain": 46.4,
+  "Musim laporan kewangan": 63.8,
+  "Setiap minggu": 52.5
+ },
+ "tidak_dijana": 31,
+ "top_guna": {
+  "Keadaan tertentu": {
+   "a_c10": 0.4136,
+   "a_j5": 0.2024,
+   "a_m5": 0.2115,
+   "a_menang": 0.4458,
+   "a_purata": 0.0058,
+   "a_terus": 0.1003,
+   "bahagian": {
+    "mA": 17.4886,
+    "mB": 6.424,
+    "mC": 1.3286,
+    "mD": 12.5378,
+    "mE": 5.1856
+   },
+   "c10": 0.4227,
+   "j5": 0.2377,
+   "k3": 0.0177,
+   "m5": 0.2521,
+   "markah_maks": 76.0,
+   "markah_min": 22.8,
+   "markah_tengah": 43.85,
+   "menang": 0.466,
+   "minggu": 0.2865,
+   "n": 64,
+   "n_belian": 743.0,
+   "purata": 0.0163,
+   "terus": 0.1238
+  },
+  "Lain-lain": {
+   "a_c10": 0.422,
+   "a_j5": 0.2011,
+   "a_m5": 0.2567,
+   "a_menang": 0.4623,
+   "a_purata": 0.0094,
+   "a_terus": 0.1171,
+   "bahagian": {
+    "mA": 19.3381,
+    "mB": 9.9677,
+    "mC": 0.2825,
+    "mD": 13.8571,
+    "mE": 3.6198
+   },
+   "c10": 0.4314,
+   "j5": 0.2339,
+   "k3": 0.0176,
+   "m5": 0.2967,
+   "markah_maks": 71.0,
+   "markah_min": 28.6,
+   "markah_tengah": 52.2,
+   "menang": 0.4737,
+   "minggu": 0.2578,
+   "n": 25,
+   "n_belian": 627.0,
+   "purata": 0.0179,
+   "terus": 0.1445
+  },
+  "Musim laporan kewangan": {
+   "a_c10": 0.3864,
+   "a_j5": 0.1136,
+   "a_m5": 0.1237,
+   "a_menang": 0.4621,
+   "a_purata": 0.0052,
+   "a_terus": 0.064,
+   "bahagian": {
+    "mA": 34.6798,
+    "mB": 13.7251,
+    "mC": 5.3039,
+    "mD": 20.0,
+    "mE": 6.7892
+   },
+   "c10": 0.4161,
+   "j5": 0.1932,
+   "k3": 0.0589,
+   "m5": 0.239,
+   "markah_maks": 88.2,
+   "markah_min": 76.1,
+   "markah_tengah": 78.4,
+   "menang": 0.4872,
+   "minggu": 0.3959,
+   "n": 100,
+   "n_belian": 1440.0,
+   "purata": 0.0113,
+   "terus": 0.1312
+  },
+  "Setiap minggu": {
+   "a_c10": 0.4227,
+   "a_j5": 0.2045,
+   "a_m5": 0.2305,
+   "a_menang": 0.4608,
+   "a_purata": 0.009,
+   "a_terus": 0.1088,
+   "bahagian": {
+    "mA": 14.1109,
+    "mB": 8.324,
+    "mC": 20.0,
+    "mD": 19.5462,
+    "mE": 4.0119
+   },
+   "c10": 0.4329,
+   "j5": 0.2238,
+   "k3": 0.016,
+   "m5": 0.2663,
+   "markah_maks": 78.5,
+   "markah_min": 59.9,
+   "markah_tengah": 64.05,
+   "menang": 0.4746,
+   "minggu": 0.8786,
+   "n": 100,
+   "n_belian": 5972.0,
+   "purata": 0.0165,
+   "terus": 0.1311
+  }
+ },
+ "top_kegunaan": {
+  "Keadaan tertentu": 0,
+  "Lain-lain": 0,
+  "Musim laporan kewangan": 97,
+  "Setiap minggu": 3
+ },
+ "top_kumpulan": {
+  "senarai utama": 97,
+  "sepanjang tahun CS20": 3
+ },
+ "top_min": 76.2,
+ "top_tengah": 78.45
+}
