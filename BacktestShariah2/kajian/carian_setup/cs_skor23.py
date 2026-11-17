@@ -219,14 +219,32 @@ def semua(kerja):
     ked = {i: k for k, i in enumerate([i for i in ids if sr[i] == ''], 1)}
     T['kedudukan'] = [ked.get(i, 0) for i in T.id]
     T['top'] = np.where((T.kedudukan > 0) & (T.kedudukan <= N_TOP), T.kedudukan, 0)
+    # tambahan (aj) selepas hasil: kedudukan dalam kumpulan "Kegunaan bila?" masing-masing (markah sama; paparan sahaja)
+    kg = np.zeros(len(T), int)
+    for g in GUNA:
+        m = ((T.kedudukan > 0) & (T.kegunaan == g)).to_numpy()
+        kg[m] = T.kedudukan[m].rank(method='first').astype(int).to_numpy()
+    T['kedudukan_guna'] = kg
+    T['top_guna'] = np.where((kg > 0) & (kg <= N_TOP), kg, 0)
     return T.sort_values(['kedudukan', 'markah'], ascending=[True, False], kind='stable').reset_index(drop=True)
+
+
+def _ringkas(X):
+    """Nilai tengah satu senarai (bagi laporan dan dashboard)."""
+    r4 = lambda x: None if x != x else round(float(x), 4)
+    md = lambda k: r4(X[k].median())
+    return dict(n=int(len(X)), markah_maks=r4(X.markah.max()), markah_tengah=md('markah'), markah_min=r4(X.markah.min()),
+                terus=md('terus'), a_terus=md('a_terus'), m5=md('m5'), a_m5=md('a_m5'), j5=md('j5'), a_j5=md('a_j5'),
+                c10=md('c10'), a_c10=md('a_c10'), menang=md('menang_B'), a_menang=md('a_menang_B'), purata=md('purata_B'),
+                a_purata=md('a_purata_B'), minggu=md('minggu'), k3=md('kl_K3'), n_belian=md('n'),
+                bahagian={k: r4(X[k].median()) for k in BHG})
 
 
 def lapor_(kerja):
     import cs_lapor as lapor
     T = semua(kerja)
     os.makedirs(HASIL, exist_ok=True)
-    lajur = ['id', 'kumpulan', 'kegunaan', 'dinilai', 'sebab', 'markah', 'kedudukan', 'top', 'serupa_dengan'] + list(BHG) + list(KRIT) + \
+    lajur = ['id', 'kumpulan', 'kegunaan', 'dinilai', 'sebab', 'markah', 'kedudukan', 'top', 'kedudukan_guna', 'top_guna', 'serupa_dengan'] + list(BHG) + list(KRIT) + \
         ['nama', 'prasyarat', 'penapis', 'n', 'tahun', 'minggu', 'terus', 'a_terus', 'kl_terus', 'kl_K1', 'kl_K2', 'kl_K3', 'm5', 'a_m5', 'kl_m5', 'm10',
          'a_m10', 'kl_m10', 'c10', 'a_c10', 'kl_c10', 'j5', 'a_j5', 'arah', 'rugi15_B', 'a_rugi15_B', 'kl_rugi15', 'thn_pos', 'thn_bil', 'kl_baki',
          'adik_bil', 'adik_pos', 'menang_B', 'a_menang_B', 'kl_menang', 'purata_B', 'a_purata_B', 'kl_purata']
@@ -241,7 +259,9 @@ def lapor_(kerja):
              top_kegunaan={k: int((P.kegunaan == k).sum()) for k in GUNA}, top_kumpulan=P.kumpulan.value_counts().to_dict(),
              semua_kegunaan={k: int((D.kegunaan == k).sum()) for k in GUNA},
              tengah_bahagian={g_: {k: r4(X_[k].median()) for k in BHG} for g_, X_ in (('top', P), ('dinilai', D))},
-             tengah_kegunaan={k: r4(D[D.kegunaan == k].markah.median()) for k in GUNA if (D.kegunaan == k).any()})
+             tengah_kegunaan={k: r4(D[D.kegunaan == k].markah.median()) for k in GUNA if (D.kegunaan == k).any()},
+             disimpan_kegunaan={k: int((S.kegunaan == k).sum()) for k in GUNA},
+             top_guna={k: _ringkas(T[(T.kegunaan == k) & (T.top_guna > 0)]) for k in GUNA if ((T.kegunaan == k) & (T.top_guna > 0)).any()})
     json.dump(B, open(os.path.join(HASIL, 'bacaan.json'), 'w'), indent=1, sort_keys=True, ensure_ascii=False)
     try:
         sys.path.insert(0, os.path.join(lapor.BS2, 'standard'))
@@ -288,7 +308,26 @@ def lapor_(kerja):
         A.append(f"| {r.top} | `{r.id}` | **{r.markah:.1f}** | {r.mA:.0f} · {r.mB:.0f} · {r.mC:.0f} · {r.mD:.0f} · {r.mE:.0f} | {r.kegunaan} | "
                  f"{tx(r.prasyarat)} | {r.nama} | {tx(r.penapis)} | {p(r.terus, 1)} ({p(r.a_terus, 1)}) | {p(r.minggu)} % | {p(r.menang_B)} "
                  f"({p(r.a_menang_B)}) | {p(r.purata_B, 1, True)} ({p(r.a_purata_B, 1, True)}) | {p(r.kl_K3, 1, True)} |")
-    A += ['', '## 5. Kaveat', '',
+    kepala = ['| # | ID | **Markah** | A · B · C · D · E | Prasyarat | Isyarat beli | Penapis saham | Tangkap % (rawak) | Minggu ada belian | '
+              'Menang % (rawak) | Purata % (rawak) | 2025–26 | # keseluruhan |', '|---' * 13 + '|']
+    for no, g in ((5, 'Setiap minggu'), (6, 'Musim laporan kewangan')):
+        G = T[(T.kegunaan == g) & (T.top_guna > 0)].sort_values('top_guna')
+        if not len(G):
+            continue
+        z = B['top_guna'][g]
+        A += ['', f'## {no}. Top {len(G)} "{g}" (markah yang sama, dalam kumpulan itu sahaja)', '',
+              f"Tambahan selepas hasil dilihat (paparan sahaja, lihat pindaan (aj)). Setup berbeza dalam kumpulan ini: "
+              f"{B['disimpan_kegunaan'][g]:,}. Markah {z['markah_maks']:.1f} hingga {z['markah_min']:.1f} (nilai tengah {z['markah_tengah']:.1f}). "
+              f"Nilai tengah: tangkap {p(z['terus'], 1)} lawan saham rawak {p(z['a_terus'], 1)}; naik ≥ 5 % seminggu {p(z['m5'], 1)} lawan "
+              f"{p(z['a_m5'], 1)}; jatuh ≥ 5 % {p(z['j5'], 1)} lawan {p(z['a_j5'], 1)}; menang {p(z['menang'], 1)} % lawan {p(z['a_menang'], 1)} %; "
+              f"purata {p(z['purata'], 1, True)} % lawan {p(z['a_purata'], 1, True)} %; minggu ada belian {p(z['minggu'])} %.", ''] + kepala
+        for r in G.itertuples():
+            A.append(f"| {r.top_guna} | `{r.id}` | **{r.markah:.1f}** | {r.mA:.0f} · {r.mB:.0f} · {r.mC:.0f} · {r.mD:.0f} · {r.mE:.0f} | "
+                     f"{tx(r.prasyarat)} | {r.nama} | {tx(r.penapis)} | {p(r.terus, 1)} ({p(r.a_terus, 1)}) | {p(r.minggu)} % | {p(r.menang_B)} "
+                     f"({p(r.a_menang_B)}) | {p(r.purata_B, 1, True)} ({p(r.a_purata_B, 1, True)}) | {p(r.kl_K3, 1, True)} | {r.kedudukan} |")
+    A += ['', '## 7. Kaveat', '',
+          '- Jangkaan yang ditulis dahulu salah pada dua perkara: markah tertinggi dijangka 55–70, dan Top 100 dijangka bercampur. '
+          'Top 100 keseluruhan hampir semuanya setup laporan kewangan kerana bahagian C hanya 20 markah.',
           '- Berat dan sasaran markah penuh dipilih selepas melihat hasil; markah menyusun, ia tidak membuktikan apa-apa. Beza beberapa markah '
           'antara dua setup tidak bermakna (kedudukan tidak stabil antara tempoh).',
           '- "Minggu ada belian" diukur pada separuh saham; pada semua saham ia lebih tinggi.',
@@ -297,7 +336,7 @@ def lapor_(kerja):
           'Senarai penuh dengan markah setiap kriteria: `skor.csv.gz`.', '']
     open(os.path.join(HASIL, 'TOP100.md'), 'w', encoding='utf-8').write('\n'.join(A))
     cari.log(f"CS23 lapor: dinilai {B['dinilai']}, serupa {B['serupa']}, disimpan {B['disimpan']}, top {B['n_top']}; markah maks {B['markah_maks']}, "
-             f"top min {B['top_min']}; top ikut kegunaan {B['top_kegunaan']}")
+             f"top min {B['top_min']}; top ikut kegunaan {B['top_kegunaan']}; disimpan ikut kegunaan {B['disimpan_kegunaan']}")
     return T, B
 
 

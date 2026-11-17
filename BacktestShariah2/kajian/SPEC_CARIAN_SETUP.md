@@ -1751,6 +1751,17 @@ kehendak pengguna atas data yang sudah dilihat — bukan ujian, bukan bukti. Tia
 - **Yang dijangka (ditulis dahulu):** markah tertinggi dijangka sekitar 55–70 (tiada setup cemerlang pada semua bahagian);
   Top 100 dijangka bercampur setup laporan kewangan dan setup sepanjang tahun; kedudukan dalam Top 100 tidak stabil
   (pelajaran audit CS19), jadi beza beberapa markah tidak bermakna.
+- **Tambahan 17 Nov 2026, DITULIS SELEPAS hasil dilihat (paparan sahaja; formula markah, sasaran, berat dan cara membuang
+  yang serupa TIDAK diubah):** jangkaan di atas salah pada dua perkara — markah tertinggi 88.2 (bukan 55–70), dan Top 100
+  keseluruhan mengandungi 97 setup "Musim laporan kewangan" dan hanya 3 "Setiap minggu" (bahagian C bernilai 20 markah,
+  sedangkan setup laporan kewangan mendapat hampir penuh pada A dan D). Top 100 keseluruhan itu kekal direkod seperti
+  dikunci. Kerana pengguna sudah menyatakan (17 Nov 2026) bahawa setup yang hanya bergantung pada musim laporan kewangan
+  tidak mencukupi dan setup yang boleh dipakai setiap minggu mesti ditunjuk dahulu, laporan dan dashboard turut memaparkan
+  **kedudukan dalam kumpulan "Kegunaan bila?" masing-masing** (markah yang sama, setup serupa sudah dibuang): "Top 100
+  setiap minggu" = 100 setup "Setiap minggu" bermarkah tertinggi; "Top 100 musim laporan" = 100 setup "Musim laporan
+  kewangan" bermarkah tertinggi. Paparan lalai dashboard = Top 100 setiap minggu. Ini susunan paparan mengikut kehendak
+  pengguna, bukan ujian dan bukan markah baharu; sama ada senarai kerja rasmi ialah Top 100 setiap minggu atau Top 100
+  keseluruhan = keputusan pengguna.
 
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
