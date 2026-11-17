@@ -1660,6 +1660,41 @@ yang wujud ketika pindaan dikomit.
   3 bulan, jadi angka mentah kelihatan tinggi bagi semua unit; yang bermakna hanya beza lawan saham rawak hari sama, dan
   beza itu dijangka kecil (beberapa mata) bagi isyarat M / N tanpa syarat.
 
+### Pindaan 17 Nov 2026 (ai) — pusingan CS22: carian setup sepanjang tahun yang dipangkatkan ikut ukuran kedua (`c10`)
+
+**Keputusan pengguna 17 Nov 2026** ("ya utk 1 ,2 3"; item 3 = "jalankan carian baharu yang disusun ikut ukuran kedua").
+
+**Kejujuran urutan (WAJIB dibaca):** sebelum pindaan ini ditulis, hasil CS21 pada kumpulan B SUDAH dilihat — ukuran kedua
+bagi 1,243 calon CS20 yang lulus, 300 kawalan rawak dan setiap isyarat M / N; diketahui bahawa kawalan rawak lebih baik
+daripada rawak dalam ketiga-tiga tempoh hanya 8 % dan bahawa unit terbaik memakai prasyarat "hasil suku terkini tumbuh
+≥ 20 %" bersama syarat trend. Tiada skor ikut `c10` pada kumpulan A dan tiada calon pusingan ini yang wujud ketika pindaan
+dikomit. Peraturan di bawah menyalin CS20 dengan sasaran ditukar; tiada ambang yang dipilih daripada hasil CS21.
+
+- **Sasaran:** label `c10` pindaan (ah) — tutup ≥ +10 % sebelum menyentuh −8 %, dalam 63 sesi — lawan saham rawak hari
+  sama × tercile ATR %. Skor = enjin yang sama (kelebihan, minimum dua era tolak 2 ralat piawai) pada kumpulan A.
+- **Ruang dan syarat = CS20 tanpa perubahan:** isyarat beli `asal` (mod tanpa intai) + `K`; prasyarat tarikh laporan
+  kewangan dan kalendar TIDAK dibenarkan; syarat kekerapan ≥ 80 % minggu dan ≥ 50 % minggu pada tahun paling teruk (pada A
+  semasa memilih, pada B semasa mendaftar); `N_ATAS = 5`, `N_TINJAU = 200`.
+- **Kawalan:** 300 peraturan rawak daripada ruang yang sama dengan syarat kekerapan yang sama (benih 20261118).
+- **"Lulus" (kumpulan B):** ≥ 300 belian (satu posisi sehingga keputusan belian diketahui), ≥ 10 tahun aktif, kelebihan
+  `c10` > 0 dalam K1, K2 DAN K3.
+- **Bacaan dikunci (ambang sama dengan CS13 / CS20):** (B1) kadar lulus calon ≥ kawalan + 20 mata; (B2) bahagian calon dengan
+  kelebihan `c10` K3 > 0 ≥ 60 % DAN ≥ kawalan + 10 mata. Jika gagal: tiada kod baharu, dilaporkan seadanya.
+- **Pendaftaran (hanya jika bacaan lulus):** calon lulus yang (i) menepati syarat kekerapan pada B, (ii) `arah10` > 0 —
+  tambahan "kena" melebihi tambahan "jatuh dahulu", supaya bukan sekadar memilih saham yang lebih bergerak — dan (iii)
+  bukan kembar (Jaccard belian ≥ 0.80 dengan kod F sedia ada yang boleh dinilai, TERMASUK 748 kod CS20, atau calon berskor
+  lebih tinggi yang sudah diterima). Kod `F2803` dan seterusnya, pusingan `CS22`; setup lengkap = stop loss 4×ATR14 + cara
+  pegang B seperti kod lain. Calon yang peraturannya sama atau kembar dengan kod sedia ada tidak diberi kod baharu; ia
+  dilaporkan sebagai "kod sedia ada yang juga lulus ukuran kedua".
+- **Laporan wajib bagi setiap kod:** `c10`, `j8`, `k10` lawan rawak; kelebihan K1 / K2 / K3; `arah10`; ukuran utama
+  (tangkap `terus`, naik dan jatuh ≥ 5 % minggu pertama) lawan rawak; kadar menang dan purata cara B lawan saham rawak yang
+  dipegang sama; minggu yang ada belian.
+- **Keluaran:** `carian_setup/cs_capai22.py` → `hasil/CS22/CARIAN_C10.md`, `senarai_c10.csv`, `calon.csv.gz`, `kawalan.csv`,
+  `bacaan.json`.
+- **Yang dijangka (ditulis dahulu):** kelebihan kecil (kira-kira +1 hingga +3 mata daripada ~40); banyak calon bertindih
+  dengan kod CS20; bacaan boleh gagal pada 2025–26 (pelajaran CS12: ukuran longgar lulus pada saham tidak dilihat tetapi
+  gagal pada tahun tidak dilihat).
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan
