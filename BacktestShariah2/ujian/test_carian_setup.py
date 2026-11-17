@@ -3101,5 +3101,56 @@ class TestCS21(unittest.TestCase):
         self.assertTrue({'isyarat M sahaja', 'isyarat N sahaja', 'kawalan rawak sepanjang tahun (CS20)'} <= set(G.kumpulan))
 
 
+class TestCS22(unittest.TestCase):
+    """Pusingan CS22 (pindaan 17 Nov 2026 (ai)): carian setup sepanjang tahun dipangkatkan ikut ukuran kedua (c10)."""
+
+    def test_dikunci(self):
+        import cs_capai21 as c21
+        import cs_capai22 as c22
+        import cs_daftar13 as d13
+        import cs_mingguan20 as m20
+        self.assertEqual((c22.BENIH_KAWALAN, c22.PUSINGAN_SEDIA, c22.PUS, c22.ID_MULA, c22.MIN_BELIAN, c22.MIN_TAHUN),
+                         (20261118, ('CS13', 'CS20'), 'CS22', 2803, 300, 10))
+        self.assertEqual((c21.NAIK, c21.JATUH, c21.HAD, m20.N_ATAS, m20.N_TINJAU, m20.MINGGU_MIN, m20.TAHUN_MIN), (0.10, 0.08, 63, 5, 200, 0.80, 0.50))
+        self.assertEqual((d13.B1_BEZA, d13.B2_MIN, d13.B2_BEZA), (0.20, 0.60, 0.10))
+        spec = open(os.path.join(SINI, '..', 'kajian', 'SPEC_CARIAN_SETUP.md'), encoding='utf-8').read()
+        self.assertIn('### Pindaan 17 Nov 2026 (ai)', spec)
+
+    def test_bacaan(self):
+        import cs_capai22 as c22
+        T = pd.DataFrame(dict(peranan=['calon'] * 10 + ['kawalan'] * 10, layak22=True, lulus22=[True] * 6 + [False] * 4 + [True] * 2 + [False] * 8,
+                              kl_c10_K3=[0.01] * 7 + [-0.01] * 3 + [0.01] * 5 + [-0.01] * 5))
+        B = c22.bacaan(T)
+        self.assertEqual((B['lulus_calon'], B['lulus_kawalan'], B['k3_calon'], B['k3_kawalan']), (0.6, 0.2, 0.7, 0.5))
+        self.assertTrue(B['b1'] and B['b2'] and B['ya'])
+        T.loc[T.peranan == 'calon', 'kl_c10_K3'] = [0.01] * 5 + [-0.01] * 5                  # 50 % < 60 %: B2 gagal
+        B = c22.bacaan(T)
+        self.assertTrue(B['b1'] and not B['b2'] and not B['ya'])
+
+    def test_rekod(self):
+        """Hasil dalam repo: ujian dikunci GAGAL pada 2025-26 (B2), jadi TIADA kod CS22 dalam registry."""
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS22')
+        B = json.load(open(os.path.join(d, 'bacaan.json'), encoding='utf-8'))
+        c = pd.read_csv(os.path.join(d, 'calon.csv.gz'))
+        kw = pd.read_csv(os.path.join(d, 'kawalan.csv'))
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str).fillna('')
+        self.assertEqual((len(c), len(kw)), (B['n_calon'], B['n_kawalan']))
+        ok = c[c.layak22]
+        self.assertAlmostEqual(float(ok.lulus22.mean()), B['lulus_calon'], places=6)
+        self.assertAlmostEqual(float((ok.kl_c10_K3 > 0).mean()), B['k3_calon'], places=6)
+        self.assertAlmostEqual(float((kw[kw.layak22].kl_c10_K3 > 0).mean()), B['k3_kawalan'], places=6)
+        self.assertEqual(B['b1'], B['lulus_calon'] >= B['lulus_kawalan'] + 0.20)
+        self.assertEqual(B['b2'], B['k3_calon'] >= 0.60 and B['k3_calon'] >= B['k3_kawalan'] + 0.10)
+        self.assertEqual(B['ya'], B['b1'] and B['b2'])
+        self.assertTrue(((c.mgg_A >= 0.80) & (c.mgg_min_A >= 0.50)).all())
+        larang = '|'.join(('earnings dalam', 'selepas earnings', 'tiada earnings', 'hari earnings', 'Nov-Apr', 'Mei-Okt', 'hari pertama bulan', 'Januari'))
+        self.assertFalse(c.prasyarat.fillna('').str.contains(larang).any())
+        n22 = int((reg.pusingan == 'CS22').sum())
+        self.assertEqual(n22, B['n_berdaftar'])
+        if not B['ya']:
+            self.assertEqual(n22, 0)                                                      # gagal -> tiada kod baharu
+            self.assertEqual(len(pd.read_csv(os.path.join(d, 'senarai_c10.csv'))), 0)
+
+
 if __name__ == '__main__':
     unittest.main()

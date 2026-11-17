@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794866743-dcbd",
-  "nombor": 223,
-  "sha256": "b3a4639e59f1e1803d6bf1f0f99bdba45f344851ff428fdf3aac5b4f3964fb42",
-  "bait": 972440,
-  "dikemas": "2026-11-16 22:05 UTC",
-  "nota": "v188 (17 Nov 2026): Setup F audit bebas CS19 (baris jatuh >= 5 %, rawak dipegang sama, lencana AUDIT A-D dan PAPERTRADE, tapisan Papertrade 29), atas v187 #222"
+  "versi_artifact": "1794882534-6040",
+  "nombor": 224,
+  "sha256": "b98e535422eef00e24c5276c7cf64c1799b3bb0f5eeac837a036ae86dc4136ea",
+  "bait": 979450,
+  "dikemas": "2026-11-17 02:29 UTC",
+  "nota": "v189 (17 Nov 2026): Setup F — paparan lalai \"Mingguan\" (748 setup sepanjang tahun CS20), baris \"+10% dahulu\" (ukuran kedua CS21), lencana MINGGUAN dan PAPERTRADE · DIJEDA; carian/f_utama kini 3 bahagian; atas v188 #223"
 }
