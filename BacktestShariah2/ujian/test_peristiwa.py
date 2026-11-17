@@ -141,6 +141,35 @@ class TestPeristiwa(unittest.TestCase):
             self.assertEqual(o['untung_henti_pct'], '-12.22')
             self.assertAlmostEqual((hk / hb - 1) * 100, -12.22, places=1)
 
+    def test_laras_pecahan(self):
+        # SENEA 5:1 (stor dilaras 17 Nov 2026): posisi terbuka dilaras, posisi tertutup kedua-dua lorong tidak disentuh
+        lajur = ['tarikh_beli', 'saham', 'kaedah', 'harga_beli', 'harga_terkini', 'untung_pct', 'henti', 'sasaran', 'keluar',
+                 'tarikh_keluar', 'harga_keluar', 'untung_akhir_pct', 'nota', 'tidak_dibeli', 'keluar_henti']
+        rows = [dict(tarikh_beli='2026-11-12', saham='SS', kaedah='M10', harga_beli='176.56', harga_terkini='176.47',
+                     henti='165.29', keluar='False'),
+                dict(tarikh_beli='2026-11-12', saham='SS', kaedah='M74', harga_beli='176.56', keluar='True',
+                     tarikh_keluar='2026-11-12', harga_keluar='174.7', untung_akhir_pct='-1.05', keluar_henti='False'),
+                dict(tarikh_beli='2026-11-12', saham='SS', kaedah='M99', harga_beli='176.56', keluar='True',
+                     harga_keluar='170', keluar_henti='True')]
+        ix = pd.to_datetime(['2026-11-12', '2026-11-13'])
+        g = pd.DataFrame(dict(open=[35.312, 34.3], high=36.0, low=33.0, close=35.0, volume=1e5), index=ix)
+        log = pd.DataFrame([dict(masa='2026-11-17 08:12 UTC', ticker='SS', nisbah='0.2', bar='9', serak='0.0',
+                                 keputusan='laras', sumber='yfinance')])
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'claude_9.csv')
+            with open(p, 'w', newline='') as f:
+                w = csv.DictWriter(f, lajur); w.writeheader()
+                for r in rows:
+                    w.writerow({k: r.get(k, '') for k in lajur})
+            x = P.laras_pecahan(d, {'SS': g}, log)
+            self.assertEqual([y[2] for y in x], ['M10', 'M74'])
+            with open(p) as f:
+                o = list(csv.DictReader(f))
+            self.assertEqual((o[0]['harga_beli'], o[0]['henti'], o[0]['harga_terkini']), ('35.312', '33.058', '35.294'))
+            self.assertEqual((o[1]['harga_beli'], o[1]['harga_keluar'], o[1]['untung_akhir_pct']), ('35.312', '34.94', '-1.05'))
+            self.assertEqual(o[2]['harga_beli'], '176.56')
+            self.assertEqual(P.laras_pecahan(d, {'SS': g}, log), [])
+
 
 if __name__ == '__main__':
     unittest.main()

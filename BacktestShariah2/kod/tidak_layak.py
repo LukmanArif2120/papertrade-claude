@@ -326,6 +326,7 @@ def posisi(folder, frames, sesi, tulis=True, bursa=LALAI):
     akhir = str(pd.DatetimeIndex(sesi)[-1].date()) if len(sesi) else ''
     rows = peristiwa.muat()
     fk = peristiwa.laras_c(folder, rows[rows.tarikh_ex <= akhir], frames) if tulis and len(rows) else []
+    pc = peristiwa.laras_pecahan(folder, frames) if tulis else []
     return dict(ambil_alih=dict(ditutup=sum(x[4] != 'menunggu' for x in aa), menunggu=sum(x[4] == 'menunggu' for x in aa),
                                 saham=sorted({x[1] for x in aa})),
                 delist=dict(ditutup=len(dl), saham=sorted({x[1] for x in dl}),
@@ -334,6 +335,7 @@ def posisi(folder, frames, sesi, tulis=True, bursa=LALAI):
                 kelas_berganda=dict(tidak_sah=len(kb), saham=sorted({x[1] for x in kb})),
                 faktor=dict(dilaras=sum(x[5] == 'dilaras' for x in fk), semak=[x[:5] for x in fk if x[5] == 'semak'],
                             dibuka_semula=[x[:5] for x in fk if x[5] == 'dibuka semula']),
+                pecahan=dict(dilaras=len(pc), saham=sorted({x[1] for x in pc})),
                 _baris=aa + dl + tc + kb)
 
 
