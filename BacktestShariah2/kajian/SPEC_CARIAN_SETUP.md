@@ -1619,6 +1619,47 @@ yang wujud ketika pindaan ini dikomit; isyarat beli sedang dijana semula (data p
 - **Papertrade:** tiada setup CS20 masuk papertrade tanpa keputusan pengguna berasingan (dan pindaan bertarikh pada
   `jejak_f2/kohort.json`).
 
+### Pindaan 17 Nov 2026 (ah) — pusingan CS21: ukuran KEDUA "mencapai +10 % sebelum jatuh 8 %" (tanpa syarat minggu pertama)
+
+**Permintaan pengguna 17 Nov 2026** ("cuba tgk dan kaji balik method M dan N, ada saham yang boleh naik more than 10% kan
+dalam tempoh papertrade, saya mencari saham saham begini, mungkin kita boleh buang tempoh pegangan kot, sebab nampak macam
+tempoh pegangan mengganggu proses anda ... method itu mestilah sejenis method yang menangkap saham saham yang high
+possibilities untuk naik dan terus naik (based on method method M dan N)"), kemudian keputusan "1.ya b": tambah ukuran
+kedua "mencapai +10 % sebelum jatuh 8 %" untuk M, N dan semua F, dengan masa menunggu paling lama 3 bulan.
+
+**Mengapa:** ukuran utama (`terus`) mewajibkan naik ≥ 5 % dalam MINGGU PERTAMA, yang memihak kepada setup di sekitar laporan
+kewangan; kaedah M / N kebanyakannya ikut trend. Ukuran kedua ini tidak mempunyai syarat minggu pertama dan tidak
+bergantung pada cara pegang.
+
+**Kejujuran urutan:** sebelum pindaan ini ditulis, yang sudah dilihat ialah tinjauan deskriptif Lejar LANGSUNG (belian M / N
+16 Okt – 13 Nov 2026, senarai Shariah): 27 daripada 100 belian mencapai +10 % (saham rawak hari sama 27); mencapai +10 %
+sebelum menyentuh −8 %: 25 (rawak 24); 93 daripada 188 kaedah lebih baik daripada rawak. Tiada angka backtest bagi label ini
+yang wujud ketika pindaan dikomit.
+
+- **Label `c10` ("kena"):** beli pada buka sesi selepas isyarat (harga P). Dalam 63 sesi (≈ 3 bulan, termasuk hari beli):
+  berjaya jika ada TUTUP ≥ 1.10 × P sebelum harga menyentuh 0.92 × P. Sentuhan −8 %: pada hari beli hanya tutup ≤ 0.92 × P
+  (tiada jualan pada hari beli); selepas itu buka ≤ 0.92 × P atau rendah ≤ 0.92 × P, dan diperiksa DAHULU daripada tutup hari
+  yang sama (konservatif). **`j8` ("jatuh dahulu")** = menyentuh −8 % sebelum mencapai +10 %. Baki = tiada kedua-duanya dalam
+  63 sesi. **`k10` (maklumat, "terus naik")** = tutup sesi ke-63 ≥ 1.10 × P.
+- **Bar yang dinilai:** bar layak enjin dengan tetingkap 63 sesi lengkap. **Asas rawak:** purata label antara semua bar layak
+  hari yang sama dalam tercile ATR % yang sama (cara yang sama dengan label lain).
+- **Satu posisi setiap saham setiap unit:** isyarat baharu saham yang sama diabaikan sehingga keputusan belian sebelumnya
+  diketahui (kena, jatuh, atau 63 sesi).
+- **Unit yang diukur, semuanya pada saham yang carian tidak lihat (kumpulan B; K1 2010–19, K2 2020–24, K3 2025–26):**
+  (1) setiap isyarat beli asal M, N dan P SAHAJA, tanpa syarat atau prasyarat (mod tanpa intai); (2) setiap setup senarai
+  utama F yang isyaratnya ada dalam folder kerja (varian M CS07 dilangkau), dipecah "laporan kewangan" / "bukan laporan";
+  (3) setiap setup sepanjang tahun CS20 (calon lulus dan kod berdaftar, jika ada); (4) kawalan rawak CS20.
+- **Yang dilaporkan bagi setiap unit dan nilai tengah setiap kumpulan:** `c10`, `j8`, `k10` masing-masing lawan asas rawak;
+  kelebihan `c10` dalam K1 / K2 / K3; `arah10` = (c10 − asas) − (j8 − asas); bahagian tahun kalendar (≥ 20 belian) dengan
+  kelebihan `c10` > 0; bilangan belian.
+- **Ini pusingan UKURAN, bukan carian:** tiada pemilihan, tiada kod baharu, tiada perubahan pada susunan senarai utama atau
+  pada takrif `terus`. Ukuran kedua dipaparkan DI SEBELAH kadar tangkap. Carian yang dipangkatkan ikut `c10` memerlukan
+  pindaan lain (dan pelajaran CS12 terpakai: ukuran longgar pernah lulus pada saham tidak dilihat tetapi gagal pada 2025–26).
+- **Keluaran:** `carian_setup/cs_capai21.py` → `hasil/CS21/CAPAI10.md`, `unit.csv.gz`, `kumpulan.csv`, `bacaan.json`.
+- **Yang dijangka (ditulis dahulu):** kira-kira satu daripada empat hingga lima belian rawak mencapai +10 % dahulu dalam
+  3 bulan, jadi angka mentah kelihatan tinggi bagi semua unit; yang bermakna hanya beza lawan saham rawak hari sama, dan
+  beza itu dijangka kecil (beberapa mata) bagi isyarat M / N tanpa syarat.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan
