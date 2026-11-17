@@ -267,8 +267,14 @@ def laras_c(folder, rows=None, frames=None):
                     x['untung_pct'] = f'{(hk / hb2 - 1) * 100:.2f}'
                 if kel and SH.nombor(x.get('harga_keluar')):
                     x['untung_akhir_pct'] = f"{(SH.nombor(x['harga_keluar']) / hb2 - 1) * 100:.2f}"
-                if SH.benar(x.get('keluar_henti')) and SH.nombor(x.get('harga_keluar_henti')) and (x.get('tarikh_keluar_henti') or '') >= r.tarikh_ex:
-                    x['untung_henti_pct'] = f"{(SH.nombor(x['harga_keluar_henti']) / hb2 - 1) * 100:.2f}"
+                hkh = SH.nombor(x.get('harga_keluar_henti'))
+                if SH.benar(x.get('keluar_henti')) and hkh:
+                    if (x.get('tarikh_keluar_henti') or '') >= r.tarikh_ex:
+                        x['untung_henti_pct'] = f"{(hkh / hb2 - 1) * 100:.2f}"
+                    else:
+                        # lorong henti keluar SEBELUM tarikh_ex: harga jualnya ialah harga sebelum peristiwa, jadi ia
+                        # dilaras dengan faktor yang sama (siri dilaras) dan untung_henti_pct kekal (kes TRMD 17 Nov 2026)
+                        x['harga_keluar_henti'] = f'{hkh * f:.4f}'.rstrip('0').rstrip('.')
                 x['nota'] = ((x.get('nota') or '') + f'; {tanda} x{f:g} (harga beli/henti/sasaran dilaras)').lstrip('; ')
                 ubah = True
                 jenis = 'semak' if kel and x.get('tarikh_keluar') == r.tarikh_ex else 'dilaras'

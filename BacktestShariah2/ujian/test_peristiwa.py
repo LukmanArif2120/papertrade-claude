@@ -119,6 +119,28 @@ class TestPeristiwa(unittest.TestCase):
             self.assertTrue(out[0]['isyarat_keluar'].startswith('Pegang (henti 17.01'))
             self.assertEqual(out[1]['keluar'], 'True')             # henti dilaras 17.46 >= Low 17.421: keluar kekal
 
+    def test_laras_c_henti_keluar_sebelum_ex(self):
+        # TRMD 17 Nov 2026: lorong kaedah masih dipegang, lorong henti keluar 6 Nov, dividen khas ex 16 Nov
+        lajur = ['tarikh_beli', 'saham', 'kaedah', 'harga_beli', 'harga_terkini', 'untung_pct', 'henti', 'sasaran', 'keluar',
+                 'tarikh_keluar', 'harga_keluar', 'untung_akhir_pct', 'nota', 'tidak_dibeli', 'keluar_henti',
+                 'tarikh_keluar_henti', 'harga_keluar_henti', 'untung_henti_pct']
+        r = dict(tarikh_beli='2026-10-13', saham='TRMD', kaedah='M82', harga_beli='40.75', harga_terkini='36.68',
+                 henti='', keluar='False', keluar_henti='True', tarikh_keluar_henti='2026-11-06',
+                 harga_keluar_henti='35.77', untung_henti_pct='-12.22')
+        with tempfile.TemporaryDirectory() as d:
+            p = os.path.join(d, 'claude_14.csv')
+            with open(p, 'w', newline='') as f:
+                w = csv.DictWriter(f, lajur); w.writeheader(); w.writerow({k: r.get(k, '') for k in lajur})
+            fr = pd.DataFrame([dict(saham='TRMD', tarikh_ex='2026-11-16', jenis='dividen_khas', faktor='0.963195',
+                                    sumber='u', catatan='', ditambah='')])
+            P.laras_c(d, fr)
+            with open(p) as f:
+                o = list(csv.DictReader(f))[0]
+            hb, hk = float(o['harga_beli']), float(o['harga_keluar_henti'])
+            self.assertAlmostEqual(hk, 35.77 * 0.963195, places=3)
+            self.assertEqual(o['untung_henti_pct'], '-12.22')
+            self.assertAlmostEqual((hk / hb - 1) * 100, -12.22, places=1)
+
 
 if __name__ == '__main__':
     unittest.main()
