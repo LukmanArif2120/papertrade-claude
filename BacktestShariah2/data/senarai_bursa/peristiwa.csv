@@ -13105,3 +13105,19 @@ tarikh,simbol,peristiwa,nama,bursa,etf,biasa
 2026-11-14,LOVI,tambah,Live Oak Acquisition Corp. VI - Class A Ordinary Shares,NASDAQ,0,0
 2026-11-14,LOVIW,tambah,Live Oak Acquisition Corp. VI - Warrants,NASDAQ,0,0
 2026-11-14,WWB,tambah,Windward Bio Group AG - Common shares,NASDAQ,0,1
+2026-11-17,BRRK,tambah,Bluerock Acquisition Corp. II - Class A Ordinary Shares,NASDAQ,0,0
+2026-11-17,BRRKW,tambah,Bluerock Acquisition Corp. II - Warrants,NASDAQ,0,0
+2026-11-17,HCOP,tambah,Hartford Hybrid and Credit Opportunities ETF,NASDAQ,1,0
+2026-11-17,HZN,tambah,Bright Horizon Energy Corporation Common Stock,NYSE,0,1
+2026-11-17,PORT,tambah,Southport Acquisition Corp. II Class A Ordinary Shares,NYSE,0,0
+2026-11-17,PORT.W,tambah,"Southport Acquisition Corp. II Redeemable warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50",NYSE,0,0
+2026-11-17,BEATW,buang,"Heartbeam, Inc. - Warrant",NASDAQ,0,0
+2026-11-17,BKH,buang,Black Hills Corporation Common Stock,NYSE,0,1
+2026-11-17,BTBDW,buang,"BT Brands, Inc. - Warrant",NASDAQ,0,0
+2026-11-17,ITGR,buang,Integer Holdings Corporation Common Stock,NYSE,0,1
+2026-11-17,KTF,buang,DWS Municipal Income Trust,NYSE,0,1
+2026-11-17,LVWR.W,buang,"LiveWire Group, Inc. Warrants, each exercisable for one share of Common Stock at an exercise price of $11.50 per share",NYSE,0,0
+2026-11-17,NWE,buang,"NorthWestern Energy Group, Inc.  - Common Stock",NASDAQ,0,1
+2026-11-17,PLCE,buang,"Children's Place, Inc. (The) - Common Stock",NASDAQ,0,1
+2026-11-17,STLNW,buang,"Starling Oncology, Inc. - Warrant",NASDAQ,0,0
+2026-11-17,FOFO,tukar_nama,"Hang Feng Technology Innovation Co., Ltd. - Class A Ordinary Shares",NASDAQ,0,1

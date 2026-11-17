@@ -1239,7 +1239,6 @@ BEAGR,Bold Eagle Acquisition Corp. - Right,NASDAQ,0,0,2026-10-27
 BEAGU,Bold Eagle Acquisition Corp. - Units,NASDAQ,0,0,2026-10-27
 BEAM,Beam Therapeutics Inc. - Common Stock,NASDAQ,0,1,2026-10-27
 BEAT,"Heartbeam, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
-BEATW,"Heartbeam, Inc. - Warrant",NASDAQ,0,0,2026-10-27
 BEBE,TGE Value Creative Solutions Corp Class A Ordinary Shares,NYSE,0,1,2026-10-27
 BEBE.U,"TGE Value Creative Solutions Corp Units, each consisting of one Class A ordinary share and one-half of one redeemable warrant",NYSE,0,0,2026-10-27
 BEBE.W,"TGE Value Creative Solutions Corp Redeemable warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50 per share",NYSE,0,0,2026-10-27
@@ -1434,7 +1433,6 @@ BKEM,BNY Mellon Emerging Markets Equity ETF,NYSE Arca,1,0,2026-10-27
 BKF,iShares MSCI BIC ETF,NYSE Arca,1,0,2026-10-27
 BKFI,BNY Mellon Active Core Bond ETF,NYSE Arca,1,0,2026-10-27
 BKGI,BNY Mellon Global Infrastructure Income ETF,Cboe BZX,1,0,2026-10-27
-BKH,Black Hills Corporation Common Stock,NYSE,0,1,2026-10-27
 BKHA,Black Hawk Acquisition Corporation - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 BKHAR,Black Hawk Acquisition Corporation - Rights,NASDAQ,0,0,2026-10-27
 BKHAU,Black Hawk Acquisition Corporation - Units,NASDAQ,0,0,2026-10-27
@@ -1658,7 +1656,9 @@ BRNY,Burney U.S. Factor Rotation ETF,NASDAQ,1,0,2026-10-27
 BRO,"Brown & Brown, Inc. Common Stock",NYSE,0,1,2026-10-27
 BROL,Baron Risk Optimized Large Cap ETF,NYSE,1,0,2026-10-27
 BROS,Dutch Bros Inc. Class A Common Stock,NYSE,0,1,2026-10-27
+BRRK,Bluerock Acquisition Corp. II - Class A Ordinary Shares,NASDAQ,0,0,2026-11-17
 BRRKU,Bluerock Acquisition Corp. II - Units,NASDAQ,0,0,2026-10-27
+BRRKW,Bluerock Acquisition Corp. II - Warrants,NASDAQ,0,0,2026-11-17
 BRRR,Coinshares Bitcoin ETF,NASDAQ,1,0,2026-10-27
 BRSL,"Brightstar Lottery PLC Trading under the Legal Name to begin at the market open on July 21, 2025. Ordinary Shares",NYSE,0,1,2026-10-27
 BRSM,MFS Blended Research Small-Mid Cap ETF,NYSE Arca,1,0,2026-10-27
@@ -1744,7 +1744,6 @@ BSY,"Bentley Systems, Incorporated - Class B Common Stock",NASDAQ,0,1,2026-10-27
 BTA,Beacon Tactical Alternatives Risk ETF,NYSE Arca,1,0,2026-10-27
 BTAL,AGF U.S. Market Neutral Anti-Beta Fund,NYSE Arca,1,0,2026-10-27
 BTBD,"BT Brands, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
-BTBDW,"BT Brands, Inc. - Warrant",NASDAQ,0,0,2026-10-27
 BTBT,"Bit Digital, Inc. - Ordinary Share",NASDAQ,0,1,2026-10-27
 BTC,Grayscale Bitcoin Mini Trust (BTC),NYSE Arca,1,0,2026-10-27
 BTCC,Grayscale Bitcoin High Income ETF,NYSE Arca,1,0,2026-10-27
@@ -4321,7 +4320,7 @@ FOA,Finance of America Companies Inc. Class A Common Stock,NYSE,0,1,2026-10-27
 FOCL,"EDAP TMS S.A. - American Depositary Shares, each representing One Ordinary Share",NASDAQ,0,1,2026-10-27
 FOCT,FT Vest U.S. Equity Buffer ETF - October,Cboe BZX,1,0,2026-10-27
 FOF,"Cohen & Steers Closed-End Opportunity Fund, Inc. Common Stock",NYSE,0,0,2026-10-27
-FOFO,"Hang Feng Technology Innovation Co., Ltd. - Ordinary Shares",NASDAQ,0,1,2026-10-27
+FOFO,"Hang Feng Technology Innovation Co., Ltd. - Class A Ordinary Shares",NASDAQ,0,1,2026-10-27
 FOIL,"Londian Wason New Energy Tech Inc. American Depositary Shares, each representing five Ordinary Shares",NYSE,0,1,2026-10-27
 FOMG,Leverage Shares 2X Long FORM Daily ETF,Cboe BZX,1,0,2026-10-27
 FOPC,Frontier Asset Opportunistic Credit ETF,NYSE Arca,1,0,2026-10-27
@@ -5167,6 +5166,7 @@ HCMA,HCM III Acquisition Corp. - Class A Ordinary Share,NASDAQ,0,0,2026-10-27
 HCMAU,HCM III Acquisition Corp. - Units,NASDAQ,0,0,2026-10-27
 HCMAW,HCM III Acquisition Corp. - Warrants,NASDAQ,0,0,2026-10-27
 HCMT,Direxion HCM Tactical Enhanced US ETF,NYSE Arca,1,0,2026-10-27
+HCOP,Hartford Hybrid and Credit Opportunities ETF,NASDAQ,1,0,2026-11-17
 HCOW,Amplify COWS Covered Call ETF,NASDAQ,1,0,2026-10-27
 HCRB,Hartford Core Bond ETF,Cboe BZX,1,0,2026-10-27
 HCSG,"Healthcare Services Group, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -5487,6 +5487,7 @@ HYTR,Counterpoint High Yield Trend ETF,NYSE,1,0,2026-10-27
 HYUP,Xtrackers High Beta High Yield Bond ETF,NYSE Arca,1,0,2026-10-27
 HYXF,iShares ESG Advanced High Yield Corporate Bond ETF,NASDAQ,1,0,2026-10-27
 HYZD,WisdomTree Interest Rate Hedged High Yield Bond Fund,NASDAQ,1,0,2026-10-27
+HZN,Bright Horizon Energy Corporation Common Stock,NYSE,0,1,2026-11-17
 HZO,"MarineMax, Inc.  (FL) Common Stock",NYSE,0,1,2026-10-27
 IA,"Innovative Solutions and Support, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 IACL,GraniteShares US 100 Autocallable Income ETF,Cboe BZX,1,0,2026-10-27
@@ -6024,7 +6025,6 @@ ITDI,iShares LifePath Target Date 2065 ETF,NYSE Arca,1,0,2026-10-27
 ITDJ,iShares LifePath Target Date 2070 ETF,NYSE Arca,1,0,2026-10-27
 ITEQ,Amplify BlueStar Israel Technology ETF,NYSE Arca,1,0,2026-10-27
 ITG,"ITG, Inc. - Class A Common Stock",NASDAQ,0,1,2026-10-27
-ITGR,Integer Holdings Corporation Common Stock,NYSE,0,1,2026-10-27
 ITHA,ITHAX Acquisition Corp III - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 ITHAU,ITHAX Acquisition Corp III - Units,NASDAQ,0,0,2026-10-27
 ITHAW,ITHAX Acquisition Corp III - Warrants,NASDAQ,0,0,2026-10-27
@@ -6564,7 +6564,6 @@ KT,KT Corporation Common Stock,NYSE,0,1,2026-10-27
 KTB,"Kontoor Brands, Inc. Common Stock ",NYSE,0,1,2026-10-27
 KTCC,Key Tronic Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 KTEC,KraneShares Hang Seng TECH Index ETF,NYSE Arca,1,0,2026-10-27
-KTF,DWS Municipal Income Trust,NYSE,0,1,2026-10-27
 KTH,Structures Products Cp 8% CorTS Issued by Peco Energy Cap Tr II Preferred Stock,NYSE,0,0,2026-10-27
 KTN,Structured Products Corp 8.205% CorTS 8.205% Corporate Backed Trust Securities (CorTS),NYSE,0,1,2026-10-27
 KTOS,"Kratos Defense & Security Solutions, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
@@ -6955,7 +6954,6 @@ LVLU,"Lulu's Fashion Lounge Holdings, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 LVO,"LiveOne, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 LVS,Las Vegas Sands Corp. Common Stock,NYSE,0,1,2026-10-27
 LVWR,"LiveWire Group, Inc. Common Stock",NYSE,0,1,2026-10-27
-LVWR.W,"LiveWire Group, Inc. Warrants, each exercisable for one share of Common Stock at an exercise price of $11.50 per share",NYSE,0,0,2026-10-27
 LW,"Lamb Weston Holdings, Inc. Common Stock ",NYSE,0,1,2026-10-27
 LWAC,LightWave Acquisition Corp. - Class A Ordinary Shares,NASDAQ,0,0,2026-10-27
 LWACU,LightWave Acquisition Corp. - Units,NASDAQ,0,0,2026-10-27
@@ -7075,7 +7073,7 @@ MBRX,"Moleculin Biotech, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 MBS,Angel Oak Mortgage-Backed Securities ETF,NASDAQ,1,0,2026-10-27
 MBSD,Northern Trust Disciplined Duration MBS ETF,NYSE Arca,1,0,2026-10-27
 MBSF,Regan Floating Rate MBS ETF,NYSE Arca,1,0,2026-10-27
-MBSX,Regan Fixed Rate MBS ETF,NYSE Arca,1,0,2026-10-27
+MBSX,Regan Fixed Rate MBS ETF,F,1,0,2026-10-27
 MBUU,"Malibu Boats, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 MBVI,M3-Brigade Acquisition VI Corp. - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 MBVIU,M3-Brigade Acquisition VI Corp. - Units,NASDAQ,0,0,2026-10-27
@@ -8142,7 +8140,6 @@ NWAX.W,"New America Acquisition I Corp. Warrants, each whole warrant is exercisa
 NWBI,"Northwest Bancshares, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 NWCL,newcleo plc - Ordinary Shares,NASDAQ,0,1,2026-10-27
 NWCLW,newcleo plc - Warrants,NASDAQ,0,0,2026-10-27
-NWE,"NorthWestern Energy Group, Inc.  - Common Stock",NASDAQ,0,1,2026-10-27
 NWFL,Norwood Financial Corp. - Common Stock,NASDAQ,0,1,2026-10-27
 NWG,"NatWest Group plc American Depositary Shares, (each representing two (2) Ordinary Shares)",NYSE,0,1,2026-10-27
 NWGL,CL Workshop Group Limited - American Depositary Shares,NASDAQ,0,1,2026-10-27
@@ -8852,7 +8849,6 @@ PLAY,"Dave & Buster's Entertainment, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 PLBC,Plumas Bancorp - Common Stock,NASDAQ,0,1,2026-10-27
 PLBL,Polibeli Group Ltd - Class A Ordinary Shares,NASDAQ,0,1,2026-10-27
 PLBY,"Playboy, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
-PLCE,"Children's Place, Inc. (The) - Common Stock",NASDAQ,0,1,2026-10-27
 PLCI,Pelican Acquisition II Corporation - Ordinary Shares,NASDAQ,0,1,2026-10-27
 PLCIR,Pelican Acquisition II Corporation - Right,NASDAQ,0,0,2026-10-27
 PLCIU,Pelican Acquisition II Corporation - Unit,NASDAQ,0,0,2026-10-27
@@ -8967,7 +8963,9 @@ PONOU,"Pono Capital Four, Inc. - Units",NASDAQ,0,0,2026-10-27
 PONY,Pony AI Inc. - American Depositary Shares,NASDAQ,0,1,2026-10-27
 POOL,Pool Corporation - Common Stock,NASDAQ,0,1,2026-10-27
 POR,Portland General Electric Co Common Stock,NYSE,0,1,2026-10-27
+PORT,Southport Acquisition Corp. II Class A Ordinary Shares,NYSE,0,0,2026-11-17
 PORT.U,"Southport Acquisition Corp. II Units, each consisting of one Class A ordinary share and one-third of one redeemable warrant",NYSE,0,0,2026-10-27
+PORT.W,"Southport Acquisition Corp. II Redeemable warrants, each whole warrant exercisable for one Class A ordinary share at an exercise price of $11.50",NYSE,0,0,2026-11-17
 POST,"Post Holdings, Inc. Common Stock",NYSE,0,1,2026-10-27
 POW,VistaShares Electrification Supercycle ETF,NYSE Arca,1,0,2026-10-27
 POWA,Invesco Bloomberg Pricing Power ETF,NYSE Arca,1,0,2026-10-27
@@ -10771,7 +10769,6 @@ STLA,Stellantis N.V. Common Shares,NYSE,0,1,2026-10-27
 STLD,"Steel Dynamics, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
 STLL,Leverage Shares 2X Long STRL Daily ETF,Cboe BZX,1,0,2026-10-27
 STLN,"Starling Oncology, Inc. - Common Stock",NASDAQ,0,1,2026-10-27
-STLNW,"Starling Oncology, Inc. - Warrant",NASDAQ,0,0,2026-10-27
 STLR,Stellar ETF,Cboe BZX,1,0,2026-10-27
 STLU,2x Stellar ETF,Cboe BZX,1,0,2026-10-27
 STM,STMicroelectronics N.V. Common Stock,NYSE,0,1,2026-10-27
