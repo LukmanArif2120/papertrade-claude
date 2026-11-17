@@ -2889,5 +2889,53 @@ class TestCS19(unittest.TestCase):
 CAP_F_LAMA = 'e4b8fd20bb8f78a123e32c2eef75c55c42c8f27e1a50ee81ea2b4a7b7001edd5'
 
 
+class TestCS20(unittest.TestCase):
+    """Pusingan CS20 (pindaan 17 Nov 2026 (ag)): setup sepanjang tahun (membeli hampir setiap minggu)."""
+
+    def test_dikunci(self):
+        import cs_mingguan20 as m20
+        import cs_daftar13 as d13
+        self.assertEqual((m20.N_ATAS, m20.N_TINJAU, m20.N_KAWALAN, m20.BENIH_KAWALAN, m20.CUBA_KAWALAN), (5, 200, 300, 20261117, 400000))
+        self.assertEqual((m20.MINGGU_MIN, m20.TAHUN_MIN, m20.MIN_TAHUN_N, m20.BAHAGIAN), (0.80, 0.50, 20, ('asal', 'K')))
+        self.assertEqual(m20.LARANG_PASARAN, ('QG01', 'QG02', 'QG03', 'QG04'))
+        self.assertEqual(m20.LARANG_KUMPULAN, ('QF01', 'QF02', 'QF03', 'QF04', 'QF07'))
+        self.assertEqual(m20.JULAT, {'A': (20100104, 20241231, 2010, 2024), 'B': (20100104, 20260828, 2010, 2025)})
+        self.assertEqual((m20.PUS, m20.ID_MULA, m20.S_HENTI), ('CS20', 2055, d13.S_HENTI))
+        self.assertEqual((d13.JACCARD, d13.B1_BEZA, d13.B2_MIN, d13.B2_BEZA), (0.80, 0.20, 0.60, 0.10))     # bacaan sama dengan CS13
+        spec = open(os.path.join(SINI, '..', 'kajian', 'SPEC_CARIAN_SETUP.md'), encoding='utf-8').read()
+        self.assertIn('### Pindaan 17 Nov 2026 (ag)', spec)
+
+    def test_prasyarat_dibenarkan(self):
+        import cs_cs05 as c5
+        import cs_lapis as lapis
+        import cs_mingguan20 as m20
+        d = m20.dibenar()
+        self.assertEqual((len(d), int(d.sum())), (c5.NQ, 30 * 11))                 # (33 - 4 + tiada) x (15 - 5 + tiada)
+        self.assertTrue(d[0])                                                      # tiada prasyarat
+        q1, q2, _, _ = c5.nyah(np.arange(c5.NQ) * c5.NC)
+        for a, b, ok in zip(q1, q2, d):
+            kod = ([lapis.PASARAN[a][:4]] if a >= 0 else []) + ([lapis.KUMPULAN[b][:4]] if b >= 0 else [])
+            self.assertEqual(bool(ok), not any(k in m20.LARANG_PASARAN + m20.LARANG_KUMPULAN for k in kod), kod)
+            self.assertEqual(m20.larang_q(int(a), int(b)), not ok)
+        self.assertTrue(m20.larang_q(-1, [x[:4] for x in lapis.KUMPULAN].index('QF01')))
+        self.assertFalse(m20.larang_q(-1, [x[:4] for x in lapis.KUMPULAN].index('QF06')))
+
+    def test_kekerapan_mingguan(self):
+        import cs_mingguan20 as m20
+        hu = np.asarray(pd.bdate_range('2009-12-01', '2025-03-31').strftime('%Y%m%d').astype(int))
+        M = m20.minggu(hu, 'A')
+        self.assertEqual((M['n'], len(m20.minggu_kunci('A')), M['penuh'][0], M['penuh'][-1]), (783, 783, 2010, 2024))
+        self.assertTrue((M['idx'][hu < 20100104] == -1).all() and (M['idx'][hu > 20241231] == -1).all())
+        dalam = np.flatnonzero((hu >= 20100104) & (hu <= 20241231))
+        mg, mt, w = m20.kekerapan(M, dalam[::5])                                   # satu belian setiap 5 sesi = setiap minggu
+        self.assertEqual((mg, mt, len(w)), (1.0, 1.0, 783))
+        mg, mt, _ = m20.kekerapan(M, dalam[hu[dalam] // 10000 != 2015][::5])       # tiada belian sepanjang 2015
+        self.assertTrue(0.92 < mg < 0.95 and mt == 0.0)
+        self.assertFalse(m20.kerap(mg, mt))
+        mg, mt, _ = m20.kekerapan(M, np.concatenate([dalam[hu[dalam] // 10000 != 2015][::5], dalam[hu[dalam] // 10000 == 2015][::9]]))
+        self.assertTrue(mg >= 0.80 and 0.5 <= mt < 0.62 and m20.kerap(mg, mt))     # tahun paling teruk ~ 56 % minggu
+        self.assertEqual(m20.kekerapan(M, np.flatnonzero(hu < 20100104))[:2], (0.0, 0.0))
+
+
 if __name__ == '__main__':
     unittest.main()
