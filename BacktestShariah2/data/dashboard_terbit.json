@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794882534-6040",
-  "nombor": 224,
-  "sha256": "b98e535422eef00e24c5276c7cf64c1799b3bb0f5eeac837a036ae86dc4136ea",
-  "bait": 979450,
-  "dikemas": "2026-11-17 02:29 UTC",
-  "nota": "v189 (17 Nov 2026): Setup F — paparan lalai \"Mingguan\" (748 setup sepanjang tahun CS20), baris \"+10% dahulu\" (ukuran kedua CS21), lencana MINGGUAN dan PAPERTRADE · DIJEDA; carian/f_utama kini 3 bahagian; atas v188 #223"
+  "versi_artifact": "1794901143-aaa3",
+  "nombor": 225,
+  "sha256": "6308fe58a824a6bfcf3942cc3721308fafe7b909df59587863ea17cec8e454ba",
+  "bait": 991031,
+  "dikemas": "2026-11-17 07:39 UTC",
+  "nota": "v190 (17 Nov 2026): Setup F — paparan lalai \"Top 100\" + \"Setiap minggu\" ikut Markah 0–100 (CS23); lajur Markah dan \"Kegunaan bila?\" dengan tapisan; carian/f_utama kini 4 bahagian; atas v189 #224"
 }
