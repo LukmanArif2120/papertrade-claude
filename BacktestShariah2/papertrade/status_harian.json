@@ -28,81 +28,82 @@
   "buka_lewat": []
  },
  "malam": {
-  "sesi": "2026-11-13",
-  "masa": "2026-11-14 14:23 MYT",
+  "sesi": "2026-11-16",
+  "masa": "2026-11-17 23:50 MYT",
   "ralat_kaedah": [],
   "kaedah_tanpa_modul": [],
-  "masa_kaedah_s": 526,
+  "masa_kaedah_s": 527,
   "keluar_baru": {
    "M": {
-    "isyarat": 2
+    "isyarat": 3
    },
    "C": {
-    "isyarat": 382,
-    "henti": 111,
-    "masa": 25,
-    "sasaran": 9
+    "henti": 203,
+    "isyarat": 376,
+    "sasaran": 6,
+    "masa": 24
    }
   },
   "keluar_baru_jumlah": {
-   "M": 2,
-   "C": 527
+   "M": 3,
+   "C": 609
   },
-  "menunggu": 380,
+  "menunggu": 503,
   "keluar_keluarga": {
-   "M": 307,
-   "N": 220
-  },
-  "menunggu_keluarga": {
-   "M": 97,
+   "M": 329,
    "N": 280
   },
-  "harga_beli_dibetulkan": 750,
-  "harga_beli_beza_besar": 505,
+  "menunggu_keluarga": {
+   "M": 193,
+   "N": 310
+  },
+  "harga_beli_dibetulkan": 149,
+  "harga_beli_beza_besar": 23,
   "tidak_dibeli": [
-   "WWW M08",
-   "SPB M35",
-   "COR M153",
-   "ACM M153"
+   "WSM M09",
+   "TRMD M73"
   ],
   "nota": [
-   "C KVUE M93: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M74: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M99: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M124: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M80: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M141: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M148: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C WFRD M33: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C ACA M100: tiada bar 2026-11-13 (harga terkini 2026-10-22)",
-   "C WFRD M105: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C KVUE M137: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C WFRD M139: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M79: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M141: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M145: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M80: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C KVUE M81: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M82: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
+   "C SENEA M99: buka stor 37.14 lawan harga_beli 185.68 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C SENEA M89: buka stor 36.85 lawan harga_beli 184.25 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C EMBJ M02: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M10: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C SENEA M19: buka stor 32.04 lawan harga_beli 160.19 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C EMBJ M55: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
    "C SUPN M106: buka stor 26.99 lawan harga_beli 42.07 (> 15%; split/data tidak sepadan) — tidak dinilai",
-   "C KVUE M147: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M158: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C KVUE M14: tiada bar 2026-11-13 (harga terkini 2026-10-30)",
-   "C WFRD M155: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M08: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N41X16: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N41X36: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N54X16: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N54X36: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M15: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M20: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M149: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD M161: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N07X16: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N07X36: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N43X36: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N45X36: tiada bar 2026-11-13 (harga terkini 2026-11-12)",
-   "C WFRD N201X36: tiada bar 2026-11-13 (harga terkini 2026-11-12)"
+   "C EMBJ M124: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M155: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M136: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M141: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ N40X16: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ N40X36: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ N47X16: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ N47X36: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C SENEA M01: buka stor 29.46 lawan harga_beli 147.32 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C EMBJ M30: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M33: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M89: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M105: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M111: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ N39X36: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M14: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C SENEA M02: buka stor 33.96 lawan harga_beli 169.78 (> 15%; split/data tidak sepadan) — tidak dinilai",
+   "C EMBJ M49: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ N45X16: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ N45X36: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M04: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M06: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M31: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M36: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M39: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M66: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M91: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M125: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M135: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M137: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M145: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M153: tiada bar 2026-11-16 (harga terkini 2026-11-13)",
+   "C EMBJ M159: tiada bar 2026-11-16 (harga terkini 2026-11-13)"
   ],
   "tidak_layak_posisi": {
    "ambil_alih": {
@@ -111,10 +112,9 @@
     "saham": []
    },
    "delist": {
-    "ditutup": 14,
+    "ditutup": 1,
     "saham": [
-     "ACA",
-     "KVUE"
+     "INDV"
     ],
     "ditahan_tersenarai": []
    },
@@ -127,69 +127,62 @@
     "saham": []
    },
    "faktor": {
-    "dilaras": 28,
+    "dilaras": 41,
     "semak": [
      [
-      "claude_184.csv",
-      "MKTW",
-      "M127",
-      "2026-11-10",
-      "2026-11-13"
+      "claude_221.csv",
+      "TRMD",
+      "M159",
+      "2026-11-13",
+      "2026-11-16"
      ],
      [
-      "claude_209.csv",
-      "TXO",
-      "M123",
-      "2026-11-12",
-      "2026-11-13"
+      "claude_223.csv",
+      "GNK",
+      "N36X16",
+      "2026-11-13",
+      "2026-11-16"
+     ],
+     [
+      "claude_227.csv",
+      "TRMD",
+      "N113X16",
+      "2026-11-13",
+      "2026-11-16"
+     ],
+     [
+      "claude_227.csv",
+      "TRMD",
+      "N113X36",
+      "2026-11-13",
+      "2026-11-16"
      ]
     ],
-    "dibuka_semula": [
-     [
-      "claude_181.csv",
-      "MKTW",
-      "M54",
-      "2026-11-10",
-      "2026-11-13"
-     ],
-     [
-      "claude_183.csv",
-      "MKTW",
-      "M115",
-      "2026-11-10",
-      "2026-11-13"
-     ],
-     [
-      "claude_184.csv",
-      "MKTW",
-      "M131",
-      "2026-11-10",
-      "2026-11-13"
-     ]
-    ]
+    "dibuka_semula": []
    }
   },
-  "dagangan_betul": 3,
-  "senarai_beli": 1076,
-  "saham_unik": 324,
+  "dagangan_betul": 2,
+  "senarai_beli": 1011,
+  "saham_unik": 314,
   "senarai_keluarga": {
-   "M": 396,
-   "N": 680
+   "M": 348,
+   "N": 663
   },
   "kaedah_keluarga": {
-   "M": 84,
-   "N": 87
+   "N": 85,
+   "M": 78
   },
-  "kaedah": 171,
-  "belian_semula": 146,
-  "dari_watchlist": 67,
-  "isyarat": 13152,
+  "kaedah": 163,
+  "belian_semula": 123,
+  "dari_watchlist": 47,
+  "isyarat": 12424,
   "ditolak": {
-   "dipegang": 2554,
-   "had": 9016,
-   "tidak_cair": 193,
-   "kelas_berganda": 52,
-   "ambil_alih": 261
+   "dipegang": 2654,
+   "had": 8130,
+   "tidak_cair": 248,
+   "ambil_alih": 276,
+   "kelas_berganda": 48,
+   "mingguan": 57
   },
   "tidak_layak": {
    "ACLS": "ambil alih",
@@ -229,22 +222,22 @@
    "TECH": "ambil alih",
    "WLYB": "tidak cair"
   },
-  "watchlist": 547,
-  "watchlist_baharu": 243,
-  "watchlist_dibuang": 177,
-  "watchlist_ke_senarai": 67,
-  "minggu_akhir": true,
-  "fail_isyarat": "data/isyarat/2026-11-13_malam.csv.gz"
+  "watchlist": 527,
+  "watchlist_baharu": 255,
+  "watchlist_dibuang": 228,
+  "watchlist_ke_senarai": 47,
+  "minggu_akhir": false,
+  "fail_isyarat": "data/isyarat/2026-11-16_malam.csv.gz"
  },
  "gred": {
-  "tarikh": "2026-11-16",
-  "masa": "2026-11-16 20:23 MYT",
+  "tarikh": "2026-11-18",
+  "masa": "2026-11-18 00:01 MYT",
   "pemangkin": {
-   "D": 896,
-   "C": 57,
-   "B": 87,
-   "–": 10,
-   "A": 26
+   "D": 826,
+   "C": 35,
+   "–": 28,
+   "A": 29,
+   "B": 93
   }
  }
 }

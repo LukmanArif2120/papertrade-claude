@@ -1,12 +1,12 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-14 17:03 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-17 16:18 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
 | Cawangan | HEAD | Commit di belakang origin/main | origin/main (fetch terakhir) |
 |---|---|---|---|
-| main | 2026-11-14 | 0 | 2026-11-14 |
+| main | 2026-11-17 | 0 | 2026-11-17 |
 
 
 Selari dengan `origin/main` pada fetch terakhir — angka kesegaran di bawah boleh dipercayai.
@@ -31,13 +31,13 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
-| RS pasaran | 30 | 2026-10-05 | 2026-11-13 | 0.5 |  | tidak |
-| Gred kumpulan | 36 | 2026-09-25 | 2026-11-13 | 0.6 |  | tidak |
-| SEC EPS/hasil | 4105 | 2009-04-15 | 2026-11-13 | 65.2 | 271833 | ya |
-| SEC earnings 8-K | 5458 | 2004-08-23 | 2026-11-13 | 86.6 | 180182 | ya |
+| RS pasaran | 30 | 2026-10-06 | 2026-11-16 | 0.5 |  | tidak |
+| Gred kumpulan | 37 | 2026-09-25 | 2026-11-16 | 0.6 |  | tidak |
+| SEC EPS/hasil | 4107 | 2009-04-15 | 2026-11-17 | 65.2 | 271934 | ya |
+| SEC earnings 8-K | 5460 | 2004-08-23 | 2026-11-17 | 86.7 | 180223 | ya |
 
 
-Leg **RS/gred**: terbaik **36 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
+Leg **RS/gred**: terbaik **37 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
 
 
 Leg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 (`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: 2848 daripada 3302 ticker universe ada data EPS/hasil, 0 belum diisi. Universe REVERSE kira-kira 2,300 setahun.
@@ -52,12 +52,12 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Lorong | Ekuiti | Dipegang | Keluar | Sesi terakhir |
 |---|---|---|---|---|
-| RS_10 | 0.773136 | 10 | 8 | 2026-11-13 |
-| RAWAK_10 | 0.923517 | 10 | 7 | 2026-11-13 |
-| GABUNGAN_10 | 1.020657 | 8 | 27 | 2026-11-13 |
-| TOP1_10 | 0.992862 | 10 | 29 | 2026-11-13 |
-| RAWAK_KAEDAH_10 | 0.947128 | 10 | 3 | 2026-11-13 |
-| RISIKO_10 | 0.940631 | 10 | 8 | 2026-11-13 |
+| RS_10 | 0.730293 | 10 | 9 | 2026-11-16 |
+| RAWAK_10 | 0.914928 | 10 | 7 | 2026-11-16 |
+| GABUNGAN_10 | 1.003541 | 9 | 28 | 2026-11-16 |
+| TOP1_10 | 0.989991 | 8 | 31 | 2026-11-16 |
+| RAWAK_KAEDAH_10 | 0.924438 | 10 | 3 | 2026-11-16 |
+| RISIKO_10 | 0.924651 | 10 | 9 | 2026-11-16 |
 
 
 `RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz. Ia menguji saiz atas **isyarat Mxx** dan bukan ujian ke hadapan dapatan REVERSE fasa 1b (`REVERSE/SPEC_FASA2.md` §9.2).
@@ -68,24 +68,24 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 | Status pantau | Bilangan |
 |---|---|
 | AMARAN | 1 |
-| BELUM CUKUP | 125 |
-| OK | 106 |
+| BELUM CUKUP | 111 |
+| OK | 120 |
 
 
 ## 4. Kesegaran data
 
 | Sumber | Terakhir | Umur (hari) | Status |
 |---|---|---|---|
-| Stor harga | 20261113 | 1 | OK |
-| Trend D10H2-r2 | 20261113 | 1 | OK |
-| Lejar Penuh | 2026-11-13 | 1 | OK |
-| portfolio_slot | 2026-11-13 | 1 | OK |
-| Papan Penganalisis | 2026-11-14 | 0 | OK |
-| RS pasaran | 2026-11-13 | 1 | OK |
-| Gred kumpulan | 2026-11-13 | 1 | OK |
+| Stor harga | 20261116 | 1 | OK |
+| Trend D10H2-r2 | 20261116 | 1 | OK |
+| Lejar Penuh | 2026-11-16 | 1 | OK |
+| portfolio_slot | 2026-11-16 | 1 | OK |
+| Papan Penganalisis | 2026-11-17 | 0 | OK |
+| RS pasaran | 2026-11-16 | 1 | OK |
+| Gred kumpulan | 2026-11-16 | 1 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
-| Senarai Shariah (skrin Moomoo manual) | 2026-10-26 | 19 | OK (had 35 hari) |
+| Senarai Shariah (skrin Moomoo manual) | 2026-10-26 | 22 | OK (had 35 hari) |
 
 
 Ambang LEWAT: > 3 hari. Dua sebab biasa **bukan** kerosakan: hujung minggu atau cuti pasaran, dan salinan kerja yang lama (lihat §0). Periksa kedua-duanya, kemudian `penjaga_jadual` dan log workflow, sebelum menganggap saluran rosak.

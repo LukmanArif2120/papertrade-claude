@@ -633,3 +633,11 @@ Audit akhir (semua tab, 1900px dan 1600px, mod Padat): **tiada kegagalan berat**
 - Direkod 1063 (321 saham; belian semula 142; fail claude_227.csv); dilangkau 13. Harga: buka sementara yfinance 16:14 NY.
 - Dilangkau: SBH M08: buka 19.17 > buka_maks 19.04; PHIN M13: buka 73.65 <= henti 76.63; SRAD M14: buka 12.67 <= henti 12.76; AMRZ M14: buka 40.21 <= henti 40.69; HSIC M14: buka 85.70 <= henti 85.73; NXT M18: buka 91.21 <= henti 91.47; IBEX M41: isyarat batal pada buka (peraturan kaedah); UI M57: buka 645.64 <= henti 656.93; CNX M70: buka 36.16 <= henti 36.19; AVGO M139: isyarat batal pada buka (peraturan kaedah); CECO M139: isyarat batal pada buka (peraturan kaedah); TPC M143: isyarat batal pada buka (peraturan kaedah); JD M153: isyarat batal pada buka (peraturan kaedah).
 - Tiada order. Tiada wang sebenar.
+
+## 2026-11-17 23:50 MYT — GitHub Actions: kemas kini + imbas (sesi AS 2026-11-16)
+- Keluar baharu 612 (C {'henti': 203, 'isyarat': 376, 'sasaran': 6, 'masa': 24}, M {'isyarat': 3}); menunggu buka sesi seterusnya: 503.
+- Harga beli sementara dibetulkan kepada buka rasmi bar harian: 149 (beza > 0.5%: 23). Tidak dibeli baharu: WSM M09, TRMD M73.
+- Senarai beli 1011 baris (314 saham, 163 kaedah; 47 daripada watchlist; belian semula 123). Ditolak: {'dipegang': 2654, 'had': 8130, 'tidak_cair': 248, 'ambil_alih': 276, 'kelas_berganda': 48, 'mingguan': 57}.
+- Watchlist 527 (baharu 255, dibuang 228, ke senarai beli 47). Isyarat direkod: 12424 (data/isyarat/2026-11-16_malam.csv.gz).
+- Ralat kaedah: tiada. Nota: C SENEA M99: buka stor 37.14 lawan harga_beli 185.68 (> 15%; split/data tidak sepadan) — tidak dinilai; C SENEA M89: buka stor 36.85 lawan harga_beli 184.25 (> 15%; split/data tidak sepadan) — tidak dinilai; C EMBJ M02: tiada bar 2026-11-16 (harga terkini 2026-11-13); C EMBJ M10: tiada bar 2026-11-16 (harga terkini 2026-11-13); C SENEA M19: buka stor 32.04 lawan harga_beli 160.19 (> 15%; split/data tidak sepadan) — tidak dinilai; C EMBJ M55: tiada bar 2026-11-16 (harga terkini 2026-11-13); C SUPN M106: buka stor 26.99 lawan harga_beli 42.07 (> 15%; split/data tidak sepadan) — tidak dinilai; C EMBJ M124: tiada bar 2026-11-16 (harga terkini 2026-11-13).
+- Tiada order. Tiada wang sebenar.
