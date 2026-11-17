@@ -700,6 +700,7 @@ def lapor(pan, PM, Kh, L, alam_teks=TEKS_ALAM[False]):
     if ok['lengkap'] >= MIN_BACAAN:
         P = [('P1 kelebihan tangkap > 0', ok['terus'] - ok['a_terus'] > 0), ('P2 arah > 0 (tambahan naik melebihi tambahan jatuh)', ok['arah'] > 0),
              ('P3 kadar menang cara B melebihi saham rawak', ok['menang_B'] - ok['a_menang_B'] > 0),
+             ('P3b (tambahan, keputusan pengguna 17 Nov 2026) kadar menang cara 50 melebihi saham rawak', ok['menang_50'] - ok['a_menang_50'] > 0),
              ('P4 arah kohort melebihi arah kawalan (isyarat beli menambah)', ok['arah'] > kw.get('arah', np.nan))]
         A += [f"- {t}: **{'YA' if v else 'TIDAK'}**" for t, v in P]
         A.append(f"- Dibaca pada {ok['lengkap']} belian unik dengan tetingkap lengkap (perlu ≥ {MIN_BACAAN}). Bacaan pertama yang direkod dalam "

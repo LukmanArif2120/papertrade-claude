@@ -1535,6 +1535,11 @@ Pindaan ini MENGGANTIKAN butir "Alam dan kelayakan" Bahagian D pindaan (ae) dan 
   enjin backtest hanya menjana isyarat separuh alam (kumpulan A) hingga 2024. Dikira pada 2010–2024 sahaja (kedua-dua
   separuh lengkap): **kira-kira 1,760 belian unik setahun**, 93 % dalam bulan laporan (purata Oktober 405, Mac 40, Jun 27,
   September 38, Disember 24). Kesimpulan tidak berubah.
+- **Cara pegang (keputusan pengguna 17 Nov 2026, jawapan "a b" kepada soalan "(a) cara sekarang atau (b) pegang lebih
+  lama"; ditulis sebelum bermula):** KEDUA-DUA cara terus direkod dan dipaparkan sebelah-menyebelah bagi setiap belian.
+  Bacaan dikunci P1–P4 tidak berubah (P3 = cara B, cara sekarang); ditambah **P3b** = kadar menang cara 50 − saham rawak
+  yang dipegang sama > 0, dibaca pada saat yang sama dan dilaporkan walau apa pun hasilnya. Tafsiran "a b" = "dua-dua"
+  ialah tafsiran Claude; disahkan semula dengan pengguna dalam jadual keputusan.
 - **Semakan mekanik sebelum bermula (data backtest sebagai ganti muat turun; BUKAN papertrade):** topeng universe ke hadapan
   lawan universe A02 — 2,000 daripada 2,000 sama pada September dan Oktober 2026 (bulan lebih lama berbeza ≤ 12 saham, iaitu
   saham yang berpecah songsang selepas itu); syarat pasaran 12 kod ahli sama pada 20 daripada 20 hari (13 Jul – 7 Ogo 2026);
