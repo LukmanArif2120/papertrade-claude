@@ -18,3 +18,7 @@ masa,ticker,nisbah,bar,serak,keputusan,sumber
 2026-11-17 08:12 UTC,SENEA,0.2,9,0.0,laras,yfinance
 2026-11-17 08:12 UTC,SENEB,0.2,9,0.031607,anomali,yfinance
 2026-11-17 08:12 UTC,SENEB,1.0,0,0.0,kuarantin,"mula 2026-11-03: anomali nisbah_laras: nisbah 0.200000, serak 0.0316, 9 bar bertindih (bar baharu 20261103..20261116); bar stor tidak ditimpa"
+2026-11-17 12:05 UTC,GIC,0.97255,397,0.0,faktor,dividen_khas 2026-11-16 (yfinance dividen)
+2026-11-17 12:05 UTC,GNK,0.959832,397,0.0,faktor,dividen_khas 2026-11-16 (yfinance dividen)
+2026-11-17 12:05 UTC,MNR,0.975637,397,0.0,faktor,dividen_khas 2026-11-16 (yfinance dividen)
+2026-11-17 12:05 UTC,TRMD,0.963195,519,0.0,faktor,dividen_khas 2026-11-16 (yfinance dividen)

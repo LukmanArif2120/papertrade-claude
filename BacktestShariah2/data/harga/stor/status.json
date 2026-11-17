@@ -1,13 +1,12 @@
 {
- "dikemaskini": "2026-11-17 08:12 UTC",
+ "dikemaskini": "2026-11-17 12:05 UTC",
  "bar_terakhir": 20261116,
  "laras": {
   "MKTW": 1.020594,
-  "SENEA": 0.2,
   "SENEB": 0.2,
   "SUPN": 0.868021,
-  "TXO": 1.032424,
-  "WLKP": 1.022208
+  "TXO": 1.032423,
+  "WLKP": 1.022207
  },
  "perlu_sejarah": [
   "SENEB",
@@ -26,29 +25,19 @@
   "bar_terakhir": 20261116
  },
  "kuarantin": {
-  "baru": [
-   [
-    "SENEB",
-    "2026-11-03",
-    "anomali nisbah_laras: nisbah 0.200000, serak 0.0316, 9 bar bertindih (bar baharu 20261103..20261116); bar stor tidak ditimpa"
-   ]
-  ],
+  "baru": [],
   "dilepaskan": [],
   "kekal_beku": {
    "INDV": "sejarah segar bertindih 1 bar < 20 sebelum 2026-11-03",
+   "SENEB": "sejarah segar bertindih 0 bar < 20 sebelum 2026-11-03",
    "SUPN": "tidak konsisten: nisbah segar/stor 1.0706, serak 8.42% > 2%"
   }
  },
- "log_laras": 3,
- "faktor_dividen": [
-  "GIC 2026-11-16 D=1.28 P=46.63 (2.7%)",
-  "GNK 2026-11-16 D=1.05 P=26.14 (4.0%)",
-  "MNR 2026-11-16 D=0.22 P=9.03 (2.4%)",
-  "TRMD 2026-11-16 D=1.35 P=36.68 (3.7%)"
- ],
+ "log_laras": 4,
+ "faktor_dividen": [],
  "faktor_calon": [],
  "moomoo": {
-  "ditampal": 9,
+  "ditampal": 34,
   "langkau_skala": [
    "SENEA 20261105: buka_moomoo 147.32 lawan stor 29.464",
    "SENEA 20261110: buka_moomoo 169.78 lawan stor 33.956",
