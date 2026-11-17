@@ -15,6 +15,7 @@ import json
 import os
 import sys
 
+import numpy as np
 import pandas as pd
 
 SINI = os.path.dirname(os.path.abspath(__file__))
@@ -26,11 +27,18 @@ from bahagi_db import bahagi, bait, padat, HAD_DB  # noqa: E402
 CS13 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS13')
 CS14 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS14')
 CS16 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS16')
+CS19 = os.path.join(BS2, 'kajian', 'carian_setup', 'hasil', 'CS19')
 ASAS_EARN = 'earnings dalam 1-5 sesi akan datang'
 CARA1, CARA2 = 'r0.t1.126', 'r0.t2.0'                    # cara sekarang (pegang B) dan "pegang lebih lama" (pilihan pengguna B, 16 Nov 2026)
 KOL = ['id', 'asal', 'pil', 'pra', 'nama', 'pen', 'beli', 'shar', 'tangkap', 'rawak', 'm5', 'menang', 'purata', 'rugi15', 'hari', 'k3', 'n',
        'menang2', 'purata2', 'rugi2', 'hari2', 'jenis', 'am5', 'k10', 'k1', 'k2',
-       'solid', 'wakil', 'boleh', 'm10', 'am10', 'm10d', 'am10d', 'tpos', 'tbil', 'rugi8', 'serupa']
+       'solid', 'wakil', 'boleh', 'm10', 'am10', 'm10d', 'am10d', 'tpos', 'tbil', 'rugi8', 'serupa',
+       'j5', 'aj5', 'am', 'ap', 'aud', 'aun', 'pt']
+# CS19 audit bebas (pindaan (ae), 16 Nov 2026; SERAHAN_CARIAN_SETUP.md §9t): j5 / aj5 = daripada 100 belian, berapa JATUH >= 5 % minggu
+# pertama (setup / saham rawak hari sama); am / ap = kadar menang dan purata saham rawak hari sama yang DIPEGANG DENGAN CARA YANG SAMA
+# (cara sekarang); aud = gred audit (0 tiada, 1 A, 2 B, 3 C, 4 D -- BUKAN gred "tangkap ÷ rawak" halaman); aun = nota audit (x k i h y t);
+# pt = 1 jika setup dalam kohort papertrade gred A (jejak_f2). Terus daripada hasil/CS19/audit.csv.gz; None jika setup tidak diaudit.
+GRED_AUDIT = ['', 'A', 'B', 'C', 'D']
 # CS16 "ujian solid" (pindaan (z), 16 Nov 2026; SERAHAN_CARIAN_SETUP.md §9o): solid (lulus S1-S7), wakil (setup berbeza: 224 daripada
 # 290), boleh (masih positif dengan tarikh laporan DITEKA, S8), tiga angka pengguna daripada 100 belian dengan saham rawak hari sama
 # (m5/am5 sedia ada; m10/am10 = tutup hari ke-5 >= +10 %; m10d/am10d = tutup hari ke-10 >= +10 %), tahun lebih baik daripada rawak
@@ -82,7 +90,22 @@ def solid_ringkas(folder16=CS16):
                 sumber='kajian/carian_setup/hasil/CS16/solid.csv.gz, prasyarat.csv, bacaan.json (cs_solid16.py, pindaan (z))')
 
 
-def bina(folder=CS13, folder14=CS14, folder16=CS16):
+def audit_ringkas(folder19=CS19):
+    """Meta CS19: bilangan gred, kohort papertrade, dan gabungan belian unik (300 teratas; kawalan "laporan sahaja")."""
+    B = json.load(open(os.path.join(folder19, 'bacaan.json'), encoding='utf-8'))
+    G = pd.read_csv(os.path.join(folder19, 'gabungan.csv'))
+    r4 = lambda x: round(float(x), 4)
+
+    def g(awalan):
+        x = G[G.kumpulan.str.startswith(awalan)].set_index('tempoh')
+        return {t: {k: r4(x.loc[t, k]) for k in ('tangkap', 'r_tangkap', 'naik5', 'r_naik5', 'jatuh5', 'r_jatuh5', 'menang', 'r_menang',
+                                                 'purata', 'r_purata')} | {'belian': int(x.loc[t, 'belian'])} for t in ('semua', '2025-26')}
+    return dict(n=int(B['n_utama']), diaudit=int(B['diaudit']), pariti=int(B['pariti']), gred_300=B['gred_300'], gred_semua=B['gred_semua'],
+                kohort=B['kohort'], atas=g('300 teratas'), laporan_sahaja=g('KAWALAN: semua saham'), intai=int(B['intai_setup']),
+                sumber='kajian/carian_setup/hasil/CS19/audit.csv.gz, gabungan.csv, bacaan.json (cs_audit19.py, pindaan (ae))')
+
+
+def bina(folder=CS13, folder14=CS14, folder16=CS16, folder19=CS19):
     """Dokumen penuh (belum dibahagi) daripada senarai_utama.csv + cara pegang kedua (CS14); None jika fail tiada."""
     import cs_ringkas
     f = os.path.join(folder, 'senarai_utama.csv')
@@ -98,6 +121,21 @@ def bina(folder=CS13, folder14=CS14, folder16=CS16):
     for k, a in (('z_solid', 'solid'), ('z_wakil', 'wakil'), ('z_boleh', 'boleh_dibuat'), ('z_m10', 'm10'), ('z_am10', 'a_m10'), ('z_m10d', 'm10d'),
                  ('z_am10d', 'a_m10d'), ('z_tpos', 'thn_pos'), ('z_tbil', 'thn_bil'), ('z_rugi8', 'rugi8'), ('z_serupa', 'serupa_dengan')):
         U[k] = Z[a].to_numpy()
+    ada19 = os.path.exists(os.path.join(folder19, 'audit.csv.gz'))
+    if ada19:
+        A = pd.read_csv(os.path.join(folder19, 'audit.csv.gz')).set_index('id').loc[U.id]
+        ya = A.diaudit.to_numpy(bool)
+        assert (abs(A.terus.to_numpy()[ya] - U.terus.to_numpy()[ya]) < 6e-4).all(), 'CS19 tidak sepadan dengan senarai utama'
+        kohort = set(json.load(open(os.path.join(folder19, 'bacaan.json'), encoding='utf-8'))['kohort'])
+        for k, a in (('u_j5', 'j5'), ('u_aj5', 'a_j5'), ('u_am', 'a_menang_B'), ('u_ap', 'a_purata_B')):
+            U[k] = np.where(ya, A[a].to_numpy(float), np.nan)
+        U['u_aud'] = [GRED_AUDIT.index(g) if d and isinstance(g, str) else 0 for g, d in zip(A.gred, ya)]
+        U['u_aun'] = [n if d and isinstance(n, str) and n else None for n, d in zip(A.nota, ya)]
+        U['u_pt'] = [int(i in kohort) for i in U.id]
+    else:
+        for k in ('u_j5', 'u_aj5', 'u_am', 'u_ap'):
+            U[k] = np.nan
+        U['u_aud'], U['u_aun'], U['u_pt'] = 0, None, 0
     J = json.load(open(os.path.join(folder, 'bacaan.json'), encoding='utf-8'))
     U['nama_p'] = U.nama.map(cs_ringkas.nama_pendek)
     kamus, ix = {}, {}
@@ -113,7 +151,9 @@ def bina(folder=CS13, folder14=CS14, folder16=CS16):
                      b(r.menang2, 1000), b(r.purata2, 10000), b(r.rugi2, 1000), b(r.hari2, 1),
                      jenis(r.nama), b(r.a_m5, 1000), b(r.k10_B, 1000), b(r.kl_terus_K1, 10000), b(r.kl_terus_K2, 10000),
                      int(bool(r.z_solid)), int(bool(r.z_wakil)), int(bool(r.z_boleh)), b(r.z_m10, 1000), b(r.z_am10, 1000), b(r.z_m10d, 1000),
-                     b(r.z_am10d, 1000), int(r.z_tpos), int(r.z_tbil), b(r.z_rugi8, 1000), None if r.z_serupa != r.z_serupa else str(r.z_serupa)])
+                     b(r.z_am10d, 1000), int(r.z_tpos), int(r.z_tbil), b(r.z_rugi8, 1000), None if r.z_serupa != r.z_serupa else str(r.z_serupa),
+                     b(r.u_j5, 1000), b(r.u_aj5, 1000), b(r.u_am, 1000), b(r.u_ap, 10000), int(r.u_aud),
+                     r.u_aun if isinstance(r.u_aun, str) else None, int(r.u_pt)])
     sm = J.get('semak_masa') or {}
     kamus['jenis'] = JENIS
     K = pd.read_csv(os.path.join(folder, 'kawalan.csv'))
@@ -127,7 +167,7 @@ def bina(folder=CS13, folder14=CS14, folder16=CS16):
         ujian=dict(calon=J.get('n_calon'), lulus=J.get('n_lulus'), kembar=J.get('n_kembar'), lulus_calon=J.get('lulus_calon'),
                    lulus_kawalan=J.get('lulus_kawalan'), k3_calon=J.get('k3_calon'), k3_kawalan=J.get('k3_kawalan')),
         semak_masa={k: {a: (round(x, 4) if isinstance(x, float) else x) for a, x in v.items()} for k, v in sm.items()},
-        kawalan=kawalan, solid=solid_ringkas(folder16), pegang=PEGANG, pegang2=PEGANG2, banding=banding(folder14), kol=KOL, kamus=kamus, rows=rows,
+        kawalan=kawalan, solid=solid_ringkas(folder16), audit=audit_ringkas(folder19) if ada19 else None, pegang=PEGANG, pegang2=PEGANG2, banding=banding(folder14), kol=KOL, kamus=kamus, rows=rows,
         nota='Pangkat backtest pada saham yang carian tidak lihat (2010–2026); BUKAN bukti dan BUKAN keputusan wang sebenar. '
              'Tiada saham delist dalam data. Tiada papertrade tanpa keputusan pengguna.')
 

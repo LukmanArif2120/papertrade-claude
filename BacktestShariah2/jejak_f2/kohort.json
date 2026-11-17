@@ -1,0 +1,689 @@
+{
+ "spec": "kajian/SPEC_CARIAN_SETUP.md pindaan 16 Nov 2026 (ae) Bahagian D + pindaan 17 Nov 2026 (af)",
+ "alam": "semua saham alam backtest (3,260 saham; 2,000 paling cair setiap bulan), BUKAN senarai Shariah sahaja",
+ "kawalan": "KW1",
+ "stop": "4xATR14",
+ "ahli": [
+  {
+   "id": "F421",
+   "takrif": "M14.0|F14+F20|G6|PB|QH10+QF01",
+   "pencetus": "M14.0",
+   "fs": [
+    13,
+    19
+   ],
+   "pasaran": [
+    "QH10"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "hari 90% turun kemudian naik (20 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "M14 Walking with the Whales (benih M, parameter asal)",
+   "teks_penapis": "ADX < 20 + >= 30% di bawah puncak 52 minggu",
+   "jenis": "benih",
+   "modul": "M14",
+   "param": null
+  },
+  {
+   "id": "F1057",
+   "takrif": "K01.094|F06+F15|G6|PB|QA09+QF01",
+   "pencetus": "K01.094",
+   "fs": [
+    5,
+    14
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.094 RSI(14) < 45 + atas MA200",
+   "teks_penapis": "MA50 naik (lawan 20 bar lalu) + Supertrend naik",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 14,
+    "x": 45,
+    "tren": 1
+   }
+  },
+  {
+   "id": "F1033",
+   "takrif": "K01.059|F05|G6|PB|QA09+QF01",
+   "pencetus": "K01.059",
+   "fs": [
+    4
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.059 RSI(5) < 20",
+   "teks_penapis": "MA50 > MA200",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 5,
+    "x": 20,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F200",
+   "takrif": "M20.0s4|F14+F20|G6|PB|QA03+QF01",
+   "pencetus": "M20.0s4",
+   "fs": [
+    13,
+    19
+   ],
+   "pasaran": [
+    "QA03"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "SPY atas SMA200 + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "M20 EMA10/15 Crossover + Sudut (benih M, varian 0s4: c_kali_2=2.371, ema_a1_10=9, ema_a1_15=18, l_kali_0_99=0.99, tmax=21)",
+   "teks_penapis": "ADX < 20 + >= 30% di bawah puncak 52 minggu",
+   "jenis": "benih",
+   "modul": "M20",
+   "param": {
+    "c_kali_2": 2.3706131872779856,
+    "ema_a1_10": 9,
+    "ema_a1_15": 18,
+    "l_kali_0_99": 0.99,
+    "tmax": 21
+   }
+  },
+  {
+   "id": "F1247",
+   "takrif": "K01.082||G6|PB|QA09+QF01",
+   "pencetus": "K01.082",
+   "fs": [],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.082 RSI(10) < 30 + atas MA200",
+   "teks_penapis": "",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 10,
+    "x": 30,
+    "tren": 1
+   }
+  },
+  {
+   "id": "F1448",
+   "takrif": "K08.018|F11+F14|G6|PB|QC03+QF01",
+   "pencetus": "K08.018",
+   "fs": [
+    10,
+    13
+   ],
+   "pasaran": [
+    "QC03"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "keluasan naik >= 10 mata dalam 10 sesi + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K08.018 ema20 silang atas ema100",
+   "teks_penapis": "MACD > isyarat + ADX < 20",
+   "jenis": "K",
+   "keluarga": "K08",
+   "param": {
+    "f": 20,
+    "s": 100,
+    "j": "ema"
+   }
+  },
+  {
+   "id": "F1285",
+   "takrif": "K04.006|F06+F10|G6|PB|QG02+QF01",
+   "pencetus": "K04.006",
+   "fs": [
+    5,
+    9
+   ],
+   "pasaran": [
+    "QG02"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "Mei-Okt + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K04.006 masuk semula atas jalur bawah BB(20, 2.5)",
+   "teks_penapis": "MA50 naik (lawan 20 bar lalu) + RSI14 < 40",
+   "jenis": "K",
+   "keluarga": "K04",
+   "param": {
+    "n": 20,
+    "k": 2.5
+   }
+  },
+  {
+   "id": "F668",
+   "takrif": "K01.059||G6|PB|QA09+QF01",
+   "pencetus": "K01.059",
+   "fs": [],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.059 RSI(5) < 20",
+   "teks_penapis": "",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 5,
+    "x": 20,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F833",
+   "takrif": "M155.2|F14+F30|G6|PB|QA11+QF01",
+   "pencetus": "M155.2",
+   "fs": [
+    13,
+    29
+   ],
+   "pasaran": [
+    "QA11"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "QQQ naik >= 3% dalam 5 sesi + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "M155 Market Cycle Strategy (benih M, varian 2: had_henti=0.695, henti_atr=3.886, stoch_k_13=6, stoch_k_21=30, stoch_k_d_8=11, tmax=26)",
+   "teks_penapis": "ADX < 20 + hari naik (tutup > buka)",
+   "jenis": "benih",
+   "modul": "M155",
+   "param": {
+    "had_henti": 0.695030672254572,
+    "henti_atr": 3.885556523829688,
+    "stoch_k_13": 6,
+    "stoch_k_21": 30,
+    "stoch_k_d_8": 11,
+    "tmax": 26
+   }
+  },
+  {
+   "id": "F1030",
+   "takrif": "K01.005|F05+F14|G6|PB|QA09+QF01",
+   "pencetus": "K01.005",
+   "fs": [
+    4,
+    13
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.005 RSI(2) < 8",
+   "teks_penapis": "MA50 > MA200 + ADX < 20",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 2,
+    "x": 8,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F571",
+   "takrif": "K03.028||G6|PB|QA09+QF01",
+   "pencetus": "K03.028",
+   "fs": [],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K03.028 tutup < jalur bawah BB(20, 2.0)",
+   "teks_penapis": "",
+   "jenis": "K",
+   "keluarga": "K03",
+   "param": {
+    "n": 20,
+    "k": 2.0,
+    "r": 0
+   }
+  },
+  {
+   "id": "F1288",
+   "takrif": "K03.027|F05|G6|PB|QA09+QF01",
+   "pencetus": "K03.027",
+   "fs": [
+    4
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K03.027 tutup < jalur bawah BB(20, 1.5) + RSI14 < 40",
+   "teks_penapis": "MA50 > MA200",
+   "jenis": "K",
+   "keluarga": "K03",
+   "param": {
+    "n": 20,
+    "k": 1.5,
+    "r": 40
+   }
+  },
+  {
+   "id": "F203",
+   "takrif": "K06.005|F14|G6|PB|QA09+QF01",
+   "pencetus": "K06.005",
+   "fs": [
+    13
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K06.005 4 tutup menurun berturut",
+   "teks_penapis": "ADX < 20",
+   "jenis": "K",
+   "keluarga": "K06",
+   "param": {
+    "k": 4,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F479",
+   "takrif": "K01.003||G6|PB|QA09+QF01",
+   "pencetus": "K01.003",
+   "fs": [],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.003 RSI(2) < 5",
+   "teks_penapis": "",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 2,
+    "x": 5,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F694",
+   "takrif": "K01.043||G6|PB|QA09+QF01",
+   "pencetus": "K01.043",
+   "fs": [],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.043 RSI(4) < 20",
+   "teks_penapis": "",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 4,
+    "x": 20,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F1589",
+   "takrif": "K13.009|F05|G6|PB|QG02+QF01",
+   "pencetus": "K13.009",
+   "fs": [
+    4
+   ],
+   "pasaran": [
+    "QG02"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "Mei-Okt + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K13.009 Stochastic(14) silang naik dari bawah 10",
+   "teks_penapis": "MA50 > MA200",
+   "jenis": "K",
+   "keluarga": "K13",
+   "param": {
+    "n": 14,
+    "x": 10
+   }
+  },
+  {
+   "id": "F363",
+   "takrif": "K06.005||G6|PB|QA09+QF01",
+   "pencetus": "K06.005",
+   "fs": [],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K06.005 4 tutup menurun berturut",
+   "teks_penapis": "",
+   "jenis": "K",
+   "keluarga": "K06",
+   "param": {
+    "k": 4,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F1207",
+   "takrif": "M79.0|F01+F11|G6|PB|QH05+QF01",
+   "pencetus": "M79.0",
+   "fs": [
+    0,
+    10
+   ],
+   "pasaran": [
+    "QH05"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "nisbah 4% (10 hari) > 2 + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "M79 Radge: 20% Flipper (benih M, parameter asal)",
+   "teks_penapis": "tutup > MA20 + MACD > isyarat",
+   "jenis": "benih",
+   "modul": "M79",
+   "param": null
+  },
+  {
+   "id": "F1539",
+   "takrif": "K13.006|F05+F10|G6|PB|QG02+QF01",
+   "pencetus": "K13.006",
+   "fs": [
+    4,
+    9
+   ],
+   "pasaran": [
+    "QG02"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "Mei-Okt + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K13.006 Stochastic(9) silang naik dari bawah 20",
+   "teks_penapis": "MA50 > MA200 + RSI14 < 40",
+   "jenis": "K",
+   "keluarga": "K13",
+   "param": {
+    "n": 9,
+    "x": 20
+   }
+  },
+  {
+   "id": "F1347",
+   "takrif": "K13.005|F05|G6|PB|QG02+QF01",
+   "pencetus": "K13.005",
+   "fs": [
+    4
+   ],
+   "pasaran": [
+    "QG02"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "Mei-Okt + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K13.005 Stochastic(9) silang naik dari bawah 10",
+   "teks_penapis": "MA50 > MA200",
+   "jenis": "K",
+   "keluarga": "K13",
+   "param": {
+    "n": 9,
+    "x": 10
+   }
+  },
+  {
+   "id": "F733",
+   "takrif": "K01.047|F05+F14|G6|PB|QA09+QF01",
+   "pencetus": "K01.047",
+   "fs": [
+    4,
+    13
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.047 RSI(4) < 30",
+   "teks_penapis": "MA50 > MA200 + ADX < 20",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 4,
+    "x": 30,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F263",
+   "takrif": "K01.007|F05+F14|G6|PB|QA09+QF01",
+   "pencetus": "K01.007",
+   "fs": [
+    4,
+    13
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.007 RSI(2) < 10",
+   "teks_penapis": "MA50 > MA200 + ADX < 20",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 2,
+    "x": 10,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F1564",
+   "takrif": "K13.009|F04+F06|G6|PB|QG02+QF01",
+   "pencetus": "K13.009",
+   "fs": [
+    3,
+    5
+   ],
+   "pasaran": [
+    "QG02"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "Mei-Okt + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K13.009 Stochastic(14) silang naik dari bawah 10",
+   "teks_penapis": "MA20 > MA50 + MA50 naik (lawan 20 bar lalu)",
+   "jenis": "K",
+   "keluarga": "K13",
+   "param": {
+    "n": 14,
+    "x": 10
+   }
+  },
+  {
+   "id": "F1583",
+   "takrif": "K01.092|F18|G6|PB|QA09+QF01",
+   "pencetus": "K01.092",
+   "fs": [
+    17
+   ],
+   "pasaran": [
+    "QA09"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "rejim OFF baharu (<= 10 sesi) + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.092 RSI(14) < 40 + atas MA200",
+   "teks_penapis": "dalam 15% dari puncak 52 minggu",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 14,
+    "x": 40,
+    "tren": 1
+   }
+  },
+  {
+   "id": "F1354",
+   "takrif": "K07.019|F24+F30|G6|PB|QA02+QF01",
+   "pencetus": "K07.019",
+   "fs": [
+    23,
+    29
+   ],
+   "pasaran": [
+    "QA02"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "QQQ OFF + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K07.019 tutup silang atas sma200",
+   "teks_penapis": "ATR% <= 2.5 + hari naik (tutup > buka)",
+   "jenis": "K",
+   "keluarga": "K07",
+   "param": {
+    "n": 200,
+    "j": "sma"
+   }
+  },
+  {
+   "id": "F706",
+   "takrif": "K01.059||G6|PB|QH06+QF01",
+   "pencetus": "K01.059",
+   "fs": [],
+   "pasaran": [
+    "QH06"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "nisbah 4% (10 hari) < 0.5 + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K01.059 RSI(5) < 20",
+   "teks_penapis": "",
+   "jenis": "K",
+   "keluarga": "K01",
+   "param": {
+    "n": 5,
+    "x": 20,
+    "tren": 0
+   }
+  },
+  {
+   "id": "F742",
+   "takrif": "K13.015|F20+F29|G6|PB|QA05+QF01",
+   "pencetus": "K13.015",
+   "fs": [
+    19,
+    28
+   ],
+   "pasaran": [
+    "QA05"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": "QQQ dalam 3% dari puncak 52 minggu + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K13.015 Stochastic(21) silang naik dari bawah 30",
+   "teks_penapis": ">= 30% di bawah puncak 52 minggu + tutup dalam 25% teratas julat hari",
+   "jenis": "K",
+   "keluarga": "K13",
+   "param": {
+    "n": 21,
+    "x": 30
+   }
+  },
+  {
+   "id": "F557",
+   "takrif": "K13.003|F17+F18|G6|PB|QC04+QF01",
+   "pencetus": "K13.003",
+   "fs": [
+    16,
+    17
+   ],
+   "pasaran": [
+    "QC04"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": ">= 60% saham di atas MA200 + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "K13.003 Stochastic(5) silang naik dari bawah 30",
+   "teks_penapis": "RS >= 90 + dalam 15% dari puncak 52 minggu",
+   "jenis": "K",
+   "keluarga": "K13",
+   "param": {
+    "n": 5,
+    "x": 30
+   }
+  },
+  {
+   "id": "F707",
+   "takrif": "N43|F14+F20|G6|PB|QC05+QF01",
+   "pencetus": "N43",
+   "fs": [
+    13,
+    19
+   ],
+   "pasaran": [
+    "QC05"
+   ],
+   "syarikat": [
+    "QF01"
+   ],
+   "teks_prasyarat": ">= 15% saham dalam 5% dari puncak 52 minggu + earnings dalam 1-5 sesi akan datang",
+   "teks_isyarat": "N43 Undur EMA8 + penapis MA50 (benih N)",
+   "teks_penapis": "ADX < 20 + >= 30% di bawah puncak 52 minggu",
+   "jenis": "benih",
+   "modul": "kaedah.N43X36",
+   "param": null
+  }
+ ]
+}

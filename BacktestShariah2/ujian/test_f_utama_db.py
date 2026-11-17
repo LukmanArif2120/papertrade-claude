@@ -94,7 +94,7 @@ class TestFUtamaDb(unittest.TestCase):
         d = self.d
         ix = {k: i for i, k in enumerate(d['kol'])}
         self.assertEqual(d['kol'][:26], F.KOL[:26])                                       # lajur sedia ada tidak berganjak
-        self.assertEqual(d['kol'][26:], ['solid', 'wakil', 'boleh', 'm10', 'am10', 'm10d', 'am10d', 'tpos', 'tbil', 'rugi8', 'serupa'])
+        self.assertEqual(d['kol'][26:37], ['solid', 'wakil', 'boleh', 'm10', 'am10', 'm10d', 'am10d', 'tpos', 'tbil', 'rugi8', 'serupa'])
         Z = pd.read_csv(os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS16', 'solid.csv.gz')).set_index('id')
         self.assertEqual(sum(r[ix['wakil']] for r in d['rows']), int(Z.wakil.sum()))
         self.assertEqual(sum(r[ix['solid']] for r in d['rows']), int(Z.solid.sum()))
@@ -114,6 +114,35 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertEqual(a['prasyarat'], F.ASAS_EARN)
         self.assertAlmostEqual(a['m5'], 0.2404, places=3)
         self.assertAlmostEqual(a['a_m5'], 0.135, places=3)
+
+    def test_lajur_audit_cs19(self):
+        """CS19 audit bebas (pindaan (ae), 16 Nov 2026): 7 lajur di HUJUNG `kol`, terus daripada hasil/CS19/audit.csv.gz."""
+        import json
+        d = self.d
+        ix = {k: i for i, k in enumerate(d['kol'])}
+        self.assertEqual(d['kol'][:37], F.KOL[:37])                                       # lajur sedia ada tidak berganjak
+        self.assertEqual(d['kol'][37:], ['j5', 'aj5', 'am', 'ap', 'aud', 'aun', 'pt'])
+        d19 = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS19')
+        A = pd.read_csv(os.path.join(d19, 'audit.csv.gz')).set_index('id')
+        B = json.load(open(os.path.join(d19, 'bacaan.json'), encoding='utf-8'))
+        for r in d['rows'][:80] + d['rows'][-60:]:
+            a = A.loc[r[ix['id']]]
+            self.assertAlmostEqual(r[ix['j5']] / 1000, a.j5, delta=6e-4)
+            self.assertAlmostEqual(r[ix['aj5']] / 1000, a.a_j5, delta=6e-4)
+            self.assertAlmostEqual(r[ix['am']] / 1000, a.a_menang_B, delta=6e-4)
+            self.assertAlmostEqual(r[ix['ap']] / 10000, a.a_purata_B, delta=6e-5)
+            self.assertEqual(F.GRED_AUDIT[r[ix['aud']]], a.gred)
+            self.assertEqual(r[ix['aun']] or '', '' if pd.isna(a.nota) else a.nota)
+        pt = [r[ix['id']] for r in d['rows'] if r[ix['pt']]]
+        self.assertEqual(sorted(pt), sorted(B['kohort']))                                 # 29 setup papertrade
+        self.assertTrue(all(F.GRED_AUDIT[r[ix['aud']]] == 'A' for r in d['rows'] if r[ix['pt']]))
+        u = d['audit']
+        self.assertEqual((u['n'], u['diaudit'], u['pariti']), (len(d['rows']), B['diaudit'], B['pariti']))
+        self.assertEqual(sum(u['gred_300'].values()), 300)
+        self.assertGreater(u['atas']['semua']['jatuh5'], u['atas']['semua']['r_jatuh5'])   # jatuh >= 5 % pun melebihi saham rawak
+        h = open(HTML, encoding='utf-8').read()                                           # halaman membaca lajur ikut nama
+        for frasa in ("j5:g(a,'j5',10)", "aud:ix.aud==null", 'sfAuditD(r,d)', "f.lihat==='pt'", 'sf_audit:', 'sf_jatuh:', 'sf_mrawak:'):
+            self.assertIn(frasa, h)
 
     def test_saiz_di_bawah_had_db(self):
         with tempfile.TemporaryDirectory() as t:

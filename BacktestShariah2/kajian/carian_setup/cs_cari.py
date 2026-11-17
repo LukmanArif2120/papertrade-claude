@@ -10,6 +10,7 @@ Pusingan: CS01 = (set 431, Kunci 1,000 saham); CS02 = (kumpulan A, kumpulan B) R
 setiap pusingan.
 Laporan: cs_lapor.py.
 """
+import contextlib
 import glob
 import importlib
 import json
@@ -96,6 +97,30 @@ def panel(kerja, set_, bina=False):
 
 # ---------- benih M / N ----------
 _FR = _IDX = _TICK = None
+_KAUSAL = False               # pindaan 16 Nov 2026 (ae) Bahagian C; lalai False = sama seperti pusingan CS01-CS18
+
+
+@contextlib.contextmanager
+def tanpa_intai():
+    """Mod "tanpa intai" (pindaan 16 Nov 2026 (ae) Bahagian C). 98 daripada 134 modul kaedah M memakai `open.shift(-1)` (59 terus,
+    40 melalui fungsi kongsi `_k145.langkau`)
+    untuk membatalkan isyarat apabila harga buka ESOK <= paras stop (atau >= sasaran) -- maklumat yang belum wujud pada
+    tutup hari isyarat. Dalam konteks ini `Series` bernama 'open' yang dianjak NEGATIF dipulangkan kosong (NaN), jadi
+    pembatalan itu tidak berlaku dan isyarat hanya bergantung pada bar hari itu dan sebelumnya. Modul kaedah tidak diubah.
+    HAD: modul yang membaca bar esok melalui indeks tatasusunan (cth. `o[i + 1]`) atau menganjak siri LAIN (hujung
+    minggu/bulan) tidak dibetulkan di sini; lihat `cs_audit19.INTAI_LAIN` dan ujian bar terakhir `cs_audit19.py intai`."""
+    asal = pd.Series.shift
+
+    def anjak(self, periods=1, *a, **k):
+        if isinstance(periods, (int, np.integer)) and periods < 0 and self.name == 'open':
+            return pd.Series(np.nan, index=self.index, name=self.name)
+        return asal(self, periods, *a, **k)
+
+    pd.Series.shift = anjak
+    try:
+        yield
+    finally:
+        pd.Series.shift = asal
 
 
 def param_varian(pj, mid, v):
@@ -122,10 +147,11 @@ def _jalan_modul(tugas):
         bah = []
         for kt in kump:
             f2 = {t: _FR[t][LAJUR].copy() for t in kt}
-            if modul.startswith('kaedah.'):
-                m.sedia(f2, _IDX)
-            else:
-                m.sedia(f2, _IDX, P)
+            with (tanpa_intai() if _KAUSAL else contextlib.nullcontext()):
+                if modul.startswith('kaedah.'):
+                    m.sedia(f2, _IDX)
+                else:
+                    m.sedia(f2, _IDX, P)
             bah += [np.asarray(pd.Series(f2[t]['sig']).fillna(False), dtype=bool) for t in kt]
             del f2
         return nama, np.packbits(np.concatenate(bah)), None
@@ -153,9 +179,20 @@ def senarai_benih():
     return tugas
 
 
-def benih(kerja, set_, hanya=None, tugas=None, fail=None):
+def benih(kerja, set_, hanya=None, tugas=None, fail=None, kausal=False):
     """Jalankan modul benih pada set; simpan/kemas kini benih_<set>.pkl = {nama: packbits sig}, ralat = {...}.
-    tugas: senarai (nama, modul, P) khas (lalai: senarai_benih()); fail: nama fail keluaran khas."""
+    tugas: senarai (nama, modul, P) khas (lalai: senarai_benih()); fail: nama fail keluaran khas.
+    kausal=True: mod "tanpa intai" (`tanpa_intai`); WAJIB bagi pusingan baharu (pindaan (ae)); fail keluaran mesti berbeza."""
+    global _KAUSAL
+    assert not kausal or fail, 'kausal=True memerlukan nama fail keluaran sendiri (jangan campur dengan benih lama)'
+    _KAUSAL = bool(kausal)
+    try:
+        return _benih(kerja, set_, hanya, tugas, fail)
+    finally:
+        _KAUSAL = False
+
+
+def _benih(kerja, set_, hanya=None, tugas=None, fail=None):
     global _FR, _IDX, _TICK
     f = os.path.join(kerja, fail or f'benih_{set_}.pkl')
     sedia = pickle.load(open(f, 'rb')) if os.path.exists(f) else {'sig': {}, 'ralat': {}, 'param': {}}

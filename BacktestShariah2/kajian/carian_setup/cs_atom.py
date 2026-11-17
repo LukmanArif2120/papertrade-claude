@@ -61,6 +61,9 @@ TEMPOH = {
     'B': (('K1', 20100104, 20191231), ('K2', 20200102, 20241231), ('K3', 20250102, 20260828)),
     # jejak hadapan kohort F (pindaan 13 Nov 2026 (f)): hanya isyarat pada atau selepas 2026-11-13
     'hadapan': (('H', 20261113, 20991231),),
+    # papertrade gred A pada semua saham alam A02 (pindaan 17 Nov 2026 (af)): layak = >= 252 bar DAN topeng universe bulanan
+    # (`cs_hadapan19.topeng_bulanan`), tanpa syarat harga harian set 'hadapan' -- sama seperti set backtest 'A' / 'B'
+    'alam': (('H', 20261117, 20991231),),
 }
 
 

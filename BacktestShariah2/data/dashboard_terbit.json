@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794817511-a90b",
-  "nombor": 222,
-  "sha256": "9ed323aeadcdb092d65c7983ddae2284bb75238ea6a634e0e57e6460db5a8da5",
-  "bait": 964925,
-  "dikemas": "2026-11-16 08:25 UTC",
-  "nota": "v187 (16 Nov 2026): Setup F paparan Solid CS16 (224 setup, tiga angka lawan rawak, kad Ujian solid, juara utamakan Solid), atas v186 #221"
+  "versi_artifact": "1794866743-dcbd",
+  "nombor": 223,
+  "sha256": "b3a4639e59f1e1803d6bf1f0f99bdba45f344851ff428fdf3aac5b4f3964fb42",
+  "bait": 972440,
+  "dikemas": "2026-11-16 22:05 UTC",
+  "nota": "v188 (17 Nov 2026): Setup F audit bebas CS19 (baris jatuh >= 5 %, rawak dipegang sama, lencana AUDIT A-D dan PAPERTRADE, tapisan Papertrade 29), atas v187 #222"
 }
