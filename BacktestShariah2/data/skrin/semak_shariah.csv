@@ -129,7 +129,7 @@ BBSI,tiada_maklumat,,0,0,1,0
 BBW,tiada_maklumat,,0,0,1,1
 BCC,tiada_maklumat,,0,0,1,1
 BCPC,tiada_maklumat,,0,0,1,1
-BDC,tiada_maklumat,,0,0,1,0
+BDC,tiada_maklumat,,0,0,1,1
 BDX,disahkan_etf,SPUS,1,1,1,1
 BE,disahkan_etf,SPUS,1,1,1,1
 BELFA,tiada_maklumat,,0,0,1,0
@@ -169,7 +169,7 @@ CAI,tiada_maklumat,,0,0,1,1
 CALM,tiada_maklumat,,0,0,1,1
 CALX,tiada_maklumat,,0,0,1,1
 CARG,tiada_maklumat,,0,0,1,1
-CARR,disahkan_etf,SPUS,1,1,1,1
+CARR,disahkan_etf,SPUS,1,1,1,0
 CAT,sp500_tiada_spus,,0,1,1,1
 CBT,tiada_maklumat,,0,0,1,1
 CCJ,tiada_maklumat,,0,0,1,1
@@ -388,8 +388,8 @@ HQY,tiada_maklumat,,0,0,1,1
 HSIC,sp500_tiada_spus,,0,1,1,1
 HSTM,tiada_maklumat,,0,0,1,1
 HTLD,tiada_maklumat,,0,0,1,0
-HUBB,disahkan_etf,SPUS,1,1,1,0
-HUBG,tiada_maklumat,,0,0,1,0
+HUBB,disahkan_etf,SPUS,1,1,1,1
+HUBG,tiada_maklumat,,0,0,1,1
 HURC,tiada_maklumat,,0,0,1,1
 HVT,tiada_maklumat,,0,0,1,1
 HWKN,tiada_maklumat,,0,0,1,1
@@ -543,7 +543,7 @@ MUX,tiada_maklumat,,0,0,1,1
 MWA,tiada_maklumat,,0,0,1,1
 MWH,tiada_maklumat,,0,0,1,1
 MXL,tiada_maklumat,,0,0,1,1
-MYRG,tiada_maklumat,,0,0,1,0
+MYRG,tiada_maklumat,,0,0,1,1
 MZTI,tiada_maklumat,,0,0,1,1
 NBIX,tiada_maklumat,,0,0,1,1
 NC,tiada_maklumat,,0,0,1,1
@@ -657,7 +657,7 @@ PWR,disahkan_etf,SPUS,1,1,1,1
 Q,disahkan_etf,SPTE+SPUS,1,1,1,1
 QCOM,disahkan_etf,SPTE+SPUS,1,1,1,1
 QGEN,tiada_maklumat,,0,0,1,1
-QLYS,tiada_maklumat,,0,0,1,0
+QLYS,tiada_maklumat,,0,0,1,1
 QTWO,tiada_maklumat,,0,0,1,1
 RAL,tiada_maklumat,,0,0,1,1
 RAMP,tiada_maklumat,,0,0,1,0
@@ -673,7 +673,7 @@ REX,tiada_maklumat,,0,0,1,1
 REYN,tiada_maklumat,,0,0,1,1
 RGEN,tiada_maklumat,,0,0,1,1
 RGLD,tiada_maklumat,,0,0,1,1
-RGS,tiada_maklumat,,0,0,1,0
+RGS,tiada_maklumat,,0,0,1,1
 RHI,tiada_maklumat,,0,0,1,1
 RIGL,tiada_maklumat,,0,0,1,1
 RIO,tiada_maklumat,,0,0,1,1
@@ -803,7 +803,7 @@ TOL,tiada_maklumat,,0,0,1,1
 TPC,tiada_maklumat,,0,0,1,1
 TREX,tiada_maklumat,,0,0,1,1
 TRI,tiada_maklumat,,0,0,1,1
-TRMB,disahkan_etf,SPTE+SPUS,1,1,1,0
+TRMB,disahkan_etf,SPTE+SPUS,1,1,1,1
 TRMD,tiada_maklumat,,0,0,1,1
 TRNS,tiada_maklumat,,0,0,1,1
 TS,tiada_maklumat,,0,0,1,1
