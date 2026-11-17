@@ -122,10 +122,11 @@ def _skor_satu(nama):
     return nama, out
 
 
-def skor(kerja):
+def skor(kerja, V=None, F=None):
     """Skor setiap isyarat beli pada kumpulan A (sasaran `terus`); simpan sehingga N_TINJAU peraturan DIBENARKAN berskor > 0
-    yang cukup isyarat untuk syarat kekerapan -> cs20_skor.pkl."""
-    f = F_(kerja, 'skor')
+    yang cukup isyarat untuk syarat kekerapan -> cs20_skor.pkl. V = (label, asas hari sama, asas era) setiap bar bagi sasaran
+    lain dan F = penama fail kerja pusingan lain (CS22)."""
+    f = (F or F_)(kerja, 'skor')
     siap = pickle.load(open(f, 'rb')) if os.path.exists(f) else {}
     ev = semua_pencetus(kerja, 'A')
     tugas = sorted([n for n in ev if n not in siap], key=lambda n: -len(ev[n]))
@@ -135,7 +136,7 @@ def skor(kerja):
              f"{int(dibenar().sum())} daripada {c5.NQ}")
     if tugas:
         L = lapis.muat(kerja, 'A')
-        c5._G.update(pan=pan, ev=ev, V=t7.label_terus(pan), FS=np.ascontiguousarray(pan['F'][c5.SAHAM]), L1=L['L1'], L2=L['L2'],
+        c5._G.update(pan=pan, ev=ev, V=t7.label_terus(pan) if V is None else V, FS=np.ascontiguousarray(pan['F'][c5.SAHAM]), L1=L['L1'], L2=L['L2'],
                      dibenar=dibenar(), n_min=int(np.ceil(MINGGU_MIN * M['n'])))
         c5.kumpul5(np.zeros(1, np.int64), np.zeros((1, 3)), np.zeros((1, c5.NS), np.uint8), np.zeros((1, lapis.N1), np.uint8),
                    np.zeros((1, lapis.N2), np.uint8), c5.PASANG, np.zeros((c5.NQ, c5.NC, 2, 4)))       # kompil sebelum fork
@@ -155,11 +156,12 @@ def skor(kerja):
 
 
 # ---------- calon dan kawalan (kumpulan A) ----------
-def calon(kerja):
+def calon(kerja, F=None, benih=None, awalan='W'):
     """Calon = sehingga N_ATAS peraturan berskor > 0 tertinggi setiap isyarat beli antara yang dibenarkan DAN menepati syarat
     kekerapan pada A; kawalan = N_KAWALAN peraturan rawak daripada ruang yang sama yang menepati syarat yang sama.
-    -> cs20_calon.pkl"""
-    S = pickle.load(open(F_(kerja, 'skor'), 'rb'))
+    -> cs20_calon.pkl (F, benih, awalan: pusingan lain yang memakai ruang dan syarat yang sama)."""
+    F = F or F_
+    S = pickle.load(open(F(kerja, 'skor'), 'rb'))
     pan = cari.panel(kerja, 'A')
     L = lapis.muat(kerja, 'A')
     Lr = (L['L1'], L['L2'])
@@ -187,10 +189,10 @@ def calon(kerja):
         if k % 200 == 0:
             cari.log(f'  CS20 calon {k}/{len(S)} · {len(R)} calon · {tinjau} peraturan ditinjau · {time.time() - t0:.0f}s')
     T = pd.DataFrame(R).sort_values(['skor', 'pencetus', 'ke'], ascending=[False, True, True], kind='stable').reset_index(drop=True)
-    T.insert(0, 'id', [f'W{i + 1:04d}' for i in range(len(T))])
+    T.insert(0, 'id', [f'{awalan}{i + 1:04d}' for i in range(len(T))])
     cukup = sorted(n for n, r in S.items() if r.get('cukup'))
     q_boleh = np.flatnonzero(dibenar())
-    rng = np.random.default_rng(BENIH_KAWALAN)
+    rng = np.random.default_rng(BENIH_KAWALAN if benih is None else benih)
     K, cuba = [], 0
     while len(K) < N_KAWALAN and cuba < CUBA_KAWALAN:
         cuba += 1
@@ -214,14 +216,14 @@ def calon(kerja):
                       f1=f1, f2=f2, skor0=np.nan, n_E1=int((tp == 0).sum()), n_E2=int((tp == 1).sum()), mgg_A=mg, mgg_min_A=mt))
     out = {'calon': T, 'kawalan': pd.DataFrame(K), 'n_pencetus': len(S), 'n_cukup': len(cukup), 'cuba_kawalan': cuba, 'tinjau': tinjau,
            'n_ada_boleh': sum(1 for r in S.values() if r.get('cukup') and len(r['atas'][0]))}
-    pickle.dump(out, open(F_(kerja, 'calon'), 'wb'), protocol=4)
+    pickle.dump(out, open(F(kerja, 'calon'), 'wb'), protocol=4)
     cari.log(f"CS20 calon: {len(T)} calon daripada {T.pencetus.nunique() if len(T) else 0} isyarat beli ({tinjau} peraturan ditinjau); "
              f"kawalan rawak {len(K)} (dicuba {cuba})")
     return out
 
 
 # ---------- semakan pada kumpulan B ----------
-def f_sedia(kerja, set_, pan, EV, Lr):
+def f_sedia(kerja, set_, pan, EV, Lr, pusingan=('CS13',)):
     """Kod F sedia ada yang boleh menjadi kembar setup sepanjang tahun: (id, isyarat, nama, prasyarat, penapis). Setup lama
     kedudukan akhir (takrif pusingan masing-masing) + kod CS13 tanpa prasyarat yang dilarang. Yang isyaratnya tiada dalam folder
     kerja (varian M CS07) dilangkau."""
@@ -246,7 +248,7 @@ def f_sedia(kerja, set_, pan, EV, Lr):
         pen = str(KA.loc[i, 'penapis']).strip()
         out.append((i, ev[c5.topeng(pan, Lr, ev, d['q1'], d['q2'], d['f1'], d['f2'])], str(KA.loc[i, 'pencetus']),
                     pra if isinstance(pra, str) and pra.strip() not in ('', '–') else '', '' if pen in ('', '–', 'nan') else pen))
-    for i, r in reg[reg.pusingan == 'CS13'].iterrows():
+    for i, r in reg[reg.pusingan.isin(list(pusingan))].iterrows():
         b = r.takrif.split('|')
         kod = [x for x in b[4].split('+') if x] if len(b) > 4 else []
         q1 = next((kq1.index(x) for x in kod if x in kq1), -1)
@@ -262,11 +264,13 @@ def f_sedia(kerja, set_, pan, EV, Lr):
     return out, langkau
 
 
-def kunci(kerja):
+def kunci(kerja, F=None, pusingan_sedia=('CS13',)):
     """Nilai setiap calon, setiap kawalan dan kod F sepanjang tahun sedia ada dengan setup lengkap yang SAMA pada kumpulan B
-    (+ belian dan kekerapan pada A) -> cs20_kunci.pkl"""
+    (+ belian dan kekerapan pada A) -> cs20_kunci.pkl. pusingan_sedia: pusingan registry (format takrif CS13) yang kodnya
+    dikira "sedia ada" bagi semakan kembar -- TIDAK termasuk pusingan yang sedang dijana."""
     import cs_audit19 as a19
-    C = pickle.load(open(F_(kerja, 'calon'), 'rb'))
+    F = F or F_
+    C = pickle.load(open(F(kerja, 'calon'), 'rb'))
     semua_ = pd.concat([C['calon'], C['kawalan']], ignore_index=True)
     param = t7.param_semua(kerja)
     out, t0, langkau = {}, time.time(), []
@@ -307,25 +311,22 @@ def kunci(kerja):
                 o.update(nama=t7.nama7(r.pencetus, param), prasyarat=d13.teks_pra(r.q1, r.q2), penapis=d13.teks_pen(r.f1, r.f2))
             if k % 500 == 0:
                 cari.log(f'  CS20 kunci {set_} {k}/{len(semua_)} · {time.time() - t0:.0f}s')
-        F, lk = f_sedia(kerja, set_, pan, EV, Lr)
+        Fs, lk = f_sedia(kerja, set_, pan, EV, Lr, pusingan_sedia)
         langkau = sorted(set(langkau) | set(lk))
-        for idn, ev, nama, pra, pen in F:
+        for idn, ev, nama, pra, pen in Fs:
             o = nilai(idn, ev)
             if set_ == 'B':
                 o.update(nama=nama, prasyarat=pra, penapis=pen)
     out['_n'] = {s: len(cari.panel(kerja, s)['c']) for s in ('A', 'B')}
     out['_langkau'] = langkau
-    pickle.dump(out, open(F_(kerja, 'kunci'), 'wb'), protocol=4)
+    pickle.dump(out, open(F(kerja, 'kunci'), 'wb'), protocol=4)
     cari.log(f"CS20 kunci: {len(out) - 2} peraturan · kod F sedia ada dilangkau (isyarat tiada) {len(langkau)} · {time.time() - t0:.0f}s")
     return out
 
 
-def semua(kerja):
-    """(C, K, T, bacaan). T = satu baris setiap calon, kawalan dan kod F sepanjang tahun sedia ada (angka kumpulan B) + lajur
-    kekerapan, semakan ikut tahun, ukuran audit, kembar, takrif dan kod F."""
-    import cs_lapor as lapor
-    C = pickle.load(open(F_(kerja, 'calon'), 'rb'))
-    K = pickle.load(open(F_(kerja, 'kunci'), 'rb'))
+def jadual20(C, K):
+    """Satu baris setiap calon, kawalan dan kod F sepanjang tahun sedia ada (angka kumpulan B) + lajur kekerapan, semakan ikut
+    tahun dan ukuran audit."""
     Kd = {k_: v for k_, v in K.items() if not k_.startswith('_')}
     T = d13.jadual(C, Kd).drop(columns=['shariah_setahun', 'menang_B', 'purata_B', 'rugi15_B', 'n_B'])
     g = lambda k_: [Kd[i].get(k_, np.nan) for i in T.id]
@@ -338,6 +339,15 @@ def semua(kerja):
     T['mgg_semua'] = [w15(i) for i in T.id]
     T['setahun_semua'] = [len(Kd[i]['e_A']) / TAHUN_SET['A'] + len(Kd[i]['e_B']) / TAHUN_SET['B'] for i in T.id]
     T['kerap_B'] = (T.mgg_B >= MINGGU_MIN) & (T.mgg_min_B >= TAHUN_MIN)
+    return T
+
+
+def semua(kerja):
+    """(C, K, T, bacaan). T = `jadual20` + kembar, takrif dan kod F."""
+    import cs_lapor as lapor
+    C = pickle.load(open(F_(kerja, 'calon'), 'rb'))
+    K = pickle.load(open(F_(kerja, 'kunci'), 'rb'))
+    T = jadual20(C, K)
     B = d13.bacaan(T)
     c = T[(T.peranan == 'calon') & T.layak]
     kw = T[(T.peranan == 'kawalan') & T.layak]
@@ -370,26 +380,21 @@ def minggu_kunci(set_):
 
 
 # ---------- pendaftaran ----------
-def daftar(kerja):
-    """Daftar setiap calon lulus yang menepati syarat kekerapan pada B dan bukan kembar ke data/registry_F.csv (kod F2055 dst.,
-    ikut susunan skor A). HANYA jika bacaan dikunci lulus. Baris sedia ada tidak disentuh. Pulangkan bilangan kod baharu."""
+def daftar_baris(T, param, pus, tarikh):
+    """Tambah setiap baris T (calon untuk didaftar, sudah tersusun) ke data/registry_F.csv dengan kod F seterusnya; baris yang
+    takrifnya sudah berdaftar dilangkau. Baris sedia ada tidak disentuh. Pulangkan senarai kod baharu."""
     import cs_lapor as lapor
-    C, K, T, B = semua(kerja)
-    if not B['ya']:
-        cari.log('CS20 daftar: bacaan dikunci TIDAK lulus -> tiada kod F baharu')
-        return 0
-    param = t7.param_semua(kerja)
     reg = pd.read_csv(lapor.REG_F, dtype=str).fillna('').reindex(columns=lapor.LAJUR_F, fill_value='')
     ada, seterusnya, baharu = set(reg.takrif), max(int(x[1:]) for x in reg.id) + 1, []
     assert seterusnya >= ID_MULA
-    for r in T[T.untuk_daftar].sort_values('skor_A', ascending=False, kind='stable').itertuples():
+    for r in T.itertuples():
         if r.takrif in ada:
             continue
         q1, q2, f1, f2 = int(r.q1), int(r.q2), int(r.f1), int(r.f2)
         masuk = t7.nama7(r.pencetus, param)
         P = param.get(r.pencetus) if r.pencetus[0] in 'MN' else dict(t7._GRID[r.pencetus][1]) if r.pencetus[0] == 'K' else None
         b = dict.fromkeys(lapor.LAJUR_F, '')
-        b.update(id=f'F{seterusnya:02d}', keluarga='F', pusingan=PUS, tarikh_daftar=TARIKH_DAFTAR, takrif=r.takrif,
+        b.update(id=f'F{seterusnya:02d}', keluarga='F', pusingan=pus, tarikh_daftar=tarikh, takrif=r.takrif,
                  param=json.dumps({a: (round(x, 6) if isinstance(x, float) else x) for a, x in P.items()}, sort_keys=True) if P else '',
                  masuk=masuk, penapis=c5.tk_pen(f1, f2), henti=f'{d13.KOD_HENTI} {k7.HENTI[S_HENTI]}',
                  keluar=d13.TEKS_PEGANG, skor_tepat=f'{r.skor_A:.5f}', status='BACKTEST',
@@ -412,7 +417,18 @@ def daftar(kerja):
         reg = pd.concat([reg, pd.DataFrame(baharu)[lapor.LAJUR_F].astype(str)], ignore_index=True)
         reg['_n'] = reg.id.str[1:].astype(int)
         reg.sort_values('_n').drop(columns='_n').to_csv(lapor.REG_F, index=False)
-    cari.log(f"CS20 daftar: {len(baharu)} kod F baharu ({baharu[0]['id']}–{baharu[-1]['id']})" if baharu else 'CS20 daftar: tiada yang baharu')
+    return [b['id'] for b in baharu]
+
+
+def daftar(kerja):
+    """Daftar setiap calon lulus yang menepati syarat kekerapan pada B dan bukan kembar ke data/registry_F.csv (kod F2055 dst.,
+    ikut susunan skor A). HANYA jika bacaan dikunci lulus. Pulangkan bilangan kod baharu."""
+    C, K, T, B = semua(kerja)
+    if not B['ya']:
+        cari.log('CS20 daftar: bacaan dikunci TIDAK lulus -> tiada kod F baharu')
+        return 0
+    baharu = daftar_baris(T[T.untuk_daftar].sort_values('skor_A', ascending=False, kind='stable'), t7.param_semua(kerja), PUS, TARIKH_DAFTAR)
+    cari.log(f"CS20 daftar: {len(baharu)} kod F baharu ({baharu[0]}–{baharu[-1]})" if baharu else 'CS20 daftar: tiada yang baharu')
     return len(baharu)
 
 
