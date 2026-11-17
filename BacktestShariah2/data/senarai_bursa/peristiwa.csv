@@ -13121,3 +13121,23 @@ tarikh,simbol,peristiwa,nama,bursa,etf,biasa
 2026-11-17,PLCE,buang,"Children's Place, Inc. (The) - Common Stock",NASDAQ,0,1
 2026-11-17,STLNW,buang,"Starling Oncology, Inc. - Warrant",NASDAQ,0,0
 2026-11-17,FOFO,tukar_nama,"Hang Feng Technology Innovation Co., Ltd. - Class A Ordinary Shares",NASDAQ,0,1
+2026-11-17,CWPD,tambah,CWP Premium Dividend ETF,NASDAQ,1,0
+2026-11-17,CWPG,tambah,CWP Premium Growth ETF,NASDAQ,1,0
+2026-11-17,DAU,tambah,GraniteShares Autocallable AMD ETF,NASDAQ,1,0
+2026-11-17,DRAC,tambah,GraniteShares Autocallable DRAM ETF,NASDAQ,1,0
+2026-11-17,MEA,tambah,GraniteShares Autocallable META ETF,NASDAQ,1,0
+2026-11-17,NTCR,tambah,Nuveen Technology & Infrastructure Credit ETF,NASDAQ,1,0
+2026-11-17,PCHX,tambah,State Street SPDR Nasdaq MyPaycheck ETF,NASDAQ,1,0
+2026-11-17,PIVT,tambah,VanEck Pivotal Trends ETF,NASDAQ,1,0
+2026-11-17,SIMI,tambah,American Beacon SiM High Income ETF,NYSE Arca,1,0
+2026-11-17,TXR,tambah,Torex Resources Inc. Common Shares,NYSE,0,1
+2026-11-17,VRSA,tambah,Versa Bancorp - Common Stock,NASDAQ,0,1
+2026-11-17,ZDAY,tambah,Bitwise AI Cyber Defense ETF,NYSE Arca,1,0
+2026-11-17,ACH,buang,"Accendra Health, Inc. Common Stock",NYSE,0,1
+2026-11-17,ASTN,buang,Defiance Daily Target 2X Short ASTS ETF,Cboe BZX,1,0
+2026-11-17,DVLT,buang,Datavault AI Inc. - Common Stock,NASDAQ,0,1
+2026-11-17,RKLZ,buang,Defiance Daily Target 2x Short RKLB ETF,NASDAQ,1,0
+2026-11-17,STSM,buang,Defiance Daily Target 2X Short TSM ETF,NYSE Arca,1,0
+2026-11-17,VBNK,buang,VersaBank - Common Shares,NASDAQ,0,1
+2026-11-17,GM,tukar_nama,General Motors Company - Common Stock,NASDAQ,0,1
+2026-11-17,MOD,tukar_nama,"Modexus Solutions, Inc. Common Stock",NYSE,0,1
