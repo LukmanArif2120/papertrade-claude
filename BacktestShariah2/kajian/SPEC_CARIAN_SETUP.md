@@ -1762,6 +1762,10 @@ kehendak pengguna atas data yang sudah dilihat — bukan ujian, bukan bukti. Tia
   kewangan" bermarkah tertinggi. Paparan lalai dashboard = Top 100 setiap minggu. Ini susunan paparan mengikut kehendak
   pengguna, bukan ujian dan bukan markah baharu; sama ada senarai kerja rasmi ialah Top 100 setiap minggu atau Top 100
   keseluruhan = keputusan pengguna.
+- **Keputusan pengguna 17 Nov 2026 ("2 dan 3 ya"):** (2) **senarai kerja rasmi = Top 100 "Setiap minggu"**; Top 100 "Musim
+  laporan kewangan" ialah tambahan bermusim; Top 100 keseluruhan kekal rekod sahaja. (3) Di dashboard, tapisan "Kegunaan
+  bila?" kekal menggantikan tapisan Lama / Baharu. Markah, sasaran, berat dan fail hasil tidak diubah; laporan hanya
+  menyatakan senarai mana yang rasmi. Ini BUKAN keputusan papertrade (papertrade kekal dijeda).
 
 ## 8. Apa yang TIDAK dibuat dalam CS01
 

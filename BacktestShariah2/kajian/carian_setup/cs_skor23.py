@@ -31,6 +31,8 @@ D3A, D3B, BAKI_MIN, ADIK_MIN_BIL, ADIK_BAHAGIAN = 3, 3, 0.01, 3, 0.60
 E1, E2 = (5, 0.0, 0.03), (5, 0.0, 0.015)
 MIN_BELIAN, MIN_TAHUN = 300, 10
 JACCARD, N_TOP = 0.50, 100
+RASMI = 'Setiap minggu'                                               # senarai kerja rasmi (keputusan pengguna 17 Nov 2026, pindaan (aj))
+TAMBAHAN = 'Musim laporan kewangan'                                   # tambahan bermusim
 MINGGU_KERAP = 0.80
 GUNA = ('Setiap minggu', 'Musim laporan kewangan', 'Keadaan tertentu', 'Lain-lain')
 PUS = 'CS23'
@@ -260,7 +262,7 @@ def lapor_(kerja):
              semua_kegunaan={k: int((D.kegunaan == k).sum()) for k in GUNA},
              tengah_bahagian={g_: {k: r4(X_[k].median()) for k in BHG} for g_, X_ in (('top', P), ('dinilai', D))},
              tengah_kegunaan={k: r4(D[D.kegunaan == k].markah.median()) for k in GUNA if (D.kegunaan == k).any()},
-             disimpan_kegunaan={k: int((S.kegunaan == k).sum()) for k in GUNA},
+             disimpan_kegunaan={k: int((S.kegunaan == k).sum()) for k in GUNA}, senarai_rasmi=RASMI, senarai_tambahan=TAMBAHAN,
              top_guna={k: _ringkas(T[(T.kegunaan == k) & (T.top_guna > 0)]) for k in GUNA if ((T.kegunaan == k) & (T.top_guna > 0)).any()})
     json.dump(B, open(os.path.join(HASIL, 'bacaan.json'), 'w'), indent=1, sort_keys=True, ensure_ascii=False)
     try:
@@ -274,6 +276,8 @@ def lapor_(kerja):
     A = ['# CS23: markah 0–100 setiap setup F ikut matlamat pengguna, dan Top 100 (backtest; BUKAN bukti)', '', status, '',
          'Dijana `kajian/carian_setup/cs_skor23.py`. Peraturan ditulis dahulu: `kajian/SPEC_CARIAN_SETUP.md` pindaan 17 Nov 2026 (aj). '
          '**Jangan sunting secara manual.** Markah ialah PENYUSUNAN mengikut kehendak pengguna atas data yang sudah dilihat; ia bukan ujian.', '',
+         f'**Senarai kerja rasmi (keputusan pengguna 17 Nov 2026): Top {N_TOP} "{RASMI}" — §5.** Top {N_TOP} "{TAMBAHAN}" (§6) ialah tambahan '
+         f'bermusim; Top {N_TOP} keseluruhan (§4) kekal rekod sahaja. Ini bukan keputusan papertrade.', '',
          '## 1. Cara markah', '',
          f"- **A. Menangkap saham yang naik — {BERAT['A']}:** tangkap (20; penuh pada +5 mata lawan saham rawak), naik ≥ 5 % dan ≥ 10 % seminggu "
          '(10; penuh pada +8 dan +4 mata), mencapai +10 % sebelum jatuh 8 % dalam 3 bulan (5; penuh pada +3 mata).',
@@ -315,7 +319,8 @@ def lapor_(kerja):
         if not len(G):
             continue
         z = B['top_guna'][g]
-        A += ['', f'## {no}. Top {len(G)} "{g}" (markah yang sama, dalam kumpulan itu sahaja)', '',
+        A += ['', f'## {no}. Top {len(G)} "{g}" (markah yang sama, dalam kumpulan itu sahaja)' +
+              (' — SENARAI KERJA RASMI' if g == RASMI else ' — tambahan bermusim' if g == TAMBAHAN else ''), '',
               f"Tambahan selepas hasil dilihat (paparan sahaja, lihat pindaan (aj)). Setup berbeza dalam kumpulan ini: "
               f"{B['disimpan_kegunaan'][g]:,}. Markah {z['markah_maks']:.1f} hingga {z['markah_min']:.1f} (nilai tengah {z['markah_tengah']:.1f}). "
               f"Nilai tengah: tangkap {p(z['terus'], 1)} lawan saham rawak {p(z['a_terus'], 1)}; naik ≥ 5 % seminggu {p(z['m5'], 1)} lawan "

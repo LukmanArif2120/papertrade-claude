@@ -3261,8 +3261,10 @@ class TestCS23(unittest.TestCase):
         self.assertEqual(z['n'], 100)
         self.assertAlmostEqual(z['markah_maks'], float(W[W.top_guna == 1].markah.iloc[0]), places=3)
         lap = open(os.path.join(d, 'TOP100.md'), encoding='utf-8').read()
-        for frasa in ('BUKAN bukti', '## 4. Top 100', '## 5. Top 100 "Setiap minggu"', '## 6. Top 100 "Musim laporan kewangan"', 'Jangkaan yang ditulis dahulu salah'):
+        for frasa in ('BUKAN bukti', '## 4. Top 100', '## 5. Top 100 "Setiap minggu"', '## 6. Top 100 "Musim laporan kewangan"', 'Jangkaan yang ditulis dahulu salah',
+                      'Senarai kerja rasmi (keputusan pengguna 17 Nov 2026): Top 100 "Setiap minggu"', '— SENARAI KERJA RASMI'):
             self.assertIn(frasa, lap)
+        self.assertEqual((B['senarai_rasmi'], B['senarai_tambahan'], s.RASMI, s.TAMBAHAN), ('Setiap minggu', 'Musim laporan kewangan') * 2)
 
 
 if __name__ == '__main__':
