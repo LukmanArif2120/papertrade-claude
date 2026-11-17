@@ -2733,6 +2733,39 @@ class TestCS19(unittest.TestCase):
             h19.KELUAR = asal
             shutil.rmtree(d, ignore_errors=True)
 
+    def test_lewat_ikut_masa_rekod(self):
+        """Baris yang direkod selepas pembukaan sesi berikutnya dikira lewat (belian sudah berlaku), walaupun lajur lewat = 0."""
+        import shutil
+        import tempfile
+        import cs_hadapan19 as h19
+        self.assertEqual(h19.BUKA_UTC, (13, 30))
+        self.assertFalse(h19.lewat_masa(20261116, '2026-11-17 01:10'))            # selepas Lejar, sebelum buka Selasa
+        self.assertTrue(h19.lewat_masa(20261113, '2026-11-17 00:20'))             # isyarat Jumaat direkod selepas buka Isnin
+        self.assertFalse(h19.lewat_masa(20261113, '2026-11-16 13:29'))
+        self.assertTrue(h19.lewat_masa(20261113, '2026-11-16 13:30'))
+        self.assertFalse(h19.lewat_masa(20261125, '2026-11-27 13:00'))            # 26 Nov 2026 = cuti Kesyukuran; sesi berikutnya 27 Nov
+        self.assertFalse(h19.lewat_masa(20200807, 'ujian-1'))
+        asal = h19.KELUAR
+        d = tempfile.mkdtemp()
+        try:
+            h19.KELUAR = d
+            fr = {t: _saham(420, 30 + k) for k, t in enumerate(['AAA', 'BBB'])}
+            pan = h19.panel(fr, {'QQQ': _saham(420, 91), 'SPY': _saham(420, 92)})
+            D = int(pan['hari_unik'][-3])
+            pd.DataFrame([dict(tarikh_isyarat=D, saham='AAA', id='KW1', tarikh_laporan='2020-08-10', masa_laporan='', hingga=2, lewat=0,
+                               direkod='2020-08-11 01:00'),
+                          dict(tarikh_isyarat=D, saham='BBB', id='KW1', tarikh_laporan='2020-08-10', masa_laporan='', hingga=2, lewat=0,
+                               direkod='2020-08-10 14:00')])[h19.L_ISYARAT].to_csv(os.path.join(d, 'isyarat.csv'), index=False)
+            L = h19.nilai(pan).set_index('saham')
+            self.assertEqual(D, 20200807)                                         # Jumaat; sesi berikutnya Isnin 10 Ogos
+            self.assertEqual((int(L.loc['AAA', 'lewat']), int(L.loc['BBB', 'lewat'])), (1, 1))
+            pd.DataFrame([dict(tarikh_isyarat=D, saham='AAA', id='KW1', tarikh_laporan='2020-08-10', masa_laporan='', hingga=2, lewat=0,
+                               direkod='2020-08-08 01:00')])[h19.L_ISYARAT].to_csv(os.path.join(d, 'isyarat.csv'), index=False)
+            self.assertEqual(int(h19.nilai(pan).lewat.iloc[0]), 0)                # direkod sebelum buka sesi berikutnya
+        finally:
+            h19.KELUAR = asal
+            shutil.rmtree(d, ignore_errors=True)
+
     def test_alam_semua_saham(self):
         """Pindaan (af): senarai alam, topeng universe bulanan (peraturan A02 dikira ke hadapan, tanpa pandang hadapan), pintu
         harga dan kalendar, gabungan kalendar, dan jejak(semua=True) hujung ke hujung."""

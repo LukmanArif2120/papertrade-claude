@@ -1540,6 +1540,13 @@ Pindaan ini MENGGANTIKAN butir "Alam dan kelayakan" Bahagian D pindaan (ae) dan 
   Bacaan dikunci P1–P4 tidak berubah (P3 = cara B, cara sekarang); ditambah **P3b** = kadar menang cara 50 − saham rawak
   yang dipegang sama > 0, dibaca pada saat yang sama dan dilaporkan walau apa pun hasilnya. Tafsiran "a b" = "dua-dua"
   ialah tafsiran Claude; disahkan semula dengan pengguna dalam jadual keputusan.
+- **Larian pertama dan peraturan "lewat ikut masa rekod" (17 Nov 2026):** larian pertama di `main` (dicetus tangan
+  00:09 UTC 17 Nov, sebelum Lejar sesi 16 Nov siap) berjaya — harga diperoleh bagi 3,242 daripada 3,260 saham, 1,992 saham
+  layak, kalendar lengkap — tetapi stor repo ketika itu berakhir pada 13 Nov, jadi hari pertama yang direkod ialah 13 Nov,
+  SELEPAS hari belinya (16 Nov) berlalu: 85 baris kawalan, tiada isyarat setup. Peraturan (lebih ketat, ditulis ketika hanya
+  baris itu wujud): mana-mana baris yang cap masa `direkod`-nya pada atau selepas 13:30 UTC hari sesi berikutnya dikira
+  `lewat` dalam `lejar.csv` dan DIKECUALIKAN daripada bacaan, walaupun lajur `lewat` dalam log = 0
+  (`cs_hadapan19.lewat_masa`); log tambah-sahaja tidak disentuh.
 - **Semakan mekanik sebelum bermula (data backtest sebagai ganti muat turun; BUKAN papertrade):** topeng universe ke hadapan
   lawan universe A02 — 2,000 daripada 2,000 sama pada September dan Oktober 2026 (bulan lebih lama berbeza ≤ 12 saham, iaitu
   saham yang berpecah songsang selepas itu); syarat pasaran 12 kod ahli sama pada 20 daripada 20 hari (13 Jul – 7 Ogo 2026);
