@@ -1588,6 +1588,115 @@ table.sf-tb{width:100%;border-collapse:collapse;font-family:var(--f-semi)}
 /* v189 (17 Nov 2026 MYT; keputusan pengguna "ya utk 1 ,2 3"): Setup F — setup SEPANJANG TAHUN (CS20, 748 kod; + CS22 jika ada) menjadi paparan lalai
    "Mingguan"; baris "+10% dahulu" (ukuran kedua CS21) di bawah Tangkap bagi semua setup; lencana MINGGUAN; lencana PAPERTRADE · DIJEDA.
    Dokumen carian/f_utama kini 3 bahagian (lajur baharu di hujung: mg, mgg, bs, c10, ac10, j8, aj8). */
+/* SFX-CSS-MULA */
+/* v191 (17 Nov 2026 MYT; keputusan pengguna "ok pasang dua dua, mobile dan desktop"): Setup F — PAPARAN MUDAH (lalai).
+   Senarai satu baris bagi satu setup (lukisan kecil, nama biasa, markah, lawan rawak); kad bergambar (BELI / JUAL) dengan tiga kotak;
+   butiran = empat soalan berwarna + "padan dengan kehendak anda" + Angka penuh (paparan lama). Komputer: senarai kiri, kad kanan.
+   Awalan kelas sfx- supaya tidak bertembung dengan gaya sf- sedia ada; paparan lama kekal di bawah "Paparan penuh". */
+.sfx{--sfm:#8A93A0;--xk:#191D23;--xk2:#1F242B;--xb:#2E353E;--xt:#1EE3B4;--xtb:#0E3B33;--xr:#FF5D73;--xrs:#FF8C9C;--xrb:#3A1A22;--xy:#F2C14E;--xyb:#3A3112;color:#EEF1F4;margin-bottom:16px}
+.sfx svg.v5s text{font-family:var(--f-semi)}
+.sfx-hd{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.sfx-hd h2{font:700 1.35rem/1 var(--f-cond);letter-spacing:.04em;text-transform:uppercase;margin:0}
+.sfx-tukar{margin-left:auto;font:600 .78rem var(--f-semi);color:#B4BBC6;background:none;border:1px solid var(--xb,#2E353E);border-radius:99px;padding:5px 12px;cursor:pointer}
+.sfx-tukar:hover{color:#1EE3B4;border-color:#23695B}
+.sfx-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.sfx-tab{display:flex;gap:6px;flex-wrap:wrap}
+.sfx-tab button{font:700 .8rem var(--f-semi);color:#B4BBC6;background:none;border:1px solid var(--xb);border-radius:99px;padding:6px 13px;cursor:pointer}
+.sfx-tab button[aria-pressed="true"]{background:var(--xt);border-color:var(--xt);color:#06231D}
+.sfx-bar input{margin-left:auto;flex:1 1 200px;max-width:280px;font:500 .84rem var(--f-semi);color:#EEF1F4;background:#14181D;border:1px solid var(--xb);border-radius:99px;padding:7px 14px}
+.sfx-g{display:block}
+.sfx-sek{font:700 .7rem var(--f-semi);letter-spacing:.13em;color:var(--sfm);text-transform:uppercase;margin:0 0 8px}
+.sfx-sek small{letter-spacing:0;text-transform:none;font-weight:500}
+/* baris senarai */
+.sfx-row{display:grid;grid-template-columns:96px 1fr;gap:12px;background:var(--xk);border:1px solid var(--xb);border-radius:12px;padding:10px;margin-bottom:8px;cursor:pointer}
+.sfx-row:hover{border-color:#3E4854}
+.sfx-row.on{border-color:var(--xt);background:#1C2229}
+.sfx-th{background:#14181D;border:1px solid #262C34;border-radius:8px;overflow:hidden;align-self:start}
+.sfx-th svg{display:block;width:100%;height:auto}
+.sfx-row .hd{display:flex;align-items:baseline;gap:7px;font:700 .76rem var(--f-semi);color:var(--sfm)}
+.sfx-row .hd b{color:var(--xt)}
+.sfx-row .hd em{margin-left:auto;font:800 1rem var(--f-cond);color:#EEF1F4;font-style:normal}
+.sfx-row .nm{font:700 1.06rem/1.16 var(--f-cond);margin-top:2px;letter-spacing:.005em}
+.sfx-kd{font:500 .74rem var(--f-semi);color:var(--sfm);margin-top:2px}
+.sfx-row .m2{display:flex;align-items:center;gap:8px;margin-top:7px;font:600 .76rem var(--f-semi);color:#B4BBC6}
+.sfx-mt{display:inline-grid;grid-template-columns:repeat(3,18px);gap:3px;flex:none}
+.sfx-mt i{height:7px;border-radius:4px;background:#333B45}
+.sfx-mt i.s{background:#8A93A0}.sfx-mt i.k{background:var(--xy)}.sfx-mt i.h{background:var(--xt)}
+.sfx-gp{font:700 .66rem var(--f-semi);border-radius:99px;padding:1px 7px}
+/* kad */
+.sfx-card{position:relative;background:var(--xk);border:1px solid var(--xt);border-radius:14px;padding:16px;margin-bottom:8px}
+.sfx-card .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.sfx-card .no{font:700 .8rem var(--f-semi);color:var(--xt)}
+.sfx-card .kod{font:700 .8rem var(--f-semi);color:#B4BBC6;border:1px solid var(--xb);border-radius:6px;padding:2px 7px;letter-spacing:.02em}
+.sfx-card .pils{display:flex;gap:8px;flex-wrap:wrap;order:9;flex-basis:100%}
+.sfx-g.dua .sfx-card .pils{order:0;flex-basis:auto}
+.sfx-pil{font:700 .74rem var(--f-semi);border-radius:99px;padding:3px 10px;white-space:nowrap}
+.sfx-pil.laju{color:var(--xy);background:var(--xyb)}
+.sfx-card .xmk{margin-left:auto;font:800 1.1rem var(--f-cond);color:#EEF1F4;white-space:nowrap}
+.sfx-card .xmk small{font:600 .7rem var(--f-semi);color:var(--sfm);margin-left:3px}
+.sfx-x{font:700 .9rem var(--f-semi);color:#B4BBC6;background:none;border:1px solid var(--xb);border-radius:8px;width:30px;height:28px;cursor:pointer}
+.sfx-card h3{font:700 1.62rem/1.12 var(--f-cond);margin:12px 0 0;letter-spacing:.005em;text-wrap:balance}
+.sfx-raj{margin-top:14px;background:#14181D;border:1px solid #262C34;border-radius:10px;overflow:hidden}
+.sfx-raj svg{display:block;width:100%;height:auto}
+.sfx-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.sfx-3 .sel{background:var(--xk2);border-radius:10px;padding:11px 6px 10px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:7px}
+.sfx-3 .g{height:26px;display:flex;align-items:center;justify-content:center}
+.sfx-3 b{font:700 .9rem/1.15 var(--f-semi);color:#EEF1F4}
+.sfx-3 small{display:block;font:500 .7rem/1.2 var(--f-semi);color:var(--sfm);margin-top:1px}
+.sfx-dd{display:grid;grid-template-columns:repeat(5,10px);gap:3px}
+.sfx-dd i{width:10px;height:10px;border-radius:50%;background:var(--xt)}
+.sfx-dd i.r{background:transparent;border:1.6px solid var(--xr)}
+.sfx-ik{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.sfx-kaki{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;padding-top:11px;border-top:1px solid var(--xb);font:500 .78rem var(--f-semi);color:var(--sfm)}
+.sfx-btn{font:700 .82rem var(--f-semi);color:var(--xt);background:none;border:1px solid #23695B;border-radius:99px;padding:6px 14px;cursor:pointer;white-space:nowrap}
+.sfx-lbl{font:700 .7rem var(--f-semi);letter-spacing:.13em;color:var(--sfm);text-transform:uppercase;margin:20px 0 4px}
+.sfx-lbl span{letter-spacing:0;text-transform:none;font-weight:500}
+/* empat soalan */
+.sfx-sj{display:grid;grid-template-columns:5px 1fr;gap:0 12px;padding:11px 0;border-top:1px solid var(--xb)}
+.sfx-sj.satu{border-top:0}
+.sfx-sj .xbar{border-radius:3px;background:var(--xt)}
+.sfx-sj.k .xbar{background:var(--xy)}.sfx-sj.m .xbar{background:var(--xr)}.sfx-sj.n .xbar{background:#5C6878}
+.sfx-sj .q{font:600 .78rem var(--f-semi);color:var(--sfm)}
+.sfx-sj .a{font:700 1.22rem/1.2 var(--f-cond);color:#EEF1F4;margin:1px 0 2px;letter-spacing:.005em}
+.sfx-sj .x{font:500 .8rem var(--f-semi);color:#B4BBC6}
+/* padan dengan kehendak anda */
+.sfx-pd{margin-top:8px;background:var(--xk2);border-radius:10px;padding:12px 14px}
+.sfx-pd .t{font:700 1.18rem var(--f-cond)}
+.sfx-pd .t b{color:var(--xt)}
+.sfx-lima{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-top:9px}
+.sfx-lima span{height:7px;border-radius:4px;background:var(--xt)}
+.sfx-lima span.s{background:var(--xy)}.sfx-lima span.t{background:var(--xr)}
+.sfx-sm{display:grid;grid-template-columns:26px 1fr;gap:0 11px;padding:10px 0;border-top:1px solid var(--xb)}
+.sfx-sm.satu{border-top:0;padding-top:12px}
+.sfx-sm i{width:26px;height:26px;border-radius:50%;font:700 .95rem/26px var(--f-body);text-align:center;font-style:normal;background:var(--xtb);color:var(--xt)}
+.sfx-sm.s i{background:var(--xyb);color:var(--xy)}.sfx-sm.t i{background:var(--xrb);color:var(--xrs)}
+.sfx-sm b{display:block;font:600 .95rem/1.3 var(--f-body)}
+.sfx-sm small{font:500 .8rem var(--f-semi);color:#B4BBC6}
+.sfx-lama{margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--xk2);border:0;border-radius:10px;padding:12px 14px;width:100%;text-align:left;cursor:pointer;color:#EEF1F4}
+.sfx-lama b{display:block;font:700 .95rem var(--f-body)}
+.sfx-lama small{font:500 .76rem var(--f-semi);color:var(--sfm)}
+.sfx-lama span{font:700 1.1rem var(--f-semi);color:var(--xt)}
+.sfx-angka{margin-top:10px}
+.sfx-angka .sf-mc{cursor:default;margin-top:0}
+.sfx .note{margin-top:10px}
+.sfx-kosong{color:var(--sfm);font:500 .9rem var(--f-body);padding:14px 4px}
+/* komputer: senarai kiri, kad kanan */
+.sfx-g.dua{display:grid;grid-template-columns:minmax(320px,390px) 1fr;gap:18px;align-items:start}
+.sfx-g.dua .sfx-kanan{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;border-radius:14px}
+.sfx-g.dua .sfx-card{padding:20px 22px;margin-bottom:0}
+.sfx-g.dua .sfx-card h3{font-size:1.9rem}
+.sfx-g.dua .sfx-row .nm{font-size:1.02rem}
+.sfx-pd5{display:grid;grid-template-columns:repeat(auto-fit,minmax(124px,1fr));gap:8px;margin-top:8px}
+.sfx-g.dua .sfx-pd{display:flex;align-items:center;gap:18px}
+.sfx-g.dua .sfx-pd .sfx-lima{flex:1;margin-top:0;max-width:340px}
+.sfx-p5{background:var(--xk2);border-radius:10px;padding:11px 12px}
+.sfx-p5 i{display:block;width:24px;height:24px;border-radius:50%;font:700 .85rem/24px var(--f-body);text-align:center;font-style:normal;background:var(--xtb);color:var(--xt);margin-bottom:7px}
+.sfx-p5.s i{background:var(--xyb);color:var(--xy)}.sfx-p5.t i{background:var(--xrb);color:var(--xrs)}
+.sfx-p5 b{display:block;font:600 .88rem/1.25 var(--f-body)}
+.sfx-p5 small{display:block;font:500 .76rem/1.3 var(--f-semi);color:#B4BBC6;margin-top:3px}
+@media (min-width:1340px){.sfx-pd5{grid-template-columns:repeat(5,1fr)}.sfx-k2{display:grid;grid-template-columns:1.12fr 1fr;gap:24px;align-items:start}.sfx-k2 .sfx-lbl{margin-top:16px}.sfx-k2 .sfx-sj.satu{padding-top:4px}}
+@media (max-width:420px){.sfx-row{grid-template-columns:84px 1fr;gap:10px}.sfx-card h3{font-size:1.5rem}}
+/* SFX-CSS-TAMAT */
 /* v190 (17 Nov 2026 MYT; keputusan pengguna "ya dua dua"): Setup F — MARKAH 0-100 setiap setup (CS23, pindaan (aj)) dan lajur "Kegunaan bila?"
    dengan tapisan; paparan lalai "Top 100" + "Setiap minggu", disusun ikut markah. Tapisan Asal (lama / baharu) diganti tapisan Kegunaan.
    Dokumen carian/f_utama kini 4 bahagian (lajur baharu di hujung: mk, mka..mke, gn, tk, tg, sr23, mgb; meta skor). Diterbit atas v189 (#224). */
@@ -6303,6 +6412,192 @@ function sfSenarai(d,f){const all=sfBaris(d),G=SF_GNK.indexOf(f.guna);
   if(f.jenis&&f.jenis!=='semua')rows=rows.filter(r=>r.jenis===f.jenis);
   if(f.q){const q=f.q.toLowerCase();rows=rows.filter(r=>[r.id,r.pra,r.nama,r.pen,r.jenis].join(' ').toLowerCase().includes(q));}
   const k=SF_SUSUN[f.sk]||SF_SUSUN.tangkap,dir=f.dir||-1;rows.sort((a,b)=>((k(a)??-1e9)-(k(b)??-1e9))*dir||((b.tangkap??0)-(a.tangkap??0)));return rows;}
+/* SFX-JS-MULA */
+/* v191 (17 Nov 2026 MYT): PAPARAN MUDAH Setup F (keputusan pengguna "ok pasang dua dua, mobile dan desktop").
+   Tiada data baharu: nama biasa, jenis lukisan, warna dan "padan dengan kehendak anda" dikira di sini daripada lajur sedia ada
+   (nama, pra, pen, tangkap, rawak, menang, rugi8, gn, mk ...). Had warna ditulis dalam standard/dashboard.md (v191) sebelum dipasang:
+   lawan rawak (tangkap ÷ rawak) < 1.1 sama · 1.1–1.6 baik sedikit · ≥ 1.6 lebih baik; kerap untung ≥ 55 % hijau · 45–55 % kuning · < 45 % merah;
+   jatuh ≥ 8 % : ≤ 15 % hijau · 15–25 % kuning · > 25 % merah. Lukisan ialah gambaran jenis isyarat, BUKAN chart sebenar. */
+const SFX_H=n=>n===5?'seminggu':n===10?'2 minggu':(n===20||n===21)?'sebulan':(n===60||n===63)?'3 bulan':n===126?'6 bulan':n>=250?'setahun':n+' hari';
+function sfxTafsir(r){
+  if(r._x)return r._x;
+  const asal=String(r.nama||''),nm=sfNm(asal),s=nm.toLowerCase(),pra=String(r.pra||''),pen=String(r.pen||'');
+  let j='umum',k='ikut isyarat beli',lt='',garis='',kaedah='',m;
+  if(/^[MNP]\d/.test(asal)){
+    kaedah=asal.replace(/^[MNP]\d+\w*\s+/,'').replace(/\s*\(benih.*$/,'').replace(/\s*\((?:ditala|proksi)[^)]*\)/g,'').trim();const t=kaedah.toLowerCase();
+    if(/pullback|undur|rsi ?2|retest|kapitulasi/.test(t)){j='turun';k='masa ia turun sekejap';lt='turun sekejap';}
+    else if(/breakout|pecah|squeeze|turtle|cawan|vcp|nr7|nr4|52 minggu|pivot|hari dalam|inside/.test(t)){j='pecah';k='bila harga pecah naik';lt='pecah naik';garis='paras tinggi';}
+    else if(/crossover|silang|macd|supertrend|\bsar\b|ichimoku|kst/.test(t)){j='silang';k='bila trend bertukar naik';lt='trend bertukar naik';garis='garis trend';}
+    else{k='ikut isyarat kaedah ini';}
+  }
+  else if((m=s.match(/^rsi\((\d+)\) < /))){const n=+m[1];j='turun';
+    if(n<=3){k='masa ia turun sekejap';lt='turun 1–2 hari';}else if(n<=7){k='masa ia lemah beberapa hari';lt='lemah beberapa hari';}else{k='masa ia lemah seminggu dua';lt='lemah seminggu dua';}}
+  else if((m=s.match(/^jatuh >= (\d+)% dalam (\d+) hari/))){j='jatuh';k=`yang jatuh ${m[1]}% dalam ${SFX_H(+m[2])}`;lt=`jatuh ${m[1]}% dalam ${SFX_H(+m[2])}`;}
+  else if((m=s.match(/^(\d+) tutup menurun berturut/))){j='turun';k=`selepas ${m[1]} hari turun berturut-turut`;lt=`${m[1]} hari turun`;}
+  else if(/^tutup < jalur bawah bb/.test(s)){j='jatuh';k='masa harga jatuh di bawah julat biasanya';lt='jatuh bawah julat biasa';}
+  else if(/^masuk semula atas jalur bawah bb/.test(s)){j='lantun';k='bila harga naik semula selepas jatuh di bawah julat biasanya';lt='mula naik semula';}
+  else if((m=s.match(/^undur ke (?:sma|ema)(\d+) yang naik/))){j='turun';k=`masa harga undur ke purata ${m[1]} hari yang sedang naik`;lt=`undur ke purata ${m[1]} hari`;}
+  else if((m=s.match(/^holy grail \(adx > \d+, undur ema(\d+)\)/))){j='turun';k=`masa trend kuat undur ke purata ${m[1]} hari`;lt=`undur ke purata ${m[1]} hari`;}
+  else if((m=s.match(/^rsi\(\d+\) silang atas (\d+)/))){if(+m[1]<50){j='lantun';k='bila harga mula naik semula selepas lemah';lt='mula naik semula';}else{j='naik';k='bila kenaikan mula laju';lt='kenaikan mula laju';}}
+  else if(/^stochastic\(\d+\) silang naik dari bawah/.test(s)){j='lantun';k='bila harga mula naik semula dari paras rendah';lt='mula naik semula';}
+  else if(/^macd\(/.test(s)){j=/bawah sifar/.test(s)?'lantun':'naik';k='bila arah harga bertukar naik';lt='arah bertukar naik';}
+  else if((m=s.match(/^tutup silang atas (?:sma|ema)(\d+)/))){j='silang';k=`bila harga naik melepasi purata ${m[1]} hari`;lt='naik melepasi garis';garis=`purata ${m[1]} hari`;}
+  else if((m=s.match(/^(?:sma|ema)(\d+) silang atas (?:sma|ema)(\d+)/))){j='silang';k=`bila purata ${m[1]} hari memotong naik purata ${m[2]} hari`;lt='purata memotong naik';garis=`purata ${m[2]} hari`;}
+  else if(/^supertrend/.test(s)){j='silang';k='bila trend bertukar naik';lt='trend bertukar naik';garis='garis trend';}
+  else if(/^adx\(/.test(s)){j='naik';k='bila trend naik mula kuat';lt='trend mula kuat';}
+  else if((m=s.match(/^pecah tinggi (\d+) hari/))){j='pecah';k=`bila harga pecah paras tertinggi ${SFX_H(+m[1])}`;lt='pecah paras tinggi';garis=`tertinggi ${SFX_H(+m[1])}`;}
+  else if(/^pecah atas keltner/.test(s)||/^tutup silang atas jalur atas bb/.test(s)){j='pecah';k='bila harga melonjak ke atas julat biasanya';lt='melonjak keluar julat';garis='had atas julat biasa';}
+  else if(/^squeeze lepas ke atas/.test(s)){j='pecah';k='bila harga meletup naik selepas tempoh tenang';lt='lepas tempoh tenang';garis='julat tenang';}
+  else if((m=s.match(/^pecah julat sempit (\d+) hari/))){j='pecah';k=`bila harga pecah naik dari julat sempit ${SFX_H(+m[1])}`;lt='pecah julat sempit';garis='julat sempit';}
+  else if((m=s.match(/^nr(\d+)/))){j='pecah';k=`selepas hari paling tenang dalam ${m[1]} hari`;lt='hari paling tenang';garis='julat tenang';}
+  else if(/^lonjakan >= /.test(s)){j='naik';k='selepas hari melonjak dengan volum besar';lt='melonjak, volum besar';}
+  else if((m=s.match(/^gap >= ([\d.]+)%/))){j='naik';k=`selepas harga buka melompat ${+m[1]}% atau lebih`;lt='harga buka melompat';}
+  else if(/^gap-and-go/.test(s)){j='naik';k='bila harga buka melompat di atas tinggi semalam';lt='harga buka melompat';}
+  else if(/^bar pembalikan/.test(s)){j='lantun';k='selepas hari berpatah balik (buka rendah, tutup tinggi)';lt='hari berpatah balik';}
+  else if(/^rs silang atas/.test(s)){j='naik';k='bila ia mula mengatasi kebanyakan saham lain';lt='mula mengatasi saham lain';}
+  /* saham yang macam mana (daripada syarat saham dan prasyarat syarikat / industri) */
+  const kuat=/RS >= 70|templat trend Minervini|MA50 > MA200|tutup > MA200/.test(pen)||/atas ma200/.test(s)||/industri 20% teratas|sektor 3 teratas|saham lain dalam industri sama naik|saham (?:industri|sektor) di atas MA50/.test(pra);
+  let ds=/RS >= 90/.test(pen)?'saham paling kuat':kuat?'saham kuat':/>= 30% di bawah puncak/.test(pen)?'saham yang sudah jatuh jauh':/dalam (?:15|5)% dari puncak/.test(pen)?'saham dekat harga tertinggi':'saham';
+  if(/hasil suku terkini tumbuh/.test(pra))ds+=' yang jualannya tumbuh';else if(/SUE > 0/.test(pra))ds+=' yang untungnya melebihi jangkaan';
+  if(/ yang /.test(ds)&&/^yang /.test(k))k='dan '+k.slice(5);
+  /* bila (daripada prasyarat tarikh / pasaran) */
+  const lap=/earnings dalam 1-5/.test(pra);let dp='';
+  if(lap)dp='Sebelum laporan kewangan, ';
+  else if(/sesi selepas earnings|hari earnings/.test(pra))dp='Selepas laporan kewangan, ';
+  else if((m=pra.match(/Mei-Okt|Nov-Apr|Januari|7 hari pertama bulan/)))dp={'Mei-Okt':'Antara Mei dan Oktober, ','Nov-Apr':'Antara November dan April, ','Januari':'Pada bulan Januari, ','7 hari pertama bulan':'Pada awal bulan, '}[m[0]];
+  else if(/terbawah \(pulangan/.test(pra))dp='Dalam industri yang lemah, ';
+  else if(/QQQ OFF|rejim OFF|SPY bawah|QQQ RSI14 < 35|QQQ >= 10% di bawah|<= 30% saham|nisbah 4% \(10 hari\) < 0\.5|hari 90% turun|distribution day QQQ >= 5|regangan turun-naik/.test(pra))dp='Masa pasaran lemah, ';
+  else if(/turun-naik SPY/.test(pra))dp='Masa pasaran tenang, ';
+  else if(/QQQ|SPY|saham di atas MA|keluasan naik|breadth thrust|follow-through|puncak 52 minggu|nisbah 4%/.test(pra))dp='Masa pasaran kuat, ';
+  const nama=dp+(dp?'beli ':'Beli ')+ds+' '+k;
+  return r._x={nama,kaedah,j,lt,garis,lap,tenang:/ATR% <= 2\.5/.test(pen)};}
+/* lukisan: laluan sebelum beli ikut jenis isyarat; titik beli tetap (164,136); selepas itu sama bagi semua (pegang -> jual) */
+const SFX_PRA={turun:'M8,168 L24,158 40,164 56,146 72,152 88,130 104,136 120,112 136,98 146,120 156,142 164,136',
+  jatuh:'M8,152 L24,140 40,146 56,126 72,132 88,110 100,98 112,114 124,108 136,130 146,124 156,146 164,136',
+  lantun:'M8,84 L24,92 40,86 56,104 72,98 88,118 104,112 120,132 136,128 150,146 158,140 164,136',
+  pecah:'M8,170 L24,158 40,166 56,150 72,162 88,148 104,160 120,148 136,158 150,146 158,140 164,136',
+  silang:'M8,170 L24,160 40,166 56,154 72,160 88,150 104,158 120,150 136,154 150,146 158,142 164,136',
+  naik:'M8,172 L24,166 40,170 56,160 72,164 88,154 104,158 120,150 136,152 150,146 158,134 164,136',
+  umum:'M8,160 L24,152 40,158 56,146 72,154 88,142 104,150 120,140 136,148 150,138 158,142 164,136'};
+const SFX_GRS={pecah:'M24,143 H178',silang:'M8,152 L190,140'};
+function sfxGambar(x,kecil){
+  const pra=SFX_PRA[x.j]||SFX_PRA.umum,grs=SFX_GRS[x.j]||'';
+  if(kecil)return `<svg class="v5s" viewBox="30 50 222 132" aria-hidden="true">${grs?`<path d="${grs}" fill="none" stroke="#8A93A0" stroke-width="2.6" stroke-dasharray="8 7" stroke-linecap="round"/>`:''}${x.lap?'<path d="M188,56 V176" stroke="#6FD3E6" stroke-width="2.8" stroke-dasharray="4 7" stroke-linecap="round"/>':''}<path d="${pra}" fill="none" stroke="#7C8794" stroke-width="5.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M164,136 L180,116 196,122 212,96 228,102 242,74" fill="none" stroke="#1EE3B4" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/><circle cx="164" cy="136" r="11" fill="#1EE3B4" stroke="#14181D" stroke-width="4.5"/></svg>`;
+  const T=(xx,yy,t,a,w)=>`<text x="${xx}" y="${yy}" font-size="12" font-weight="${w||600}" fill="#B4BBC6"${a?` text-anchor="${a}"`:''}>${esc(t)}</text>`;
+  const P=(x1,y1,x2,y2)=>`<path d="M${x1},${y1} L${x2},${y2} M${x2-4},${y2-6} L${x2},${y2} L${x2+4},${y2-6}" fill="none" stroke="#B4BBC6" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>`;
+  let lab='';
+  if(x.j==='turun')lab=T(14,128,'sedang naik')+(x.lt?T(150,84,x.lt)+P(153,90,152,108):'');
+  else if(x.j==='jatuh')lab=T(14,176,'sedang naik')+(x.lt?T(136,84,x.lt,'end')+P(141,90,141,116):'');
+  else if(x.j==='lantun')lab=T(66,84,'sedang turun')+(x.lt?T(134,168,x.lt,'end'):'');
+  else if(x.j==='pecah')lab=(x.garis?T(26,138,x.garis,'',500):'')+(x.lt?T(150,116,x.lt,'end')+P(153,120,158,132):'');
+  else if(x.j==='silang')lab=(x.garis?T(14,142,x.garis,'',500):'')+(x.lt?T(150,120,x.lt,'end')+P(153,124,158,132):'');
+  else if(x.j==='naik')lab=x.lt?T(150,122,x.lt,'end')+P(153,126,158,130):'';
+  return `<svg class="v5s" viewBox="0 40 326 178" role="img" aria-label="Lukisan: bila beli dan bila jual">
+   <defs><linearGradient id="sfxLg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1EE3B4" stop-opacity=".22"/><stop offset="1" stop-color="#1EE3B4" stop-opacity="0"/></linearGradient></defs>
+   <path d="M164,136 L180,116 196,122 212,96 228,102 242,74 256,58 268,68 280,92 L280,184 L164,184 Z" fill="url(#sfxLg)"/>
+   ${grs?`<path d="${grs}" fill="none" stroke="#8A93A0" stroke-width="1.4" stroke-dasharray="4 4" stroke-linecap="round"/>`:''}
+   ${x.lap?'<path d="M188,52 V184" stroke="#6FD3E6" stroke-width="1.4" stroke-dasharray="2 4" stroke-linecap="round"/><text x="193" y="180" font-size="11" font-weight="600" fill="#6FD3E6">laporan kewangan</text>':''}
+   <path d="M194,138 L212,124 228,112 242,100 256,88 268,82 280,82 296,86 312,90" fill="none" stroke="#8A93A0" stroke-width="1.5" stroke-dasharray="4 4" stroke-linecap="round"/>
+   <path d="${pra}" fill="none" stroke="#7C8794" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+   <path d="M280,92 L292,108 304,114 316,112" fill="none" stroke="#7C8794" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+   <path d="M164,136 L180,116 196,122 212,96 228,102 242,74 256,58 268,68 280,92" fill="none" stroke="#1EE3B4" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+   ${lab}
+   <circle cx="164" cy="136" r="7" fill="#1EE3B4" stroke="#14181D" stroke-width="3"/>
+   <rect x="143" y="150" width="42" height="20" rx="10" fill="#1EE3B4"/><text x="164" y="164.5" font-size="12" font-weight="700" fill="#06231D" text-anchor="middle" letter-spacing=".06em">BELI</text>
+   <circle cx="280" cy="92" r="7" fill="#FF5D73" stroke="#14181D" stroke-width="3"/>
+   <rect x="282" y="62" width="42" height="20" rx="10" fill="#FF5D73"/><text x="303" y="76.5" font-size="12" font-weight="700" fill="#2A0A11" text-anchor="middle" letter-spacing=".06em">JUAL</text>
+   <path d="M164,186 V192 H280 V186" fill="none" stroke="#3E4854" stroke-width="1.5"/>
+   <text x="222" y="208" font-size="12" font-weight="600" fill="#B4BBC6" text-anchor="middle">pegang 20 hari atau lebih</text></svg>`;}
+/* penilaian mudah satu setup: lawan rawak, kerap untung, rugi, bila, padan dengan lima kehendak pengguna (17 Nov 2026) */
+function sfxNilai(r){
+  if(r._n)return r._n;
+  const x=sfxTafsir(r),nis=sfNis(r),B=n=>Math.round(n||0),u=Math.max(0,Math.min(10,Math.round((r.menang||0)/10)));
+  const rw=nis==null?{t:'–',k:-1,w:'n'}:nis>=1.6?{t:'Lebih baik',k:2,w:'h'}:nis>=1.1?{t:'Baik sedikit',k:1,w:'k'}:{t:'Sama dengan rawak',k:0,w:'n'};
+  const lw=`${B(r.tangkap)} lawan ${B(r.rawak)}`;
+  const ru=r.rugi8!=null?{n:Math.round(r.rugi8/10),t:'jatuh 8% atau lebih',w:r.rugi8<=15?'h':r.rugi8<=25?'k':'m'}:{n:Math.round((r.rugi15||0)/10),t:'rugi 15% atau lebih',w:(r.rugi15||0)<=8?'h':(r.rugi15||0)<=15?'k':'m'};
+  const mg=r.mgb!=null?`Ada belian dalam ${B(r.mgb)}% minggu`:'';
+  const bl=r.gn===0?{t:'Setiap minggu',p:'boleh beli',w:'h'}:r.gn===1?{t:'Musim laporan kewangan',p:'empat musim setahun',w:'k'}:r.gn===2?{t:'Keadaan tertentu',p:'bukan setiap minggu',w:'k'}:{t:'Masa tertentu sahaja',p:'ikut bulan atau tarikh',w:'n'};
+  const soalan=[[bl.w,'Boleh pakai bila?',bl.t,mg||bl.p],
+    [r.menang>=55?'h':r.menang>=45?'k':'m','Berapa kerap untung?',`${u} daripada 10 belian`,`Purata ${sfSg(r.purata)} setiap belian${r.ap!=null?` · pilih rawak ${sfSg(r.ap)}`:''}`],
+    [rw.w,'Lebih baik daripada pilih rawak?',rw.k===2?'Ya':rw.k===1?'Sedikit':rw.k===0?'Tidak':'–',`${lw} daripada 100${r.tbil?` · lebih baik ${r.tpos} daripada ${r.tbil} tahun`:''}`],
+    [ru.w,'Berapa teruk boleh rugi?',`${ru.n} daripada 10 ${ru.t}`,'Stop loss longgar, boleh rugi lebih 10%']];
+  const padan=[[r.gn===0?'y':r.gn===2?'s':'t','Boleh beli setiap minggu',r.gn===0?(mg||'Ya'):r.gn===1?'Tidak. Hanya pada musim laporan kewangan':r.gn===2?`Kadang-kadang${r.mgb!=null?`: ${B(r.mgb)}% minggu`:''}`:'Tidak. Hanya pada masa tertentu'],
+    ['y','Bukan beli hari ini, jual hari ini','Pegang 20 hari atau lebih'],
+    [rw.k===2?'y':rw.k===1?'s':'t','Lebih baik daripada pilih rawak',rw.k===2?`Ya: ${lw} daripada 100`:rw.k===1?`Sedikit sahaja: ${lw} daripada 100`:`Tidak: ${lw} daripada 100`],
+    ['t','Rugi paling banyak 5%','Tidak. Boleh rugi lebih 10% sebelum jual'],
+    [x.tenang?'s':'t','Naik perlahan tapi stabil',x.tenang?'Saham tenang, tetapi setup ini dicari untuk naik laju':'Tidak. Setup ini dicari untuk saham naik laju']];
+  return r._n={x,u,rw,lw,ru,bl,soalan,padan,ya:padan.filter(p=>p[0]==='y').length};}
+const SFX_IK={cal:'<rect x="3.5" y="5.5" width="17" height="15" rx="3"/><path d="M3.5 10h17M8 3.5v4M16 3.5v4"/>',tik:'<path d="M8.3 15l2.3 2.3 5-4.6"/>'};
+const sfxMeter=k=>`<span class="sfx-mt"><i${k===0?' class="s"':''}></i><i${k===1?' class="k"':''}></i><i${k===2?' class="h"':''}></i></span>`;
+const sfxTanda={y:'✓',s:'≈',t:'✕'};
+const sfxPil=r=>r.gn==null||!SF_GN[r.gn]?'':`<span class="sfx-pil" style="background:${SF_GN[r.gn][1]};color:${SF_GN[r.gn][2]}">${r.gn===1?'Musim laporan':SF_GN[r.gn][0]}</span>`;
+function sfxBaris(r,f,on){const n=sfxNilai(r),x=n.x,kd=f.g==='semua'?r.tk:r.tg;
+  return `<div class="sfx-row${on?' on':''}" data-sfx="${esc(r.id)}" role="button" tabindex="0"><div class="sfx-th">${sfxGambar(x,1)}</div><div>
+   <div class="hd">${kd?`<b>#${kd}</b>`:''}<span>${esc(r.id)}</span>${f.g==='semua'&&r.gn!=null&&SF_GN[r.gn]?`<span class="sfx-gp" style="background:${SF_GN[r.gn][1]};color:${SF_GN[r.gn][2]}">${SF_GN[r.gn][3]}</span>`:''}<em>${r.mk==null?'–':fx(r.mk,1)}</em></div>
+   <div class="nm">${esc(x.nama)}</div>${x.kaedah?`<div class="sfx-kd">kaedah ${esc(x.kaedah)}</div>`:''}
+   <div class="m2">${sfxMeter(n.rw.k)}<span>${n.rw.t} · ${n.lw}</span></div></div></div>`;}
+function sfxTiga(r,n){return `<div class="sfx-3">
+   <div class="sel"><div class="g"><div class="sfx-dd">${'<i></i>'.repeat(n.u)}${'<i class="r"></i>'.repeat(10-n.u)}</div></div><b>${n.u} untung<small>${10-n.u} rugi</small></b></div>
+   <div class="sel"><div class="g" style="color:${r.gn!=null&&SF_GN[r.gn]?SF_GN[r.gn][2]:'#8A93A0'}"><svg class="sfx-ik" viewBox="0 0 24 24">${SFX_IK.cal}${r.gn===0?SFX_IK.tik:''}</svg></div><b>${r.gn===1?'Musim laporan':n.bl.t}<small>${n.bl.p}</small></b></div>
+   <div class="sel"><div class="g">${sfxMeter(n.rw.k)}</div><b>${n.rw.k===0?'Sama':n.rw.t}<small>lawan pilih rawak</small></b></div></div>`;}
+const sfxSoalan=n=>`<div class="sfx-lbl">Empat soalan</div>${n.soalan.map(([w,q,a,xx],i)=>`<div class="sfx-sj${i?'':' satu'}${w==='h'?'':' '+w}"><div class="xbar"></div><div><div class="q">${q}</div><div class="a">${esc(a)}</div><div class="x">${esc(xx)}</div></div></div>`).join('')}`;
+const sfxLima=n=>`<div class="sfx-lima">${n.padan.slice().sort((a,b)=>'yst'.indexOf(a[0])-'yst'.indexOf(b[0])).map(p=>`<span${p[0]==='y'?'':` class="${p[0]}"`}></span>`).join('')}</div>`;
+function sfxAngka(r,d){const adaS=r.m5!=null;
+  return `<div class="sfx-angka"><div class="sf-mc"><div class="top"><b class="sf-num">${esc(r.id)}</b>${sfGrH(sfGred(r))}${sfSolidB(r)}<span class="sf-num k3 ${cls(r.k3)}" style="font-size:.8rem">2025–26 ${(r.k3>0?'+':'')+fx(r.k3,1)}</span></div>
+   ${r.mk!=null?`<div style="margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span class="sf-mk" data-tip="sf_markah">${fx(r.mk,1)}<small style="font:600 .66rem var(--f-semi);color:var(--sfm)"> markah</small></span>${sfGnB(r)}<span class="sf-rw" style="margin:0">${sfMkKd(r)}${r.mgb!=null?` · ${Math.round(r.mgb)}% minggu · ${fx(r.beli,0)}/tahun`:''}</span></div>${sfMkBar(r)}`:''}
+   ${r.aud||r.pt||r.mg?`<div style="margin-top:6px">${sfMgB(r)}${sfAudB(r)}${sfPtB(r)}</div>`:''}<div style="margin-top:6px">${sfChips(r.pra)||'<span class="mut" style="font-size:.75rem">tiada prasyarat</span>'}</div><div class="sf-is" style="margin-top:4px;font-size:.8rem">${esc(sfNm(r.nama))}<small>${esc(r.pen||'–')}</small></div>
+   <div class="bb"><div><div class="sf-kl">Tangkap ${sfPc(r.tangkap)} <span class="mut">· rawak ${Math.round(r.rawak)}</span></div>${sfTrk(r.tangkap,30,'linear-gradient(90deg,#12A886,#1EE3B4)',r.rawak)}${r.c10!=null?`<div class="sf-rw" style="text-align:left;color:#9FD8E6" data-tip="sf_c10">+10% dahulu ${Math.round(r.c10)} · rawak ${Math.round(r.ac10)}</div>`:''}</div>
+    <div><div class="sf-kl">Menang ${sfPc(r.menang)} <span class="mut">· ${sfSg(r.purata)}</span></div>${sfTrk(r.menang,100,'#1EE3B4',50)}${r.am!=null?`<div class="sf-rw" style="text-align:left" data-tip="sf_mrawak">rawak ${sfPc(r.am)} · ${sfSg(r.ap)}</div>`:''}${r.menang2!=null?`<div class="sf-rw" style="text-align:left">lebih lama ${sfPc(r.menang2)} · ${sfSg(r.purata2)}</div>`:''}</div></div>
+   ${adaS?`${sfTiga(r)}<div class="sf-rw" style="text-align:left;margin-top:6px">${r.tbil?`lebih baik daripada rawak ${r.tpos}/${r.tbil} tahun · `:''}jatuh ≥ 8%: ${sfPc(r.rugi8)} · <span style="white-space:nowrap;color:${r.mg||r.boleh?'#1EE3B4':'#FF8C9C'}">${r.mg?'✓ tiada tarikh laporan':r.boleh?'✓ boleh dibuat':'✗ perlu tarikh tepat'}</span></div>`:''}
+   ${sfButiran(r,d)}</div></div>`;}
+function sfxKad(r,d,f,dua){const n=sfxNilai(r),x=n.x,kd=f.g==='semua'?r.tk:r.tg;
+  const kepala=`<div class="top">${kd?`<span class="no">#${kd}</span>`:''}<span class="kod">${esc(r.id)}</span><span class="pils">${sfxPil(r)}${x.tenang?'':'<span class="sfx-pil laju">Saham laju</span>'}</span><span class="xmk" data-tip="sf_markah">${r.mk==null?'–':fx(r.mk,1)}<small>markah</small></span>${dua?'':'<button type="button" class="sfx-x" data-sfxa="tutup" aria-label="Tutup kad">⌃</button>'}</div>
+   <h3>${esc(x.nama)}</h3>${x.kaedah?`<div class="sfx-kd">kaedah ${esc(x.kaedah)}</div>`:''}`;
+  const muka=`<div class="sfx-raj">${sfxGambar(x)}</div>${sfxTiga(r,n)}`;
+  const lama=f.angka?sfxAngka(r,d):'';
+  if(dua)return `<div class="sfx-card" data-sfxk="${esc(r.id)}">${kepala}
+    <div class="sfx-k2"><div>${muka}</div><div>${sfxSoalan(n)}</div></div>
+    <div class="sfx-lbl">Padan dengan kehendak anda</div>
+    <div class="sfx-pd"><div class="t">Padan <b>${n.ya} daripada 5</b></div>${sfxLima(n)}</div><div class="sfx-pd5">${n.padan.map(p=>`<div class="sfx-p5${p[0]==='y'?'':' '+p[0]}"><i>${sfxTanda[p[0]]}</i><b>${p[1]}</b><small>${esc(p[2])}</small></div>`).join('')}</div>
+    <div class="sfx-kaki"><span>Lukisan sahaja, bukan chart sebenar · backtest, belum bukti</span><button type="button" class="sfx-btn" data-sfxa="angka">${f.angka?'Tutup angka penuh ⌃':'Angka penuh ›'}</button></div>${lama}</div>`;
+  return `<div class="sfx-card" data-sfxk="${esc(r.id)}">${kepala}${muka}
+    ${f.butir?`${sfxSoalan(n)}
+     <div class="sfx-lbl">Padan dengan kehendak anda</div>
+     <div class="sfx-pd"><div class="t">Padan <b>${n.ya} daripada 5</b></div>${sfxLima(n)}</div>
+     ${n.padan.map((p,i)=>`<div class="sfx-sm${i?'':' satu'}${p[0]==='y'?'':' '+p[0]}"><i>${sfxTanda[p[0]]}</i><div><b>${p[1]}</b><small>${esc(p[2])}</small></div></div>`).join('')}
+     <button type="button" class="sfx-lama" data-sfxa="angka"><div><b>Angka penuh</b><small>Paparan lama: tangkap, menang, naik dan jatuh minggu pertama</small></div><span>${f.angka?'⌃':'›'}</span></button>${lama}`:''}
+    <div class="sfx-kaki"><span>Lukisan sahaja · backtest, belum bukti</span><button type="button" class="sfx-btn" data-sfxa="butir">${f.butir?'Tutup butiran ⌃':'Lihat butiran ⌄'}</button></div></div>`;}
+function sfxLukis(el,d,ff,all){
+  const f=ff.x||(ff.x={g:'minggu',q:'',buka:null,butir:false,angka:false,shown:AWAL});
+  let mq=null;try{mq=S._sfxMq||(S._sfxMq=matchMedia('(min-width:1180px)'));if(!S._sfxMqD){S._sfxMqD=1;mq.addEventListener('change',()=>{if(S.tab==='setupf')renderAll();});}}catch(e){}
+  let tp=12;try{const hb=document.querySelector('header');if(hb&&/sticky|fixed/.test(getComputedStyle(hb).position))tp=Math.round(hb.getBoundingClientRect().height)+12;}catch(e){}
+  const dua=!!(mq&&mq.matches),adaMk=all.some(r=>r.tk>0),G={minggu:0,laporan:1}[f.g];
+  let rows;
+  if(f.q){const q=f.q.toLowerCase();rows=all.filter(r=>[r.id,r.pra,r.nama,r.pen,sfxTafsir(r).nama].join(' ').toLowerCase().includes(q));}
+  else{rows=adaMk?all.filter(r=>r.tk>0):all.slice();if(G!=null)rows=rows.filter(r=>r.gn===G);}
+  {const kd=r=>(f.q||f.g==='semua'?r.tk:r.tg)||1e9;rows.sort((a,b)=>adaMk?(kd(a)-kd(b))||((b.mk??-1)-(a.mk??-1))||((b.tangkap??0)-(a.tangkap??0)):((b.tangkap??0)-(a.tangkap??0)));}
+  const vis=rows.slice(0,f.shown||AWAL),pilih=dua?(rows.find(r=>r.id===f.buka)||rows[0]||null):rows.find(r=>r.id===f.buka)||null;
+  const bil=g=>adaMk?all.filter(r=>r.tk>0&&(g==null||r.gn===g)).length:all.length;
+  const senarai=vis.map(r=>!dua&&pilih&&r.id===pilih.id?sfxKad(r,d,f,false):sfxBaris(r,f,!!(pilih&&r.id===pilih.id))).join('')||'<p class="sfx-kosong">Tiada setup sepadan.</p>';
+  const tajuk=f.q?`Carian "${esc(f.q)}"`:f.g==='minggu'?'Setiap minggu':f.g==='laporan'?'Musim laporan kewangan':'Semua setup';
+  el.innerHTML=`<div class="sfx">
+   <div class="sfx-hd"><h2>Setup F</h2><span class="sf-tag">● BACKTEST · BUKAN BUKTI</span><button type="button" class="sfx-tukar" id="sfxKePenuh">Paparan penuh ›</button></div>
+   <div class="sfx-bar"><div class="sfx-tab" id="sfxTab">${[['minggu',`Setiap minggu (${nf(bil(0))})`],['laporan',`Musim laporan (${nf(bil(1))})`],['semua',`Semua (${nf(bil(null))})`]].map(([v,t])=>`<button type="button" data-v="${v}" aria-pressed="${!f.q&&f.g===v}">${t}</button>`).join('')}</div>
+    <input type="search" id="sfxQ" placeholder="Cari kod atau nama, cth. F2212, laporan, pecah" value="${esc(f.q)}"></div>
+   <div class="sfx-g${dua?' dua':''}"><div class="sfx-kiri"><div class="sfx-sek">${tajuk} <small>· ${nf(rows.length)} setup · disusun ikut markah · tekan satu baris</small></div>${senarai}${kakiLagi('sfxMore')(Math.min(f.shown||AWAL,rows.length),rows.length)}</div>
+    ${dua?`<div class="sfx-kanan" style="top:${tp}px;max-height:calc(100vh - ${tp+12}px)">${pilih?sfxKad(pilih,d,f,true):'<p class="sfx-kosong">Pilih satu setup di kiri.</p>'}</div>`:''}</div>
+   <p class="note"><b>Cara baca.</b> Lukisan menunjukkan jenis isyarat dan belian yang menjadi; ia bukan chart sebenar, dan kira-kira separuh belian tidak menjadi. Titik hijau = tempat beli. "13 lawan 10" = daripada 100 belian, 13 naik laju (naik ≥ 5% minggu pertama dan terus naik hingga minggu ke-4) lawan 10 bagi saham rawak yang dibeli pada hari sama. Semua angka daripada backtest pada saham yang carian tidak pernah lihat (2010–2026), selepas kos; pangkat backtest, BUKAN bukti.</p>
+   <p class="note"><b>Warna.</b> Lawan pilih rawak: kelabu = sama (kurang 1.1 kali), kuning = baik sedikit (1.1–1.6 kali), hijau = lebih baik (1.6 kali ke atas). Kerap untung: hijau ≥ 55%, kuning 45–55%, merah &lt; 45%. Jatuh 8% atau lebih: hijau ≤ 15% belian, kuning 15–25%, merah &gt; 25%. Setup musim laporan kewangan menangkap lebih banyak saham naik laju, tetapi saham jatuh laju juga lebih kerap, dan kadar menangnya hampir sama dengan saham rawak. "Padan dengan kehendak anda" memakai lima kehendak yang anda nyatakan pada 17 Nov 2026; semua setup sekarang dicari untuk saham naik laju dengan stop loss longgar.</p></div>`;
+  {const t=$('#sfxTab');if(t)t.onclick=e=>{const b=e.target.closest('button');if(!b)return;f.g=b.dataset.v;f.q='';f.buka=null;f.butir=false;f.angka=false;f.shown=AWAL;renderAll();};}
+  {const q=$('#sfxQ');if(q){let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.buka=null;f.shown=AWAL;renderAll();const n=$('#sfxQ');if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);};}}
+  {const b=$('#sfxKePenuh');if(b)b.onclick=()=>{ff.mod='penuh';renderAll();};}
+  bindLagi('sfxMore',f);
+  el.onclick=e=>{const a=e.target.closest('[data-sfxa]');
+    if(a){const k=a.dataset.sfxa;if(k==='tutup'){f.buka=null;f.butir=false;f.angka=false;}else if(k==='butir'){f.butir=!f.butir;if(!f.butir)f.angka=false;}else if(k==='angka')f.angka=!f.angka;kekalSkrol(renderAll);return;}
+    if(e.target.closest('.sfx-card,.sf-dx'))return;
+    const r=e.target.closest('.sfx-row');if(r&&el.contains(r)){f.buka=r.dataset.sfx;if(!dua){f.butir=false;}f.angka=false;kekalSkrol(renderAll);}};
+  el.onkeydown=e=>{if(e.key==='Enter'){const r=e.target.closest('.sfx-row');if(r)r.click();}};}
+/* SFX-JS-TAMAT */
 function renderSetupF(){
   const el=$('#v-setupf'),d=S.sf;
   if(!d||!Array.isArray(d.rows)||!d.rows.length){el.innerHTML=`<div class="panel empty">${S.sfSiap?'Senarai setup F belum ditolak ke pangkalan data (carian/f_utama).':'Memuatkan senarai setup F…'}${diagDok('sf')}</div>`;return;}
@@ -6312,6 +6607,9 @@ function renderSetupF(){
      setup yang boleh dipakai setiap minggu ditunjuk dahulu) */
   const adaMk=all.some(r=>r.tk>0),SK=d.skor||null;
   if(f.guna===undefined)f.guna='semua';
+  /* v191: paparan mudah ialah lalai; paparan lama kekal di bawah "Paparan penuh" */
+  if(f.mod===undefined)f.mod='mudah';
+  if(f.mod==='mudah'){sfxLukis(el,d,f,all);return;}
   if(adaMk&&!f._top){f._top=1;f._mg=1;f.lihat='top';f.guna='minggu';f.sk='markah';f.dir=-1;}
   if(!adaMk){if(f.lihat==='top')f.lihat='mg';f.guna='semua';if(f.sk==='markah'||f.sk==='guna')f.sk='tangkap';}
   /* v189: setup sepanjang tahun (mingguan) ialah paparan lalai apabila ada (kehendak pengguna 17 Nov 2026) */
@@ -6392,7 +6690,7 @@ function renderSetupF(){
     ${op?sfButiran(r,d):''}</div>`;}).join('');
   const jopt=[['semua','Semua jenis isyarat']].concat(Object.entries(SF_JENIS_P).filter(([k])=>all.some(r=>r.jenis===k)).map(([k,v])=>[k,v]));
   el.innerHTML=`<div class="sf5">
-   <div class="sf-hd"><h2>Setup F</h2><span class="sf-tag">● SENARAI UTAMA · BACKTEST</span><p class="sub">pangkat backtest · BUKAN keputusan wang sebenar · ${nPt?`papertrade maya ${nPt} setup: ${jeda?'DIJEDA':'berjalan'}`:'belum papertrade'} · dijana ${esc(d.dibina||'')}</p></div>
+   <div class="sf-hd"><h2>Setup F</h2><span class="sf-tag">● SENARAI UTAMA · BACKTEST</span><button type="button" class="sfx-tukar" id="sfxKeMudah" style="margin-left:0">‹ Paparan mudah</button><p class="sub">pangkat backtest · BUKAN keputusan wang sebenar · ${nPt?`papertrade maya ${nPt} setup: ${jeda?'DIJEDA':'berjalan'}`:'belum papertrade'} · dijana ${esc(d.dibina||'')}</p></div>
    ${kst}${sfSolidKad(all,d)}${juara}${mid}${row1}</div>
   <div class="panel"><div class="panel-h"><h2>Ranking setup</h2><span class="sub">${nf(rows.length)} daripada ${nf(all.length)} · ketik baris untuk butiran · + = banding</span></div>
     <div class="sf-flt">${segH('sfLihat',f.lihat,(adaMk?[['top','Top 100']]:[]).concat(nMg?[['mg',`Mingguan (${nf(nMg)})`]]:[]).concat(adaS?[['solid',`Solid (${nf(nW)})`]]:[]).concat((nPt?[['pt',`Papertrade (${nPt})`]]:[]).concat([['pilihan',`Pilihan (${d.n_pilihan})`],['semua',`Semua (${nf(all.length)})`]])),'Paparan')}${adaMk?segH('sfGuna',f.guna,[['semua','Semua kegunaan'],['minggu','Setiap minggu'],['laporan','Musim laporan'],['tertentu','Keadaan tertentu'],['lain','Lain-lain']],'Kegunaan bila?'):segH('sfAsal',f.asal,[['semua','Lama + baharu'],['lama','Lama'],['baharu','Baharu']],'Asal')}
@@ -6423,6 +6721,7 @@ function renderSetupF(){
   {const j=$('#sfJenis');if(j)j.onchange=()=>{f.jenis=j.value;f.shown=AWAL;renderAll();};}
   {const q=$('#sfQ');if(q){let tm;q.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{f.q=q.value.trim();f.shown=AWAL;renderAll();const n=$('#sfQ');if(n){n.focus();n.setSelectionRange(n.value.length,n.value.length);}},220);};}}
   bindLagi('sfMore',f);
+  {const b=$('#sfxKeMudah');if(b)b.onclick=()=>{f.mod='mudah';renderAll();};}
   {const p=$('#sfPetaP');if(p)p.onclick=e=>{const b=e.target.closest('button');if(!b)return;f.peta=b.dataset.v;renderAll();};}
   {const c=$('#sfChs');if(c){const pilih=e=>{const k=e.target.closest('[data-j]');if(!k)return;f.jenis=f.jenis===k.dataset.j?'semua':k.dataset.j;f.shown=AWAL;f.buka=null;renderAll();};c.onclick=pilih;c.onkeydown=e=>{if(e.key==='Enter')pilih(e);};}}
   el.onclick=e=>{const b=e.target.closest('[data-ban]');

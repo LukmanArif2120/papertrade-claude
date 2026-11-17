@@ -242,6 +242,24 @@ class TestFUtamaDb(unittest.TestCase):
         self.assertEqual(__import__('re').findall(r"\['([^']+)','#[0-9A-F]{6}','#[0-9A-F]{6}','[^']+'\]", h.split('const SF_GN=')[1].split(';')[0]),
                          F.GUNA)                                                           # susunan label halaman = susunan GUNA
 
+    def test_paparan_mudah_v191(self):
+        """v191 (17 Nov 2026): paparan mudah ialah lalai; had warna dikunci di sini (ditulis sebelum dipasang,
+        standard/dashboard.md v191). Mengubah had memerlukan keputusan pengguna + nota bertarikh."""
+        h = open(HTML, encoding='utf-8').read()
+        self.assertIn("if(f.mod===undefined)f.mod='mudah';", h)                           # lalai
+        self.assertIn("if(f.mod==='mudah'){sfxLukis(el,d,f,all);return;}", h)
+        self.assertIn('id="sfxKePenuh"', h)                                                # paparan lama kekal boleh dibuka
+        self.assertIn('id="sfxKeMudah"', h)
+        self.assertIn("nis>=1.6?{t:'Lebih baik',k:2,w:'h'}:nis>=1.1?{t:'Baik sedikit',k:1,w:'k'}", h)   # lawan rawak
+        self.assertIn("r.menang>=55?'h':r.menang>=45?'k':'m'", h)                         # kerap untung
+        self.assertIn("r.rugi8<=15?'h':r.rugi8<=25?'k':'m'", h)                           # jatuh >= 8 %
+        for kehendak in ('Boleh beli setiap minggu', 'Bukan beli hari ini, jual hari ini', 'Lebih baik daripada pilih rawak',
+                         'Rugi paling banyak 5%', 'Naik perlahan tapi stabil'):
+            self.assertIn(kehendak, h)
+        self.assertIn('backtest, belum bukti', h)                                          # kaveat kekal pada setiap kad
+        for lajur in ('nama', 'pra', 'pen', 'tangkap', 'rawak', 'menang', 'rugi8', 'gn', 'mk', 'tg', 'tk', 'mgb'):
+            self.assertIn(lajur, self.d['kol'])                                            # tiada lajur db baharu diperlukan
+
     def test_saiz_di_bawah_had_db(self):
         with tempfile.TemporaryDirectory() as t:
             out = F.main(['--keluar', t])

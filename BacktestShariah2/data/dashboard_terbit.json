@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794901143-aaa3",
-  "nombor": 225,
-  "sha256": "6308fe58a824a6bfcf3942cc3721308fafe7b909df59587863ea17cec8e454ba",
-  "bait": 991031,
-  "dikemas": "2026-11-17 07:39 UTC",
-  "nota": "v190 (17 Nov 2026): Setup F — paparan lalai \"Top 100\" + \"Setiap minggu\" ikut Markah 0–100 (CS23); lajur Markah dan \"Kegunaan bila?\" dengan tapisan; carian/f_utama kini 4 bahagian; atas v189 #224"
+  "versi_artifact": "1794926464-7ecd",
+  "nombor": 226,
+  "sha256": "f1f2c04bafa5a2544b1a80ec15b0cba4267633876cea244cd157c3bfb72c7e47",
+  "bait": 1027052,
+  "dikemas": "2026-11-17 14:41 UTC",
+  "nota": "v191 (17 Nov 2026): Setup F — PAPARAN MUDAH lalai (senarai nama biasa + lukisan, kad bergambar BELI/JUAL, empat soalan berwarna, \"padan dengan kehendak anda\"; komputer: senarai kiri, kad kanan); paparan lama di bawah \"Paparan penuh\" dan \"Angka penuh\"; tiada perubahan db; atas v190 #225"
 }
