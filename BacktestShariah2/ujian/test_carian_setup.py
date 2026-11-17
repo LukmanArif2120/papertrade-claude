@@ -2766,6 +2766,22 @@ class TestCS19(unittest.TestCase):
             h19.KELUAR = asal
             shutil.rmtree(d, ignore_errors=True)
 
+    def test_jeda(self):
+        """Keputusan pengguna 17 Nov 2026 ("jangan papertrade lagi"): selagi jejak_f2/JEDA wujud, workflow melangkau langkah
+        papertrade dan arahan penjejak tidak berbuat apa-apa."""
+        import io
+        from contextlib import redirect_stdout
+        import cs_hadapan19 as h19
+        akar = os.path.join(SINI, '..', '..')
+        wf = open(os.path.join(akar, '.github', 'workflows', 'jejak_f.yml'), encoding='utf-8').read()
+        self.assertIn("if: ${{ hashFiles('BacktestShariah2/jejak_f2/JEDA') == '' }}", wf)
+        if os.path.exists(os.path.join(SINI, '..', 'jejak_f2', 'JEDA')):
+            buf = io.StringIO()
+            with redirect_stdout(buf):
+                h19.main(['jejak', '--stor', '/tiada', '--kalendar', '/tiada'])      # tidak menyentuh folder yang tiada
+                h19.main(['harga', '--ke', '/tiada'])
+            self.assertEqual(buf.getvalue().count('DIJEDA'), 2)
+
     def test_alam_semua_saham(self):
         """Pindaan (af): senarai alam, topeng universe bulanan (peraturan A02 dikira ke hadapan, tanpa pandang hadapan), pintu
         harga dan kalendar, gabungan kalendar, dan jejak(semua=True) hujung ke hujung."""

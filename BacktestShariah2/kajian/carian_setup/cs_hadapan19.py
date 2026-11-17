@@ -743,6 +743,9 @@ def main(argv=None):
     ap.add_argument('--kalendar', help='fail kalendar semua saham (hasil `kalendar`)')
     ap.add_argument('--ke', help='destinasi `harga` (folder) atau `kalendar` (fail)')
     a = ap.parse_args(argv)
+    if a.arahan != 'kohort' and os.path.exists(os.path.join(KELUAR, 'JEDA')):
+        print('papertrade gred A DIJEDA (jejak_f2/JEDA wujud; keputusan pengguna 17 Nov 2026): tiada apa-apa dibuat')
+        return
     if a.arahan == 'kohort':
         bina_kohort()
     elif a.arahan == 'harga':

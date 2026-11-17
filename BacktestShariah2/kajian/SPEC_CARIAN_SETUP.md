@@ -1547,6 +1547,13 @@ Pindaan ini MENGGANTIKAN butir "Alam dan kelayakan" Bahagian D pindaan (ae) dan 
   baris itu wujud): mana-mana baris yang cap masa `direkod`-nya pada atau selepas 13:30 UTC hari sesi berikutnya dikira
   `lewat` dalam `lejar.csv` dan DIKECUALIKAN daripada bacaan, walaupun lajur `lewat` dalam log = 0
   (`cs_hadapan19.lewat_masa`); log tambah-sahaja tidak disentuh.
+- **JEDA (keputusan pengguna 17 Nov 2026, beberapa jam selepas penjejak hidup):** "jangan papertrade lagi. kita tak boleh
+  macam ni, mengharapkan musim kewangan sahaja. perlu ada method method lain yang diluar musim kewangan dan boleh digunakan
+  setiap minggu." Penjejak DIJEDA melalui fail `jejak_f2/JEDA` (langkah workflow dilangkau; `cs_hadapan19.py` tidak berbuat
+  apa-apa). Yang sudah direkod (13 Nov: 85 baris kawalan, tiada isyarat setup, dikira lewat) kekal sebagai rekod dan tidak
+  dibuang. Tiada bacaan dibuat. Menyambung semula memerlukan keputusan pengguna + pindaan bertarikh yang menyatakan kohort
+  (dijangka termasuk setup sepanjang tahun, pindaan (ag)) dan hari mula baharu; hari semasa jeda TIDAK diisi ke belakang.
+  Penjejak lama `jejak_f/` (8 setup lama, bukan musim laporan) tidak disentuh.
 - **Semakan mekanik sebelum bermula (data backtest sebagai ganti muat turun; BUKAN papertrade):** topeng universe ke hadapan
   lawan universe A02 — 2,000 daripada 2,000 sama pada September dan Oktober 2026 (bulan lebih lama berbeza ≤ 12 saham, iaitu
   saham yang berpecah songsang selepas itu); syarat pasaran 12 kod ahli sama pada 20 daripada 20 hari (13 Jul – 7 Ogo 2026);
