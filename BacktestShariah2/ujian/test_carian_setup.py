@@ -2733,6 +2733,55 @@ class TestCS19(unittest.TestCase):
             h19.KELUAR = asal
             shutil.rmtree(d, ignore_errors=True)
 
+    def test_lewat_ikut_masa_rekod(self):
+        """Baris yang direkod selepas pembukaan sesi berikutnya dikira lewat (belian sudah berlaku), walaupun lajur lewat = 0."""
+        import shutil
+        import tempfile
+        import cs_hadapan19 as h19
+        self.assertEqual(h19.BUKA_UTC, (13, 30))
+        self.assertFalse(h19.lewat_masa(20261116, '2026-11-17 01:10'))            # selepas Lejar, sebelum buka Selasa
+        self.assertTrue(h19.lewat_masa(20261113, '2026-11-17 00:20'))             # isyarat Jumaat direkod selepas buka Isnin
+        self.assertFalse(h19.lewat_masa(20261113, '2026-11-16 13:29'))
+        self.assertTrue(h19.lewat_masa(20261113, '2026-11-16 13:30'))
+        self.assertFalse(h19.lewat_masa(20261125, '2026-11-27 13:00'))            # 26 Nov 2026 = cuti Kesyukuran; sesi berikutnya 27 Nov
+        self.assertFalse(h19.lewat_masa(20200807, 'ujian-1'))
+        asal = h19.KELUAR
+        d = tempfile.mkdtemp()
+        try:
+            h19.KELUAR = d
+            fr = {t: _saham(420, 30 + k) for k, t in enumerate(['AAA', 'BBB'])}
+            pan = h19.panel(fr, {'QQQ': _saham(420, 91), 'SPY': _saham(420, 92)})
+            D = int(pan['hari_unik'][-3])
+            pd.DataFrame([dict(tarikh_isyarat=D, saham='AAA', id='KW1', tarikh_laporan='2020-08-10', masa_laporan='', hingga=2, lewat=0,
+                               direkod='2020-08-11 01:00'),
+                          dict(tarikh_isyarat=D, saham='BBB', id='KW1', tarikh_laporan='2020-08-10', masa_laporan='', hingga=2, lewat=0,
+                               direkod='2020-08-10 14:00')])[h19.L_ISYARAT].to_csv(os.path.join(d, 'isyarat.csv'), index=False)
+            L = h19.nilai(pan).set_index('saham')
+            self.assertEqual(D, 20200807)                                         # Jumaat; sesi berikutnya Isnin 10 Ogos
+            self.assertEqual((int(L.loc['AAA', 'lewat']), int(L.loc['BBB', 'lewat'])), (1, 1))
+            pd.DataFrame([dict(tarikh_isyarat=D, saham='AAA', id='KW1', tarikh_laporan='2020-08-10', masa_laporan='', hingga=2, lewat=0,
+                               direkod='2020-08-08 01:00')])[h19.L_ISYARAT].to_csv(os.path.join(d, 'isyarat.csv'), index=False)
+            self.assertEqual(int(h19.nilai(pan).lewat.iloc[0]), 0)                # direkod sebelum buka sesi berikutnya
+        finally:
+            h19.KELUAR = asal
+            shutil.rmtree(d, ignore_errors=True)
+
+    def test_jeda(self):
+        """Keputusan pengguna 17 Nov 2026 ("jangan papertrade lagi"): selagi jejak_f2/JEDA wujud, workflow melangkau langkah
+        papertrade dan arahan penjejak tidak berbuat apa-apa."""
+        import io
+        from contextlib import redirect_stdout
+        import cs_hadapan19 as h19
+        akar = os.path.join(SINI, '..', '..')
+        wf = open(os.path.join(akar, '.github', 'workflows', 'jejak_f.yml'), encoding='utf-8').read()
+        self.assertIn("if: ${{ hashFiles('BacktestShariah2/jejak_f2/JEDA') == '' }}", wf)
+        if os.path.exists(os.path.join(SINI, '..', 'jejak_f2', 'JEDA')):
+            buf = io.StringIO()
+            with redirect_stdout(buf):
+                h19.main(['jejak', '--stor', '/tiada', '--kalendar', '/tiada'])      # tidak menyentuh folder yang tiada
+                h19.main(['harga', '--ke', '/tiada'])
+            self.assertEqual(buf.getvalue().count('DIJEDA'), 2)
+
     def test_alam_semua_saham(self):
         """Pindaan (af): senarai alam, topeng universe bulanan (peraturan A02 dikira ke hadapan, tanpa pandang hadapan), pintu
         harga dan kalendar, gabungan kalendar, dan jejak(semua=True) hujung ke hujung."""
@@ -2887,6 +2936,54 @@ class TestCS19(unittest.TestCase):
 
 
 CAP_F_LAMA = 'e4b8fd20bb8f78a123e32c2eef75c55c42c8f27e1a50ee81ea2b4a7b7001edd5'
+
+
+class TestCS20(unittest.TestCase):
+    """Pusingan CS20 (pindaan 17 Nov 2026 (ag)): setup sepanjang tahun (membeli hampir setiap minggu)."""
+
+    def test_dikunci(self):
+        import cs_mingguan20 as m20
+        import cs_daftar13 as d13
+        self.assertEqual((m20.N_ATAS, m20.N_TINJAU, m20.N_KAWALAN, m20.BENIH_KAWALAN, m20.CUBA_KAWALAN), (5, 200, 300, 20261117, 400000))
+        self.assertEqual((m20.MINGGU_MIN, m20.TAHUN_MIN, m20.MIN_TAHUN_N, m20.BAHAGIAN), (0.80, 0.50, 20, ('asal', 'K')))
+        self.assertEqual(m20.LARANG_PASARAN, ('QG01', 'QG02', 'QG03', 'QG04'))
+        self.assertEqual(m20.LARANG_KUMPULAN, ('QF01', 'QF02', 'QF03', 'QF04', 'QF07'))
+        self.assertEqual(m20.JULAT, {'A': (20100104, 20241231, 2010, 2024), 'B': (20100104, 20260828, 2010, 2025)})
+        self.assertEqual((m20.PUS, m20.ID_MULA, m20.S_HENTI), ('CS20', 2055, d13.S_HENTI))
+        self.assertEqual((d13.JACCARD, d13.B1_BEZA, d13.B2_MIN, d13.B2_BEZA), (0.80, 0.20, 0.60, 0.10))     # bacaan sama dengan CS13
+        spec = open(os.path.join(SINI, '..', 'kajian', 'SPEC_CARIAN_SETUP.md'), encoding='utf-8').read()
+        self.assertIn('### Pindaan 17 Nov 2026 (ag)', spec)
+
+    def test_prasyarat_dibenarkan(self):
+        import cs_cs05 as c5
+        import cs_lapis as lapis
+        import cs_mingguan20 as m20
+        d = m20.dibenar()
+        self.assertEqual((len(d), int(d.sum())), (c5.NQ, 30 * 11))                 # (33 - 4 + tiada) x (15 - 5 + tiada)
+        self.assertTrue(d[0])                                                      # tiada prasyarat
+        q1, q2, _, _ = c5.nyah(np.arange(c5.NQ) * c5.NC)
+        for a, b, ok in zip(q1, q2, d):
+            kod = ([lapis.PASARAN[a][:4]] if a >= 0 else []) + ([lapis.KUMPULAN[b][:4]] if b >= 0 else [])
+            self.assertEqual(bool(ok), not any(k in m20.LARANG_PASARAN + m20.LARANG_KUMPULAN for k in kod), kod)
+            self.assertEqual(m20.larang_q(int(a), int(b)), not ok)
+        self.assertTrue(m20.larang_q(-1, [x[:4] for x in lapis.KUMPULAN].index('QF01')))
+        self.assertFalse(m20.larang_q(-1, [x[:4] for x in lapis.KUMPULAN].index('QF06')))
+
+    def test_kekerapan_mingguan(self):
+        import cs_mingguan20 as m20
+        hu = np.asarray(pd.bdate_range('2009-12-01', '2025-03-31').strftime('%Y%m%d').astype(int))
+        M = m20.minggu(hu, 'A')
+        self.assertEqual((M['n'], len(m20.minggu_kunci('A')), M['penuh'][0], M['penuh'][-1]), (783, 783, 2010, 2024))
+        self.assertTrue((M['idx'][hu < 20100104] == -1).all() and (M['idx'][hu > 20241231] == -1).all())
+        dalam = np.flatnonzero((hu >= 20100104) & (hu <= 20241231))
+        mg, mt, w = m20.kekerapan(M, dalam[::5])                                   # satu belian setiap 5 sesi = setiap minggu
+        self.assertEqual((mg, mt, len(w)), (1.0, 1.0, 783))
+        mg, mt, _ = m20.kekerapan(M, dalam[hu[dalam] // 10000 != 2015][::5])       # tiada belian sepanjang 2015
+        self.assertTrue(0.92 < mg < 0.95 and mt == 0.0)
+        self.assertFalse(m20.kerap(mg, mt))
+        mg, mt, _ = m20.kekerapan(M, np.concatenate([dalam[hu[dalam] // 10000 != 2015][::5], dalam[hu[dalam] // 10000 == 2015][::9]]))
+        self.assertTrue(mg >= 0.80 and 0.5 <= mt < 0.62 and m20.kerap(mg, mt))     # tahun paling teruk ~ 56 % minggu
+        self.assertEqual(m20.kekerapan(M, np.flatnonzero(hu < 20100104))[:2], (0.0, 0.0))
 
 
 if __name__ == '__main__':

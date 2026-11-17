@@ -1,0 +1,7 @@
+Papertrade 29 setup "audit A" DIJEDA pada 17 Nov 2026 atas keputusan pengguna:
+"jangan papertrade lagi. kita tak boleh macam ni, mengharapkan musim kewangan sahaja. perlu ada method method lain yang
+diluar musim kewangan dan boleh digunakan setiap minggu."
+
+Selagi fail ini wujud, langkah "Papertrade gred A" dalam .github/workflows/jejak_f.yml dilangkau dan
+`cs_hadapan19.py harga | kalendar | jejak` tidak berbuat apa-apa. Log sedia ada kekal sebagai rekod.
+Sambung semula HANYA dengan keputusan pengguna + pindaan bertarikh (kajian/SPEC_CARIAN_SETUP.md): padam fail ini.

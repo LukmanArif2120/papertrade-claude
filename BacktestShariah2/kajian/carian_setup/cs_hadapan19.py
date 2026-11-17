@@ -122,6 +122,23 @@ def _d(x):
     return date(x // 10000, x // 100 % 100, x % 100)
 
 
+BUKA_UTC = (13, 30)                                          # pembukaan NYSE paling awal dalam UTC (waktu musim panas AS)
+
+
+def lewat_masa(tarikh_isyarat, direkod):
+    """True jika baris direkod pada / selepas pembukaan sesi BERIKUTNYA (belian sudah berlaku ketika isyarat ditulis), cth. stor
+    harga repo belum memuat sesi terkini ketika larian. Had 13:30 UTC dipakai sepanjang tahun (konservatif pada musim sejuk).
+    Cap masa yang tidak boleh dibaca (ujian) = tidak lewat."""
+    try:
+        t = pd.Timestamp(str(direkod))
+    except (ValueError, TypeError):
+        return False
+    if t is pd.NaT:
+        return False
+    n = sesi_pada_atau_selepas(_d(tarikh_isyarat) + timedelta(days=1))
+    return bool(t >= pd.Timestamp(n.year, n.month, n.day, *BUKA_UTC))
+
+
 def _i(d):
     return d.year * 10000 + d.month * 100 + d.day
 
@@ -582,7 +599,8 @@ def nilai(pan):
     out, t_akhir, b_akhir = [], None, -1
     for k, r in enumerate(S.itertuples()):
         d = dict.fromkeys(lajur, '')
-        d.update(id=r.id, saham=r.saham, tarikh_isyarat=r.d, lewat=r.lewat, tarikh_laporan=r.tarikh_laporan, hingga=r.hingga, diambil=0)
+        d.update(id=r.id, saham=r.saham, tarikh_isyarat=r.d, lewat=int(str(r.lewat) == '1' or lewat_masa(r.d, r.direkod)),
+                 tarikh_laporan=r.tarikh_laporan, hingga=r.hingga, diambil=0)
         if not ada[k]:
             d['status_B'] = d['status_50'] = 'TIADA_DATA'
             out.append(d)
@@ -663,8 +681,9 @@ def lapor(pan, PM, Kh, L, alam_teks=TEKS_ALAM[False]):
     A = ['# Papertrade setup F gred A (maya; BUKAN keputusan wang sebenar)', '', status, '',
          f'Dijana `kajian/carian_setup/cs_hadapan19.py`; harga hingga {D}. Peraturan: `{SPEC}`. Tiada order. **Jangan sunting.**', '',
          '## Hari ini', '',
-         f"- Hari diproses: {len(H)} (mula {H.tarikh.astype(int).min() if len(H) else '–'}); terlepas dan diisi lewat: "
-         f"{int((H.lewat.astype(str) == '1').sum()) if len(H) else 0}.",
+         f"- Hari diproses: {len(H)} (mula {H.tarikh.astype(int).min() if len(H) else '–'}); terlepas dan diisi lewat, atau direkod "
+         f"selepas pasaran sesi berikutnya dibuka (dikecualikan daripada bacaan): "
+         f"{sum(1 for r in H.itertuples() if str(r.lewat) == '1' or lewat_masa(r.tarikh, r.direkod)) if len(H) else 0}.",
          f"- Setup yang syarat pasarannya benar hari ini: {len(aktif)} daripada {len(Kh['ahli'])}"
          + (f" ({', '.join(f'`{x}`' for x in aktif)})." if aktif else '.'),
          '- Syarat pasaran: ' + '; '.join(f"{nama_q.get(k, k)} = {'YA' if PM[k][-1] else 'tidak'}" for k in semua_q) + '.',
@@ -724,6 +743,9 @@ def main(argv=None):
     ap.add_argument('--kalendar', help='fail kalendar semua saham (hasil `kalendar`)')
     ap.add_argument('--ke', help='destinasi `harga` (folder) atau `kalendar` (fail)')
     a = ap.parse_args(argv)
+    if a.arahan != 'kohort' and os.path.exists(os.path.join(KELUAR, 'JEDA')):
+        print('papertrade gred A DIJEDA (jejak_f2/JEDA wujud; keputusan pengguna 17 Nov 2026): tiada apa-apa dibuat')
+        return
     if a.arahan == 'kohort':
         bina_kohort()
     elif a.arahan == 'harga':

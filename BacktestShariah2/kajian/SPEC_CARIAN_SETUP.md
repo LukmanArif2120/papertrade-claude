@@ -1540,12 +1540,84 @@ Pindaan ini MENGGANTIKAN butir "Alam dan kelayakan" Bahagian D pindaan (ae) dan 
   Bacaan dikunci P1–P4 tidak berubah (P3 = cara B, cara sekarang); ditambah **P3b** = kadar menang cara 50 − saham rawak
   yang dipegang sama > 0, dibaca pada saat yang sama dan dilaporkan walau apa pun hasilnya. Tafsiran "a b" = "dua-dua"
   ialah tafsiran Claude; disahkan semula dengan pengguna dalam jadual keputusan.
+- **Larian pertama dan peraturan "lewat ikut masa rekod" (17 Nov 2026):** larian pertama di `main` (dicetus tangan
+  00:09 UTC 17 Nov, sebelum Lejar sesi 16 Nov siap) berjaya — harga diperoleh bagi 3,242 daripada 3,260 saham, 1,992 saham
+  layak, kalendar lengkap — tetapi stor repo ketika itu berakhir pada 13 Nov, jadi hari pertama yang direkod ialah 13 Nov,
+  SELEPAS hari belinya (16 Nov) berlalu: 85 baris kawalan, tiada isyarat setup. Peraturan (lebih ketat, ditulis ketika hanya
+  baris itu wujud): mana-mana baris yang cap masa `direkod`-nya pada atau selepas 13:30 UTC hari sesi berikutnya dikira
+  `lewat` dalam `lejar.csv` dan DIKECUALIKAN daripada bacaan, walaupun lajur `lewat` dalam log = 0
+  (`cs_hadapan19.lewat_masa`); log tambah-sahaja tidak disentuh.
+- **JEDA (keputusan pengguna 17 Nov 2026, beberapa jam selepas penjejak hidup):** "jangan papertrade lagi. kita tak boleh
+  macam ni, mengharapkan musim kewangan sahaja. perlu ada method method lain yang diluar musim kewangan dan boleh digunakan
+  setiap minggu." Penjejak DIJEDA melalui fail `jejak_f2/JEDA` (langkah workflow dilangkau; `cs_hadapan19.py` tidak berbuat
+  apa-apa). Yang sudah direkod (13 Nov: 85 baris kawalan, tiada isyarat setup, dikira lewat) kekal sebagai rekod dan tidak
+  dibuang. Tiada bacaan dibuat. Menyambung semula memerlukan keputusan pengguna + pindaan bertarikh yang menyatakan kohort
+  (dijangka termasuk setup sepanjang tahun, pindaan (ag)) dan hari mula baharu; hari semasa jeda TIDAK diisi ke belakang.
+  Penjejak lama `jejak_f/` (8 setup lama, bukan musim laporan) tidak disentuh.
 - **Semakan mekanik sebelum bermula (data backtest sebagai ganti muat turun; BUKAN papertrade):** topeng universe ke hadapan
   lawan universe A02 — 2,000 daripada 2,000 sama pada September dan Oktober 2026 (bulan lebih lama berbeza ≤ 12 saham, iaitu
   saham yang berpecah songsang selepas itu); syarat pasaran 12 kod ahli sama pada 20 daripada 20 hari (13 Jul – 7 Ogo 2026);
   isyarat 29 ahli pada separuh alam yang enjin menjana untuk 2026 (kumpulan B): 303 daripada 307 sama, tiada isyarat
   tambahan. Muat turun Yahoo dan kalendar Nasdaq sebenar hanya boleh berjalan di GitHub (kedua-duanya disekat dalam sesi
   Claude), jadi larian pertama di `main` ialah ujian pertama bahagian itu; kegagalannya tidak menulis isyarat.
+
+### Pindaan 17 Nov 2026 (ag) — pusingan CS20: setup "sepanjang tahun" (membeli hampir setiap minggu)
+
+**Permintaan pengguna 17 Nov 2026** ("kalau kebanyakan method adalah tertumpu kepada laporan kewangan punya musim, susah la
+saya. mesti ada method F yang always can be used weekly. yang sentiasa muncul dan mencapai matlamat saya. sebab itu adanya
+prasyarat dan juga syarat juga kombinasi indicators dan parameters. betul?"), kemudian keputusan "ya" kepada "jalankan
+carian baharu khas setup sepanjang tahun (mingguan)?".
+
+**Mengapa pusingan baharu (sebab baharu, bukan ulangan):** CS12 / CS13 menyimpan hanya 5 peraturan masuk terbaik setiap
+isyarat beli; prasyarat "laporan kewangan dalam 1–5 sesi" menaikkan skor setiap isyarat, jadi 1,878 daripada 2,001 setup
+senarai utama memakainya dan peraturan sepanjang tahun TERSISIH sebelum dinilai pada kumpulan B.
+
+**Kejujuran urutan (WAJIB dibaca):** sebelum pindaan ini ditulis, yang sudah dilihat ialah kekerapan mingguan dan kadar
+tangkap 2,001 setup SEDIA ADA pada kumpulan B (`SERAHAN_CARIAN_SETUP.md` §9u), termasuk 123 setup bukan laporan; ambang
+kekerapan di bawah dipilih dengan mengetahui `F27`, `F06` dan `F30` menepatinya. Tiada skor, calon atau hasil pusingan ini
+yang wujud ketika pindaan ini dikomit; isyarat beli sedang dijana semula (data persediaan, tiada hasil dagangan).
+
+- **Sasaran dan kayu ukur:** label ketat `terus` (naik ≥ 5 % minggu pertama, naik lagi hingga minggu ke-4, −8 % tidak
+  disentuh) = KADAR TANGKAP, lawan saham rawak hari sama × tercile ATR %. Tiada ukuran akaun, indeks atau MDD.
+- **Isyarat beli (pencetus):** bahagian `asal` (semua modul benih M / N dan pencetus P; dijana semula dengan `kausal=True`,
+  mod tanpa intai, pindaan (ae) Bahagian C) + bahagian `K` (656 varian 25 keluarga indikator; tiada intai). Varian parameter
+  M peringkat CS07 (`M1`, `M2`) TIDAK disertakan: hanya 25 daripada 1,959 kod CS13 datang daripadanya dan menjananya semula
+  memerlukan beberapa jam lagi; boleh ditambah dengan pindaan lain.
+- **Prasyarat yang DIBENARKAN:** semua prasyarat pasaran kecuali kalendar (`QG01`–`QG04`); semua prasyarat kumpulan /
+  syarikat kecuali yang bergantung pada TARIKH laporan kewangan (`QF01`, `QF02`, `QF03`, `QF04`, `QF07`). `QF05` (kejutan
+  untung terkini positif) dan `QF06` (hasil suku terkini tumbuh ≥ 20 %) dibenarkan: sifat syarikat yang kekal sepanjang suku.
+  Penapis saham seperti CS05 (0–2 daripada 27).
+- **Syarat kekerapan "mingguan"** (satu posisi setiap saham, pegang 20 sesi; minggu kalendar Isnin–Jumaat; diukur pada
+  SEPARUH alam, iaitu kumpulan itu sahaja): belian dalam ≥ **80 %** minggu keseluruhan DAN ≥ **50 %** minggu pada tahun
+  kalendar penuh yang paling teruk. Kumpulan A: 2010–2024 (semasa memilih calon). Kumpulan B: 2010 – 28 Ogos 2026, tahun
+  penuh 2010–2025 (semasa mendaftar).
+- **Skor dan calon (kumpulan A):** skor enjin CS13 tanpa perubahan (kelebihan `terus` lawan rawak hari sama, minimum dua era
+  tolak 2 ralat piawai). Calon = sehingga `N_ATAS = 5` peraturan berskor > 0 tertinggi bagi setiap isyarat beli antara
+  peraturan yang dibenarkan DAN menepati syarat kekerapan pada A; dicari mengikut susunan skor antara `N_TINJAU = 200`
+  peraturan dibenarkan teratas setiap isyarat. Tiada had bilangan calon.
+- **Kawalan:** `N_KAWALAN = 300` peraturan rawak daripada ruang yang SAMA (prasyarat dibenarkan sahaja) yang menepati syarat
+  kekerapan yang sama pada A (benih 20261117; paling banyak 400,000 cubaan).
+- **Semakan kumpulan B** (setup lengkap: stop loss 4×ATR14 + cara pegang B): "lulus" = takrif CS13 tanpa perubahan (≥ 300
+  belian, ≥ 10 tahun aktif, kelebihan `terus` > 0 dalam K1, K2 DAN K3).
+- **Bacaan dikunci (sama dengan CS13):** (B1) kadar lulus calon ≥ kadar lulus kawalan + 20 mata; (B2) bahagian calon dengan
+  kelebihan K3 > 0 ≥ 60 % DAN ≥ kawalan + 10 mata. Kedua-duanya mesti benar. Jika gagal: TIADA kod F baharu; calon kekal
+  rekod dan kegagalan dilaporkan seadanya.
+- **Semakan ikut tahun (wajib dilaporkan; bukan syarat):** bahagian tahun kalendar (≥ 20 belian) dengan kelebihan `terus`
+  > 0, calon lulus lawan kawalan.
+- **Pendaftaran (hanya jika bacaan lulus):** setiap calon lulus yang juga menepati syarat kekerapan pada B dan bukan kembar
+  (Jaccard belian A + B ≥ 0.80 dengan kod F sedia ada yang boleh dinilai atau calon berskor lebih tinggi yang sudah
+  diterima) diberi kod `F2055` dan seterusnya, pusingan `CS20`, ikut susunan skor A. Tiada had bilangan. Baris registry
+  sedia ada tidak diubah. Setup lengkap = stop loss 4×ATR14 + cara pegang B, seperti CS13.
+- **Laporan wajib bagi setiap setup berdaftar (pelajaran CS19), pada kumpulan B:** tangkap, naik ≥ 5 % dan JATUH ≥ 5 %
+  minggu pertama masing-masing lawan rawak, `arah`, kelebihan K1 / K2 / K3, kadar menang dan purata cara B lawan saham rawak
+  hari sama yang DIPEGANG DENGAN CARA SAMA (`cs_audit19.ukur`), minggu yang ada belian dan belian setahun.
+- **Keluaran:** `carian_setup/cs_mingguan20.py` → `hasil/CS20/MINGGUAN.md`, `mingguan.csv`, `calon.csv.gz`, `kawalan.csv`,
+  `bacaan.json`.
+- **Yang dijangka (ditulis sebelum dijalankan):** kelebihan tangkap setup sepanjang tahun kecil (kira-kira +1 hingga +3 mata;
+  setup laporan +5 hingga +7); bacaan dikunci boleh gagal; K3 (2025–26) ialah syarat lulus, jadi ia bukan bukti di luar
+  sampel — bukti bersih hanya papertrade.
+- **Papertrade:** tiada setup CS20 masuk papertrade tanpa keputusan pengguna berasingan (dan pindaan bertarikh pada
+  `jejak_f2/kohort.json`).
 
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
