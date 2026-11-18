@@ -1,5 +1,5 @@
 {
- "dikemaskini": "2026-11-18 07:46 UTC",
+ "dikemaskini": "2026-11-18 11:26 UTC",
  "bar_terakhir": 20261117,
  "laras": {
   "GIC": 1.028225,
@@ -7,7 +7,6 @@
   "MKTW": 1.020594,
   "MNR": 1.024971,
   "MOD": 1.086137,
-  "SENEB": 0.2,
   "SUPN": 0.867611,
   "TRMD": 1.038211,
   "TXO": 1.032423,
@@ -22,7 +21,7 @@
   "bar_terakhir": 20261117
  },
  "harga_B.csv": {
-  "ticker_dikemaskini": 498,
+  "ticker_dikemaskini": 497,
   "bar_terakhir": 20261117
  },
  "harga_idx.csv": {
@@ -31,19 +30,14 @@
  },
  "kuarantin": {
   "baru": [],
-  "dilepaskan": [
-   [
-    "SENEB",
-    "2026-11-03"
-   ]
-  ],
+  "dilepaskan": [],
   "kekal_beku": {
    "INDV": "sejarah segar bertindih 1 bar < 20 sebelum 2026-11-03",
    "MOD": "tidak konsisten: nisbah segar/stor 1.0000, serak 8.61% > 2%",
    "SUPN": "tidak konsisten: nisbah segar/stor 1.0706, serak 8.42% > 2%"
   }
  },
- "log_laras": 1,
+ "log_laras": 0,
  "faktor_dividen": [],
  "faktor_calon": [],
  "moomoo": {
