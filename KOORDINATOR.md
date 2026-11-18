@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-18 11:28 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-18 13:59 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -33,8 +33,8 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 |---|---|---|---|---|---|---|
 | RS pasaran | 30 | 2026-10-07 | 2026-11-17 | 0.5 |  | tidak |
 | Gred kumpulan | 38 | 2026-09-25 | 2026-11-17 | 0.6 |  | tidak |
-| SEC EPS/hasil | 4107 | 2009-04-15 | 2026-11-17 | 65.2 | 271953 | ya |
-| SEC earnings 8-K | 5460 | 2004-08-23 | 2026-11-17 | 86.7 | 180229 | ya |
+| SEC EPS/hasil | 4108 | 2009-04-15 | 2026-11-18 | 65.2 | 271961 | ya |
+| SEC earnings 8-K | 5461 | 2004-08-23 | 2026-11-18 | 86.7 | 180233 | ya |
 
 
 Leg **RS/gred**: terbaik **38 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
@@ -52,12 +52,12 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 
 | Lorong | Ekuiti | Dipegang | Keluar | Sesi terakhir |
 |---|---|---|---|---|
-| RS_10 | 0.730293 | 10 | 9 | 2026-11-16 |
-| RAWAK_10 | 0.914928 | 10 | 7 | 2026-11-16 |
-| GABUNGAN_10 | 1.003541 | 9 | 28 | 2026-11-16 |
-| TOP1_10 | 0.989991 | 8 | 31 | 2026-11-16 |
-| RAWAK_KAEDAH_10 | 0.924438 | 10 | 3 | 2026-11-16 |
-| RISIKO_10 | 0.924651 | 10 | 9 | 2026-11-16 |
+| RS_10 | 0.715542 | 10 | 10 | 2026-11-17 |
+| RAWAK_10 | 0.895912 | 10 | 7 | 2026-11-17 |
+| GABUNGAN_10 | 0.99611 | 8 | 30 | 2026-11-17 |
+| TOP1_10 | 0.974496 | 7 | 34 | 2026-11-17 |
+| RAWAK_KAEDAH_10 | 0.919431 | 10 | 4 | 2026-11-17 |
+| RISIKO_10 | 0.91723 | 10 | 10 | 2026-11-17 |
 
 
 `RISIKO_10` (sejak 28 Okt 2026) dipasangkan dengan `RS_10`: susunan calon sama, hanya saiz berbeza. **MDD-nya mesti dibaca bersama lajur `tunai`** — pendedahannya lebih rendah, jadi sebahagian kelebihan MDD datang daripada pendedahan, bukan saiz. Ia menguji saiz atas **isyarat Mxx** dan bukan ujian ke hadapan dapatan REVERSE fasa 1b (`REVERSE/SPEC_FASA2.md` §9.2).
@@ -78,8 +78,8 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 |---|---|---|---|
 | Stor harga | 20261117 | 1 | OK |
 | Trend D10H2-r2 | 20261117 | 1 | OK |
-| Lejar Penuh | 2026-11-16 | 2 | OK |
-| portfolio_slot | 2026-11-16 | 2 | OK |
+| Lejar Penuh | 2026-11-17 | 1 | OK |
+| portfolio_slot | 2026-11-17 | 1 | OK |
 | Papan Penganalisis | 2026-11-18 | 0 | OK |
 | RS pasaran | 2026-11-17 | 1 | OK |
 | Gred kumpulan | 2026-11-17 | 1 | OK |

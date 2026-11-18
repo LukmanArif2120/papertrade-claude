@@ -1,19 +1,17 @@
 {
- "dikemaskini": "2026-11-18 11:26 UTC",
+ "dikemaskini": "2026-11-18 13:55 UTC",
  "bar_terakhir": 20261117,
  "laras": {
   "GIC": 1.028225,
   "GNK": 1.041849,
   "MKTW": 1.020594,
   "MNR": 1.024971,
-  "MOD": 1.086137,
   "SUPN": 0.867611,
   "TRMD": 1.038211,
   "TXO": 1.032423,
   "WLKP": 1.022206
  },
  "perlu_sejarah": [
-  "MOD",
   "SUPN"
  ],
  "harga_A.csv": {
@@ -21,7 +19,7 @@
   "bar_terakhir": 20261117
  },
  "harga_B.csv": {
-  "ticker_dikemaskini": 497,
+  "ticker_dikemaskini": 498,
   "bar_terakhir": 20261117
  },
  "harga_idx.csv": {
@@ -33,7 +31,6 @@
   "dilepaskan": [],
   "kekal_beku": {
    "INDV": "sejarah segar bertindih 1 bar < 20 sebelum 2026-11-03",
-   "MOD": "tidak konsisten: nisbah segar/stor 1.0000, serak 8.61% > 2%",
    "SUPN": "tidak konsisten: nisbah segar/stor 1.0706, serak 8.42% > 2%"
   }
  },
