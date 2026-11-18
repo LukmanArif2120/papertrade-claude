@@ -1,5 +1,5 @@
 {
- "kini": "2026-11-17",
+ "kini": "2026-11-18",
  "versi": "lift_masuk_2026-11-07",
  "mula": "2026-10-15",
  "mula_langsung": {
@@ -7,14 +7,14 @@
   "N": "2026-11-03",
   "GB": "2026-11-03"
  },
- "sesi_terakhir": "2026-11-16",
- "harga_pada": "20261116",
+ "sesi_terakhir": "2026-11-17",
+ "harga_pada": "20261117",
  "ufuk": 10,
- "posisi": 18840,
- "kaedah": 128,
- "hari_beli": 13,
+ "posisi": 20958,
+ "kaedah": 220,
+ "hari_beli": 14,
  "hari_on": 1,
- "hari_off": 12,
+ "hari_off": 13,
  "kos": 0.2,
  "sd_lift": null,
  "perlu_2mata": null,
