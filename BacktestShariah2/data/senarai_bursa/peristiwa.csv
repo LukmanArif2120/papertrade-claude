@@ -13141,3 +13141,19 @@ tarikh,simbol,peristiwa,nama,bursa,etf,biasa
 2026-11-17,VBNK,buang,VersaBank - Common Shares,NASDAQ,0,1
 2026-11-17,GM,tukar_nama,General Motors Company - Common Stock,NASDAQ,0,1
 2026-11-17,MOD,tukar_nama,"Modexus Solutions, Inc. Common Stock",NYSE,0,1
+2026-11-18,APFS,tambah,Artisan Focus Fund: ETF Class Shares,NYSE Arca,1,0
+2026-11-18,APNX,tambah,Artisan Select Equity Fund: ETF Class Shares,NYSE Arca,1,0
+2026-11-18,GMIX,tambah,iShares Macro AlphaBeta Active ETF,NYSE Arca,1,0
+2026-11-18,SHLA,tambah,Global X Asia Defense Tech ETF,NYSE Arca,1,0
+2026-11-18,TRLL,tambah,Direxion Trillions ETF,NYSE Arca,1,0
+2026-11-18,VEN,tambah,Teucrium Venezuela Future Opportunities ETF,NYSE Arca,1,0
+2026-11-18,VVPL,tambah,Vulcan Value Partners ETF,Cboe BZX,1,0
+2026-11-18,YASX,tambah,Yorkville America Space Index ETF,NYSE Arca,1,0
+2026-11-18,YO,tambah,Amplify S&P 500 Buffered Autocallable Yield Opportunity ETF,NYSE Arca,1,0
+2026-11-18,ZOAR,tambah,Zoar Limited Ordinary Shares,NYSE American,0,1
+2026-11-18,IBO,buang,"Impact BioMedical, Inc. Common Stock",NYSE American,0,1
+2026-11-18,PCRX,buang,"Pacira BioSciences, Inc. - Common Stock",NASDAQ,0,1
+2026-11-18,SHFS,buang,"SHF Holdings, Inc. - Class A Common Stock",NASDAQ,0,1
+2026-11-18,SHFSW,buang,"SHF Holdings, Inc. - Warrants",NASDAQ,0,0
+2026-11-18,TYYY,buang,xETFs TSLA Daily Income ETF,NYSE Arca,1,0
+2026-11-18,WZRD,buang,Opportunistic Trader ETF,Cboe BZX,1,0
