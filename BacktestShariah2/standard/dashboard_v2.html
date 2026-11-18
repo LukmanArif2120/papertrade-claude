@@ -1694,7 +1694,24 @@ table.sf-tb{width:100%;border-collapse:collapse;font-family:var(--f-semi)}
 .sfx-p5.s i{background:var(--xyb);color:var(--xy)}.sfx-p5.t i{background:var(--xrb);color:var(--xrs)}
 .sfx-p5 b{display:block;font:600 .88rem/1.25 var(--f-body)}
 .sfx-p5 small{display:block;font:500 .76rem/1.3 var(--f-semi);color:#B4BBC6;margin-top:3px}
-@media (min-width:1340px){.sfx-pd5{grid-template-columns:repeat(5,1fr)}.sfx-k2{display:grid;grid-template-columns:1.12fr 1fr;gap:24px;align-items:start}.sfx-k2 .sfx-lbl{margin-top:16px}.sfx-k2 .sfx-sj.satu{padding-top:4px}}
+/* v192 (18 Nov 2026; keputusan pengguna "ya, semua ikut cadangan": susunan 3): kad komputer disusun ikut LEBAR KAD, bukan lebar skrin.
+   Graf dihadkan 430 px supaya garis dan tulisan tidak membesar di skrin lebar. Kad >= 640 px: graf + tiga kotak | empat soalan.
+   Kad >= 1000 px: tiga lajur (graf + kotak | empat soalan | padan sebagai senarai), semuanya muat satu skrin. */
+.sfx-g.dua .sfx-kanan{container-type:inline-size;container-name:sfxk}
+.sfx-g.dua .sfx-raj,.sfx-g.dua .sfx-3{max-width:430px}
+@container sfxk (min-width:640px){
+ .sfx-k2{display:grid;grid-template-columns:minmax(300px,430px) 1fr;gap:28px;align-items:start}
+ .sfx-k2 .sfx-lbl{margin-top:16px}.sfx-k2 .sfx-sj.satu{padding-top:4px}
+ .sfx-k3{grid-column:1/-1}.sfx-k3 .sfx-lbl{margin-top:0}
+ .sfx-k3 .sfx-pd5{grid-template-columns:repeat(5,1fr)}}
+@container sfxk (min-width:1000px){
+ .sfx-k2{grid-template-columns:minmax(300px,400px) 1fr 1fr;gap:30px}
+ .sfx-k3{grid-column:auto}.sfx-k3 .sfx-lbl{margin-top:16px}
+ .sfx-g.dua .sfx-k3 .sfx-pd{margin-top:6px;padding:9px 12px;gap:14px}
+ .sfx-k3 .sfx-pd5{grid-template-columns:1fr;gap:0;margin-top:2px}
+ .sfx-k3 .sfx-p5{display:grid;grid-template-columns:24px 1fr;gap:0 11px;background:none;border-radius:0;padding:8px 0;border-top:1px solid var(--xb)}
+ .sfx-k3 .sfx-p5:first-child{border-top:0}
+ .sfx-k3 .sfx-p5 i{grid-row:1/3;margin:0}.sfx-k3 .sfx-p5 small{margin-top:1px}}
 @media (max-width:420px){.sfx-row{grid-template-columns:84px 1fr;gap:10px}.sfx-card h3{font-size:1.5rem}}
 /* SFX-CSS-TAMAT */
 /* v190 (17 Nov 2026 MYT; keputusan pengguna "ya dua dua"): Setup F — MARKAH 0-100 setiap setup (CS23, pindaan (aj)) dan lajur "Kegunaan bila?"
@@ -6556,9 +6573,9 @@ function sfxKad(r,d,f,dua){const n=sfxNilai(r),x=n.x,kd=f.g==='semua'?r.tk:r.tg;
   const muka=`<div class="sfx-raj">${sfxGambar(x)}</div>${sfxTiga(r,n)}`;
   const lama=f.angka?sfxAngka(r,d):'';
   if(dua)return `<div class="sfx-card" data-sfxk="${esc(r.id)}">${kepala}
-    <div class="sfx-k2"><div>${muka}</div><div>${sfxSoalan(n)}</div></div>
-    <div class="sfx-lbl">Padan dengan kehendak anda</div>
-    <div class="sfx-pd"><div class="t">Padan <b>${n.ya} daripada 5</b></div>${sfxLima(n)}</div><div class="sfx-pd5">${n.padan.map(p=>`<div class="sfx-p5${p[0]==='y'?'':' '+p[0]}"><i>${sfxTanda[p[0]]}</i><b>${p[1]}</b><small>${esc(p[2])}</small></div>`).join('')}</div>
+    <div class="sfx-k2"><div>${muka}</div><div>${sfxSoalan(n)}</div>
+     <div class="sfx-k3"><div class="sfx-lbl">Padan dengan kehendak anda</div>
+      <div class="sfx-pd"><div class="t">Padan <b>${n.ya} daripada 5</b></div>${sfxLima(n)}</div><div class="sfx-pd5">${n.padan.map(p=>`<div class="sfx-p5${p[0]==='y'?'':' '+p[0]}"><i>${sfxTanda[p[0]]}</i><b>${p[1]}</b><small>${esc(p[2])}</small></div>`).join('')}</div></div></div>
     <div class="sfx-kaki"><span>Lukisan sahaja, bukan chart sebenar · backtest, belum bukti</span><button type="button" class="sfx-btn" data-sfxa="angka">${f.angka?'Tutup angka penuh ⌃':'Angka penuh ›'}</button></div>${lama}</div>`;
   return `<div class="sfx-card" data-sfxk="${esc(r.id)}">${kepala}${muka}
     ${f.butir?`${sfxSoalan(n)}

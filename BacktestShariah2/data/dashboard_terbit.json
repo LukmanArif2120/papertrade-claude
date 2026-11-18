@@ -1,9 +1,9 @@
 {
   "artifact": "https://claude.ai/code/artifact/12bb853e-34ef-4d6c-885d-10f46984437e",
-  "versi_artifact": "1794926464-7ecd",
-  "nombor": 226,
-  "sha256": "f1f2c04bafa5a2544b1a80ec15b0cba4267633876cea244cd157c3bfb72c7e47",
-  "bait": 1027052,
-  "dikemas": "2026-11-17 14:41 UTC",
-  "nota": "v191 (17 Nov 2026): Setup F — PAPARAN MUDAH lalai (senarai nama biasa + lukisan, kad bergambar BELI/JUAL, empat soalan berwarna, \"padan dengan kehendak anda\"; komputer: senarai kiri, kad kanan); paparan lama di bawah \"Paparan penuh\" dan \"Angka penuh\"; tiada perubahan db; atas v190 #225"
+  "versi_artifact": "1794967129-3775",
+  "nombor": 227,
+  "sha256": "8ddcc011df9d603650352555130b695497bcb8914d6471d846dfa430e8d6eb80",
+  "bait": 1028251,
+  "dikemas": "2026-11-18 01:59 UTC",
+  "nota": "v192 (18 Nov 2026): Setup F paparan mudah — kad komputer disusun ikut lebar kad (graf dihadkan 430 px; kad >= 1000 px tiga lajur: graf + kotak | empat soalan | padan); telefon tidak berubah; atas v191 #226"
 }

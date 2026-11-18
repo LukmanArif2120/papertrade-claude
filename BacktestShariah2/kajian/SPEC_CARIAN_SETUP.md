@@ -1767,6 +1767,61 @@ kehendak pengguna atas data yang sudah dilihat — bukan ujian, bukan bukti. Tia
   bila?" kekal menggantikan tapisan Lama / Baharu. Markah, sasaran, berat dan fail hasil tidak diubah; laporan hanya
   menyatakan senarai mana yang rasmi. Ini BUKAN keputusan papertrade (papertrade kekal dijeda).
 
+### Pindaan 17 Nov 2026 (ak) — pusingan CS24: kumpulan "SAHAM TENANG" (naik perlahan tetapi stabil; jual bila turun 5 % dari harga tertinggi) (sebelum dijalankan)
+
+**Keputusan pengguna 17 Nov 2026.** Tujuh jawapan pengguna kepada soalan Claude (direkod dalam `CLAUDE.md` dan
+`SERAHAN_CARIAN_SETUP.md` §1b): mahu DUA kumpulan berasingan — saham laju (semua kod F sedia ada) dan **saham tenang**;
+"naik perlahan tetapi stabil" lebih penting daripada naik besar; rugi paling besar satu belian ≈ 5 % **dikira dari harga
+tertinggi sejak beli**; belian "berjaya" = dijual dengan untung apabila trend patah, tanpa sasaran angka dan tanpa had masa.
+Urutan kerja dipilih pengguna: "Selepas dashboard siap" (dashboard v191 siap, PR #71).
+
+**Kejujuran urutan (WAJIB dibaca):** dua carian ukuran longgar sebelum ini GAGAL pada 2025–26 (CS12 label `naik`; CS22 label
+`c10`), dan CS14 sudah menunjukkan bahawa jualan "jatuh k×ATR dari puncak" menaikkan purata sambil menurunkan kadar
+menang, dengan saham rawak mendapat tambahan yang serupa. Pusingan ini BUKAN ulangan: takrif di bawah (alam saham tenang,
+jualan 5 % dari tutup tertinggi, kejayaan = dijual dengan untung) datang daripada jawapan pengguna, bukan daripada data, dan
+belum pernah dikira. Ketika pindaan ini dikomit: tiada label `t5`, tiada skor dan tiada calon pusingan ini wujud; yang
+sudah dijana hanyalah input (panel, lapisan prasyarat, isyarat benih tanpa intai).
+
+- **Alam "tenang":** hanya bar isyarat dengan `ATR% <= 2.5` (penapis `F24` sedia ada: ATR14 ÷ tutup × 100 ≤ 2.5). Isyarat
+  setiap pencetus ditapis kepada alam ini SEBELUM skor, kekerapan dan kawalan dikira.
+- **Cara pegang `T5` (satu-satunya, tidak ditala):** beli pada buka esok (P). Puncak = maksimum P dan setiap tutup sejak hari
+  beli. Apabila tutup ≤ 0.95 × puncak → jual pada buka sesi berikutnya (jualan paling awal = buka sesi ke-2; tiada jualan
+  pada hari beli). Tiada stop lain, tiada sasaran, tiada indikator keluar. Had teknikal 252 sesi (jual pada tutup sesi
+  ke-252) supaya label tertakrif; bahagian belian yang mencapai had itu dilaporkan. Pulangan = jual ÷ P − 1 − kos 0.5 %.
+- **Sasaran:** label `t5` = pulangan bersih T5 > 0 ("dijual dengan untung"), bagi bar yang dagangannya selesai dalam data.
+  Asas rawak = purata `t5` semua bar tenang layak pada hari yang sama (saham tenang rawak hari sama, dipegang cara sama);
+  asas era = purata bar tenang dalam tempoh yang sama. Skor = enjin CS20 (kelebihan lawan asas hari sama, minimum dua era
+  tolak 2 ralat piawai) pada kumpulan A.
+- **Ruang dan syarat = CS20:** isyarat beli `asal` (mod tanpa intai) + `K`; prasyarat tarikh laporan kewangan dan kalendar
+  TIDAK dibenarkan; syarat kekerapan ≥ 80 % minggu dan ≥ 50 % minggu pada tahun paling teruk, dikira atas isyarat dalam alam
+  tenang (pada A semasa memilih, pada B semasa mendaftar); `N_ATAS = 5`, `N_TINJAU = 200`.
+- **Kawalan:** 300 peraturan rawak daripada ruang dan alam yang sama, dengan syarat kekerapan yang sama (benih 20261119).
+- **"Lulus" (kumpulan B):** ≥ 300 belian (satu posisi setiap saham sehingga dijual), ≥ 10 tahun aktif, kelebihan `t5` > 0
+  dalam K1, K2 DAN K3.
+- **Bacaan dikunci (ambang CS13 / CS20 / CS22):** (B1) kadar lulus calon ≥ kawalan + 20 mata; (B2) bahagian calon dengan
+  kelebihan `t5` K3 (2025–26) > 0 ≥ 60 % DAN ≥ kawalan + 10 mata. Jika gagal: tiada kod baharu, dilaporkan seadanya, dan
+  carian "saham tenang" tidak diulang tanpa sebab baharu.
+- **Pendaftaran (hanya jika bacaan lulus):** calon lulus yang (i) menepati syarat kekerapan pada B, (ii) purata pulangan T5
+  melebihi purata pulangan saham tenang rawak hari sama yang dipegang cara sama (supaya bukan sekadar kerap untung kecil),
+  dan (iii) bukan kembar calon berskor lebih tinggi (Jaccard belian ≥ 0.80). Kod `F2803` dan seterusnya, pusingan `CS24`,
+  kumpulan "tenang"; setup lengkap = alam tenang + cara pegang T5.
+- **Laporan wajib:** kadar menang T5 lawan rawak (keseluruhan, K1 / K2 / K3, bilangan tahun positif); purata dan nilai
+  tengah pulangan lawan rawak; persentil ke-5 pulangan (rugi lazim yang teruk); hari pegang (nilai tengah, persentil 90);
+  bahagian yang mencapai had 252 sesi; minggu yang ada belian; ukuran utama `terus` sebagai maklumat.
+- **Keluaran:** `carian_setup/cs_tenang24.py` → `hasil/CS24/TENANG.md`, `calon.csv.gz`, `kawalan.csv`, `bacaan.json`
+  (dan `senarai_tenang.csv` jika lulus).
+- **Yang dijangka (ditulis dahulu):** kadar menang di bawah 50 % bagi calon DAN saham rawak (jualan 5 % dari puncak menjual
+  awal); kelebihan kecil (kira-kira 0 hingga +2 mata); kemungkinan besar gagal B2 seperti CS12 dan CS22. Pusingan ini
+  mengukur kadar "dijual dengan untung", bukan untung akaun, dan tidak dinilai lawan indeks.
+
+### Keputusan pengguna 18 Nov 2026 selepas CS24 ("ya, semua ikut cadangan") — kumpulan saham tenang dihentikan
+
+Hasil CS24 (`hasil/CS24/TENANG.md`): bacaan dikunci GAGAL (B1 lulus; B2: 59.8 % calon lebih baik daripada rawak pada 2025–26,
+perlu ≥ 60 %); tiada kod baharu. Pengguna memilih (a): **berhenti di sini dan kekal dengan kumpulan saham laju**. Carian
+kumpulan saham tenang (alam `ATR% <= 2.5`, jualan 5 % dari tutup tertinggi) tidak diulang tanpa permintaan pengguna.
+**Stop loss kumpulan saham laju tidak ditukar** (4×ATR14 dari harga beli; cara pegang B). Tiada perubahan pada registry F,
+senarai utama, Top 100 atau penjejak.
+
 ## 8. Apa yang TIDAK dibuat dalam CS01
 
 Penalaan Optuna penuh 1,303 parameter kaedah M (hanya dua varian rawak setiap kaedah), gabungan ≥ 3 penapis, gabungan

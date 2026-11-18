@@ -3267,5 +3267,99 @@ class TestCS23(unittest.TestCase):
         self.assertEqual((B['senarai_rasmi'], B['senarai_tambahan'], s.RASMI, s.TAMBAHAN), ('Setiap minggu', 'Musim laporan kewangan') * 2)
 
 
+class TestCS24(unittest.TestCase):
+    """Pusingan CS24 (pindaan 17 Nov 2026 (ak)): kumpulan "saham tenang", cara pegang T5 (jual bila tutup <= 95 % tutup tertinggi)."""
+
+    def test_dikunci(self):
+        import cs_atom as atom
+        import cs_daftar13 as d13
+        import cs_mingguan20 as m20
+        import cs_tenang24 as c24
+        self.assertEqual((c24.PUS, c24.BENIH_KAWALAN, c24.JATUH, c24.HAD, c24.KOS, c24.MIN_BELIAN, c24.MIN_TAHUN),
+                         ('CS24', 20261119, 0.05, 252, 0.005, 300, 10))
+        self.assertEqual(atom.PENAPIS[c24.I_TENANG], 'F24 ATR% <= 2.5')
+        self.assertEqual((m20.N_ATAS, m20.N_TINJAU, m20.MINGGU_MIN, m20.TAHUN_MIN), (5, 200, 0.80, 0.50))
+        self.assertEqual((d13.B1_BEZA, d13.B2_MIN, d13.B2_BEZA, d13.JACCARD), (0.20, 0.60, 0.10, 0.80))
+        spec = open(os.path.join(SINI, '..', 'kajian', 'SPEC_CARIAN_SETUP.md'), encoding='utf-8').read()
+        self.assertIn('### Pindaan 17 Nov 2026 (ak)', spec)
+
+    @staticmethod
+    def _naif(i, akhir, o, c, jatuh=0.05, had=252, kos=0.005):
+        e = i + 1
+        if e > akhir:
+            return None
+        P, puncak = o[e], o[e]
+        for d in range(had):
+            b = e + d
+            if b > akhir:
+                return None
+            puncak = max(puncak, c[b])
+            if c[b] <= (1 - jatuh) * puncak:
+                return None if b + 1 > akhir else (o[b + 1] / P - 1 - kos, d + 1, False)
+            if d == had - 1:
+                return (c[b] / P - 1 - kos, d, True)
+        return None
+
+    def test_label_t5(self):
+        import cs_tenang24 as c24
+        # contoh pengguna: beli 100, naik ke 120, tutup 114 (= 95 % daripada 120) -> jual pada buka esoknya
+        o = np.array([99., 100., 104., 111., 119., 115., 113., 112.])
+        c = np.array([99., 103., 110., 120., 116., 114., 112., 111.])
+        ev, akhir = np.array([0], np.int64), np.array([7], np.int64)
+        R, sk, siap, cap = c24.label_t5(ev, akhir, o, c, 0.05, 252, 0.005)
+        self.assertTrue(siap[0] and not cap[0])
+        self.assertEqual(int(sk[0]), 5)                                   # isyarat jual pada tutup 114 (hari ke-5 pegang), jual bar 6
+        self.assertAlmostEqual(float(R[0]), 113. / 100. - 1 - 0.005)
+        # jatuh pada hari beli: tutup <= 95 % harga beli -> jual pada buka sesi ke-2, bukan hari yang sama
+        o2, c2 = np.array([50., 50., 46., 45.]), np.array([50., 47., 46., 45.])
+        R, sk, siap, cap = c24.label_t5(np.array([0], np.int64), np.array([3], np.int64), o2, c2, 0.05, 252, 0.005)
+        self.assertTrue(siap[0])
+        self.assertEqual(int(sk[0]), 1)
+        self.assertAlmostEqual(float(R[0]), 46. / 50. - 1 - 0.005)
+        # data tamat sebelum dijual -> tidak selesai; had teknikal -> jual pada tutup sesi terakhir
+        o3 = c3 = np.linspace(10., 20., 30)
+        R, sk, siap, cap = c24.label_t5(np.array([0, 0], np.int64), np.array([29, 29], np.int64), o3, c3, 0.05, 252, 0.005)
+        self.assertFalse(siap[0])
+        R, sk, siap, cap = c24.label_t5(np.array([0], np.int64), np.array([29], np.int64), o3, c3, 0.05, 10, 0.005)
+        self.assertTrue(siap[0] and cap[0])
+        self.assertEqual(int(sk[0]), 9)
+        self.assertAlmostEqual(float(R[0]), c3[10] / o3[1] - 1 - 0.005)
+        # lawan kiraan naif pada siri rawak
+        rng = np.random.default_rng(24)
+        c4 = 50 * np.exp(np.cumsum(rng.normal(0.0005, 0.015, 600)))
+        o4 = c4 * np.exp(rng.normal(0, 0.004, 600))
+        ev4 = np.arange(0, 590, 7).astype(np.int64)
+        ak4 = np.full(len(ev4), 599, np.int64)
+        R, sk, siap, cap = c24.label_t5(ev4, ak4, o4, c4, 0.05, 252, 0.005)
+        for k, i in enumerate(ev4):
+            w = self._naif(int(i), 599, o4, c4)
+            self.assertEqual(bool(siap[k]), w is not None)
+            if w is not None:
+                self.assertAlmostEqual(float(R[k]), w[0], places=12)
+                self.assertEqual((int(sk[k]), bool(cap[k])), (w[1], w[2]))
+
+    def test_bacaan(self):
+        import cs_tenang24 as c24
+        T = pd.DataFrame(dict(peranan=['calon'] * 10 + ['kawalan'] * 10, layak=True, lulus=[True] * 6 + [False] * 4 + [True] * 2 + [False] * 8,
+                              kl_t5_K3=[0.01] * 7 + [-0.01] * 3 + [0.01] * 5 + [-0.01] * 5))
+        B = c24.bacaan(T)
+        self.assertTrue(B['b1'] and B['b2'] and B['ya'])                  # 60 % lawan 20 %; K3 70 % lawan 50 %
+        T.loc[T.peranan == 'kawalan', 'kl_t5_K3'] = [0.01] * 7 + [-0.01] * 3
+        self.assertFalse(c24.bacaan(T)['b2'])                             # 70 % lawan 70 %: beza < 10 mata
+
+    def test_hasil_direkod(self):
+        """Bacaan dikunci CS24 gagal (B2), jadi tiada kod pusingan CS24 dan tiada senarai_tenang.csv."""
+        d = os.path.join(SINI, '..', 'kajian', 'carian_setup', 'hasil', 'CS24')
+        with open(os.path.join(d, 'bacaan.json'), encoding='utf-8') as f:
+            B = json.load(f)
+        self.assertTrue(B['b1'])
+        self.assertFalse(B['b2'])
+        self.assertFalse(B['ya'])
+        self.assertLess(B['k3_calon'], 0.60)
+        self.assertFalse(os.path.exists(os.path.join(d, 'senarai_tenang.csv')))
+        reg = pd.read_csv(os.path.join(SINI, '..', 'data', 'registry_F.csv'), dtype=str)
+        self.assertFalse((reg.pusingan == 'CS24').any())
+
+
 if __name__ == '__main__':
     unittest.main()

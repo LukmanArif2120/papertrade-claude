@@ -260,6 +260,17 @@ class TestFUtamaDb(unittest.TestCase):
         for lajur in ('nama', 'pra', 'pen', 'tangkap', 'rawak', 'menang', 'rugi8', 'gn', 'mk', 'tg', 'tk', 'mgb'):
             self.assertIn(lajur, self.d['kol'])                                            # tiada lajur db baharu diperlukan
 
+    def test_susunan_komputer_v192(self):
+        """v192 (18 Nov 2026): kad komputer disusun ikut LEBAR KAD (container query) dan graf dihadkan, supaya garis dan tulisan
+        lukisan tidak membesar di skrin lebar; blok "padan" ialah anak ketiga .sfx-k2 (tiga lajur pada kad >= 1000 px)."""
+        h = open(HTML, encoding='utf-8').read()
+        self.assertIn('.sfx-g.dua .sfx-kanan{container-type:inline-size;container-name:sfxk}', h)
+        self.assertIn('.sfx-g.dua .sfx-raj,.sfx-g.dua .sfx-3{max-width:430px}', h)
+        self.assertIn('@container sfxk (min-width:640px){', h)
+        self.assertIn('@container sfxk (min-width:1000px){', h)
+        self.assertIn('<div class="sfx-k3"><div class="sfx-lbl">Padan dengan kehendak anda</div>', h)
+        self.assertNotIn('@media (min-width:1340px){.sfx-pd5', h)                           # peraturan ikut lebar skrin v191 diganti
+
     def test_saiz_di_bawah_had_db(self):
         with tempfile.TemporaryDirectory() as t:
             out = F.main(['--keluar', t])
