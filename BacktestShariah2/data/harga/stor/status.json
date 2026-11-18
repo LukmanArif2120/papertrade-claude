@@ -1,5 +1,5 @@
 {
- "dikemaskini": "2026-11-18 06:22 UTC",
+ "dikemaskini": "2026-11-18 07:46 UTC",
  "bar_terakhir": 20261117,
  "laras": {
   "GIC": 1.028225,
@@ -15,7 +15,6 @@
  },
  "perlu_sejarah": [
   "MOD",
-  "SENEB",
   "SUPN"
  ],
  "harga_A.csv": {
@@ -32,15 +31,19 @@
  },
  "kuarantin": {
   "baru": [],
-  "dilepaskan": [],
+  "dilepaskan": [
+   [
+    "SENEB",
+    "2026-11-03"
+   ]
+  ],
   "kekal_beku": {
    "INDV": "sejarah segar bertindih 1 bar < 20 sebelum 2026-11-03",
    "MOD": "tidak konsisten: nisbah segar/stor 1.0000, serak 8.61% > 2%",
-   "SENEB": "tidak konsisten: nisbah segar/stor 0.2000, serak 7.94% > 2%",
    "SUPN": "tidak konsisten: nisbah segar/stor 1.0706, serak 8.42% > 2%"
   }
  },
- "log_laras": 0,
+ "log_laras": 1,
  "faktor_dividen": [],
  "faktor_calon": [],
  "moomoo": {
