@@ -45,14 +45,16 @@
   "dividen_baharu": 0
  },
  "sejarah": {
-  "dijana": "2026-11-17 22:22 UTC",
-  "bil_ticker": 2,
+  "dijana": "2026-11-18 01:42 UTC",
+  "bil_ticker": 3,
   "diminta": [
+   "MOD",
    "SENEB",
    "SUPN"
   ],
   "tiada_data": [],
   "kuarantin": [
+   "MOD",
    "SENEB",
    "SUPN"
   ]
