@@ -4,3 +4,4 @@ INDV,2026-11-03,delist 2026-11-03 (direktori Nasdaq buang; ambil alih EDGAR 425 
 WFRD,2026-11-02,direktori Nasdaq tukar_nama 2026-11-13 dalam tetingkap bar baharu 20261102..20261113; bar stor tidak ditimpa,2026-11-14 06:22 UTC,aktif
 WFRD,2026-11-02,"sejarah segar konsisten dengan bar stor dipercayai (< 2026-11-02): nisbah 1, serak 0.0000, 40 bar; bar >= 2026-11-02 diganti",2026-11-14 09:53 UTC,lepas
 SENEB,2026-11-03,"anomali nisbah_laras: nisbah 0.200000, serak 0.0316, 9 bar bertindih (bar baharu 20261103..20261116); bar stor tidak ditimpa",2026-11-17 08:12 UTC,aktif
+MOD,2026-11-04,direktori Nasdaq tukar_nama 2026-11-17 dalam tetingkap bar baharu 20261104..20261117; bar stor tidak ditimpa,2026-11-18 00:09 UTC,aktif

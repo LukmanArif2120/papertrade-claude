@@ -22,3 +22,4 @@ masa,ticker,nisbah,bar,serak,keputusan,sumber
 2026-11-17 12:05 UTC,GNK,0.959832,397,0.0,faktor,dividen_khas 2026-11-16 (yfinance dividen)
 2026-11-17 12:05 UTC,MNR,0.975637,397,0.0,faktor,dividen_khas 2026-11-16 (yfinance dividen)
 2026-11-17 12:05 UTC,TRMD,0.963195,519,0.0,faktor,dividen_khas 2026-11-16 (yfinance dividen)
+2026-11-18 00:09 UTC,MOD,1.0,0,0.0,kuarantin,mula 2026-11-04: direktori Nasdaq tukar_nama 2026-11-17 dalam tetingkap bar baharu 20261104..20261117; bar stor tidak ditimpa
