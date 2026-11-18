@@ -1,6 +1,6 @@
 # CANTAS — calon berhenti direkod (label maklumat bulanan; bukan tindakan)
 
-Dijana 2026-11-18 11:33 UTC oleh `standard/cantas.py` atas `kad_skor.json` harga 2026-11-17. Pradaftar `standard/SPEC_CANTAS.md`. **Tiada Lejar atau kad skor diubah**; cantas sebenar = keputusan pengguna dalam `koordinator/keputusan.csv`.
+Dijana 2026-11-18 15:44 UTC oleh `standard/cantas.py` atas `kad_skor.json` harga 2026-11-17. Pradaftar `standard/SPEC_CANTAS.md`. **Tiada Lejar atau kad skor diubah**; cantas sebenar = keputusan pengguna dalam `koordinator/keputusan.csv`.
 
 > **Status keputusan (kad skor, harga 2026-11-17):** TERBUKTI 0 · CALON 0 · BELUM CUKUP 226 · GAGAL 0 · NEGATIF 0. Rejim QQQ OFF sejak 2026-10-16. Hanya **TERBUKTI** layak untuk wang sebenar (`laporan/KAD_SKOR.md`); nombor dalam laporan ini BUKAN keputusan dan tidak boleh dibaca sebagai pangkat untuk wang sebenar.
 
