@@ -1,15 +1,16 @@
 {
- "dikemaskini": "2026-11-18 00:10 UTC",
+ "dikemaskini": "2026-11-18 06:22 UTC",
  "bar_terakhir": 20261117,
  "laras": {
   "GIC": 1.028225,
   "GNK": 1.041849,
   "MKTW": 1.020594,
-  "MNR": 1.024972,
+  "MNR": 1.024971,
+  "MOD": 1.086137,
   "SENEB": 0.2,
   "SUPN": 0.867611,
   "TRMD": 1.038211,
-  "TXO": 1.032424,
+  "TXO": 1.032423,
   "WLKP": 1.022206
  },
  "perlu_sejarah": [
@@ -30,26 +31,18 @@
   "bar_terakhir": 20261117
  },
  "kuarantin": {
-  "baru": [
-   [
-    "MOD",
-    "2026-11-04",
-    "direktori Nasdaq tukar_nama 2026-11-17 dalam tetingkap bar baharu 20261104..20261117; bar stor tidak ditimpa"
-   ]
-  ],
+  "baru": [],
   "dilepaskan": [],
   "kekal_beku": {
    "INDV": "sejarah segar bertindih 1 bar < 20 sebelum 2026-11-03",
+   "MOD": "tidak konsisten: nisbah segar/stor 1.0000, serak 8.61% > 2%",
    "SENEB": "tidak konsisten: nisbah segar/stor 0.2000, serak 7.94% > 2%",
    "SUPN": "tidak konsisten: nisbah segar/stor 1.0706, serak 8.42% > 2%"
   }
  },
- "log_laras": 1,
+ "log_laras": 0,
  "faktor_dividen": [],
- "faktor_calon": [
-  "EMBJ 2026-11-17 -0.7629",
-  "LVLU 2026-11-17 -0.1572"
- ],
+ "faktor_calon": [],
  "moomoo": {
   "ditampal": 22,
   "langkau_skala": [

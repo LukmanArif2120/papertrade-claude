@@ -1,6 +1,6 @@
 # KOORDINATOR — keadaan repo dalam satu halaman
 
-Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-18 00:13 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
+Dijana `BacktestShariah2/standard/koordinator.py` pada 2026-11-18 06:46 (waktu pelayan). Tiada rangkaian, tiada LLM, tiada penalaan — semuanya dibaca daripada fail keadaan repo. **Jangan ubah manual.**
 
 ## 0. Salinan kerja
 
@@ -32,12 +32,12 @@ REVERSE menguji **signal dan indikator** untuk ENTRY/HOLD/EXIT. Ia **tidak** men
 | Sumber | Hari dagangan | Mula | Akhir | Suku (anggaran) | Baris | Cukup? |
 |---|---|---|---|---|---|---|
 | RS pasaran | 30 | 2026-10-07 | 2026-11-17 | 0.5 |  | tidak |
-| Gred kumpulan | 37 | 2026-09-25 | 2026-11-16 | 0.6 |  | tidak |
-| SEC EPS/hasil | 4107 | 2009-04-15 | 2026-11-17 | 65.2 | 271934 | ya |
-| SEC earnings 8-K | 5460 | 2004-08-23 | 2026-11-17 | 86.7 | 180223 | ya |
+| Gred kumpulan | 38 | 2026-09-25 | 2026-11-17 | 0.6 |  | tidak |
+| SEC EPS/hasil | 4107 | 2009-04-15 | 2026-11-17 | 65.2 | 271953 | ya |
+| SEC earnings 8-K | 5460 | 2004-08-23 | 2026-11-17 | 86.7 | 180229 | ya |
 
 
-Leg **RS/gred**: terbaik **37 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
+Leg **RS/gred**: terbaik **38 / 250** hari dagangan. Peristiwa sah ialah fungsi deterministik stor harga, jadi join peristiwa × data titik-masa boleh dibuat **retrospektif** — yang perlu ditunggu ialah masa, bukan kod.
 
 
 Leg **SEC** tidak menunggu: nilai pertama difail = titik-masa retrospektif sejak 2009 (`SPEC_FASA2.md` §4.1). Halangannya **liputan ticker**: 2848 daripada 3302 ticker universe ada data EPS/hasil, 0 belum diisi. Universe REVERSE kira-kira 2,300 setahun.
@@ -82,7 +82,7 @@ Jejak berasingan daripada §2. Semua di bawah ini dipacu oleh isyarat kaedah **M
 | portfolio_slot | 2026-11-16 | 2 | OK |
 | Papan Penganalisis | 2026-11-18 | 0 | OK |
 | RS pasaran | 2026-11-17 | 1 | OK |
-| Gred kumpulan | 2026-11-16 | 2 | OK |
+| Gred kumpulan | 2026-11-17 | 1 | OK |
 | SEC fundamental | fail diubah | 0 | OK |
 | Senarai bursa | fail diubah | 0 | OK |
 | Senarai Shariah (skrin Moomoo manual) | 2026-10-26 | 23 | OK (had 35 hari) |
